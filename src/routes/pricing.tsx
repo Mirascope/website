@@ -68,7 +68,9 @@ const FeatureRow = ({
       <div className="text-lg font-medium">{feature}</div>
 
       {sameNonBoolean ? (
-        <div className="col-span-2 text-center text-lg whitespace-pre-line">{free}</div>
+        <div className="col-span-2 text-center text-lg whitespace-pre-line">
+          {free}
+        </div>
       ) : (
         <>
           <div className="text-center">
@@ -440,14 +442,14 @@ function PricingPage() {
             Have questions about our pricing?
           </h2>
           <p className="text-gray-600">
-            Contact us at{" "}
+            Join our{" "}
             <a
-              href="mailto:support@mirascope.com"
+              href="https://join.slack.com/t/mirascope-community/shared_invite/zt-2ilqhvmki-FB6LWluInUCkkjYD3oSjNA"
               className="text-primary font-medium hover:underline"
             >
-              support@mirascope.com
+              community
             </a>{" "}
-            for more information about our current beta or upcoming plans.
+            and ask the team directly!
           </p>
         </div>
       </div>

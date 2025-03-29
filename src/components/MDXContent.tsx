@@ -104,7 +104,7 @@ const parseMarkdown = async (markdown: string): Promise<string> => {
       const id = codeBlocks.length;
       codeBlocks.push({
         language: lang || "text",
-        code: code,
+        code: code.trim(), // Trim the code to remove extra whitespace
         meta: meta || "",
       });
       return `__CODE_BLOCK_${id}__`;
@@ -112,8 +112,15 @@ const parseMarkdown = async (markdown: string): Promise<string> => {
   );
 
   // Process the rest of the markdown
+  // First, remove the first h1 header (title) since it's already shown at the top of the page
+  const firstH1Match = processedMd.match(/^# (.*$)/m);
+  if (firstH1Match) {
+    // Remove the first h1 header from the markdown
+    processedMd = processedMd.replace(firstH1Match[0], '');
+  }
+
   processedMd = processedMd
-    // Headers
+    // Headers - process remaining headers
     .replace(
       /^# (.*$)/gm,
       '<h1 class="text-3xl font-bold my-4">$1</h1>'
@@ -171,7 +178,8 @@ const parseMarkdown = async (markdown: string): Promise<string> => {
     const { language, code, meta } = codeBlocks[i];
 
     // Process the code with meta information to add [!code highlight] comments
-    const processedCode = processCodeWithMetaHighlighting(code, meta, language);
+    // Ensure code is trimmed to remove extra whitespace
+    const processedCode = processCodeWithMetaHighlighting(code.trim(), meta, language);
 
     try {
       // Create highlighted versions for both light and dark themes
@@ -188,8 +196,7 @@ const parseMarkdown = async (markdown: string): Promise<string> => {
       });
 
       // Wrap with styling and add copy button with theme detection script
-      const codeBlock = `
-        <div class="code-block-wrapper relative group rounded-lg overflow-hidden my-6 border border-gray-100 dark:border-gray-800">
+      const codeBlock = `<div class="code-block-wrapper relative group rounded-lg overflow-hidden my-6 border border-gray-100 dark:border-gray-800">
           <button 
             class="copy-button absolute border right-3 top-3 opacity-0 group-hover:opacity-100 transition-opacity p-1.5 rounded-md bg-white dark:bg-[#282c34] hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
             onclick="
@@ -205,8 +212,7 @@ const parseMarkdown = async (markdown: string): Promise<string> => {
           </button>
           <div class="light-theme-code dark:hidden">${lightThemeCode}</div>
           <div class="dark-theme-code hidden dark:block">${darkThemeCode}</div>
-        </div>
-      `;
+        </div>`;
 
       // Replace the placeholder
       processedMd = processedMd.replace(`__CODE_BLOCK_${i}__`, codeBlock);
@@ -224,7 +230,7 @@ const parseMarkdown = async (markdown: string): Promise<string> => {
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
 
-      const fallbackBlock = `<pre class="rounded-lg p-4 my-6 bg-gray-100 dark:bg-gray-800 overflow-x-auto border border-gray-200 dark:border-gray-700"><code class="font-mono text-sm whitespace-pre">${escapedCode}</code></pre>`;
+      const fallbackBlock = `<pre class="rounded-lg p-4 my-6 bg-gray-100 dark:bg-gray-800 overflow-x-auto border border-gray-200 dark:border-gray-700"><code class="font-mono text-sm whitespace-pre">${escapedCode.trim()}</code></pre>`;
 
       processedMd = processedMd.replace(`__CODE_BLOCK_${i}__`, fallbackBlock);
     }

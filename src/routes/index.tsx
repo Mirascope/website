@@ -20,7 +20,7 @@ function LandingPage() {
                 />
               </div>
 
-              <h1 className="text-4xl sm:text-5xl md:text-6xl text-primary mb-0 font-excalifont handwriting-enabled:font-handwriting">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl text-primary mb-0 hero-font">
                 Mirascope
               </h1>
             </div>
@@ -30,13 +30,13 @@ function LandingPage() {
         <div className="text-black mt-0 flex flex-col font-medium tracking-tight drop-shadow-sm">
           <span
             style={{ fontSize: "clamp(2.5rem, 8vw, 6rem)", lineHeight: "0.9" }}
-            className="whitespace-normal sm:whitespace-nowrap font-excalifont handwriting-enabled:font-handwriting mb-8"
+            className="whitespace-normal sm:whitespace-nowrap hero-font mb-8"
           >
             The AI Engineer's
           </span>
           <span
             style={{ fontSize: "clamp(2.5rem, 8vw, 6rem)", lineHeight: "0.9" }}
-            className="whitespace-normal sm:whitespace-nowrap font-excalifont handwriting-enabled:font-handwriting"
+            className="whitespace-normal sm:whitespace-nowrap hero-font"
           >
             Developer Stack
           </span>
@@ -49,7 +49,7 @@ function LandingPage() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Read the docs
+            Learn more
           </a>
           <a
             href="https://join.slack.com/t/mirascope-community/shared_invite/zt-2ilqhvmki-FB6LWluInUCkkjYD3oSjNA"
