@@ -4,7 +4,7 @@ import { getAllPosts } from "@/lib/mdx";
 import type { PostMeta } from "@/lib/mdx";
 
 // Posts per page
-const POSTS_PER_PAGE = 9;
+const POSTS_PER_PAGE = 6;
 
 export const Route = createFileRoute("/blog/")({
   component: BlogPage,
@@ -57,7 +57,7 @@ function BlogPage() {
           </p>
         </div>
 
-        <div className="mb-10">
+        <div className="mb-10 min-h-[800px]">
           {loading ? (
             <div className="flex justify-center items-center h-64">
               <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
@@ -97,11 +97,16 @@ function BlogPage() {
                   </div>
                 </Link>
               ))}
+              
+              {/* Spacer elements to maintain grid layout when fewer than POSTS_PER_PAGE posts */}
+              {[...Array(Math.max(0, POSTS_PER_PAGE - currentPosts.length))].map((_, index) => (
+                <div key={`spacer-${index}`} className="h-0 md:h-auto" />
+              ))}
             </div>
           )}
         </div>
 
-        {!loading && posts.length > 0 && totalPages > 1 && (
+        {!loading && posts.length > 0 && (
           <div className="mt-8 py-4 border-t w-full">
             <div className="flex justify-center">
               <nav className="flex gap-2">
@@ -113,7 +118,7 @@ function BlogPage() {
                   Previous
                 </button>
 
-                {Array.from({ length: totalPages }, (_, i) => (
+                {Array.from({ length: Math.max(1, totalPages) }, (_, i) => (
                   <button
                     key={i + 1}
                     onClick={() => handlePageChange(i + 1)}

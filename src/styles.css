@@ -155,7 +155,7 @@ p code, li code, h1 code, h2 code, h3 code, h4 code, h5 code, h6 code {
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.871 0.006 286.286);
 
-  --texture-opacity: 0.4;
+  --texture-opacity: 0.3;
   --texture-blend-mode: multiply;
 }
 
@@ -194,7 +194,7 @@ p code, li code, h1 code, h2 code, h3 code, h4 code, h5 code, h6 code {
   --sidebar-ring: oklch(0.442 0.017 285.786);
 
   /* Paper texture variables for dark mode */
-  --texture-opacity: 0.4;
+  --texture-opacity: 0.3;
   --texture-blend-mode: soft-light;
 }
 
@@ -266,6 +266,15 @@ p code, li code, h1 code, h2 code, h3 code, h4 code, h5 code, h6 code {
 
 /* Font class for Excalifont - used for stylistic elements in mono mode */
 .font-excalifont {
+  font-family: 'Excalifont', sans-serif !important;
+}
+
+/* Special styling for hero text in different modes */
+.handwriting-enabled .hero-font {
+  font-family: 'Williams Handwriting', cursive !important;
+}
+
+.mono-enabled .hero-font {
   font-family: 'Excalifont', sans-serif !important;
 }
 
