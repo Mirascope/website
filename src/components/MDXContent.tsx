@@ -150,24 +150,15 @@ const parseMarkdown = async (markdown: string): Promise<string> => {
     .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
     .replace(/\*(.*?)\*/g, "<em>$1</em>")
 
-    // Lists
-    .replace(
-      /^\s*\n- (.*)/gm,
-      '<ul class="list-disc pl-6 my-4">\n<li class="mb-1">$1</li>'
-    )
-    .replace(/^- (.*)/gm, '<li class="mb-1">$1</li>')
-    .replace(
-      /^\s*\n\d+\. (.*)/gm,
-      '<ol class="list-decimal pl-6 my-4">\n<li class="mb-1">$1</li>'
-    )
-    .replace(/^\d+\. (.*)/gm, '<li class="mb-1">$1</li>')
-
+    // Unordered lists
+    .replace(/^- (.*)/gm, '<ul class="list-disc pl-5 my-4"><li>$1</li></ul>')
+    .replace(/^\* (.*)/gm, '<ul class="list-disc pl-5 my-4"><li>$1</li></ul>')
+    
+    // Ordered lists
+    .replace(/^\d+\. (.*)/gm, '<ol class="list-decimal pl-5 my-4"><li>$1</li></ol>')
+    
     // Paragraphs (must come after lists)
-    .replace(/^([^<#\n].*)/gm, '<p class="my-3">$1</p>')
-
-    // Fix lists closure
-    .replace(/<\/li>\n(?!<li)/g, "</li></ul>\n")
-    .replace(/<\/li>\n(?!<li|\n)/g, "</li></ol>\n")
+    .replace(/^(?!<)(?!#)(?!-)(?!\*)(?!\d+\.)(.*)/gm, '<p class="my-3">$1</p>')
 
     // Fix any duplicate tags or common issues
     .replace(/<\/ul>\s*<\/ul>/g, "</ul>")

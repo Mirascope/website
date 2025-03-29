@@ -85,7 +85,7 @@ function BlogPage() {
                         {post.title}
                       </h3>
                       <p className="text-sm text-gray-500 mb-4 select-none">
-                        {post.date} · {post.readTime}
+                        {post.date} · {post.readTime} · By {post.author}
                       </p>
                       <p className="text-gray-600 mb-4 select-none">
                         {post.description}
