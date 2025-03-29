@@ -127,6 +127,12 @@ const parseMarkdown = async (markdown: string): Promise<string> => {
       '<h3 class="text-xl font-medium my-3">$1</h3>'
     )
 
+    // Links - process before inline code to avoid conflicts with code backticks
+    .replace(
+      /\[([^\]]+)\]\(([^)]+)\)/g,
+      '<a href="$2" class="text-blue-600 dark:text-blue-400 hover:underline no-underline">$1</a>'
+    )
+
     // Inline code
     .replace(
       /`([^`]+)`/g,

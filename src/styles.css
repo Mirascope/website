@@ -4,7 +4,15 @@
 /* Williams Handwriting Font Import - All styles */
 @font-face {
   font-family: 'Williams Handwriting';
-  src: \url("/fonts/Williams-Handwriting-v1.ttf") format('truetype');
+  src: \url("/fonts/Williams-Handwriting-Regular-v1.ttf") format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Excalifont';
+  src: \url("/fonts/Excalifont-Regular.woff2") format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -251,9 +259,14 @@ p code, li code, h1 code, h2 code, h3 code, h4 code, h5 code, h6 code {
   font-size: 1.1rem !important;
 }
 
-/* Font class for handwriting - preserved only for logo */
+/* Font class for handwriting - used in handwriting mode */
 .font-handwriting {
   font-family: 'Williams Handwriting', cursive !important;
+}
+
+/* Font class for Excalifont - used for stylistic elements in mono mode */
+.font-excalifont {
+  font-family: 'Excalifont', sans-serif !important;
 }
 
 /* Font class for sans */
