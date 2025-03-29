@@ -86,7 +86,7 @@ function BlogPostPage() {
       <div className="mb-6">
         <h1 className="text-3xl sm:text-4xl font-normal mb-2">{post.title}</h1>
         <p className="text-muted-foreground">
-          {post.date} · {post.readTime}
+          {post.date} · {post.readTime} · By {post.author}
         </p>
       </div>
 

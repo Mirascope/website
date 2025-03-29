@@ -7,6 +7,7 @@ export type PostMeta = {
   date: string;
   readTime: string;
   slug: string;
+  author: string;
 };
 
 // Cache for loaded posts
@@ -71,6 +72,7 @@ const loadAllPosts = async (): Promise<Record<string, { content: string; meta: P
           description: frontmatter.description || '',
           date: frontmatter.date || '',
           readTime: frontmatter.readTime || '',
+          author: frontmatter.author || 'Mirascope Team',
           slug,
         }
       };
