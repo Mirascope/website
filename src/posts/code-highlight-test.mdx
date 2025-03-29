@@ -1,0 +1,84 @@
+---
+title: "Code Highlighting Test"
+description: "Testing various code highlighting features."
+date: "2025-04-02"
+readTime: "2 min read"
+---
+
+# Code Highlighting Test
+
+This post demonstrates various code highlighting features using the standard notation.
+
+## Basic Line Highlighting
+
+```javascript {2-3}
+// This is a simple function
+function highlightMe() {
+  return "This line is highlighted too!";
+}
+
+console.log(highlightMe());
+```
+
+## Multiple Ranges
+
+```typescript {1,4-5,8}
+import { useState } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+  const increment = () => setCount(count + 1);
+  
+  return (
+    <button onClick={increment}>
+      Count: {count}
+    </button>
+  );
+}
+
+export default Counter;
+```
+
+## Different Languages
+
+```python {2,5}
+def greet(name):
+    # This line will be highlighted
+    greeting = f"Hello, {name}!"
+    
+    return greeting  # This line will be highlighted too
+    
+print(greet("World"))
+```
+
+```css {2,5-7}
+.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+```
+
+## Edge Cases
+
+Empty highlights - should show no highlighting:
+
+```javascript {}
+function noHighlight() {
+  return "No lines should be highlighted";
+}
+```
+
+Single line highlighting:
+
+```bash {1}
+echo "Only this line is highlighted"
+echo "This line is not highlighted"
+```
+
+That's all for the highlighting test!
