@@ -57,7 +57,7 @@ code, pre, .shiki, .shiki code,
 
 /* Handwriting mode uses handwriting font for code blocks */
 .handwriting-enabled code, .handwriting-enabled pre, .handwriting-enabled .shiki, .handwriting-enabled .shiki code {
-  font-family: 'Williams Handwriting New', cursive !important;
+  font-family: 'Williams Handwriting', cursive !important;
   font-size: 1.2rem !important;
 }
 
