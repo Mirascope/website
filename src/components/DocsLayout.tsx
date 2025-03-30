@@ -1,60 +1,35 @@
-import { createFileRoute, useParams } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
-import { getDoc, getDocsForProduct } from "@/lib/docs";
-import MDXContent from "@/components/MDXContent";
+import React from "react";
 import DocsSidebar from "@/components/DocsSidebar";
 import TableOfContents from "@/components/TableOfContents";
+import MDXContent from "@/components/MDXContent";
+import { type DocItem } from "@/lib/docs";
 
-export const Route = createFileRoute("/docs/$product/")({
-  component: ProductDocsIndexPage,
-  beforeLoad: ({ params }) => {
-    console.log(`Loading index page for product: ${params.product}`);
-  }
-});
+type DocsLayoutProps = {
+  product: string;
+  section: string | null;
+  slug: string;
+  document: { meta: DocItem; content: string } | null;
+  docs: DocItem[];
+  loading: boolean;
+  error: string | null;
+};
 
-function ProductDocsIndexPage() {
-  const { product } = useParams({ from: "/docs/$product/" });
-  
-  const [document, setDocument] = useState<{ meta: any; content: string } | null>(null);
-  const [productDocs, setProductDocs] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-      
-      console.log(`[ProductIndex] Loading index page for ${product}`);
-
-      try {
-        // Load all docs for this product
-        const docsForProduct = getDocsForProduct(product);
-        setProductDocs(docsForProduct);
-
-        // Try to load the index document first, if that fails, try welcome
-        let doc;
-        try {
-          doc = await getDoc(product, { slug: "index" });
-          console.log(`[ProductIndex] Loaded index document for ${product}:`, doc.meta.title);
-        } catch (indexError) {
-          // If index doesn't exist, try welcome as fallback
-          console.log(`[ProductIndex] No index document found, trying welcome for ${product}`);
-          doc = await getDoc(product, { slug: "welcome" });
-        }
-        console.log(`[ProductIndex] Loaded welcome document for ${product}:`, doc.meta.title);
-        setDocument(doc);
-        setLoading(false);
-      } catch (err) {
-        console.error("Error loading document:", err);
-        setError(`Failed to load document: ${err.message}`);
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [product]);
-
+/**
+ * DocsLayout - Shared layout for all documentation pages
+ * 
+ * Handles loading states, error states, and the common layout
+ * between all doc page types (product index, regular docs, API docs)
+ */
+const DocsLayout: React.FC<DocsLayoutProps> = ({
+  product,
+  section,
+  slug,
+  document,
+  docs,
+  loading,
+  error,
+}) => {
+  // Loading state
   if (loading) {
     return (
       <div className="flex justify-center" style={{ paddingTop: "60px" }}>
@@ -64,8 +39,8 @@ function ProductDocsIndexPage() {
             <div className="fixed w-72 top-[60px] pt-6 max-h-[calc(100vh-60px)] overflow-y-auto">
               <DocsSidebar
                 product={product}
-                section={null}
-                currentSlug="welcome"
+                section={section}
+                currentSlug={slug}
                 docs={[]}
               />
             </div>
@@ -83,6 +58,7 @@ function ProductDocsIndexPage() {
     );
   }
 
+  // Error state
   if (error || !document) {
     return (
       <div className="flex justify-center" style={{ paddingTop: "60px" }}>
@@ -92,18 +68,18 @@ function ProductDocsIndexPage() {
             <div className="fixed w-72 top-[60px] pt-6 max-h-[calc(100vh-60px)] overflow-y-auto">
               <DocsSidebar
                 product={product}
-                section={null}
-                currentSlug="welcome"
-                docs={productDocs}
+                section={section}
+                currentSlug={slug}
+                docs={docs}
               />
             </div>
           </div>
 
           {/* Main content area with error message */}
           <div className="w-[1000px] flex-shrink-0 py-20 flex flex-col items-center justify-center pl-8">
-            <h1 className="text-2xl font-medium mb-4">Welcome Document Not Found</h1>
+            <h1 className="text-2xl font-medium mb-4">Document Not Found</h1>
             <p className="text-gray-500">
-              {error || "The welcome document for this product doesn't exist."}
+              {error || "The document you're looking for doesn't exist."}
             </p>
           </div>
 
@@ -114,6 +90,7 @@ function ProductDocsIndexPage() {
     );
   }
 
+  // Regular document display
   return (
     <div className="flex justify-center" style={{ paddingTop: "60px" }}>
       <div className="flex mx-auto w-[1400px]">
@@ -122,9 +99,9 @@ function ProductDocsIndexPage() {
           <div className="fixed w-72 top-[60px] pt-6 max-h-[calc(100vh-60px)] overflow-y-auto">
             <DocsSidebar
               product={product}
-              section={null}
-              currentSlug="welcome"
-              docs={productDocs}
+              section={section}
+              currentSlug={slug}
+              docs={docs}
             />
           </div>
         </div>
@@ -150,8 +127,8 @@ function ProductDocsIndexPage() {
               <TableOfContents
                 contentId="doc-content"
                 product={product}
-                section={null}
-                slug="welcome"
+                section={section}
+                slug={slug}
               />
             </div>
           </div>
@@ -159,4 +136,6 @@ function ProductDocsIndexPage() {
       </div>
     </div>
   );
-}
+};
+
+export default DocsLayout;
