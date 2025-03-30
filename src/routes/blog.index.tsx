@@ -4,7 +4,7 @@ import { getAllPosts } from "@/lib/mdx";
 import type { PostMeta } from "@/lib/mdx";
 
 // Posts per page
-const POSTS_PER_PAGE = 6;
+const POSTS_PER_PAGE = 4;
 
 export const Route = createFileRoute("/blog/")({
   component: BlogPage,
@@ -97,9 +97,11 @@ function BlogPage() {
                   </div>
                 </Link>
               ))}
-              
+
               {/* Spacer elements to maintain grid layout when fewer than POSTS_PER_PAGE posts */}
-              {[...Array(Math.max(0, POSTS_PER_PAGE - currentPosts.length))].map((_, index) => (
+              {[
+                ...Array(Math.max(0, POSTS_PER_PAGE - currentPosts.length)),
+              ].map((_, index) => (
                 <div key={`spacer-${index}`} className="h-0 md:h-auto" />
               ))}
             </div>

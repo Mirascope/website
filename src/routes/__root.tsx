@@ -12,18 +12,18 @@ export const Route = createRootRoute({
     
     // Initialize font preference from localStorage
     const [monoEnabled, setMonoEnabled] = useState(() => {
-      if (typeof window === 'undefined') return true;
+      if (typeof window === 'undefined') return false;
       const savedPreference = localStorage.getItem('fontPreference');
-      // If no preference is set, default to mono
-      return savedPreference === null ? true : savedPreference === 'mono';
+      // If no preference is set, default to handwriting
+      return savedPreference === null ? false : savedPreference === 'mono';
     });
 
     // Apply the font preference on initial load
     useEffect(() => {
       if (typeof window !== 'undefined') {
         const savedPreference = localStorage.getItem('fontPreference');
-        // If no preference is set, default to mono
-        setMonoEnabled(savedPreference === null ? true : savedPreference === 'mono');
+        // If no preference is set, default to handwriting
+        setMonoEnabled(savedPreference === null ? false : savedPreference === 'mono');
       }
     }, []);
 
@@ -43,8 +43,11 @@ export const Route = createRootRoute({
         <div 
           className={`flex flex-col min-h-screen ${isLandingPage ? 'bg-watercolor-flipped' : ''} ${monoEnabled ? 'mono-enabled' : 'handwriting-enabled'}`}
         >
-          <div className="max-w-5xl mx-auto w-full flex-grow">
-            <Header monoEnabled={monoEnabled} toggleFont={toggleFont} />
+          {/* Header is fixed, so it's outside the content flow */}
+          <Header monoEnabled={monoEnabled} toggleFont={toggleFont} />
+          
+          {/* Content container with padding to account for fixed header */}
+          <div className="pt-24 max-w-5xl mx-auto w-full flex-grow">
             <main className="flex-grow">
               <Outlet />
             </main>

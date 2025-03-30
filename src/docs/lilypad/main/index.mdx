@@ -1,0 +1,58 @@
+---
+title: Getting Started with Lilypad
+description: Learn how to build your data flywheel with Lilypad.
+---
+
+# Getting Started with Lilypad
+
+Welcome to Lilypad, a framework for building your data flywheel in one line of code.
+
+## What is Lilypad?
+
+Lilypad helps you collect, curate, and evaluate data for your LLM-powered applications. It provides:
+
+- Simple API for data collection
+- Tools for data evaluation
+- Integration with Mirascope
+- Fine-tuning capabilities
+- Feedback loops for continuous improvement
+
+## Installation
+
+```bash
+npm install @mirascope/lilypad
+```
+
+## Quick Example
+
+```typescript
+import { DataFlywheel } from "@mirascope/lilypad";
+
+// Create a data flywheel
+const flywheel = new DataFlywheel({
+  name: "customer-support",
+  storage: {
+    type: "local",
+    path: "./data",
+  },
+});
+
+// Collect data
+await flywheel.collect({
+  input: "How do I reset my password?",
+  output: "You can reset your password by clicking on the 'Forgot Password' link on the login page.",
+  metadata: {
+    source: "customer-chat",
+    timestamp: Date.now(),
+  },
+});
+
+// Evaluate data
+const evaluations = await flywheel.evaluate({
+  evaluator: "helpfulness",
+});
+
+console.log(evaluations);
+```
+
+Ready to learn more? Check out the [Installation](/docs/lilypad/main/installation) guide to get started.

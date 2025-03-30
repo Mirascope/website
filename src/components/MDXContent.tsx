@@ -119,19 +119,50 @@ const parseMarkdown = async (markdown: string): Promise<string> => {
     processedMd = processedMd.replace(firstH1Match[0], '');
   }
 
+  // Create a slug function for headings
+  const slugify = (text: string): string => {
+    return text
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+  };
+
   processedMd = processedMd
-    // Headers - process remaining headers
+    // Headers - process remaining headers with IDs for linking
     .replace(
       /^# (.*$)/gm,
-      '<h1 class="text-3xl font-bold my-4">$1</h1>'
+      (match, p1) => {
+        const headingId = slugify(p1);
+        return `<h1 id="${headingId}" class="text-3xl font-bold my-6 scroll-mt-28">${p1}</h1>`;
+      }
     )
     .replace(
       /^## (.*$)/gm,
-      '<h2 class="text-2xl font-semibold my-3">$1</h2>'
+      (match, p1) => {
+        const headingId = slugify(p1);
+        return `<h2 id="${headingId}" class="text-2xl font-semibold my-5 scroll-mt-28">${p1}</h2>`;
+      }
     )
     .replace(
       /^### (.*$)/gm,
-      '<h3 class="text-xl font-medium my-3">$1</h3>'
+      (match, p1) => {
+        const headingId = slugify(p1);
+        return `<h3 id="${headingId}" class="text-xl font-medium my-4 scroll-mt-28">${p1}</h3>`;
+      }
+    )
+    .replace(
+      /^#### (.*$)/gm,
+      (match, p1) => {
+        const headingId = slugify(p1);
+        return `<h4 id="${headingId}" class="text-lg font-medium my-3 scroll-mt-28">${p1}</h4>`;
+      }
+    )
+    .replace(
+      /^##### (.*$)/gm,
+      (match, p1) => {
+        const headingId = slugify(p1);
+        return `<h5 id="${headingId}" class="text-base font-medium my-3 scroll-mt-28">${p1}</h5>`;
+      }
     )
 
     // Links - process before inline code to avoid conflicts with code backticks
@@ -239,7 +270,11 @@ const MDXContent: React.FC<MDXContentProps> = ({ source }) => {
       try {
         // Skip frontmatter if present (previously extracted by the data loader)
         const contentNoFrontmatter = source.replace(/^---\n[\s\S]*?\n---\n/, '');
-        const processedHtml = await parseMarkdown(contentNoFrontmatter);
+        
+        // Remove sourcemap comments that might appear at the end of the content
+        const cleanedContent = contentNoFrontmatter.replace(/\/\/# sourceMappingURL=.*$/, '');
+        
+        const processedHtml = await parseMarkdown(cleanedContent);
         setHtml(processedHtml);
       } catch (error) {
         console.error("Error processing markdown:", error);

@@ -69,20 +69,41 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
     };
   }, [dropdownOpen]);
 
+  // State to track scroll position
+  const [scrolled, setScrolled] = useState(false);
+
+  // Effect to handle scroll position
+  useEffect(() => {
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 10;
+      if (isScrolled !== scrolled) {
+        setScrolled(isScrolled);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [scrolled]);
+
   return (
     <header
       className={cn(
-        "py-6 px-4 sm:px-6 flex justify-center items-center relative",
+        "py-6 px-4 sm:px-6 flex justify-center items-center fixed top-0 left-0 right-0 w-full z-50 transition-all duration-200",
         isLandingPage
           ? "bg-transparent text-white"
-          : "bg-background text-slate-800"
+          : "bg-background text-slate-800",
+        scrolled && !isLandingPage ? "border-b border-gray-200 shadow-sm" : "",
+        scrolled && isLandingPage ? "bg-black/90 backdrop-blur-sm" : ""
       )}
     >
-      <nav className="flex flex-row items-center justify-between w-full max-w-5xl">
+      <nav className="flex flex-row items-center justify-between w-full max-w-5xl mx-auto">
         <Link
           to="/"
           className={cn(
-            "flex items-center",
+            "flex items-center relative z-10",
             isLandingPage ? "invisible" : "visible"
           )}
         >
@@ -94,7 +115,7 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
         </Link>
 
         {/* Desktop Navigation - Centered */}
-        <div className="hidden md:flex items-center gap-6 absolute left-1/2 transform -translate-x-1/2">
+        <div className="hidden md:flex items-center gap-6 absolute left-1/2 transform -translate-x-1/2 z-20">
           {/* Products Menu */}
           <NavigationMenu>
             <NavigationMenuList>
@@ -113,8 +134,8 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
                   <ul className="grid grid-cols-1 sm:grid-cols-2 w-[300px] sm:w-[480px] gap-4">
                     <li>
                       <NavigationMenuLink asChild>
-                        <a
-                          href="/products/mirascope"
+                        <Link
+                          to="/docs/mirascope/main/index"
                           className="block p-4 space-y-1.5 rounded-md bg-white hover:bg-gray-50 transition-colors"
                         >
                           <div className="font-medium text-xl text-[#6366f1]">
@@ -123,13 +144,13 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
                           <p className="text-base text-gray-600">
                             LLM abstractions that aren't obstructions.
                           </p>
-                        </a>
+                        </Link>
                       </NavigationMenuLink>
                     </li>
                     <li>
                       <NavigationMenuLink asChild>
-                        <a
-                          href="/products/lilypad"
+                        <Link
+                          to="/docs/lilypad/main/index"
                           className="block p-4 space-y-1.5 rounded-md bg-white hover:bg-gray-50 transition-colors"
                         >
                           <div className="font-medium text-xl text-[#2d8031]">
@@ -139,7 +160,7 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
                             Start building your data flywheel in one line of
                             code.
                           </p>
-                        </a>
+                        </Link>
                       </NavigationMenuLink>
                     </li>
                   </ul>
@@ -168,18 +189,6 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
                 <div className="py-1 flex flex-col">
                   <button
                     onClick={() => {
-                      if (!monoEnabled) {
-                        toggleFont();
-                      }
-                      setDropdownOpen(false);
-                    }}
-                    className={`w-full text-left px-4 py-2 hover:bg-gray-50 ${monoEnabled ? "bg-gray-50" : ""}`}
-                    style={{ fontSize: "0.875rem" }}
-                  >
-                    <span className="font-mono inline-block">Monospace</span>
-                  </button>
-                  <button
-                    onClick={() => {
                       if (monoEnabled) {
                         toggleFont();
                       }
@@ -191,6 +200,18 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
                     <span className="font-handwriting inline-block">
                       Handwriting
                     </span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (!monoEnabled) {
+                        toggleFont();
+                      }
+                      setDropdownOpen(false);
+                    }}
+                    className={`w-full text-left px-4 py-2 hover:bg-gray-50 ${monoEnabled ? "bg-gray-50" : ""}`}
+                    style={{ fontSize: "0.875rem" }}
+                  >
+                    <span className="font-mono inline-block">Monospace</span>
                   </button>
                 </div>
               </div>
@@ -220,28 +241,21 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
         >
           <div className="flex flex-col space-y-4">
             <div className="font-medium text-xl my-2">Products</div>
-            <a
-              href="/products/mirascope"
+            <Link
+              to="/docs/mirascope/main/index"
               className="p-3 rounded-md bg-white text-[#6366f1] font-medium hover:bg-gray-50 transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
-              Mirascope
-            </a>
-            <a
-              href="/products/lilypad"
+              Mirascope Docs
+            </Link>
+            <Link
+              to="/docs/lilypad/main/index"
               className="p-3 rounded-md bg-white text-[#2d8031] font-medium hover:bg-gray-50 transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
-              Lilypad
-            </a>
-            <hr className="my-2" />
-            <Link
-              to="/docs"
-              className="font-medium py-2 text-xl flex items-center relative cursor-pointer hover:text-primary transition-colors duration-200"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Docs
+              Lilypad Docs
             </Link>
+            <hr className="my-2" />
             <Link
               to="/blog"
               className="font-medium py-2 text-xl flex items-center relative cursor-pointer hover:text-primary transition-colors duration-200"
@@ -261,20 +275,6 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
               <p className="text-gray-500 text-sm mb-1">Font Style</p>
               <div className="border border-gray-200 rounded-md overflow-hidden">
                 <button
-                  className={`w-full text-left px-4 py-1.5 hover:bg-gray-50 ${monoEnabled ? "bg-gray-50" : "bg-white"}`}
-                  style={{ fontSize: "0.875rem" }}
-                  onClick={() => {
-                    if (!monoEnabled) {
-                      toggleFont();
-                      setIsMenuOpen(false);
-                    } else {
-                      setIsMenuOpen(false);
-                    }
-                  }}
-                >
-                  <span className="font-mono inline-block">Monospace</span>
-                </button>
-                <button
                   className={`w-full text-left px-4 py-1.5 hover:bg-gray-50 ${!monoEnabled ? "bg-gray-50" : "bg-white"}`}
                   style={{ fontSize: "0.875rem" }}
                   onClick={() => {
@@ -289,6 +289,20 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
                   <span className="font-handwriting inline-block">
                     Handwriting
                   </span>
+                </button>
+                <button
+                  className={`w-full text-left px-4 py-1.5 hover:bg-gray-50 ${monoEnabled ? "bg-gray-50" : "bg-white"}`}
+                  style={{ fontSize: "0.875rem" }}
+                  onClick={() => {
+                    if (!monoEnabled) {
+                      toggleFont();
+                      setIsMenuOpen(false);
+                    } else {
+                      setIsMenuOpen(false);
+                    }
+                  }}
+                >
+                  <span className="font-mono inline-block">Monospace</span>
                 </button>
               </div>
             </div>

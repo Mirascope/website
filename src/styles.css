@@ -8,6 +8,7 @@
   font-weight: normal;
   font-style: normal;
   font-display: swap;
+  descent-override: 10%;
 }
 
 @font-face {
@@ -155,6 +156,8 @@ p code, li code, h1 code, h2 code, h3 code, h4 code, h5 code, h6 code {
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.871 0.006 286.286);
 
+  /* Paper texture variables for light mode */
+  --text-offset: 2px;
   --texture-opacity: 0.3;
   --texture-blend-mode: multiply;
 }
@@ -194,6 +197,7 @@ p code, li code, h1 code, h2 code, h3 code, h4 code, h5 code, h6 code {
   --sidebar-ring: oklch(0.442 0.017 285.786);
 
   /* Paper texture variables for dark mode */
+  --text-offset: 2px;
   --texture-opacity: 0.3;
   --texture-blend-mode: soft-light;
 }
@@ -291,6 +295,7 @@ header button:not(.font-toggle-button),
   font-weight: 400 !important;
 }
 
+
 /* Font toggle button styling - consistent across all pages */
 .font-toggle-button {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif !important;
@@ -325,13 +330,14 @@ header button:not(.font-toggle-button),
 /* Custom navigation menu styling */
 [data-radix-navigation-menu-viewport],
 [data-radix-navigation-menu-content] {
-  z-index: 1000 !important;
+  z-index: 1050 !important;
 }
 
 .NavigationMenuContent {
   display: block !important;
   visibility: visible !important;
   position: absolute !important;
+  z-index: 1050 !important;
 }
 
 /* Remove default Radix chevron */
@@ -347,6 +353,7 @@ header button:not(.font-toggle-button),
   transform: none !important;
   width: auto !important;
   min-width: 12rem !important;
+  z-index: 1050 !important;
 }
 
 /* Homepage headings styling */
@@ -443,3 +450,23 @@ header button:not(.font-toggle-button),
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   transform: scale(1.08);
 }
+
+/* This is the new vertical alignment approach */
+
+/* Brand-specific colors */
+.text-mirascope-purple {
+  color: #6366f1;
+}
+
+.text-lilypad-green {
+  color: #2d8031;
+}
+
+.bg-mirascope-purple {
+  background-color: #6366f1;
+}
+
+.bg-lilypad-green {
+  background-color: #2d8031;
+}
+
