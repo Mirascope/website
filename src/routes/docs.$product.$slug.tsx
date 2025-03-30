@@ -5,16 +5,21 @@ import MDXContent from "@/components/MDXContent";
 import DocsSidebar from "@/components/DocsSidebar";
 import TableOfContents from "@/components/TableOfContents";
 
-export const Route = createFileRoute("/docs/$product/")({
-  component: ProductDocsIndexPage,
-  beforeLoad: ({ params }) => {
-    console.log(`Loading index page for product: ${params.product}`);
-  }
+export const Route = createFileRoute("/docs/$product/$slug")({
+  component: DocProductPage,
+  validateParams: ({ product, slug }) => {
+    console.log(`[SLUG ROUTE] Validating top-level route: product=${product}, slug=${slug}`);
+    
+    // Accept ALL routes for troubleshooting
+    return { product, slug };
+  },
 });
 
-function ProductDocsIndexPage() {
-  const { product } = useParams({ from: "/docs/$product/" });
-  
+function DocProductPage() {
+  const { product, slug } = useParams({
+    from: "/docs/$product/$slug",
+  });
+
   const [document, setDocument] = useState<{ meta: any; content: string } | null>(null);
   const [productDocs, setProductDocs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -22,38 +27,40 @@ function ProductDocsIndexPage() {
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log(`[DocProductPage] Loading content for product=${product}, slug=${slug}`);
       setLoading(true);
       setError(null);
-      
-      console.log(`[ProductIndex] Loading index page for ${product}`);
 
       try {
         // Load all docs for this product
         const docsForProduct = getDocsForProduct(product);
         setProductDocs(docsForProduct);
+        console.log(`[DocProductPage] Loaded ${docsForProduct.length} docs for product`);
 
-        // Try to load the index document first, if that fails, try welcome
-        let doc;
-        try {
-          doc = await getDoc(product, { slug: "index" });
-          console.log(`[ProductIndex] Loaded index document for ${product}:`, doc.meta.title);
-        } catch (indexError) {
-          // If index doesn't exist, try welcome as fallback
-          console.log(`[ProductIndex] No index document found, trying welcome for ${product}`);
-          doc = await getDoc(product, { slug: "welcome" });
+        // Load the document - this is a top-level item (no section or group)
+        console.log(`[DocProductPage] Fetching content for ${product}/${slug}`);
+        const doc = await getDoc(product, { slug });
+        console.log(`[DocProductPage] Received document:`, doc);
+        
+        if (!doc) {
+          throw new Error("Document is null or undefined");
         }
-        console.log(`[ProductIndex] Loaded welcome document for ${product}:`, doc.meta.title);
+        
+        if (!doc.content || doc.content.trim() === "") {
+          console.warn(`[DocProductPage] Empty content received for ${product}/${slug}`);
+        }
+        
         setDocument(doc);
         setLoading(false);
       } catch (err) {
-        console.error("Error loading document:", err);
+        console.error(`[DocProductPage] Error loading document for ${product}/${slug}:`, err);
         setError(`Failed to load document: ${err.message}`);
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [product]);
+  }, [product, slug]);
 
   if (loading) {
     return (
@@ -65,7 +72,7 @@ function ProductDocsIndexPage() {
               <DocsSidebar
                 product={product}
                 section={null}
-                currentSlug="welcome"
+                currentSlug={slug}
                 docs={[]}
               />
             </div>
@@ -84,6 +91,9 @@ function ProductDocsIndexPage() {
   }
 
   if (error || !document) {
+    // Add additional debugging for the document fetch failure
+    console.error(`[DocProduct] Document fetch failed for ${product}/${slug}`, { error, document });
+    
     return (
       <div className="flex justify-center" style={{ paddingTop: "60px" }}>
         <div className="flex mx-auto w-[1400px]">
@@ -93,7 +103,7 @@ function ProductDocsIndexPage() {
               <DocsSidebar
                 product={product}
                 section={null}
-                currentSlug="welcome"
+                currentSlug={slug}
                 docs={productDocs}
               />
             </div>
@@ -101,10 +111,13 @@ function ProductDocsIndexPage() {
 
           {/* Main content area with error message */}
           <div className="w-[1000px] flex-shrink-0 py-20 flex flex-col items-center justify-center pl-8">
-            <h1 className="text-2xl font-medium mb-4">Welcome Document Not Found</h1>
+            <h1 className="text-2xl font-medium mb-4">Document Not Found</h1>
             <p className="text-gray-500">
-              {error || "The welcome document for this product doesn't exist."}
+              {error || `The document "${slug}" in product "${product}" could not be loaded.`}
             </p>
+            <div className="mt-4 p-4 bg-gray-100 rounded text-sm">
+              <p>Looking for file: /src/docs/{product}/{slug}.mdx</p>
+            </div>
           </div>
 
           {/* Right TOC sidebar - empty during error state */}
@@ -114,6 +127,45 @@ function ProductDocsIndexPage() {
     );
   }
 
+  // Extra safety check
+  if (!document || !document.content) {
+    console.error(`[DocProduct] Document missing or invalid for ${product}/${slug}`);
+    return (
+      <div className="flex justify-center" style={{ paddingTop: "60px" }}>
+        <div className="flex mx-auto w-[1400px]">
+          {/* Left sidebar */}
+          <div className="w-72 flex-shrink-0">
+            <div className="fixed w-72 top-[60px] pt-6 max-h-[calc(100vh-60px)] overflow-y-auto">
+              <DocsSidebar
+                product={product}
+                section={null}
+                currentSlug={slug}
+                docs={productDocs}
+              />
+            </div>
+          </div>
+
+          {/* Main content area with error message */}
+          <div className="w-[1000px] flex-shrink-0 py-20 flex flex-col items-center justify-center pl-8">
+            <h1 className="text-2xl font-medium mb-4">Document Error - Missing Content</h1>
+            <p className="text-gray-500">
+              The document content could not be loaded properly.
+            </p>
+            <div className="mt-4 p-4 bg-gray-100 rounded text-sm">
+              <p>Document path: {product}/{slug}</p>
+              <p className="mt-2">This is a debug message for troubleshooting purposes.</p>
+            </div>
+          </div>
+
+          {/* Right TOC sidebar - empty during error state */}
+          <div className="w-64 flex-shrink-0 hidden lg:block"></div>
+        </div>
+      </div>
+    );
+  }
+
+  console.log(`[DocProduct] Rendering document for ${product}/${slug} with title "${document.meta.title}"`);
+  
   return (
     <div className="flex justify-center" style={{ paddingTop: "60px" }}>
       <div className="flex mx-auto w-[1400px]">
@@ -123,7 +175,7 @@ function ProductDocsIndexPage() {
             <DocsSidebar
               product={product}
               section={null}
-              currentSlug="welcome"
+              currentSlug={slug}
               docs={productDocs}
             />
           </div>
@@ -138,6 +190,13 @@ function ProductDocsIndexPage() {
           <div id="doc-content" className="prose prose-slate max-w-none">
             <MDXContent source={document.content} />
           </div>
+          <div className="mt-8 p-4 bg-gray-50 rounded-lg text-xs">
+            <p>Debug info:</p>
+            <p>Product: {product}</p>
+            <p>Slug: {slug}</p>
+            <p>Title: {document.meta.title}</p>
+            <p>Content length: {document.content?.length || 0} characters</p>
+          </div>
         </div>
 
         {/* Right TOC sidebar */}
@@ -151,7 +210,7 @@ function ProductDocsIndexPage() {
                 contentId="doc-content"
                 product={product}
                 section={null}
-                slug="welcome"
+                slug={slug}
               />
             </div>
           </div>

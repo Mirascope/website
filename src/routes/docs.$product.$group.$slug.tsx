@@ -1,71 +1,72 @@
 import { createFileRoute, useParams } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-import { getDoc, getDocsForSection, getSectionsForProduct } from "@/lib/docs";
+import { getDoc, getDocsForGroup } from "@/lib/docs";
 import type { DocMeta } from "@/lib/docs";
 import MDXContent from "@/components/MDXContent";
 import DocsSidebar from "@/components/DocsSidebar";
 import TableOfContents from "@/components/TableOfContents";
 
-export const Route = createFileRoute("/docs/$product/$section/$slug")({
-  component: DocSectionPage,
-  validateParams: ({ product, section, slug }) => {
-    console.log(`[Section Route] Validating section route: product=${product}, section=${section}, slug=${slug}`);
+export const Route = createFileRoute("/docs/$product/$group/$slug")({
+  component: DocGroupPage,
+  beforeLoad: ({ params }) => {
+    console.log(
+      `[Group Route] beforeLoad: product=${params.product}, group=${params.group}, slug=${params.slug}`
+    );
+  },
+  validateParams: ({ product, group, slug }) => {
+    console.log(`[Group Route] Validating group route: product=${product}, group=${group}, slug=${slug}`);
     
-    // Check if this is really a section (and not a top-level item incorrectly interpreted as a section)
     // Import directly to avoid circular dependencies
     const docsMetadata = require("@/docs/_meta").default;
-    
     const productData = docsMetadata[product];
+    
     if (!productData) {
-      console.error(`[Section Route] Product not found: ${product}`);
+      console.error(`[Group Route] Product not found: ${product}`);
       return false;
     }
     
-    // Special case: If this is a top-level item like "migration", don't handle it here
-    const isTopLevelItem = productData.items && productData.items[section];
-    if (isTopLevelItem) {
-      console.log(`[Section Route] '${section}' is a top-level item, not a section. Rejecting match.`);
+    // If this "group" is actually a section, reject this route match 
+    // and let the section route handle it
+    if (productData.sections && productData.sections[group]) {
+      console.log(`[Group Route] "${group}" is actually a section in metadata, not a group. Rejecting match.`);
       return false;
     }
     
-    // Special case: If this is a top-level group like "getting-started", don't handle it here
-    const isTopLevelGroup = productData.groups && productData.groups[section];
-    if (isTopLevelGroup) {
-      console.log(`[Section Route] '${section}' is a top-level group, not a section. Rejecting match.`);
+    // Verify that this is a valid group in the product's top-level groups
+    const groupExists = productData.groups && productData.groups[group];
+    if (!groupExists) {
+      console.error(`[Group Route] Group not found: ${group} in product ${product}`);
       return false;
     }
     
-    // Verify the section exists in the metadata
-    const isSectionValid = productData.sections && productData.sections[section];
-    console.log(`[Section Route] '${section}' is ${isSectionValid ? 'a valid' : 'NOT a valid'} section`);
-    
-    if (isSectionValid) {
-      // For sections, also check that the slug is valid (if not index/overview)
-      const isIndexPath = slug === "index" || slug === "" || slug === "overview";
-      const itemExists = productData.sections[section]?.items?.[slug];
-      
-      if (!isIndexPath && !itemExists) {
-        console.error(`[Section Route] Item '${slug}' not found in section '${section}'`);
-        // Still allow this to pass, we'll handle the error in the component
-      }
-      
-      return { product, section, slug };
+    // If this is the index page for a group, reject this route and let the index route handle it
+    if (slug === "index" || slug === "" || slug === "overview") {
+      console.log(`[Group Route] This is a group index page for ${group}, letting docs.$product.$group.index route handle it`);
+      return false;
     }
     
-    return false;
+    // Verify that the item exists in this group
+    const itemExists = productData.groups[group]?.items?.[slug];
+    if (!itemExists) {
+      console.error(`[Group Route] Item not found: ${slug} in group ${group}`);
+      return false;
+    }
+    
+    console.log(`[Group Route] Successfully validated path: ${product}/${group}/${slug}`);
+    return { product, group, slug };
   },
 });
 
-function DocSectionPage() {
-  const { product, section, slug } = useParams({
-    from: "/docs/$product/$section/$slug",
+function DocGroupPage() {
+  const { product, group, slug } = useParams({
+    from: "/docs/$product/$group/$slug",
   });
 
   const [document, setDocument] = useState<{
     meta: DocMeta;
     content: string;
   } | null>(null);
-  const [sectionDocs, setSectionDocs] = useState<DocMeta[]>([]);
+  const [groupDocs, setGroupDocs] = useState<DocMeta[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -75,36 +76,36 @@ function DocSectionPage() {
       setError(null);
 
       try {
-        // Load section docs for the sidebar
-        const docsInSection = getDocsForSection(product, section);
-        setSectionDocs(docsInSection);
+        // Load group docs for the sidebar
+        const docsInGroup = getDocsForGroup(product, group);
+        setGroupDocs(docsInGroup);
 
         // Load the current document
+        console.log(`[Group Route] Loading document for ${product}/${group}/${slug}`);
         try {
-          const doc = await getDoc(product, { section, slug });
-          console.log(`[Section Route] Loaded document: ${doc.meta.title}`);
+          const doc = await getDoc(product, { group, slug });
+          console.log(`[Group Route] Loaded document: ${doc.meta.title}`);
           setDocument(doc);
         } catch (docErr) {
-          console.error(`[Section Route] Error loading document: ${docErr.message}`);
+          console.error(`[Group Route] Error loading document: ${docErr.message}`);
           
-          // Create placeholder content if file not found but metadata exists
-          const metadata = require("@/docs/_meta").default;
-          const productData = metadata[product];
-          const sectionData = productData?.sections?.[section];
+          // Create placeholder content if file not found
+          const productData = docsMetadata[product];
+          const groupData = productData?.groups?.[group];
           
-          if (sectionData && sectionData.items && sectionData.items[slug]) {
-            const itemData = sectionData.items[slug];
-            console.log(`[Section Route] Creating placeholder content from metadata for ${product}/${section}/${slug}`);
+          if (groupData && groupData.items && groupData.items[slug]) {
+            const itemData = groupData.items[slug];
+            console.log(`[Group Route] Creating placeholder content for ${product}/${group}/${slug}`);
             
             const meta: DocMeta = {
               title: itemData.title,
               description: itemData.description || `${itemData.title} documentation`,
               slug,
-              path: `${product}/${section}/${slug}`,
+              path: `${product}/${group}/${slug}`,
               product,
-              type: "section-item",
-              section,
-              sectionTitle: sectionData.title
+              type: "group-item",
+              group,
+              groupTitle: groupData.title
             };
             
             const content = `---
@@ -120,10 +121,11 @@ ${meta.description || ""}
             
             setDocument({ meta, content });
           } else {
-            console.error(`[Section Route] Item not found in metadata: ${product}/${section}/${slug}`);
-            setError(`Item "${slug}" not found in section "${section}"`);
+            console.error(`[Group Route] Item not found in _meta.ts: ${product}/${group}/${slug}`);
+            setError(`Item "${slug}" not found in group "${group}"`);
           }
         }
+        
         setLoading(false);
       } catch (err) {
         console.error("Error loading document:", err);
@@ -133,7 +135,7 @@ ${meta.description || ""}
     };
 
     fetchData();
-  }, [product, section, slug]);
+  }, [product, group, slug]);
 
   if (loading) {
     return (
@@ -144,9 +146,10 @@ ${meta.description || ""}
             <div className="fixed w-72 top-[60px] pt-6 max-h-[calc(100vh-60px)] overflow-y-auto">
               <DocsSidebar
                 product={product}
-                section={section}
+                section={null}
                 currentSlug={slug}
                 docs={[]}
+                currentGroup={group}
               />
             </div>
           </div>
@@ -172,28 +175,20 @@ ${meta.description || ""}
             <div className="fixed w-72 top-[60px] pt-6 max-h-[calc(100vh-60px)] overflow-y-auto">
               <DocsSidebar
                 product={product}
-                section={section}
+                section={null}
                 currentSlug={slug}
-                docs={sectionDocs}
+                docs={[]}
+                currentGroup={group}
               />
             </div>
           </div>
 
-          {/* Main content area with error message and debug info */}
+          {/* Main content area with error message */}
           <div className="w-[1000px] flex-shrink-0 py-20 px-8 flex flex-col items-center justify-center">
             <h1 className="text-2xl font-medium mb-4">Document Not Found</h1>
             <p className="text-gray-500">
               {error || "The document you're looking for doesn't exist."}
             </p>
-            <div className="mt-6 p-4 bg-gray-50 rounded-lg text-left w-full max-w-lg">
-              <h3 className="text-lg font-medium mb-2">Debug Information</h3>
-              <pre className="text-xs overflow-auto">
-                {`Product: ${product}
-Section: ${section}
-Slug: ${slug}
-Expected path: /src/docs/${product}/${section}/${slug}.mdx`}
-              </pre>
-            </div>
           </div>
 
           {/* Right TOC sidebar - empty during error state */}
@@ -201,21 +196,6 @@ Expected path: /src/docs/${product}/${section}/${slug}.mdx`}
         </div>
       </div>
     );
-  }
-
-  // Safety check for empty content
-  if (!document.content || document.content.trim() === "") {
-    console.error("Document content is empty for:", product, section, slug);
-    // Use a sensible fallback
-    document.content = `---
-title: ${document.meta.title || "Documentation"}
-description: ${document.meta.description || "Content coming soon"}
----
-
-# ${document.meta.title || "Documentation"}
-
-${document.meta.description || "Content is being developed. Please check back soon."}
-`;
   }
 
   return (
@@ -226,15 +206,16 @@ ${document.meta.description || "Content is being developed. Please check back so
           <div className="fixed w-72 top-[60px] pt-6 max-h-[calc(100vh-60px)] overflow-y-auto">
             <DocsSidebar
               product={product}
-              section={section}
+              section={null}
               currentSlug={slug}
-              docs={sectionDocs}
+              docs={[]} 
+              currentGroup={group}
             />
           </div>
         </div>
 
-        {/* Main content area - wider width */}
-        <div className="w-[1000px] flex-shrink-0 pt-0 px-8 -mt-12">
+        {/* Main content area */}
+        <div className="w-[1000px] flex-shrink-0 pt-6 px-8">
           <h1 className="text-3xl font-medium mb-4">{document.meta.title}</h1>
           {document.meta.description && (
             <p className="text-gray-600 mb-6">{document.meta.description}</p>
@@ -254,7 +235,7 @@ ${document.meta.description || "Content is being developed. Please check back so
               <TableOfContents
                 contentId="doc-content"
                 product={product}
-                section={section}
+                section={null}
                 slug={slug}
               />
             </div>

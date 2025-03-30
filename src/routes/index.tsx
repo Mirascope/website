@@ -14,7 +14,7 @@ function LandingPage() {
             <div className="flex flex-row items-center justify-center relative z-10">
               <div className="mr-3 sm:mr-4 w-16 sm:w-20 h-16 sm:h-20 flex items-center justify-center">
                 <img
-                  src="/public/frog-logo.png"
+                  src="/frog-logo.png"
                   alt="Mirascope Frog Logo"
                   className="w-12 sm:w-16 h-auto"
                 />
