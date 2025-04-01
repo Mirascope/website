@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import Logo from "@/components/Logo";
 
 // Reusable navigation link component
 interface NavLinkProps {
@@ -107,10 +108,12 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
             isLandingPage ? "invisible" : "visible"
           )}
         >
-          <img
-            src="/frog-logo.png"
-            alt="Mirascope Frog Logo"
-            className="h-7 sm:h-8 w-auto"
+          <Logo 
+            size="small" 
+            withText={true}
+            textClassName={cn(
+              isLandingPage ? "text-white" : "text-primary"
+            )}
           />
         </Link>
 
