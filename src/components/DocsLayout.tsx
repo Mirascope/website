@@ -44,7 +44,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
   if (loading) {
     return (
       <div className="flex justify-center" style={{ paddingTop: "60px" }}>
-        <div className="flex mx-auto w-full max-w-[1800px] px-4">
+        <div className="flex mx-auto w-full max-w-7xl">
           {/* Left sidebar */}
           <div className="w-64 flex-shrink-0">
             <div className="fixed w-64 top-[60px] pt-6 max-h-[calc(100vh-60px)] overflow-y-auto">
@@ -74,7 +74,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
   if (error || !document) {
     return (
       <div className="flex justify-center" style={{ paddingTop: "60px" }}>
-        <div className="flex mx-auto w-full max-w-[1800px] px-4">
+        <div className="flex mx-auto w-full max-w-7xl">
           {/* Left sidebar */}
           <div className="w-64 flex-shrink-0">
             <div className="fixed w-64 top-[60px] pt-6 max-h-[calc(100vh-60px)] overflow-y-auto">
@@ -122,7 +122,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
   // Regular document display
   return (
     <div className="flex justify-center" style={{ paddingTop: "60px" }}>
-      <div className="flex mx-auto w-full max-w-[1800px] px-4">
+      <div className="flex mx-auto w-full max-w-7xl">
         {/* Left sidebar */}
         <div className="w-64 flex-shrink-0">
           <div className="fixed w-64 top-[60px] pt-6 max-h-[calc(100vh-60px)] overflow-y-auto">
