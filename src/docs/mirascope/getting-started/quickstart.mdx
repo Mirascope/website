@@ -7,28 +7,54 @@ Install Mirascope, specifying the provider you intend to use, and set your API k
 
 <ProviderContextProvider>
   <OSContextProvider>
-    <ProviderSelector />
-    <OSSelector className="mt-4" />
-    <InstallSnippet className="mt-4" />
+    <ApiStyleProvider>
+      <ProviderSelector />
+      <OSSelector className="mt-4" />
+      <ApiStyleSelector className="mt-4" />
+      <InstallSnippet className="mt-4" />
 
-    <CodeSnippet code={`
-      from mirascope import llm
-      from pydantic import BaseModel
-
-
-      class Book(BaseModel):
-          title: str
-          author: str
+      <TemplatesOnly>
+        <CodeSnippet code={`
+          from mirascope import llm
+          from pydantic import BaseModel
 
 
-      @llm.call(provider="$PROVIDER_NAME", model="$PROVIDER_MODEL", response_model=Book)
-      def extract_book(text: str) -> str:
-          return f"Extract {text}"
+          class Book(BaseModel):
+              title: str
+              author: str
+
+          @llm.call(provider="$PROVIDER_NAME", model="$PROVIDER_MODEL", response_model=Book)
+          @llm.prompt_template("Extract {text}")
+          def extract_book(text: str) -> str:
+              ...
 
 
-      book = extract_book("The Name of the Wind by Patrick Rothfuss")
-      print(book)
-      # Output: title='The Name of the Wind' author='Patrick Rothfuss'
-    `} />
+          book = extract_book("The Name of the Wind by Patrick Rothfuss")
+          print(book)
+          # Output: title='The Name of the Wind' author='Patrick Rothfuss'
+        `} />
+      </TemplatesOnly>
+
+      <MessagesOnly>
+        <CodeSnippet code={`
+          from mirascope import llm
+          from pydantic import BaseModel
+
+
+          class Book(BaseModel):
+              title: str
+              author: str
+
+          @llm.call(provider="$PROVIDER_NAME", model="$PROVIDER_MODEL", response_model=Book)
+          def extract_book(text: str) -> str:
+              return f"Extract {text}"
+
+
+          book = extract_book("fantasy")
+          print(book)
+          # Output: title='The Name of the Wind' author='Patrick Rothfuss'
+        `} />
+      </MessagesOnly>
+    </ApiStyleProvider>
   </OSContextProvider>
 </ProviderContextProvider>
