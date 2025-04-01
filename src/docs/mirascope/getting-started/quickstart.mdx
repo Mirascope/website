@@ -10,5 +10,25 @@ Install Mirascope, specifying the provider you intend to use, and set your API k
     <ProviderSelector />
     <OSSelector className="mt-4" />
     <InstallSnippet className="mt-4" />
+
+    <CodeSnippet code={`
+      from mirascope import llm
+      from pydantic import BaseModel
+
+
+      class Book(BaseModel):
+          title: str
+          author: str
+
+
+      @llm.call(provider="$PROVIDER_NAME", model="$PROVIDER_MODEL", response_model=Book)
+      def extract_book(text: str) -> str:
+          return f"Extract {text}"
+
+
+      book = extract_book("The Name of the Wind by Patrick Rothfuss")
+      print(book)
+      # Output: title='The Name of the Wind' author='Patrick Rothfuss'
+    `} />
   </OSContextProvider>
 </ProviderContextProvider>
