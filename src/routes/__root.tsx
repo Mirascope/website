@@ -16,7 +16,7 @@ export const Route = createRootRoute({
     return (
       <>
         <div
-          className={`flex flex-col min-h-screen ${isLandingPage ? "bg-watercolor-flipped" : ""} handwriting-enabled`}
+          className={`px-4 sm:px-6 flex flex-col min-h-screen ${isLandingPage ? "bg-watercolor-flipped" : ""} handwriting-enabled`}
         >
           {/* Header is fixed, so it's outside the content flow */}
           <Header />
