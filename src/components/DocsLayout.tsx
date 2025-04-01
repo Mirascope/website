@@ -64,7 +64,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
   // Loading state
   if (loading) {
     return (
-      <div className="flex justify-center" style={{ paddingTop: "60px" }}>
+      <div className="flex justify-center pt-[60px]">
         <div className="flex mx-auto w-full max-w-7xl">
           {/* Left sidebar */}
           <div className="w-64 flex-shrink-0">
