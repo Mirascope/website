@@ -15,15 +15,10 @@ import { Route as PricingImport } from './routes/pricing'
 import { Route as IndexImport } from './routes/index'
 import { Route as DocsIndexImport } from './routes/docs.index'
 import { Route as BlogIndexImport } from './routes/blog.index'
+import { Route as DocsSplatImport } from './routes/docs.$'
 import { Route as BlogSlugImport } from './routes/blog.$slug'
-import { Route as DocsProductIndexImport } from './routes/docs.$product.index'
-import { Route as DocsProductSlugImport } from './routes/docs.$product.$slug'
-import { Route as DocsProductSectionIndexImport } from './routes/docs.$product.$section.index'
-import { Route as DocsProductGroupIndexImport } from './routes/docs.$product.$group.index'
-import { Route as DocsProductSectionSlugImport } from './routes/docs.$product.$section.$slug'
-import { Route as DocsProductGroupSlugImport } from './routes/docs.$product.$group.$slug'
-import { Route as DocsProductSectionGroupIndexImport } from './routes/docs.$product.$section.$group.index'
-import { Route as DocsProductSectionGroupSlugImport } from './routes/docs.$product.$section.$group.$slug'
+import { Route as DocsProductSplatImport } from './routes/docs.$product.$'
+import { Route as DocsProductApiSplatImport } from './routes/docs.$product.api.$'
 
 // Create/Update Routes
 
@@ -51,61 +46,29 @@ const BlogIndexRoute = BlogIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const DocsSplatRoute = DocsSplatImport.update({
+  id: '/docs/$',
+  path: '/docs/$',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const BlogSlugRoute = BlogSlugImport.update({
   id: '/blog/$slug',
   path: '/blog/$slug',
   getParentRoute: () => rootRoute,
 } as any)
 
-const DocsProductIndexRoute = DocsProductIndexImport.update({
-  id: '/docs/$product/',
-  path: '/docs/$product/',
+const DocsProductSplatRoute = DocsProductSplatImport.update({
+  id: '/docs/$product/$',
+  path: '/docs/$product/$',
   getParentRoute: () => rootRoute,
 } as any)
 
-const DocsProductSlugRoute = DocsProductSlugImport.update({
-  id: '/docs/$product/$slug',
-  path: '/docs/$product/$slug',
+const DocsProductApiSplatRoute = DocsProductApiSplatImport.update({
+  id: '/docs/$product/api/$',
+  path: '/docs/$product/api/$',
   getParentRoute: () => rootRoute,
 } as any)
-
-const DocsProductSectionIndexRoute = DocsProductSectionIndexImport.update({
-  id: '/docs/$product/$section/',
-  path: '/docs/$product/$section/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const DocsProductGroupIndexRoute = DocsProductGroupIndexImport.update({
-  id: '/docs/$product/$group/',
-  path: '/docs/$product/$group/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const DocsProductSectionSlugRoute = DocsProductSectionSlugImport.update({
-  id: '/docs/$product/$section/$slug',
-  path: '/docs/$product/$section/$slug',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const DocsProductGroupSlugRoute = DocsProductGroupSlugImport.update({
-  id: '/docs/$product/$group/$slug',
-  path: '/docs/$product/$group/$slug',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const DocsProductSectionGroupIndexRoute =
-  DocsProductSectionGroupIndexImport.update({
-    id: '/docs/$product/$section/$group/',
-    path: '/docs/$product/$section/$group/',
-    getParentRoute: () => rootRoute,
-  } as any)
-
-const DocsProductSectionGroupSlugRoute =
-  DocsProductSectionGroupSlugImport.update({
-    id: '/docs/$product/$section/$group/$slug',
-    path: '/docs/$product/$section/$group/$slug',
-    getParentRoute: () => rootRoute,
-  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -132,6 +95,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugImport
       parentRoute: typeof rootRoute
     }
+    '/docs/$': {
+      id: '/docs/$'
+      path: '/docs/$'
+      fullPath: '/docs/$'
+      preLoaderRoute: typeof DocsSplatImport
+      parentRoute: typeof rootRoute
+    }
     '/blog/': {
       id: '/blog/'
       path: '/blog'
@@ -146,60 +116,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DocsIndexImport
       parentRoute: typeof rootRoute
     }
-    '/docs/$product/$slug': {
-      id: '/docs/$product/$slug'
-      path: '/docs/$product/$slug'
-      fullPath: '/docs/$product/$slug'
-      preLoaderRoute: typeof DocsProductSlugImport
+    '/docs/$product/$': {
+      id: '/docs/$product/$'
+      path: '/docs/$product/$'
+      fullPath: '/docs/$product/$'
+      preLoaderRoute: typeof DocsProductSplatImport
       parentRoute: typeof rootRoute
     }
-    '/docs/$product/': {
-      id: '/docs/$product/'
-      path: '/docs/$product'
-      fullPath: '/docs/$product'
-      preLoaderRoute: typeof DocsProductIndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/docs/$product/$group/$slug': {
-      id: '/docs/$product/$group/$slug'
-      path: '/docs/$product/$group/$slug'
-      fullPath: '/docs/$product/$group/$slug'
-      preLoaderRoute: typeof DocsProductGroupSlugImport
-      parentRoute: typeof rootRoute
-    }
-    '/docs/$product/$section/$slug': {
-      id: '/docs/$product/$section/$slug'
-      path: '/docs/$product/$section/$slug'
-      fullPath: '/docs/$product/$section/$slug'
-      preLoaderRoute: typeof DocsProductSectionSlugImport
-      parentRoute: typeof rootRoute
-    }
-    '/docs/$product/$group/': {
-      id: '/docs/$product/$group/'
-      path: '/docs/$product/$group'
-      fullPath: '/docs/$product/$group'
-      preLoaderRoute: typeof DocsProductGroupIndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/docs/$product/$section/': {
-      id: '/docs/$product/$section/'
-      path: '/docs/$product/$section'
-      fullPath: '/docs/$product/$section'
-      preLoaderRoute: typeof DocsProductSectionIndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/docs/$product/$section/$group/$slug': {
-      id: '/docs/$product/$section/$group/$slug'
-      path: '/docs/$product/$section/$group/$slug'
-      fullPath: '/docs/$product/$section/$group/$slug'
-      preLoaderRoute: typeof DocsProductSectionGroupSlugImport
-      parentRoute: typeof rootRoute
-    }
-    '/docs/$product/$section/$group/': {
-      id: '/docs/$product/$section/$group/'
-      path: '/docs/$product/$section/$group'
-      fullPath: '/docs/$product/$section/$group'
-      preLoaderRoute: typeof DocsProductSectionGroupIndexImport
+    '/docs/$product/api/$': {
+      id: '/docs/$product/api/$'
+      path: '/docs/$product/api/$'
+      fullPath: '/docs/$product/api/$'
+      preLoaderRoute: typeof DocsProductApiSplatImport
       parentRoute: typeof rootRoute
     }
   }
@@ -211,32 +139,22 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/pricing': typeof PricingRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/docs/$': typeof DocsSplatRoute
   '/blog': typeof BlogIndexRoute
   '/docs': typeof DocsIndexRoute
-  '/docs/$product/$slug': typeof DocsProductSlugRoute
-  '/docs/$product': typeof DocsProductIndexRoute
-  '/docs/$product/$group/$slug': typeof DocsProductGroupSlugRoute
-  '/docs/$product/$section/$slug': typeof DocsProductSectionSlugRoute
-  '/docs/$product/$group': typeof DocsProductGroupIndexRoute
-  '/docs/$product/$section': typeof DocsProductSectionIndexRoute
-  '/docs/$product/$section/$group/$slug': typeof DocsProductSectionGroupSlugRoute
-  '/docs/$product/$section/$group': typeof DocsProductSectionGroupIndexRoute
+  '/docs/$product/$': typeof DocsProductSplatRoute
+  '/docs/$product/api/$': typeof DocsProductApiSplatRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/pricing': typeof PricingRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/docs/$': typeof DocsSplatRoute
   '/blog': typeof BlogIndexRoute
   '/docs': typeof DocsIndexRoute
-  '/docs/$product/$slug': typeof DocsProductSlugRoute
-  '/docs/$product': typeof DocsProductIndexRoute
-  '/docs/$product/$group/$slug': typeof DocsProductGroupSlugRoute
-  '/docs/$product/$section/$slug': typeof DocsProductSectionSlugRoute
-  '/docs/$product/$group': typeof DocsProductGroupIndexRoute
-  '/docs/$product/$section': typeof DocsProductSectionIndexRoute
-  '/docs/$product/$section/$group/$slug': typeof DocsProductSectionGroupSlugRoute
-  '/docs/$product/$section/$group': typeof DocsProductSectionGroupIndexRoute
+  '/docs/$product/$': typeof DocsProductSplatRoute
+  '/docs/$product/api/$': typeof DocsProductApiSplatRoute
 }
 
 export interface FileRoutesById {
@@ -244,16 +162,11 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/pricing': typeof PricingRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/docs/$': typeof DocsSplatRoute
   '/blog/': typeof BlogIndexRoute
   '/docs/': typeof DocsIndexRoute
-  '/docs/$product/$slug': typeof DocsProductSlugRoute
-  '/docs/$product/': typeof DocsProductIndexRoute
-  '/docs/$product/$group/$slug': typeof DocsProductGroupSlugRoute
-  '/docs/$product/$section/$slug': typeof DocsProductSectionSlugRoute
-  '/docs/$product/$group/': typeof DocsProductGroupIndexRoute
-  '/docs/$product/$section/': typeof DocsProductSectionIndexRoute
-  '/docs/$product/$section/$group/$slug': typeof DocsProductSectionGroupSlugRoute
-  '/docs/$product/$section/$group/': typeof DocsProductSectionGroupIndexRoute
+  '/docs/$product/$': typeof DocsProductSplatRoute
+  '/docs/$product/api/$': typeof DocsProductApiSplatRoute
 }
 
 export interface FileRouteTypes {
@@ -262,46 +175,31 @@ export interface FileRouteTypes {
     | '/'
     | '/pricing'
     | '/blog/$slug'
+    | '/docs/$'
     | '/blog'
     | '/docs'
-    | '/docs/$product/$slug'
-    | '/docs/$product'
-    | '/docs/$product/$group/$slug'
-    | '/docs/$product/$section/$slug'
-    | '/docs/$product/$group'
-    | '/docs/$product/$section'
-    | '/docs/$product/$section/$group/$slug'
-    | '/docs/$product/$section/$group'
+    | '/docs/$product/$'
+    | '/docs/$product/api/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/pricing'
     | '/blog/$slug'
+    | '/docs/$'
     | '/blog'
     | '/docs'
-    | '/docs/$product/$slug'
-    | '/docs/$product'
-    | '/docs/$product/$group/$slug'
-    | '/docs/$product/$section/$slug'
-    | '/docs/$product/$group'
-    | '/docs/$product/$section'
-    | '/docs/$product/$section/$group/$slug'
-    | '/docs/$product/$section/$group'
+    | '/docs/$product/$'
+    | '/docs/$product/api/$'
   id:
     | '__root__'
     | '/'
     | '/pricing'
     | '/blog/$slug'
+    | '/docs/$'
     | '/blog/'
     | '/docs/'
-    | '/docs/$product/$slug'
-    | '/docs/$product/'
-    | '/docs/$product/$group/$slug'
-    | '/docs/$product/$section/$slug'
-    | '/docs/$product/$group/'
-    | '/docs/$product/$section/'
-    | '/docs/$product/$section/$group/$slug'
-    | '/docs/$product/$section/$group/'
+    | '/docs/$product/$'
+    | '/docs/$product/api/$'
   fileRoutesById: FileRoutesById
 }
 
@@ -309,32 +207,22 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   PricingRoute: typeof PricingRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  DocsSplatRoute: typeof DocsSplatRoute
   BlogIndexRoute: typeof BlogIndexRoute
   DocsIndexRoute: typeof DocsIndexRoute
-  DocsProductSlugRoute: typeof DocsProductSlugRoute
-  DocsProductIndexRoute: typeof DocsProductIndexRoute
-  DocsProductGroupSlugRoute: typeof DocsProductGroupSlugRoute
-  DocsProductSectionSlugRoute: typeof DocsProductSectionSlugRoute
-  DocsProductGroupIndexRoute: typeof DocsProductGroupIndexRoute
-  DocsProductSectionIndexRoute: typeof DocsProductSectionIndexRoute
-  DocsProductSectionGroupSlugRoute: typeof DocsProductSectionGroupSlugRoute
-  DocsProductSectionGroupIndexRoute: typeof DocsProductSectionGroupIndexRoute
+  DocsProductSplatRoute: typeof DocsProductSplatRoute
+  DocsProductApiSplatRoute: typeof DocsProductApiSplatRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   PricingRoute: PricingRoute,
   BlogSlugRoute: BlogSlugRoute,
+  DocsSplatRoute: DocsSplatRoute,
   BlogIndexRoute: BlogIndexRoute,
   DocsIndexRoute: DocsIndexRoute,
-  DocsProductSlugRoute: DocsProductSlugRoute,
-  DocsProductIndexRoute: DocsProductIndexRoute,
-  DocsProductGroupSlugRoute: DocsProductGroupSlugRoute,
-  DocsProductSectionSlugRoute: DocsProductSectionSlugRoute,
-  DocsProductGroupIndexRoute: DocsProductGroupIndexRoute,
-  DocsProductSectionIndexRoute: DocsProductSectionIndexRoute,
-  DocsProductSectionGroupSlugRoute: DocsProductSectionGroupSlugRoute,
-  DocsProductSectionGroupIndexRoute: DocsProductSectionGroupIndexRoute,
+  DocsProductSplatRoute: DocsProductSplatRoute,
+  DocsProductApiSplatRoute: DocsProductApiSplatRoute,
 }
 
 export const routeTree = rootRoute
@@ -350,16 +238,11 @@ export const routeTree = rootRoute
         "/",
         "/pricing",
         "/blog/$slug",
+        "/docs/$",
         "/blog/",
         "/docs/",
-        "/docs/$product/$slug",
-        "/docs/$product/",
-        "/docs/$product/$group/$slug",
-        "/docs/$product/$section/$slug",
-        "/docs/$product/$group/",
-        "/docs/$product/$section/",
-        "/docs/$product/$section/$group/$slug",
-        "/docs/$product/$section/$group/"
+        "/docs/$product/$",
+        "/docs/$product/api/$"
       ]
     },
     "/": {
@@ -371,35 +254,20 @@ export const routeTree = rootRoute
     "/blog/$slug": {
       "filePath": "blog.$slug.tsx"
     },
+    "/docs/$": {
+      "filePath": "docs.$.tsx"
+    },
     "/blog/": {
       "filePath": "blog.index.tsx"
     },
     "/docs/": {
       "filePath": "docs.index.tsx"
     },
-    "/docs/$product/$slug": {
-      "filePath": "docs.$product.$slug.tsx"
+    "/docs/$product/$": {
+      "filePath": "docs.$product.$.tsx"
     },
-    "/docs/$product/": {
-      "filePath": "docs.$product.index.tsx"
-    },
-    "/docs/$product/$group/$slug": {
-      "filePath": "docs.$product.$group.$slug.tsx"
-    },
-    "/docs/$product/$section/$slug": {
-      "filePath": "docs.$product.$section.$slug.tsx"
-    },
-    "/docs/$product/$group/": {
-      "filePath": "docs.$product.$group.index.tsx"
-    },
-    "/docs/$product/$section/": {
-      "filePath": "docs.$product.$section.index.tsx"
-    },
-    "/docs/$product/$section/$group/$slug": {
-      "filePath": "docs.$product.$section.$group.$slug.tsx"
-    },
-    "/docs/$product/$section/$group/": {
-      "filePath": "docs.$product.$section.$group.index.tsx"
+    "/docs/$product/api/$": {
+      "filePath": "docs.$product.api.$.tsx"
     }
   }
 }

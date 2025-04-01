@@ -18,10 +18,6 @@ const DocsSidebar = ({
   const currentPath = matches[matches.length - 1]?.pathname || "";
   const currentParams = matches[matches.length - 1]?.params || {};
   
-  // Log useful debugging info
-  console.log("Current path in sidebar:", currentPath);
-  console.log("Route params:", currentParams);
-  console.log("Props received:", { product, section, currentSlug, currentGroup });
   
   // Get metadata for this product
   const productData = docsMetadata[product];
@@ -31,8 +27,6 @@ const DocsSidebar = ({
   const topLevelGroups = Object.keys(productData?.groups || {});
   const matchingGroup = topLevelGroups.find(group => currentPath.includes(`/docs/${product}/${group}/`));
   
-  console.log("Available top-level groups:", topLevelGroups);
-  console.log("Matching group from path:", matchingGroup);
   
   if (!productData) return <div>Product not found</div>;
 

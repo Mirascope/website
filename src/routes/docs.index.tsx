@@ -10,7 +10,7 @@ export const Route = createFileRoute("/docs/")({
  * Default docs entry point. Redirects to the default product (Mirascope)
  */
 function DocsIndexPage() {
-  console.log("Redirecting to /docs/mirascope from /docs/");
+  // Redirect to default product
   // Redirect to the Mirascope docs by default
   return <Navigate to="/docs/mirascope" />;
 }
