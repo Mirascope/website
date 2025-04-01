@@ -121,25 +121,13 @@ function BlogPostPage() {
         {/* Main content area */}
         <div className="flex-1 min-w-0 py-6">
           <div className="max-w-5xl mx-auto">
-            <div className="mb-6 flex gap-2">
+            <div className="mb-6">
               <Link to="/blog" className="inline-block">
                 <Button variant="outline" size="sm">
                   <ChevronLeft className="w-4 h-4 mr-1" />
                   Back to Blog
                 </Button>
               </Link>
-              <Button
-                variant={funMode ? "default" : "outline"}
-                size="sm"
-                onClick={toggleFunMode}
-                className={cn(
-                  funMode ? "bg-primary text-white" : "hover:bg-purple-50",
-                  "transition-colors"
-                )}
-              >
-                <Sparkles className="w-4 h-4 mr-1" />
-                Fun Mode
-              </Button>
             </div>
 
             <div className="mb-6">
@@ -161,12 +149,27 @@ function BlogPostPage() {
         </div>
 
         {/* Right TOC sidebar - only visible on lg and larger screens */}
-        <div className="pt-15 w-56 flex-shrink-0 hidden lg:block">
+        <div className="pt-6 w-56 flex-shrink-0 hidden lg:block">
           <div className="fixed w-56 max-h-[calc(100vh-60px)] overflow-y-auto">
             <div className="px-4">
-              <h4 className="text-sm font-medium mb-4 text-gray-500">
-                On this page
-              </h4>
+              <div className="flex flex-col gap-3 mb-4">
+                <Button
+                  variant={funMode ? "default" : "outline"}
+                  size="sm"
+                  onClick={toggleFunMode}
+                  className={cn(
+                    funMode ? "bg-primary text-white" : "hover:bg-purple-50",
+                    "transition-colors w-full"
+                  )}
+                >
+                  <Sparkles className="w-4 h-4 mr-1" />
+                  Fun Mode
+                </Button>
+
+                <h4 className="text-sm font-medium text-gray-500">
+                  On this page
+                </h4>
+              </div>
               <TableOfContents
                 contentId="blog-content"
                 product="mirascope"
