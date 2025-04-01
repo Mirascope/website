@@ -2,16 +2,25 @@ import React from "react";
 import DocsSidebar from "@/components/DocsSidebar";
 import TableOfContents from "@/components/TableOfContents";
 import MDXContent from "@/components/MDXContent";
-import { type DocItem } from "@/lib/docs";
+import { type DocMeta } from "@/lib/docs";
 
 type DocsLayoutProps = {
   product: string;
   section: string | null;
   slug: string;
-  document: { meta: DocItem; content: string } | null;
-  docs: DocItem[];
+  group?: string | null;
+  document: { meta: DocMeta; content: string } | null;
+  docs: DocMeta[];
   loading: boolean;
   error: string | null;
+  errorDetails?: {
+    expectedPath: string;
+    path: string;
+    product: string;
+    section?: string;
+    group?: string | null;
+    slug: string;
+  };
 };
 
 /**
@@ -24,10 +33,12 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
   product,
   section,
   slug,
+  group = null,
   document,
   docs,
   loading,
   error,
+  errorDetails,
 }) => {
   // Loading state
   if (loading) {
@@ -41,6 +52,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
                 product={product}
                 section={section}
                 currentSlug={slug}
+                currentGroup={group}
                 docs={[]}
               />
             </div>
@@ -70,6 +82,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
                 product={product}
                 section={section}
                 currentSlug={slug}
+                currentGroup={group}
                 docs={docs}
               />
             </div>
@@ -81,6 +94,20 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
             <p className="text-gray-500">
               {error || "The document you're looking for doesn't exist."}
             </p>
+            {errorDetails && (
+              <div className="mt-4 p-4 bg-gray-100 rounded text-sm">
+                <p>Looking for file: {errorDetails.expectedPath}</p>
+                <p className="mt-2">Debug info:</p>
+                <ul className="list-disc ml-5 mt-1">
+                  <li>Path: {errorDetails.path}</li>
+                  <li>Product: {errorDetails.product}</li>
+                  {errorDetails.section && <li>Section: {errorDetails.section}</li>}
+                  {errorDetails.group && <li>Group: {errorDetails.group}</li>}
+                  <li>Slug: {errorDetails.slug}</li>
+                  <li>Expected path: {errorDetails.expectedPath}</li>
+                </ul>
+              </div>
+            )}
           </div>
 
           {/* Right TOC sidebar - empty during error state */}
@@ -101,6 +128,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
               product={product}
               section={section}
               currentSlug={slug}
+              currentGroup={group}
               docs={docs}
             />
           </div>
@@ -109,7 +137,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
         {/* Main content area */}
         <div className="w-[1000px] flex-shrink-0 pt-6 pl-8">
           <h1 className="text-3xl font-medium mb-4">{document.meta.title}</h1>
-          {document.meta.description && (
+          {document.meta.description && document.meta.description.trim() !== "" && (
             <p className="text-gray-600 mb-6">{document.meta.description}</p>
           )}
           <div id="doc-content" className="prose prose-slate max-w-none">
