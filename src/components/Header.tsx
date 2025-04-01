@@ -108,7 +108,7 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
           )}
         >
           <img
-            src="/public/frog-logo.png"
+            src="/frog-logo.png"
             alt="Mirascope Frog Logo"
             className="h-7 sm:h-8 w-auto"
           />
@@ -135,7 +135,7 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
                     <li>
                       <NavigationMenuLink asChild>
                         <Link
-                          to="/docs/mirascope/main/index"
+                          to="/docs/mirascope"
                           className="block p-4 space-y-1.5 rounded-md bg-white hover:bg-gray-50 transition-colors"
                         >
                           <div className="font-medium text-xl text-[#6366f1]">
@@ -150,7 +150,7 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
                     <li>
                       <NavigationMenuLink asChild>
                         <Link
-                          to="/docs/lilypad/main/index"
+                          to="/docs/lilypad"
                           className="block p-4 space-y-1.5 rounded-md bg-white hover:bg-gray-50 transition-colors"
                         >
                           <div className="font-medium text-xl text-[#2d8031]">
@@ -242,14 +242,14 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
           <div className="flex flex-col space-y-4">
             <div className="font-medium text-xl my-2">Products</div>
             <Link
-              to="/docs/mirascope/main/index"
+              to="/docs/mirascope"
               className="p-3 rounded-md bg-white text-[#6366f1] font-medium hover:bg-gray-50 transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               Mirascope Docs
             </Link>
             <Link
-              to="/docs/lilypad/main/index"
+              to="/docs/lilypad"
               className="p-3 rounded-md bg-white text-[#2d8031] font-medium hover:bg-gray-50 transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >

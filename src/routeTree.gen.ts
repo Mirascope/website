@@ -15,10 +15,10 @@ import { Route as PricingImport } from './routes/pricing'
 import { Route as IndexImport } from './routes/index'
 import { Route as DocsIndexImport } from './routes/docs.index'
 import { Route as BlogIndexImport } from './routes/blog.index'
+import { Route as DocsSplatImport } from './routes/docs.$'
 import { Route as BlogSlugImport } from './routes/blog.$slug'
-import { Route as DocsProductIndexImport } from './routes/docs.$product.index'
-import { Route as DocsProductSectionIndexImport } from './routes/docs.$product.$section.index'
-import { Route as DocsProductSectionSlugImport } from './routes/docs.$product.$section.$slug'
+import { Route as DocsProductSplatImport } from './routes/docs.$product.$'
+import { Route as DocsProductApiSplatImport } from './routes/docs.$product.api.$'
 
 // Create/Update Routes
 
@@ -46,27 +46,27 @@ const BlogIndexRoute = BlogIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const DocsSplatRoute = DocsSplatImport.update({
+  id: '/docs/$',
+  path: '/docs/$',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const BlogSlugRoute = BlogSlugImport.update({
   id: '/blog/$slug',
   path: '/blog/$slug',
   getParentRoute: () => rootRoute,
 } as any)
 
-const DocsProductIndexRoute = DocsProductIndexImport.update({
-  id: '/docs/$product/',
-  path: '/docs/$product/',
+const DocsProductSplatRoute = DocsProductSplatImport.update({
+  id: '/docs/$product/$',
+  path: '/docs/$product/$',
   getParentRoute: () => rootRoute,
 } as any)
 
-const DocsProductSectionIndexRoute = DocsProductSectionIndexImport.update({
-  id: '/docs/$product/$section/',
-  path: '/docs/$product/$section/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const DocsProductSectionSlugRoute = DocsProductSectionSlugImport.update({
-  id: '/docs/$product/$section/$slug',
-  path: '/docs/$product/$section/$slug',
+const DocsProductApiSplatRoute = DocsProductApiSplatImport.update({
+  id: '/docs/$product/api/$',
+  path: '/docs/$product/api/$',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -95,6 +95,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugImport
       parentRoute: typeof rootRoute
     }
+    '/docs/$': {
+      id: '/docs/$'
+      path: '/docs/$'
+      fullPath: '/docs/$'
+      preLoaderRoute: typeof DocsSplatImport
+      parentRoute: typeof rootRoute
+    }
     '/blog/': {
       id: '/blog/'
       path: '/blog'
@@ -109,25 +116,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DocsIndexImport
       parentRoute: typeof rootRoute
     }
-    '/docs/$product/': {
-      id: '/docs/$product/'
-      path: '/docs/$product'
-      fullPath: '/docs/$product'
-      preLoaderRoute: typeof DocsProductIndexImport
+    '/docs/$product/$': {
+      id: '/docs/$product/$'
+      path: '/docs/$product/$'
+      fullPath: '/docs/$product/$'
+      preLoaderRoute: typeof DocsProductSplatImport
       parentRoute: typeof rootRoute
     }
-    '/docs/$product/$section/$slug': {
-      id: '/docs/$product/$section/$slug'
-      path: '/docs/$product/$section/$slug'
-      fullPath: '/docs/$product/$section/$slug'
-      preLoaderRoute: typeof DocsProductSectionSlugImport
-      parentRoute: typeof rootRoute
-    }
-    '/docs/$product/$section/': {
-      id: '/docs/$product/$section/'
-      path: '/docs/$product/$section'
-      fullPath: '/docs/$product/$section'
-      preLoaderRoute: typeof DocsProductSectionIndexImport
+    '/docs/$product/api/$': {
+      id: '/docs/$product/api/$'
+      path: '/docs/$product/api/$'
+      fullPath: '/docs/$product/api/$'
+      preLoaderRoute: typeof DocsProductApiSplatImport
       parentRoute: typeof rootRoute
     }
   }
@@ -139,22 +139,22 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/pricing': typeof PricingRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/docs/$': typeof DocsSplatRoute
   '/blog': typeof BlogIndexRoute
   '/docs': typeof DocsIndexRoute
-  '/docs/$product': typeof DocsProductIndexRoute
-  '/docs/$product/$section/$slug': typeof DocsProductSectionSlugRoute
-  '/docs/$product/$section': typeof DocsProductSectionIndexRoute
+  '/docs/$product/$': typeof DocsProductSplatRoute
+  '/docs/$product/api/$': typeof DocsProductApiSplatRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/pricing': typeof PricingRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/docs/$': typeof DocsSplatRoute
   '/blog': typeof BlogIndexRoute
   '/docs': typeof DocsIndexRoute
-  '/docs/$product': typeof DocsProductIndexRoute
-  '/docs/$product/$section/$slug': typeof DocsProductSectionSlugRoute
-  '/docs/$product/$section': typeof DocsProductSectionIndexRoute
+  '/docs/$product/$': typeof DocsProductSplatRoute
+  '/docs/$product/api/$': typeof DocsProductApiSplatRoute
 }
 
 export interface FileRoutesById {
@@ -162,11 +162,11 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/pricing': typeof PricingRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/docs/$': typeof DocsSplatRoute
   '/blog/': typeof BlogIndexRoute
   '/docs/': typeof DocsIndexRoute
-  '/docs/$product/': typeof DocsProductIndexRoute
-  '/docs/$product/$section/$slug': typeof DocsProductSectionSlugRoute
-  '/docs/$product/$section/': typeof DocsProductSectionIndexRoute
+  '/docs/$product/$': typeof DocsProductSplatRoute
+  '/docs/$product/api/$': typeof DocsProductApiSplatRoute
 }
 
 export interface FileRouteTypes {
@@ -175,31 +175,31 @@ export interface FileRouteTypes {
     | '/'
     | '/pricing'
     | '/blog/$slug'
+    | '/docs/$'
     | '/blog'
     | '/docs'
-    | '/docs/$product'
-    | '/docs/$product/$section/$slug'
-    | '/docs/$product/$section'
+    | '/docs/$product/$'
+    | '/docs/$product/api/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/pricing'
     | '/blog/$slug'
+    | '/docs/$'
     | '/blog'
     | '/docs'
-    | '/docs/$product'
-    | '/docs/$product/$section/$slug'
-    | '/docs/$product/$section'
+    | '/docs/$product/$'
+    | '/docs/$product/api/$'
   id:
     | '__root__'
     | '/'
     | '/pricing'
     | '/blog/$slug'
+    | '/docs/$'
     | '/blog/'
     | '/docs/'
-    | '/docs/$product/'
-    | '/docs/$product/$section/$slug'
-    | '/docs/$product/$section/'
+    | '/docs/$product/$'
+    | '/docs/$product/api/$'
   fileRoutesById: FileRoutesById
 }
 
@@ -207,22 +207,22 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   PricingRoute: typeof PricingRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  DocsSplatRoute: typeof DocsSplatRoute
   BlogIndexRoute: typeof BlogIndexRoute
   DocsIndexRoute: typeof DocsIndexRoute
-  DocsProductIndexRoute: typeof DocsProductIndexRoute
-  DocsProductSectionSlugRoute: typeof DocsProductSectionSlugRoute
-  DocsProductSectionIndexRoute: typeof DocsProductSectionIndexRoute
+  DocsProductSplatRoute: typeof DocsProductSplatRoute
+  DocsProductApiSplatRoute: typeof DocsProductApiSplatRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   PricingRoute: PricingRoute,
   BlogSlugRoute: BlogSlugRoute,
+  DocsSplatRoute: DocsSplatRoute,
   BlogIndexRoute: BlogIndexRoute,
   DocsIndexRoute: DocsIndexRoute,
-  DocsProductIndexRoute: DocsProductIndexRoute,
-  DocsProductSectionSlugRoute: DocsProductSectionSlugRoute,
-  DocsProductSectionIndexRoute: DocsProductSectionIndexRoute,
+  DocsProductSplatRoute: DocsProductSplatRoute,
+  DocsProductApiSplatRoute: DocsProductApiSplatRoute,
 }
 
 export const routeTree = rootRoute
@@ -238,11 +238,11 @@ export const routeTree = rootRoute
         "/",
         "/pricing",
         "/blog/$slug",
+        "/docs/$",
         "/blog/",
         "/docs/",
-        "/docs/$product/",
-        "/docs/$product/$section/$slug",
-        "/docs/$product/$section/"
+        "/docs/$product/$",
+        "/docs/$product/api/$"
       ]
     },
     "/": {
@@ -254,20 +254,20 @@ export const routeTree = rootRoute
     "/blog/$slug": {
       "filePath": "blog.$slug.tsx"
     },
+    "/docs/$": {
+      "filePath": "docs.$.tsx"
+    },
     "/blog/": {
       "filePath": "blog.index.tsx"
     },
     "/docs/": {
       "filePath": "docs.index.tsx"
     },
-    "/docs/$product/": {
-      "filePath": "docs.$product.index.tsx"
+    "/docs/$product/$": {
+      "filePath": "docs.$product.$.tsx"
     },
-    "/docs/$product/$section/$slug": {
-      "filePath": "docs.$product.$section.$slug.tsx"
-    },
-    "/docs/$product/$section/": {
-      "filePath": "docs.$product.$section.index.tsx"
+    "/docs/$product/api/$": {
+      "filePath": "docs.$product.api.$.tsx"
     }
   }
 }
