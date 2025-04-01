@@ -1,7 +1,8 @@
 import { createFileRoute, useParams } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { getDoc, getDocsForProduct } from "@/lib/docs";
-import MDXContent from "@/components/MDXContent";
+import { MDXRenderer } from "@/components/MDXRenderer";
+import { processMDX } from "@/lib/mdx-utils";
 import DocsSidebar from "@/components/DocsSidebar";
 import TableOfContents from "@/components/TableOfContents";
 
@@ -57,6 +58,7 @@ function DocsPage() {
     meta: any;
     content: string;
   } | null>(null);
+  const [compiledMDX, setCompiledMDX] = useState<{ code: string; frontmatter: Record<string, any> } | null>(null);
   const [productDocs, setProductDocs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -449,6 +451,25 @@ Get started with ${product} by exploring the documentation in the sidebar.`;
     setSidebarOpen(!sidebarOpen);
   };
 
+  // Process MDX content when document changes
+  useEffect(() => {
+    const processContent = async () => {
+      if (document && document.content) {
+        try {
+          const result = await processMDX(document.content);
+          setCompiledMDX(result);
+        } catch (error) {
+          console.error("Error processing MDX:", error);
+          setCompiledMDX(null);
+        }
+      } else {
+        setCompiledMDX(null);
+      }
+    };
+    
+    processContent();
+  }, [document]);
+
   return (
     <div className="relative" style={{ paddingTop: "60px" }}>
       {/* Mobile sidebar overlay */}
@@ -521,7 +542,18 @@ Get started with ${product} by exploring the documentation in the sidebar.`;
               id="doc-content"
               className="prose prose-sm lg:prose-base prose-slate max-w-none"
             >
-              <MDXContent source={document.content} />
+              {document.content ? (
+                compiledMDX ? (
+                  <MDXRenderer 
+                    code={compiledMDX.code} 
+                    frontmatter={compiledMDX.frontmatter} 
+                  />
+                ) : (
+                  <div className="animate-pulse bg-gray-100 h-40 rounded-md"></div>
+                )
+              ) : (
+                <div></div> /* Empty div for no content */
+              )}
             </div>
           </div>
 
