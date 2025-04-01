@@ -122,10 +122,19 @@ const parseMarkdown = async (markdown: string): Promise<string> => {
 
   // Create a slug function for headings
   const slugify = (text: string): string => {
-    return text
+    // Handle special cases that might cause issues
+    if (!text) return "heading";
+    
+    // Normalize Unicode characters
+    const normalized = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    
+    return normalized
       .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)/g, '');
+      .trim()
+      .replace(/[^a-z0-9]+/g, '-')  // Replace any non-alphanumeric chars with hyphens
+      .replace(/(^-|-$)/g, '')     // Remove leading/trailing hyphens
+      .replace(/--+/g, '-')        // Replace multiple hyphens with one
+      || 'heading';                // Default to 'heading' if nothing remains
   };
 
   processedMd = processedMd
@@ -265,7 +274,9 @@ const parseMarkdown = async (markdown: string): Promise<string> => {
 const MDXContent: React.FC<MDXContentProps> = ({ source, useFunMode = false }) => {
   const [html, setHtml] = useState<string>("");
   const [loading, setLoading] = useState(true);
+  const [processedHtml, setProcessedHtml] = useState<string>("");
 
+  // First useEffect - Process the markdown source
   useEffect(() => {
     const renderMarkdown = async () => {
       try {
@@ -286,6 +297,45 @@ const MDXContent: React.FC<MDXContentProps> = ({ source, useFunMode = false }) =
 
     renderMarkdown();
   }, [source]);
+
+  // Second useEffect - Process HTML to ensure IDs on all headings
+  useEffect(() => {
+    if (html) {
+      // Use RegExp to find all heading tags without IDs
+      const headingRegex = /<(h[1-6])(?![^>]*id=["'])[^>]*>(.*?)<\/\1>/gi;
+      const newProcessedHtml = html.replace(headingRegex, (match, tag, content) => {
+        const id = slugify(content);
+        return `<${tag} id="${id}">${content}</${tag}>`;
+      });
+      
+      setProcessedHtml(newProcessedHtml);
+    } else {
+      setProcessedHtml("");
+    }
+  }, [html]);
+
+  // Third useEffect - Add IDs to headings in the DOM after render
+  useEffect(() => {
+    if (html) {
+      // Wait for the content to be fully rendered in the DOM
+      setTimeout(() => {
+        const contentElement = document.querySelector('.mdx-content');
+        if (contentElement) {
+          // Find all headings that don't have IDs
+          const headings = contentElement.querySelectorAll('h1, h2, h3, h4, h5, h6');
+          headings.forEach((heading, index) => {
+            if (!heading.id) {
+              // Generate an ID from the heading's text content
+              const text = heading.textContent || `heading-${index}`;
+              const id = slugify(text);
+              heading.setAttribute('id', id);
+              // Quietly add IDs without logging
+            }
+          });
+        }
+      }, 100);
+    }
+  }, [html]);
 
   if (loading) {
     return <div className="animate-pulse bg-gray-100 h-40 rounded-md"></div>;
@@ -406,7 +456,7 @@ const MDXContent: React.FC<MDXContentProps> = ({ source, useFunMode = false }) =
       `,
         }}
       />
-      <div dangerouslySetInnerHTML={{ __html: html }} />
+      <div dangerouslySetInnerHTML={{ __html: processedHtml || html }} />
     </div>
   );
 };
