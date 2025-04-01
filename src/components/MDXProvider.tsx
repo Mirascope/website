@@ -1,6 +1,7 @@
 import React from 'react';
 import { MDXProvider } from '@mdx-js/react';
 import { cn } from '@/lib/utils';
+import { ProviderContextProvider, ProviderSelector, InstallSnippet, CodeSnippet, OSSelector, OSContextProvider } from './docs';
 
 // Helper function to generate heading ID from text
 const slugify = (text: string): string => {
@@ -21,6 +22,18 @@ const slugify = (text: string): string => {
 
 // Custom components that will be available in MDX files
 export const components = {
+  // Custom components for docs
+  ProviderContextProvider,
+  ProviderSelector,
+  InstallSnippet,
+  CodeSnippet,
+  OSSelector,
+  OSContextProvider,
+  
+  // Shorthand components
+  Install: InstallSnippet,
+  
+  // Standard HTML elements
   h1: ({ children, ...props }: React.ComponentPropsWithoutRef<'h1'>) => {
     // Generate an ID from the text content if not provided
     const id = props.id || (typeof children === 'string' ? slugify(children) : undefined);
