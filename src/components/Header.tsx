@@ -81,10 +81,10 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    
+    window.addEventListener("scroll", handleScroll);
+
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, [scrolled]);
 
@@ -99,7 +99,7 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
         scrolled && isLandingPage ? "bg-black/90 backdrop-blur-sm" : ""
       )}
     >
-      <nav className="flex flex-row items-center justify-between w-full max-w-5xl mx-auto">
+      <nav className="flex flex-row items-center justify-between w-full max-w-2xl mx-auto">
         <Link
           to="/"
           className={cn(

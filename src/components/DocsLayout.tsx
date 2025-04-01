@@ -25,7 +25,7 @@ type DocsLayoutProps = {
 
 /**
  * DocsLayout - Shared layout for all documentation pages
- * 
+ *
  * Handles loading states, error states, and the common layout
  * between all doc page types (product index, regular docs, API docs)
  */
@@ -44,10 +44,10 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
   if (loading) {
     return (
       <div className="flex justify-center" style={{ paddingTop: "60px" }}>
-        <div className="flex mx-auto w-[1400px]">
+        <div className="flex mx-auto w-full max-w-[1800px] px-4">
           {/* Left sidebar */}
-          <div className="w-72 flex-shrink-0">
-            <div className="fixed w-72 top-[60px] pt-6 max-h-[calc(100vh-60px)] overflow-y-auto">
+          <div className="w-64 flex-shrink-0">
+            <div className="fixed w-64 top-[60px] pt-6 max-h-[calc(100vh-60px)] overflow-y-auto">
               <DocsSidebar
                 product={product}
                 section={section}
@@ -59,12 +59,12 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
           </div>
 
           {/* Main content area with loading spinner */}
-          <div className="w-[1000px] flex-shrink-0 flex justify-center items-center py-20 pl-8">
+          <div className="flex-1 min-w-0 flex justify-center items-center py-20 px-8">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
           </div>
 
           {/* Right TOC sidebar - empty during loading */}
-          <div className="w-64 flex-shrink-0 hidden lg:block"></div>
+          <div className="w-56 flex-shrink-0 hidden lg:block"></div>
         </div>
       </div>
     );
@@ -74,10 +74,10 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
   if (error || !document) {
     return (
       <div className="flex justify-center" style={{ paddingTop: "60px" }}>
-        <div className="flex mx-auto w-[1400px]">
+        <div className="flex mx-auto w-full max-w-[1800px] px-4">
           {/* Left sidebar */}
-          <div className="w-72 flex-shrink-0">
-            <div className="fixed w-72 top-[60px] pt-6 max-h-[calc(100vh-60px)] overflow-y-auto">
+          <div className="w-64 flex-shrink-0">
+            <div className="fixed w-64 top-[60px] pt-6 max-h-[calc(100vh-60px)] overflow-y-auto">
               <DocsSidebar
                 product={product}
                 section={section}
@@ -89,7 +89,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
           </div>
 
           {/* Main content area with error message */}
-          <div className="w-[1000px] flex-shrink-0 py-20 flex flex-col items-center justify-center pl-8">
+          <div className="flex-1 min-w-0 py-20 flex flex-col items-center justify-center px-8">
             <h1 className="text-2xl font-medium mb-4">Document Not Found</h1>
             <p className="text-gray-500">
               {error || "The document you're looking for doesn't exist."}
@@ -101,7 +101,9 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
                 <ul className="list-disc ml-5 mt-1">
                   <li>Path: {errorDetails.path}</li>
                   <li>Product: {errorDetails.product}</li>
-                  {errorDetails.section && <li>Section: {errorDetails.section}</li>}
+                  {errorDetails.section && (
+                    <li>Section: {errorDetails.section}</li>
+                  )}
                   {errorDetails.group && <li>Group: {errorDetails.group}</li>}
                   <li>Slug: {errorDetails.slug}</li>
                   <li>Expected path: {errorDetails.expectedPath}</li>
@@ -111,7 +113,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
           </div>
 
           {/* Right TOC sidebar - empty during error state */}
-          <div className="w-64 flex-shrink-0 hidden lg:block"></div>
+          <div className="w-56 flex-shrink-0 hidden lg:block"></div>
         </div>
       </div>
     );
@@ -120,10 +122,10 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
   // Regular document display
   return (
     <div className="flex justify-center" style={{ paddingTop: "60px" }}>
-      <div className="flex mx-auto w-[1400px]">
+      <div className="flex mx-auto w-full max-w-[1800px] px-4">
         {/* Left sidebar */}
-        <div className="w-72 flex-shrink-0">
-          <div className="fixed w-72 top-[60px] pt-6 max-h-[calc(100vh-60px)] overflow-y-auto">
+        <div className="w-64 flex-shrink-0">
+          <div className="fixed w-64 top-[60px] pt-6 max-h-[calc(100vh-60px)] overflow-y-auto">
             <DocsSidebar
               product={product}
               section={section}
@@ -135,20 +137,28 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
         </div>
 
         {/* Main content area */}
-        <div className="w-[1000px] flex-shrink-0 pt-6 pl-8">
-          <h1 className="text-3xl font-medium mb-4">{document.meta.title}</h1>
-          {document.meta.description && document.meta.description.trim() !== "" && (
-            <p className="text-gray-600 mb-6">{document.meta.description}</p>
-          )}
-          <div id="doc-content" className="prose prose-slate max-w-none">
-            <MDXContent source={document.content} />
+        <div className="flex-1 min-w-0 px-8">
+          <div className="max-w-5xl mx-auto">
+            <h1 className="text-3xl font-medium mb-4">{document.meta.title}</h1>
+            {document.meta.description &&
+              document.meta.description.trim() !== "" && (
+                <p className="text-gray-600 mb-6">
+                  {document.meta.description}
+                </p>
+              )}
+            <div
+              id="doc-content"
+              className="prose prose-slate max-w-none overflow-x-auto"
+            >
+              <MDXContent source={document.content} />
+            </div>
           </div>
         </div>
 
         {/* Right TOC sidebar */}
-        <div className="w-64 flex-shrink-0 hidden lg:block">
-          <div className="fixed w-64 top-[60px] pt-6 max-h-[calc(100vh-60px)] overflow-y-auto">
-            <div className="px-4 pt-6">
+        <div className="w-56 flex-shrink-0 hidden lg:block">
+          <div className="fixed w-56 max-h-[calc(100vh-60px)] overflow-y-auto">
+            <div className="px-4">
               <h4 className="text-sm font-medium mb-4 text-gray-500">
                 On this page
               </h4>
