@@ -41,3 +41,26 @@ export const mockAPI = {
     }
   }
 };
+
+// API for accessing documentation files
+export const docsAPI = {
+  /**
+   * Get the content of a specific MDX documentation file
+   */
+  async getDocContent(filePath: string): Promise<string> {
+    try {
+      // Log the file path we're trying to fetch for debugging
+      console.log(`Fetching doc content for: /src/docs/${filePath}`);
+      
+      // Fetch the MDX content from the docs directory
+      const response = await fetch(`/src/docs/${filePath}`);
+      if (!response.ok) {
+        throw new Error(`Error fetching doc content: ${response.statusText}`);
+      }
+      return await response.text();
+    } catch (error) {
+      console.error(`Error fetching doc content for ${filePath}:`, error);
+      throw error;
+    }
+  }
+};

@@ -1,57 +1,35 @@
-import { createFileRoute, useParams } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
-import { getDoc, getDocsForSection } from "@/lib/docs";
-import type { DocMeta } from "@/lib/docs";
-import MDXContent from "@/components/MDXContent";
+import React from "react";
 import DocsSidebar from "@/components/DocsSidebar";
 import TableOfContents from "@/components/TableOfContents";
+import MDXContent from "@/components/MDXContent";
+import { type DocItem } from "@/lib/docs";
 
-export const Route = createFileRoute("/docs/$product/$section/$slug")({
-  component: DocPage,
-  loader: ({ params }) => {
-    // Validate the params
-    const { product, section, slug } = params;
-    return { product, section, slug };
-  },
-});
+type DocsLayoutProps = {
+  product: string;
+  section: string | null;
+  slug: string;
+  document: { meta: DocItem; content: string } | null;
+  docs: DocItem[];
+  loading: boolean;
+  error: string | null;
+};
 
-function DocPage() {
-  const { product, section, slug } = useParams({
-    from: "/docs/$product/$section/$slug",
-  });
-
-  const [document, setDocument] = useState<{
-    meta: DocMeta;
-    content: string;
-  } | null>(null);
-  const [sectionDocs, setSectionDocs] = useState<DocMeta[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        // Load section docs for the sidebar
-        const docsInSection = await getDocsForSection(product, section);
-        setSectionDocs(docsInSection);
-
-        // Load the current document
-        const doc = await getDoc(product, section, slug);
-        setDocument(doc);
-        setLoading(false);
-      } catch (err) {
-        console.error("Error loading document:", err);
-        setError(`Failed to load document: ${err.message}`);
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [product, section, slug]);
-
+/**
+ * DocsLayout - Shared layout for all documentation pages
+ * 
+ * Handles loading states, error states, and the common layout
+ * between all doc page types (product index, regular docs, API docs)
+ */
+const DocsLayout: React.FC<DocsLayoutProps> = ({
+  product,
+  section,
+  slug,
+  document,
+  docs,
+  loading,
+  error,
+}) => {
+  // Loading state
   if (loading) {
     return (
       <div className="flex justify-center" style={{ paddingTop: "60px" }}>
@@ -69,7 +47,7 @@ function DocPage() {
           </div>
 
           {/* Main content area with loading spinner */}
-          <div className="w-[1000px] flex-shrink-0 flex justify-center items-center py-20 px-8">
+          <div className="w-[1000px] flex-shrink-0 flex justify-center items-center py-20 pl-8">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
           </div>
 
@@ -80,6 +58,7 @@ function DocPage() {
     );
   }
 
+  // Error state
   if (error || !document) {
     return (
       <div className="flex justify-center" style={{ paddingTop: "60px" }}>
@@ -91,13 +70,13 @@ function DocPage() {
                 product={product}
                 section={section}
                 currentSlug={slug}
-                docs={sectionDocs}
+                docs={docs}
               />
             </div>
           </div>
 
           {/* Main content area with error message */}
-          <div className="w-[1000px] flex-shrink-0 py-20 px-8 flex flex-col items-center justify-center">
+          <div className="w-[1000px] flex-shrink-0 py-20 flex flex-col items-center justify-center pl-8">
             <h1 className="text-2xl font-medium mb-4">Document Not Found</h1>
             <p className="text-gray-500">
               {error || "The document you're looking for doesn't exist."}
@@ -111,21 +90,7 @@ function DocPage() {
     );
   }
 
-  // Safety check for empty content
-  if (!document.content || document.content.trim() === "") {
-    console.error("Document content is empty for:", product, section, slug);
-    // Use a sensible fallback
-    document.content = `---
-title: ${document.meta.title || "Documentation"}
-description: ${document.meta.description || "Content coming soon"}
----
-
-# ${document.meta.title || "Documentation"}
-
-${document.meta.description || "Content is being developed. Please check back soon."}
-`;
-  }
-
+  // Regular document display
   return (
     <div className="flex justify-center" style={{ paddingTop: "60px" }}>
       <div className="flex mx-auto w-[1400px]">
@@ -136,13 +101,13 @@ ${document.meta.description || "Content is being developed. Please check back so
               product={product}
               section={section}
               currentSlug={slug}
-              docs={sectionDocs}
+              docs={docs}
             />
           </div>
         </div>
 
-        {/* Main content area - wider width */}
-        <div className="w-[1000px] flex-shrink-0 pt-0 px-8 -mt-12">
+        {/* Main content area */}
+        <div className="w-[1000px] flex-shrink-0 pt-6 pl-8">
           <h1 className="text-3xl font-medium mb-4">{document.meta.title}</h1>
           {document.meta.description && (
             <p className="text-gray-600 mb-6">{document.meta.description}</p>
@@ -171,4 +136,6 @@ ${document.meta.description || "Content is being developed. Please check back so
       </div>
     </div>
   );
-}
+};
+
+export default DocsLayout;

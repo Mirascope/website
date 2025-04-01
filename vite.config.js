@@ -53,6 +53,46 @@ const mdxVirtualModulePlugin = () => {
           res.end(JSON.stringify({ error: 'Failed to serve post content' }));
         }
       });
+      
+      // Serve documentation MDX files from src/docs directory
+      server.middlewares.use('/src/docs/', (req, res, next) => {
+        // The URL will be something like /src/docs/mirascope/index.mdx
+        const urlPath = req.url;
+        
+        // Skip if not an MDX file
+        if (!urlPath.endsWith('.mdx')) {
+          return next();
+        }
+        
+        try {
+          // Resolve to the actual file path in the filesystem
+          const docsDir = resolve(__dirname, 'src/docs');
+          
+          // Extract the relative path from the URL
+          // Remove leading slash if present
+          const relativePath = urlPath.startsWith('/') ? urlPath.slice(1) : urlPath;
+          
+          // Construct the full file path
+          const filePath = resolve(docsDir, relativePath);
+          
+          console.log(`Serving documentation file: ${filePath}`);
+          
+          if (!fs.existsSync(filePath)) {
+            console.error(`Documentation file not found: ${filePath}`);
+            res.statusCode = 404;
+            return res.end(JSON.stringify({ error: 'Documentation file not found' }));
+          }
+          
+          const content = fs.readFileSync(filePath, 'utf-8');
+          
+          res.setHeader('Content-Type', 'text/plain');
+          res.end(content);
+        } catch (error) {
+          console.error(`Error serving documentation file ${urlPath}:`, error);
+          res.statusCode = 500;
+          res.end(JSON.stringify({ error: 'Failed to serve documentation content' }));
+        }
+      });
     }
   };
 };
@@ -81,7 +121,7 @@ export default defineConfig({
         global: 'globalThis',
       },
     },
-    exclude: ['src/posts/*.mdx']
+    exclude: ['src/posts/*.mdx', 'src/docs/*.mdx']
   },
   server: {
     fs: {
