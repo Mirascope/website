@@ -512,3 +512,17 @@ header button:not(.font-toggle-button),
   background-color: #2d8031;
 }
 
+/* Badge container for docs and usage info */
+.badge-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.badge-container a {
+  display: inline-block;
+  width: auto;
+  flex: 0 0 auto;
+}
+
