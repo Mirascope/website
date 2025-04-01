@@ -45,20 +45,20 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
 }) => {
   // Initialize fun mode from localStorage if available
   const [funMode, setFunMode] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('docsFunMode') === 'true';
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("docsFunMode") === "true";
     }
     return false;
   });
-  
+
   // Toggle fun mode (handwriting font for docs content)
   const toggleFunMode = () => {
     const newMode = !funMode;
     setFunMode(newMode);
-    
+
     // Save preference to localStorage
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('docsFunMode', newMode.toString());
+    if (typeof window !== "undefined") {
+      localStorage.setItem("docsFunMode", newMode.toString());
     }
   };
   // Loading state
@@ -195,7 +195,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
                   <Sparkles className="w-4 h-4 mr-1" />
                   Fun Mode
                 </Button>
-                
+
                 <h4 className="text-sm font-medium text-gray-500">
                   On this page
                 </h4>
