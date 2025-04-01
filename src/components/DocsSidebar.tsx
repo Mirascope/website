@@ -47,7 +47,43 @@ const DocsSidebar = ({
     currentPath.includes(`/docs/${product}/${group}/`)
   );
 
-  if (!productData) return <div>Product not found</div>;
+  // For unknown products, only show the product selector
+  if (!productData) {
+    return (
+      <aside className="h-full pt-6 pb-12">
+        <div className="mb-2">
+          {/* Product selector only */}
+          <div className="flex mb-5 space-x-4">
+            {product === "mirascope" ? (
+              <span className="text-xl font-medium text-mirascope-purple">
+                Mirascope
+              </span>
+            ) : (
+              <Link
+                to="/docs/mirascope"
+                className="text-xl font-medium text-gray-400 hover:text-gray-700"
+              >
+                Mirascope
+              </Link>
+            )}
+
+            {product === "lilypad" ? (
+              <span className="text-xl font-medium text-lilypad-green">
+                Lilypad
+              </span>
+            ) : (
+              <Link
+                to="/docs/lilypad"
+                className="text-xl font-medium text-gray-400 hover:text-gray-700"
+              >
+                Lilypad
+              </Link>
+            )}
+          </div>
+        </div>
+      </aside>
+    );
+  }
 
   // Is the main "Docs" tab active?
   // The Docs tab is active when:

@@ -89,24 +89,77 @@ function BlogPostPage() {
   }
 
   if (error || !post) {
+    // Create fallback post with just "Untitled Document" and nothing else
+    const fallbackPost = {
+      title: "Untitled Document",
+      content: "",
+      date: "",
+      readTime: "",
+      author: ""
+    };
+    
     return (
       <div className="flex justify-center">
         <div className="flex mx-auto w-full max-w-7xl px-4">
           {/* Left empty sidebar for symmetry */}
           <div className="w-56 flex-shrink-0 hidden lg:block"></div>
 
-          <div className="flex-1 min-w-0 flex flex-col justify-center items-center h-[calc(100vh-136px)]">
-            <h1 className="text-2xl font-medium mb-4">Post Not Found</h1>
-            <p className="text-muted-foreground mb-6">
-              {error || "The blog post you're looking for doesn't exist."}
-            </p>
-            <Link to="/blog">
-              <Button>Back to Blog</Button>
-            </Link>
+          {/* Main content area */}
+          <div className="flex-1 min-w-0 py-6">
+            <div className="max-w-5xl mx-auto">
+              <div className="mb-6">
+                <Link to="/blog" className="inline-block">
+                  <Button variant="outline" size="sm">
+                    <ChevronLeft className="w-4 h-4 mr-1" />
+                    Back to Blog
+                  </Button>
+                </Link>
+              </div>
+
+              <div className="mb-6">
+                <h1 className="text-3xl sm:text-4xl font-semibold mb-2">
+                  {fallbackPost.title}
+                </h1>
+              </div>
+
+              <div
+                id="blog-content"
+                className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 blog-content"
+              >
+                {/* Empty content as requested */}
+              </div>
+            </div>
           </div>
 
-          {/* Right TOC sidebar placeholder */}
-          <div className="w-56 flex-shrink-0 hidden lg:block"></div>
+          {/* Right TOC sidebar - with empty content */}
+          <div className="w-56 flex-shrink-0 hidden lg:block">
+            <div className="fixed w-56 top-[60px] h-[calc(100vh-60px)] flex flex-col">
+              <div className="flex flex-col h-full">
+                {/* Fixed header section */}
+                <div className="flex flex-col gap-3 mb-4 bg-white pt-6 px-4">
+                  <Button
+                    variant={funMode ? "default" : "outline"}
+                    size="sm"
+                    onClick={toggleFunMode}
+                    className={cn(
+                      funMode ? "bg-primary text-white" : "hover:bg-purple-50",
+                      "transition-colors w-full"
+                    )}
+                  >
+                    <Sparkles className="w-4 h-4 mr-1" />
+                    Fun Mode
+                  </Button>
+
+                  <h4 className="text-sm font-medium text-gray-500">
+                    On this page
+                  </h4>
+                </div>
+                
+                {/* Empty scrollable area */}
+                <div className="overflow-y-auto flex-grow px-4 pb-6"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );

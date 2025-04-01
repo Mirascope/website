@@ -75,6 +75,43 @@ function DocsPage() {
         console.log(`[DocsPage] Full path: ${fullPath}`);
         
         try {
+          // Check if this is an invalid document path that should display "Untitled Document"
+          // This applies to paths like docs/mirascope/bad that don't exist in the docs structure
+          // It also applies to unknown products like docs/unknown-product
+          const pathIsInvalid = (
+            // Unknown product (docsForProduct will be empty)
+            (pathParts.length > 0 && docsForProduct.length === 0) ||
+            // Known product but unknown path
+            (pathParts.length > 1 && !docsForProduct.some(doc => 
+              // For paths like /docs/mirascope/bad we check if there's a matching slug
+              doc.slug === pathParts[pathParts.length - 1] ||
+              // For longer paths, check if the full path matches
+              doc.path === pathParts.join('/')
+            ))
+          );
+          
+          if (pathIsInvalid) {
+            console.log(`[DocsPage] Path appears to be invalid, creating "Untitled Document" fallback`);
+            // Create a fallback doc with "Untitled Document" title
+            const fallbackDoc = {
+              meta: {
+                title: "Untitled Document",
+                description: "",
+                slug: "",
+                path: _splat,
+                product,
+                section,
+                group,
+                type: "item"
+              },
+              content: ""  // Empty content as requested
+            };
+            
+            setDocument(fallbackDoc);
+            setLoading(false);
+            return;
+          }
+          
           // Get the document with a fallback system
           let doc = null;
           
@@ -121,10 +158,10 @@ function DocsPage() {
             throw new Error("Document is null or undefined");
           }
           
-          // Check for empty content and provide fallback
+          // Check for empty content
           if (!doc.content || doc.content.trim() === "") {
-            console.warn(`[DocsPage] Empty content for ${fullPath}, using fallback`);
-            doc.content = `# ${doc.meta.title || 'Documentation'}\n\n*Content not available yet.*`;
+            console.warn(`[DocsPage] Empty content for ${fullPath}, leaving empty as requested`);
+            doc.content = "";
           }
           
           console.log(`[DocsPage] Document loaded successfully: ${doc.meta.title}`);
@@ -136,11 +173,17 @@ function DocsPage() {
           // If this is a product landing page, create a fallback
           if (pathParts.length <= 1) {
             console.log(`[DocsPage] Creating product landing page fallback`);
-            const title = `${product.charAt(0).toUpperCase() + product.slice(1)} Documentation`;
-            const description = "";
             
-            // Create content with frontmatter
-            const welcomeContent = `---
+            // Check if this is a known product
+            const isKnownProduct = product in docsMetadata;
+            
+            if (isKnownProduct) {
+              // For known products, create a welcoming fallback
+              const title = `${product.charAt(0).toUpperCase() + product.slice(1)} Documentation`;
+              const description = "";
+              
+              // Create content with frontmatter
+              const welcomeContent = `---
 title: ${title}
 description: ${description}
 ---
@@ -148,18 +191,33 @@ description: ${description}
 # ${title}
 
 Get started with ${product} by exploring the documentation in the sidebar.`;
+              
+              setDocument({
+                meta: {
+                  title,
+                  description,
+                  slug: 'index',
+                  path: product,
+                  product,
+                  type: "item"
+                },
+                content: welcomeContent
+              });
+            } else {
+              // For unknown products, use "Untitled Document" with empty content
+              setDocument({
+                meta: {
+                  title: "Untitled Document",
+                  description: "",
+                  slug: "",
+                  path: product,
+                  product,
+                  type: "item"
+                },
+                content: ""
+              });
+            }
             
-            setDocument({
-              meta: {
-                title,
-                description,
-                slug: 'index',
-                path: product,
-                product,
-                type: "item"
-              },
-              content: welcomeContent
-            });
             setLoading(false);
             return;
           }
@@ -205,9 +263,30 @@ Get started with ${product} by exploring the documentation in the sidebar.`;
     );
   }
 
-  if (error || !document) {
-    // Document fetch failure
-    
+  useEffect(() => {
+    // When there's an error, we want to set document to a fallback with "Untitled Document"
+    if (error) {
+      console.log(`[DocsPage] Setting fallback "Untitled Document" due to error: ${error}`);
+      setDocument({
+        meta: {
+          title: "Untitled Document",
+          description: "",
+          slug: "",
+          path: _splat,
+          product,
+          section,
+          group,
+          type: "item"
+        },
+        content: ""  // Empty content as requested
+      });
+      
+      // Clear the error so we don't show any error state
+      setError(null);
+    }
+  }, [error, _splat, product, section, group]);
+
+  if (loading) {
     return (
       <div className="flex justify-center" style={{ paddingTop: "60px" }}>
         <div className="flex mx-auto w-[1400px]">
@@ -217,35 +296,81 @@ Get started with ${product} by exploring the documentation in the sidebar.`;
               <DocsSidebar
                 product={product}
                 section={section}
-                currentSlug={currentSlug}
+                currentSlug=""
+                currentGroup={group}
+                docs={[]}
+              />
+            </div>
+          </div>
+
+          {/* Main content area with loading spinner */}
+          <div className="w-[1000px] flex-shrink-0 flex justify-center items-center py-20 pl-8">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+          </div>
+
+          {/* Right TOC sidebar - empty during loading */}
+          <div className="w-64 flex-shrink-0 hidden lg:block"></div>
+        </div>
+      </div>
+    );
+  }
+
+  // Handle case when document is null but not in loading state
+  if (!document) {
+    const fallbackDocument = {
+      meta: {
+        title: "Untitled Document",
+        description: "",
+        slug: "",
+        path: _splat,
+        product,
+        section,
+        group,
+        type: "item"
+      },
+      content: ""  // Empty content for "nothing else" display
+    };
+    
+    return (
+      <div className="flex justify-center" style={{ paddingTop: "60px" }}>
+        <div className="flex mx-auto w-[1400px]">
+          {/* Left sidebar - still shown but nothing highlighted specifically */}
+          <div className="w-72 flex-shrink-0">
+            <div className="fixed w-72 top-[60px] pt-6 max-h-[calc(100vh-60px)] overflow-y-auto">
+              <DocsSidebar
+                product={product}
+                section={section}
+                currentSlug=""  // Empty to prevent highlighting any specific page
                 currentGroup={group}
                 docs={productDocs}
               />
             </div>
           </div>
 
-          {/* Main content area with error message */}
-          <div className="w-[1000px] flex-shrink-0 py-20 flex flex-col items-center justify-center pl-8">
-            <h1 className="text-2xl font-medium mb-4">Document Not Found</h1>
-            <p className="text-gray-500">
-              {error || `The document at path "${_splat}" could not be loaded.`}
-            </p>
-            <div className="mt-4 p-4 bg-gray-100 rounded text-sm">
-              <p>Looking for file: /src/docs/{_splat}.mdx</p>
-              <p className="mt-2">Debug info:</p>
-              <ul className="list-disc ml-5 mt-1">
-                <li>Path: {_splat}</li>
-                <li>Product: {product}</li>
-                {section && <li>Section: {section}</li>}
-                {group && <li>Group: {group}</li>}
-                <li>Slug: {currentSlug}</li>
-                <li>Expected path: /src/docs/{_splat}.mdx</li>
-              </ul>
+          {/* Main content area with minimal "Untitled Document" */}
+          <div className="w-[1000px] flex-shrink-0 pt-6 pl-8">
+            <h1 className="text-3xl font-medium mb-4">{fallbackDocument.meta.title}</h1>
+            <div id="doc-content" className="prose prose-slate max-w-none">
+              {/* Empty content as requested */}
             </div>
           </div>
 
-          {/* Right TOC sidebar - empty during error state */}
-          <div className="w-64 flex-shrink-0 hidden lg:block"></div>
+          {/* Right TOC sidebar - hidden since there's no content */}
+          <div className="w-64 flex-shrink-0 hidden lg:block">
+            <div className="fixed w-64 top-[60px] h-[calc(100vh-60px)] flex flex-col">
+              <div className="px-4 flex flex-col h-full">
+                {/* Fixed header section */}
+                <div className="flex flex-col pt-6 mb-4 bg-white">
+                  <h4 className="text-sm font-medium mb-4 text-gray-500">
+                    On this page
+                  </h4>
+                </div>
+                
+                {/* Empty table of contents */}
+                <div className="overflow-y-auto flex-grow px-4 pb-6"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
