@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, Sparkles } from "lucide-react";
 import { getPostBySlug } from "@/lib/mdx";
 import MDXContent from "@/components/MDXContent";
+import TableOfContents from "@/components/TableOfContents";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/blog/$slug")({
@@ -73,9 +74,15 @@ function BlogPostPage() {
     return (
       <div className="flex justify-center">
         <div className="flex mx-auto w-full max-w-7xl px-4">
+          {/* Left empty sidebar for symmetry */}
+          <div className="w-56 flex-shrink-0 hidden lg:block"></div>
+          
           <div className="flex-1 min-w-0 flex justify-center items-center h-[calc(100vh-136px)]">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
           </div>
+          
+          {/* Right TOC sidebar placeholder */}
+          <div className="w-56 flex-shrink-0 hidden lg:block"></div>
         </div>
       </div>
     );
@@ -85,6 +92,9 @@ function BlogPostPage() {
     return (
       <div className="flex justify-center">
         <div className="flex mx-auto w-full max-w-7xl px-4">
+          {/* Left empty sidebar for symmetry */}
+          <div className="w-56 flex-shrink-0 hidden lg:block"></div>
+          
           <div className="flex-1 min-w-0 flex flex-col justify-center items-center h-[calc(100vh-136px)]">
             <h1 className="text-2xl font-medium mb-4">Post Not Found</h1>
             <p className="text-muted-foreground mb-6">
@@ -94,6 +104,9 @@ function BlogPostPage() {
               <Button>Back to Blog</Button>
             </Link>
           </div>
+          
+          {/* Right TOC sidebar placeholder */}
+          <div className="w-56 flex-shrink-0 hidden lg:block"></div>
         </div>
       </div>
     );
@@ -102,8 +115,12 @@ function BlogPostPage() {
   return (
     <div className="flex justify-center">
       <div className="flex mx-auto w-full max-w-7xl px-4">
+        {/* Left empty sidebar for symmetry */}
+        <div className="w-56 flex-shrink-0 hidden lg:block"></div>
+        
+        {/* Main content area */}
         <div className="flex-1 min-w-0 py-6">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-5xl mx-auto">
             <div className="mb-6 flex gap-2">
               <Link to="/blog" className="inline-block">
                 <Button variant="outline" size="sm">
@@ -134,8 +151,28 @@ function BlogPostPage() {
               </p>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 blog-content">
+            <div 
+              id="blog-content"
+              className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 blog-content"
+            >
               <MDXContent source={post.content} useFunMode={funMode} />
+            </div>
+          </div>
+        </div>
+        
+        {/* Right TOC sidebar - only visible on lg and larger screens */}
+        <div className="w-56 flex-shrink-0 hidden lg:block">
+          <div className="fixed w-56 max-h-[calc(100vh-60px)] overflow-y-auto">
+            <div className="px-4">
+              <h4 className="text-sm font-medium mb-4 text-gray-500">
+                On this page
+              </h4>
+              <TableOfContents
+                contentId="blog-content"
+                product="mirascope"
+                section="blog"
+                slug={slug}
+              />
             </div>
           </div>
         </div>
