@@ -53,7 +53,7 @@ function BlogPostPage() {
   if (loading) {
     return (
       <div className="flex justify-center">
-        <div className="flex mx-auto w-full max-w-[1800px] px-4">
+        <div className="flex mx-auto w-full max-w-7xl px-4">
           <div className="flex-1 min-w-0 flex justify-center items-center h-[calc(100vh-136px)]">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
           </div>
@@ -65,7 +65,7 @@ function BlogPostPage() {
   if (error || !post) {
     return (
       <div className="flex justify-center">
-        <div className="flex mx-auto w-full max-w-[1800px] px-4">
+        <div className="flex mx-auto w-full max-w-7xl px-4">
           <div className="flex-1 min-w-0 flex flex-col justify-center items-center h-[calc(100vh-136px)]">
             <h1 className="text-2xl font-medium mb-4">Post Not Found</h1>
             <p className="text-muted-foreground mb-6">
@@ -82,9 +82,9 @@ function BlogPostPage() {
 
   return (
     <div className="flex justify-center">
-      <div className="flex mx-auto w-full max-w-[1800px] px-4">
+      <div className="flex mx-auto w-full max-w-7xl px-4">
         <div className="flex-1 min-w-0 py-6">
-          <div className="max-w-5xl mx-auto">
+          <div className="max-w-4xl mx-auto">
             <div className="mb-6">
               <Link to="/blog" className="inline-block">
                 <Button variant="outline" size="sm">
