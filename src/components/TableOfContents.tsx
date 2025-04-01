@@ -30,7 +30,9 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
     const extractHeadings = () => {
       const contentElement = document.getElementById(contentId);
       if (!contentElement) {
-        console.log(`TableOfContents: Content element with ID "${contentId}" not found`);
+        console.log(
+          `TableOfContents: Content element with ID "${contentId}" not found`
+        );
         return;
       }
 
@@ -59,7 +61,9 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
       ).filter((el) => el.id); // Only include headings with IDs
 
       if (headingElements.length === 0) {
-        console.log(`TableOfContents: No headings with IDs found in element "${contentId}"`);
+        console.log(
+          `TableOfContents: No headings with IDs found in element "${contentId}"`
+        );
         return;
       }
 
@@ -71,8 +75,13 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
       }));
 
       // Only update state if we have new headings that are different from current ones
-      if (items.length > 0 && JSON.stringify(items) !== JSON.stringify(headings)) {
-        console.log(`TableOfContents: Setting ${items.length} headings for ${contentId}`);
+      if (
+        items.length > 0 &&
+        JSON.stringify(items) !== JSON.stringify(headings)
+      ) {
+        console.log(
+          `TableOfContents: Setting ${items.length} headings for ${contentId}`
+        );
         setHeadings(items);
       }
     };
@@ -83,22 +92,22 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
     // Add a mutation observer to detect when heading IDs might be added dynamically
     const observer = new MutationObserver((mutations) => {
       // Check if any mutations involve element attributes (like adding an ID)
-      const shouldExtract = mutations.some(mutation => 
-        mutation.type === 'attributes' || 
-        mutation.type === 'childList'
+      const shouldExtract = mutations.some(
+        (mutation) =>
+          mutation.type === "attributes" || mutation.type === "childList"
       );
-      
+
       if (shouldExtract) {
         setTimeout(extractHeadings, 100);
       }
     });
-    
+
     const contentElement = document.getElementById(contentId);
     if (contentElement) {
-      observer.observe(contentElement, { 
-        attributes: true, 
-        childList: true, 
-        subtree: true 
+      observer.observe(contentElement, {
+        attributes: true,
+        childList: true,
+        subtree: true,
       });
     }
 
@@ -151,7 +160,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
   }
 
   return (
-    <div className="overflow-y-auto max-h-[calc(100vh-12rem)]">
+    <div className="overflow-y-auto max-h-[calc(100vh-18rem)]">
       <div className="pl-4">
         <nav className="space-y-1">
           {headings.map((heading) => (
