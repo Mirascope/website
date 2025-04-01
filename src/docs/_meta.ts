@@ -62,6 +62,9 @@ const meta: DocsStructure = {
         items: {
           quickstart: {
             title: "Quickstart"
+          },
+          why: {
+            title: "Why Mirascope?"
           }
         }
       }
