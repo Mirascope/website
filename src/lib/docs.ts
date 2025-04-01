@@ -182,17 +182,21 @@ export const getDoc = async (path: string): Promise<DocWithContent> => {
               `[getDoc] Generating fallback for product index: ${product}`
             );
 
-            // Get metadata from _meta.ts if available
-            const productDocs = docsMetadata[product] as ProductDocs;
-            const indexItem = productDocs?.items?.index;
-            const title =
-              indexItem?.title ||
-              `${product.charAt(0).toUpperCase() + product.slice(1)} Documentation`;
-            const description =
-              indexItem?.description || `Welcome to ${product} documentation`;
+            // Check if this is a known product
+            const isKnownProduct = product in docsMetadata;
+            
+            if (isKnownProduct) {
+              // Get metadata from _meta.ts if available
+              const productDocs = docsMetadata[product] as ProductDocs;
+              const indexItem = productDocs?.items?.index;
+              const title =
+                indexItem?.title ||
+                `${product.charAt(0).toUpperCase() + product.slice(1)} Documentation`;
+              const description =
+                indexItem?.description || `Welcome to ${product} documentation`;
 
-            // Generate a placeholder content with proper metadata
-            content = `---
+              // Generate a placeholder content with proper metadata
+              content = `---
 title: ${title}
 description: ${description}
 ---
@@ -203,9 +207,21 @@ ${description}
 
 Get started with ${product} by exploring the documentation in the sidebar.`;
 
-            console.log(
-              `[getDoc] Generated fallback content for product index`
-            );
+              console.log(
+                `[getDoc] Generated fallback content for known product index`
+              );
+            } else {
+              // For unknown products, use "Untitled Document" with empty content
+              content = `---
+title: Untitled Document
+description: 
+---
+`;
+              console.log(
+                `[getDoc] Generated "Untitled Document" for unknown product index`
+              );
+            }
+            
             contentCache[filePath] = content;
           } else {
             throw fetchError;
@@ -280,11 +296,11 @@ const getMetadataFromStructure = (path: string): DocMeta => {
   const productDocs = docsMetadata[product] as ProductDocs;
 
   if (!productDocs) {
-    // Product not found, return minimal metadata
+    // Product not found, return "Untitled Document" metadata
     return {
-      title: product.charAt(0).toUpperCase() + product.slice(1),
+      title: "Untitled Document",
       description: "",
-      slug: pathParts.length > 1 ? pathParts[pathParts.length - 1] : "index",
+      slug: "",
       path: pathParts.join("/"),
       product,
       type: "item",
@@ -577,20 +593,12 @@ const getMetadataFromStructure = (path: string): DocMeta => {
 
 // Helper function to create placeholder content
 const createPlaceholderContent = (path: string): string => {
-  // Extract product from path
-  const pathParts = path.replace(/^\/docs\//, "").split("/");
-  const product = pathParts[0];
-
-  // Check if the product exists in metadata
-  const productExists = product in docsMetadata;
-
-  // If the path is specified in _meta.ts but content is missing, show "Document Not Found"
-  if (productExists) {
-    return `# Document Not Found`;
-  }
-
-  // For paths not in _meta.ts, show a simple "Untitled Document" message
-  return `# Untitled Document`;
+  // For all cases, just return "Untitled Document" as the title with no content
+  return `---
+title: Untitled Document
+description: 
+---
+`;
 };
 
 // Get all documentation for a product

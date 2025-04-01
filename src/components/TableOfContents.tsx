@@ -30,6 +30,9 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
     const extractHeadings = () => {
       const contentElement = document.getElementById(contentId);
       if (!contentElement) {
+        console.log(
+          `TableOfContents: Content element with ID "${contentId}" not found`
+        );
         return;
       }
 
@@ -52,40 +55,68 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
         return;
       }
 
+      // Find all heading elements with IDs
       const headingElements = Array.from(
         contentElement.querySelectorAll("h1, h2, h3, h4, h5, h6")
       ).filter((el) => el.id); // Only include headings with IDs
 
-      // Skip if we already have these headings (prevent re-renders)
-      if (
-        headingElements.length === 0 ||
-        (headings.length > 0 &&
-          headingElements.length === headings.length &&
-          headingElements.every((el, i) => el.id === headings[i].id))
-      ) {
+      if (headingElements.length === 0) {
+        console.log(
+          `TableOfContents: No headings with IDs found in element "${contentId}"`
+        );
         return;
       }
 
+      // Create TOCItems from the heading elements
       const items: TOCItem[] = headingElements.map((heading) => ({
         id: heading.id,
         text: heading.textContent || "",
         level: parseInt(heading.tagName.substring(1)), // Get the heading level (1-6)
       }));
 
-      // Only update state if we have new headings
-      if (items.length > 0) {
+      // Only update state if we have new headings that are different from current ones
+      if (
+        items.length > 0 &&
+        JSON.stringify(items) !== JSON.stringify(headings)
+      ) {
+        console.log(
+          `TableOfContents: Setting ${items.length} headings for ${contentId}`
+        );
         setHeadings(items);
       }
     };
 
     // Initial extraction after a brief delay to ensure content is rendered
-    const initialTimer = setTimeout(extractHeadings, 100);
+    const initialTimer = setTimeout(extractHeadings, 300);
 
-    // Clean up initial timer
+    // Add a mutation observer to detect when heading IDs might be added dynamically
+    const observer = new MutationObserver((mutations) => {
+      // Check if any mutations involve element attributes (like adding an ID)
+      const shouldExtract = mutations.some(
+        (mutation) =>
+          mutation.type === "attributes" || mutation.type === "childList"
+      );
+
+      if (shouldExtract) {
+        setTimeout(extractHeadings, 100);
+      }
+    });
+
+    const contentElement = document.getElementById(contentId);
+    if (contentElement) {
+      observer.observe(contentElement, {
+        attributes: true,
+        childList: true,
+        subtree: true,
+      });
+    }
+
+    // Clean up timers and observers
     return () => {
       clearTimeout(initialTimer);
+      observer.disconnect();
     };
-  }, [contentId, product, section, slug, headings]);
+  }, [contentId, product, section, slug]); // Removed headings from dependency list
 
   // Second effect: Set up observer for active heading tracking
   useEffect(() => {
@@ -129,7 +160,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
   }
 
   return (
-    <div className="overflow-y-auto max-h-[calc(100vh-12rem)]">
+    <div className="overflow-y-auto max-h-[calc(100vh-18rem)]">
       <div className="pl-4">
         <nav className="space-y-1">
           {headings.map((heading) => (
