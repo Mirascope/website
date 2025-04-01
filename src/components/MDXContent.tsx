@@ -291,11 +291,30 @@ const MDXContent: React.FC<MDXContentProps> = ({ source }) => {
   }
 
   return (
-    <div className="prose prose-slate max-w-none">
+    <div className="prose prose-slate max-w-none mdx-content font-mono">
       {/* Styles for blog post content and code highlighting */}
       <style
         dangerouslySetInnerHTML={{
           __html: `
+        /* Force monospace for all MDX content */
+        .mdx-content {
+          font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+          font-size: 0.9rem !important;
+        }
+        
+        .mdx-content *:not(pre, code) {
+          font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+        }
+        
+        /* Force monospace for code elements regardless of site font setting */
+        .mdx-content code, 
+        .mdx-content pre, 
+        .mdx-content .shiki, 
+        .mdx-content .shiki code {
+          font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+          font-size: 0.9rem !important;
+        }
+        
         /* Base styles for Shiki */
         .shiki {
           margin: 0 !important;

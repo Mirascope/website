@@ -40,35 +40,10 @@ const NavLink = ({ href, children, className, onClick }: NavLinkProps) => {
   );
 };
 
-interface HeaderProps {
-  monoEnabled: boolean;
-  toggleFont: () => void;
-}
-
-export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
+export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
   const router = useRouterState();
   const isLandingPage = router.location.pathname === "/";
-
-  // Close dropdown on outside click
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (
-        dropdownOpen &&
-        !target.closest(".font-toggle-button") &&
-        !target.closest(".font-dropdown")
-      ) {
-        setDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [dropdownOpen]);
 
   // State to track scroll position
   const [scrolled, setScrolled] = useState(false);
@@ -173,52 +148,7 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
           <NavLink href="/pricing">Pricing</NavLink>
         </div>
 
-        <div className="hidden md:flex items-center">
-          <div className="relative">
-            <button
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="font-toggle-button bg-white text-black hover:bg-gray-50 text-sm px-4 py-2 border border-gray-200 shadow-sm rounded-md cursor-pointer flex items-center"
-              style={{ color: "black" }}
-            >
-              Font
-            </button>
-            {dropdownOpen && (
-              <div
-                className="font-dropdown absolute right-0 top-full mt-1 bg-white border border-gray-200 shadow-sm rounded-md overflow-hidden z-50"
-                style={{ minWidth: "10rem", color: "black" }}
-              >
-                <div className="py-1 flex flex-col">
-                  <button
-                    onClick={() => {
-                      if (monoEnabled) {
-                        toggleFont();
-                      }
-                      setDropdownOpen(false);
-                    }}
-                    className={`w-full text-left px-4 py-2 hover:bg-gray-50 ${!monoEnabled ? "bg-gray-50" : ""}`}
-                    style={{ fontSize: "0.875rem" }}
-                  >
-                    <span className="font-handwriting inline-block">
-                      Handwriting
-                    </span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      if (!monoEnabled) {
-                        toggleFont();
-                      }
-                      setDropdownOpen(false);
-                    }}
-                    className={`w-full text-left px-4 py-2 hover:bg-gray-50 ${monoEnabled ? "bg-gray-50" : ""}`}
-                    style={{ fontSize: "0.875rem" }}
-                  >
-                    <span className="font-mono inline-block">Monospace</span>
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
+        <div className="hidden md:flex"></div>
 
         {/* Mobile Menu Button */}
         <button
@@ -271,42 +201,6 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
             >
               Pricing
             </Link>
-            <hr className="my-2" />
-            <div className="mt-1">
-              <p className="text-gray-500 text-sm mb-1">Font Style</p>
-              <div className="border border-gray-200 rounded-md overflow-hidden">
-                <button
-                  className={`w-full text-left px-4 py-1.5 hover:bg-gray-50 ${!monoEnabled ? "bg-gray-50" : "bg-white"}`}
-                  style={{ fontSize: "0.875rem" }}
-                  onClick={() => {
-                    if (monoEnabled) {
-                      toggleFont();
-                      setIsMenuOpen(false);
-                    } else {
-                      setIsMenuOpen(false);
-                    }
-                  }}
-                >
-                  <span className="font-handwriting inline-block">
-                    Handwriting
-                  </span>
-                </button>
-                <button
-                  className={`w-full text-left px-4 py-1.5 hover:bg-gray-50 ${monoEnabled ? "bg-gray-50" : "bg-white"}`}
-                  style={{ fontSize: "0.875rem" }}
-                  onClick={() => {
-                    if (!monoEnabled) {
-                      toggleFont();
-                      setIsMenuOpen(false);
-                    } else {
-                      setIsMenuOpen(false);
-                    }
-                  }}
-                >
-                  <span className="font-mono inline-block">Monospace</span>
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       )}
