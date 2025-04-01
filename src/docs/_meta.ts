@@ -88,29 +88,6 @@ const meta: DocsStructure = {
             title: "Guides Overview"
           }
         },
-        
-        // Grouped guides pages
-        groups: {
-          basics: {
-            title: "Basics",
-            items: {
-              getting_started: {
-                title: "Getting Started Guide"
-              },
-              concepts: {
-                title: "Core Concepts"
-              }
-            }
-          },
-          advanced: {
-            title: "Advanced",
-            items: {
-              patterns: {
-                title: "Advanced Patterns" 
-              }
-            }
-          }
-        }
       }
     }
   },
@@ -160,18 +137,6 @@ const meta: DocsStructure = {
             title: "Guides Overview"
           }
         },
-        
-        // Grouped guides pages
-        groups: {
-          basics: {
-            title: "Basics",
-            items: {
-              getting_started: {
-                title: "Getting Started Guide"
-              }
-            }
-          }
-        }
       }
     }
   }

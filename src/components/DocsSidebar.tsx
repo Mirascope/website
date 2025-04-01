@@ -99,7 +99,7 @@ const DocsSidebar = ({
 
   return (
     <aside className="h-full pt-6 pb-12">
-      <div className="px-3 mb-6">
+      <div className="px-3 mb-2">
         {/* Product selector */}
         <div className="flex mb-5 space-x-4">
           {product === "mirascope" ? (
@@ -130,7 +130,7 @@ const DocsSidebar = ({
         </div>
 
         {/* Section tabs (Docs, API, Guides, etc.) - Displayed vertically */}
-        <div className="flex flex-col space-y-1 mb-6">
+        <div className="flex flex-col space-y-1">
           {/* Main docs tab */}
           <Link
             to={`/docs/${product}`}
