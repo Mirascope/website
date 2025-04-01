@@ -24,20 +24,20 @@ function BlogPostPage() {
   const [error, setError] = useState<string | null>(null);
   // Initialize fun mode from localStorage if available
   const [funMode, setFunMode] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('blogFunMode') === 'true';
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("blogFunMode") === "true";
     }
     return false;
   });
-  
+
   // Toggle fun mode (handwriting font for blog content)
   const toggleFunMode = () => {
     const newMode = !funMode;
     setFunMode(newMode);
-    
+
     // Save preference to localStorage
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('blogFunMode', newMode.toString());
+    if (typeof window !== "undefined") {
+      localStorage.setItem("blogFunMode", newMode.toString());
     }
   };
 
@@ -76,11 +76,11 @@ function BlogPostPage() {
         <div className="flex mx-auto w-full max-w-7xl px-4">
           {/* Left empty sidebar for symmetry */}
           <div className="w-56 flex-shrink-0 hidden lg:block"></div>
-          
+
           <div className="flex-1 min-w-0 flex justify-center items-center h-[calc(100vh-136px)]">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
           </div>
-          
+
           {/* Right TOC sidebar placeholder */}
           <div className="w-56 flex-shrink-0 hidden lg:block"></div>
         </div>
@@ -94,7 +94,7 @@ function BlogPostPage() {
         <div className="flex mx-auto w-full max-w-7xl px-4">
           {/* Left empty sidebar for symmetry */}
           <div className="w-56 flex-shrink-0 hidden lg:block"></div>
-          
+
           <div className="flex-1 min-w-0 flex flex-col justify-center items-center h-[calc(100vh-136px)]">
             <h1 className="text-2xl font-medium mb-4">Post Not Found</h1>
             <p className="text-muted-foreground mb-6">
@@ -104,7 +104,7 @@ function BlogPostPage() {
               <Button>Back to Blog</Button>
             </Link>
           </div>
-          
+
           {/* Right TOC sidebar placeholder */}
           <div className="w-56 flex-shrink-0 hidden lg:block"></div>
         </div>
@@ -117,7 +117,7 @@ function BlogPostPage() {
       <div className="flex mx-auto w-full max-w-7xl px-4">
         {/* Left empty sidebar for symmetry */}
         <div className="w-56 flex-shrink-0 hidden lg:block"></div>
-        
+
         {/* Main content area */}
         <div className="flex-1 min-w-0 py-6">
           <div className="max-w-5xl mx-auto">
@@ -128,9 +128,9 @@ function BlogPostPage() {
                   Back to Blog
                 </Button>
               </Link>
-              <Button 
-                variant={funMode ? "default" : "outline"} 
-                size="sm" 
+              <Button
+                variant={funMode ? "default" : "outline"}
+                size="sm"
                 onClick={toggleFunMode}
                 className={cn(
                   funMode ? "bg-primary text-white" : "hover:bg-purple-50",
@@ -151,7 +151,7 @@ function BlogPostPage() {
               </p>
             </div>
 
-            <div 
+            <div
               id="blog-content"
               className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 blog-content"
             >
@@ -159,9 +159,9 @@ function BlogPostPage() {
             </div>
           </div>
         </div>
-        
+
         {/* Right TOC sidebar - only visible on lg and larger screens */}
-        <div className="w-56 flex-shrink-0 hidden lg:block">
+        <div className="pt-15 w-56 flex-shrink-0 hidden lg:block">
           <div className="fixed w-56 max-h-[calc(100vh-60px)] overflow-y-auto">
             <div className="px-4">
               <h4 className="text-sm font-medium mb-4 text-gray-500">
