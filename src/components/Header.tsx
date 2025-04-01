@@ -70,7 +70,7 @@ export default function Header() {
         "py-6 px-4 sm:px-6 flex justify-center items-center fixed top-0 left-0 right-0 w-full z-50 transition-all duration-200",
         isLandingPage
           ? "bg-transparent text-white"
-          : "bg-background text-slate-800",
+          : "bg-background text-slate-800 dark:text-white",
         scrolled && !isLandingPage ? "border-b border-gray-200 shadow-sm" : "",
         scrolled && isLandingPage ? "bg-black/90 backdrop-blur-sm" : ""
       )}
@@ -106,18 +106,18 @@ export default function Header() {
                 >
                   Docs
                 </NavigationMenuTrigger>
-                <NavigationMenuContent className="bg-white p-4">
+                <NavigationMenuContent className="bg-background dark:bg-popover p-4">
                   <ul className="grid grid-cols-1 sm:grid-cols-2 w-[300px] sm:w-[480px] gap-4">
                     <li>
                       <NavigationMenuLink asChild>
                         <Link
                           to="/docs/mirascope"
-                          className="block p-4 space-y-1.5 rounded-md bg-white hover:bg-gray-50 transition-colors"
+                          className="block p-4 space-y-1.5 rounded-md bg-background dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                         >
                           <div className="font-medium text-xl text-[#6366f1]">
                             Mirascope
                           </div>
-                          <p className="text-base text-gray-600">
+                          <p className="text-base text-gray-600 dark:text-gray-300">
                             LLM abstractions that aren't obstructions.
                           </p>
                         </Link>
@@ -127,12 +127,12 @@ export default function Header() {
                       <NavigationMenuLink asChild>
                         <Link
                           to="/docs/lilypad"
-                          className="block p-4 space-y-1.5 rounded-md bg-white hover:bg-gray-50 transition-colors"
+                          className="block p-4 space-y-1.5 rounded-md bg-background dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                         >
                           <div className="font-medium text-xl text-[#2d8031]">
                             Lilypad
                           </div>
-                          <p className="text-base text-gray-600">
+                          <p className="text-base text-gray-600 dark:text-gray-300">
                             Start building your data flywheel in one line of
                             code.
                           </p>
@@ -152,7 +152,7 @@ export default function Header() {
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden p-2 text-black"
+          className="md:hidden p-2 text-black dark:text-white"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-label="Toggle menu"
         >
@@ -164,7 +164,7 @@ export default function Header() {
       {isMenuOpen && (
         <div
           className={cn(
-            "absolute top-full right-4 mt-2 p-6 md:hidden z-50 shadow-lg text-slate-800 rounded-lg max-w-xs",
+            "absolute top-full right-4 mt-2 p-6 md:hidden z-50 shadow-lg text-slate-800 dark:text-white rounded-lg max-w-xs",
             isLandingPage
               ? "bg-background/90 backdrop-blur-sm"
               : "bg-background"
@@ -174,14 +174,14 @@ export default function Header() {
             <div className="font-medium text-xl my-2">Docs</div>
             <Link
               to="/docs/mirascope"
-              className="p-3 rounded-md bg-white text-[#6366f1] font-medium hover:bg-gray-50 transition-colors"
+              className="p-3 rounded-md bg-white dark:bg-gray-800 text-[#6366f1] font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               Mirascope
             </Link>
             <Link
               to="/docs/lilypad"
-              className="p-3 rounded-md bg-white text-[#2d8031] font-medium hover:bg-gray-50 transition-colors"
+              className="p-3 rounded-md bg-white dark:bg-gray-800 text-[#2d8031] font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               Lilypad

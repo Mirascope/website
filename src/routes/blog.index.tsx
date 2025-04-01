@@ -53,7 +53,7 @@ function BlogPage() {
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-8">
               <h1 className="text-4xl font-bold mb-4 text-center">Blog</h1>
-              <p className="text-xl text-gray-700 max-w-2xl mx-auto">
+              <p className="text-xl text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
                 The latest news, updates, and insights about
                 <br />
                 Mirascope and LLM application development.
@@ -82,16 +82,16 @@ function BlogPage() {
                       to={`/blog/${post.slug}`}
                       className="block h-full cursor-pointer group"
                     >
-                      <div className="h-[320px] flex flex-col hover:shadow-lg transition-all duration-200 shadow-sm bg-white rounded-lg border border-gray-200 overflow-hidden">
+                      <div className="h-[320px] flex flex-col hover:shadow-lg transition-all duration-200 shadow-sm bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
                         <div className="p-6 flex flex-col h-full">
                           <div>
                             <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
                               {post.title}
                             </h3>
-                            <p className="text-sm text-gray-500 mb-4 select-none">
+                            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 select-none">
                               {post.date} · {post.readTime} · By {post.author}
                             </p>
-                            <p className="text-gray-600 mb-4 select-none line-clamp-3">
+                            <p className="text-gray-600 dark:text-gray-300 mb-4 select-none line-clamp-3">
                               {post.description}
                             </p>
                           </div>
@@ -123,7 +123,7 @@ function BlogPage() {
                     <button
                       onClick={() => handlePageChange(currentPage - 1)}
                       disabled={currentPage === 1}
-                      className={`px-3 py-1 rounded border font-medium ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:bg-gray-100"}`}
+                      className={`px-3 py-1 rounded border font-medium ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800"}`}
                     >
                       Previous
                     </button>
@@ -135,7 +135,7 @@ function BlogPage() {
                         className={`w-8 h-8 flex items-center justify-center rounded font-medium ${
                           currentPage === i + 1
                             ? "bg-primary text-white"
-                            : "border hover:bg-gray-100"
+                            : "border hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800"
                         }`}
                       >
                         {i + 1}
@@ -145,7 +145,7 @@ function BlogPage() {
                     <button
                       onClick={() => handlePageChange(currentPage + 1)}
                       disabled={currentPage === totalPages}
-                      className={`px-3 py-1 rounded border font-medium ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:bg-gray-100"}`}
+                      className={`px-3 py-1 rounded border font-medium ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800"}`}
                     >
                       Next
                     </button>
