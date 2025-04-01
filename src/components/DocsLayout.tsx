@@ -43,6 +43,46 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
   error,
   errorDetails,
 }) => {
+  // Sidebar expanded state - only collapsible at mobile/tablet breakpoint
+  const [sidebarExpanded, setSidebarExpanded] = useState(true);
+
+  // Track if we're at a small screen breakpoint
+  const [isSmallScreen, setIsSmallScreen] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth < 768; // md breakpoint is 768px in Tailwind
+    }
+    return false; // Default to large screen for SSR
+  });
+
+  // Update breakpoint state based on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      const smallScreen = window.innerWidth < 768;
+      setIsSmallScreen(smallScreen);
+
+      // Auto-expand sidebar on large screens
+      if (!smallScreen) {
+        setSidebarExpanded(true);
+      }
+    };
+
+    // Initialize on first render
+    handleResize();
+
+    // Add event listener
+    window.addEventListener("resize", handleResize);
+
+    // Clean up
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Toggle sidebar expanded/collapsed (only used on small screens)
+  const toggleSidebar = () => {
+    if (isSmallScreen) {
+      setSidebarExpanded(!sidebarExpanded);
+    }
+  };
+
   // Initialize fun mode from localStorage if available
   const [funMode, setFunMode] = useState(() => {
     if (typeof window !== "undefined") {
@@ -66,16 +106,81 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
     return (
       <div className="flex justify-center pt-[60px]">
         <div className="flex mx-auto w-full max-w-7xl">
-          {/* Left sidebar */}
-          <div className="w-64 flex-shrink-0">
-            <div className="fixed w-64 top-[60px] pt-6 max-h-[calc(100vh-60px)] overflow-y-auto">
-              <DocsSidebar
-                product={product}
-                section={section}
-                currentSlug={slug}
-                currentGroup={group}
-                docs={[]}
-              />
+          {/* Left sidebar - collapsible on mobile only */}
+          <div
+            className={`transition-all duration-300 ease-in-out flex flex-shrink-0 ${
+              sidebarExpanded ? "w-64" : isSmallScreen ? "w-10" : "w-64"
+            }`}
+          >
+            {/* Collapsed sidebar toggle button (show only when collapsed on small screens) */}
+            {isSmallScreen && !sidebarExpanded && (
+              <div className="fixed top-[120px] z-20">
+                <button
+                  onClick={toggleSidebar}
+                  className="flex items-center justify-center w-10 h-10 bg-white rounded-r-md border border-l-0 border-gray-200 shadow-sm hover:bg-gray-50"
+                  aria-label="Expand sidebar"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </button>
+              </div>
+            )}
+
+            {/* Sidebar content */}
+            <div
+              className={`fixed h-[calc(100vh-60px)] top-[60px] pt-6 transition-all duration-300 ease-in-out ${
+                sidebarExpanded
+                  ? "w-64 opacity-100"
+                  : isSmallScreen
+                    ? "w-0 opacity-0 overflow-hidden"
+                    : "w-64 opacity-100"
+              }`}
+            >
+              {/* Expanded sidebar toggle button (show only on small screens when expanded) */}
+              {isSmallScreen && sidebarExpanded && (
+                <div className="absolute top-6 right-2 z-20">
+                  <button
+                    onClick={toggleSidebar}
+                    className="flex items-center justify-center w-6 h-6 rounded hover:bg-gray-100"
+                    aria-label="Collapse sidebar"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                  </button>
+                </div>
+              )}
+
+              <div className="h-full overflow-y-auto">
+                <DocsSidebar
+                  product={product}
+                  section={section}
+                  currentSlug={slug}
+                  currentGroup={group}
+                  docs={[]}
+                />
+              </div>
             </div>
           </div>
 
@@ -94,18 +199,83 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
   // Error state
   if (error || !document) {
     return (
-      <div className="flex justify-center" style={{ paddingTop: "60px" }}>
+      <div className="flex justify-center pt-[60px]">
         <div className="flex mx-auto w-full max-w-7xl">
-          {/* Left sidebar */}
-          <div className="w-64 flex-shrink-0">
-            <div className="fixed w-64 top-[60px] pt-6 max-h-[calc(100vh-60px)] overflow-y-auto">
-              <DocsSidebar
-                product={product}
-                section={section}
-                currentSlug={slug}
-                currentGroup={group}
-                docs={docs}
-              />
+          {/* Left sidebar - collapsible on mobile only */}
+          <div
+            className={`transition-all duration-300 ease-in-out flex flex-shrink-0 ${
+              sidebarExpanded ? "w-64" : isSmallScreen ? "w-10" : "w-64"
+            }`}
+          >
+            {/* Collapsed sidebar toggle button (show only when collapsed on small screens) */}
+            {isSmallScreen && !sidebarExpanded && (
+              <div className="fixed top-[120px] z-20">
+                <button
+                  onClick={toggleSidebar}
+                  className="flex items-center justify-center w-10 h-10 bg-white rounded-r-md border border-l-0 border-gray-200 shadow-sm hover:bg-gray-50"
+                  aria-label="Expand sidebar"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </button>
+              </div>
+            )}
+
+            {/* Sidebar content */}
+            <div
+              className={`fixed h-[calc(100vh-60px)] top-[60px] pt-6 transition-all duration-300 ease-in-out ${
+                sidebarExpanded
+                  ? "w-64 opacity-100"
+                  : isSmallScreen
+                    ? "w-0 opacity-0 overflow-hidden"
+                    : "w-64 opacity-100"
+              }`}
+            >
+              {/* Expanded sidebar toggle button (show only on small screens when expanded) */}
+              {isSmallScreen && sidebarExpanded && (
+                <div className="absolute top-6 right-2 z-20">
+                  <button
+                    onClick={toggleSidebar}
+                    className="flex items-center justify-center w-6 h-6 rounded hover:bg-gray-100"
+                    aria-label="Collapse sidebar"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                  </button>
+                </div>
+              )}
+
+              <div className="h-full overflow-y-auto">
+                <DocsSidebar
+                  product={product}
+                  section={section}
+                  currentSlug={slug}
+                  currentGroup={group}
+                  docs={docs}
+                />
+              </div>
             </div>
           </div>
 
@@ -142,25 +312,90 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
 
   // Regular document display
   return (
-    <div className="flex justify-center" style={{ paddingTop: "60px" }}>
+    <div className="flex justify-center pt-[60px]">
       <div className="flex mx-auto w-full max-w-7xl">
-        {/* Left sidebar */}
-        <div className="w-64 flex-shrink-0">
-          <div className="fixed w-64 top-[60px] pt-6 max-h-[calc(100vh-60px)] overflow-y-auto">
-            <DocsSidebar
-              product={product}
-              section={section}
-              currentSlug={slug}
-              currentGroup={group}
-              docs={docs}
-            />
+        {/* Left sidebar - collapsible on mobile only */}
+        <div
+          className={`transition-all duration-300 ease-in-out flex flex-shrink-0 ${
+            sidebarExpanded ? "w-64" : isSmallScreen ? "w-10" : "w-64"
+          }`}
+        >
+          {/* Collapsed sidebar toggle button (show only when collapsed on small screens) */}
+          {isSmallScreen && !sidebarExpanded && (
+            <div className="fixed top-[110px] z-20">
+              <button
+                onClick={toggleSidebar}
+                className="flex items-center rounded bg-white border border-gray-300 justify-center w-6 h-6 rounded hover:bg-gray-100"
+                aria-label="Expand sidebar"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  className="stroke-gray-300"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </button>
+            </div>
+          )}
+
+          {/* Sidebar content */}
+          <div
+            className={`fixed h-[calc(100vh-60px)] top-[60px] pt-6 transition-all duration-300 ease-in-out ${
+              sidebarExpanded
+                ? "w-64 opacity-100"
+                : isSmallScreen
+                  ? "w-0 opacity-0 overflow-hidden"
+                  : "w-64 opacity-100"
+            }`}
+          >
+            {/* Expanded sidebar toggle button (show only on small screens when expanded) */}
+            {isSmallScreen && sidebarExpanded && (
+              <div className="absolute top-12 right-2 z-20">
+                <button
+                  onClick={toggleSidebar}
+                  className="flex items-center justify-center rounded border border-gray-300 w-6 h-6 hover:bg-gray-100"
+                  aria-label="Collapse sidebar"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    className="stroke-gray-300"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                  </svg>
+                </button>
+              </div>
+            )}
+
+            <div className="h-full overflow-y-auto">
+              <DocsSidebar
+                product={product}
+                section={section}
+                currentSlug={slug}
+                currentGroup={group}
+                docs={docs}
+              />
+            </div>
           </div>
         </div>
 
         {/* Main content area */}
-        <div className="flex-1 min-w-0 px-8">
-          <div className="max-w-5xl mx-auto">
-            <h1 className="text-4xl font-semibold mb-4">
+        <div className="flex-1 min-w-0 px-4 lg:px-8">
+          <div className="w-full max-w-5xl mx-auto">
+            <h1 className="text-3xl lg:text-4xl font-semibold mb-4">
               {document.meta.title}
             </h1>
             {document.meta.description &&
@@ -171,7 +406,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
               )}
             <div
               id="doc-content"
-              className="prose prose-slate max-w-none overflow-x-auto mdx-container"
+              className="prose prose-sm lg:prose-base prose-slate max-w-none overflow-x-auto mdx-container"
             >
               <MDXContent source={document.content} useFunMode={funMode} />
             </div>
@@ -180,8 +415,8 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
 
         {/* Right TOC sidebar */}
         <div className="w-56 flex-shrink-0 hidden lg:block">
-          <div className="fixed w-56 max-h-[calc(100vh-60px)] overflow-y-auto">
-            <div className="px-4">
+          <div className="fixed w-56 top-[60px] max-h-[calc(100vh-60px)] overflow-y-auto">
+            <div className="px-4 pt-6">
               <div className="flex flex-col gap-3 mb-4">
                 <Button
                   variant={funMode ? "default" : "outline"}
