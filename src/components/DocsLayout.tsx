@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import DocsSidebar from "@/components/DocsSidebar";
 import TableOfContents from "@/components/TableOfContents";
 import MDXContent from "@/components/MDXContent";
 import { type DocMeta } from "@/lib/docs";
+import { Button } from "@/components/ui/button";
+import { Sparkles } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 type DocsLayoutProps = {
   product: string;
@@ -40,6 +43,24 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
   error,
   errorDetails,
 }) => {
+  // Initialize fun mode from localStorage if available
+  const [funMode, setFunMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('docsFunMode') === 'true';
+    }
+    return false;
+  });
+  
+  // Toggle fun mode (handwriting font for docs content)
+  const toggleFunMode = () => {
+    const newMode = !funMode;
+    setFunMode(newMode);
+    
+    // Save preference to localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('docsFunMode', newMode.toString());
+    }
+  };
   // Loading state
   if (loading) {
     return (
@@ -152,7 +173,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
               id="doc-content"
               className="prose prose-slate max-w-none overflow-x-auto mdx-container"
             >
-              <MDXContent source={document.content} />
+              <MDXContent source={document.content} useFunMode={funMode} />
             </div>
           </div>
         </div>
@@ -161,9 +182,24 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
         <div className="w-56 flex-shrink-0 hidden lg:block">
           <div className="fixed w-56 max-h-[calc(100vh-60px)] overflow-y-auto">
             <div className="px-4">
-              <h4 className="text-sm font-medium mb-4 text-gray-500">
-                On this page
-              </h4>
+              <div className="flex flex-col gap-3 mb-4">
+                <Button
+                  variant={funMode ? "default" : "outline"}
+                  size="sm"
+                  onClick={toggleFunMode}
+                  className={cn(
+                    funMode ? "bg-primary text-white" : "hover:bg-purple-50",
+                    "transition-colors w-full"
+                  )}
+                >
+                  <Sparkles className="w-4 h-4 mr-1" />
+                  Fun Mode
+                </Button>
+                
+                <h4 className="text-sm font-medium text-gray-500">
+                  On this page
+                </h4>
+              </div>
               <TableOfContents
                 contentId="doc-content"
                 product={product}
