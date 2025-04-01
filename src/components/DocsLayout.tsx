@@ -150,7 +150,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
               )}
             <div
               id="doc-content"
-              className="prose prose-slate max-w-none overflow-x-auto"
+              className="prose prose-slate max-w-none overflow-x-auto mdx-container"
             >
               <MDXContent source={document.content} />
             </div>
