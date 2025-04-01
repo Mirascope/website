@@ -204,7 +204,7 @@ function PricingPage() {
 
   // Beta notice content for tooltips
   const betaNoticeContent = (
-    <div>
+    <div className="font-handwriting">
       <h3 className="text-lg font-semibold text-[#2d8031] mb-2">
         Open Beta Notice
       </h3>
@@ -273,7 +273,7 @@ function PricingPage() {
                       </TooltipTrigger>
                       <TooltipContent
                         side="right"
-                        className="w-96 p-4 bg-[#f0f9f0] text-[#2d8031] border border-[#c5e7c5]"
+                        className="w-md p-4 bg-[#f0f9f0] text-[#2d8031] border border-[#c5e7c5]"
                       >
                         {betaNoticeContent}
                       </TooltipContent>
