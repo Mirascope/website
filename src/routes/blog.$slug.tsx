@@ -1,9 +1,10 @@
 import { createFileRoute, useParams, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Sparkles } from "lucide-react";
 import { getPostBySlug } from "@/lib/mdx";
 import MDXContent from "@/components/MDXContent";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/blog/$slug")({
   component: BlogPostPage,
@@ -20,6 +21,24 @@ function BlogPostPage() {
   const [post, setPost] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  // Initialize fun mode from localStorage if available
+  const [funMode, setFunMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('blogFunMode') === 'true';
+    }
+    return false;
+  });
+  
+  // Toggle fun mode (handwriting font for blog content)
+  const toggleFunMode = () => {
+    const newMode = !funMode;
+    setFunMode(newMode);
+    
+    // Save preference to localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('blogFunMode', newMode.toString());
+    }
+  };
 
   // Add visible logging for debugging
   console.log("BlogPostPage rendered with slug:", slug);
@@ -85,13 +104,25 @@ function BlogPostPage() {
       <div className="flex mx-auto w-full max-w-7xl px-4">
         <div className="flex-1 min-w-0 py-6">
           <div className="max-w-4xl mx-auto">
-            <div className="mb-6">
+            <div className="mb-6 flex gap-2">
               <Link to="/blog" className="inline-block">
                 <Button variant="outline" size="sm">
                   <ChevronLeft className="w-4 h-4 mr-1" />
                   Back to Blog
                 </Button>
               </Link>
+              <Button 
+                variant={funMode ? "default" : "outline"} 
+                size="sm" 
+                onClick={toggleFunMode}
+                className={cn(
+                  funMode ? "bg-primary text-white" : "hover:bg-purple-50",
+                  "transition-colors"
+                )}
+              >
+                <Sparkles className="w-4 h-4 mr-1" />
+                Fun Mode
+              </Button>
             </div>
 
             <div className="mb-6">
@@ -104,7 +135,7 @@ function BlogPostPage() {
             </div>
 
             <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 blog-content">
-              <MDXContent source={post.content} />
+              <MDXContent source={post.content} useFunMode={funMode} />
             </div>
           </div>
         </div>
