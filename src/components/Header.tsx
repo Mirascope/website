@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import Logo from "@/components/Logo";
 
 // Reusable navigation link component
 interface NavLinkProps {
@@ -39,35 +40,10 @@ const NavLink = ({ href, children, className, onClick }: NavLinkProps) => {
   );
 };
 
-interface HeaderProps {
-  monoEnabled: boolean;
-  toggleFont: () => void;
-}
-
-export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
+export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
   const router = useRouterState();
   const isLandingPage = router.location.pathname === "/";
-
-  // Close dropdown on outside click
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (
-        dropdownOpen &&
-        !target.closest(".font-toggle-button") &&
-        !target.closest(".font-dropdown")
-      ) {
-        setDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [dropdownOpen]);
 
   // State to track scroll position
   const [scrolled, setScrolled] = useState(false);
@@ -81,10 +57,10 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    
+    window.addEventListener("scroll", handleScroll);
+
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, [scrolled]);
 
@@ -94,12 +70,12 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
         "py-6 px-4 sm:px-6 flex justify-center items-center fixed top-0 left-0 right-0 w-full z-50 transition-all duration-200",
         isLandingPage
           ? "bg-transparent text-white"
-          : "bg-background text-slate-800",
+          : "bg-background text-slate-800 dark:text-white",
         scrolled && !isLandingPage ? "border-b border-gray-200 shadow-sm" : "",
         scrolled && isLandingPage ? "bg-black/90 backdrop-blur-sm" : ""
       )}
     >
-      <nav className="flex flex-row items-center justify-between w-full max-w-5xl mx-auto">
+      <nav className="flex flex-row items-center justify-between w-full max-w-7xl mx-auto">
         <Link
           to="/"
           className={cn(
@@ -107,10 +83,10 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
             isLandingPage ? "invisible" : "visible"
           )}
         >
-          <img
-            src="/frog-logo.png"
-            alt="Mirascope Frog Logo"
-            className="h-7 sm:h-8 w-auto"
+          <Logo
+            size="small"
+            withText={true}
+            textClassName={cn(isLandingPage ? "text-white" : "text-primary")}
           />
         </Link>
 
@@ -130,18 +106,18 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
                 >
                   Docs
                 </NavigationMenuTrigger>
-                <NavigationMenuContent className="bg-white p-4">
+                <NavigationMenuContent className="bg-background dark:bg-popover p-4">
                   <ul className="grid grid-cols-1 sm:grid-cols-2 w-[300px] sm:w-[480px] gap-4">
                     <li>
                       <NavigationMenuLink asChild>
                         <Link
                           to="/docs/mirascope"
-                          className="block p-4 space-y-1.5 rounded-md bg-white hover:bg-gray-50 transition-colors"
+                          className="block p-4 space-y-1.5 rounded-md bg-background dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                         >
                           <div className="font-medium text-xl text-[#6366f1]">
                             Mirascope
                           </div>
-                          <p className="text-base text-gray-600">
+                          <p className="text-base text-gray-600 dark:text-gray-300">
                             LLM abstractions that aren't obstructions.
                           </p>
                         </Link>
@@ -151,12 +127,12 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
                       <NavigationMenuLink asChild>
                         <Link
                           to="/docs/lilypad"
-                          className="block p-4 space-y-1.5 rounded-md bg-white hover:bg-gray-50 transition-colors"
+                          className="block p-4 space-y-1.5 rounded-md bg-background dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                         >
                           <div className="font-medium text-xl text-[#2d8031]">
                             Lilypad
                           </div>
-                          <p className="text-base text-gray-600">
+                          <p className="text-base text-gray-600 dark:text-gray-300">
                             Start building your data flywheel in one line of
                             code.
                           </p>
@@ -172,56 +148,11 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
           <NavLink href="/pricing">Pricing</NavLink>
         </div>
 
-        <div className="hidden md:flex items-center">
-          <div className="relative">
-            <button
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="font-toggle-button bg-white text-black hover:bg-gray-50 text-sm px-4 py-2 border border-gray-200 shadow-sm rounded-md cursor-pointer flex items-center"
-              style={{ color: "black" }}
-            >
-              Font
-            </button>
-            {dropdownOpen && (
-              <div
-                className="font-dropdown absolute right-0 top-full mt-1 bg-white border border-gray-200 shadow-sm rounded-md overflow-hidden z-50"
-                style={{ minWidth: "10rem", color: "black" }}
-              >
-                <div className="py-1 flex flex-col">
-                  <button
-                    onClick={() => {
-                      if (monoEnabled) {
-                        toggleFont();
-                      }
-                      setDropdownOpen(false);
-                    }}
-                    className={`w-full text-left px-4 py-2 hover:bg-gray-50 ${!monoEnabled ? "bg-gray-50" : ""}`}
-                    style={{ fontSize: "0.875rem" }}
-                  >
-                    <span className="font-handwriting inline-block">
-                      Handwriting
-                    </span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      if (!monoEnabled) {
-                        toggleFont();
-                      }
-                      setDropdownOpen(false);
-                    }}
-                    className={`w-full text-left px-4 py-2 hover:bg-gray-50 ${monoEnabled ? "bg-gray-50" : ""}`}
-                    style={{ fontSize: "0.875rem" }}
-                  >
-                    <span className="font-mono inline-block">Monospace</span>
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
+        <div className="hidden md:flex"></div>
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden p-2 text-black"
+          className="md:hidden p-2 text-black dark:text-white"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-label="Toggle menu"
         >
@@ -233,27 +164,27 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
       {isMenuOpen && (
         <div
           className={cn(
-            "absolute top-full right-4 mt-2 p-6 md:hidden z-50 shadow-lg text-slate-800 rounded-lg max-w-xs",
+            "absolute top-full right-4 mt-2 p-6 md:hidden z-50 shadow-lg text-slate-800 dark:text-white rounded-lg max-w-xs",
             isLandingPage
               ? "bg-background/90 backdrop-blur-sm"
               : "bg-background"
           )}
         >
           <div className="flex flex-col space-y-4">
-            <div className="font-medium text-xl my-2">Products</div>
+            <div className="font-medium text-xl my-2">Docs</div>
             <Link
               to="/docs/mirascope"
-              className="p-3 rounded-md bg-white text-[#6366f1] font-medium hover:bg-gray-50 transition-colors"
+              className="p-3 rounded-md bg-white dark:bg-gray-800 text-[#6366f1] font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
-              Mirascope Docs
+              Mirascope
             </Link>
             <Link
               to="/docs/lilypad"
-              className="p-3 rounded-md bg-white text-[#2d8031] font-medium hover:bg-gray-50 transition-colors"
+              className="p-3 rounded-md bg-white dark:bg-gray-800 text-[#2d8031] font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
-              Lilypad Docs
+              Lilypad
             </Link>
             <hr className="my-2" />
             <Link
@@ -270,42 +201,6 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
             >
               Pricing
             </Link>
-            <hr className="my-2" />
-            <div className="mt-1">
-              <p className="text-gray-500 text-sm mb-1">Font Style</p>
-              <div className="border border-gray-200 rounded-md overflow-hidden">
-                <button
-                  className={`w-full text-left px-4 py-1.5 hover:bg-gray-50 ${!monoEnabled ? "bg-gray-50" : "bg-white"}`}
-                  style={{ fontSize: "0.875rem" }}
-                  onClick={() => {
-                    if (monoEnabled) {
-                      toggleFont();
-                      setIsMenuOpen(false);
-                    } else {
-                      setIsMenuOpen(false);
-                    }
-                  }}
-                >
-                  <span className="font-handwriting inline-block">
-                    Handwriting
-                  </span>
-                </button>
-                <button
-                  className={`w-full text-left px-4 py-1.5 hover:bg-gray-50 ${monoEnabled ? "bg-gray-50" : "bg-white"}`}
-                  style={{ fontSize: "0.875rem" }}
-                  onClick={() => {
-                    if (!monoEnabled) {
-                      toggleFont();
-                      setIsMenuOpen(false);
-                    } else {
-                      setIsMenuOpen(false);
-                    }
-                  }}
-                >
-                  <span className="font-mono inline-block">Monospace</span>
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       )}

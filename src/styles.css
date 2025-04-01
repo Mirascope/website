@@ -64,11 +64,49 @@ code, pre, .shiki, .shiki code,
   font-size: 0.9rem !important;
 }
 
-/* Handwriting mode uses handwriting font for code blocks */
-.handwriting-enabled code, .handwriting-enabled pre, .handwriting-enabled .shiki, .handwriting-enabled .shiki code {
-  font-family: 'Williams Handwriting', cursive !important;
-  font-size: 1.2rem !important;
+/* MDX content always uses monospace for all text and code blocks */
+.mdx-content {
+  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  font-size: 0.9rem !important;
 }
+
+.mdx-content h1,
+.mdx-content h2,
+.mdx-content h3,
+.mdx-content h4,
+.mdx-content h5,
+.mdx-content h6,
+.mdx-content p,
+.mdx-content ol,
+.mdx-content ul,
+.mdx-content li,
+.mdx-content div,
+.mdx-content span,
+.mdx-content a,
+.mdx-content code,
+.mdx-content pre,
+.mdx-content .shiki,
+.mdx-content .shiki code,
+.mdx-content * {
+  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+}
+
+.handwriting-enabled .mdx-content,
+.handwriting-enabled #doc-content,
+.handwriting-enabled .mdx-container,
+.handwriting-enabled .blog-content .mdx-content,
+.handwriting-enabled .prose {
+  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  font-size: 1.0rem !important;
+}
+
+/* Additional rule to specifically target blog content */
+.blog-content {
+  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  font-size: 1.0rem !important;
+}
+
+/* Fun mode completely uses handwriting font */
 
 /* Ensure inline code stands out from text */
 p code, li code, h1 code, h2 code, h3 code, h4 code, h5 code, h6 code {
@@ -120,6 +158,10 @@ p code, li code, h1 code, h2 code, h3 code, h4 code, h5 code, h6 code {
   z-index: -1;
 }
 
+.dark .bg-watercolor-flipped::before {
+  background-image: url('/dark-mode-watercolor-background.png');
+}
+
 
 :root {
   --background: oklch(0.995 0 0);  /* Pure white for background like the frog logo background */
@@ -163,42 +205,42 @@ p code, li code, h1 code, h2 code, h3 code, h4 code, h5 code, h6 code {
 }
 
 .dark {
-  --background: oklch(0.141 0.005 285.823);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.141 0.005 285.823);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.141 0.005 285.823);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(58.54% 0.2041 277.12);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.274 0.006 286.033);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.705 0.015 286.067);
-  --accent: oklch(0.274 0.006 286.033);
-  --accent-foreground: oklch(0.985 0 0);
+  --background: oklch(0.105 0.004 285.823); /* Darker background */
+  --foreground: oklch(0.95 0 0); /* Slightly off-white for better contrast */
+  --card: oklch(0.13 0.005 285.823); /* Slightly lighter than background */
+  --card-foreground: oklch(0.95 0 0);
+  --popover: oklch(0.13 0.005 285.823);
+  --popover-foreground: oklch(0.95 0 0);
+  --primary: oklch(58.54% 0.2041 277.12); /* Keep primary color consistent */
+  --primary-foreground: oklch(0.95 0 0);
+  --secondary: oklch(0.18 0.006 286.033); /* Slightly lighter than background */
+  --secondary-foreground: oklch(0.95 0 0);
+  --muted: oklch(0.18 0.006 286.033);
+  --muted-foreground: oklch(0.75 0.015 286.067); /* Lighter muted text */
+  --accent: oklch(0.18 0.006 286.033);
+  --accent-foreground: oklch(0.95 0 0);
   --destructive: oklch(0.396 0.141 25.723);
   --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: oklch(0.274 0.006 286.033);
-  --input: oklch(0.274 0.006 286.033);
-  --ring: oklch(0.442 0.017 285.786);
+  --border: oklch(0.16 0.006 286.033); /* Darker border */
+  --input: oklch(0.16 0.006 286.033);
+  --ring: oklch(0.35 0.017 285.786);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.21 0.006 285.885);
-  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar: oklch(0.13 0.006 285.885); /* Matching card color */
+  --sidebar-foreground: oklch(0.95 0 0);
   --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.274 0.006 286.033);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(0.274 0.006 286.033);
-  --sidebar-ring: oklch(0.442 0.017 285.786);
+  --sidebar-primary-foreground: oklch(0.95 0 0);
+  --sidebar-accent: oklch(0.18 0.006 286.033);
+  --sidebar-accent-foreground: oklch(0.95 0 0);
+  --sidebar-border: oklch(0.16 0.006 286.033);
+  --sidebar-ring: oklch(0.35 0.017 285.786);
 
   /* Paper texture variables for dark mode */
   --text-offset: 2px;
-  --texture-opacity: 0.3;
+  --texture-opacity: 0.15; /* Reduced opacity for dark mode */
   --texture-blend-mode: soft-light;
 }
 

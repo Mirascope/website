@@ -155,7 +155,7 @@ custom_chain.invoke("bears")
 
 As previously mentioned, LangChain runnables provide three key methods to execute and interact with your chains:
 
-- `invoke`: executes a runnable with a single input, and\*\*\*\* is typically used when you have a single piece of data to process.
+- `invoke`: executes a runnable with a single input, and is typically used when you have a single piece of data to process.
 - `batch`: allows you to process multiple inputs in parallel. This method is useful when you have a list of inputs and want to run them through the chain simultaneously.
   ‍
 - `stream`: processes input data as a stream, handling one piece of data at a time and providing results as they are available. This method is ideal for handling streamed output for real-time data processing or for large datasets that you want to process incrementally. At the time of this writing, streaming support for retries is being added for higher reliability without any latency cost (as explained in their docs).

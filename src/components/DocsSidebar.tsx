@@ -47,7 +47,43 @@ const DocsSidebar = ({
     currentPath.includes(`/docs/${product}/${group}/`)
   );
 
-  if (!productData) return <div>Product not found</div>;
+  // For unknown products, only show the product selector
+  if (!productData) {
+    return (
+      <aside className="h-full pt-6 pb-12">
+        <div className="mb-2">
+          {/* Product selector only */}
+          <div className="flex mb-5 space-x-4">
+            {product === "mirascope" ? (
+              <span className="text-xl font-medium text-mirascope-purple">
+                Mirascope
+              </span>
+            ) : (
+              <Link
+                to="/docs/mirascope"
+                className="text-xl font-medium text-gray-400 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+              >
+                Mirascope
+              </Link>
+            )}
+
+            {product === "lilypad" ? (
+              <span className="text-xl font-medium text-lilypad-green">
+                Lilypad
+              </span>
+            ) : (
+              <Link
+                to="/docs/lilypad"
+                className="text-xl font-medium text-gray-400 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+              >
+                Lilypad
+              </Link>
+            )}
+          </div>
+        </div>
+      </aside>
+    );
+  }
 
   // Is the main "Docs" tab active?
   // The Docs tab is active when:
@@ -99,7 +135,7 @@ const DocsSidebar = ({
 
   return (
     <aside className="h-full pt-6 pb-12">
-      <div className="px-3 mb-6">
+      <div className="mb-2">
         {/* Product selector */}
         <div className="flex mb-5 space-x-4">
           {product === "mirascope" ? (
@@ -130,7 +166,7 @@ const DocsSidebar = ({
         </div>
 
         {/* Section tabs (Docs, API, Guides, etc.) - Displayed vertically */}
-        <div className="flex flex-col space-y-1 mb-6">
+        <div className="flex flex-col space-y-1">
           {/* Main docs tab */}
           <Link
             to={`/docs/${product}`}
@@ -138,9 +174,9 @@ const DocsSidebar = ({
               "px-3 py-2 text-base rounded-md w-full",
               isDocsTabActive
                 ? product === "mirascope"
-                  ? "bg-gray-100 text-mirascope-purple font-medium"
-                  : "bg-gray-100 text-lilypad-green font-medium"
-                : "text-gray-600 hover:bg-gray-100"
+                  ? "bg-gray-100 dark:bg-gray-800 text-mirascope-purple font-medium"
+                  : "bg-gray-100 dark:bg-gray-800 text-lilypad-green font-medium"
+                : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
             )}
           >
             Docs
@@ -168,11 +204,11 @@ const DocsSidebar = ({
       </div>
 
       {/* Border line below section buttons */}
-      <div className="px-3 pb-4">
+      <div className="pb-4">
         <div className="border-b border-gray-300"></div>
       </div>
 
-      <div className="px-3">
+      <div>
         <nav className="space-y-3">
           {matchingSection ? (
             // Show section content if we're in a section path
