@@ -4,6 +4,7 @@ import { transformerNotationHighlight } from "@shikijs/transformers";
 
 type MDXContentProps = {
   source: string;
+  useFunMode?: boolean;
 };
 
 // Function to parse meta information and add highlight markers to code
@@ -261,7 +262,7 @@ const parseMarkdown = async (markdown: string): Promise<string> => {
   return processedMd;
 };
 
-const MDXContent: React.FC<MDXContentProps> = ({ source }) => {
+const MDXContent: React.FC<MDXContentProps> = ({ source, useFunMode = false }) => {
   const [html, setHtml] = useState<string>("");
   const [loading, setLoading] = useState(true);
 
@@ -291,19 +292,31 @@ const MDXContent: React.FC<MDXContentProps> = ({ source }) => {
   }
 
   return (
-    <div className="prose prose-slate max-w-none mdx-content font-mono">
+    <div className={`prose prose-slate max-w-none mdx-content ${useFunMode ? 'fun-mode' : ''}`}>
       {/* Styles for blog post content and code highlighting */}
       <style
         dangerouslySetInnerHTML={{
           __html: `
-        /* Force monospace for all MDX content */
-        .mdx-content {
+        /* Font styles based on mode */
+        .mdx-content:not(.fun-mode) {
           font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
-          font-size: 0.9rem !important;
+          font-size: 1.0rem !important;
         }
         
-        .mdx-content *:not(pre, code) {
+        .mdx-content:not(.fun-mode) *:not(pre, code) {
           font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+        }
+        
+        /* Fun mode (handwriting) styles - apply to everything including code blocks */
+        .mdx-content.fun-mode,
+        .mdx-content.fun-mode *,
+        .mdx-content.fun-mode code,
+        .mdx-content.fun-mode pre,
+        .mdx-content.fun-mode .shiki,
+        .mdx-content.fun-mode .shiki code,
+        .mdx-content.fun-mode .shiki .line {
+          font-family: 'Williams Handwriting', cursive !important;
+          font-size: 1.2rem !important;
         }
         
         /* Force monospace for code elements regardless of site font setting */
@@ -312,7 +325,7 @@ const MDXContent: React.FC<MDXContentProps> = ({ source }) => {
         .mdx-content .shiki, 
         .mdx-content .shiki code {
           font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
-          font-size: 0.9rem !important;
+          font-size: 0.9rem !important; /* Keep code blocks slightly smaller */
         }
         
         /* Base styles for Shiki */
