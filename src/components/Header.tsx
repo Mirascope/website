@@ -100,7 +100,7 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
         scrolled && isLandingPage ? "bg-black/90 backdrop-blur-sm" : ""
       )}
     >
-      <nav className="flex flex-row items-center justify-between w-full max-w-2xl mx-auto">
+      <nav className="flex flex-row items-center justify-between w-full max-w-7xl mx-auto">
         <Link
           to="/"
           className={cn(
@@ -108,12 +108,10 @@ export default function Header({ monoEnabled, toggleFont }: HeaderProps) {
             isLandingPage ? "invisible" : "visible"
           )}
         >
-          <Logo 
-            size="small" 
+          <Logo
+            size="small"
             withText={true}
-            textClassName={cn(
-              isLandingPage ? "text-white" : "text-primary"
-            )}
+            textClassName={cn(isLandingPage ? "text-white" : "text-primary")}
           />
         </Link>
 

@@ -99,7 +99,7 @@ const DocsSidebar = ({
 
   return (
     <aside className="h-full pt-6 pb-12">
-      <div className="px-3 mb-2">
+      <div className="mb-2">
         {/* Product selector */}
         <div className="flex mb-5 space-x-4">
           {product === "mirascope" ? (
@@ -168,11 +168,11 @@ const DocsSidebar = ({
       </div>
 
       {/* Border line below section buttons */}
-      <div className="px-3 pb-4">
+      <div className="pb-4">
         <div className="border-b border-gray-300"></div>
       </div>
 
-      <div className="px-3">
+      <div>
         <nav className="space-y-3">
           {matchingSection ? (
             // Show section content if we're in a section path
