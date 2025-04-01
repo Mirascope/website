@@ -171,20 +171,20 @@ export default function Header() {
           )}
         >
           <div className="flex flex-col space-y-4">
-            <div className="font-medium text-xl my-2">Products</div>
+            <div className="font-medium text-xl my-2">Docs</div>
             <Link
               to="/docs/mirascope"
               className="p-3 rounded-md bg-white text-[#6366f1] font-medium hover:bg-gray-50 transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
-              Mirascope Docs
+              Mirascope
             </Link>
             <Link
               to="/docs/lilypad"
               className="p-3 rounded-md bg-white text-[#2d8031] font-medium hover:bg-gray-50 transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
-              Lilypad Docs
+              Lilypad
             </Link>
             <hr className="my-2" />
             <Link
