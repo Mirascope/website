@@ -238,7 +238,7 @@ function BlogPostPage() {
 
               <div
                 id="blog-content"
-                className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border border-gray-200 blog-content"
+                className="bg-white dark:bg-gray-900 rounded-xl shadow-sm p-4 sm:p-6 border border-gray-200 dark:border-gray-700 blog-content"
               >
                 <MDXContent source={post.content} useFunMode={funMode} />
               </div>
@@ -251,7 +251,7 @@ function BlogPostPage() {
             <div className="fixed w-56 top-[96px] h-[calc(100vh-60px)] overflow-hidden">
               <div className="flex flex-col h-full">
                 {/* Fixed header section with Fun Mode button */}
-                <div className="flex flex-col gap-3 mb-4 pt-6 px-4 bg-white">
+                <div className="flex flex-col gap-3 mb-4 pt-6 px-4 bg-white dark:bg-gray-900">
                   <Button
                     variant={funMode ? "default" : "outline"}
                     size="sm"
@@ -265,7 +265,7 @@ function BlogPostPage() {
                     Fun Mode
                   </Button>
 
-                  <h4 className="text-sm font-medium text-gray-500">
+                  <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400">
                     On this page
                   </h4>
                 </div>
@@ -286,7 +286,7 @@ function BlogPostPage() {
           {/* Mobile slide-in TOC panel */}
           <div
             className={`
-            fixed top-0 right-0 w-72 h-full z-40 bg-white shadow-lg border-l border-gray-200
+            fixed top-0 right-0 w-72 h-full z-40 bg-white dark:bg-gray-900 shadow-lg border-l border-gray-200 dark:border-gray-700
             ${tocOpen ? "translate-x-0" : "translate-x-full"}
             transition-transform duration-300 ease-in-out
             lg:hidden

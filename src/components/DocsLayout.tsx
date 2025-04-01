@@ -50,7 +50,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
     }
     return false; // Default to large screen for SSR
   });
-  
+
   // Sidebar expanded state - only collapsible at mobile/tablet breakpoint
   // Default to expanded on large screens and collapsed on small screens
   const [sidebarExpanded, setSidebarExpanded] = useState(() => {
@@ -65,10 +65,10 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
     const handleResize = () => {
       const smallScreen = window.innerWidth < 768;
       const wasSmallScreen = isSmallScreen;
-      
+
       // Update small screen state
       setIsSmallScreen(smallScreen);
-      
+
       if (!smallScreen) {
         // Auto-expand sidebar on large screens
         setSidebarExpanded(true);
@@ -294,11 +294,11 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
           {/* Main content area with error message */}
           <div className="flex-1 min-w-0 py-20 flex flex-col items-center justify-center px-8">
             <h1 className="text-2xl font-medium mb-4">Document Not Found</h1>
-            <p className="text-gray-500">
+            <p className="text-gray-500 dark:text-gray-400">
               {error || "The document you're looking for doesn't exist."}
             </p>
             {errorDetails && (
-              <div className="mt-4 p-4 bg-gray-100 rounded text-sm">
+              <div className="mt-4 p-4 bg-gray-100 dark:bg-gray-800 rounded text-sm">
                 <p>Looking for file: {errorDetails.expectedPath}</p>
                 <p className="mt-2">Debug info:</p>
                 <ul className="list-disc ml-5 mt-1">
@@ -412,7 +412,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
             </h1>
             {document.meta.description &&
               document.meta.description.trim() !== "" && (
-                <p className="text-gray-600 mb-6">
+                <p className="text-gray-600 dark:text-gray-300 mb-6">
                   {document.meta.description}
                 </p>
               )}
@@ -428,7 +428,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
         {/* Right TOC sidebar */}
         <div className="w-56 flex-shrink-0 hidden lg:block">
           <div className="fixed w-56 top-[60px] max-h-[calc(100vh-60px)] overflow-y-auto">
-            <div className="px-4 pt-6">
+            <div className="px-4 pt-12">
               <div className="flex flex-col gap-3 mb-4">
                 <Button
                   variant={funMode ? "default" : "outline"}
@@ -443,7 +443,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
                   Fun Mode
                 </Button>
 
-                <h4 className="text-sm font-medium text-gray-500">
+                <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400">
                   On this page
                 </h4>
               </div>
