@@ -139,7 +139,9 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
         {/* Main content area */}
         <div className="flex-1 min-w-0 px-8">
           <div className="max-w-5xl mx-auto">
-            <h1 className="text-3xl font-medium mb-4">{document.meta.title}</h1>
+            <h1 className="text-4xl font-semibold mb-4">
+              {document.meta.title}
+            </h1>
             {document.meta.description &&
               document.meta.description.trim() !== "" && (
                 <p className="text-gray-600 mb-6">
