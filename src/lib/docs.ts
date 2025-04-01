@@ -6,6 +6,7 @@ import type {
   DocSection, 
   ProductDocs 
 } from "../docs/_meta";
+import { docsAPI } from "./utils";
 
 // Types for documentation handling
 export type DocType = "item" | "group-item" | "section-item" | "section-group-item";
@@ -35,406 +36,178 @@ export type DocWithContent = {
 // Cache for loaded documentation content
 let contentCache: Record<string, string> = {};
 
-// Function to parse frontmatter from MDX content
+// Function to handle frontmatter - parse title and description from the frontmatter
 const parseFrontmatter = (
   fileContent: string
 ): { frontmatter: Record<string, any>; content: string } => {
-  // Handle YAML frontmatter with three dashes
-  const frontmatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/;
-  const match = fileContent.match(frontmatterRegex);
-
-  if (!match) {
-    // If no frontmatter, just extract the first heading as the title
-    const titleMatch = fileContent.match(/^# (.*$)/m);
-    const title = titleMatch ? titleMatch[1] : "Untitled Document";
+  try {
+    // We'll keep this very simple - extract anything between the first two '---' markers
+    const parts = fileContent.split('---');
+    
+    // If there are at least 3 parts (before, frontmatter, content)
+    if (parts.length >= 3) {
+      // First part should be empty (or whitespace)
+      // Second part is frontmatter
+      // Everything after that is content
+      const frontmatterStr = parts[1].trim();
+      const content = parts.slice(2).join('---').trimStart();
+      
+      // Parse the frontmatter into a key-value object
+      const frontmatter: Record<string, any> = {};
+      
+      // Split by lines and process each line
+      frontmatterStr.split('\n').forEach(line => {
+        const trimmedLine = line.trim();
+        if (!trimmedLine) return; // Skip empty lines
+        
+        // Look for key: value format
+        const colonIndex = trimmedLine.indexOf(':');
+        if (colonIndex > 0) {
+          const key = trimmedLine.slice(0, colonIndex).trim();
+          const value = trimmedLine.slice(colonIndex + 1).trim();
+          
+          // Remove quotes if present
+          frontmatter[key] = value.replace(/^["'](.*)["']$/, '$1');
+        }
+      });
+      
+      console.log(`[parseFrontmatter] Extracted frontmatter:`, frontmatter);
+      
+      return {
+        frontmatter,
+        content
+      };
+    }
+    
+    // If no frontmatter found, return the original content
     return {
-      frontmatter: { title },
-      content: fileContent,
+      frontmatter: {},
+      content: fileContent
+    };
+  } catch (error) {
+    console.error('[parseFrontmatter] Error parsing frontmatter:', error);
+    return {
+      frontmatter: {},
+      content: fileContent
     };
   }
-
-  const frontmatterStr = match[1];
-  const content = match[2];
-
-  // Parse frontmatter into key-value pairs
-  const frontmatter: Record<string, any> = {};
-  const lines = frontmatterStr.split("\n");
-
-  for (const line of lines) {
-    const colonIndex = line.indexOf(":");
-    if (colonIndex !== -1) {
-      const key = line.slice(0, colonIndex).trim();
-      // Remove quotes from value if present
-      let value = line
-        .slice(colonIndex + 1)
-        .trim()
-        .replace(/^"(.*)"$/, "$1")
-        .replace(/^'(.*)'$/, "$1");
-        
-      // Clean up any trailing comments
-      if (value.includes("#")) {
-        value = value.split("#")[0].trim();
-      }
-      
-      // Convert boolean strings to actual boolean values
-      if (value === "true") {
-        frontmatter[key] = true;
-      } else if (value === "false") {
-        frontmatter[key] = false;
-      } else {
-        frontmatter[key] = value;
-      }
-    }
-  }
-
-  return { frontmatter, content };
 };
 
-// Get document by product, type, and path components
+// Get document by path
 export const getDoc = async (
-  product: string,
-  params: {
-    section?: string;
-    group?: string;
-    slug: string;
-  }
+  path: string,
 ): Promise<DocWithContent> => {
-  const { section, group, slug } = params;
-  
-  console.log(
-    `[Docs] getDoc called with product: ${product}, ` +
-    `section: ${section || "none"}, ` +
-    `group: ${group || "none"}, ` +
-    `slug: ${slug === "" ? "(empty)" : slug}`
-  );
-
   try {
-    // Determine the file path based on the type
-    let filePath = '';
-    let isWelcome = false;
+    // Convert /docs/mirascope/migration to mirascope/migration.mdx
+    let filePath = path.replace(/^\/docs\//, '');
     
-    console.log(`[Docs] getDoc determining path for: product=${product}, section=${section}, group=${group}, slug=${slug || "(empty)"}`);
+    // Save the original path parts for metadata lookup
+    const originalPathParts = filePath.split('/').filter(part => part !== '');
     
-    if (section && group) {
-      // Section + group - like API > LLM > Generation
-      
-      // Verify this is a valid section first
-      const sectionExists = docsMetadata[product]?.sections?.[section];
-      if (!sectionExists) {
-        console.error(`[Docs] Section '${section}' not found in product ${product}`);
-      }
-      
-      // Verify the group exists in this section
-      const groupExists = docsMetadata[product]?.sections?.[section]?.groups?.[group];
-      if (!groupExists) {
-        console.error(`[Docs] Group '${group}' not found in section '${section}'`);
-      }
-      
-      // Check for index or empty slug for section+group
-      if (slug === "" || slug === undefined || slug === "index" || slug === "overview") {
-        console.log(`[Docs] Loading section+group index file: ${product}/${section}/${group}/index.mdx`);
-        filePath = `${product}/${section}/${group}/index.mdx`;
-      } else {
-        // Regular section+group item
-        filePath = `${product}/${section}/${group}/${slug}.mdx`;
-        console.log(`[Docs] Using section+group path: ${filePath}`);
-      }
-      
-      // Verify this exists in the metadata
-      const itemExists = 
-        slug === "index" || slug === "" || slug === "overview"
-          ? true // Assume index always exists metadata-wise
-          : docsMetadata[product]?.sections?.[section]?.groups?.[group]?.items?.[slug];
-      
-      console.log(`[Docs] Section group item exists in metadata: ${!!itemExists}`);
-      
-      // Double check the file path is correct
-      console.log(`[Docs] Checking for file at path: ${filePath}`);
-    } else if (section) {
-      // Verify this is a valid section or top-level item
-      const sectionExists = docsMetadata[product]?.sections?.[section];
-      const isTopLevelItem = docsMetadata[product]?.items?.[section];
-      
-      if (!sectionExists && !isTopLevelItem) {
-        console.error(`[Docs] Section '${section}' not found in product ${product} and is not a top-level item`);
-        
-        // Check if this is actually a top-level group that was misinterpreted as a section
-        const isTopLevelGroup = docsMetadata[product]?.groups?.[section];
-        if (isTopLevelGroup) {
-          console.log(`[Docs] '${section}' is actually a top-level group, not a section. Adjusting path.`);
-          
-          // Treat this as a group item path
-          if (slug === "" || slug === undefined || slug === "index" || slug === "overview") {
-            filePath = `${product}/${section}/index.mdx`;
-          } else {
-            filePath = `${product}/${section}/${slug}.mdx`;
-          }
-        }
-      } 
-      // It's a valid section or top-level item, proceed normally
-      else if (isTopLevelItem) {
-        // This is a top-level item, not a section
-        filePath = `${product}/${section}.mdx`;
-        console.log(`[Docs] This is a top-level item, not a section. Using path: ${filePath}`);
-      }
-      else {
-        // For empty slug at section level, we always load the index.mdx file
-        if (slug === "" || slug === undefined) {
-          console.log(`[Docs] Loading section index file: ${product}/${section}/index.mdx`);
-          filePath = `${product}/${section}/index.mdx`;
-        } 
-        // For explicit "index" or "overview" slug
-        else if (slug === "index" || slug === "overview") {
-          console.log(`[Docs] Loading section index file for slug '${slug}': ${product}/${section}/index.mdx`);
-          filePath = `${product}/${section}/index.mdx`;
-        } 
-        // Regular section item
-        else {
-          filePath = `${product}/${section}/${slug}.mdx`;
-          console.log(`[Docs] Using section path: ${filePath}`);
-          
-          // Verify this item exists in the section
-          const itemExists = docsMetadata[product]?.sections?.[section]?.items?.[slug];
-          if (!itemExists) {
-            console.error(`[Docs] Item '${slug}' not found in section '${section}'`);
-          }
-        }
-      }
-    } else if (group) {
-      // Verify this is a valid group 
-      const groupExists = docsMetadata[product]?.groups?.[group];
-      if (!groupExists) {
-        console.error(`[Docs] Group '${group}' not found in product ${product}`);
-      }
-      
-      // Check for index or empty slug
-      if (slug === "" || slug === undefined || slug === "index" || slug === "overview") {
-        // Handle group index page - first try the index file
-        console.log(`[Docs] Loading group index file: ${product}/${group}/index.mdx`);
-        filePath = `${product}/${group}/index.mdx`;
-        
-        // Also prepare fallback to first item if no index exists
-        const groupItems = docsMetadata[product]?.groups?.[group]?.items || {};
-        const itemSlugs = Object.keys(groupItems);
-        
-        if (itemSlugs.length > 0) {
-          console.log(`[Docs] Found ${itemSlugs.length} items in group, will use first item as fallback if needed`);
-        } else {
-          console.log(`[Docs] No items found in group ${group}`);
-        }
-      } else {
-        // Regular group item
-        filePath = `${product}/${group}/${slug}.mdx`;
-        console.log(`[Docs] Using group path: ${filePath}`);
-        
-        // Verify this item exists in the group
-        const itemExists = docsMetadata[product]?.groups?.[group]?.items?.[slug];
-        if (!itemExists) {
-          console.error(`[Docs] Item '${slug}' not found in group '${group}'`);
-        }
-      }
-    } else {
-      // Top-level page - like Migration Guide
-      if (slug === "welcome") {
-        isWelcome = true;
-        filePath = `${product}/index.mdx`; // Special case for welcome page
-        console.log(`[Docs] Using welcome path: ${filePath}`);
-      } else {
-        filePath = `${product}/${slug}.mdx`;
-        console.log(`[Docs] Using top-level path: ${filePath}`);
-        
-        // Double-check that this file actually exists in metadata
-        const productData = docsMetadata[product];
-        const itemExists = productData?.items && productData.items[slug];
-        console.log(`[Docs] Item '${slug}' ${itemExists ? 'exists' : 'does NOT exist'} in metadata`);
-      }
+    // Normalize path by ensuring no trailing slash (except for root)
+    if (filePath.endsWith('/') && filePath !== '/') {
+      filePath = filePath.slice(0, -1);
     }
     
-    console.log(`[Docs] Final file path: ${filePath}`);
+    // Handle various path formats - with extra debug logging
+    if (filePath === '' || filePath === '/') {
+      // Root docs path
+      filePath = 'index.mdx';
+      console.log(`[getDoc] Root docs path handling: ${filePath}`);
+    } else if (filePath.endsWith('/index')) {
+      // Already has /index at the end
+      filePath = `${filePath}.mdx`;
+      console.log(`[getDoc] Path with /index handling: ${filePath}`);
+    } else if (filePath.split('/').pop() === '') {
+      // Ends with a slash, should load index
+      filePath = `${filePath}index.mdx`;
+      console.log(`[getDoc] Path with trailing slash handling: ${filePath}`);
+    } else if (filePath.endsWith('/index.mdx')) {
+      // Already properly formatted
+      console.log(`[getDoc] Already properly formatted: ${filePath}`);
+    } else if (filePath === 'index') {
+      // Just 'index'
+      filePath = 'index.mdx';
+      console.log(`[getDoc] Just 'index' handling: ${filePath}`);
+    } else if (filePath.includes('/') && filePath.split('/').pop() === 'index') {
+      // Paths like mirascope/index
+      filePath = `${filePath}.mdx`;
+      console.log(`[getDoc] Path ending with 'index' handling: ${filePath}`);
+    } else {
+      // Normal path like mirascope/migration
+      filePath = `${filePath}.mdx`;
+      console.log(`[getDoc] Normal path handling: ${filePath}`);
+    }
     
-    // Get the content from cache or fetch
-    let content = contentCache[filePath];
-    if (!content) {
-      try {
-        // Check if this is a section group path and provide detailed logs
-        if (section && group) {
-          console.log(`[Docs] Section group fetch: product=${product}, section=${section}, group=${group}, slug=${slug}`);
-          console.log(`[Docs] Full path to fetch: /src/docs/${filePath}`);
-        } else {
-          console.log(`[Docs] Fetching content from: /src/docs/${filePath}`);
-        }
+    // Debug log for diagnosing path issues
+    console.log(`[getDoc] Original path: ${path}, Normalized file path: ${filePath}, Path parts:`, originalPathParts);
+    
+    
+    // Attempt to load the file
+    let content;
+    try {
+      // Check cache first
+      if (contentCache[filePath]) {
+        content = contentCache[filePath];
+        console.log(`[getDoc] Using cached content for: ${filePath}`);
+      } else {
+        // Use the docsAPI to fetch the file content
+        console.log(`[getDoc] Attempting to fetch document: ${filePath}`);
         
-        const response = await fetch(`/src/docs/${filePath}`);
+        // For product index pages like mirascope/index.mdx, also check the _meta.ts
+        // to ensure we have valid metadata even if the file doesn't physically exist
+        const isProductIndex = filePath.split('/').length === 2 && 
+                              filePath.endsWith('/index.mdx');
         
-        if (!response.ok) {
-          console.error(`[Docs] Fetch failed with status ${response.status}: ${response.statusText}`);
+        try {
+          content = await docsAPI.getDocContent(filePath);
+          console.log(`[getDoc] Successfully fetched content for: ${filePath}`);
+          contentCache[filePath] = content;
+        } catch (fetchError) {
+          console.error(`[getDoc] Error fetching doc content: ${fetchError.message}`);
           
-          if (section && group) {
-            console.error(`[Docs] Failed to load section group document: ${product}/${section}/${group}/${slug}`);
-            console.error(`[Docs] This could be due to:
-            1. The file doesn't exist at src/docs/${filePath}
-            2. The route is correct but the file is missing
-            3. The file exists but has permission issues`);
-          }
-          
-          throw new Error(`Error fetching doc content: ${response.statusText}`);
-        }
-        
-        content = await response.text();
-        console.log(`[Docs] Content loaded successfully, length: ${content.length} characters`);
-        contentCache[filePath] = content;
-      } catch (error) {
-        console.error(`[Docs] Error fetching doc content for ${filePath}:`, error);
-        
-        // Special error handling for section group documents
-        if (section && group) {
-          console.error(`[Docs] Details for section group fetch:
-          - Product: ${product}
-          - Section: ${section}
-          - Group: ${group}
-          - Slug: ${slug}
-          - Expected file: ${filePath}`);
-        }
-        
-        // For section+group, try to be more specific with error messaging
-        if (section && group) {
-          // Try to get the document metadata first
-          let title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, ' ');
-          
-          // Check if this is actually defined in metadata
-          const groupData = docsMetadata[product]?.sections?.[section]?.groups?.[group];
-          const itemData = groupData?.items?.[slug];
-          
-          if (itemData) {
-            title = itemData.title;
-            console.log(`[Docs] Found item in metadata: ${title}`);
-          } else {
-            console.log(`[Docs] Item ${slug} not found in metadata for ${section}/${group}`);
-          }
-          
-          // For section+group index pages, generate a special index page
-          if (slug === "index" || slug === "" || slug === "overview") {
-            const groupData = docsMetadata[product]?.sections?.[section]?.groups?.[group];
-            const groupItems = groupData?.items || {};
-            const groupTitle = groupData?.title || group;
-            const groupDesc = groupData?.description || "";
+          // Special handling for product index pages
+          if (isProductIndex) {
+            const product = filePath.split('/')[0];
+            console.log(`[getDoc] Generating fallback for product index: ${product}`);
             
-            console.log(`[Docs] Creating auto-generated index page for ${section}/${group}`);
+            // Get metadata from _meta.ts if available
+            const productDocs = docsMetadata[product] as ProductDocs;
+            const indexItem = productDocs?.items?.index;
+            const title = indexItem?.title || `${product.charAt(0).toUpperCase() + product.slice(1)} Documentation`;
+            const description = indexItem?.description || `Welcome to ${product} documentation`;
             
-            // Create a nice index page showing all the items in this group
-            content = `---
-title: ${groupTitle}
-description: ${groupDesc}
----
-
-# ${groupTitle}
-
-${groupDesc}
-
-## Available Documentation
-
-${Object.entries(groupItems)
-  .map(([itemSlug, item]) => `- [${item.title}](/docs/${product}/${section}/${group}/${itemSlug})`)
-  .join('\n')}
-`;
-          }
-          // Standard section+group item
-          else {
-            // Create detailed error message about the missing content
+            // Generate a placeholder content with proper metadata
             content = `---
 title: ${title}
-description: Document Not Found
+description: ${description}
 ---
 
 # ${title}
 
-This document could not be found. Please check that you have created the file:
+${description}
 
-\`/src/docs/${filePath}\`
-
-Make sure you've also defined it in the metadata at:
-
-\`/src/docs/_meta.ts\` under \`${product}.sections.${section}.groups.${group}.items.${slug}\`
-
-## Debug Info
-- Product: ${product}
-- Section: ${section}
-- Group: ${group}
-- Slug: ${slug}
-- Expected file path: ${filePath}
-`;
-          }
-          console.log(`[Docs] Created detailed error content for ${filePath}`);
-        } else if (group && !section) {
-          // Special handling for group-only items
-          console.log(`[Docs] Creating placeholder content for group item: ${product}/${group}/${slug}`);
-          
-          // Get group data
-          const groupData = docsMetadata[product]?.groups?.[group];
-          
-          if (groupData) {
-            // For group index pages, auto-generate an index
-            if (slug === "index" || slug === "" || slug === "overview") {
-              const groupItems = groupData.items || {};
-              const groupTitle = groupData.title || group;
-              const groupDesc = groupData.description || "";
-              
-              console.log(`[Docs] Creating auto-generated index page for group ${group}`);
-              
-              // Create a nice index page showing all the items in this group
-              content = `---
-title: ${groupTitle}
-description: ${groupDesc}
----
-
-# ${groupTitle}
-
-${groupDesc}
-
-## Available Documentation
-
-${Object.entries(groupItems)
-  .map(([itemSlug, item]) => `- [${item.title}](/docs/${product}/${group}/${itemSlug})`)
-  .join('\n')}
-`;
-            } else {
-              // For regular group items, try to get title from metadata
-              const itemData = groupData.items?.[slug];
-              const title = itemData?.title || slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, ' ');
-              
-              // Create a placeholder for the group item
-              content = `---
-title: ${title}
-description: ${itemData?.description || `Documentation for ${title}`}
----
-
-# ${title}
-
-*This content is under development. Please check back soon for updates.*
-`;
-            }
+Get started with ${product} by exploring the documentation in the sidebar.`;
+            
+            console.log(`[getDoc] Generated fallback content for product index`);
+            contentCache[filePath] = content;
           } else {
-            // Group not found in metadata
-            console.log(`[Docs] Creating placeholder content for ${filePath}`);
-            content = createPlaceholderContent(product, { section, group, slug });
+            throw fetchError;
           }
-        } else {
-          // Create regular placeholder content for other cases
-          console.log(`[Docs] Creating placeholder content for ${filePath}`);
-          content = createPlaceholderContent(product, { section, group, slug });
         }
       }
-    } else {
-      console.log(`[Docs] Using cached content for ${filePath}`);
+    } catch (error) {
+      console.warn(`[getDoc] Could not load document content for ${path}, using placeholder`, error);
+      content = createPlaceholderContent(path);
     }
     
-    // Parse frontmatter
-    const { frontmatter } = parseFrontmatter(content);
+    // Parse frontmatter and get content
+    const { frontmatter, content: cleanContent } = parseFrontmatter(content);
     
-    // Get metadata from structure
-    const meta = getMetadataFromStructure(product, { section, group, slug: isWelcome ? "welcome" : slug });
+    // Get metadata from _meta.ts
+    let meta = getMetadataFromStructure(path);
     
-    // Override with frontmatter if specified
+    // Override title and description with frontmatter values if they exist
     if (frontmatter.title) {
       meta.title = frontmatter.title;
     }
@@ -443,158 +216,280 @@ description: ${itemData?.description || `Documentation for ${title}`}
       meta.description = frontmatter.description;
     }
     
-    return { meta, content };
-  } catch (error) {
-    console.error(
-      `[Docs] Error loading document for ${product} / ${section} / ${group} / ${slug}:`,
-      error
-    );
+    console.log(`[getDoc] Final metadata:`, meta);
     
-    // Create placeholder with metadata
-    const meta = getMetadataFromStructure(product, { section, group, slug });
-    const content = createPlaceholderContent(product, { section, group, slug });
+    return { meta, content: cleanContent };
+  } catch (error) {
+    
+    // Fallback
+    const meta = getMetadataFromStructure(path);
+    
+    // Create fallback content with frontmatter
+    const content = `---
+title: ${meta.title}
+description: ${meta.description || ""}
+---
+
+# ${meta.title}
+
+Content not available.`;
     
     return { meta, content };
   }
 };
 
 // Helper function to get metadata from the structure
-const getMetadataFromStructure = (
-  product: string,
-  params: {
-    section?: string;
-    group?: string;
-    slug: string;
+const getMetadataFromStructure = (path: string): DocMeta => {
+  // Remove /docs/ prefix and extract path parts
+  const pathParts = path.replace(/^\/docs\//, '').split('/').filter(part => part !== '');
+  console.log(`[getMetadataFromStructure] Path parts:`, pathParts);
+  
+  if (pathParts.length === 0) {
+    return {
+      title: "Documentation",
+      description: "",
+      slug: "index",
+      path: "index",
+      product: "",
+      type: "item",
+    };
   }
-): DocMeta => {
-  const { section, group, slug } = params;
+  
+  const product = pathParts[0];
   const productDocs = docsMetadata[product] as ProductDocs;
   
   if (!productDocs) {
     // Product not found, return minimal metadata
     return {
       title: product.charAt(0).toUpperCase() + product.slice(1),
-      description: `Documentation for ${product}`,
-      slug,
-      path: buildPath(product, { section, group, slug }),
+      description: "",
+      slug: pathParts.length > 1 ? pathParts[pathParts.length - 1] : "index",
+      path: pathParts.join('/'),
       product,
       type: "item",
     };
   }
   
-  // Determine the title and description based on type
+  // Initialize variables
   let title = "";
   let description = "";
   let docType: DocType = "item";
+  let section = "";
+  let group = "";
   let sectionTitle = "";
   let groupTitle = "";
+  let slug = pathParts.length > 1 ? pathParts[pathParts.length - 1] : "index";
   
-  if (section && group && slug) {
-    // Section + group + slug - E.g., API > LLM > Generation
-    docType = "section-group-item";
+  // Define a function to get a default slug if needed
+  const getSlug = (parts: string[]) => {
+    // If path ends with a slash, use index
+    if (path.endsWith('/')) return "index";
     
-    // First check if "section" is actually a top-level group
-    if (productDocs.groups && productDocs.groups[section]) {
-      // This is a top-level group being mistakenly treated as a section
-      console.log(`"${section}" is actually a top-level group, not a section`);
-      
-      const groupData = productDocs.groups[section];
-      groupTitle = groupData.title;
-      
-      if (group === section) {
-        // We're handling a top-level group item
-        const item = groupData.items[slug];
-        if (item) {
-          title = item.title;
-          description = item.description || "";
-        }
-      } else {
-        console.error(`Group mismatch: section=${section}, group=${group}`);
-      }
-    } else {
-      // Regular section+group handling
-      const sectionData = productDocs.sections[section];
-      if (sectionData) {
-        sectionTitle = sectionData.title;
-        
-        console.log(`Looking for group '${group}' in section '${section}'`);
-        console.log(`Available groups in this section:`, Object.keys(sectionData.groups || {}));
-        
-        const groupData = sectionData.groups?.[group];
-        if (groupData) {
-          groupTitle = groupData.title;
-          
-          console.log(`Looking for slug '${slug}' in group '${group}'`);
-          console.log(`Available items in this group:`, Object.keys(groupData.items));
-          
-          const item = groupData.items[slug];
-          if (item) {
-            title = item.title;
-            description = item.description || "";
-          }
-        } else {
-          console.error(`Group '${group}' not found in section '${section}'`);
-        }
-      } else {
-        console.error(`Section '${section}' not found in product '${product}'`);
-      }
-    }
-  } else if (section && slug) {
-    // Section + slug - E.g., API > Overview
-    
-    // Check if this "section" is actually a top-level group
-    if (productDocs.groups && productDocs.groups[section]) {
-      // This is a top-level group being mistakenly treated as a section
-      console.log(`In section+slug: "${section}" is actually a top-level group, not a section`);
-      
-      // Treat this as a group item instead
-      docType = "group-item";
-      const groupData = productDocs.groups[section];
-      groupTitle = groupData.title;
-      
-      const item = groupData.items[slug];
-      if (item) {
-        title = item.title;
-        description = item.description || "";
-      }
-    } else {
-      // Regular section handling
-      docType = "section-item";
-      const sectionData = productDocs.sections[section];
-      if (sectionData) {
-        sectionTitle = sectionData.title;
-        
-        const item = sectionData.items[slug];
-        if (item) {
-          title = item.title;
-          description = item.description || "";
-        }
-      } else {
-        console.error(`In section+slug: Section '${section}' not found in product '${product}'`);
-      }
-    }
-  } else if (group && slug) {
-    // Group + slug - E.g., Getting Started > Quickstart
-    docType = "group-item";
-    
-    const groupData = productDocs.groups[group];
-    if (groupData) {
-      groupTitle = groupData.title;
-      
-      const item = groupData.items[slug];
-      if (item) {
-        title = item.title;
-        description = item.description || "";
-      }
-    }
-  } else {
-    // Just slug - E.g., Migration Guide
+    // Otherwise use the last part
+    return parts[parts.length - 1] || "index";
+  };
+  
+  // Handle top-level items with special case for paths like /docs/mirascope/migration/
+  if (pathParts.length <= 2 && path.endsWith('/') && pathParts.length > 1) {
+    // Treat this as a top-level item (not an index)
+    // For paths like /docs/mirascope/migration/
     docType = "item";
+    slug = pathParts[1]; // Use the second part
+    console.log(`[getMetadataFromStructure] Top-level item with trailing slash: ${slug}`);
     
-    const item = productDocs.items[slug];
+    // Look for the metadata in top-level items
+    const item = productDocs.items?.[slug];
     if (item) {
       title = item.title;
+      description = item.description || `${title} documentation`;
+      console.log(`[getMetadataFromStructure] Found item metadata:`, { title, description });
+    } else {
+      title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, ' ');
+      description = `Documentation for ${title}`;
+      console.log(`[getMetadataFromStructure] Using default item metadata:`, { title, description });
+    }
+    return {
+      title,
+      description,
+      slug,
+      path: pathParts.join('/'),
+      product,
+      type: docType,
+    };
+  }
+  
+  // Determine the type and extract metadata based on path structure
+  if (pathParts.length === 1) {
+    // Product root: /docs/mirascope/
+    docType = "item";
+    slug = getSlug(pathParts);
+    
+    if (slug === "index" || slug === "" || slug === "welcome" || slug === "overview") {
+      // Use product index item
+      const indexItem = productDocs.items?.index;
+      console.log(`[getMetadataFromStructure] Checking for index item for ${product}`, indexItem);
+      
+      if (indexItem) {
+        title = indexItem.title;
+        description = indexItem.description || "";
+        console.log(`[getMetadataFromStructure] Using metadata from _meta.ts for index:`, { title, description });
+      } else {
+        title = `${product.charAt(0).toUpperCase() + product.slice(1)} Documentation`;
+        description = "";
+        console.log(`[getMetadataFromStructure] Using fallback metadata for index:`, { title, description });
+      }
+    } else {
+      // Regular top-level item: /docs/mirascope/migration
+      const item = productDocs.items?.[slug];
+      console.log(`[getMetadataFromStructure] Looking for item metadata for slug: ${slug}`, item);
+      if (item) {
+        title = item.title;
+        description = item.description || "";
+      } else {
+        title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, ' ');
+        description = "";
+      }
+    }
+  } else if (pathParts.length === 2) {
+    // Could be a group or section: /docs/mirascope/getting-started/ or /docs/mirascope/api/
+    // OR a direct top-level item: /docs/mirascope/migration
+    slug = getSlug(pathParts);
+    const potentialGroupOrSection = pathParts[1];
+    
+    // First check if this is a direct top-level item like migration.mdx
+    if (slug !== "index" && productDocs.items && productDocs.items[slug]) {
+      // This is a direct top-level item like /docs/mirascope/migration
+      docType = "item";
+      const item = productDocs.items[slug];
+      title = item.title;
       description = item.description || "";
+      console.log(`[getMetadataFromStructure] Found top-level item:`, { slug, title, description });
+      return {
+        title,
+        description,
+        slug,
+        path: pathParts.join('/'),
+        product,
+        type: docType,
+      };
+    }
+    
+    // Check if it's a group
+    if (productDocs.groups && productDocs.groups[potentialGroupOrSection]) {
+      docType = "group-item";
+      group = potentialGroupOrSection;
+      groupTitle = productDocs.groups[group].title;
+      
+      if (slug === "index" || slug === "" || slug === "overview") {
+        // Group index: /docs/mirascope/getting-started/
+        title = groupTitle;
+        description = productDocs.groups[group].description || "";
+      } else {
+        // Group item: /docs/mirascope/getting-started/quickstart
+        const item = productDocs.groups[group].items?.[slug];
+        if (item) {
+          title = item.title;
+          description = item.description || "";
+        } else {
+          title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, ' ');
+          description = "";
+        }
+      }
+    } 
+    // Check if it's a section
+    else if (productDocs.sections && productDocs.sections[potentialGroupOrSection]) {
+      docType = "section-item";
+      section = potentialGroupOrSection;
+      sectionTitle = productDocs.sections[section].title;
+      
+      if (slug === "index" || slug === "" || slug === "overview") {
+        // Section index: /docs/mirascope/api/
+        title = sectionTitle;
+        description = productDocs.sections[section].description || "";
+      } else {
+        // Section item: /docs/mirascope/api/quickstart
+        const item = productDocs.sections[section].items?.[slug];
+        if (item) {
+          title = item.title;
+          description = item.description || "";
+        } else {
+          title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, ' ');
+          description = "";
+        }
+      }
+    } else {
+      // Unknown structure, use fallback
+      docType = "item";
+      title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, ' ');
+      description = "";
+    }
+  } else if (pathParts.length === 3) {
+    // Section + group or deeper: /docs/mirascope/api/llm/
+    slug = getSlug(pathParts);
+    const potentialSection = pathParts[1];
+    const potentialGroup = pathParts[2];
+    
+    // Check if it's a section+group structure
+    if (productDocs.sections && 
+        productDocs.sections[potentialSection] && 
+        productDocs.sections[potentialSection].groups && 
+        productDocs.sections[potentialSection].groups![potentialGroup]) {
+      
+      docType = "section-group-item";
+      section = potentialSection;
+      group = potentialGroup;
+      sectionTitle = productDocs.sections[section].title;
+      groupTitle = productDocs.sections[section].groups![group].title;
+      
+      if (slug === "index" || slug === "" || slug === "overview") {
+        // Section+group index: /docs/mirascope/api/llm/
+        title = groupTitle;
+        description = productDocs.sections[section].groups![group].description || "";
+      } else {
+        // Section+group item: /docs/mirascope/api/llm/generation
+        const item = productDocs.sections[section].groups![group].items?.[slug];
+        if (item) {
+          title = item.title;
+          description = item.description || "";
+        } else {
+          title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, ' ');
+          description = "";
+        }
+      }
+    } else {
+      // Unknown structure, use fallback
+      docType = "item";
+      title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, ' ');
+      description = "";
+    }
+  } else if (pathParts.length >= 4) {
+    // Section + group + item: /docs/mirascope/api/llm/generation
+    docType = "section-group-item";
+    section = pathParts[1];
+    group = pathParts[2];
+    slug = pathParts[3];
+    
+    // Check if the structure exists
+    if (productDocs.sections && 
+        productDocs.sections[section] && 
+        productDocs.sections[section].groups && 
+        productDocs.sections[section].groups![group]) {
+      
+      sectionTitle = productDocs.sections[section].title;
+      groupTitle = productDocs.sections[section].groups![group].title;
+      
+      const item = productDocs.sections[section].groups![group].items?.[slug];
+      if (item) {
+        title = item.title;
+        description = item.description || "";
+      } else {
+        title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, ' ');
+        description = "";
+      }
+    } else {
+      // Unknown structure, use fallback
+      title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, ' ');
+      description = "";
     }
   }
   
@@ -603,11 +498,11 @@ const getMetadataFromStructure = (
     title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, ' ');
   }
   
-  return {
+  const meta = {
     title,
     description,
     slug,
-    path: buildPath(product, { section, group, slug }),
+    path: pathParts.join('/'),
     product,
     type: docType,
     section,
@@ -615,50 +510,29 @@ const getMetadataFromStructure = (
     sectionTitle,
     groupTitle,
   };
+  
+  return meta;
 };
 
-// Helper function to build a path based on components
-const buildPath = (
-  product: string,
-  params: {
-    section?: string;
-    group?: string;
-    slug: string;
-  }
-): string => {
-  const { section, group, slug } = params;
-  
-  if (section && group) {
-    return `${product}/${section}/${group}/${slug}`;
-  } else if (section) {
-    return `${product}/${section}/${slug}`;
-  } else if (group) {
-    return `${product}/${group}/${slug}`;
-  } else {
-    return `${product}/${slug}`;
-  }
-};
+// (buildPath function removed since we now use the path directly)
 
 // Helper function to create placeholder content
-const createPlaceholderContent = (
-  product: string,
-  params: {
-    section?: string;
-    group?: string;
-    slug: string;
-  }
-): string => {
-  const meta = getMetadataFromStructure(product, params);
+const createPlaceholderContent = (path: string): string => {
+  // Extract product from path
+  const pathParts = path.replace(/^\/docs\//, '').split('/');
+  const product = pathParts[0];
   
-  return `---
-title: ${meta.title}
-description: ${meta.description || `Documentation for ${meta.title}`}
----
-
-# ${meta.title}
-
-*This content is under development. Please check back soon for updates.*
-`;
+  
+  // Check if the product exists in metadata
+  const productExists = product in docsMetadata;
+  
+  // If the path is specified in _meta.ts but content is missing, show "Document Not Found"
+  if (productExists) {
+    return `# Document Not Found`;
+  }
+  
+  // For paths not in _meta.ts, show a simple "Untitled Document" message
+  return `# Untitled Document`;
 };
 
 // Get all documentation for a product
@@ -673,11 +547,12 @@ export const getDocsForProduct = (product: string): DocMeta[] => {
   // Process top-level items
   Object.keys(productDocs.items).forEach(slug => {
     const item = productDocs.items[slug];
+    const path = `${product}/${slug}`;
     docs.push({
       title: item.title,
       description: item.description,
       slug,
-      path: buildPath(product, { slug }),
+      path,
       product,
       type: "item"
     });
@@ -690,11 +565,12 @@ export const getDocsForProduct = (product: string): DocMeta[] => {
     // Add each item in the group
     Object.keys(group.items).forEach(itemSlug => {
       const item = group.items[itemSlug];
+      const path = `${product}/${groupSlug}/${itemSlug}`;
       docs.push({
         title: item.title,
         description: item.description,
         slug: itemSlug,
-        path: buildPath(product, { group: groupSlug, slug: itemSlug }),
+        path,
         product,
         type: "group-item",
         group: groupSlug,
@@ -710,11 +586,12 @@ export const getDocsForProduct = (product: string): DocMeta[] => {
     // Add section items
     Object.keys(section.items).forEach(itemSlug => {
       const item = section.items[itemSlug];
+      const path = `${product}/${sectionSlug}/${itemSlug}`;
       docs.push({
         title: item.title,
         description: item.description,
         slug: itemSlug,
-        path: buildPath(product, { section: sectionSlug, slug: itemSlug }),
+        path,
         product,
         type: "section-item",
         section: sectionSlug,
@@ -730,15 +607,12 @@ export const getDocsForProduct = (product: string): DocMeta[] => {
         // Add each item in the group
         Object.keys(group.items).forEach(itemSlug => {
           const item = group.items[itemSlug];
+          const path = `${product}/${sectionSlug}/${groupSlug}/${itemSlug}`;
           docs.push({
             title: item.title,
             description: item.description,
             slug: itemSlug,
-            path: buildPath(product, { 
-              section: sectionSlug, 
-              group: groupSlug, 
-              slug: itemSlug 
-            }),
+            path,
             product,
             type: "section-group-item",
             section: sectionSlug,

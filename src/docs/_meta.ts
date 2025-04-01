@@ -14,20 +14,17 @@
 // Basic item structure
 export interface DocMetaItem {
   title: string;
-  description?: string;
 }
 
 // Group of documents
 export interface DocGroup {
   title: string;
-  description?: string;
   items: Record<string, DocMetaItem>;
 }
 
 // Section of documentation (like API)
 export interface DocSection {
   title: string; 
-  description?: string;
   defaultSlug?: string;
   items: Record<string, DocMetaItem>;  // Direct section items
   groups?: Record<string, DocGroup>;   // Grouped section items
@@ -51,12 +48,10 @@ const meta: DocsStructure = {
     // Top level pages
     items: {
       index: {
-        title: "Welcome",
-        description: "Welcome to the Mirascope documentation."
+        title: "Welcome"
       },
       migration: {
-        title: "Migration Guide",
-        description: "Migration guide for Mirascope."
+        title: "Migration Guide"
       }
     },
     
@@ -64,15 +59,9 @@ const meta: DocsStructure = {
     groups: {
       "getting-started": {
         title: "Getting Started",
-        description: "Get up and running with Mirascope",
         items: {
           quickstart: {
-            title: "Quickstart",
-            description: "Get up and running with Mirascope in minutes."
-          },
-          "installation": {
-            title: "Installation",
-            description: "How to install Mirascope."
+            title: "Quickstart"
           }
         }
       }
@@ -82,17 +71,14 @@ const meta: DocsStructure = {
     sections: {
       api: {
         title: "API",
-        description: "Mirascope API documentation",
         
         // Top-level API pages
         items: {
           index: {
-            title: "API Overview",
-            description: "Overview of the Mirascope API."
+            title: "API Overview"
           },
           quickstart: {
-            title: "Quickstart",
-            description: "Woah",
+            title: "Quickstart"
           }
         },
         
@@ -100,11 +86,9 @@ const meta: DocsStructure = {
         groups: {
           llm: {
             title: "LLM",
-            description: "LLM-related API",
             items: {
               generation: {
-                title: "llm.generation",
-                description: "The llm.generation decorator."
+                title: "llm.generation"
               }
             }
           }
@@ -118,8 +102,7 @@ const meta: DocsStructure = {
     // Top level pages
     items: {
       index: {
-        title: "Welcome",
-        description: "Welcome to the Lilypad documentation."
+        title: "Welcome"
       }
     },
     
@@ -127,15 +110,12 @@ const meta: DocsStructure = {
     groups: {
       "getting-started": {
         title: "Getting Started",
-        description: "Get up and running with Lilypad",
         items: {
           quickstart: {
-            title: "Quickstart",
-            description: "Get up and running with Lilypad in minutes."
+            title: "Quickstart"
           },
           installation: {
-            title: "Installation",
-            description: "How to install Lilypad."
+            title: "Installation"
           }
         }
       }
@@ -145,30 +125,24 @@ const meta: DocsStructure = {
     sections: {
       api: {
         title: "API",
-        description: "Lilypad API documentation",
         
         // Top-level API pages
         items: {
           index: {
-            title: "API Overview",
-            description: "Overview of the Lilypad API."
+            title: "API Overview"
           },
           quickstart: {
-            title: "Quickstart",
-            description: "Woah",
+            title: "Quickstart"
           }
         },
         
         // Grouped API pages
-        // Grouped API pages
         groups: {
           llm: {
             title: "LLM",
-            description: "LLM-related API",
             items: {
               generation: {
-                title: "llm.generation",
-                description: "The llm.generation decorator."
+                title: "llm.generation"
               }
             }
           }
