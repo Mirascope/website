@@ -67,7 +67,7 @@ const meta: DocsStructure = {
       }
     },
     
-    // Sections (like API)
+    // Sections (like API, Guides)
     sections: {
       api: {
         title: "API",
@@ -75,20 +75,38 @@ const meta: DocsStructure = {
         // Top-level API pages
         items: {
           index: {
-            title: "API Overview"
+            title: "Under construction..."
           },
-          quickstart: {
-            title: "Quickstart"
+        },
+      },
+      guides: {
+        title: "Guides",
+        
+        // Top-level guides pages
+        items: {
+          index: {
+            title: "Guides Overview"
           }
         },
         
-        // Grouped API pages
+        // Grouped guides pages
         groups: {
-          llm: {
-            title: "LLM",
+          basics: {
+            title: "Basics",
             items: {
-              generation: {
-                title: "llm.generation"
+              getting_started: {
+                title: "Getting Started Guide"
+              },
+              concepts: {
+                title: "Core Concepts"
+              }
+            }
+          },
+          advanced: {
+            title: "Advanced",
+            items: {
+              patterns: {
+                title: "Advanced Patterns" 
               }
             }
           }
@@ -121,7 +139,7 @@ const meta: DocsStructure = {
       }
     },
     
-    // Sections (like API)
+    // Sections (like API, Guides)
     sections: {
       api: {
         title: "API",
@@ -129,20 +147,27 @@ const meta: DocsStructure = {
         // Top-level API pages
         items: {
           index: {
-            title: "API Overview"
+            title: "Under construction..."
           },
-          quickstart: {
-            title: "Quickstart"
+        },
+      },
+      guides: {
+        title: "Guides",
+        
+        // Top-level guides pages
+        items: {
+          index: {
+            title: "Guides Overview"
           }
         },
         
-        // Grouped API pages
+        // Grouped guides pages
         groups: {
-          llm: {
-            title: "LLM",
+          basics: {
+            title: "Basics",
             items: {
-              generation: {
-                title: "llm.generation"
+              getting_started: {
+                title: "Getting Started Guide"
               }
             }
           }
