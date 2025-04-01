@@ -43,9 +43,6 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
   error,
   errorDetails,
 }) => {
-  // Sidebar expanded state - only collapsible at mobile/tablet breakpoint
-  const [sidebarExpanded, setSidebarExpanded] = useState(true);
-
   // Track if we're at a small screen breakpoint
   const [isSmallScreen, setIsSmallScreen] = useState(() => {
     if (typeof window !== "undefined") {
@@ -53,16 +50,31 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
     }
     return false; // Default to large screen for SSR
   });
+  
+  // Sidebar expanded state - only collapsible at mobile/tablet breakpoint
+  // Default to expanded on large screens and collapsed on small screens
+  const [sidebarExpanded, setSidebarExpanded] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth >= 768; // Auto-collapsed on small screens
+    }
+    return true; // Default to expanded for SSR
+  });
 
   // Update breakpoint state based on window resize
   useEffect(() => {
     const handleResize = () => {
       const smallScreen = window.innerWidth < 768;
+      const wasSmallScreen = isSmallScreen;
+      
+      // Update small screen state
       setIsSmallScreen(smallScreen);
-
-      // Auto-expand sidebar on large screens
+      
       if (!smallScreen) {
+        // Auto-expand sidebar on large screens
         setSidebarExpanded(true);
+      } else if (!wasSmallScreen && smallScreen) {
+        // Auto-collapse when crossing from large to small screen
+        setSidebarExpanded(false);
       }
     };
 
@@ -74,7 +86,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
 
     // Clean up
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [isSmallScreen]);
 
   // Toggle sidebar expanded/collapsed (only used on small screens)
   const toggleSidebar = () => {
