@@ -35,11 +35,11 @@ export const providerDefaults: Record<Provider, {
 }> = {
   "OpenAI": {
     packageName: "openai",
-    defaultModel: "gpt-4o",
+    defaultModel: "gpt-4o-mini",
   },
   "Anthropic": {
     packageName: "anthropic",
-    defaultModel: "claude-3-opus-20240229",
+    defaultModel: "claude-3-5-sonnet-latest",
   },
   "Mistral": {
     packageName: "mistralai",
@@ -47,15 +47,15 @@ export const providerDefaults: Record<Provider, {
   },
   "xAI": {
     packageName: "xai",
-    defaultModel: "xai-001",
+    defaultModel: "grok-3",
   },
   "Google": {
     packageName: "google",
-    defaultModel: "gemini-1.5-pro",
+    defaultModel: "gemini-2.0-flash",
   },
   "Groq": {
     packageName: "groq",
-    defaultModel: "llama3-70b-8192",
+    defaultModel: "llama-3.1-70b-versatile",
   },
   "Cohere": {
     packageName: "cohere",
@@ -63,15 +63,15 @@ export const providerDefaults: Record<Provider, {
   },
   "LiteLLM": {
     packageName: "litellm",
-    defaultModel: "gpt-4o",
+    defaultModel: "gpt-4o-mini",
   },
   "Azure AI": {
     packageName: "azure",
-    defaultModel: "gpt-4o",
+    defaultModel: "gpt-4o-mini",
   },
   "Bedrock": {
     packageName: "bedrock",
-    defaultModel: "anthropic.claude-3-opus-20240229",
+    defaultModel: "amazon.nova-lite-v1:0",
   }
 };
 
