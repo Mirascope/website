@@ -276,35 +276,75 @@ export function MDXProviderWrapper({
       <style
         dangerouslySetInnerHTML={{
           __html: `
-          /* Font styles based on mode */
-          .mdx-content:not(.fun-mode) {
-            font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+          /* Base styles for content - Sans-serif font */
+          .mdx-content {
+            font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
             font-size: 1.0rem !important;
           }
           
-          .mdx-content:not(.fun-mode) *:not(pre, code) {
-            font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+          /* All standard text elements use sans font in normal mode */
+          .mdx-content h1, 
+          .mdx-content h2, 
+          .mdx-content h3, 
+          .mdx-content h4, 
+          .mdx-content h5, 
+          .mdx-content h6, 
+          .mdx-content p, 
+          .mdx-content a, 
+          .mdx-content li, 
+          .mdx-content blockquote, 
+          .mdx-content table { 
+            font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
           }
           
-          /* Fun mode (handwriting) styles - apply to everything including code blocks */
-          .mdx-content.fun-mode,
-          .mdx-content.fun-mode *,
-          .mdx-content.fun-mode code,
-          .mdx-content.fun-mode pre,
-          .mdx-content.fun-mode .shiki,
-          .mdx-content.fun-mode .shiki code,
-          .mdx-content.fun-mode .shiki .line {
+          /* Code elements always use monospace in all modes */
+          .mdx-content pre,
+          .mdx-content code,
+          .mdx-content .shiki,
+          .mdx-content .shiki code,
+          .mdx-content .shiki .line {
+            font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+            font-size: 0.9rem !important;
+          }
+          
+          /* Fun mode (handwriting) styles - need high specificity to override defaults */
+          .mdx-content.fun-mode h1, 
+          .mdx-content.fun-mode h2, 
+          .mdx-content.fun-mode h3, 
+          .mdx-content.fun-mode h4, 
+          .mdx-content.fun-mode h5, 
+          .mdx-content.fun-mode h6, 
+          .mdx-content.fun-mode p, 
+          .mdx-content.fun-mode strong,
+          .mdx-content.fun-mode em,
+          .mdx-content.fun-mode b,
+          .mdx-content.fun-mode i,
+          .mdx-content.fun-mode a, 
+          .mdx-content.fun-mode li, 
+          .mdx-content.fun-mode div,
+          .mdx-content.fun-mode span,
+          .mdx-content.fun-mode blockquote, 
+          .mdx-content.fun-mode table,
+          .mdx-content.fun-mode * {
             font-family: 'Williams Handwriting', cursive !important;
             font-size: 1.2rem !important;
           }
           
-          /* Force monospace for code elements regardless of site font setting */
-          .mdx-content code, 
-          .mdx-content pre, 
-          .mdx-content .shiki, 
-          .mdx-content .shiki code {
-            font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
-            font-size: 0.9rem !important; /* Keep code blocks slightly smaller */
+          /* Fun mode - make sure code elements also use handwriting with highest specificity */
+          .mdx-content.fun-mode pre,
+          .mdx-content.fun-mode code,
+          .mdx-content.fun-mode .shiki,
+          .mdx-content.fun-mode .shiki code,
+          .mdx-content.fun-mode .shiki .line,
+          .mdx-content.fun-mode .shiki * {
+            font-family: 'Williams Handwriting', cursive !important;
+            font-size: 1.2rem !important;
+          }
+          
+          /* Additional styles for code highlighting */
+          .mdx-content .shiki code span {
+            font-family: inherit !important;
+            font-size: inherit !important;
           }
           
           /* Additional list styling */
