@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import {
   ProviderContextProvider,
   ProviderSelector,
+  ProviderDropdown,
   InstallSnippet,
   CodeSnippet,
   ApiStyleCodeBlock,
@@ -35,6 +36,7 @@ export const components = {
   // Custom components for docs
   ProviderContextProvider,
   ProviderSelector,
+  ProviderDropdown,
   InstallSnippet,
   CodeSnippet,
   ApiStyleCodeBlock,
