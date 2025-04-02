@@ -79,7 +79,7 @@ function BlogPage() {
                   {currentPosts.map((post) => (
                     <Link
                       key={post.slug}
-                      to={`/blog/${post.slug}`}
+                      to="/blog/$slug" params={{ slug: post.slug }}
                       className="block h-full cursor-pointer group"
                     >
                       <div className="h-[320px] flex flex-col hover:shadow-lg transition-all duration-200 shadow-sm bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">

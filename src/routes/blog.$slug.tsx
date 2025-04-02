@@ -72,12 +72,12 @@ function BlogPostPage() {
           }
         } catch (fetchErr) {
           console.error("Error in getPostBySlug:", fetchErr);
-          setError(`Error fetching post: ${fetchErr.message}`);
+          setError(`Error fetching post: ${fetchErr instanceof Error ? fetchErr.message : String(fetchErr)}`);
         }
         setLoading(false);
       } catch (err) {
         console.error("General error fetching post:", err);
-        setError(`Failed to load post: ${err.message}`);
+        setError(`Failed to load post: ${err instanceof Error ? err.message : String(err)}`);
         setLoading(false);
       }
     };

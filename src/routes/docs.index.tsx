@@ -1,4 +1,5 @@
 import { createFileRoute, Navigate } from "@tanstack/react-router";
+import { getProductRoute } from "@/lib/routes";
 
 export const Route = createFileRoute("/docs/")({
   component: DocsIndexPage,
@@ -12,5 +13,5 @@ export const Route = createFileRoute("/docs/")({
 function DocsIndexPage() {
   // Redirect to default product
   // Redirect to the Mirascope docs by default
-  return <Navigate to="/docs/mirascope" />;
+  return <Navigate to={getProductRoute("mirascope")} />;
 }

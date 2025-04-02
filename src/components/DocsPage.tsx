@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import DocsLayout from "@/components/DocsLayout";
 import { getDoc, getDocsForProduct, type DocMeta } from "@/lib/docs";
+import { type ProductName } from "@/lib/route-types";
 
 type DocsPageProps = {
-  product: string;
+  product: ProductName;
   section: string | null;
   splat: string;
 };
@@ -216,7 +217,7 @@ Get started with ${product} by exploring the documentation in the sidebar.`;
   let errorDetails: { 
     expectedPath: string; 
     path: string; 
-    product: string; 
+    product: ProductName; 
     section: string | null; 
     group: string | null; 
     slug: string; 

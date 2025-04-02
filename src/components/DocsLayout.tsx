@@ -7,9 +7,10 @@ import { type DocMeta } from "@/lib/docs";
 import { Button } from "@/components/ui/button";
 import { Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { type ProductName } from "@/lib/route-types";
 
 type DocsLayoutProps = {
-  product: string;
+  product: ProductName;
   section: string | null;
   slug: string;
   group?: string | null;
@@ -20,7 +21,7 @@ type DocsLayoutProps = {
   errorDetails?: {
     expectedPath: string;
     path: string;
-    product: string;
+    product: ProductName;
     section?: string | null;
     group?: string | null;
     slug: string;

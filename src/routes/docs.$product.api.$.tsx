@@ -1,5 +1,6 @@
 import { createFileRoute, useParams } from "@tanstack/react-router";
 import DocsPage from "@/components/DocsPage";
+import { type ProductName } from "@/lib/route-types";
 
 export const Route = createFileRoute("/docs/$product/api/$")({
   component: DocsApiPage,
@@ -15,9 +16,9 @@ function DocsApiPage() {
   // Use the shared DocsPage component
   return (
     <DocsPage
-      product={product}
+      product={product as ProductName}
       section={section}
-      splat={_splat}
+      splat={_splat || ""}
     />
   );
 }

@@ -5,32 +5,19 @@ import { MDXRenderer } from "@/components/MDXRenderer";
 import { processMDX } from "@/lib/mdx-utils";
 import DocsSidebar from "@/components/DocsSidebar";
 import TableOfContents from "@/components/TableOfContents";
+import { type ProductName } from "@/lib/route-types";
+import docsMetadata from "@/docs/_meta";
 
 export const Route = createFileRoute("/docs/$")({
   component: DocsPage,
-  // This is now a fallback route - it should only match if the more specific routes don't
-  validateParams: ({ _splat }) => {
-    // Parse the path into parts
-    const pathParts = _splat.split("/").filter(Boolean);
-
-    // Only match if there's no product part (empty path) or for the root /docs/ page
-    if (pathParts.length === 0) {
-      return { _splat };
-    }
-
-    console.log(`[docs.$] Falling back to more specific routes for: ${_splat}`);
-    // For all other cases, let the more specific routes handle it
-    return false;
-  },
 });
 
 function DocsPage() {
-  // Get the full URL path after /docs/
-  const { _splat } = useParams({ from: "/docs/$" });
+  const { _splat = "" } = useParams({ from: "/docs/$" });
 
-  // Parse the path into product/section/group/slug components
   const pathParts = _splat.split("/").filter(Boolean);
-  const product = pathParts[0] || "";
+  // Type assertion needed for ProductName - invalid products are handled in the fetchData try/catch
+  const product = (pathParts[0] || "") as ProductName;
 
   // Extract current slug (last part) for sidebar highlighting
   const currentSlug =
@@ -196,7 +183,7 @@ function DocsPage() {
           setLoading(false);
         } catch (fetchErr) {
           console.error(
-            `[DocsPage] Error fetching document: ${fetchErr.message}`
+            `[DocsPage] Error fetching document: ${fetchErr instanceof Error ? fetchErr.message : String(fetchErr)}`
           );
 
           // If this is a product landing page, create a fallback
@@ -254,8 +241,9 @@ Get started with ${product} by exploring the documentation in the sidebar.`;
           throw fetchErr;
         }
       } catch (err) {
-        console.error(`[DocsPage] Failed to load document: ${err.message}`);
-        setError(`Failed to load document: ${err.message}`);
+        const errorMessage = err instanceof Error ? err.message : String(err);
+        console.error(`[DocsPage] Failed to load document: ${errorMessage}`);
+        setError(`Failed to load document: ${errorMessage}`);
         setLoading(false);
       }
     };
