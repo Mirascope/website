@@ -1,4 +1,3 @@
-import React from 'react';
 import { MDXProviderWrapper, components } from './MDXProvider';
 import { MDXRemote } from 'next-mdx-remote';
 
@@ -6,6 +5,15 @@ interface MDXRendererProps {
   code: string;
   frontmatter: Record<string, any>;
   useFunMode?: boolean;
+}
+
+// Define interface for what MDXRemote expects - must match MDXRemoteSerializeResult
+interface MDXRemoteProps {
+  compiledSource: string;
+  scope: Record<string, any>;
+  frontmatter: Record<string, any>; // Making this required as well
+  components?: Record<string, React.ComponentType<any>>;
+  [key: string]: any;
 }
 
 /**
@@ -19,16 +27,18 @@ export function MDXRenderer({ code, frontmatter, useFunMode = false }: MDXRender
 
   // Use next-mdx-remote for rendering
   try {
-    // Assuming code is the compiled MDX content in the format next-mdx-remote expects
+    // Create a compatible MDXRemote input that satisfies the type requirements
+    const mdxProps: MDXRemoteProps = {
+      compiledSource: code,
+      frontmatter: frontmatter,
+      scope: frontmatter,
+      components: components as any,
+    };
+
     return (
       <div className={`mdx-content prose max-w-none ${useFunMode ? 'fun-mode' : ''}`}>
         <MDXProviderWrapper useFunMode={useFunMode}>
-          <MDXRemote 
-            compiledSource={code} 
-            scope={frontmatter}
-            // This ensures our custom components in MDXProvider are used
-            components={components}
-          />
+          <MDXRemote {...mdxProps} />
         </MDXProviderWrapper>
       </div>
     );
