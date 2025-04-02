@@ -1,10 +1,11 @@
-import rehypePrettyCode from 'rehype-pretty-code';
 import { serialize } from 'next-mdx-remote/serialize';
 
 export interface ProcessedMDX {
   code: string;
   frontmatter: Record<string, any>;
 }
+
+/* This content has been moved to code-highlight.ts */
 
 /**
  * Extracts and parses frontmatter from MDX content
@@ -51,32 +52,8 @@ export async function processMDX(source: string): Promise<ProcessedMDX> {
     const { content, frontmatter } = extractFrontmatter(source);
     
     // Use next-mdx-remote's serialize function to compile the MDX
+    // We'll handle code highlighting in the custom component instead of rehype
     const mdxSource = await serialize(content, {
-      mdxOptions: {
-        rehypePlugins: [
-          [
-            rehypePrettyCode,
-            {
-              theme: {
-                light: 'github-light',
-                dark: 'github-dark',
-              },
-              keepBackground: false,
-              onVisitLine(node: any) {
-                if (node.children.length === 0) {
-                  node.children = [{ type: 'text', value: ' ' }];
-                }
-              },
-              onVisitHighlightedLine(node: any) {
-                node.properties.className = ['highlighted'];
-              },
-              onVisitHighlightedWord(node: any) {
-                node.properties.className = ['word'];
-              },
-            } as any,
-          ],
-        ],
-      },
       // Include frontmatter in the scope
       scope: frontmatter,
     });
