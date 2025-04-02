@@ -3,4 +3,29 @@ title: Mirascope Getting Started Quickstart
 description: Mirascope Getting Started Quickstart
 ---
 
-This is the Mirascope Getting Started Quickstart content.
+Install Mirascope, specifying the provider you intend to use, and set your API key:
+
+<ProviderContextProvider>
+  <ProviderSelector />
+  <InstallSnippet className="mt-4" />
+</ProviderContextProvider>
+
+## Mirascope API
+
+Mirascope provides a consistent, easy-to-use API across all providers:
+
+<ProviderContextProvider>
+  <ApiStyleCodeBlock 
+    examplePath="mirascope/getting-started/quickstart" 
+  />
+</ProviderContextProvider>
+
+## Provider SDK Equivalent
+
+For comparison, here's how you would achieve the same result using the provider's native SDK:
+
+<ProviderContextProvider>
+  <ProviderCodeBlock 
+    examplePath="mirascope/getting-started/quickstart" 
+  />
+</ProviderContextProvider>
