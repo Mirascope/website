@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, Sparkles } from "lucide-react";
 import { getPostBySlug } from "@/lib/mdx";
-import MDXContent from "@/components/MDXContent";
+import { MDXRenderer } from "@/components/MDXRenderer";
+import { processMDX } from "@/lib/mdx-utils";
 import TableOfContents from "@/components/TableOfContents";
 import { cn } from "@/lib/utils";
 
@@ -20,6 +21,7 @@ export const Route = createFileRoute("/blog/$slug")({
 function BlogPostPage() {
   const { slug } = useParams({ from: "/blog/$slug" });
   const [post, setPost] = useState<any>(null);
+  const [compiledMDX, setCompiledMDX] = useState<{ code: string; frontmatter: Record<string, any> } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   // TOC state for mobile
@@ -62,6 +64,12 @@ function BlogPostPage() {
           const result = await getPostBySlug(slug);
           console.log("Got post data:", result);
           setPost(result ? { ...result.meta, content: result.content } : null);
+          
+          // Process the MDX content with the new compiler
+          if (result && result.content) {
+            const mdxResult = await processMDX(result.content);
+            setCompiledMDX(mdxResult);
+          }
         } catch (fetchErr) {
           console.error("Error in getPostBySlug:", fetchErr);
           setError(`Error fetching post: ${fetchErr.message}`);
@@ -240,7 +248,15 @@ function BlogPostPage() {
                 id="blog-content"
                 className="bg-white dark:bg-gray-900 rounded-xl shadow-sm p-4 sm:p-6 border border-gray-200 dark:border-gray-700 blog-content"
               >
-                <MDXContent source={post.content} useFunMode={funMode} />
+                {compiledMDX ? (
+                  <MDXRenderer 
+                    code={compiledMDX.code} 
+                    frontmatter={compiledMDX.frontmatter} 
+                    useFunMode={funMode} 
+                  />
+                ) : (
+                  <div className="animate-pulse bg-gray-100 h-40 rounded-md"></div>
+                )}
               </div>
             </div>
           </div>
