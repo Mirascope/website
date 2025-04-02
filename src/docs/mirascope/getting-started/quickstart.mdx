@@ -10,9 +10,29 @@ Install Mirascope, specifying the provider you intend to use, and set your API k
     <ProviderSelector />
     <OSSelector className="mt-4" />
     <InstallSnippet className="mt-4" />
+  </OSContextProvider>
+</ProviderContextProvider>
+
+## Mirascope API
+
+Mirascope provides a consistent, easy-to-use API across all providers:
+
+<ProviderContextProvider>
+  <OSContextProvider>
     <ApiStyleCodeBlock 
       examplePath="mirascope/getting-started/quickstart" 
-      className="mt-4"
+    />
+  </OSContextProvider>
+</ProviderContextProvider>
+
+## Provider SDK Equivalent
+
+For comparison, here's how you would achieve the same result using the provider's native SDK:
+
+<ProviderContextProvider>
+  <OSContextProvider>
+    <ProviderCodeBlock 
+      examplePath="mirascope/getting-started/quickstart" 
     />
   </OSContextProvider>
 </ProviderContextProvider>
