@@ -46,9 +46,7 @@ export const components = {
   // Standard HTML elements
   h1: ({ children, ...props }: React.ComponentPropsWithoutRef<"h1">) => {
     // Generate an ID from the text content if not provided
-    const id =
-      props.id ||
-      (typeof children === "string" ? slugify(children) : undefined);
+    const id = props.id || (typeof children === "string" ? slugify(children) : undefined);
     return (
       <h1 id={id} className="text-3xl font-bold my-6 scroll-mt-28" {...props}>
         {children}
@@ -56,23 +54,15 @@ export const components = {
     );
   },
   h2: ({ children, ...props }: React.ComponentPropsWithoutRef<"h2">) => {
-    const id =
-      props.id ||
-      (typeof children === "string" ? slugify(children) : undefined);
+    const id = props.id || (typeof children === "string" ? slugify(children) : undefined);
     return (
-      <h2
-        id={id}
-        className="text-2xl font-semibold my-5 scroll-mt-28"
-        {...props}
-      >
+      <h2 id={id} className="text-2xl font-semibold my-5 scroll-mt-28" {...props}>
         {children}
       </h2>
     );
   },
   h3: ({ children, ...props }: React.ComponentPropsWithoutRef<"h3">) => {
-    const id =
-      props.id ||
-      (typeof children === "string" ? slugify(children) : undefined);
+    const id = props.id || (typeof children === "string" ? slugify(children) : undefined);
     return (
       <h3 id={id} className="text-xl font-medium my-4 scroll-mt-28" {...props}>
         {children}
@@ -80,9 +70,7 @@ export const components = {
     );
   },
   h4: ({ children, ...props }: React.ComponentPropsWithoutRef<"h4">) => {
-    const id =
-      props.id ||
-      (typeof children === "string" ? slugify(children) : undefined);
+    const id = props.id || (typeof children === "string" ? slugify(children) : undefined);
     return (
       <h4 id={id} className="text-lg font-medium my-3 scroll-mt-28" {...props}>
         {children}
@@ -90,27 +78,16 @@ export const components = {
     );
   },
   h5: ({ children, ...props }: React.ComponentPropsWithoutRef<"h5">) => {
-    const id =
-      props.id ||
-      (typeof children === "string" ? slugify(children) : undefined);
+    const id = props.id || (typeof children === "string" ? slugify(children) : undefined);
     return (
-      <h5
-        id={id}
-        className="text-base font-medium my-3 scroll-mt-28"
-        {...props}
-      >
+      <h5 id={id} className="text-base font-medium my-3 scroll-mt-28" {...props}>
         {children}
       </h5>
     );
   },
-  p: (props: React.ComponentPropsWithoutRef<"p">) => (
-    <p className="my-3" {...props} />
-  ),
+  p: (props: React.ComponentPropsWithoutRef<"p">) => <p className="my-3" {...props} />,
   a: (props: React.ComponentPropsWithoutRef<"a">) => (
-    <a
-      className="text-blue-600 dark:text-blue-400 hover:underline no-underline"
-      {...props}
-    />
+    <a className="text-blue-600 dark:text-blue-400 hover:underline no-underline" {...props} />
   ),
   ul: (props: React.ComponentPropsWithoutRef<"ul">) => (
     <ul className="list-disc pl-5 my-4" {...props} />
@@ -118,9 +95,7 @@ export const components = {
   ol: (props: React.ComponentPropsWithoutRef<"ol">) => (
     <ol className="list-decimal pl-5 my-4" {...props} />
   ),
-  li: (props: React.ComponentPropsWithoutRef<"li">) => (
-    <li className="mb-2" {...props} />
-  ),
+  li: (props: React.ComponentPropsWithoutRef<"li">) => <li className="mb-2" {...props} />,
   // Inline code - this is only for inline elements, not code blocks
   code: (props: React.ComponentPropsWithoutRef<"code">) => {
     // Don't apply inline code styling to code blocks (which are children of pre tags)
@@ -176,14 +151,16 @@ export const components = {
 
         // Try to find language info in child's className
         // Use type assertion to ensure we can access props
-        const childProps = child.props as { 
-          className?: string;
-          children?: React.ReactNode | string;
-        } | undefined || {};
-        
+        const childProps =
+          (child.props as
+            | {
+                className?: string;
+                children?: React.ReactNode | string;
+              }
+            | undefined) || {};
+
         if (childProps.className?.includes("language-")) {
-          language =
-            (childProps.className.match(/language-(\w+)/) || [])[1] || "";
+          language = (childProps.className.match(/language-(\w+)/) || [])[1] || "";
           const metaMatch = childProps.className.match(/\{([^}]+)\}/);
           meta = metaMatch ? `{${metaMatch[1]}}` : "";
 
@@ -202,15 +179,16 @@ export const components = {
             if (!React.isValidElement(grandchild)) continue;
 
             // Type assertion for grandchild props
-            const grandchildProps = grandchild.props as {
-              className?: string;
-              children?: React.ReactNode | string;
-            } | undefined || {};
-            
+            const grandchildProps =
+              (grandchild.props as
+                | {
+                    className?: string;
+                    children?: React.ReactNode | string;
+                  }
+                | undefined) || {};
+
             if (grandchildProps.className?.includes("language-")) {
-              language =
-                (grandchildProps.className.match(/language-(\w+)/) || [])[1] ||
-                "";
+              language = (grandchildProps.className.match(/language-(\w+)/) || [])[1] || "";
               const metaMatch = grandchildProps.className.match(/\{([^}]+)\}/);
               meta = metaMatch ? `{${metaMatch[1]}}` : "";
 
@@ -228,13 +206,7 @@ export const components = {
 
     // If we found code content and a language, use our CodeBlock component
     if (codeContent) {
-      return (
-        <CodeBlock
-          code={codeContent.replace(/\n$/, "")}
-          language={language}
-          meta={meta}
-        />
-      );
+      return <CodeBlock code={codeContent.replace(/\n$/, "")} language={language} meta={meta} />;
     }
 
     // Fallback to standard pre if not a code block or couldn't extract content
@@ -245,9 +217,7 @@ export const components = {
       />
     );
   },
-  strong: (props: React.ComponentPropsWithoutRef<"strong">) => (
-    <strong {...props} />
-  ),
+  strong: (props: React.ComponentPropsWithoutRef<"strong">) => <strong {...props} />,
   em: (props: React.ComponentPropsWithoutRef<"em">) => <em {...props} />,
   blockquote: (props: React.ComponentPropsWithoutRef<"blockquote">) => (
     <blockquote
@@ -265,10 +235,7 @@ export const components = {
     />
   ),
   td: (props: React.ComponentPropsWithoutRef<"td">) => (
-    <td
-      className="px-4 py-2 border-t border-gray-200 dark:border-gray-700"
-      {...props}
-    />
+    <td className="px-4 py-2 border-t border-gray-200 dark:border-gray-700" {...props} />
   ),
   hr: (props: React.ComponentPropsWithoutRef<"hr">) => (
     <hr className="my-6 border-gray-200 dark:border-gray-700" {...props} />
@@ -280,10 +247,7 @@ interface MDXProviderWrapperProps {
   useFunMode?: boolean;
 }
 
-export function MDXProviderWrapper({
-  children,
-  useFunMode = false,
-}: MDXProviderWrapperProps) {
+export function MDXProviderWrapper({ children, useFunMode = false }: MDXProviderWrapperProps) {
   return (
     <div className={cn(useFunMode ? "fun-mode" : "")}>
       <MDXProvider components={components}>{children}</MDXProvider>

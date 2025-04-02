@@ -19,8 +19,7 @@ export function ApiStyleCodeBlock({
 }: ApiStyleCodeBlockProps) {
   // Local state for API style
   const [apiStyle, setApiStyle] = useState<ApiStyle>("messages");
-  
-  
+
   // State for code examples
   const [messagesCode, setMessagesCode] = useState<string | null>(null);
   const [templatesCode, setTemplatesCode] = useState<string | null>(null);
@@ -37,7 +36,7 @@ export function ApiStyleCodeBlock({
         // Fetch both files in parallel
         const [messagesRes, templatesRes] = await Promise.all([
           fetch(`/examples/${examplePath}/messages.py`),
-          fetch(`/examples/${examplePath}/template.py`)
+          fetch(`/examples/${examplePath}/template.py`),
         ]);
 
         // Check for HTTP errors
@@ -51,7 +50,7 @@ export function ApiStyleCodeBlock({
         // Get the text content
         const [messagesText, templatesText] = await Promise.all([
           messagesRes.text(),
-          templatesRes.text()
+          templatesRes.text(),
         ]);
 
         // Store the code
@@ -71,7 +70,7 @@ export function ApiStyleCodeBlock({
   // API Style selector component
   const StyleSelector = () => {
     if (!showSelector) return null;
-    
+
     const styles: ApiStyle[] = ["messages", "templates"];
 
     return (
@@ -131,10 +130,7 @@ export function ApiStyleCodeBlock({
   return (
     <div className={className}>
       <StyleSelector />
-      <CodeSnippet
-        code={codeToDisplay || "// Code example not available"}
-        language={language}
-      />
+      <CodeSnippet code={codeToDisplay || "// Code example not available"} language={language} />
     </div>
   );
 }

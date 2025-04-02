@@ -3,8 +3,8 @@ import type { ProductName, ValidStaticPath } from "./route-types";
 // Map of product names to their static route paths
 // This allows adding new products by just extending this object
 export const PRODUCT_ROUTES: Record<ProductName, ValidStaticPath> = {
-  "mirascope": "/docs/mirascope",
-  "lilypad": "/docs/lilypad",
+  mirascope: "/docs/mirascope",
+  lilypad: "/docs/lilypad",
 };
 
 // Handle type compatibility with TanStack Router paths

@@ -30,8 +30,7 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
   const group = pathParts.length > 0 ? pathParts[0] : null;
 
   // Extract current slug (last part) for sidebar highlighting
-  const currentSlug =
-    pathParts.length > 0 ? pathParts[pathParts.length - 1] : "index";
+  const currentSlug = pathParts.length > 0 ? pathParts[pathParts.length - 1] : "index";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -82,24 +81,17 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
             try {
               doc = await getDoc(fullPath);
             } catch (exactPathError) {
-              console.log(
-                `${logPrefix} Exact path not found, trying index fallback`
-              );
+              console.log(`${logPrefix} Exact path not found, trying index fallback`);
 
               // If the path doesn't end with a slash, try with /index
               if (!splat.endsWith("/") && !splat.endsWith(".mdx")) {
                 try {
                   const indexPath = `${fullPath}/index`;
                   doc = await getDoc(indexPath);
-                  console.log(
-                    `${logPrefix} Successfully loaded index document for sub-path`
-                  );
+                  console.log(`${logPrefix} Successfully loaded index document for sub-path`);
                 } catch (indexError) {
                   // If index doesn't exist either, throw the original error
-                  console.error(
-                    `${logPrefix} Index not found either`,
-                    indexError
-                  );
+                  console.error(`${logPrefix} Index not found either`, indexError);
                   throw exactPathError;
                 }
               } else {
@@ -115,9 +107,7 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
 
           // Check for empty content and provide fallback
           if (!doc.content || doc.content.trim() === "") {
-            console.warn(
-              `${logPrefix} Empty content for ${fullPath}, using fallback`
-            );
+            console.warn(`${logPrefix} Empty content for ${fullPath}, using fallback`);
 
             // Create appropriate title based on section
             let fallbackTitle;
@@ -132,9 +122,7 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
             doc.content = `# ${doc.meta.title || fallbackTitle}`;
           }
 
-          console.log(
-            `${logPrefix} Document loaded successfully: ${doc.meta.title}`
-          );
+          console.log(`${logPrefix} Document loaded successfully: ${doc.meta.title}`);
           setDocument(doc);
           setLoading(false);
         } catch (fetchErr) {
@@ -148,8 +136,7 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
 
             // Determine title and content based on section
             let title, content;
-            const productCapitalized =
-              product.charAt(0).toUpperCase() + product.slice(1);
+            const productCapitalized = product.charAt(0).toUpperCase() + product.slice(1);
 
             if (section === "api") {
               title = `${productCapitalized} API Documentation`;
@@ -214,14 +201,16 @@ Get started with ${product} by exploring the documentation in the sidebar.`;
   }, [splat, product, section, group, currentSlug]);
 
   // Generate debug error details if needed
-  let errorDetails: { 
-    expectedPath: string; 
-    path: string; 
-    product: ProductName; 
-    section: string | null; 
-    group: string | null; 
-    slug: string; 
-  } | undefined = undefined;
+  let errorDetails:
+    | {
+        expectedPath: string;
+        path: string;
+        product: ProductName;
+        section: string | null;
+        group: string | null;
+        slug: string;
+      }
+    | undefined = undefined;
   if (error) {
     const expectedPath = section
       ? `/src/docs/${product}/${section}/${splat}.mdx`

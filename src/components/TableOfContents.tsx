@@ -14,12 +14,7 @@ type TableOfContentsProps = {
   slug: string;
 };
 
-const TableOfContents: React.FC<TableOfContentsProps> = ({
-  contentId,
-  product,
-  section,
-  slug,
-}) => {
+const TableOfContents: React.FC<TableOfContentsProps> = ({ contentId, product, section, slug }) => {
   const [headings, setHeadings] = useState<TOCItem[]>([]);
   const [activeId, setActiveId] = useState<string>("");
 
@@ -29,9 +24,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
     const extractHeadings = () => {
       const contentElement = document.getElementById(contentId);
       if (!contentElement) {
-        console.log(
-          `TableOfContents: Content element with ID "${contentId}" not found`
-        );
+        console.log(`TableOfContents: Content element with ID "${contentId}" not found`);
         return;
       }
 
@@ -41,9 +34,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
       ).filter((el) => el.id); // Only include headings with IDs
 
       if (headingElements.length === 0) {
-        console.log(
-          `TableOfContents: No headings with IDs found in element "${contentId}"`
-        );
+        console.log(`TableOfContents: No headings with IDs found in element "${contentId}"`);
         return;
       }
 
@@ -55,13 +46,8 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
       }));
 
       // Only update state if we have new headings that are different from current ones
-      if (
-        items.length > 0 &&
-        JSON.stringify(items) !== JSON.stringify(headings)
-      ) {
-        console.log(
-          `TableOfContents: Setting ${items.length} headings for ${contentId}`
-        );
+      if (items.length > 0 && JSON.stringify(items) !== JSON.stringify(headings)) {
+        console.log(`TableOfContents: Setting ${items.length} headings for ${contentId}`);
         setHeadings(items);
       }
     };
@@ -73,8 +59,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
     const observer = new MutationObserver((mutations) => {
       // Check if any mutations involve element attributes (like adding an ID)
       const shouldExtract = mutations.some(
-        (mutation) =>
-          mutation.type === "attributes" || mutation.type === "childList"
+        (mutation) => mutation.type === "attributes" || mutation.type === "childList"
       );
 
       if (shouldExtract) {
@@ -120,9 +105,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
     }, observerOptions);
 
     // Observe all heading elements
-    const elements = headings
-      .map((heading) => document.getElementById(heading.id))
-      .filter(Boolean);
+    const elements = headings.map((heading) => document.getElementById(heading.id)).filter(Boolean);
 
     elements.forEach((el) => {
       if (el) headingObserver.observe(el);
@@ -134,9 +117,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
   }, [headings, contentId]);
 
   if (headings.length === 0) {
-    return (
-      <p className="text-sm text-gray-400 italic pl-5">No headings found</p>
-    );
+    return <p className="text-sm text-gray-400 italic pl-5">No headings found</p>;
   }
 
   return (

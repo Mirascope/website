@@ -1,8 +1,8 @@
 /**
  * Documentation structure for all products
- * 
+ *
  * This file defines the structure, order, and metadata for all documentation.
- * 
+ *
  * Structure:
  * - Top-level keys are product names (mirascope, lilypad)
  * - Each product contains:
@@ -26,17 +26,17 @@ export interface DocGroup {
 
 // Section of documentation (like API)
 export interface DocSection {
-  title: string; 
+  title: string;
   description?: string;
   defaultSlug?: string;
-  items: Record<string, DocMetaItem>;  // Direct section items
-  groups?: Record<string, DocGroup>;   // Grouped section items
+  items: Record<string, DocMetaItem>; // Direct section items
+  groups?: Record<string, DocGroup>; // Grouped section items
 }
 
 // Product documentation
 export interface ProductDocs {
-  items: Record<string, DocMetaItem>;  // Top-level items
-  groups: Record<string, DocGroup>;    // Grouped items
+  items: Record<string, DocMetaItem>; // Top-level items
+  groups: Record<string, DocGroup>; // Grouped items
   sections: Record<string, DocSection>; // Sections (like API)
 }
 
@@ -51,101 +51,101 @@ const meta: DocsStructure = {
     // Top level pages
     items: {
       index: {
-        title: "Welcome"
+        title: "Welcome",
       },
       migration: {
-        title: "Migration Guide"
-      }
+        title: "Migration Guide",
+      },
     },
-    
+
     // Grouped pages in main area
     groups: {
       "getting-started": {
         title: "Getting Started",
         items: {
           quickstart: {
-            title: "Quickstart"
+            title: "Quickstart",
           },
           why: {
-            title: "Why Mirascope?"
-          }
-        }
-      }
+            title: "Why Mirascope?",
+          },
+        },
+      },
     },
-    
+
     // Sections (like API, Guides)
     sections: {
       api: {
         title: "API",
-        
+
         // Top-level API pages
         items: {
           index: {
-            title: "Under construction..."
+            title: "Under construction...",
           },
         },
       },
       guides: {
         title: "Guides",
-        
+
         // Top-level guides pages
         items: {
           index: {
-            title: "Guides Overview"
-          }
+            title: "Guides Overview",
+          },
         },
-      }
-    }
+      },
+    },
   },
-  
+
   // Lilypad Documentation
   lilypad: {
     // Top level pages
     items: {
       index: {
-        title: "Welcome"
-      }
+        title: "Welcome",
+      },
     },
-    
+
     // Grouped pages in main area
     groups: {
       "getting-started": {
         title: "Getting Started",
         items: {
           quickstart: {
-            title: "Quickstart"
+            title: "Quickstart",
           },
           installation: {
-            title: "Installation"
-          }
-        }
-      }
+            title: "Installation",
+          },
+        },
+      },
     },
-    
+
     // Sections (like API, Guides)
     sections: {
       api: {
         title: "API",
-        
+
         // Top-level API pages
         items: {
           index: {
-            title: "Under construction..."
+            title: "Under construction...",
           },
         },
       },
       guides: {
         title: "Guides",
-        
+
         // Top-level guides pages
         items: {
           index: {
-            title: "Guides Overview"
-          }
+            title: "Guides Overview",
+          },
         },
-      }
-    }
-  }
+      },
+    },
+  },
 };
 
 export default meta;

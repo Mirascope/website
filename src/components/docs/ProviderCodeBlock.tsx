@@ -19,7 +19,7 @@ export function ProviderCodeBlock({
 }: ProviderCodeBlockProps) {
   // Get the currently selected provider
   const { provider } = useProvider();
-  
+
   // State for code examples and loading
   const [codeMap, setCodeMap] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(true);
@@ -29,27 +29,29 @@ export function ProviderCodeBlock({
     async function loadProviderExamples() {
       setIsLoading(true);
       const newCodeMap: Record<string, string> = {};
-      
+
       try {
         // Try to load all providers in parallel
         const loadPromises = providers.map(async (p) => {
           // Use the packageName from providerDefaults
           const { packageName } = providerDefaults[p];
           const url = `/examples/${examplePath}/sdk/${packageName}.py`;
-          
+
           try {
             const response = await fetch(url);
             if (response.ok) {
               const text = await response.text();
-              
+
               // Validate it's actual code and not an HTML error page
-              if (text.trim().startsWith('<!DOCTYPE html>') || 
-                  text.trim().startsWith('<html') || 
-                  text.includes('<head>')) {
+              if (
+                text.trim().startsWith("<!DOCTYPE html>") ||
+                text.trim().startsWith("<html") ||
+                text.includes("<head>")
+              ) {
                 console.warn(`Got HTML instead of Python for ${p}:`, text.substring(0, 100));
                 return { provider: p, success: false };
               }
-              
+
               newCodeMap[p] = text;
               return { provider: p, success: true };
             }
@@ -59,10 +61,10 @@ export function ProviderCodeBlock({
             return { provider: p, success: false };
           }
         });
-        
+
         // Wait for all fetch operations to complete
         await Promise.all(loadPromises);
-        
+
         setCodeMap(newCodeMap);
         setIsLoading(false);
       } catch (err) {
@@ -90,7 +92,7 @@ export function ProviderCodeBlock({
 
   // Find the code for the current provider
   const currentProviderCode = codeMap[provider];
-  
+
   // If we don't have code for the current provider, show an empty code block
   const codeToDisplay = currentProviderCode || "// No example available for this provider yet";
 
@@ -102,10 +104,7 @@ export function ProviderCodeBlock({
           Example for {provider} not available yet.
         </div>
       )}
-      <CodeSnippet
-        code={codeToDisplay}
-        language={language}
-      />
+      <CodeSnippet code={codeToDisplay} language={language} />
     </div>
   );
 }

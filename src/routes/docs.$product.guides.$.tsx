@@ -9,16 +9,10 @@ export const Route = createFileRoute("/docs/$product/guides/$")({
 function DocsGuidesPage() {
   // Get the product and guides path
   const { product, _splat } = useParams({ from: "/docs/$product/guides/$" });
-  
+
   // For guides routes, the section is always 'guides'
-  const section = 'guides';
-  
+  const section = "guides";
+
   // Use the shared DocsPage component
-  return (
-    <DocsPage
-      product={product as ProductName}
-      section={section}
-      splat={_splat || ""}
-    />
-  );
+  return <DocsPage product={product as ProductName} section={section} splat={_splat || ""} />;
 }

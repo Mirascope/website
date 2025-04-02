@@ -8,12 +8,7 @@ interface CodeBlockProps {
   className?: string;
 }
 
-export function CodeBlock({
-  code,
-  language = "text",
-  meta = "",
-  className = "",
-}: CodeBlockProps) {
+export function CodeBlock({ code, language = "text", meta = "", className = "" }: CodeBlockProps) {
   const [lightHtml, setLightHtml] = useState<string>("");
   const [darkHtml, setDarkHtml] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -24,11 +19,7 @@ export function CodeBlock({
     async function highlight() {
       setIsLoading(true);
       try {
-        const { lightThemeHtml, darkThemeHtml } = await highlightCode(
-          code,
-          language,
-          meta
-        );
+        const { lightThemeHtml, darkThemeHtml } = await highlightCode(code, language, meta);
         setLightHtml(lightThemeHtml);
         setDarkHtml(darkThemeHtml);
       } catch (error) {

@@ -7,7 +7,7 @@ export const Route = createFileRoute("/docs/")({
 
 /**
  * DocsIndexPage
- * 
+ *
  * Default docs entry point. Redirects to the default product (Mirascope)
  */
 function DocsIndexPage() {

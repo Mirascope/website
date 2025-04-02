@@ -14,7 +14,7 @@ export function ProviderSelector({ className = "" }: { className?: string }) {
             onClick={() => setProvider(p)}
             className={`px-3 py-1 text-sm rounded-md transition-colors ${
               provider === p
-                ? "bg-primary text-white" 
+                ? "bg-primary text-white"
                 : "bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
             }`}
           >

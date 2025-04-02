@@ -14,10 +14,7 @@ interface DocsSidebarProps {
   docs: DocMeta[];
 }
 
-const DocsSidebar = ({
-  product,
-  currentGroup,
-}: DocsSidebarProps) => {
+const DocsSidebar = ({ product, currentGroup }: DocsSidebarProps) => {
   // Get current route from TanStack Router
   const matches = useMatches();
   const currentPath = matches[matches.length - 1]?.pathname || "";
@@ -28,23 +25,17 @@ const DocsSidebar = ({
 
   // Create ordered sections with Guides between Docs and API
   let orderedSections = [...sections]; // Clone the array
-  if (
-    sections.some((s) => s.slug === "guides") &&
-    sections.some((s) => s.slug === "api")
-  ) {
+  if (sections.some((s) => s.slug === "guides") && sections.some((s) => s.slug === "api")) {
     // Filter out guides and api first
     const guidesSection = sections.find((s) => s.slug === "guides");
     const apiSection = sections.find((s) => s.slug === "api");
-    const otherSections = sections.filter(
-      (s) => s.slug !== "guides" && s.slug !== "api"
-    );
+    const otherSections = sections.filter((s) => s.slug !== "guides" && s.slug !== "api");
 
     // Rebuild the array in the desired order: [other sections, guides, api]
     orderedSections = [...otherSections];
     if (guidesSection) orderedSections.push(guidesSection);
     if (apiSection) orderedSections.push(apiSection);
   }
-
 
   // For unknown products, only show the product selector
   if (!productData) {
@@ -54,9 +45,7 @@ const DocsSidebar = ({
           {/* Product selector only */}
           <div className="flex mb-5 space-x-4">
             {product === "mirascope" ? (
-              <span className="text-xl font-medium text-mirascope-purple">
-                Mirascope
-              </span>
+              <span className="text-xl font-medium text-mirascope-purple">Mirascope</span>
             ) : (
               <Link
                 to={getProductRoute("mirascope")}
@@ -67,9 +56,7 @@ const DocsSidebar = ({
             )}
 
             {product === "lilypad" ? (
-              <span className="text-xl font-medium text-lilypad-green">
-                Lilypad
-              </span>
+              <span className="text-xl font-medium text-lilypad-green">Lilypad</span>
             ) : (
               <Link
                 to={getProductRoute("lilypad")}
@@ -97,9 +84,7 @@ const DocsSidebar = ({
   const allSections = Object.keys(productData?.sections || {});
 
   // Check if the current URL contains any of the sections from _meta.ts
-  const matchingSection = allSections.find((s) =>
-    currentPath.startsWith(`/docs/${product}/${s}/`)
-  );
+  const matchingSection = allSections.find((s) => currentPath.startsWith(`/docs/${product}/${s}/`));
 
   // Docs tab is active only if we're not in a section
   const isDocsTabActive = !matchingSection;
@@ -108,15 +93,12 @@ const DocsSidebar = ({
   const isActivePath = (path: string) => {
     // Normalize paths by ensuring they end with a slash
     const normalizedPath = path.endsWith("/") ? path : `${path}/`;
-    const normalizedCurrentPath = currentPath.endsWith("/")
-      ? currentPath
-      : `${currentPath}/`;
+    const normalizedCurrentPath = currentPath.endsWith("/") ? currentPath : `${currentPath}/`;
 
     // Special case for product landing - both /docs/product and /docs/product/ should match
     if (
       path === `/docs/${product}` &&
-      (currentPath === `/docs/${product}` ||
-        currentPath === `/docs/${product}/`)
+      (currentPath === `/docs/${product}` || currentPath === `/docs/${product}/`)
     ) {
       return true;
     }
@@ -138,9 +120,7 @@ const DocsSidebar = ({
         {/* Product selector */}
         <div className="flex mb-5 space-x-4">
           {product === "mirascope" ? (
-            <span className="text-xl font-medium text-mirascope-purple">
-              Mirascope
-            </span>
+            <span className="text-xl font-medium text-mirascope-purple">Mirascope</span>
           ) : (
             <Link
               to={getProductRoute("mirascope")}
@@ -151,9 +131,7 @@ const DocsSidebar = ({
           )}
 
           {product === "lilypad" ? (
-            <span className="text-xl font-medium text-lilypad-green">
-              Lilypad
-            </span>
+            <span className="text-xl font-medium text-lilypad-green">Lilypad</span>
           ) : (
             <Link
               to={getProductRoute("lilypad")}
@@ -219,10 +197,7 @@ const DocsSidebar = ({
             />
           ) : (
             // Show main docs content if we're not in a section
-            <MainDocsContent
-              product={product}
-              isActivePath={isActivePath}
-            />
+            <MainDocsContent product={product} isActivePath={isActivePath} />
           )}
         </nav>
       </div>
@@ -237,11 +212,7 @@ interface SectionContentProps {
 }
 
 // Renders content for a section (e.g., API)
-const SectionContent = ({
-  product,
-  section,
-  isActivePath,
-}: SectionContentProps) => {
+const SectionContent = ({ product, section, isActivePath }: SectionContentProps) => {
   const sectionData = docsMetadata[product]?.sections?.[section];
   if (!sectionData) return null;
 
@@ -250,9 +221,7 @@ const SectionContent = ({
       {/* Section top-level items */}
       {Object.entries(sectionData.items || {}).map(([slug, item]) => {
         const url =
-          slug === "index"
-            ? `/docs/${product}/${section}/`
-            : `/docs/${product}/${section}/${slug}`;
+          slug === "index" ? `/docs/${product}/${section}/` : `/docs/${product}/${section}/${slug}`;
 
         return (
           <Link
@@ -274,7 +243,6 @@ const SectionContent = ({
 
       {/* Section groups */}
       {Object.entries(sectionData.groups || {}).map(([groupSlug, group]) => {
-
         return (
           <div key={groupSlug} className="pt-4">
             {/* Group title - not selectable/highlightable */}
@@ -318,10 +286,7 @@ interface MainDocsContentProps {
 }
 
 // Renders main docs content
-const MainDocsContent = ({
-  product,
-  isActivePath,
-}: MainDocsContentProps) => {
+const MainDocsContent = ({ product, isActivePath }: MainDocsContentProps) => {
   const productData = docsMetadata[product];
   if (!productData) return null;
 
@@ -329,8 +294,7 @@ const MainDocsContent = ({
     <>
       {/* Top-level items */}
       {Object.entries(productData.items || {}).map(([slug, item]) => {
-        const url =
-          slug === "index" ? `/docs/${product}` : `/docs/${product}/${slug}`;
+        const url = slug === "index" ? `/docs/${product}` : `/docs/${product}/${slug}`;
 
         return (
           <Link
@@ -352,7 +316,6 @@ const MainDocsContent = ({
 
       {/* Top-level groups */}
       {Object.entries(productData.groups || {}).map(([groupSlug, group]) => {
-
         return (
           <div key={groupSlug} className="pt-4">
             {/* Group title - not selectable/highlightable */}

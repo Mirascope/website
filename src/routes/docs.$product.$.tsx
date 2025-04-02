@@ -12,13 +12,7 @@ function DocsProductPage() {
 
   // No section for regular product routes
   const section = null;
-  
+
   // Use the shared DocsPage component
-  return (
-    <DocsPage
-      product={product as ProductName}
-      section={section}
-      splat={_splat || ""}
-    />
-  );
+  return <DocsPage product={product as ProductName} section={section} splat={_splat || ""} />;
 }

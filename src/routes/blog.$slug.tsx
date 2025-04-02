@@ -21,7 +21,10 @@ export const Route = createFileRoute("/blog/$slug")({
 function BlogPostPage() {
   const { slug } = useParams({ from: "/blog/$slug" });
   const [post, setPost] = useState<any>(null);
-  const [compiledMDX, setCompiledMDX] = useState<{ code: string; frontmatter: Record<string, any> } | null>(null);
+  const [compiledMDX, setCompiledMDX] = useState<{
+    code: string;
+    frontmatter: Record<string, any>;
+  } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   // TOC state for mobile
@@ -64,7 +67,7 @@ function BlogPostPage() {
           const result = await getPostBySlug(slug);
           console.log("Got post data:", result);
           setPost(result ? { ...result.meta, content: result.content } : null);
-          
+
           // Process the MDX content with the new compiler
           if (result && result.content) {
             const mdxResult = await processMDX(result.content);
@@ -72,7 +75,9 @@ function BlogPostPage() {
           }
         } catch (fetchErr) {
           console.error("Error in getPostBySlug:", fetchErr);
-          setError(`Error fetching post: ${fetchErr instanceof Error ? fetchErr.message : String(fetchErr)}`);
+          setError(
+            `Error fetching post: ${fetchErr instanceof Error ? fetchErr.message : String(fetchErr)}`
+          );
         }
         setLoading(false);
       } catch (err) {
@@ -185,9 +190,7 @@ function BlogPostPage() {
                   onClick={toggleFunMode}
                   className={cn(
                     "rounded-full w-12 h-12 p-0 shadow-md",
-                    funMode
-                      ? "bg-primary text-white"
-                      : "bg-white hover:bg-purple-50"
+                    funMode ? "bg-primary text-white" : "bg-white hover:bg-purple-50"
                   )}
                 >
                   <Sparkles className="w-5 h-5" />
@@ -249,10 +252,10 @@ function BlogPostPage() {
                 className="bg-white dark:bg-gray-900 rounded-xl shadow-sm p-4 sm:p-6 border border-gray-200 dark:border-gray-700 blog-content"
               >
                 {compiledMDX ? (
-                  <MDXRenderer 
-                    code={compiledMDX.code} 
-                    frontmatter={compiledMDX.frontmatter} 
-                    useFunMode={funMode} 
+                  <MDXRenderer
+                    code={compiledMDX.code}
+                    frontmatter={compiledMDX.frontmatter}
+                    useFunMode={funMode}
                   />
                 ) : (
                   <div className="animate-pulse bg-gray-100 h-40 rounded-md"></div>
