@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 
 type TOCItem = {
@@ -33,25 +32,6 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
         console.log(
           `TableOfContents: Content element with ID "${contentId}" not found`
         );
-        return;
-      }
-
-      // Generate some sample headings for testing
-      if (
-        process.env.NODE_ENV === "development" &&
-        product === "mirascope" &&
-        section === "main" &&
-        slug === "index"
-      ) {
-        // Only mock headings for specific pages when needed
-        if (headings.length === 0) {
-          const mockHeadings: TOCItem[] = [
-            { id: "what-is-mirascope", text: "What is Mirascope?", level: 2 },
-            { id: "installation", text: "Installation", level: 2 },
-            { id: "quick-example", text: "Quick Example", level: 2 },
-          ];
-          setHeadings(mockHeadings);
-        }
         return;
       }
 
