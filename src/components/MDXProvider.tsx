@@ -126,10 +126,12 @@ export const components = {
     // Don't apply inline code styling to code blocks (which are children of pre tags)
     const isInPre = React.useRef<boolean>(false);
     React.useLayoutEffect(() => {
+      // Type assertion for DOM properties access
+      const element = props as unknown as { parentElement?: { tagName: string } };
       const parentIsPre =
         props.className?.includes("language-") ||
         props.className?.includes("shiki") ||
-        props.parentElement?.tagName === "PRE";
+        element.parentElement?.tagName === "PRE";
       isInPre.current = !!parentIsPre;
     }, [props]);
 
@@ -173,35 +175,47 @@ export const components = {
         if (!React.isValidElement(child)) continue;
 
         // Try to find language info in child's className
-        if (child.props?.className?.includes("language-")) {
+        // Use type assertion to ensure we can access props
+        const childProps = child.props as { 
+          className?: string;
+          children?: React.ReactNode | string;
+        } | undefined || {};
+        
+        if (childProps.className?.includes("language-")) {
           language =
-            (child.props.className.match(/language-(\w+)/) || [])[1] || "";
-          const metaMatch = child.props.className.match(/\{([^}]+)\}/);
+            (childProps.className.match(/language-(\w+)/) || [])[1] || "";
+          const metaMatch = childProps.className.match(/\{([^}]+)\}/);
           meta = metaMatch ? `{${metaMatch[1]}}` : "";
 
           // Extract code content from child
-          if (typeof child.props.children === "string") {
-            codeContent = child.props.children;
+          if (typeof childProps.children === "string") {
+            codeContent = childProps.children;
             break;
           }
         }
 
         // If child itself doesn't have the class but has children, try those
-        if (!codeContent && child.props?.children) {
-          const grandchildren = React.Children.toArray(child.props.children);
+        if (!codeContent && childProps.children) {
+          const grandchildren = React.Children.toArray(childProps.children);
 
           for (const grandchild of grandchildren) {
             if (!React.isValidElement(grandchild)) continue;
 
-            if (grandchild.props?.className?.includes("language-")) {
+            // Type assertion for grandchild props
+            const grandchildProps = grandchild.props as {
+              className?: string;
+              children?: React.ReactNode | string;
+            } | undefined || {};
+            
+            if (grandchildProps.className?.includes("language-")) {
               language =
-                (grandchild.props.className.match(/language-(\w+)/) || [])[1] ||
+                (grandchildProps.className.match(/language-(\w+)/) || [])[1] ||
                 "";
-              const metaMatch = grandchild.props.className.match(/\{([^}]+)\}/);
+              const metaMatch = grandchildProps.className.match(/\{([^}]+)\}/);
               meta = metaMatch ? `{${metaMatch[1]}}` : "";
 
-              if (typeof grandchild.props.children === "string") {
-                codeContent = grandchild.props.children;
+              if (typeof grandchildProps.children === "string") {
+                codeContent = grandchildProps.children;
                 break;
               }
             }
