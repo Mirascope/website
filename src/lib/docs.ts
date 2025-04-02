@@ -1,9 +1,6 @@
 // Import the centralized meta file
 import docsMetadata from "../docs/_meta";
 import type {
-  DocMetaItem,
-  DocGroup,
-  DocSection,
   ProductDocs,
 } from "../docs/_meta";
 import { docsAPI } from "./utils";
@@ -170,7 +167,8 @@ export const getDoc = async (path: string): Promise<DocWithContent> => {
           content = await docsAPI.getDocContent(filePath);
           console.log(`[getDoc] Successfully fetched content for: ${filePath}`);
           contentCache[filePath] = content;
-        } catch (fetchError) {
+        } catch (error) {
+          const fetchError = error as Error;
           console.error(
             `[getDoc] Error fetching doc content: ${fetchError.message}`
           );
@@ -592,7 +590,7 @@ const getMetadataFromStructure = (path: string): DocMeta => {
 // (buildPath function removed since we now use the path directly)
 
 // Helper function to create placeholder content
-const createPlaceholderContent = (path: string): string => {
+const createPlaceholderContent = (_path: string): string => {
   // For all cases, just return "Untitled Document" as the title with no content
   return `---
 title: Untitled Document
