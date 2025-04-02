@@ -1,13 +1,9 @@
 import { createFileRoute, useParams } from "@tanstack/react-router";
 import DocsPage from "@/components/DocsPage";
+import { type ProductName } from "@/lib/route-types";
 
 export const Route = createFileRoute("/docs/$product/guides/$")({
   component: DocsGuidesPage,
-  // Don't match if the next part is another section or special path
-  validateParams: ({ product, _splat }) => {
-    // Accept all paths for guides section
-    return { product, _splat };
-  },
 });
 
 function DocsGuidesPage() {
@@ -20,9 +16,9 @@ function DocsGuidesPage() {
   // Use the shared DocsPage component
   return (
     <DocsPage
-      product={product}
+      product={product as ProductName}
       section={section}
-      splat={_splat}
+      splat={_splat || ""}
     />
   );
 }

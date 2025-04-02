@@ -2,23 +2,21 @@ import { Link, useMatches } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import docsMetadata from "@/docs/_meta";
 import { getSectionsForProduct } from "@/lib/docs";
-
-/**
- * DocsSidebar component - Renders navigation based on _meta.ts structure
- */
+import { getProductRoute, getSectionRoute, getSectionParams } from "@/lib/routes";
+import type { ProductName } from "@/lib/route-types";
 import type { DocMeta } from "@/lib/docs";
 
 interface DocsSidebarProps {
-  product?: string;
-  section?: string | null;
-  currentSlug?: string;
-  currentGroup?: string | null;
-  docs?: DocMeta[];
+  product: ProductName;
+  section: string | null;
+  currentSlug: string;
+  currentGroup: string | null;
+  docs: DocMeta[];
 }
 
 const DocsSidebar = ({
-  product = "",
-  currentGroup = null,
+  product,
+  currentGroup,
 }: DocsSidebarProps) => {
   // Get current route from TanStack Router
   const matches = useMatches();
@@ -61,7 +59,7 @@ const DocsSidebar = ({
               </span>
             ) : (
               <Link
-                to="/docs/mirascope"
+                to={getProductRoute("mirascope")}
                 className="text-xl font-medium text-gray-400 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
               >
                 Mirascope
@@ -74,7 +72,7 @@ const DocsSidebar = ({
               </span>
             ) : (
               <Link
-                to="/docs/lilypad"
+                to={getProductRoute("lilypad")}
                 className="text-xl font-medium text-gray-400 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
               >
                 Lilypad
@@ -145,7 +143,7 @@ const DocsSidebar = ({
             </span>
           ) : (
             <Link
-              to="/docs/mirascope"
+              to={getProductRoute("mirascope")}
               className="text-xl font-medium text-gray-400 hover:text-gray-700"
             >
               Mirascope
@@ -158,7 +156,7 @@ const DocsSidebar = ({
             </span>
           ) : (
             <Link
-              to="/docs/lilypad"
+              to={getProductRoute("lilypad")}
               className="text-xl font-medium text-gray-400 hover:text-gray-700"
             >
               Lilypad
@@ -170,7 +168,7 @@ const DocsSidebar = ({
         <div className="flex flex-col space-y-1">
           {/* Main docs tab */}
           <Link
-            to={`/docs/${product}`}
+            to={getProductRoute(product)}
             className={cn(
               "px-3 py-2 text-base rounded-md w-full",
               isDocsTabActive
@@ -187,7 +185,8 @@ const DocsSidebar = ({
           {orderedSections.map((s) => (
             <Link
               key={s.slug}
-              to={`/docs/${product}/${s.slug}/`}
+              to={getSectionRoute(product, s.slug)}
+              params={getSectionParams(product, s.slug)}
               className={cn(
                 "px-3 py-2 text-base rounded-md w-full",
                 // Section tab is active if we're in this section's URL path

@@ -10,6 +10,7 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
+import { getProductRoute } from "@/lib/routes";
 import Logo from "@/components/Logo";
 
 // Reusable navigation link component
@@ -110,7 +111,7 @@ export default function Header() {
                     <li>
                       <NavigationMenuLink asChild>
                         <Link
-                          to="/docs/mirascope"
+                          to={getProductRoute("mirascope")}
                           className="block p-4 space-y-1.5 rounded-md bg-background dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                         >
                           <div className="font-medium text-xl text-[#6366f1]">
@@ -125,7 +126,7 @@ export default function Header() {
                     <li>
                       <NavigationMenuLink asChild>
                         <Link
-                          to="/docs/lilypad"
+                          to={getProductRoute("lilypad")}
                           className="block p-4 space-y-1.5 rounded-md bg-background dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                         >
                           <div className="font-medium text-xl text-[#2d8031]">
@@ -172,14 +173,14 @@ export default function Header() {
           <div className="flex flex-col space-y-4">
             <div className="font-medium text-xl my-2">Docs</div>
             <Link
-              to="/docs/mirascope"
+              to={getProductRoute("mirascope")}
               className="p-3 rounded-md bg-white dark:bg-gray-800 text-[#6366f1] font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               Mirascope
             </Link>
             <Link
-              to="/docs/lilypad"
+              to={getProductRoute("lilypad")}
               className="p-3 rounded-md bg-white dark:bg-gray-800 text-[#2d8031] font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
