@@ -91,17 +91,31 @@ const ProviderContext = createContext<ProviderContextType | undefined>(undefined
 export function ProviderContextProvider({
   children,
   defaultProvider = "OpenAI",
+  onProviderChange,
 }: {
   children: ReactNode;
   defaultProvider?: Provider;
+  onProviderChange?: (provider: Provider) => void;
 }) {
   const [provider, setProvider] = useState<Provider>(defaultProvider);
+
+  // Create a wrapper for setProvider that calls the callback when provided
+  const handleProviderChange = (newProvider: Provider) => {
+    setProvider(newProvider);
+    if (onProviderChange) {
+      onProviderChange(newProvider);
+    }
+  };
 
   // Get the provider info
   const providerInfo = providerDefaults[provider];
 
   return (
-    <ProviderContext.Provider value={{ provider, setProvider, providerInfo }}>
+    <ProviderContext.Provider value={{ 
+      provider, 
+      setProvider: handleProviderChange, 
+      providerInfo 
+    }}>
       {children}
     </ProviderContext.Provider>
   );
