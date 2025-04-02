@@ -42,7 +42,7 @@ export const providerDefaults: Record<Provider, {
     defaultModel: "claude-3-5-sonnet-latest",
   },
   "Mistral": {
-    packageName: "mistralai",
+    packageName: "mistral",
     defaultModel: "mistral-large-latest",
   },
   "xAI": {
