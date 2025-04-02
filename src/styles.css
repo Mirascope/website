@@ -1,18 +1,18 @@
 /* Google Fonts Import */
-@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 
 /* Williams Handwriting Font Import - All styles */
 @font-face {
-  font-family: 'Williams Handwriting';
-  src: \url("/fonts/Williams-Handwriting-Regular-v1.ttf") format('truetype');
+  font-family: "Williams Handwriting";
+  src: \url("/fonts/Williams-Handwriting-Regular-v1.ttf")format("truetype");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
   descent-override: 10%;
 }
 
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @plugin "tailwindcss-animate";
 
@@ -20,7 +20,18 @@
 
 body {
   @apply m-0;
-  font-family: 'Geist Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family:
+    "Geist Sans",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    "Open Sans",
+    "Helvetica Neue",
+    sans-serif;
   font-size: 1rem; /* Default size - will be overridden by mono/sans classes */
   font-weight: 400; /* Normal weight */
   letter-spacing: 0.01em; /* Slight letter spacing */
@@ -45,20 +56,29 @@ body::before {
 
 /* Base code styles */
 code {
-  font-family:
-    source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 /* Code blocks use different fonts based on mode */
-code, pre, .shiki, .shiki code, 
-.mono-enabled code, .mono-enabled pre, .mono-enabled .shiki, .mono-enabled .shiki code {
-  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+code,
+pre,
+.shiki,
+.shiki code,
+.mono-enabled code,
+.mono-enabled pre,
+.mono-enabled .shiki,
+.mono-enabled .shiki code {
+  font-family:
+    "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace !important;
   font-size: 0.9rem !important;
 }
 
 /* MDX content always uses monospace for all text and code blocks */
 .mdx-content {
-  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  font-family:
+    "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace !important;
   font-size: 0.9rem !important;
 }
 
@@ -79,7 +99,17 @@ code, pre, .shiki, .shiki code,
 .mdx-content:not(.fun-mode) div,
 .mdx-content:not(.fun-mode) span,
 .mdx-content:not(.fun-mode) a {
-  font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
+  font-family:
+    "Roboto",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Helvetica,
+    Arial,
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol" !important;
 }
 
 /* Code elements should always use monospace regardless of sans/mono setting */
@@ -87,7 +117,9 @@ code, pre, .shiki, .shiki code,
 .mdx-content pre,
 .mdx-content .shiki,
 .mdx-content .shiki code {
-  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  font-family:
+    "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace !important;
 }
 
 .handwriting-enabled .mdx-content,
@@ -95,40 +127,67 @@ code, pre, .shiki, .shiki code,
 .handwriting-enabled .mdx-container,
 .handwriting-enabled .blog-content .mdx-content,
 .handwriting-enabled .prose {
-  font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
-  font-size: 1.0rem !important;
+  font-family:
+    "Roboto",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Helvetica,
+    Arial,
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol" !important;
+  font-size: 1rem !important;
 }
 
 /* Additional rule to specifically target blog content */
 .blog-content {
-  font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
-  font-size: 1.0rem !important;
+  font-family:
+    "Roboto",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Helvetica,
+    Arial,
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol" !important;
+  font-size: 1rem !important;
 }
 
 /* Ensure inline code stands out from text */
-p code, li code, h1 code, h2 code, h3 code, h4 code, h5 code, h6 code {
+p code,
+li code,
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
   border-radius: 0.2rem;
   padding: 0.1rem 0.3rem;
 }
 
-.mono-enabled p code, 
+.mono-enabled p code,
 .mono-enabled li code,
-.mono-enabled h1 code, 
-.mono-enabled h2 code, 
-.mono-enabled h3 code, 
-.mono-enabled h4 code, 
-.mono-enabled h5 code, 
+.mono-enabled h1 code,
+.mono-enabled h2 code,
+.mono-enabled h3 code,
+.mono-enabled h4 code,
+.mono-enabled h5 code,
 .mono-enabled h6 code {
   background-color: rgba(0, 0, 0, 0.05);
 }
 
-.handwriting-enabled p code, 
+.handwriting-enabled p code,
 .handwriting-enabled li code,
-.handwriting-enabled h1 code, 
-.handwriting-enabled h2 code, 
-.handwriting-enabled h3 code, 
-.handwriting-enabled h4 code, 
-.handwriting-enabled h5 code, 
+.handwriting-enabled h1 code,
+.handwriting-enabled h2 code,
+.handwriting-enabled h3 code,
+.handwriting-enabled h4 code,
+.handwriting-enabled h5 code,
 .handwriting-enabled h6 code {
   background-color: rgba(0, 0, 0, 0.03);
   font-weight: 400;
@@ -141,13 +200,13 @@ p code, li code, h1 code, h2 code, h3 code, h4 code, h5 code, h6 code {
 }
 
 .bg-watercolor-flipped::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('/watercolor-background.png');
+  background-image: url("/watercolor-background.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -156,14 +215,13 @@ p code, li code, h1 code, h2 code, h3 code, h4 code, h5 code, h6 code {
 }
 
 .dark .bg-watercolor-flipped::before {
-  background-image: url('/dark-mode-watercolor-background.png');
+  background-image: url("/dark-mode-watercolor-background.png");
 }
 
-
 :root {
-  --background: oklch(0.995 0 0);  /* Pure white for background like the frog logo background */
+  --background: oklch(0.995 0 0); /* Pure white for background like the frog logo background */
   --foreground: oklch(0.141 0.005 285.823);
-  --card: oklch(0.985 0.004 95);  /* Very light gray with a subtle hint of warmth for cards */
+  --card: oklch(0.985 0.004 95); /* Very light gray with a subtle hint of warmth for cards */
   --card-foreground: oklch(0.141 0.005 285.823);
   --popover: oklch(0.98 0.005 95);
   --popover-foreground: oklch(0.141 0.005 285.823);
@@ -292,7 +350,17 @@ p code, li code, h1 code, h2 code, h3 code, h4 code, h5 code, h6 code {
 /* Font for site content - active when mono-enabled class is present */
 .font-mono,
 .mono-enabled {
-  font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
+  font-family:
+    "Roboto",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Helvetica,
+    Arial,
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol" !important;
   font-size: 1rem !important;
 }
 
@@ -301,14 +369,16 @@ p code, li code, h1 code, h2 code, h3 code, h4 code, h5 code, h6 code {
 .mono-enabled code,
 .mono-enabled .shiki,
 .mono-enabled .shiki code {
-  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  font-family:
+    "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace !important;
   font-size: 0.9rem !important;
 }
 
 /* Font for site content when handwriting is enabled */
 .handwriting-enabled,
 .mdx-content.fun-mode {
-  font-family: 'Williams Handwriting', cursive !important;
+  font-family: "Williams Handwriting", cursive !important;
   font-size: 1.1rem !important;
 }
 
@@ -330,7 +400,7 @@ p code, li code, h1 code, h2 code, h3 code, h4 code, h5 code, h6 code {
 .mdx-content.fun-mode div,
 .mdx-content.fun-mode span,
 .mdx-content.fun-mode a {
-  font-family: 'Williams Handwriting', cursive !important;
+  font-family: "Williams Handwriting", cursive !important;
   font-size: 1.2rem !important;
 }
 
@@ -345,46 +415,58 @@ p code, li code, h1 code, h2 code, h3 code, h4 code, h5 code, h6 code {
 .mdx-content.fun-mode .shiki,
 .mdx-content.fun-mode .shiki code,
 .mdx-content.fun-mode .shiki .line {
-  font-family: 'Williams Handwriting', cursive !important;
+  font-family: "Williams Handwriting", cursive !important;
   font-size: 1.2rem !important;
 }
 
 /* Font class for handwriting - used in handwriting mode */
 .font-handwriting {
-  font-family: 'Williams Handwriting', cursive !important;
+  font-family: "Williams Handwriting", cursive !important;
 }
 
 /* Font class for Excalifont - used for stylistic elements in mono mode */
 .font-excalifont {
-  font-family: 'Excalifont', sans-serif !important;
+  font-family: "Excalifont", sans-serif !important;
 }
 
 /* Special styling for hero text in different modes */
 .handwriting-enabled .hero-font {
-  font-family: 'Williams Handwriting', cursive !important;
+  font-family: "Williams Handwriting", cursive !important;
 }
 
 .mono-enabled .hero-font {
-  font-family: 'Excalifont', sans-serif !important;
+  font-family: "Excalifont", sans-serif !important;
 }
 
 /* Font class for sans */
 .font-sans {
-  font-family: 'Geist Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
+  font-family:
+    "Geist Sans",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    "Open Sans",
+    "Helvetica Neue",
+    sans-serif !important;
   font-size: 1rem !important;
 }
 
 /* Navigation and header items styling */
-header a, 
+header a,
 header button:not(.font-toggle-button),
 .navigation-item {
   font-weight: 400 !important;
 }
 
-
 /* Font toggle button styling - consistent across all pages */
 .font-toggle-button {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif !important;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+    "Helvetica Neue", sans-serif !important;
   line-height: 1.5 !important;
   font-weight: 500 !important;
   letter-spacing: 0.01em !important;
@@ -396,12 +478,14 @@ header button:not(.font-toggle-button),
 
 /* Font classes for use in menu options */
 .font-mono {
-  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  font-family:
+    "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace !important;
   font-size: 1rem !important;
 }
 
 .font-handwriting {
-  font-family: 'Williams Handwriting', cursive !important;
+  font-family: "Williams Handwriting", cursive !important;
 }
 
 /* Font menu option sizing */
@@ -485,12 +569,20 @@ header button:not(.font-toggle-button),
 }
 
 /* Standard header sizes */
-.blog-content h1 { font-size: 2rem !important; }
-.blog-content h2 { font-size: 1.5rem !important; }
-.blog-content h3 { font-size: 1.25rem !important; }
+.blog-content h1 {
+  font-size: 2rem !important;
+}
+.blog-content h2 {
+  font-size: 1.5rem !important;
+}
+.blog-content h3 {
+  font-size: 1.25rem !important;
+}
 .blog-content h4,
 .blog-content h5,
-.blog-content h6 { font-size: 1.1rem !important; }
+.blog-content h6 {
+  font-size: 1.1rem !important;
+}
 
 /* Hide the first h1 heading in blog content since it's already shown in the page header */
 .blog-content > h1:first-of-type {
@@ -500,16 +592,16 @@ header button:not(.font-toggle-button),
 /* Torn paper effect */
 .torn-paper-effect {
   clip-path: polygon(
-    0% 4%, 
-    10% 0%, 
-    20% 2%, 
-    30% 0%, 
-    40% 3%, 
-    50% 0%, 
-    60% 2%, 
-    70% 0%, 
-    80% 3%, 
-    90% 0%, 
+    0% 4%,
+    10% 0%,
+    20% 2%,
+    30% 0%,
+    40% 3%,
+    50% 0%,
+    60% 2%,
+    70% 0%,
+    80% 3%,
+    90% 0%,
     100% 4%,
     99% 20%,
     100% 35%,
@@ -627,14 +719,19 @@ header button:not(.font-toggle-button),
   margin-right: 1.5rem;
   display: inline-block;
   text-align: right;
-  color: rgba(115,138,148,.4)
+  color: rgba(115, 138, 148, 0.4);
 }
 
 /* Line highlighting styles for the shiki transformer */
 .shiki .highlighted,
 .shiki [data-highlighted],
 .shiki .line[data-highlighted="true"] {
-  background-color: rgba(124, 58, 237, 0.07) !important; /* More purple background (violet-600 with opacity) */
+  background-color: rgba(
+    124,
+    58,
+    237,
+    0.07
+  ) !important; /* More purple background (violet-600 with opacity) */
   border-left: 3px solid #6366f1 !important; /* Violet-600 color */
   margin-left: -1rem !important;
   padding-left: calc(1rem - 3px) !important;
@@ -647,7 +744,12 @@ header button:not(.font-toggle-button),
 .dark-theme-code .shiki .highlighted,
 .dark-theme-code .shiki [data-highlighted],
 .dark-theme-code .shiki .line[data-highlighted="true"] {
-  background-color: rgba(139, 92, 246, 0.1) !important; /* More purple for dark mode (violet-500 with opacity) */
+  background-color: rgba(
+    139,
+    92,
+    246,
+    0.1
+  ) !important; /* More purple for dark mode (violet-500 with opacity) */
   border-left-color: #6366f1 !important; /* Violet-500 color for dark mode */
   box-shadow: 9999px 0 0 0 rgba(139, 92, 246, 0.1) !important; /* Extend highlight to the right in dark mode */
 }
@@ -663,4 +765,3 @@ header button:not(.font-toggle-button),
 .dark-theme-code {
   overflow-x: auto;
 }
-

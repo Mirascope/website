@@ -13,10 +13,13 @@ yarn.lock
 pnpm-lock.yaml
 .venv
 
-
 # Generated TypeScript files
 *.gen.ts
 routeTree.gen.ts
+
+# Markdown/MDX files (to preserve emphasis styles)
+*.md
+*.mdx
 
 # Large text files
 LICENSE
