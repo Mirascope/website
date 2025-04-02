@@ -13,13 +13,23 @@ export function CodeSnippet({
   code,
   children,
   language = "python",
-  highlightLines,
   className = "",
 }: CodeSnippetProps) {
   const { provider, providerInfo } = useProvider();
   
-  // Get source content
-  let content = typeof children === 'string' ? children : code || '';
+  // Determine which code to use
+  let content: string;
+  
+  if (code) {
+    // Use the code prop if available
+    content = code;
+  } else if (typeof children === 'string') {
+    // Use children as string if available
+    content = children;
+  } else {
+    // Fallback
+    content = '// No code provided';
+  }
   
   // Clean up content if it's a string
   if (typeof content === 'string') {
