@@ -2,9 +2,6 @@ import React from "react";
 import { MDXProvider } from "@mdx-js/react";
 import { cn } from "@/lib/utils";
 import {
-  ProviderContextProvider,
-  ProviderSelector,
-  ProviderDropdown,
   InstallSnippet,
   CodeSnippet,
   ApiStyleCodeBlock,
@@ -34,9 +31,6 @@ const slugify = (text: string): string => {
 // Custom components that will be available in MDX files
 export const components = {
   // Custom components for docs
-  ProviderContextProvider,
-  ProviderSelector,
-  ProviderDropdown,
   InstallSnippet,
   CodeSnippet,
   ApiStyleCodeBlock,
