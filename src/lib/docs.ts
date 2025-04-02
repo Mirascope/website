@@ -1,16 +1,10 @@
 // Import the centralized meta file
 import docsMetadata from "../docs/_meta";
-import type {
-  ProductDocs,
-} from "../docs/_meta";
+import type { ProductDocs } from "../docs/_meta";
 import { docsAPI } from "./utils";
 
 // Types for documentation handling
-export type DocType =
-  | "item"
-  | "group-item"
-  | "section-item"
-  | "section-group-item";
+export type DocType = "item" | "group-item" | "section-item" | "section-group-item";
 
 // Document metadata
 export type DocMeta = {
@@ -128,10 +122,7 @@ export const getDoc = async (path: string): Promise<DocWithContent> => {
       // Just 'index'
       filePath = "index.mdx";
       console.log(`[getDoc] Just 'index' handling: ${filePath}`);
-    } else if (
-      filePath.includes("/") &&
-      filePath.split("/").pop() === "index"
-    ) {
+    } else if (filePath.includes("/") && filePath.split("/").pop() === "index") {
       // Paths like mirascope/index
       filePath = `${filePath}.mdx`;
       console.log(`[getDoc] Path ending with 'index' handling: ${filePath}`);
@@ -160,8 +151,7 @@ export const getDoc = async (path: string): Promise<DocWithContent> => {
 
         // For product index pages like mirascope/index.mdx, also check the _meta.ts
         // to ensure we have valid metadata even if the file doesn't physically exist
-        const isProductIndex =
-          filePath.split("/").length === 2 && filePath.endsWith("/index.mdx");
+        const isProductIndex = filePath.split("/").length === 2 && filePath.endsWith("/index.mdx");
 
         try {
           content = await docsAPI.getDocContent(filePath);
@@ -169,20 +159,16 @@ export const getDoc = async (path: string): Promise<DocWithContent> => {
           contentCache[filePath] = content;
         } catch (error) {
           const fetchError = error as Error;
-          console.error(
-            `[getDoc] Error fetching doc content: ${fetchError.message}`
-          );
+          console.error(`[getDoc] Error fetching doc content: ${fetchError.message}`);
 
           // Special handling for product index pages
           if (isProductIndex) {
             const product = filePath.split("/")[0];
-            console.log(
-              `[getDoc] Generating fallback for product index: ${product}`
-            );
+            console.log(`[getDoc] Generating fallback for product index: ${product}`);
 
             // Check if this is a known product
             const isKnownProduct = product in docsMetadata;
-            
+
             if (isKnownProduct) {
               // Get metadata from _meta.ts if available
               const productDocs = docsMetadata[product] as ProductDocs;
@@ -190,8 +176,7 @@ export const getDoc = async (path: string): Promise<DocWithContent> => {
               const title =
                 indexItem?.title ||
                 `${product.charAt(0).toUpperCase() + product.slice(1)} Documentation`;
-              const description =
-                indexItem?.description || `Welcome to ${product} documentation`;
+              const description = indexItem?.description || `Welcome to ${product} documentation`;
 
               // Generate a placeholder content with proper metadata
               content = `---
@@ -205,9 +190,7 @@ ${description}
 
 Get started with ${product} by exploring the documentation in the sidebar.`;
 
-              console.log(
-                `[getDoc] Generated fallback content for known product index`
-              );
+              console.log(`[getDoc] Generated fallback content for known product index`);
             } else {
               // For unknown products, use "Untitled Document" with empty content
               content = `---
@@ -215,11 +198,9 @@ title: Untitled Document
 description: 
 ---
 `;
-              console.log(
-                `[getDoc] Generated "Untitled Document" for unknown product index`
-              );
+              console.log(`[getDoc] Generated "Untitled Document" for unknown product index`);
             }
-            
+
             contentCache[filePath] = content;
           } else {
             throw fetchError;
@@ -330,9 +311,7 @@ const getMetadataFromStructure = (path: string): DocMeta => {
     // For paths like /docs/mirascope/migration/
     docType = "item";
     slug = pathParts[1]; // Use the second part
-    console.log(
-      `[getMetadataFromStructure] Top-level item with trailing slash: ${slug}`
-    );
+    console.log(`[getMetadataFromStructure] Top-level item with trailing slash: ${slug}`);
 
     // Look for the metadata in top-level items
     const item = productDocs.items?.[slug];
@@ -367,41 +346,30 @@ const getMetadataFromStructure = (path: string): DocMeta => {
     docType = "item";
     slug = getSlug(pathParts);
 
-    if (
-      slug === "index" ||
-      slug === "" ||
-      slug === "welcome" ||
-      slug === "overview"
-    ) {
+    if (slug === "index" || slug === "" || slug === "welcome" || slug === "overview") {
       // Use product index item
       const indexItem = productDocs.items?.index;
-      console.log(
-        `[getMetadataFromStructure] Checking for index item for ${product}`,
-        indexItem
-      );
+      console.log(`[getMetadataFromStructure] Checking for index item for ${product}`, indexItem);
 
       if (indexItem) {
         title = indexItem.title;
         description = indexItem.description || "";
-        console.log(
-          `[getMetadataFromStructure] Using metadata from _meta.ts for index:`,
-          { title, description }
-        );
+        console.log(`[getMetadataFromStructure] Using metadata from _meta.ts for index:`, {
+          title,
+          description,
+        });
       } else {
         title = `${product.charAt(0).toUpperCase() + product.slice(1)} Documentation`;
         description = "";
-        console.log(
-          `[getMetadataFromStructure] Using fallback metadata for index:`,
-          { title, description }
-        );
+        console.log(`[getMetadataFromStructure] Using fallback metadata for index:`, {
+          title,
+          description,
+        });
       }
     } else {
       // Regular top-level item: /docs/mirascope/migration
       const item = productDocs.items?.[slug];
-      console.log(
-        `[getMetadataFromStructure] Looking for item metadata for slug: ${slug}`,
-        item
-      );
+      console.log(`[getMetadataFromStructure] Looking for item metadata for slug: ${slug}`, item);
       if (item) {
         title = item.title;
         description = item.description || "";
@@ -455,17 +423,13 @@ const getMetadataFromStructure = (path: string): DocMeta => {
           title = item.title;
           description = item.description || "";
         } else {
-          title =
-            slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
+          title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
           description = "";
         }
       }
     }
     // Check if it's a section
-    else if (
-      productDocs.sections &&
-      productDocs.sections[potentialGroupOrSection]
-    ) {
+    else if (productDocs.sections && productDocs.sections[potentialGroupOrSection]) {
       docType = "section-item";
       section = potentialGroupOrSection;
       sectionTitle = productDocs.sections[section].title;
@@ -481,8 +445,7 @@ const getMetadataFromStructure = (path: string): DocMeta => {
           title = item.title;
           description = item.description || "";
         } else {
-          title =
-            slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
+          title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
           description = "";
         }
       }
@@ -514,8 +477,7 @@ const getMetadataFromStructure = (path: string): DocMeta => {
       if (slug === "index" || slug === "" || slug === "overview") {
         // Section+group index: /docs/mirascope/api/llm/
         title = groupTitle;
-        description =
-          productDocs.sections[section].groups![group].description || "";
+        description = productDocs.sections[section].groups![group].description || "";
       } else {
         // Section+group item: /docs/mirascope/api/llm/generation
         const item = productDocs.sections[section].groups![group].items?.[slug];
@@ -523,8 +485,7 @@ const getMetadataFromStructure = (path: string): DocMeta => {
           title = item.title;
           description = item.description || "";
         } else {
-          title =
-            slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
+          title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
           description = "";
         }
       }
@@ -693,10 +654,7 @@ export const getDocsForProduct = (product: string): DocMeta[] => {
 };
 
 // Get all docs for a product section
-export const getDocsForSection = (
-  product: string,
-  section: string
-): DocMeta[] => {
+export const getDocsForSection = (product: string, section: string): DocMeta[] => {
   const allDocs = getDocsForProduct(product);
   return allDocs.filter((doc) => doc.section === section);
 };
@@ -708,9 +666,7 @@ export const getDocsForGroup = (product: string, group: string): DocMeta[] => {
 };
 
 // Gets all available sections for a product
-export const getSectionsForProduct = (
-  product: string
-): { slug: string; title: string }[] => {
+export const getSectionsForProduct = (product: string): { slug: string; title: string }[] => {
   const productDocs = docsMetadata[product] as ProductDocs;
   if (!productDocs || !productDocs.sections) {
     return [];
@@ -721,4 +677,3 @@ export const getSectionsForProduct = (
     title: productDocs.sections[sectionSlug].title,
   }));
 };
-

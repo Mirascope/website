@@ -1,12 +1,16 @@
-import { codeToHtml } from 'shiki';
-import { transformerNotationHighlight } from '@shikijs/transformers';
+import { codeToHtml } from "shiki";
+import { transformerNotationHighlight } from "@shikijs/transformers";
 
 /**
  * Function to parse meta information and add highlighting comments
  * Transforms meta information like {1-3,5} into [!code highlight] comments
  */
-export function processCodeWithMetaHighlighting(code: string, meta: string, language: string): string {
-  if (!meta || !meta.includes('{') || !meta.includes('}')) {
+export function processCodeWithMetaHighlighting(
+  code: string,
+  meta: string,
+  language: string
+): string {
+  if (!meta || !meta.includes("{") || !meta.includes("}")) {
     return code;
   }
 
@@ -15,14 +19,14 @@ export function processCodeWithMetaHighlighting(code: string, meta: string, lang
   if (!highlightMatch) return code;
 
   const highlightInfo = highlightMatch[1];
-  const lines = code.split('\n');
+  const lines = code.split("\n");
   const lineHighlights = new Set<number>();
 
   // Process ranges like 1-3,5,7-9
-  highlightInfo.split(',').forEach(part => {
-    if (part.includes('-')) {
+  highlightInfo.split(",").forEach((part) => {
+    if (part.includes("-")) {
       // Handle ranges like 1-3
-      const [start, end] = part.split('-').map(Number);
+      const [start, end] = part.split("-").map(Number);
       for (let i = start; i <= end; i++) {
         lineHighlights.add(i);
       }
@@ -79,11 +83,11 @@ export function processCodeWithMetaHighlighting(code: string, meta: string, lang
     return line;
   });
 
-  return processedLines.join('\n');
+  return processedLines.join("\n");
 }
 
 // Generate HTML for highlighted code
-export async function highlightCode(code: string, language: string = 'text', meta: string = '') {
+export async function highlightCode(code: string, language: string = "text", meta: string = "") {
   try {
     // Process the code with meta information for line highlighting
     const processedCode = processCodeWithMetaHighlighting(code.trim(), meta, language);
@@ -91,14 +95,14 @@ export async function highlightCode(code: string, language: string = 'text', met
     // Generate HTML for both light and dark themes
     // Using direct codeToHtml call from shiki
     const lightThemeHtml = await codeToHtml(processedCode, {
-      lang: language || 'text',
-      theme: 'one-light', // Use original theme
+      lang: language || "text",
+      theme: "one-light", // Use original theme
       transformers: [transformerNotationHighlight()],
     });
 
     const darkThemeHtml = await codeToHtml(processedCode, {
-      lang: language || 'text',
-      theme: 'dark-plus', // Use original theme
+      lang: language || "text",
+      theme: "dark-plus", // Use original theme
       transformers: [transformerNotationHighlight()],
     });
 
@@ -106,7 +110,7 @@ export async function highlightCode(code: string, language: string = 'text', met
     return { lightThemeHtml, darkThemeHtml };
   } catch (error) {
     console.error(`Error highlighting code with language "${language}":`, error);
-    
+
     // Fallback to a simple code block with escaped HTML
     const escapedCode = code
       .replace(/&/g, "&amp;")
@@ -114,7 +118,7 @@ export async function highlightCode(code: string, language: string = 'text', met
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#039;");
-      
+
     const fallbackHtml = `<pre class="shiki"><code>${escapedCode.trim()}</code></pre>`;
     return { lightThemeHtml: fallbackHtml, darkThemeHtml: fallbackHtml };
   }

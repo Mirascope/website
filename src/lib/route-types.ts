@@ -7,13 +7,13 @@ export function isValidProduct(product: string): product is ProductName {
 }
 
 // Type aliases for valid static paths in the router
-export type ValidStaticPath = 
-  | "/" 
-  | "/blog" 
-  | "/docs" 
-  | "/docs/mirascope" 
-  | "/docs/lilypad" 
-  | "/privacy" 
+export type ValidStaticPath =
+  | "/"
+  | "/blog"
+  | "/docs"
+  | "/docs/mirascope"
+  | "/docs/lilypad"
+  | "/privacy"
   | "/terms";
 
 // Type aliases for valid dynamic paths in the router
@@ -26,4 +26,3 @@ export type ValidDynamicPath =
 
 // Combine all valid paths for use in the router
 export type ValidPath = ValidStaticPath | ValidDynamicPath;
-

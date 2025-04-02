@@ -51,12 +51,7 @@ const Logo: React.FC<LogoProps> = ({
   const selectedSize = sizeMap[size];
 
   const logoContent = (
-    <div
-      className={cn(
-        "flex flex-row items-center justify-center",
-        containerClassName
-      )}
-    >
+    <div className={cn("flex flex-row items-center justify-center", containerClassName)}>
       <div className={cn(selectedSize.spacing, imgClassName)}>
         <img
           src="/frog-logo.png"
@@ -66,13 +61,7 @@ const Logo: React.FC<LogoProps> = ({
       </div>
 
       {withText && (
-        <h1
-          className={cn(
-            selectedSize.text,
-            "text-primary mb-0 font-handwriting",
-            textClassName
-          )}
-        >
+        <h1 className={cn(selectedSize.text, "text-primary mb-0 font-handwriting", textClassName)}>
           Mirascope
         </h1>
       )}

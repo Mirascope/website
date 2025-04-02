@@ -12,13 +12,7 @@ function DocsApiPage() {
 
   // For API routes, the section is always 'api'
   const section = "api";
-  
+
   // Use the shared DocsPage component
-  return (
-    <DocsPage
-      product={product as ProductName}
-      section={section}
-      splat={_splat || ""}
-    />
-  );
+  return <DocsPage product={product as ProductName} section={section} splat={_splat || ""} />;
 }

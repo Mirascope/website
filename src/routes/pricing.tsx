@@ -1,17 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Check, Info, X } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/pricing")({
   component: PricingPage,
 });
-
 
 // Feature row component for displaying features with the same value across tiers
 const FeatureRow = ({
@@ -24,8 +19,7 @@ const FeatureRow = ({
   pro: string | boolean;
 }) => {
   // If both tiers have the exact same value (and it's not a boolean)
-  const sameNonBoolean =
-    free === pro && typeof free === "string" && free !== "";
+  const sameNonBoolean = free === pro && typeof free === "string" && free !== "";
 
   return (
     <div className="grid grid-cols-3 gap-4 py-3 border-b border-gray-100 dark:border-gray-800 items-center min-h-[48px]">
@@ -98,14 +92,13 @@ const PricingTier = ({
     <div
       className={cn(
         "px-6 py-8",
-        isGreen ? "bg-gradient-to-br from-[#f0f9f0] to-white dark:from-[#193619] dark:to-gray-900" : "bg-white dark:bg-gray-900"
+        isGreen
+          ? "bg-gradient-to-br from-[#f0f9f0] to-white dark:from-[#193619] dark:to-gray-900"
+          : "bg-white dark:bg-gray-900"
       )}
     >
       <h3
-        className={cn(
-          "text-xl font-semibold mb-2",
-          isGreen ? "text-[#2d8031]" : "text-gray-900"
-        )}
+        className={cn("text-xl font-semibold mb-2", isGreen ? "text-[#2d8031]" : "text-gray-900")}
       >
         {name}
       </h3>
@@ -173,15 +166,13 @@ function PricingPage() {
         Open Beta Notice
       </h3>
       <p className="text-lg mb-2">
-        Lilypad is currently in an open beta, during which we will not be
-        charging for the platform. All users during this period will have free
-        access to Pro features.
+        Lilypad is currently in an open beta, during which we will not be charging for the platform.
+        All users during this period will have free access to Pro features.
       </p>
       <p className="text-lg mb-2">
-        Once we finalize our pricing and release the production stable version,
-        we will give all existing users a grace period during which they can
-        continue to evaluate the platform to determine if they would like to
-        continue on a paid plan.
+        Once we finalize our pricing and release the production stable version, we will give all
+        existing users a grace period during which they can continue to evaluate the platform to
+        determine if they would like to continue on a paid plan.
       </p>
       <p className="text-lg">
         Licenses for self-hosting are available upon request during the beta.
@@ -193,9 +184,7 @@ function PricingPage() {
     <div className="py-12 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-16">
-          <h1 className="text-4xl font-bold mb-4 text-center dark:text-white">
-            Lilypad Pricing
-          </h1>
+          <h1 className="text-4xl font-bold mb-4 text-center dark:text-white">Lilypad Pricing</h1>
           <p className="text-xl text-gray-700 dark:text-gray-300 max-w-2xl mx-auto mb-2">
             Get started with the Free plan today.
           </p>
@@ -230,10 +219,7 @@ function PricingPage() {
                     <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Pro</h3>
                     <Tooltip>
                       <TooltipTrigger>
-                        <Info
-                          size={16}
-                          className="text-[#2d8031] cursor-pointer"
-                        />
+                        <Info size={16} className="text-[#2d8031] cursor-pointer" />
                       </TooltipTrigger>
                       <TooltipContent
                         side="right"
@@ -243,9 +229,7 @@ function PricingPage() {
                       </TooltipContent>
                     </Tooltip>
                   </div>
-                  <p className="text-gray-600 mb-5">
-                    For teams with more advanced needs
-                  </p>
+                  <p className="text-gray-600 mb-5">For teams with more advanced needs</p>
                   <div className="mb-6">
                     <span className="text-3xl font-bold">TBD</span>
                   </div>
@@ -282,12 +266,7 @@ function PricingPage() {
 
                 {/* Table rows */}
                 {cloudHostedFeatures.map((feat, i) => (
-                  <FeatureRow
-                    key={i}
-                    feature={feat.feature}
-                    free={feat.free}
-                    pro={feat.pro}
-                  />
+                  <FeatureRow key={i} feature={feat.feature} free={feat.free} pro={feat.pro} />
                 ))}
               </div>
             </div>
@@ -310,10 +289,7 @@ function PricingPage() {
                     <h3 className="text-xl font-semibold text-gray-900">Pro</h3>
                     <Tooltip>
                       <TooltipTrigger>
-                        <Info
-                          size={16}
-                          className="text-[#2d8031] cursor-pointer"
-                        />
+                        <Info size={16} className="text-[#2d8031] cursor-pointer" />
                       </TooltipTrigger>
                       <TooltipContent
                         side="right"
@@ -323,9 +299,7 @@ function PricingPage() {
                       </TooltipContent>
                     </Tooltip>
                   </div>
-                  <p className="text-gray-600 mb-5">
-                    For teams with more advanced needs
-                  </p>
+                  <p className="text-gray-600 mb-5">For teams with more advanced needs</p>
                   <div className="mb-6">
                     <span className="text-3xl font-bold">TBD</span>
                   </div>
@@ -362,12 +336,7 @@ function PricingPage() {
 
                 {/* Table rows */}
                 {selfHostedFeatures.map((feat, i) => (
-                  <FeatureRow
-                    key={i}
-                    feature={feat.feature}
-                    free={feat.free}
-                    pro={feat.pro}
-                  />
+                  <FeatureRow key={i} feature={feat.feature} free={feat.free} pro={feat.pro} />
                 ))}
               </div>
             </div>
@@ -385,8 +354,8 @@ function PricingPage() {
                 How long will the open beta last?
               </h3>
               <p className="text-gray-600 dark:text-gray-300">
-                The open beta period is ongoing, and we'll provide advance
-                notice before moving to paid plans.
+                The open beta period is ongoing, and we'll provide advance notice before moving to
+                paid plans.
               </p>
             </div>
             <div>
@@ -394,8 +363,8 @@ function PricingPage() {
                 What happens when the beta ends?
               </h3>
               <p className="text-gray-600 dark:text-gray-300">
-                All existing users will receive a grace period to evaluate which
-                plan is right for them before making any changes.
+                All existing users will receive a grace period to evaluate which plan is right for
+                them before making any changes.
               </p>
             </div>
           </div>

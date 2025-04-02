@@ -78,10 +78,7 @@ export default function Header() {
       <nav className="flex flex-row items-center justify-between w-full max-w-7xl mx-auto">
         <Link
           to="/"
-          className={cn(
-            "flex items-center relative z-10",
-            isLandingPage ? "invisible" : "visible"
-          )}
+          className={cn("flex items-center relative z-10", isLandingPage ? "invisible" : "visible")}
         >
           <Logo
             size="small"
@@ -114,9 +111,7 @@ export default function Header() {
                           to={getProductRoute("mirascope")}
                           className="block p-4 space-y-1.5 rounded-md bg-background dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                         >
-                          <div className="font-medium text-xl text-[#6366f1]">
-                            Mirascope
-                          </div>
+                          <div className="font-medium text-xl text-[#6366f1]">Mirascope</div>
                           <p className="text-base text-gray-600 dark:text-gray-300">
                             LLM abstractions that aren't obstructions.
                           </p>
@@ -129,12 +124,9 @@ export default function Header() {
                           to={getProductRoute("lilypad")}
                           className="block p-4 space-y-1.5 rounded-md bg-background dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                         >
-                          <div className="font-medium text-xl text-[#2d8031]">
-                            Lilypad
-                          </div>
+                          <div className="font-medium text-xl text-[#2d8031]">Lilypad</div>
                           <p className="text-base text-gray-600 dark:text-gray-300">
-                            Start building your data flywheel in one line of
-                            code.
+                            Start building your data flywheel in one line of code.
                           </p>
                         </Link>
                       </NavigationMenuLink>
@@ -165,9 +157,7 @@ export default function Header() {
         <div
           className={cn(
             "absolute top-full right-4 mt-2 p-6 md:hidden z-50 shadow-lg text-slate-800 dark:text-white rounded-lg max-w-xs",
-            isLandingPage
-              ? "bg-background/90 backdrop-blur-sm"
-              : "bg-background"
+            isLandingPage ? "bg-background/90 backdrop-blur-sm" : "bg-background"
           )}
         >
           <div className="flex flex-col space-y-4">

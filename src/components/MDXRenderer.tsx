@@ -1,5 +1,5 @@
-import { MDXProviderWrapper, components } from './MDXProvider';
-import { MDXRemote } from 'next-mdx-remote';
+import { MDXProviderWrapper, components } from "./MDXProvider";
+import { MDXRemote } from "next-mdx-remote";
 
 interface MDXRendererProps {
   code: string;
@@ -36,14 +36,14 @@ export function MDXRenderer({ code, frontmatter, useFunMode = false }: MDXRender
     };
 
     return (
-      <div className={`mdx-content prose max-w-none ${useFunMode ? 'fun-mode' : ''}`}>
+      <div className={`mdx-content prose max-w-none ${useFunMode ? "fun-mode" : ""}`}>
         <MDXProviderWrapper useFunMode={useFunMode}>
           <MDXRemote {...mdxProps} />
         </MDXProviderWrapper>
       </div>
     );
   } catch (error) {
-    console.error('Error rendering MDX with next-mdx-remote:', error);
+    console.error("Error rendering MDX with next-mdx-remote:", error);
     return (
       <div className="p-4 border border-red-500 rounded-md bg-red-50 text-red-800">
         <h3 className="font-bold mb-2">Error rendering MDX</h3>

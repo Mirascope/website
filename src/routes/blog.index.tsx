@@ -67,19 +67,16 @@ function BlogPage() {
                 </div>
               ) : posts.length === 0 ? (
                 <div className="text-center py-12">
-                  <h2 className="text-xl font-medium text-gray-600">
-                    No posts found
-                  </h2>
-                  <p className="text-muted-foreground mt-2">
-                    Check back soon for new content!
-                  </p>
+                  <h2 className="text-xl font-medium text-gray-600">No posts found</h2>
+                  <p className="text-muted-foreground mt-2">Check back soon for new content!</p>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 min-h-[650px]">
                   {currentPosts.map((post) => (
                     <Link
                       key={post.slug}
-                      to="/blog/$slug" params={{ slug: post.slug }}
+                      to="/blog/$slug"
+                      params={{ slug: post.slug }}
                       className="block h-full cursor-pointer group"
                     >
                       <div className="h-[320px] flex flex-col hover:shadow-lg transition-all duration-200 shadow-sm bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
@@ -95,22 +92,15 @@ function BlogPage() {
                               {post.description}
                             </p>
                           </div>
-                          <span className="text-primary font-medium mt-auto">
-                            Read more
-                          </span>
+                          <span className="text-primary font-medium mt-auto">Read more</span>
                         </div>
                       </div>
                     </Link>
                   ))}
 
                   {/* Spacer elements to maintain grid layout when fewer than POSTS_PER_PAGE posts */}
-                  {[
-                    ...Array(Math.max(0, POSTS_PER_PAGE - currentPosts.length)),
-                  ].map((_, index) => (
-                    <div
-                      key={`spacer-${index}`}
-                      className="h-[320px] md:h-[320px] invisible"
-                    />
+                  {[...Array(Math.max(0, POSTS_PER_PAGE - currentPosts.length))].map((_, index) => (
+                    <div key={`spacer-${index}`} className="h-[320px] md:h-[320px] invisible" />
                   ))}
                 </div>
               )}

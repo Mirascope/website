@@ -1,8 +1,8 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 // API for accessing MDX posts
@@ -13,17 +13,17 @@ export const mockAPI = {
   async getPostsList(): Promise<string[]> {
     // Fetch the list of MDX files from the virtual API endpoint
     try {
-      const response = await fetch('/api/posts-list');
+      const response = await fetch("/api/posts-list");
       if (!response.ok) {
         throw new Error(`Error fetching posts list: ${response.statusText}`);
       }
       return await response.json();
     } catch (error) {
-      console.error('Error fetching posts list:', error);
+      console.error("Error fetching posts list:", error);
       throw error;
     }
   },
-  
+
   /**
    * Get the content of a specific MDX file
    */
@@ -39,7 +39,7 @@ export const mockAPI = {
       console.error(`Error fetching post content for ${filename}:`, error);
       throw error;
     }
-  }
+  },
 };
 
 // API for accessing documentation files
@@ -51,7 +51,7 @@ export const docsAPI = {
     try {
       // Log the file path we're trying to fetch for debugging
       console.log(`Fetching doc content for: /src/docs/${filePath}`);
-      
+
       // Fetch the MDX content from the docs directory
       const response = await fetch(`/src/docs/${filePath}`);
       if (!response.ok) {
@@ -62,5 +62,5 @@ export const docsAPI = {
       console.error(`Error fetching doc content for ${filePath}:`, error);
       throw error;
     }
-  }
+  },
 };

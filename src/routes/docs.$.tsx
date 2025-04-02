@@ -20,8 +20,7 @@ function DocsPage() {
   const product = (pathParts[0] || "") as ProductName;
 
   // Extract current slug (last part) for sidebar highlighting
-  const currentSlug =
-    pathParts.length > 1 ? pathParts[pathParts.length - 1] : "index";
+  const currentSlug = pathParts.length > 1 ? pathParts[pathParts.length - 1] : "index";
 
   // Extract section and group if they exist
   let section = null;
@@ -45,7 +44,10 @@ function DocsPage() {
     meta: any;
     content: string;
   } | null>(null);
-  const [compiledMDX, setCompiledMDX] = useState<{ code: string; frontmatter: Record<string, any> } | null>(null);
+  const [compiledMDX, setCompiledMDX] = useState<{
+    code: string;
+    frontmatter: Record<string, any>;
+  } | null>(null);
   const [productDocs, setProductDocs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -112,22 +114,15 @@ function DocsPage() {
           let doc = null;
 
           // Check if this is the root path or product path without a trailing slash
-          if (
-            _splat === "" ||
-            (!_splat.includes("/") && !_splat.endsWith("/"))
-          ) {
+          if (_splat === "" || (!_splat.includes("/") && !_splat.endsWith("/"))) {
             // Add /index to handle the index case properly
             const indexPath = _splat ? `${fullPath}/index` : `${fullPath}index`;
             console.log(`[DocsPage] Trying explicit index path: ${indexPath}`);
             try {
               doc = await getDoc(indexPath);
-              console.log(
-                `[DocsPage] Successfully loaded explicit index document`
-              );
+              console.log(`[DocsPage] Successfully loaded explicit index document`);
             } catch (indexError) {
-              console.log(
-                `[DocsPage] Explicit index not found, trying normal path`
-              );
+              console.log(`[DocsPage] Explicit index not found, trying normal path`);
               // Fall back to the normal path
               doc = await getDoc(fullPath);
             }
@@ -136,9 +131,7 @@ function DocsPage() {
             try {
               doc = await getDoc(fullPath);
             } catch (exactPathError) {
-              console.log(
-                `[DocsPage] Exact path not found, trying index fallback`
-              );
+              console.log(`[DocsPage] Exact path not found, trying index fallback`);
 
               // If the path doesn't end with a slash and doesn't have a specific file,
               // try to load the index.mdx from that directory
@@ -146,15 +139,10 @@ function DocsPage() {
                 try {
                   const indexPath = `${fullPath}/`;
                   doc = await getDoc(indexPath);
-                  console.log(
-                    `[DocsPage] Successfully loaded index document with trailing slash`
-                  );
+                  console.log(`[DocsPage] Successfully loaded index document with trailing slash`);
                 } catch (indexError) {
                   // If index doesn't exist either, throw the original error
-                  console.error(
-                    `[DocsPage] Index not found either`,
-                    indexError
-                  );
+                  console.error(`[DocsPage] Index not found either`, indexError);
                   throw exactPathError;
                 }
               } else {
@@ -170,15 +158,11 @@ function DocsPage() {
 
           // Check for empty content
           if (!doc.content || doc.content.trim() === "") {
-            console.warn(
-              `[DocsPage] Empty content for ${fullPath}, leaving empty as requested`
-            );
+            console.warn(`[DocsPage] Empty content for ${fullPath}, leaving empty as requested`);
             doc.content = "";
           }
 
-          console.log(
-            `[DocsPage] Document loaded successfully: ${doc.meta.title}`
-          );
+          console.log(`[DocsPage] Document loaded successfully: ${doc.meta.title}`);
           setDocument(doc);
           setLoading(false);
         } catch (fetchErr) {
@@ -283,9 +267,7 @@ Get started with ${product} by exploring the documentation in the sidebar.`;
   useEffect(() => {
     // When there's an error, we want to set document to a fallback with "Untitled Document"
     if (error) {
-      console.log(
-        `[DocsPage] Setting fallback "Untitled Document" due to error: ${error}`
-      );
+      console.log(`[DocsPage] Setting fallback "Untitled Document" due to error: ${error}`);
       setDocument({
         meta: {
           title: "Untitled Document",
@@ -419,10 +401,7 @@ Get started with ${product} by exploring the documentation in the sidebar.`;
               <h1 className="text-2xl lg:text-3xl font-medium mb-4">
                 {fallbackDocument.meta.title}
               </h1>
-              <div
-                id="doc-content"
-                className="prose prose-sm lg:prose-base prose-slate max-w-none"
-              >
+              <div id="doc-content" className="prose prose-sm lg:prose-base prose-slate max-w-none">
                 {/* Empty content as requested */}
               </div>
             </div>
@@ -454,7 +433,7 @@ Get started with ${product} by exploring the documentation in the sidebar.`;
         setCompiledMDX(null);
       }
     };
-    
+
     processContent();
   }, [document]);
 
@@ -517,25 +496,14 @@ Get started with ${product} by exploring the documentation in the sidebar.`;
           {/* Main content area - full width on mobile */}
           <div className="flex-1 min-w-0 pt-6 lg:pl-8">
             {/* Title and content */}
-            <h1 className="text-2xl lg:text-3xl font-medium mb-4">
-              {document.meta.title}
-            </h1>
-            {document.meta.description &&
-              document.meta.description.trim() !== "" && (
-                <p className="text-gray-600 mb-6">
-                  {document.meta.description}
-                </p>
-              )}
-            <div
-              id="doc-content"
-              className="prose prose-sm lg:prose-base prose-slate max-w-none"
-            >
+            <h1 className="text-2xl lg:text-3xl font-medium mb-4">{document.meta.title}</h1>
+            {document.meta.description && document.meta.description.trim() !== "" && (
+              <p className="text-gray-600 mb-6">{document.meta.description}</p>
+            )}
+            <div id="doc-content" className="prose prose-sm lg:prose-base prose-slate max-w-none">
               {document.content ? (
                 compiledMDX ? (
-                  <MDXRenderer 
-                    code={compiledMDX.code} 
-                    frontmatter={compiledMDX.frontmatter} 
-                  />
+                  <MDXRenderer code={compiledMDX.code} frontmatter={compiledMDX.frontmatter} />
                 ) : (
                   <div className="animate-pulse bg-gray-100 h-40 rounded-md"></div>
                 )
@@ -549,9 +517,7 @@ Get started with ${product} by exploring the documentation in the sidebar.`;
           <div className="w-64 flex-shrink-0 hidden lg:block">
             <div className="fixed w-64 top-[60px] pt-6 max-h-[calc(100vh-60px)] overflow-y-auto">
               <div className="px-4 pt-12">
-                <h4 className="text-sm font-medium mb-4 text-gray-500">
-                  On this page
-                </h4>
+                <h4 className="text-sm font-medium mb-4 text-gray-500">On this page</h4>
                 <TableOfContents
                   contentId="doc-content"
                   product={product}
