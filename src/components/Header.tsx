@@ -100,6 +100,12 @@ export default function Header() {
                       ? "hover:text-gray-300 data-[state=open]:text-gray-300"
                       : "hover:text-gray-600 data-[state=open]:text-gray-600"
                   )}
+                  onClick={(e) => {
+                    // Prevent the default behavior which would toggle the dropdown
+                    e.preventDefault();
+                    // Navigate to Mirascope docs
+                    window.location.href = getProductRoute("mirascope");
+                  }}
                 >
                   Docs
                 </NavigationMenuTrigger>
