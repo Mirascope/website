@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import DocsSidebar from "@/components/DocsSidebar";
 import TableOfContents from "@/components/TableOfContents";
-import { MDXRenderer } from "@/components/MDXRenderer";
-import { processMDX } from "@/lib/mdx-utils";
+import MDXContent from "@/components/MDXContent";
 import { type DocMeta } from "@/lib/docs";
 import { Button } from "@/components/ui/button";
 import { Sparkles } from "lucide-react";
@@ -44,8 +43,6 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
   error,
   errorDetails,
 }) => {
-  // State for compiled MDX content
-  const [compiledMDX, setCompiledMDX] = useState<{ code: string; frontmatter: Record<string, any> } | null>(null);
   // Track if we're at a small screen breakpoint
   const [isSmallScreen, setIsSmallScreen] = useState(() => {
     if (typeof window !== "undefined") {
@@ -116,25 +113,6 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
       localStorage.setItem("docsFunMode", newMode.toString());
     }
   };
-  
-  // Process MDX content when document changes
-  useEffect(() => {
-    const processContent = async () => {
-      if (document && document.content) {
-        try {
-          const result = await processMDX(document.content);
-          setCompiledMDX(result);
-        } catch (error) {
-          console.error("Error processing MDX:", error);
-          setCompiledMDX(null);
-        }
-      } else {
-        setCompiledMDX(null);
-      }
-    };
-    
-    processContent();
-  }, [document]);
   // Loading state
   if (loading) {
     return (
@@ -442,19 +420,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
               id="doc-content"
               className="prose prose-sm lg:prose-base prose-slate max-w-none overflow-x-auto mdx-container"
             >
-              {document.content ? (
-                compiledMDX ? (
-                  <MDXRenderer 
-                    code={compiledMDX.code} 
-                    frontmatter={compiledMDX.frontmatter} 
-                    useFunMode={funMode} 
-                  />
-                ) : (
-                  <div className="animate-pulse bg-gray-100 h-40 rounded-md"></div>
-                )
-              ) : (
-                <div></div> /* Empty div for no content */
-              )}
+              <MDXContent source={document.content} useFunMode={funMode} />
             </div>
           </div>
         </div>
