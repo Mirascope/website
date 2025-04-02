@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useProvider } from "./ProviderContext";
 import type { Provider } from "./ProviderContext";
-import { useOS, operatingSystems } from "./OSSelector";
+import { CodeSnippet } from "./CodeSnippet";
 
 // Define available operating systems
 export type OS = "MacOS / Linux" | "Windows";
+export const operatingSystems: OS[] = ["MacOS / Linux", "Windows"];
 
 // Define API key variables for each provider
 const providerApiKeys: Record<Provider, string | null> = {
@@ -32,9 +33,19 @@ const specialInstallInstructions: Record<string, Record<OS, string>> = {
   }
 };
 
-export function InstallSnippet({ className = "" }: { className?: string }) {
+interface InstallSnippetProps {
+  className?: string;
+  showSelector?: boolean;
+}
+
+export function InstallSnippet({ 
+  className = "",
+  showSelector = true
+}: InstallSnippetProps) {
+  // Local state for OS selection
+  const [os, setOS] = useState<OS>("MacOS / Linux");
+  
   const { provider, providerInfo } = useProvider();
-  const { os } = useOS();
   
   // Get the set environment variable command based on OS
   const setEnvCmd = os === "MacOS / Linux" ? "export" : "set";
@@ -46,14 +57,42 @@ export function InstallSnippet({ className = "" }: { className?: string }) {
     ? specialInstallInstructions[provider][os]
     : `${setEnvCmd} ${apiKeyVar}=XXXX`;
   
+  // Installation command
+  const installCommand = `pip install "mirascope[${providerInfo.packageName}]"\n${specialInstructions}`;
+  
+  // OS selector component
+  const OSSelector = () => {
+    if (!showSelector) return null;
+    
+    return (
+      <div className="my-4">
+        <h4 className="text-sm font-medium mb-2">Select Operating System:</h4>
+        <div className="flex gap-2">
+          {operatingSystems.map((currentOS) => (
+            <button
+              key={currentOS}
+              onClick={() => setOS(currentOS)}
+              className={`px-3 py-1 text-sm rounded-md transition-colors ${
+                os === currentOS
+                  ? "bg-primary text-white"
+                  : "bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
+              }`}
+            >
+              {currentOS}
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  };
+  
   return (
-    <div className={`my-4 ${className}`}>
-      
-      <pre>
-        <code className="language-bash">
-          {`pip install "mirascope[${providerInfo.packageName}]"\n${specialInstructions}`}
-        </code>
-      </pre>
+    <div className={className}>
+      <OSSelector />
+      <CodeSnippet
+        code={installCommand}
+        language="bash"
+      />
     </div>
   );
 }

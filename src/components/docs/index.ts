@@ -4,4 +4,3 @@ export * from './CodeSnippet';
 export * from './ApiStyleCodeBlock';
 export * from './ProviderCodeBlock';
 export * from './InstallSnippet';
-export * from './OSSelector';

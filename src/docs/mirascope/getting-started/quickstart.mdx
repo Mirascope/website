@@ -6,11 +6,8 @@ description: Mirascope Getting Started Quickstart
 Install Mirascope, specifying the provider you intend to use, and set your API key:
 
 <ProviderContextProvider>
-  <OSContextProvider>
-    <ProviderSelector />
-    <OSSelector className="mt-4" />
-    <InstallSnippet className="mt-4" />
-  </OSContextProvider>
+  <ProviderSelector />
+  <InstallSnippet className="mt-4" />
 </ProviderContextProvider>
 
 ## Mirascope API
@@ -18,11 +15,9 @@ Install Mirascope, specifying the provider you intend to use, and set your API k
 Mirascope provides a consistent, easy-to-use API across all providers:
 
 <ProviderContextProvider>
-  <OSContextProvider>
-    <ApiStyleCodeBlock 
-      examplePath="mirascope/getting-started/quickstart" 
-    />
-  </OSContextProvider>
+  <ApiStyleCodeBlock 
+    examplePath="mirascope/getting-started/quickstart" 
+  />
 </ProviderContextProvider>
 
 ## Provider SDK Equivalent
@@ -30,9 +25,7 @@ Mirascope provides a consistent, easy-to-use API across all providers:
 For comparison, here's how you would achieve the same result using the provider's native SDK:
 
 <ProviderContextProvider>
-  <OSContextProvider>
-    <ProviderCodeBlock 
-      examplePath="mirascope/getting-started/quickstart" 
-    />
-  </OSContextProvider>
+  <ProviderCodeBlock 
+    examplePath="mirascope/getting-started/quickstart" 
+  />
 </ProviderContextProvider>
