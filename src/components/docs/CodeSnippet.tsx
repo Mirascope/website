@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { useProvider } from "./ProviderContext";
+import { CodeBlock } from "../CodeBlock";
 
 interface CodeSnippetProps {
   code?: string;
@@ -57,9 +58,7 @@ export function CodeSnippet({
   
   return (
     <div className={`my-4 ${className}`}>
-      <pre className="relative rounded-lg bg-gray-100 dark:bg-gray-800 p-4 overflow-x-auto">
-        <code className={`language-${language}`}>{processedContent}</code>
-      </pre>
+      <CodeBlock code={processedContent} language={language} />
     </div>
   );
 }
