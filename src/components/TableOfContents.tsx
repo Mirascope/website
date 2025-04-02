@@ -11,7 +11,7 @@ type TOCItem = {
 type TableOfContentsProps = {
   contentId: string;
   product: string;
-  section: string;
+  section: string | null;
   slug: string;
 };
 

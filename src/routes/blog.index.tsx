@@ -76,7 +76,7 @@ function BlogPage() {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 min-h-[650px]">
-                  {currentPosts.map((post, index) => (
+                  {currentPosts.map((post) => (
                     <Link
                       key={post.slug}
                       to={`/blog/${post.slug}`}

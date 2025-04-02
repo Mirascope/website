@@ -21,7 +21,7 @@ type DocsLayoutProps = {
     expectedPath: string;
     path: string;
     product: string;
-    section?: string;
+    section?: string | null;
     group?: string | null;
     slug: string;
   };

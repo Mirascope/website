@@ -17,19 +17,17 @@ export function ProviderCodeBlock({
   language = "python",
   className = "",
 }: ProviderCodeBlockProps) {
-  // Get the currently selected provider and provider defaults
-  const { provider, providerInfo } = useProvider();
+  // Get the currently selected provider
+  const { provider } = useProvider();
   
   // State for code examples and loading
   const [codeMap, setCodeMap] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   // Load all available provider code examples on mount
   useEffect(() => {
     async function loadProviderExamples() {
       setIsLoading(true);
-      setError(null);
       const newCodeMap: Record<string, string> = {};
       
       try {
@@ -69,7 +67,6 @@ export function ProviderCodeBlock({
         setIsLoading(false);
       } catch (err) {
         console.error("Error loading provider examples:", err);
-        setError(err instanceof Error ? err.message : String(err));
         setIsLoading(false);
       }
     }

@@ -22,7 +22,11 @@
     "noUncheckedSideEffectImports": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-    }
+      "@/*": ["./src/*"]
+    },
+    
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true
   }
 }

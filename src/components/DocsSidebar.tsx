@@ -1,4 +1,3 @@
-import React from "react";
 import { Link, useMatches } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import docsMetadata from "@/docs/_meta";
@@ -7,16 +6,23 @@ import { getSectionsForProduct } from "@/lib/docs";
 /**
  * DocsSidebar component - Renders navigation based on _meta.ts structure
  */
+import type { DocMeta } from "@/lib/docs";
+
+interface DocsSidebarProps {
+  product?: string;
+  section?: string | null;
+  currentSlug?: string;
+  currentGroup?: string | null;
+  docs?: DocMeta[];
+}
+
 const DocsSidebar = ({
   product = "",
-  section = null,
-  currentSlug = "",
   currentGroup = null,
-}) => {
+}: DocsSidebarProps) => {
   // Get current route from TanStack Router
   const matches = useMatches();
   const currentPath = matches[matches.length - 1]?.pathname || "";
-  const currentParams = matches[matches.length - 1]?.params || {};
 
   // Get metadata for this product
   const productData = docsMetadata[product];
@@ -41,11 +47,6 @@ const DocsSidebar = ({
     if (apiSection) orderedSections.push(apiSection);
   }
 
-  // Check if the current path includes a top-level group
-  const topLevelGroups = Object.keys(productData?.groups || {});
-  const matchingGroup = topLevelGroups.find((group) =>
-    currentPath.includes(`/docs/${product}/${group}/`)
-  );
 
   // For unknown products, only show the product selector
   if (!productData) {
@@ -106,7 +107,7 @@ const DocsSidebar = ({
   const isDocsTabActive = !matchingSection;
 
   // Helper function to check if a path matches the current path
-  const isActivePath = (path) => {
+  const isActivePath = (path: string) => {
     // Normalize paths by ensuring they end with a slash
     const normalizedPath = path.endsWith("/") ? path : `${path}/`;
     const normalizedCurrentPath = currentPath.endsWith("/")
@@ -216,16 +217,12 @@ const DocsSidebar = ({
               product={product}
               section={matchingSection}
               isActivePath={isActivePath}
-              currentPath={currentPath}
-              currentGroup={currentGroup}
             />
           ) : (
             // Show main docs content if we're not in a section
             <MainDocsContent
               product={product}
               isActivePath={isActivePath}
-              currentPath={currentPath}
-              currentGroup={currentGroup}
             />
           )}
         </nav>
@@ -234,14 +231,18 @@ const DocsSidebar = ({
   );
 };
 
+interface SectionContentProps {
+  product: string;
+  section: string;
+  isActivePath: (path: string) => boolean;
+}
+
 // Renders content for a section (e.g., API)
 const SectionContent = ({
   product,
   section,
   isActivePath,
-  currentPath,
-  currentGroup,
-}) => {
+}: SectionContentProps) => {
   const sectionData = docsMetadata[product]?.sections?.[section];
   if (!sectionData) return null;
 
@@ -274,7 +275,6 @@ const SectionContent = ({
 
       {/* Section groups */}
       {Object.entries(sectionData.groups || {}).map(([groupSlug, group]) => {
-        const groupUrl = `/docs/${product}/${section}/${groupSlug}/`;
 
         return (
           <div key={groupSlug} className="pt-4">
@@ -313,13 +313,16 @@ const SectionContent = ({
   );
 };
 
+interface MainDocsContentProps {
+  product: string;
+  isActivePath: (path: string) => boolean;
+}
+
 // Renders main docs content
 const MainDocsContent = ({
   product,
   isActivePath,
-  currentPath,
-  currentGroup,
-}) => {
+}: MainDocsContentProps) => {
   const productData = docsMetadata[product];
   if (!productData) return null;
 
@@ -350,7 +353,6 @@ const MainDocsContent = ({
 
       {/* Top-level groups */}
       {Object.entries(productData.groups || {}).map(([groupSlug, group]) => {
-        const groupUrl = `/docs/${product}/${groupSlug}/`;
 
         return (
           <div key={groupSlug} className="pt-4">
