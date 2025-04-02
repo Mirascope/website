@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useProvider } from "./ProviderContext";
 import { CodeSnippet } from "./CodeSnippet";
 
 // API style options
@@ -21,8 +20,6 @@ export function ApiStyleCodeBlock({
   // Local state for API style
   const [apiStyle, setApiStyle] = useState<ApiStyle>("messages");
   
-  // Get provider info for variable substitution
-  const { provider, providerInfo } = useProvider();
   
   // State for code examples
   const [messagesCode, setMessagesCode] = useState<string | null>(null);

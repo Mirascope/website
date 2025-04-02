@@ -1,7 +1,4 @@
-import React from "react";
 import { useProvider, providers } from "./ProviderContext";
-// Use type annotation instead of importing the type
-import type { Provider } from "./ProviderContext";
 
 // The provider selector component
 export function ProviderSelector({ className = "" }: { className?: string }) {

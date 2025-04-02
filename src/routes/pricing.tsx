@@ -1,13 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Check, Info, X } from "lucide-react";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardFooter,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   Tooltip,
@@ -20,34 +12,6 @@ export const Route = createFileRoute("/pricing")({
   component: PricingPage,
 });
 
-// Feature check component
-const FeatureCheck = ({
-  included = true,
-  feature,
-}: {
-  included?: boolean;
-  feature: string;
-}) => (
-  <div className="flex items-start space-x-3 py-2">
-    <div
-      className={cn(
-        "mt-0.5 rounded-full p-1",
-        included ? "bg-[#e8f5e9] dark:bg-[#193619]" : "bg-gray-100 dark:bg-gray-800"
-      )}
-    >
-      {included ? (
-        <Check size={16} className="text-[#2d8031]" />
-      ) : (
-        <X size={16} className="text-gray-400" />
-      )}
-    </div>
-    <span
-      className={cn("text-lg", included ? "text-gray-700 dark:text-gray-300" : "text-gray-500 dark:text-gray-400")}
-    >
-      {feature}
-    </span>
-  </div>
-);
 
 // Feature row component for displaying features with the same value across tiers
 const FeatureRow = ({

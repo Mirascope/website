@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useProvider } from "./ProviderContext";
 import type { Provider } from "./ProviderContext";
 import { CodeSnippet } from "./CodeSnippet";

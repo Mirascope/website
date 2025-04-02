@@ -138,7 +138,7 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
           setLoading(false);
         } catch (fetchErr) {
           console.error(
-            `${logPrefix} Error fetching document: ${fetchErr.message}`
+            `${logPrefix} Error fetching document: ${fetchErr instanceof Error ? fetchErr.message : String(fetchErr)}`
           );
 
           // If this is an index page, create a fallback
@@ -202,8 +202,9 @@ Get started with ${product} by exploring the documentation in the sidebar.`;
           throw fetchErr;
         }
       } catch (err) {
-        console.error(`[DocsPage] Failed to load document: ${err.message}`);
-        setError(`Failed to load document: ${err.message}`);
+        const errorMessage = err instanceof Error ? err.message : String(err);
+        console.error(`[DocsPage] Failed to load document: ${errorMessage}`);
+        setError(`Failed to load document: ${errorMessage}`);
         setLoading(false);
       }
     };
@@ -212,7 +213,14 @@ Get started with ${product} by exploring the documentation in the sidebar.`;
   }, [splat, product, section, group, currentSlug]);
 
   // Generate debug error details if needed
-  let errorDetails = null;
+  let errorDetails: { 
+    expectedPath: string; 
+    path: string; 
+    product: string; 
+    section: string | null; 
+    group: string | null; 
+    slug: string; 
+  } | undefined = undefined;
   if (error) {
     const expectedPath = section
       ? `/src/docs/${product}/${section}/${splat}.mdx`
