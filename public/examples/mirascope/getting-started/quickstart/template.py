@@ -1,10 +1,17 @@
 from mirascope import llm, prompt_template
+from pydantic import BaseModel
 
 
-@llm.call(provider="openai", model="gpt-4o-mini")
-@prompt_template("Recommend a {genre} book")
-def recommend_book(genre: str): ...
+class Book(BaseModel):
+    title: str
+    author: str
 
 
-response: llm.CallResponse = recommend_book("fantasy")
-print(response.content)
+@llm.call(provider="$PROVIDER_NAME", model="$PROVIDER_MODEL", response_model=Book)
+@prompt_template("Extract {text}")
+def extract_book(text: str): ...
+
+
+book: Book = extract_book("The Name of the Wind by Patrick Rothfuss")
+print(book)
+# Output: title='The Name of the Wind' author='Patrick Rothfuss'

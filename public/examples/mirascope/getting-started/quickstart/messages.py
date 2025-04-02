@@ -1,10 +1,19 @@
-from mirascope import Messages, llm
+from mirascope import llm
+from pydantic import BaseModel
 
 
-@llm.call(provider="openai", model="gpt-4o-mini")
-def recommend_book(genre: str) -> Messages.Type:
-    return Messages.User(f"Recommend a {genre} book")
+class Book(BaseModel):
+    """An extracted book."""
+ 
+    title: str
+    author: str
 
 
-response: llm.CallResponse = recommend_book("fantasy")
-print(response.content)
+@llm.call(provider="$PROVIDER_NAME", model="$PROVIDER_MODEL", response_model=Book)
+def extract_book(text: str) -> str:
+    return f"Extract {text}"
+
+
+book: Book = extract_book("The Name of the Wind by Patrick Rothfuss")
+print(book)
+# Output: title='The Name of the Wind' author='Patrick Rothfuss'
