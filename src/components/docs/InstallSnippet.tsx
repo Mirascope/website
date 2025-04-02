@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useProvider } from "./ProviderContext";
 import type { Provider } from "./ProviderContext";
-import { CodeSnippet } from "./CodeSnippet";
+import { CodeBlock } from "../CodeBlock";
+import { cn } from "@/lib/utils";
 
 // Define available operating systems
 export type OS = "MacOS / Linux" | "Windows";
@@ -57,36 +58,30 @@ export function InstallSnippet({ className = "", showSelector = true }: InstallS
   // Installation command
   const installCommand = `pip install "mirascope[${providerInfo.packageName}]"\n${specialInstructions}`;
 
-  // OS selector component
-  const OSSelector = () => {
-    if (!showSelector) return null;
-
-    return (
-      <div className="my-4">
-        <h4 className="text-sm font-medium mb-2">Select Operating System:</h4>
-        <div className="flex gap-2">
-          {operatingSystems.map((currentOS) => (
-            <button
-              key={currentOS}
-              onClick={() => setOS(currentOS)}
-              className={`px-3 py-1 text-sm rounded-md transition-colors ${
-                os === currentOS
-                  ? "bg-primary text-white"
-                  : "bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
-              }`}
-            >
-              {currentOS}
-            </button>
-          ))}
-        </div>
-      </div>
-    );
-  };
-
   return (
-    <div className={className}>
-      <OSSelector />
-      <CodeSnippet code={installCommand} language="bash" />
+    <div className={cn("rounded-md border-2 border-blue-600/50 bg-[#191c20] shadow-md overflow-hidden", className)}>
+      <div className="flex border-b border-gray-700 px-3">
+        {operatingSystems.map((currentOS) => (
+          <button
+            key={currentOS}
+            onClick={() => setOS(currentOS)}
+            className={cn(
+              "px-4 py-1.5 text-sm text-gray-400 hover:text-gray-200 relative",
+              (os === currentOS) && "text-white border-b-2 border-white"
+            )}
+          >
+            {currentOS}
+          </button>
+        ))}
+      </div>
+      
+      <div className="p-0 m-0">
+        <CodeBlock 
+          code={installCommand} 
+          language="bash" 
+          className="border-0 bg-transparent m-0 p-0" 
+        />
+      </div>
     </div>
   );
 }
