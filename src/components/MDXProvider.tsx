@@ -1,8 +1,7 @@
 import React from 'react';
 import { MDXProvider } from '@mdx-js/react';
 import { cn } from '@/lib/utils';
-import { ProviderContextProvider, ProviderSelector, InstallSnippet, CodeSnippet, OSSelector, OSContextProvider } from './docs';
-import { ApiStyleProvider, ApiStyleSelector, useApiStyle } from './docs/ApiStyleContext';
+import { ProviderContextProvider, ProviderSelector, InstallSnippet, CodeSnippet, ApiStyleCodeBlock, OSSelector, OSContextProvider } from './docs';
 
 // Helper function to generate heading ID from text
 const slugify = (text: string): string => {
@@ -28,20 +27,9 @@ export const components = {
   ProviderSelector,
   InstallSnippet,
   CodeSnippet,
+  ApiStyleCodeBlock,
   OSSelector,
   OSContextProvider,
-  ApiStyleProvider,
-  ApiStyleSelector,
-  
-  // Conditional components that consider ApiStyle
-  TemplatesOnly: ({ children }: { children: React.ReactNode }) => {
-    const { apiStyle } = useApiStyle();
-    return apiStyle === 'templates' ? <>{children}</> : null;
-  },
-  MessagesOnly: ({ children }: { children: React.ReactNode }) => {
-    const { apiStyle } = useApiStyle();
-    return apiStyle === 'messages' ? <>{children}</> : null;
-  },
   
   // Shorthand components
   Install: InstallSnippet,
