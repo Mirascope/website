@@ -1,14 +1,16 @@
 import { useState, useEffect } from "react";
-import { CodeSnippet } from "./CodeSnippet";
+import { CodeBlock } from "../CodeBlock";
+import Logo from "../Logo";
+import { cn } from "@/lib/utils";
 
-// API style options
-type ApiStyle = "messages" | "templates";
+type ApiStyle = "Messages" | "String Template";
 
 interface ApiStyleCodeBlockProps {
-  examplePath: string; // Path relative to public/examples
+  examplePath: string;
   language?: string;
   className?: string;
-  showSelector?: boolean; // Whether to show the style selector
+  showSelector?: boolean;
+  mirascopeHeader?: boolean;
 }
 
 export function ApiStyleCodeBlock({
@@ -16,30 +18,25 @@ export function ApiStyleCodeBlock({
   language = "python",
   className = "",
   showSelector = true,
+  mirascopeHeader = false,
 }: ApiStyleCodeBlockProps) {
-  // Local state for API style
-  const [apiStyle, setApiStyle] = useState<ApiStyle>("messages");
-
-  // State for code examples
+  const [apiStyle, setApiStyle] = useState<ApiStyle>("Messages");
   const [messagesCode, setMessagesCode] = useState<string | null>(null);
   const [templatesCode, setTemplatesCode] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Load both code examples at component mount
   useEffect(() => {
     async function loadExamples() {
       setIsLoading(true);
       setError(null);
 
       try {
-        // Fetch both files in parallel
         const [messagesRes, templatesRes] = await Promise.all([
           fetch(`/examples/${examplePath}/messages.py`),
           fetch(`/examples/${examplePath}/template.py`),
         ]);
 
-        // Check for HTTP errors
         if (!messagesRes.ok) {
           throw new Error(`Failed to load messages example (${messagesRes.status})`);
         }
@@ -47,13 +44,11 @@ export function ApiStyleCodeBlock({
           throw new Error(`Failed to load templates example (${templatesRes.status})`);
         }
 
-        // Get the text content
         const [messagesText, templatesText] = await Promise.all([
           messagesRes.text(),
           templatesRes.text(),
         ]);
 
-        // Store the code
         setMessagesCode(messagesText);
         setTemplatesCode(templatesText);
         setIsLoading(false);
@@ -67,70 +62,70 @@ export function ApiStyleCodeBlock({
     loadExamples();
   }, [examplePath]);
 
-  // API Style selector component
-  const StyleSelector = () => {
-    if (!showSelector) return null;
+  const codeToDisplay = apiStyle === "Messages" ? messagesCode : templatesCode;
 
-    const styles: ApiStyle[] = ["messages", "templates"];
-
-    return (
-      <div className={`my-4`}>
-        <h4 className="text-sm font-medium mb-2">API Style:</h4>
-        <div className="flex gap-2">
-          {styles.map((style) => (
-            <button
-              key={style}
-              onClick={() => setApiStyle(style)}
-              className={`px-3 py-1 text-sm rounded-md transition-colors capitalize ${
-                apiStyle === style
-                  ? "bg-primary text-white"
-                  : "bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
-              }`}
-            >
-              {style}
-            </button>
-          ))}
-        </div>
-      </div>
-    );
-  };
-
-  // Show loading state
   if (isLoading) {
     return (
-      <div className={className}>
-        <StyleSelector />
-        <div className="my-4 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse">
-          <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded mb-2 w-3/4"></div>
-          <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
-          <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded mb-2 w-5/6"></div>
-          <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded mb-2 w-2/3"></div>
+      <div className={cn("rounded-xl border border-blue-600/40 bg-[#191c20] shadow-md overflow-hidden", className)}>
+        <div className="p-4 animate-pulse">
+          <div className="h-6 bg-gray-700 rounded mb-4 w-1/4"></div>
+          <div className="h-5 bg-gray-800 rounded mb-2 w-3/4"></div>
+          <div className="h-5 bg-gray-800 rounded mb-2"></div>
+          <div className="h-5 bg-gray-800 rounded mb-2 w-5/6"></div>
+          <div className="h-5 bg-gray-800 rounded mb-2 w-2/3"></div>
         </div>
       </div>
     );
   }
 
-  // Show error state
   if (error) {
     return (
-      <div className={className}>
-        <StyleSelector />
-        <div className="my-4 p-4 border-l-4 border-red-500 bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-300 rounded">
-          <p className="font-medium">Error loading code examples</p>
-          <p className="text-sm mt-1">{error}</p>
+      <div className={cn("rounded-xl border border-red-500 bg-[#191c20] shadow-md overflow-hidden", className)}>
+        <div className="p-4">
+          <p className="font-medium text-red-400">Error loading code examples</p>
+          <p className="text-sm mt-1 text-red-300">{error}</p>
         </div>
       </div>
     );
   }
 
-  // Display the appropriate code based on API style
-  const codeToDisplay = apiStyle === "messages" ? messagesCode : templatesCode;
-
-  // The CodeSnippet will handle the variable replacement
+  const tabs = ["Messages", "String Template"];
+  
   return (
-    <div className={className}>
-      <StyleSelector />
-      <CodeSnippet code={codeToDisplay || "// Code example not available"} language={language} />
+    <div className={cn("rounded-md border-2 border-blue-600/50 bg-[#191c20] shadow-md overflow-hidden", className)}>
+      {mirascopeHeader && (
+        <div className="px-4 py-2.5 flex items-center bg-blue-800/20">
+          <Logo 
+            size="micro" 
+            withText={true} 
+            textClassName="text-white opacity-90 font-medium" 
+          />
+        </div>
+      )}
+      
+      <div className="flex border-b border-gray-700 px-3 mt-0">
+        {tabs.map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setApiStyle(tab as ApiStyle)}
+            className={cn(
+              "px-4 py-1.5 text-sm text-gray-400 hover:text-gray-200 relative",
+              (tab === apiStyle) && "text-white border-b-2 border-white"
+            )}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+      
+      <div className="p-0 m-0">
+        <CodeBlock 
+          code={codeToDisplay || "# Code example not available"} 
+          language={language} 
+          className="border-0 bg-transparent m-0 p-0" 
+        />
+      </div>
+      
     </div>
   );
 }

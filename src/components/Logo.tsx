@@ -2,7 +2,7 @@ import React from "react";
 import { cn } from "@/lib/utils";
 
 interface LogoProps {
-  size?: "small" | "medium" | "large";
+  size?: "micro" | "small" | "medium" | "large";
   withText?: boolean;
   className?: string;
   textClassName?: string;
@@ -25,6 +25,13 @@ const Logo: React.FC<LogoProps> = ({
 }) => {
   // Size mappings for the logo
   const sizeMap = {
+    micro: {
+      container: "w-auto",
+      img: "h-4 w-auto",
+      text: "text-xs",
+      spacing: "mr-1.5",
+      wrapper: "px-1.5 py-0.5",
+    },
     small: {
       container: "w-auto",
       img: "h-7 w-auto",
