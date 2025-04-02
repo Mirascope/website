@@ -1,7 +1,7 @@
 import React from 'react';
 import { MDXProvider } from '@mdx-js/react';
 import { cn } from '@/lib/utils';
-import { ProviderContextProvider, ProviderSelector, InstallSnippet, CodeSnippet, ApiStyleCodeBlock, ProviderCodeBlock, OSSelector, OSContextProvider } from './docs';
+import { ProviderContextProvider, ProviderSelector, InstallSnippet, CodeSnippet, ApiStyleCodeBlock, ProviderCodeBlock } from './docs';
 
 // Helper function to generate heading ID from text
 const slugify = (text: string): string => {
@@ -29,8 +29,6 @@ export const components = {
   CodeSnippet,
   ApiStyleCodeBlock,
   ProviderCodeBlock,
-  OSSelector,
-  OSContextProvider,
   
   // Shorthand components
   Install: InstallSnippet,
