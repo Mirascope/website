@@ -1,15 +1,44 @@
 from openai import OpenAI
+from pydantic import BaseModel
 
 client = OpenAI()
 
 
-def recommend_book(genre: str) -> str:
+class Book(BaseModel):
+    """An extracted book."""
+
+    title: str
+    author: str
+
+
+def extract_book(text: str) -> Book:
     completion = client.chat.completions.create(
         model="gpt-4o-mini",
-        messages=[{"role": "user", "content": f"Recommend a {genre} book"}],
+        messages=[{"role": "user", "content": f"Extract {text}"}],
+        tools=[
+            {
+                "function": {
+                    "name": "Book",
+                    "description": "An extracted book.",
+                    "parameters": {
+                        "properties": {
+                            "title": {"type": "string"},
+                            "author": {"type": "string"},
+                        },
+                        "required": ["title", "author"],
+                        "type": "object",
+                    },
+                },
+                "type": "function",
+            }
+        ],
+        tool_choice="required",
     )
-    return str(completion.choices[0].message.content)
+    if tool_calls := completion.choices[0].message.tool_calls:
+        return Book.model_validate_json(tool_calls[0].function.arguments)
+    raise ValueError("No tool call found")
 
 
-output = recommend_book("fantasy")
-print(output)
+book = extract_book("The Name of the Wind by Patrick Rothfuss")
+print(book)
+# Output: title='The Name of the Wind' author='Patrick Rothfuss'
