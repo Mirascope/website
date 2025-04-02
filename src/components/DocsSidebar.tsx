@@ -5,6 +5,8 @@ import { getSectionsForProduct } from "@/lib/docs";
 import { getProductRoute, getSectionRoute, getSectionParams } from "@/lib/routes";
 import type { ProductName } from "@/lib/route-types";
 import type { DocMeta } from "@/lib/docs";
+import { Server } from "lucide-react";
+import { type Provider, ProviderContextProvider, ProviderDropdown } from "./docs";
 
 interface DocsSidebarProps {
   product: ProductName;
@@ -12,9 +14,11 @@ interface DocsSidebarProps {
   currentSlug: string;
   currentGroup: string | null;
   docs: DocMeta[];
+  selectedProvider?: Provider;
+  onProviderChange?: (provider: Provider) => void;
 }
 
-const DocsSidebar = ({ product, currentGroup }: DocsSidebarProps) => {
+const DocsSidebar = ({ product, currentGroup, selectedProvider, onProviderChange }: DocsSidebarProps) => {
   // Get current route from TanStack Router
   const matches = useMatches();
   const currentPath = matches[matches.length - 1]?.pathname || "";

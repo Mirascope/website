@@ -21,7 +21,14 @@ export function ProviderDropdown({ className }: ProviderDropdownProps) {
     <div className={cn("flex flex-col", className)}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm" className="w-full justify-between">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className={cn(
+              "w-full justify-between",
+              provider && "border-blue-300 dark:border-blue-700 text-blue-600 dark:text-blue-400"
+            )}
+          >
             {provider}
             <ChevronDown className="h-4 w-4 ml-2" />
           </Button>
@@ -33,7 +40,7 @@ export function ProviderDropdown({ className }: ProviderDropdownProps) {
               onClick={() => setProvider(p)}
               className={cn(
                 "cursor-pointer",
-                provider === p && "bg-primary/10 font-medium"
+                provider === p && "bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 font-medium"
               )}
             >
               {p}
