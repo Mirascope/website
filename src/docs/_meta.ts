@@ -14,17 +14,20 @@
 // Basic item structure
 export interface DocMetaItem {
   title: string;
+  description?: string;
 }
 
 // Group of documents
 export interface DocGroup {
   title: string;
+  description?: string;
   items: Record<string, DocMetaItem>;
 }
 
 // Section of documentation (like API)
 export interface DocSection {
   title: string; 
+  description?: string;
   defaultSlug?: string;
   items: Record<string, DocMetaItem>;  // Direct section items
   groups?: Record<string, DocGroup>;   // Grouped section items
