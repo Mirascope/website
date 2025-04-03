@@ -36,10 +36,9 @@ const specialInstallInstructions: Record<string, Record<OS, string>> = {
 
 interface InstallSnippetProps {
   className?: string;
-  showSelector?: boolean;
 }
 
-export function InstallSnippet({ className = "", showSelector = true }: InstallSnippetProps) {
+export function InstallSnippet({ className = "" }: InstallSnippetProps) {
   // Local state for OS selection
   const [os, setOS] = useState<OS>("MacOS / Linux");
 
