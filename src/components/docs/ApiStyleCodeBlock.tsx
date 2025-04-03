@@ -9,7 +9,6 @@ interface ApiStyleCodeBlockProps {
   examplePath: string;
   language?: string;
   className?: string;
-  showSelector?: boolean;
   mirascopeHeader?: boolean;
 }
 
@@ -17,7 +16,6 @@ export function ApiStyleCodeBlock({
   examplePath,
   language = "python",
   className = "",
-  showSelector = true,
   mirascopeHeader = false,
 }: ApiStyleCodeBlockProps) {
   const [apiStyle, setApiStyle] = useState<ApiStyle>("Messages");
