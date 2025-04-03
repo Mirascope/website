@@ -1,6 +1,173 @@
 ---
 title: Why Mirascope?
-description: Why use Mirascope?
+description: Why use Mirascope for your LLM applications
 ---
 
-This is the Mirascope Why Use Mirascope content.
+Trusted by founders and engineers building the next generation of AI-native applications:
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div className="border rounded-md p-4 bg-white dark:bg-gray-800">
+    <p className="font-bold">Jake Duth</p>
+    <p className="text-sm text-gray-600 dark:text-gray-400">Co-Founder & CTO / Reddy</p>
+    <p className="mt-2 italic">"Mirascope's simplicity made it the natural next step from OpenAI's API — all without fighting the unnecessary complexity of tools like LangChain. We have all the bells and whistles we need for production while maintaining exceptional ease of use."</p>
+  </div>
+  
+  <div className="border rounded-md p-4 bg-white dark:bg-gray-800">
+    <p className="font-bold">Vince Trost</p>
+    <p className="text-sm text-gray-600 dark:text-gray-400">Co-Founder / Plastic Labs</p>
+    <p className="mt-2 italic">"The Pydantic inspired LLM toolkit the space has been missing. Simple, modular, extensible...helps where you need it, stays out of your way when you don't."</p>
+  </div>
+
+  <div className="border rounded-md p-4 bg-white dark:bg-gray-800">
+    <p className="font-bold">Skylar Payne</p>
+    <p className="text-sm text-gray-600 dark:text-gray-400">VP of Engineering & DS / Health Rhythms</p>
+    <p className="mt-2 italic">"Mirascope's 'abstractions that aren't obstructions' tagline rings true – I was up and running in minutes, with seamless switching between AI providers. The type system catches any schema issues while I iterate, letting me focus entirely on crafting the perfect prompts."</p>
+  </div>
+
+  <div className="border rounded-md p-4 bg-white dark:bg-gray-800">
+    <p className="font-bold">Off Sornsoontorn</p>
+    <p className="text-sm text-gray-600 dark:text-gray-400">Senior AI & ML Engineer / Six Atomic</p>
+    <p className="mt-2 italic">"LangChain required learning many concepts and its rigid abstractions made LLM behavior hard to customize. Mirascope lets us easily adapt LLM behaviors to any UI/UX design, so we can focus on innovation rather than working around limitations."</p>
+  </div>
+
+  <div className="border rounded-md p-4 bg-white dark:bg-gray-800">
+    <p className="font-bold">William Profit</p>
+    <p className="text-sm text-gray-600 dark:text-gray-400">Co-Founder / Callisto</p>
+    <p className="mt-2 italic">"After trying many alternatives, we chose Mirascope for our large project and haven't looked back. It's simple, lean, and gets the job done without getting in the way. The team & community are super responsive, making building even easier."</p>
+  </div>
+
+  <div className="border rounded-md p-4 bg-white dark:bg-gray-800">
+    <p className="font-bold">Rami Awar</p>
+    <p className="text-sm text-gray-600 dark:text-gray-400">Founder / DataLine</p>
+    <p className="mt-2 italic">"Migrating DataLine to Mirascope feels like I was rid of a pebble in my shoe that I never knew existed. This is what good design should feel like. Well done."</p>
+  </div>
+</div>
+
+## Abstractions That Aren't Obstructions
+
+Mirascope provides powerful abstractions that simplify LLM interactions without hiding the underlying mechanics. This approach gives you the convenience of high-level APIs while maintaining full control and transparency.
+
+### Everything Beyond The Prompt Is Boilerplate
+
+By eliminating boilerplate, Mirascope allows you to focus on what matters most: your prompt.
+
+Let's compare structured outputs using Mirascope vs. the official SDKs:
+
+#### Mirascope API
+
+<ApiStyleCodeBlock 
+  mirascopeHeader={true}
+  examplePath="mirascope/getting-started/quickstart" 
+/>
+
+#### Provider SDK Equivalent
+
+<ProviderCodeBlock 
+  examplePath="mirascope/getting-started/quickstart"
+  collapsible={false}
+  headerText="Official SDK"
+/>
+
+Reducing this boilerplate becomes increasingly important as the number and complexity of your calls grows beyond a single basic example. Furthermore, the Mirascope interface works across all of our various supported providers, so you don't need to learn the intricacies of each provider to use them the same way.
+
+### Functional, Modular Design
+
+Mirascope's functional approach promotes modularity and reusability. You can easily compose and chain LLM calls, creating complex workflows with simple, readable code.
+
+The goal of our design approach is to remain **Pythonic** so you can **build your way**.
+
+### Provider-Agnostic When Wanted, Specific When Needed
+
+We understand the desire for easily switching between various LLM providers. We also understand the (common) need to engineer a prompt for a specific provider (and model).
+
+By implementing our LLM API call functionality as decorators, Mirascope makes implementing any and all of these paths straightforward and easy:
+
+#### Provider-Specific
+
+```python
+from mirascope.core import anthropic, openai
+
+
+@openai.call("gpt-4o-mini")
+def openai_recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+@anthropic.call("claude-3-5-sonnet-20240620")
+def anthropic_recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+openai_response = openai_recommend_book("fantasy")
+print(openai_response.content)
+
+anthropic_response = anthropic_recommend_book("fantasy")
+print(anthropic_response.content)
+```
+
+#### Provider-Agnostic
+
+```python
+from mirascope.core import anthropic, openai, prompt_template
+
+
+@prompt_template()
+def recommend_book_prompt(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+# OpenAI
+openai_model = "gpt-4o-mini"
+openai_recommend_book = openai.call(openai_model)(recommend_book_prompt)
+openai_response = openai_recommend_book("fantasy")
+print(openai_response.content)
+
+# Anthropic
+anthropic_model = "claude-3-5-sonnet-20240620"
+anthropic_recommend_book = anthropic.call(anthropic_model)(recommend_book_prompt)
+anthropic_response = anthropic_recommend_book("fantasy")
+print(anthropic_response.content)
+```
+
+### Type Hints & Editor Support
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+  <div className="border rounded-md p-4 bg-white dark:bg-gray-800">
+    <p className="font-bold">🛡️ Type Safety</p>
+    <p>Catch errors before runtime during lint</p>
+  </div>
+  
+  <div className="border rounded-md p-4 bg-white dark:bg-gray-800">
+    <p className="font-bold">💡 Editor Support</p>
+    <p>Rich autocomplete and inline documentation</p>
+  </div>
+</div>
+
+## Who Should Use Mirascope?
+
+Mirascope is **designed for everyone** to use!
+
+However, we believe that the value of Mirascope will shine in particular for:
+
+- **Professional Developers**: Who need fine-grained control and transparency in their LLM interactions.
+- **AI Application Builders**: Looking for a tool that can grow with their project from prototype to production.
+- **Teams**: Who value clean, maintainable code and want to avoid the "black box" problem of many AI frameworks.
+- **Researchers and Experimenters**: Who need the flexibility to quickly try out new ideas without fighting their tools.
+
+## Getting Started
+
+<div className="flex flex-wrap gap-4 my-6">
+  <a href="./quickstart" className="inline-flex items-center px-6 py-3 border border-blue-400 dark:border-blue-500 text-base font-medium rounded-md text-blue-500 dark:text-blue-400 bg-transparent hover:bg-blue-50 dark:hover:bg-blue-900/20">
+    🚀 Quick Start
+  </a>
+  <a href="../learn" className="inline-flex items-center px-6 py-3 border border-blue-400 dark:border-blue-500 text-base font-medium rounded-md text-blue-500 dark:text-blue-400 bg-transparent hover:bg-blue-50 dark:hover:bg-blue-900/20">
+    📚 Learn More
+  </a>
+  <a href="https://join.slack.com/t/mirascope-community/shared_invite/zt-2ilqhvmki-FB6LWluInUCkkjYD3oSjNA" className="inline-flex items-center px-6 py-3 border border-blue-400 dark:border-blue-500 text-base font-medium rounded-md text-blue-500 dark:text-blue-400 bg-transparent hover:bg-blue-50 dark:hover:bg-blue-900/20">
+    👥 Join Our Community
+  </a>
+</div>
+
+By choosing Mirascope, you're opting for a tool that respects your expertise as a developer while providing the conveniences you need to work efficiently and effectively with LLMs.
+
+We believe the best tools get out of your way and let you focus on building great applications.
