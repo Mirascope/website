@@ -17,6 +17,7 @@
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant sunset (&:is(.sunset *));
 
 body {
   @apply m-0;
@@ -221,7 +222,6 @@ h6 code {
 
 .sunset .bg-watercolor-flipped::before {
   background-image: url("/sunset-mode-watercolor-background.png");
-  opacity: 1;
 }
 
 :root {
@@ -308,6 +308,7 @@ h6 code {
 .sunset {
   /* Keep text colors the same as light mode */
   --background: oklch(0.998 0.001 90); /* Very slightly warmer white */
+  /* Removed gradient background */
   --foreground: oklch(0.141 0.005 285.823); /* Same as light mode */
   --card: oklch(0.985 0.004 95); /* Same as light mode */
   --card-foreground: oklch(0.141 0.005 285.823); /* Same as light mode */
