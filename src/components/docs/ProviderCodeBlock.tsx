@@ -31,7 +31,8 @@ export function ProviderCodeBlock({
   const [isLoading, setIsLoading] = useState(true);
   
   // State for collapsible behavior - must be declared here, not conditionally
-  const [isExpanded, setIsExpanded] = useState(true);
+  // Default to collapsed when collapsible is true
+  const [isExpanded, setIsExpanded] = useState(!collapsible);
 
   // Load all available provider code examples on mount
   useEffect(() => {
