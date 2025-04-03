@@ -6,6 +6,11 @@ import {
   CodeSnippet,
   ApiStyleCodeBlock,
   ProviderCodeBlock,
+  Callout,
+  Note,
+  Warning,
+  Info,
+  Success,
 } from "./docs";
 import { CodeBlock } from "./CodeBlock";
 
@@ -35,6 +40,11 @@ export const components = {
   CodeSnippet,
   ApiStyleCodeBlock,
   ProviderCodeBlock,
+  Callout,
+  Note,
+  Warning,
+  Info,
+  Success,
 
   // Shorthand components
   Install: InstallSnippet,
