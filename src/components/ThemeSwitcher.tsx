@@ -54,16 +54,14 @@ export default function ThemeSwitcher() {
     // Store the current theme
     localStorage.setItem("theme", theme);
 
-    // For sunset mode on homepage, we need a reload to properly show the background
+    // For sunset mode on homepage, update the background without reloading
     if (
       (prevTheme === "sunset" || theme === "sunset") &&
       prevTheme !== theme &&
       window.location.pathname === "/"
     ) {
-      // Reload the page after a slight delay to ensure the theme class is applied
-      setTimeout(() => {
-        window.location.reload();
-      }, 50);
+      // Instead of reloading, dynamically update the background
+      document.body.style.transition = "background-image 0.3s ease";
     }
   }, [theme, mounted]);
 
