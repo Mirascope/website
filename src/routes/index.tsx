@@ -19,7 +19,7 @@ function LandingPage() {
           />
         </div>
 
-        <div className="text-black dark:text-white mt-0 flex flex-col font-medium tracking-tight drop-shadow-sm">
+        <div className="text-black dark:text-white mt-0 flex flex-col font-medium tracking-tight dark:drop-shadow-lg">
           <span
             style={{ fontSize: "clamp(2.5rem, 8vw, 6rem)", lineHeight: "0.9" }}
             className="whitespace-normal sm:whitespace-nowrap font-handwriting mb-8"
