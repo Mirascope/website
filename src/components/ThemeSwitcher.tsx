@@ -36,37 +36,34 @@ export default function ThemeSwitcher() {
 
     // Store previous theme for comparison
     const prevTheme = localStorage.getItem("theme") || "system";
-    
+
     // Clear previous themes
     const root = document.documentElement;
     root.classList.remove("light", "dark", "sunset");
-    
+
     // Apply current theme
     if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
       root.classList.add(systemTheme);
     } else {
       root.classList.add(theme);
     }
-    
+
     // Store the current theme
     localStorage.setItem("theme", theme);
-    
-    // Instead of reloading, let's update the background directly
-    // This provides a smoother transition
-    if ((prevTheme === "sunset" || theme === "sunset") && 
-        prevTheme !== theme) {
-      // Update watercolor backgrounds without reloading
-      const bgElements = document.querySelectorAll('.bg-watercolor-flipped');
-      bgElements.forEach(el => {
-        // Force a repaint of the pseudoelement by temporarily modifying the element
-        if (el instanceof HTMLElement) {
-          const currentDisplay = el.style.display;
-          el.style.display = 'none';
-          void el.offsetHeight; // Trigger reflow
-          el.style.display = currentDisplay;
-        }
-      });
+
+    // For sunset mode on homepage, we need a reload to properly show the background
+    if (
+      (prevTheme === "sunset" || theme === "sunset") &&
+      prevTheme !== theme &&
+      window.location.pathname === "/"
+    ) {
+      // Reload the page after a slight delay to ensure the theme class is applied
+      setTimeout(() => {
+        window.location.reload();
+      }, 50);
     }
   }, [theme, mounted]);
 
@@ -75,7 +72,7 @@ export default function ThemeSwitcher() {
     if (!mounted) return;
 
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    
+
     const handleChange = () => {
       if (theme === "system") {
         const systemTheme = mediaQuery.matches ? "dark" : "light";
@@ -97,9 +94,9 @@ export default function ThemeSwitcher() {
       <DropdownMenuTrigger asChild>
         <button
           className={cn(
-            "p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary transition-colors",
-            isLandingPage 
-              ? "text-white hover:text-gray-200" 
+            "p-2 mr-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary transition-colors",
+            isLandingPage
+              ? "text-white hover:text-gray-200"
               : "text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
           )}
           aria-label="Select theme"
