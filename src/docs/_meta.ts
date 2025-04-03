@@ -63,9 +63,6 @@ const meta: DocsStructure = {
       "getting-started": {
         title: "Getting Started",
         items: {
-          quickstart: {
-            title: "Quickstart",
-          },
           why: {
             title: "Why Mirascope?",
           },
