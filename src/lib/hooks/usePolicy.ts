@@ -13,7 +13,7 @@ interface UsePolicyResult {
 
 /**
  * Custom hook to fetch and process policy content
- * 
+ *
  * @param policyPath - Path to the policy MDX file
  * @param defaultTitle - Default title to use if metadata is missing
  * @returns Object containing policy metadata, compiled MDX, loading state, and error
@@ -51,6 +51,6 @@ export function usePolicy(policyPath: string, defaultTitle: string): UsePolicyRe
     policyMeta: policyMeta ?? { title: defaultTitle },
     compiledMDX,
     loading,
-    error
+    error,
   };
 }
