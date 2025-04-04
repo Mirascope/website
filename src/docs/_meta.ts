@@ -15,6 +15,7 @@
 export interface DocMetaItem {
   title: string;
   description?: string;
+  hasExtractableSnippets?: boolean; // Flag to indicate the doc has code snippets that should be extracted
 }
 
 // Group of documents
@@ -63,6 +64,7 @@ const meta: DocsStructure = {
           quickstart: {
             title: "Quickstart",
             description: "Get started with Mirascope",
+            hasExtractableSnippets: true,
           },
           why: {
             title: "Why Mirascope?",
@@ -136,5 +138,63 @@ const meta: DocsStructure = {
     },
   },
 };
+
+/**
+ * Helper function to iterate through all docs in the metadata
+ * @returns An array of objects with product, path, and metadata for each doc
+ */
+export function getAllDocs(): Array<{ product: string; path: string; meta: DocMetaItem }> {
+  const allDocs: Array<{ product: string; path: string; meta: DocMetaItem }> = [];
+
+  // Loop through all products and their docs
+  for (const [product, productDocs] of Object.entries(meta)) {
+    // Process top-level items
+    for (const [key, docMeta] of Object.entries(productDocs.items)) {
+      allDocs.push({
+        product,
+        path: key,
+        meta: docMeta,
+      });
+    }
+
+    // Process items in groups
+    for (const [groupKey, group] of Object.entries(productDocs.groups)) {
+      for (const [itemKey, docMeta] of Object.entries(group.items)) {
+        allDocs.push({
+          product,
+          path: `${groupKey}/${itemKey}`,
+          meta: docMeta,
+        });
+      }
+    }
+
+    // Process items in sections
+    for (const [sectionKey, section] of Object.entries(productDocs.sections)) {
+      // Direct section items
+      for (const [itemKey, docMeta] of Object.entries(section.items)) {
+        allDocs.push({
+          product,
+          path: `${sectionKey}/${itemKey}`,
+          meta: docMeta,
+        });
+      }
+
+      // Items in section groups
+      if (section.groups) {
+        for (const [groupKey, group] of Object.entries(section.groups)) {
+          for (const [itemKey, docMeta] of Object.entries(group.items)) {
+            allDocs.push({
+              product,
+              path: `${sectionKey}/${groupKey}/${itemKey}`,
+              meta: docMeta,
+            });
+          }
+        }
+      }
+    }
+  }
+
+  return allDocs;
+}
 
 export default meta;
