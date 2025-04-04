@@ -68,7 +68,7 @@ export default function Header() {
   return (
     <header
       className={cn(
-        "py-6 px-4 sm:px-6 flex justify-center items-center fixed top-0 left-0 right-0 w-full z-50 transition-all duration-200",
+        "py-6 px-4 sm:px-6 flex justify-center items-center fixed top-0 left-0 right-0 w-full z-50",
         isLandingPage
           ? "bg-transparent text-white"
           : "bg-background text-slate-800 dark:text-white sunset:text-slate-800",
