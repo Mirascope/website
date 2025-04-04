@@ -13,7 +13,7 @@ import {
   Info,
   Success,
 } from "./docs";
-import { CodeBlock } from "./CodeBlock";
+import { ProviderCodeWrapper } from "./ProviderCodeWrapper";
 
 // Helper function to generate heading ID from text
 const slugify = (text: string): string => {
@@ -131,7 +131,7 @@ export const components = {
     );
   },
 
-  // Code blocks - use our custom CodeBlock component
+  // Code blocks - use our custom CodeBlock component with provider substitution
   pre: (props: React.ComponentPropsWithoutRef<"pre">) => {
     // Direct extraction approach that works with MDX's structure
     let codeContent = "";
@@ -212,9 +212,15 @@ export const components = {
       }
     }
 
-    // If we found code content and a language, use our CodeBlock component
+    // If we found code content and a language, use our ProviderCodeWrapper component
     if (codeContent) {
-      return <CodeBlock code={codeContent.replace(/\n$/, "")} language={language} meta={meta} />;
+      return (
+        <ProviderCodeWrapper
+          code={codeContent.replace(/\n$/, "")}
+          language={language}
+          meta={meta}
+        />
+      );
     }
 
     // Fallback to standard pre if not a code block or couldn't extract content
