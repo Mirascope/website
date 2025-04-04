@@ -63,9 +63,14 @@ const meta: DocsStructure = {
           why: {
             title: "Why Mirascope?",
           },
-          migration: {
-            title: "Migration Guide",
+          help: {
+            title: "Help",
+            description: "How to get help with Mirascope",
           },
+          migration: {
+            title: "0.x Migration Guide",
+          },
+
         },
       },
     },
