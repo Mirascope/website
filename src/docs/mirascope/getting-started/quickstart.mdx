@@ -23,7 +23,7 @@ The `call` decorator in Mirascope transforms Python functions into LLM API calls
 from mirascope import llm
 
 
-@llm.call(provider="$PROVIDER_NAME", model="$PROVIDER_MODEL")
+@llm.call(provider="$PROVIDER", model="$MODEL")
 def get_capital(country: str) -> str:
     return f"What is the capital of {country}?"
 
@@ -50,7 +50,7 @@ This approach allows you to use LLMs as if they were regular Python functions, m
 Streaming allows you to process LLM responses in real-time, which is particularly useful for long-form content generation or when you want to provide immediate feedback to users.
 
 ```python
-@llm.call(provider="$PROVIDER_NAME", model="$PROVIDER_MODEL", stream=True)
+@llm.call(provider="$PROVIDER", model="$MODEL", stream=True)
 def stream_city_info(city: str) -> str:
     return f"Provide a brief description of {city}."
 
@@ -88,7 +88,7 @@ class Capital(BaseModel):
     country: str
 
 
-@llm.call(provider="$PROVIDER_NAME", model="$PROVIDER_MODEL", response_model=Capital)
+@llm.call(provider="$PROVIDER", model="$MODEL", response_model=Capital)
 def extract_capital(query: str) -> str:
     return f"{query}"
 
@@ -106,7 +106,7 @@ city='Paris' country='France'
 JSON mode allows you to directly parse LLM outputs as JSON. This is particularly useful when you need structured data from your LLM calls.
 
 ```python
-@llm.call(provider="$PROVIDER_NAME", model="$PROVIDER_MODEL", json_mode=True)
+@llm.call(provider="$PROVIDER", model="$MODEL", json_mode=True)
 def city_info(city: str) -> str:
     return f"Provide information about {city} in JSON format"
 
@@ -188,7 +188,7 @@ class CityInfo(BaseModel):
     country: str
 
 
-@llm.call(provider="$PROVIDER_NAME", model="$PROVIDER_MODEL", json_mode=True, response_model=CityInfo)
+@llm.call(provider="$PROVIDER", model="$MODEL", json_mode=True, response_model=CityInfo)
 def city_info(city: str) -> str:
     return f"Provide information about {city} in JSON format"
 
@@ -218,7 +218,7 @@ class Capital(BaseModel):
     country: str
 
 
-@llm.call(provider="$PROVIDER_NAME", model="$PROVIDER_MODEL", response_model=Capital)
+@llm.call(provider="$PROVIDER", model="$MODEL", response_model=Capital)
 async def get_capital_async(country: str) -> str:
     return f"What is the capital of {country}?"
 
@@ -272,7 +272,7 @@ def parse_cot(response: llm.CallResponse) -> str:
     return match.group(1).strip()
 
 
-@llm.call(provider="$PROVIDER_NAME", model="$PROVIDER_MODEL", output_parser=parse_cot)
+@llm.call(provider="$PROVIDER", model="$MODEL", output_parser=parse_cot)
 @prompt_template(
     """
     First, output your thought process in <thinking> tags.

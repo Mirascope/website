@@ -6,7 +6,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
-import { useProvider, providers } from "./ProviderContext";
+import { useProvider, providers, providerDefaults } from "./ProviderContext";
 import { cn } from "@/lib/utils";
 
 interface ProviderDropdownProps {
@@ -28,7 +28,7 @@ export function ProviderDropdown({ className }: ProviderDropdownProps) {
               provider && "border-blue-300 dark:border-blue-700 text-blue-600 dark:text-blue-400"
             )}
           >
-            {provider}
+            {providerDefaults[provider].displayName}
             <ChevronDown className="h-4 w-4 ml-2" />
           </Button>
         </DropdownMenuTrigger>
@@ -43,7 +43,7 @@ export function ProviderDropdown({ className }: ProviderDropdownProps) {
                   "bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 font-medium"
               )}
             >
-              {p}
+              {providerDefaults[p].displayName}
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>

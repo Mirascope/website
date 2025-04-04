@@ -130,7 +130,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
   // Helper function to validate a provider string
   const validateProvider = (provider: string | null): Provider => {
     if (!provider || !providers.includes(provider as Provider)) {
-      return "OpenAI"; // Default fallback if invalid
+      return "openai"; // Default fallback if invalid
     }
     return provider as Provider;
   };
@@ -141,7 +141,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
       const savedProvider = localStorage.getItem("selectedProvider");
       return validateProvider(savedProvider);
     }
-    return "OpenAI";
+    return "openai";
   });
 
   // Handle provider change and save to localStorage
