@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useProvider, providerDefaults } from "./ProviderContext";
+import { useProvider } from "./ProviderContext";
 import { CodeBlock } from "../CodeBlock";
 import { cn } from "@/lib/utils";
 import { ChevronDown, ChevronUp, Wrench } from "lucide-react";
@@ -41,9 +41,8 @@ export function ProviderCodeBlock({
       const newCodeMap: Record<string, string> = {};
 
       try {
-        // Just load the current provider
-        const { packageName } = providerDefaults[provider];
-        const url = `/examples/${examplePath}/sdk/${packageName}.py`;
+        // Load the current provider's example
+        const url = `/examples/${examplePath}/sdk/${provider}.py`;
 
         try {
           const response = await fetch(url);

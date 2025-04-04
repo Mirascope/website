@@ -20,17 +20,11 @@ export function ProviderCodeWrapper({
   // Only process python or bash code
   if (code && (language === "python" || language === "bash")) {
     // Check if this code block contains provider variables
-    const hasProviderVars =
-      code.includes("$PROVIDER_NAME") ||
-      code.includes("$PROVIDER_PACKAGE") ||
-      code.includes("$PROVIDER_MODEL");
+    const hasProviderVars = code.includes("$PROVIDER") || code.includes("$MODEL");
 
     if (hasProviderVars) {
       // Replace provider variables
-      code = code
-        .replace(/\$PROVIDER_NAME/g, provider.toLowerCase())
-        .replace(/\$PROVIDER_PACKAGE/g, providerInfo.packageName)
-        .replace(/\$PROVIDER_MODEL/g, providerInfo.defaultModel);
+      code = code.replace(/\$PROVIDER/g, provider).replace(/\$MODEL/g, providerInfo.defaultModel);
     }
   }
 

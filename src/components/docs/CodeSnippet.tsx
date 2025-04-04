@@ -50,11 +50,10 @@ export function CodeSnippet({
     }
   }
 
-  // Replace template variables without complex parsing
+  // Replace template variables
   const processedContent = String(content)
-    .replace(/\$PROVIDER_NAME/g, provider.toLowerCase())
-    .replace(/\$PROVIDER_PACKAGE/g, providerInfo.packageName)
-    .replace(/\$PROVIDER_MODEL/g, providerInfo.defaultModel);
+    .replace(/\$PROVIDER/g, provider)
+    .replace(/\$MODEL/g, providerInfo.defaultModel);
 
   return (
     <div className={`my-4 ${className}`}>
