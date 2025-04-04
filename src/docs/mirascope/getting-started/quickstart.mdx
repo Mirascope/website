@@ -1,23 +1,19 @@
+---
+title: Quickstart
+description: Get started with Mirascope across various LLM providers.
+---
+
 # Quickstart
 
-Mirascope supports various LLM providers, including [OpenAI](https://openai.com/), [Anthropic](https://www.anthropic.com/), [Mistral](https://mistral.ai/), [Gemini](https://gemini.google.com), [Groq](https://groq.com/), [Cohere](https://cohere.com/), [LiteLLM](https://www.litellm.ai/), [Azure AI](https://azure.microsoft.com/en-us/solutions/ai), and [Vertex AI](https://cloud.google.com/vertex-ai). For the purposes of this guide, we will be using OpenAI.
+Mirascope supports various LLM providers, including [OpenAI](https://openai.com/), [Anthropic](https://www.anthropic.com/), [Mistral](https://mistral.ai/), [Gemini](https://gemini.google.com), [Groq](https://groq.com/), [Cohere](https://cohere.com/), [LiteLLM](https://www.litellm.ai/), [Azure AI](https://azure.microsoft.com/en-us/solutions/ai), and [Vertex AI](https://cloud.google.com/vertex-ai). You can select your preferred provider using the dropdown menu above.
 
 ## Setup
 
-Let's start by installing Mirascope and its dependencies:
+Let's start by installing Mirascope and setting up your API keys:
 
-```python
-pip install "mirascope[openai]"
-```
+<InstallSnippet />
 
-This command installs Mirascope along with the necessary packages for the OpenAI integration.
-
-```python
-import os
-
-os.environ["OPENAI_API_KEY"] = "YOUR_API_KEY"
-# Set the appropriate API key for the provider you're using
-```
+This installs Mirascope with the necessary packages for your chosen provider and configures the appropriate API keys.
 
 ## Basic LLM Call
 
@@ -27,7 +23,7 @@ The `call` decorator in Mirascope transforms Python functions into LLM API calls
 from mirascope import llm
 
 
-@llm.call(provider="openai", model="gpt-4o-mini")
+@llm.call(provider="$PROVIDER_NAME", model="$PROVIDER_MODEL")
 def get_capital(country: str) -> str:
     return f"What is the capital of {country}?"
 
@@ -42,9 +38,9 @@ The capital of Japan is Tokyo.
 
 In this example:
 1. We import the `llm` module from Mirascope, which provides the `call` decorator.
-2. The `@llm.call(provider="openai", model="gpt-4o-mini")` decorator specifies which LLM model to use.
+2. The `@llm.call` decorator specifies which provider and model to use.
 3. We return the content of a single user message in the function body.
-4. When we call `get_capital("Japan")`, it templates the prompt, sends a request to the OpenAI API, and returns the response.
+4. When we call `get_capital("Japan")`, it templates the prompt, sends a request to the provider's API, and returns the response.
 5. We print the `content` of the response, which contains the LLM's answer.
 
 This approach allows you to use LLMs as if they were regular Python functions, making it easy to integrate AI capabilities into your applications.
@@ -54,7 +50,7 @@ This approach allows you to use LLMs as if they were regular Python functions, m
 Streaming allows you to process LLM responses in real-time, which is particularly useful for long-form content generation or when you want to provide immediate feedback to users.
 
 ```python
-@llm.call(proivider="openai", model="gpt-4o-mini", stream=True)
+@llm.call(provider="$PROVIDER_NAME", model="$PROVIDER_MODEL", stream=True)
 def stream_city_info(city: str) -> str:
     return f"Provide a brief description of {city}."
 
@@ -83,7 +79,7 @@ Streaming is beneficial for:
 Response models in Mirascope allow you to structure and validate the output from LLMs. This feature is particularly useful when you need to ensure that the LLM's response adheres to a specific format or contains certain fields.
 
 ```python
-from mirascope.core import llm
+from mirascope import llm
 from pydantic import BaseModel
 
 
@@ -92,7 +88,7 @@ class Capital(BaseModel):
     country: str
 
 
-@llm.call(provider="openai", model="gpt-4o-mini", response_model=Capital)
+@llm.call(provider="$PROVIDER_NAME", model="$PROVIDER_MODEL", response_model=Capital)
 def extract_capital(query: str) -> str:
     return f"{query}"
 
@@ -110,7 +106,7 @@ city='Paris' country='France'
 JSON mode allows you to directly parse LLM outputs as JSON. This is particularly useful when you need structured data from your LLM calls.
 
 ```python
-@llm.call(provider="openai", model="gpt-4o-mini", json_mode=True)
+@llm.call(provider="$PROVIDER_NAME", model="$PROVIDER_MODEL", json_mode=True)
 def city_info(city: str) -> str:
     return f"Provide information about {city} in JSON format"
 
@@ -192,7 +188,7 @@ class CityInfo(BaseModel):
     country: str
 
 
-@llm.call(provider="openai", model="gpt-4o-mini", json_mode=True, response_model=CityInfo)
+@llm.call(provider="$PROVIDER_NAME", model="$PROVIDER_MODEL", json_mode=True, response_model=CityInfo)
 def city_info(city: str) -> str:
     return f"Provide information about {city} in JSON format"
 
@@ -214,9 +210,15 @@ Mirascope supports asynchronous processing, allowing for efficient parallel exec
 ```python
 from mirascope import llm
 import asyncio
+from pydantic import BaseModel
 
 
-@llm.call(provider="openai", model="gpt-4o-mini", response_model=Capital)
+class Capital(BaseModel):
+    city: str
+    country: str
+
+
+@llm.call(provider="$PROVIDER_NAME", model="$PROVIDER_MODEL", response_model=Capital)
 async def get_capital_async(country: str) -> str:
     return f"What is the capital of {country}?"
 
@@ -263,14 +265,14 @@ from mirascope import llm, prompt_template
 
 
 def parse_cot(response: llm.CallResponse) -> str:
-    pattern = r"<thinking>.?*</thinking>.*?<output>(.*?)</output>"
+    pattern = r"<thinking>.*?</thinking>.*?<output>(.*?)</output>"
     match = re.search(pattern, response.content, re.DOTALL)
     if not match:
         return response.content
     return match.group(1).strip()
 
 
-@llm.call(provider="openai", model="gpt-4o-mini", output_parser=parse_cot)
+@llm.call(provider="$PROVIDER_NAME", model="$PROVIDER_MODEL", output_parser=parse_cot)
 @prompt_template(
     """
     First, output your thought process in <thinking> tags.
@@ -280,6 +282,7 @@ def parse_cot(response: llm.CallResponse) -> str:
     """
 )
 def chain_of_thought(question: str): 
+    pass
 
 
 question = "Roger has 5 tennis balls. He buys 2 cans of 3. How many does he have now?"
