@@ -1,6 +1,6 @@
 ---
 title: Mirascope
-description: 
+description: Mirascope is a Python library that streamlines working with LLMs
 ---
 
 <div className="badge-container">
@@ -22,4 +22,29 @@ Whether you're generating text, extracting structured information, or developing
     <a href="https://github.com/Mirascope/mirascope" className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-white hover:bg-primary/90 transition-colors"><span className="material-icon">⭐</span> Star the Repo</a>
 </div>
 
+## Getting Started
 
+Install Mirascope, specifying the provider you intend to use, and set your API key:
+
+<InstallSnippet className="mt-4" />
+
+## Mirascope API
+
+Mirascope provides a consistent, easy-to-use API across all providers:
+
+<ApiStyleCodeBlock 
+  mirascopeHeader={true}
+  examplePath="mirascope/getting-started/quickstart" 
+/>
+
+## Provider SDK Equivalent
+
+For comparison, here's how you would achieve the same result using the provider's native SDK:
+
+<ProviderCodeBlock 
+  examplePath="mirascope/getting-started/quickstart"
+  collapsible={true}
+  headerText="Official SDK"
+/>
+
+We're excited to see what you'll build with Mirascope, and we're here to help! Don't hesitate to reach out :)

@@ -11,10 +11,10 @@ import reportWebVitals from "./reportWebVitals.ts";
 // Initial theme setup (later handled by ThemeSwitcher component)
 const initializeTheme = () => {
   const savedTheme = localStorage.getItem("theme");
-  
+
   // Remove any existing theme classes
   document.documentElement.classList.remove("light", "dark", "sunset");
-  
+
   if (savedTheme === "light") {
     document.documentElement.classList.add("light");
   } else if (savedTheme === "dark") {

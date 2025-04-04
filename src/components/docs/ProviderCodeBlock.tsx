@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
-import { useProvider, providers, providerDefaults } from "./ProviderContext";
-import { CodeSnippet } from "./CodeSnippet";
+import { useProvider, providerDefaults } from "./ProviderContext";
+import { CodeBlock } from "../CodeBlock";
+import { cn } from "@/lib/utils";
+import { ChevronDown, ChevronUp, Wrench } from "lucide-react";
 
 interface ProviderCodeBlockProps {
   examplePath: string; // Path relative to public/examples
   language?: string;
   className?: string;
+  collapsible?: boolean;
+  headerText?: string;
 }
 
 /**
@@ -16,6 +20,8 @@ export function ProviderCodeBlock({
   examplePath,
   language = "python",
   className = "",
+  collapsible = false,
+  headerText = "",
 }: ProviderCodeBlockProps) {
   // Get the currently selected provider
   const { provider } = useProvider();
@@ -24,6 +30,10 @@ export function ProviderCodeBlock({
   const [codeMap, setCodeMap] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(true);
 
+  // State for collapsible behavior - must be declared here, not conditionally
+  // Default to collapsed when collapsible is true
+  const [isExpanded, setIsExpanded] = useState(!collapsible);
+
   // Load all available provider code examples on mount
   useEffect(() => {
     async function loadProviderExamples() {
@@ -31,39 +41,29 @@ export function ProviderCodeBlock({
       const newCodeMap: Record<string, string> = {};
 
       try {
-        // Try to load all providers in parallel
-        const loadPromises = providers.map(async (p) => {
-          // Use the packageName from providerDefaults
-          const { packageName } = providerDefaults[p];
-          const url = `/examples/${examplePath}/sdk/${packageName}.py`;
+        // Just load the current provider
+        const { packageName } = providerDefaults[provider];
+        const url = `/examples/${examplePath}/sdk/${packageName}.py`;
 
-          try {
-            const response = await fetch(url);
-            if (response.ok) {
-              const text = await response.text();
+        try {
+          const response = await fetch(url);
+          if (response.ok) {
+            const text = await response.text();
 
-              // Validate it's actual code and not an HTML error page
-              if (
-                text.trim().startsWith("<!DOCTYPE html>") ||
-                text.trim().startsWith("<html") ||
-                text.includes("<head>")
-              ) {
-                console.warn(`Got HTML instead of Python for ${p}:`, text.substring(0, 100));
-                return { provider: p, success: false };
-              }
-
-              newCodeMap[p] = text;
-              return { provider: p, success: true };
+            // Validate it's actual code and not an HTML error page
+            if (
+              text.trim().startsWith("<!DOCTYPE html>") ||
+              text.trim().startsWith("<html") ||
+              text.includes("<head>")
+            ) {
+              console.warn(`Got HTML instead of Python for ${provider}:`, text.substring(0, 100));
+            } else {
+              newCodeMap[provider] = text;
             }
-            return { provider: p, success: false };
-          } catch (err) {
-            console.log(`Failed to load example for ${p}:`, err);
-            return { provider: p, success: false };
           }
-        });
-
-        // Wait for all fetch operations to complete
-        await Promise.all(loadPromises);
+        } catch (err) {
+          console.log(`Failed to load example for ${provider}:`, err);
+        }
 
         setCodeMap(newCodeMap);
         setIsLoading(false);
@@ -74,7 +74,7 @@ export function ProviderCodeBlock({
     }
 
     loadProviderExamples();
-  }, [examplePath]);
+  }, [examplePath, provider]);
 
   // Show loading state
   if (isLoading) {
@@ -96,15 +96,52 @@ export function ProviderCodeBlock({
   // If we don't have code for the current provider, show an empty code block
   const codeToDisplay = currentProviderCode || "// No example available for this provider yet";
 
+  // Toggle collapse/expand
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   // Display the code
   return (
-    <div className={className}>
-      {!currentProviderCode && (
-        <div className="mb-2 px-3 py-1 text-sm bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-300 rounded">
-          Example for {provider} not available yet.
+    <div
+      className={cn(
+        "rounded-md border-2 border-blue-600/50 bg-[#191c20] shadow-md overflow-hidden",
+        className
+      )}
+    >
+      {collapsible && (
+        <div
+          className="px-4 py-2.5 flex items-center justify-between bg-blue-800/20 cursor-pointer"
+          onClick={toggleExpand}
+        >
+          <div className="flex items-center">
+            <div className="bg-blue-500 rounded-full p-0.5 mr-2 flex items-center justify-center w-5 h-5">
+              <Wrench className="text-white w-3 h-3" />
+            </div>
+            <span className="text-white font-medium">{headerText || "Official SDK"}</span>
+          </div>
+          {isExpanded ? (
+            <ChevronUp className="h-5 w-5 text-white" />
+          ) : (
+            <ChevronDown className="h-5 w-5 text-white" />
+          )}
         </div>
       )}
-      <CodeSnippet code={codeToDisplay} language={language} />
+
+      {isExpanded && (
+        <div className="p-0 m-0">
+          {!currentProviderCode && (
+            <div className="px-4 py-2 text-sm text-yellow-300 bg-yellow-900/20">
+              Example for {provider} not available yet.
+            </div>
+          )}
+          <CodeBlock
+            code={codeToDisplay}
+            language={language}
+            className="border-0 bg-transparent m-0 p-0"
+          />
+        </div>
+      )}
     </div>
   );
 }

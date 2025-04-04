@@ -49,11 +49,16 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
     setTimeout(() => setIsCopied(false), 2000);
   };
 
+  // If loading, just show the code without syntax highlighting to maintain size
   if (isLoading) {
     return (
       <div
-        className={`code-block-wrapper ${className} animate-pulse bg-gray-100 dark:bg-gray-800 h-32 rounded-lg`}
-      ></div>
+        className={`code-block-wrapper relative rounded-lg overflow-hidden m-0 p-0 border border-gray-100 dark:border-gray-800 text-sm ${className}`}
+      >
+        <pre className="p-4 bg-gray-100 dark:bg-[#191c20] m-0 opacity-40">
+          <code>{code}</code>
+        </pre>
+      </div>
     );
   }
 
