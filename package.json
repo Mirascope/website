@@ -1,7 +1,6 @@
 {
   "name": "my-app",
   "private": true,
-  "type": "module",
   "scripts": {
     "start": "vite --port 3000",
     "build": "vite build && tsc",
@@ -11,10 +10,12 @@
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\"",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\"",
     "prepare": "husky",
-    "pre-commit": "lint-staged && npm run typecheck"
+    "pre-commit": "lint-staged && npm run typecheck",
+    "update-snippets": "ts-node --project tsconfig.scripts.json scripts/update-snippets.ts"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,css,md,mdx}": "prettier --write"
+    "*.{js,jsx,ts,tsx,json,css,md,mdx}": "prettier --write",
+    "src/docs/**/*.mdx": "ts-node --project tsconfig.scripts.json scripts/update-snippets.ts --check"
   },
   "dependencies": {
     "@mdx-js/react": "^3.1.0",
@@ -44,6 +45,7 @@
     "@shikijs/transformers": "^3.2.1",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.2.0",
+    "@types/node": "^22.14.0",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
     "@vitejs/plugin-react": "^4.3.4",
@@ -51,6 +53,7 @@
     "jsdom": "^26.0.0",
     "lint-staged": "^15.5.0",
     "prettier": "^3.5.3",
+    "ts-node": "^10.9.2",
     "typescript": "^5.7.2",
     "vite": "^6.1.0",
     "vitest": "^3.0.5",

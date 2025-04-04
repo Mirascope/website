@@ -10,25 +10,25 @@ export const operatingSystems: OS[] = ["MacOS / Linux", "Windows"];
 
 // Define API key variables for each provider
 const providerApiKeys: Record<Provider, string | null> = {
-  OpenAI: "OPENAI_API_KEY",
-  Anthropic: "ANTHROPIC_API_KEY",
-  Mistral: "MISTRAL_API_KEY",
-  Google: "GOOGLE_API_KEY",
-  Groq: "GROQ_API_KEY",
-  Cohere: "CO_API_KEY",
-  LiteLLM: "OPENAI_API_KEY", // LiteLLM uses OpenAI's API key by default
-  "Azure AI": "AZURE_API_KEY",
-  Bedrock: null, // Superceded by custom instruction
-  xAI: "XAI_API_KEY",
+  openai: "OPENAI_API_KEY",
+  anthropic: "ANTHROPIC_API_KEY",
+  mistral: "MISTRAL_API_KEY",
+  google: "GOOGLE_API_KEY",
+  groq: "GROQ_API_KEY",
+  cohere: "CO_API_KEY",
+  litellm: "OPENAI_API_KEY", // LiteLLM uses OpenAI's API key by default
+  azure: "AZURE_API_KEY",
+  bedrock: null, // Superceded by custom instruction
+  xai: "XAI_API_KEY",
 };
 
 // Special cases for providers like Bedrock, Azure, etc.
 const specialInstallInstructions: Record<string, Record<OS, string>> = {
-  Bedrock: {
+  bedrock: {
     "MacOS / Linux": "aws configure",
     Windows: "aws configure",
   },
-  "Azure AI": {
+  azure: {
     "MacOS / Linux": "export AZURE_INFERENCE_ENDPOINT=XXXX\nexport AZURE_INFERENCE_CREDENTIAL=XXXX",
     Windows: "set AZURE_INFERENCE_ENDPOINT=XXXX\nset AZURE_INFERENCE_CREDENTIAL=XXXX",
   },
@@ -42,7 +42,7 @@ export function InstallSnippet({ className = "" }: InstallSnippetProps) {
   // Local state for OS selection
   const [os, setOS] = useState<OS>("MacOS / Linux");
 
-  const { provider, providerInfo } = useProvider();
+  const { provider } = useProvider();
 
   // Get the set environment variable command based on OS
   const setEnvCmd = os === "MacOS / Linux" ? "export" : "set";
@@ -55,7 +55,7 @@ export function InstallSnippet({ className = "" }: InstallSnippetProps) {
     : `${setEnvCmd} ${apiKeyVar}=XXXX`;
 
   // Installation command
-  const installCommand = `pip install "mirascope[${providerInfo.packageName}]"\n${specialInstructions}`;
+  const installCommand = `pip install "mirascope[${provider}]"\n${specialInstructions}`;
 
   return (
     <div

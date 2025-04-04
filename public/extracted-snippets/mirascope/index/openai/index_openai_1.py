@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# Example 1: Mirascope API
+# Generated for provider: openai
+# This file is auto-generated and should not be edited directly
+
 from mirascope import llm
 from pydantic import BaseModel
 
@@ -9,7 +14,7 @@ class Book(BaseModel):
     author: str
 
 
-@llm.call(provider="$PROVIDER_NAME", model="$PROVIDER_MODEL", response_model=Book)
+@llm.call(provider="openai", model="gpt-4o-mini", response_model=Book)
 def extract_book(text: str) -> str:
     return f"Extract {text}"
 
