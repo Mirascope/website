@@ -11,12 +11,14 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as TermsImport } from './routes/terms'
 import { Route as PrivacyImport } from './routes/privacy'
 import { Route as PricingImport } from './routes/pricing'
 import { Route as IndexImport } from './routes/index'
+import { Route as TermsIndexImport } from './routes/terms/index'
 import { Route as DocsIndexImport } from './routes/docs.index'
 import { Route as BlogIndexImport } from './routes/blog.index'
+import { Route as TermsUseImport } from './routes/terms/use'
+import { Route as TermsServiceImport } from './routes/terms/service'
 import { Route as DocsSplatImport } from './routes/docs.$'
 import { Route as BlogSlugImport } from './routes/blog.$slug'
 import { Route as DocsProductSplatImport } from './routes/docs.$product.$'
@@ -24,12 +26,6 @@ import { Route as DocsProductGuidesSplatImport } from './routes/docs.$product.gu
 import { Route as DocsProductApiSplatImport } from './routes/docs.$product.api.$'
 
 // Create/Update Routes
-
-const TermsRoute = TermsImport.update({
-  id: '/terms',
-  path: '/terms',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const PrivacyRoute = PrivacyImport.update({
   id: '/privacy',
@@ -49,6 +45,12 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const TermsIndexRoute = TermsIndexImport.update({
+  id: '/terms/',
+  path: '/terms/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const DocsIndexRoute = DocsIndexImport.update({
   id: '/docs/',
   path: '/docs/',
@@ -58,6 +60,18 @@ const DocsIndexRoute = DocsIndexImport.update({
 const BlogIndexRoute = BlogIndexImport.update({
   id: '/blog/',
   path: '/blog/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const TermsUseRoute = TermsUseImport.update({
+  id: '/terms/use',
+  path: '/terms/use',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const TermsServiceRoute = TermsServiceImport.update({
+  id: '/terms/service',
+  path: '/terms/service',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -116,13 +130,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyImport
       parentRoute: typeof rootRoute
     }
-    '/terms': {
-      id: '/terms'
-      path: '/terms'
-      fullPath: '/terms'
-      preLoaderRoute: typeof TermsImport
-      parentRoute: typeof rootRoute
-    }
     '/blog/$slug': {
       id: '/blog/$slug'
       path: '/blog/$slug'
@@ -137,6 +144,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DocsSplatImport
       parentRoute: typeof rootRoute
     }
+    '/terms/service': {
+      id: '/terms/service'
+      path: '/terms/service'
+      fullPath: '/terms/service'
+      preLoaderRoute: typeof TermsServiceImport
+      parentRoute: typeof rootRoute
+    }
+    '/terms/use': {
+      id: '/terms/use'
+      path: '/terms/use'
+      fullPath: '/terms/use'
+      preLoaderRoute: typeof TermsUseImport
+      parentRoute: typeof rootRoute
+    }
     '/blog/': {
       id: '/blog/'
       path: '/blog'
@@ -149,6 +170,13 @@ declare module '@tanstack/react-router' {
       path: '/docs'
       fullPath: '/docs'
       preLoaderRoute: typeof DocsIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/terms/': {
+      id: '/terms/'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsIndexImport
       parentRoute: typeof rootRoute
     }
     '/docs/$product/$': {
@@ -181,11 +209,13 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
-  '/terms': typeof TermsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/docs/$': typeof DocsSplatRoute
+  '/terms/service': typeof TermsServiceRoute
+  '/terms/use': typeof TermsUseRoute
   '/blog': typeof BlogIndexRoute
   '/docs': typeof DocsIndexRoute
+  '/terms': typeof TermsIndexRoute
   '/docs/$product/$': typeof DocsProductSplatRoute
   '/docs/$product/api/$': typeof DocsProductApiSplatRoute
   '/docs/$product/guides/$': typeof DocsProductGuidesSplatRoute
@@ -195,11 +225,13 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
-  '/terms': typeof TermsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/docs/$': typeof DocsSplatRoute
+  '/terms/service': typeof TermsServiceRoute
+  '/terms/use': typeof TermsUseRoute
   '/blog': typeof BlogIndexRoute
   '/docs': typeof DocsIndexRoute
+  '/terms': typeof TermsIndexRoute
   '/docs/$product/$': typeof DocsProductSplatRoute
   '/docs/$product/api/$': typeof DocsProductApiSplatRoute
   '/docs/$product/guides/$': typeof DocsProductGuidesSplatRoute
@@ -210,11 +242,13 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
-  '/terms': typeof TermsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/docs/$': typeof DocsSplatRoute
+  '/terms/service': typeof TermsServiceRoute
+  '/terms/use': typeof TermsUseRoute
   '/blog/': typeof BlogIndexRoute
   '/docs/': typeof DocsIndexRoute
+  '/terms/': typeof TermsIndexRoute
   '/docs/$product/$': typeof DocsProductSplatRoute
   '/docs/$product/api/$': typeof DocsProductApiSplatRoute
   '/docs/$product/guides/$': typeof DocsProductGuidesSplatRoute
@@ -226,11 +260,13 @@ export interface FileRouteTypes {
     | '/'
     | '/pricing'
     | '/privacy'
-    | '/terms'
     | '/blog/$slug'
     | '/docs/$'
+    | '/terms/service'
+    | '/terms/use'
     | '/blog'
     | '/docs'
+    | '/terms'
     | '/docs/$product/$'
     | '/docs/$product/api/$'
     | '/docs/$product/guides/$'
@@ -239,11 +275,13 @@ export interface FileRouteTypes {
     | '/'
     | '/pricing'
     | '/privacy'
-    | '/terms'
     | '/blog/$slug'
     | '/docs/$'
+    | '/terms/service'
+    | '/terms/use'
     | '/blog'
     | '/docs'
+    | '/terms'
     | '/docs/$product/$'
     | '/docs/$product/api/$'
     | '/docs/$product/guides/$'
@@ -252,11 +290,13 @@ export interface FileRouteTypes {
     | '/'
     | '/pricing'
     | '/privacy'
-    | '/terms'
     | '/blog/$slug'
     | '/docs/$'
+    | '/terms/service'
+    | '/terms/use'
     | '/blog/'
     | '/docs/'
+    | '/terms/'
     | '/docs/$product/$'
     | '/docs/$product/api/$'
     | '/docs/$product/guides/$'
@@ -267,11 +307,13 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
-  TermsRoute: typeof TermsRoute
   BlogSlugRoute: typeof BlogSlugRoute
   DocsSplatRoute: typeof DocsSplatRoute
+  TermsServiceRoute: typeof TermsServiceRoute
+  TermsUseRoute: typeof TermsUseRoute
   BlogIndexRoute: typeof BlogIndexRoute
   DocsIndexRoute: typeof DocsIndexRoute
+  TermsIndexRoute: typeof TermsIndexRoute
   DocsProductSplatRoute: typeof DocsProductSplatRoute
   DocsProductApiSplatRoute: typeof DocsProductApiSplatRoute
   DocsProductGuidesSplatRoute: typeof DocsProductGuidesSplatRoute
@@ -281,11 +323,13 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
-  TermsRoute: TermsRoute,
   BlogSlugRoute: BlogSlugRoute,
   DocsSplatRoute: DocsSplatRoute,
+  TermsServiceRoute: TermsServiceRoute,
+  TermsUseRoute: TermsUseRoute,
   BlogIndexRoute: BlogIndexRoute,
   DocsIndexRoute: DocsIndexRoute,
+  TermsIndexRoute: TermsIndexRoute,
   DocsProductSplatRoute: DocsProductSplatRoute,
   DocsProductApiSplatRoute: DocsProductApiSplatRoute,
   DocsProductGuidesSplatRoute: DocsProductGuidesSplatRoute,
@@ -304,11 +348,13 @@ export const routeTree = rootRoute
         "/",
         "/pricing",
         "/privacy",
-        "/terms",
         "/blog/$slug",
         "/docs/$",
+        "/terms/service",
+        "/terms/use",
         "/blog/",
         "/docs/",
+        "/terms/",
         "/docs/$product/$",
         "/docs/$product/api/$",
         "/docs/$product/guides/$"
@@ -323,20 +369,26 @@ export const routeTree = rootRoute
     "/privacy": {
       "filePath": "privacy.tsx"
     },
-    "/terms": {
-      "filePath": "terms.tsx"
-    },
     "/blog/$slug": {
       "filePath": "blog.$slug.tsx"
     },
     "/docs/$": {
       "filePath": "docs.$.tsx"
     },
+    "/terms/service": {
+      "filePath": "terms/service.tsx"
+    },
+    "/terms/use": {
+      "filePath": "terms/use.tsx"
+    },
     "/blog/": {
       "filePath": "blog.index.tsx"
     },
     "/docs/": {
       "filePath": "docs.index.tsx"
+    },
+    "/terms/": {
+      "filePath": "terms/index.tsx"
     },
     "/docs/$product/$": {
       "filePath": "docs.$product.$.tsx"
