@@ -11,7 +11,7 @@ function TermsOfUsePage() {
     "/src/policies/terms/use.mdx",
     "TERMS OF USE"
   );
-  
+
   return (
     <PolicyPage
       meta={policyMeta}

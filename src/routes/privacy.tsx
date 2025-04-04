@@ -11,7 +11,7 @@ function PrivacyPage() {
     "/src/policies/privacy.mdx",
     "PRIVACY POLICY"
   );
-  
+
   return (
     <PolicyPage
       meta={policyMeta}
