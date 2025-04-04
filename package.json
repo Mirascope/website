@@ -9,7 +9,12 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\"",
-    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\""
+    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\"",
+    "prepare": "husky",
+    "pre-commit": "lint-staged && npm run typecheck"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,css,md,mdx}": "prettier --write"
   },
   "dependencies": {
     "@mdx-js/react": "^3.1.0",
@@ -42,7 +47,9 @@
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
     "@vitejs/plugin-react": "^4.3.4",
+    "husky": "^9.1.7",
     "jsdom": "^26.0.0",
+    "lint-staged": "^15.5.0",
     "prettier": "^3.5.3",
     "typescript": "^5.7.2",
     "vite": "^6.1.0",
