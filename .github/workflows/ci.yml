@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: 20
     
@@ -32,3 +32,24 @@ jobs:
     
     - name: Build
       run: npm run build
+      
+    - name: Verify code snippets are up-to-date
+      run: npm run update-snippets -- --check
+      
+    - name: Add comment when snippets are out of date (PR only)
+      if: failure() && github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const { issue, repo } = context;
+          github.rest.issues.createComment({
+            issue_number: issue.number,
+            owner: repo.owner,
+            repo: repo.repo,
+            body: `❌ The code snippets in the documentation are out of date. 
+
+Please run \`npm run update-snippets\` locally and commit the updated snippets.
+
+This ensures that the runnable code examples in the docs stay in sync with the documentation content.`
+          });
