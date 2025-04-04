@@ -35,7 +35,7 @@ export default function Footer() {
             Privacy Policy
           </Link>
           <Link
-            to="/terms"
+            to="/terms/use"
             className={cn(
               "text-sm sm:text-base transition-colors",
               isLandingPage
@@ -43,7 +43,7 @@ export default function Footer() {
                 : "text-slate-800 dark:text-white hover:text-primary dark:hover:text-primary-foreground"
             )}
           >
-            Terms of Service
+            Terms of Use
           </Link>
         </div>
       </div>
