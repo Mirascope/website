@@ -111,11 +111,13 @@ export function ProviderContextProvider({
   const providerInfo = providerDefaults[provider];
 
   return (
-    <ProviderContext.Provider value={{ 
-      provider, 
-      setProvider: handleProviderChange, 
-      providerInfo 
-    }}>
+    <ProviderContext.Provider
+      value={{
+        provider,
+        setProvider: handleProviderChange,
+        providerInfo,
+      }}
+    >
       {children}
     </ProviderContext.Provider>
   );
