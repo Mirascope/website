@@ -348,6 +348,13 @@ function parseArgs(): { check: boolean; path?: string; verbose: boolean } {
   const pathArg = args.find((arg) => arg.startsWith("--path="));
   if (pathArg) {
     result.path = pathArg.substring("--path=".length);
+  } else {
+    // If --path is not found but there's an argument without a flag, assume it's a file path
+    // This handles the case when lint-staged passes the file directly
+    const nonFlagArgs = args.filter((arg) => !arg.startsWith("--"));
+    if (nonFlagArgs.length > 0) {
+      result.path = nonFlagArgs[0];
+    }
   }
 
   return result;

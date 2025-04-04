@@ -14,7 +14,8 @@
     "update-snippets": "ts-node --project tsconfig.scripts.json scripts/update-snippets.ts"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,css,md,mdx}": "prettier --write"
+    "*.{js,jsx,ts,tsx,json,css,md,mdx}": "prettier --write",
+    "src/docs/**/*.mdx": "ts-node --project tsconfig.scripts.json scripts/update-snippets.ts --check"
   },
   "dependencies": {
     "@mdx-js/react": "^3.1.0",
