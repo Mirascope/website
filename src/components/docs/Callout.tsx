@@ -60,7 +60,7 @@ export function Callout({ type, title, children, className }: CalloutProps) {
       </div>
 
       {/* Content */}
-      <div className="px-6 py-5 bg-gray-50/95 dark:bg-transparent sunset:bg-amber-50/90 text-gray-800 dark:text-gray-200 sunset:text-gray-800 rounded-b-lg">
+      <div className="px-3 py-1 bg-gray-50/95 dark:bg-transparent sunset:bg-amber-50/90 text-gray-800 dark:text-gray-200 sunset:text-gray-800 rounded-b-lg">
         {children}
       </div>
     </div>
