@@ -123,11 +123,23 @@ export function ProviderContextProvider({
   );
 }
 
+// Default provider to use when outside of ProviderContextProvider
+const defaultProvider: Provider = "OpenAI";
+
 // Hook to access the provider context
 export function useProvider() {
   const context = useContext(ProviderContext);
   if (context === undefined) {
-    throw new Error("useProvider must be used within a ProviderContextProvider");
+    // Return a default context when no provider is available
+    // This happens in blog posts or other areas without the provider dropdown
+    console.log("No ProviderContext found, using default provider:", defaultProvider);
+    return {
+      provider: defaultProvider,
+      setProvider: () => {
+        console.warn("Attempted to set provider outside of ProviderContextProvider");
+      },
+      providerInfo: providerDefaults[defaultProvider],
+    };
   }
   return context;
 }
