@@ -13,6 +13,8 @@ import {
   Success,
   TabbedCode,
   CodeTab,
+  TabbedCodeExample,
+  Tab,
 } from "./docs";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
 import Logo from "./Logo";
@@ -46,6 +48,8 @@ export const components = {
   ProviderCodeBlock,
   TabbedCode,
   CodeTab,
+  TabbedCodeExample,
+  Tab,
   Callout,
   Note,
   Warning,

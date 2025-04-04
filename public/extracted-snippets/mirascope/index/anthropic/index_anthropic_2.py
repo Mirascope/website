@@ -8,6 +8,8 @@ from pydantic import BaseModel
 
 
 class Book(BaseModel):
+    """An extracted book."""
+ 
     title: str
     author: str
 
