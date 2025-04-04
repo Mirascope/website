@@ -21,9 +21,8 @@ export const parseFrontmatter = (
     throw new Error("Invalid frontmatter format");
   }
 
-  
   const frontmatterStr = match[1];
-  const content = match[2].replace(/\/\/# sourceMappingURL=.*$/gm, '');;
+  const content = match[2].replace(/\/\/# sourceMappingURL=.*$/gm, "");
 
   // Parse frontmatter into key-value pairs
   const frontmatter: Record<string, string> = {};
@@ -50,28 +49,32 @@ export const parseFrontmatter = (
  */
 export const fetchPolicyContent = async (
   filePath: string
-): Promise<{ meta: PolicyMeta; content: string; compiledMDX: { code: string; frontmatter: Record<string, any> } }> => {
+): Promise<{
+  meta: PolicyMeta;
+  content: string;
+  compiledMDX: { code: string; frontmatter: Record<string, any> };
+}> => {
   try {
     // Fetch the MDX file
     const response = await fetch(filePath);
     if (!response.ok) {
       throw new Error(`Error fetching content: ${response.statusText}`);
     }
-    
+
     const mdxContent = await response.text();
-    
+
     // Parse frontmatter and content
     const { frontmatter, content } = parseFrontmatter(mdxContent);
-    
+
     // Create meta object from frontmatter
     const meta: PolicyMeta = {
       title: frontmatter.title,
       lastUpdated: frontmatter.lastUpdated,
     };
-    
+
     // Process the MDX content
     const compiledMDX = await processMDX(content);
-    
+
     return { meta, content, compiledMDX };
   } catch (error) {
     console.error(`Error loading content from ${filePath}:`, error);
@@ -86,10 +89,10 @@ export const formatDate = (dateString: string): string => {
   if (!dateString) return "";
   try {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   } catch (e) {
     console.error("Error formatting date:", e);
