@@ -78,6 +78,10 @@ const meta: DocsStructure = {
           migration: {
             title: "0.x Migration Guide",
           },
+          "snippet-test": {
+            title: "Snippet Test",
+            description: "Testing snippets (dev only)",
+          },
         },
       },
     },
