@@ -32,24 +32,8 @@ Install Mirascope, specifying the provider you intend to use, and set your API k
 
 Mirascope provides a consistent, easy-to-use API across all providers:
 
-<div className="rounded-md border-2 border-blue-600/50 bg-[#191c20] shadow-md overflow-hidden">
-  <div className="px-4 py-2.5 flex items-center bg-blue-800/20">
-    <Logo size="micro" withText={true} textClassName="text-white opacity-90 font-medium" />
-  </div>
-
-  <Tabs defaultValue="Messages">
-    <div className="flex border-b border-gray-700 px-3">
-      <TabsList className="bg-transparent p-0 h-auto">
-        <TabsTrigger value="Messages" className="px-4 py-1.5 text-sm text-gray-400 hover:text-gray-200 rounded-none border-b-2 border-transparent data-[state=active]:border-white data-[state=active]:text-white">
-          Messages
-        </TabsTrigger>
-        <TabsTrigger value="Template" className="px-4 py-1.5 text-sm text-gray-400 hover:text-gray-200 rounded-none border-b-2 border-transparent data-[state=active]:border-white data-[state=active]:text-white">
-          Template
-        </TabsTrigger>
-      </TabsList>
-    </div>
-
-    <TabsContent value="Messages">
+<TabbedCodeExample showLogo={true}>
+<Tab value="Messages">
 ```python
 from mirascope import llm
 from pydantic import BaseModel
@@ -71,15 +55,16 @@ book: Book = extract_book("The Name of the Wind by Patrick Rothfuss")
 print(book)
 # Output: title='The Name of the Wind' author='Patrick Rothfuss'
 ```
-    </TabsContent>
-
-    <TabsContent value="Template">
+</Tab>
+<Tab value="Template">
 ```python
 from mirascope import llm, prompt_template
 from pydantic import BaseModel
 
 
 class Book(BaseModel):
+    """An extracted book."""
+ 
     title: str
     author: str
 
@@ -93,9 +78,8 @@ book: Book = extract_book("The Name of the Wind by Patrick Rothfuss")
 print(book)
 # Output: title='The Name of the Wind' author='Patrick Rothfuss'
 ```
-    </TabsContent>
-  </Tabs>
-</div>
+</Tab>
+</TabbedCodeExample>
 
 ## Provider SDK Equivalent
 
