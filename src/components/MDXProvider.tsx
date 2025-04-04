@@ -4,16 +4,13 @@ import { cn } from "@/lib/utils";
 import {
   InstallSnippet,
   CodeSnippet,
-  ApiStyleCodeBlock,
   ProviderCodeBlock,
   Callout,
   Note,
   Warning,
   Info,
   Success,
-  TabbedCode,
-  CodeTab,
-  TabbedCodeExample,
+  TabbedSection,
   Tab,
 } from "./docs";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
@@ -44,11 +41,8 @@ export const components = {
   // Custom components for docs
   InstallSnippet,
   CodeSnippet,
-  ApiStyleCodeBlock,
   ProviderCodeBlock,
-  TabbedCode,
-  CodeTab,
-  TabbedCodeExample,
+  TabbedSection,
   Tab,
   Callout,
   Note,
