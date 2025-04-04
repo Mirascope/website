@@ -67,10 +67,13 @@ const meta: DocsStructure = {
             title: "Help",
             description: "How to get help with Mirascope",
           },
+          contributing: {
+            title: "Contributing",
+            description: "How to contribute to Mirascope",
+          },
           migration: {
             title: "0.x Migration Guide",
           },
-
         },
       },
     },
