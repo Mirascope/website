@@ -23,7 +23,7 @@ import * as path from "path";
 import * as crypto from "crypto";
 
 // Import our low-level extraction functions
-import { processFile } from "./extract-snippets";
+import { processFile } from "./lib/snippet-extractor";
 
 // Import doc meta types and data
 import { getAllDocs } from "../src/docs/_meta";
@@ -310,8 +310,34 @@ function checkDocSnippets(doc: ExtractableDoc, providers: string[], verbose = fa
 /**
  * Parse command line arguments
  */
+/**
+ * Display help information
+ */
+function showHelp(): void {
+  console.log("Usage: npm run update-snippets -- [options]");
+  console.log("");
+  console.log("Options:");
+  console.log("  --check               Check if snippets are up-to-date");
+  console.log("  --path=<file-path>    Update/check snippets for a specific file");
+  console.log("  --verbose             Show more detailed output");
+  console.log("  --help                Show this help message");
+  console.log("");
+  console.log("Examples:");
+  console.log("  npm run update-snippets                                   # Update all snippets");
+  console.log("  npm run update-snippets -- --check                        # Check all snippets");
+  console.log("  npm run update-snippets -- --path=src/docs/.../file.mdx   # Update specific file");
+  console.log("  npm run update-snippets -- --check --path=src/docs/...    # Check specific file");
+  process.exit(0);
+}
+
 function parseArgs(): { check: boolean; path?: string; verbose: boolean } {
   const args = process.argv.slice(2);
+
+  // Show help if requested
+  if (args.includes("--help") || args.includes("-h")) {
+    showHelp();
+  }
+
   const result = {
     check: args.includes("--check"),
     verbose: args.includes("--verbose"),
