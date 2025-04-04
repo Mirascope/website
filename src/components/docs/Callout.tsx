@@ -43,11 +43,11 @@ export function Callout({ type, title, children, className }: CalloutProps) {
   return (
     <div className={cn("rounded-lg border my-6", containerClass, className)}>
       {/* Title bar */}
-      <div className="flex items-center gap-3 py-2 px-3 border-b border-gray-700/20 bg-[#20253a] rounded-t-lg">
+      <div className="flex items-center gap-3 py-2 px-3 border-b border-gray-700/20 bg-gray-100 dark:bg-[#20253a] sunset:bg-amber-100 rounded-t-lg">
         <div className={cn("rounded-full flex items-center justify-center w-6 h-6", iconClass)}>
           <Icon className="w-3.5 h-3.5" />
         </div>
-        <div className="font-semibold text-white text-base">
+        <div className="font-semibold text-gray-800 dark:text-white sunset:text-gray-800 text-base">
           {title ||
             (type === "note"
               ? "Note"
@@ -60,7 +60,9 @@ export function Callout({ type, title, children, className }: CalloutProps) {
       </div>
 
       {/* Content */}
-      <div className="px-6 py-5 text-gray-200 rounded-b-lg">{children}</div>
+      <div className="px-6 py-5 bg-gray-50/95 dark:bg-transparent sunset:bg-amber-50/90 text-gray-800 dark:text-gray-200 sunset:text-gray-800 rounded-b-lg">
+        {children}
+      </div>
     </div>
   );
 }
