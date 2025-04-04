@@ -4,7 +4,7 @@ import Logo from "../Logo";
 import { cn } from "@/lib/utils";
 
 /**
- * A Tab component to be used within TabbedCodeExample
+ * A Tab component to be used within TabbedSection
  * This is just a container for the content that will be extracted for tabs
  */
 export function Tab({
@@ -21,10 +21,10 @@ export function Tab({
 Tab.displayName = "Tab";
 
 /**
- * A reusable component for tabbed code examples
- * Provides a consistent UI for different code examples, especially API styles
+ * A reusable component for tabbed content
+ * Provides a consistent UI for different content in tabs
  */
-export function TabbedCodeExample({
+export function TabbedSection({
   children,
   className = "",
   showLogo = false,

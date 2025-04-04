@@ -69,6 +69,7 @@ const meta: DocsStructure = {
           },
           why: {
             title: "Why Mirascope?",
+            hasExtractableSnippets: true,
           },
           help: {
             title: "Help",
