@@ -73,7 +73,9 @@ export default function Header() {
           ? "bg-transparent text-white"
           : "bg-background text-slate-800 dark:text-white sunset:text-slate-800",
         scrolled && !isLandingPage ? "border-b border-gray-200 shadow-sm" : "",
-        scrolled && isLandingPage ? "bg-black/90 dark:bg-black/90 sunset:bg-black/60 backdrop-blur-sm" : ""
+        scrolled && isLandingPage
+          ? "bg-black/90 dark:bg-black/90 sunset:bg-black/60 backdrop-blur-sm"
+          : ""
       )}
     >
       <nav className="flex flex-row items-center justify-between w-full max-w-7xl mx-auto">
