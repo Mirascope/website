@@ -58,7 +58,12 @@ export function InstallSnippet({ className = "" }: InstallSnippetProps) {
   const installCommand = `pip install "mirascope[${providerInfo.packageName}]"\n${specialInstructions}`;
 
   return (
-    <div className={cn("rounded-md border-2 border-blue-600/50 bg-[#191c20] shadow-md overflow-hidden", className)}>
+    <div
+      className={cn(
+        "rounded-md border-2 border-blue-600/50 bg-[#191c20] shadow-md overflow-hidden",
+        className
+      )}
+    >
       <div className="flex border-b border-gray-700 px-3">
         {operatingSystems.map((currentOS) => (
           <button
@@ -66,19 +71,19 @@ export function InstallSnippet({ className = "" }: InstallSnippetProps) {
             onClick={() => setOS(currentOS)}
             className={cn(
               "px-4 py-1.5 text-sm text-gray-400 hover:text-gray-200 relative",
-              (os === currentOS) && "text-white border-b-2 border-white"
+              os === currentOS && "text-white border-b-2 border-white"
             )}
           >
             {currentOS}
           </button>
         ))}
       </div>
-      
+
       <div className="p-0 m-0">
-        <CodeBlock 
-          code={installCommand} 
-          language="bash" 
-          className="border-0 bg-transparent m-0 p-0" 
+        <CodeBlock
+          code={installCommand}
+          language="bash"
+          className="border-0 bg-transparent m-0 p-0"
         />
       </div>
     </div>
