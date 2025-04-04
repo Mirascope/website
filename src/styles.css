@@ -49,7 +49,7 @@ body::before {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500' viewBox='0 0 500 500'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.9' numOctaves='1' seed='2'/%3E%3CfeDiffuseLighting lighting-color='white' surfaceScale='1'%3E%3CfeDistantLight azimuth='45' elevation='60'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='500' height='500' filter='url(%23grain)' opacity='0.6'/%3E%3C/svg%3E");
+  background-image: var(--texture-svg);
   opacity: var(--texture-opacity);
   mix-blend-mode: var(--texture-blend-mode);
   z-index: 9999;
@@ -265,6 +265,7 @@ h6 code {
   --text-offset: 2px;
   --texture-opacity: 0.3;
   --texture-blend-mode: multiply;
+  --texture-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500' viewBox='0 0 500 500'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.9' numOctaves='1' seed='2'/%3E%3CfeDiffuseLighting lighting-color='white' surfaceScale='1'%3E%3CfeDistantLight azimuth='45' elevation='60'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='500' height='500' filter='url(%23grain)' opacity='0.6'/%3E%3C/svg%3E");
 }
 
 .dark {
@@ -303,8 +304,52 @@ h6 code {
 
   /* Paper texture variables for dark mode */
   --text-offset: 2px;
-  --texture-opacity: 0.15; /* Reduced opacity for dark mode */
-  --texture-blend-mode: soft-light;
+  --texture-opacity: 0.6; /* Adjusted opacity for dark mode */
+  --texture-blend-mode: screen;
+  --texture-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500' viewBox='0 0 500 500'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.9' numOctaves='1' seed='2'/%3E%3CfeDiffuseLighting lighting-color='%23505050' surfaceScale='1'%3E%3CfeDistantLight azimuth='45' elevation='60'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='500' height='500' filter='url(%23grain)' opacity='0.6'/%3E%3C/svg%3E");
+}
+
+.sunset {
+  /* Keep text colors the same as light mode */
+  --background: oklch(0.998 0.001 90); /* Very slightly warmer white */
+  /* Removed gradient background */
+  --foreground: oklch(0.141 0.005 285.823); /* Same as light mode */
+  --card: oklch(0.985 0.004 95); /* Same as light mode */
+  --card-foreground: oklch(0.141 0.005 285.823); /* Same as light mode */
+  --popover: oklch(0.98 0.005 95); /* Same as light mode */
+  --popover-foreground: oklch(0.141 0.005 285.823); /* Same as light mode */
+  --primary: oklch(58.54% 0.2041 277.12); /* Same as light mode */
+  --primary-foreground: oklch(0.985 0 0); /* Same as light mode */
+  --secondary: oklch(0.967 0.001 286.375); /* Same as light mode */
+  --secondary-foreground: oklch(0.21 0.006 285.885); /* Same as light mode */
+  --muted: oklch(0.967 0.001 286.375); /* Same as light mode */
+  --muted-foreground: oklch(0.552 0.016 285.938); /* Same as light mode */
+  --accent: oklch(0.967 0.001 286.375); /* Same as light mode */
+  --accent-foreground: oklch(0.21 0.006 285.885); /* Same as light mode */
+  --destructive: oklch(0.577 0.245 27.325); /* Same as light mode */
+  --destructive-foreground: oklch(0.577 0.245 27.325); /* Same as light mode */
+  --border: oklch(0.92 0.004 286.32); /* Same as light mode */
+  --input: oklch(0.92 0.004 286.32); /* Same as light mode */
+  --ring: oklch(0.871 0.006 286.286); /* Same as light mode */
+  --chart-1: oklch(0.646 0.222 41.116); /* Same as light mode */
+  --chart-2: oklch(0.6 0.118 184.704); /* Same as light mode */
+  --chart-3: oklch(0.398 0.07 227.392); /* Same as light mode */
+  --chart-4: oklch(0.828 0.189 84.429); /* Same as light mode */
+  --chart-5: oklch(0.769 0.188 70.08); /* Same as light mode */
+  --sidebar: oklch(0.985 0 0); /* Same as light mode */
+  --sidebar-foreground: oklch(0.141 0.005 285.823); /* Same as light mode */
+  --sidebar-primary: oklch(0.21 0.006 285.885); /* Same as light mode */
+  --sidebar-primary-foreground: oklch(0.985 0 0); /* Same as light mode */
+  --sidebar-accent: oklch(0.967 0.001 286.375); /* Same as light mode */
+  --sidebar-accent-foreground: oklch(0.21 0.006 285.885); /* Same as light mode */
+  --sidebar-border: oklch(0.92 0.004 286.32); /* Same as light mode */
+  --sidebar-ring: oklch(0.871 0.006 286.286); /* Same as light mode */
+
+  /* Paper texture variables for sunset mode */
+  --text-offset: 2px;
+  --texture-opacity: 0.35;
+  --texture-blend-mode: multiply;
+  --texture-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500' viewBox='0 0 500 500'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.9' numOctaves='1' seed='2'/%3E%3CfeDiffuseLighting lighting-color='%23f7d2a2' surfaceScale='1'%3E%3CfeDistantLight azimuth='45' elevation='60'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='500' height='500' filter='url(%23grain)' opacity='0.6'/%3E%3C/svg%3E");
 }
 
 .sunset {
@@ -813,23 +858,43 @@ header button:not(.font-toggle-button),
 /* Styles moved from MDXProvider.tsx */
 /* Base styles for content - Sans-serif font */
 .mdx-content {
-  font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
-  font-size: 1.0rem !important;
+  font-family:
+    "Roboto",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Helvetica,
+    Arial,
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol" !important;
+  font-size: 1rem !important;
 }
 
 /* All standard text elements use sans font in normal mode */
-.mdx-content h1, 
-.mdx-content h2, 
-.mdx-content h3, 
-.mdx-content h4, 
-.mdx-content h5, 
-.mdx-content h6, 
-.mdx-content p, 
-.mdx-content a, 
-.mdx-content li, 
-.mdx-content blockquote, 
-.mdx-content table { 
-  font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
+.mdx-content h1,
+.mdx-content h2,
+.mdx-content h3,
+.mdx-content h4,
+.mdx-content h5,
+.mdx-content h6,
+.mdx-content p,
+.mdx-content a,
+.mdx-content li,
+.mdx-content blockquote,
+.mdx-content table {
+  font-family:
+    "Roboto",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Helvetica,
+    Arial,
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol" !important;
 }
 
 /* Code elements always use monospace in all modes */
@@ -838,31 +903,33 @@ header button:not(.font-toggle-button),
 .mdx-content .shiki,
 .mdx-content .shiki code,
 .mdx-content .shiki .line {
-  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  font-family:
+    "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace !important;
   /* SINGLE SOURCE OF TRUTH FOR CODE FONT SIZE */
   font-size: 0.7rem !important;
 }
 
 /* Fun mode (handwriting) styles - need high specificity to override defaults */
-.mdx-content.fun-mode h1, 
-.mdx-content.fun-mode h2, 
-.mdx-content.fun-mode h3, 
-.mdx-content.fun-mode h4, 
-.mdx-content.fun-mode h5, 
-.mdx-content.fun-mode h6, 
-.mdx-content.fun-mode p, 
+.mdx-content.fun-mode h1,
+.mdx-content.fun-mode h2,
+.mdx-content.fun-mode h3,
+.mdx-content.fun-mode h4,
+.mdx-content.fun-mode h5,
+.mdx-content.fun-mode h6,
+.mdx-content.fun-mode p,
 .mdx-content.fun-mode strong,
 .mdx-content.fun-mode em,
 .mdx-content.fun-mode b,
 .mdx-content.fun-mode i,
-.mdx-content.fun-mode a, 
-.mdx-content.fun-mode li, 
+.mdx-content.fun-mode a,
+.mdx-content.fun-mode li,
 .mdx-content.fun-mode div,
 .mdx-content.fun-mode span,
-.mdx-content.fun-mode blockquote, 
+.mdx-content.fun-mode blockquote,
 .mdx-content.fun-mode table,
 .mdx-content.fun-mode * {
-  font-family: 'Williams Handwriting', cursive !important;
+  font-family: "Williams Handwriting", cursive !important;
   font-size: 1.2rem !important;
 }
 
@@ -873,7 +940,7 @@ header button:not(.font-toggle-button),
 .mdx-content.fun-mode .shiki code,
 .mdx-content.fun-mode .shiki .line,
 .mdx-content.fun-mode .shiki * {
-  font-family: 'Williams Handwriting', cursive !important;
+  font-family: "Williams Handwriting", cursive !important;
   font-size: 0.9rem !important;
 }
 

@@ -53,9 +53,6 @@ const meta: DocsStructure = {
       index: {
         title: "Welcome",
       },
-      migration: {
-        title: "Migration Guide",
-      },
     },
 
     // Grouped pages in main area
@@ -63,11 +60,11 @@ const meta: DocsStructure = {
       "getting-started": {
         title: "Getting Started",
         items: {
-          quickstart: {
-            title: "Quickstart",
-          },
           why: {
             title: "Why Mirascope?",
+          },
+          migration: {
+            title: "Migration Guide",
           },
         },
       },
@@ -82,16 +79,6 @@ const meta: DocsStructure = {
         items: {
           index: {
             title: "Under construction...",
-          },
-        },
-      },
-      guides: {
-        title: "Guides",
-
-        // Top-level guides pages
-        items: {
-          index: {
-            title: "Guides Overview",
           },
         },
       },
@@ -131,16 +118,6 @@ const meta: DocsStructure = {
         items: {
           index: {
             title: "Under construction...",
-          },
-        },
-      },
-      guides: {
-        title: "Guides",
-
-        // Top-level guides pages
-        items: {
-          index: {
-            title: "Guides Overview",
           },
         },
       },
