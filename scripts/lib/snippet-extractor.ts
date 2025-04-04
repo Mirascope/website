@@ -1,25 +1,15 @@
-#!/usr/bin/env node
-
 /**
- * Extract code snippets from MDX files and generate separate, runnable Python example files.
+ * Snippet extraction module.
  *
- * This is the low-level "plumbing" tool that extracts snippets from a single MDX file
- * and generates examples for a single provider.
- *
- * Usage:
- *   npm run extract-snippets -- <mdx_file> [provider] [output_dir]
- *
- * Arguments:
- *   mdx_file   - Path to the MDX file containing Python code blocks
- *   provider   - Provider to use for variable substitution (openai, anthropic, etc.)
- *   output_dir - Optional custom output directory
+ * This module provides low-level functions for extracting code snippets from MDX files
+ * and generating runnable Python examples for different providers.
  */
 
 import * as fs from "fs";
 import * as path from "path";
 // Import from shared provider config
-import { providerDefaults } from "../src/config/providers";
-import type { Provider } from "../src/config/providers";
+import { providerDefaults } from "../../src/config/providers";
+import type { Provider } from "../../src/config/providers";
 
 /**
  * Extract Python snippets from an MDX file
@@ -178,27 +168,4 @@ export function processFile(
 
   console.log(`Successfully generated ${snippets.length} example files in ${outputDir}`);
   return generatedFiles;
-}
-
-/**
- * Main function
- */
-function main() {
-  const args = process.argv.slice(2);
-
-  if (args.length < 1) {
-    console.error("Usage: npm run extract-snippets -- <mdx_file> [provider] [output_dir]");
-    process.exit(1);
-  }
-
-  const mdxFile = args[0];
-  const provider = args.length > 1 ? args[1] : "openai";
-  const customOutputDir = args.length > 2 ? args[2] : null;
-
-  processFile(mdxFile, provider, customOutputDir);
-}
-
-// Only run the main function if this script is executed directly
-if (require.main === module) {
-  main();
 }
