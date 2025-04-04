@@ -29,7 +29,7 @@ export function ProviderCodeBlock({
   // State for code examples and loading
   const [codeMap, setCodeMap] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(true);
-  
+
   // State for collapsible behavior - must be declared here, not conditionally
   // Default to collapsed when collapsible is true
   const [isExpanded, setIsExpanded] = useState(!collapsible);
@@ -103,10 +103,15 @@ export function ProviderCodeBlock({
 
   // Display the code
   return (
-    <div className={cn("rounded-md border-2 border-blue-600/50 bg-[#191c20] shadow-md overflow-hidden", className)}>
+    <div
+      className={cn(
+        "rounded-md border-2 border-blue-600/50 bg-[#191c20] shadow-md overflow-hidden",
+        className
+      )}
+    >
       {collapsible && (
-        <div 
-          className="px-4 py-2.5 flex items-center justify-between bg-blue-800/20 cursor-pointer" 
+        <div
+          className="px-4 py-2.5 flex items-center justify-between bg-blue-800/20 cursor-pointer"
           onClick={toggleExpand}
         >
           <div className="flex items-center">
@@ -122,7 +127,7 @@ export function ProviderCodeBlock({
           )}
         </div>
       )}
-      
+
       {isExpanded && (
         <div className="p-0 m-0">
           {!currentProviderCode && (
@@ -130,10 +135,10 @@ export function ProviderCodeBlock({
               Example for {provider} not available yet.
             </div>
           )}
-          <CodeBlock 
-            code={codeToDisplay} 
-            language={language} 
-            className="border-0 bg-transparent m-0 p-0" 
+          <CodeBlock
+            code={codeToDisplay}
+            language={language}
+            className="border-0 bg-transparent m-0 p-0"
           />
         </div>
       )}

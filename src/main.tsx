@@ -8,23 +8,31 @@ import { routeTree } from "./routeTree.gen";
 import "./styles.css";
 import reportWebVitals from "./reportWebVitals.ts";
 
-// Apply dark mode based on system preference
-const applySystemTheme = () => {
-  // Check if user prefers dark mode
-  if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+// Initial theme setup (later handled by ThemeSwitcher component)
+const initializeTheme = () => {
+  const savedTheme = localStorage.getItem("theme");
+
+  // Remove any existing theme classes
+  document.documentElement.classList.remove("light", "dark", "sunset");
+
+  if (savedTheme === "light") {
+    document.documentElement.classList.add("light");
+  } else if (savedTheme === "dark") {
     document.documentElement.classList.add("dark");
+  } else if (savedTheme === "sunset") {
+    document.documentElement.classList.add("sunset");
   } else {
-    document.documentElement.classList.remove("dark");
+    // System preference for initial load
+    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.add("light");
+    }
   }
 };
 
-// Apply theme immediately
-applySystemTheme();
-
-// Add listener for system theme changes
-if (window.matchMedia) {
-  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applySystemTheme);
-}
+// Apply theme immediately on initial page load
+initializeTheme();
 
 // Create a new router instance
 const router = createRouter({

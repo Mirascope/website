@@ -8,7 +8,12 @@ import { Button } from "@/components/ui/button";
 import { Sparkles, Server } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { type ProductName } from "@/lib/route-types";
-import { ProviderContextProvider, ProviderDropdown, providers, type Provider } from "@/components/docs";
+import {
+  ProviderContextProvider,
+  ProviderDropdown,
+  providers,
+  type Provider,
+} from "@/components/docs";
 
 type DocsLayoutProps = {
   product: ProductName;
@@ -121,7 +126,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
       localStorage.setItem("docsFunMode", newMode.toString());
     }
   };
-  
+
   // Helper function to validate a provider string
   const validateProvider = (provider: string | null): Provider => {
     if (!provider || !providers.includes(provider as Provider)) {
@@ -138,7 +143,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
     }
     return "OpenAI";
   });
-  
+
   // Handle provider change and save to localStorage
   const handleProviderChange = (provider: string) => {
     const validProvider = validateProvider(provider);
@@ -169,8 +174,8 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
   // Loading state
   if (loading) {
     return (
-        <div className="flex justify-center pt-[60px]">
-          <div className="flex mx-auto w-full max-w-7xl">
+      <div className="flex justify-center pt-[60px]">
+        <div className="flex mx-auto w-full max-w-7xl">
           {/* Left sidebar - collapsible on mobile only */}
           <div
             className={`transition-all duration-300 ease-in-out flex flex-shrink-0 ${
@@ -377,7 +382,10 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
 
   // Regular document display
   return (
-    <ProviderContextProvider defaultProvider={selectedProvider} onProviderChange={handleProviderChange}>
+    <ProviderContextProvider
+      defaultProvider={selectedProvider}
+      onProviderChange={handleProviderChange}
+    >
       <div className="flex justify-center pt-[60px]">
         <div className="flex mx-auto w-full max-w-7xl">
           {/* Left sidebar - collapsible on mobile only */}
@@ -503,7 +511,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
                     <Sparkles className="w-4 h-4 mr-1" />
                     Fun Mode
                   </Button>
-                  
+
                   {/* Provider dropdown */}
                   <div className="mt-3">
                     <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
