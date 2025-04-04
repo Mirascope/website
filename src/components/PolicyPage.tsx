@@ -30,7 +30,7 @@ const PolicyPage: React.FC<PolicyPageProps> = ({
     "terms-service": "TERMS OF SERVICE",
   }[type];
 
-  const title = meta?.title || defaultTitle;
+  const title = meta?.title ?? defaultTitle;
   const lastUpdated = meta?.lastUpdated ? formatDate(meta.lastUpdated) : "";
 
   if (loading) {
