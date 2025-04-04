@@ -53,6 +53,7 @@ const meta: DocsStructure = {
     items: {
       index: {
         title: "Welcome",
+        hasExtractableSnippets: true,
       },
     },
 

@@ -11,7 +11,11 @@ import {
   Warning,
   Info,
   Success,
+  TabbedCode,
+  CodeTab,
 } from "./docs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
+import Logo from "./Logo";
 import { ProviderCodeWrapper } from "./ProviderCodeWrapper";
 
 // Helper function to generate heading ID from text
@@ -40,11 +44,20 @@ export const components = {
   CodeSnippet,
   ApiStyleCodeBlock,
   ProviderCodeBlock,
+  TabbedCode,
+  CodeTab,
   Callout,
   Note,
   Warning,
   Info,
   Success,
+
+  // UI Components
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+  Logo,
 
   // Shorthand components
   Install: InstallSnippet,
