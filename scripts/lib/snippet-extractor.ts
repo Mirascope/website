@@ -156,7 +156,14 @@ export function processFile(
       ? dirName.split("src/docs/")[1]
       : path.basename(dirName);
 
-    outputDir = path.join("public", "extracted-snippets", relativePath, baseName, provider);
+    outputDir = path.join(
+      process.cwd(),
+      "public",
+      "extracted-snippets",
+      relativePath,
+      baseName,
+      provider
+    );
   }
 
   // Generate a separate Python file for each snippet
