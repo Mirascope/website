@@ -1,6 +1,7 @@
 {
   "name": "my-app",
   "private": true,
+  "type": "module",
   "scripts": {
     "start": "vite --port 3000",
     "build": "vite build && tsc",
