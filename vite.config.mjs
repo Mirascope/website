@@ -13,7 +13,7 @@ const mdxVirtualModulePlugin = () => {
       // Create a virtual endpoint to list all posts
       server.middlewares.use("/api/posts-list", (req, res) => {
         try {
-          const postsDir = resolve(__dirname, "src/posts");
+          const postsDir = resolve(process.cwd(), "src/posts");
           const files = fs.readdirSync(postsDir).filter((file) => file.endsWith(".mdx"));
 
           res.setHeader("Content-Type", "application/json");
@@ -34,7 +34,7 @@ const mdxVirtualModulePlugin = () => {
         }
 
         try {
-          const postsDir = resolve(__dirname, "src/posts");
+          const postsDir = resolve(process.cwd(), "src/posts");
           const filePath = resolve(postsDir, filename);
 
           if (!fs.existsSync(filePath)) {
@@ -65,7 +65,7 @@ const mdxVirtualModulePlugin = () => {
 
         try {
           // Resolve to the actual file path in the filesystem
-          const docsDir = resolve(__dirname, "src/docs");
+          const docsDir = resolve(process.cwd(), "src/docs");
 
           // Extract the relative path from the URL
           // Remove leading slash if present
@@ -110,7 +110,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@": resolve(__dirname, "./src"),
+      "@": resolve(process.cwd(), "./src"),
     },
   },
   // Add node-specific configuration for fs and path
