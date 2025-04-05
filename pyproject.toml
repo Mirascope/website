@@ -33,6 +33,7 @@ providers = [
 [tool.uv]
 dev-dependencies = [
     "pyright>=1.1.396",
+    "ruff>=0.1.6",
 ]
 
 [tool.pyright]
@@ -41,7 +42,5 @@ include = [
     "public/examples"
 ]
 exclude = [
-    "**/__pycache__",
-    "public/examples/mirascope/getting-started/quickstart/sdk/bedrock.py",
-    "public/examples/mirascope/getting-started/quickstart/sdk/xai.py"
+    "**/__pycache__"
 ]

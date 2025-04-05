@@ -1,0 +1,32 @@
+# Basic Ruff configuration for checking snippets
+# This is an exploratory configuration to see what kinds of issues would be flagged
+
+# Python target version
+target-version = "py310"
+
+# Exclude build artifacts and other non-code files
+exclude = [
+    ".git",
+    "__pycache__",
+    "node_modules",
+    "build",
+    "dist",
+]
+
+[lint]
+# Enable only the most important rules for example code
+select = [
+    "E",      # pycodestyle errors
+    "F",      # pyflakes
+    # "I",      # isort (disabled - not useful for examples)
+    "B",      # flake8-bugbear 
+    "UP",     # pyupgrade
+]
+
+# Ignore rules that are too strict for example code
+ignore = [
+    "E501",   # line too long
+]
+
+[lint.isort]
+known-first-party = ["mirascope"]
