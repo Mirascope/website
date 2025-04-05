@@ -1,0 +1,52 @@
+name: Python Typecheck
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  typecheck:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+        
+    - name: Install uv
+      run: |
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+    
+    - name: Make script executable
+      run: chmod +x ./scripts/typecheck-snippets.sh
+      
+    - name: Install dependencies and run typecheck
+      run: ./scripts/typecheck-snippets.sh --check
+      
+    - name: Add comment when typechecking fails (PR only)
+      if: failure() && github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const { issue, repo } = context;
+          github.rest.issues.createComment({
+            issue_number: issue.number,
+            owner: repo.owner,
+            repo: repo.repo,
+            body: `❌ Python typechecking failed for code snippets.
+
+Please check the GitHub Actions log for details and fix the type errors in the extracted snippets.
+
+Common fixes:
+1. Make sure all code blocks in MDX files have necessary imports
+2. Fix type annotations in the code
+3. Update the snippets with \`npm run update-snippets\`
+`
+          });

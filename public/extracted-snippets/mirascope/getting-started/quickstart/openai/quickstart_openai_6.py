@@ -26,7 +26,9 @@ async def main():
         print(f"The capital of {capital.country} is {capital.city}")
 
 
-# await main() when running in a Jupyter notebook
-await main()
+# For a Python script, uncomment this line:
+# asyncio.run(main())
 
-# asyncio.run(main()) when running in a Python script
+# For demonstration purposes only (this won't work in a regular Python script):
+# In a Jupyter notebook or interactive environment you would use:
+# await main()

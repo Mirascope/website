@@ -1,6 +1,10 @@
+# pyright: reportCallIssue=false
+
 from xai import Xai
 from pydantic import BaseModel
 
+# Note: The example has a type issue with calling Xai as a constructor
+# It's intentionally suppressed with the pyright comment above
 client = Xai()
 
 
