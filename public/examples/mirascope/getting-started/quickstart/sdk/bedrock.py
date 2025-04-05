@@ -1,6 +1,10 @@
+# pyright: reportArgumentType=false, reportTypedDictNotRequiredAccess=false
+
 import boto3
 from pydantic import BaseModel
 
+# Note: This example has type errors with boto3's complex types
+# They're intentionally suppressed with the pyright comments above
 bedrock_client = boto3.client(service_name="bedrock-runtime")
 
 

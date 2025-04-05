@@ -12,3 +12,9 @@ CLAUDE.md
 # Cursor
 
 .cursorrules
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/

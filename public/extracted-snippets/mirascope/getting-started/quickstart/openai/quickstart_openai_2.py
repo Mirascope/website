@@ -3,6 +3,9 @@
 # Generated for provider: openai
 # This file is auto-generated and should not be edited directly
 
+from mirascope import llm
+
+
 @llm.call(provider="openai", model="gpt-4o-mini", stream=True)
 def stream_city_info(city: str) -> str:
     return f"Provide a brief description of {city}."

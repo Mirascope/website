@@ -24,6 +24,7 @@ npm start
 - `npm run format` - Format all files with Prettier
 - `npm run format:check` - Check if files need formatting
 - `npm run update-snippets` - Update or check extractable code snippets (use --help for options)
+- `npm run validate:python` - Runs typechecking and linting on extracted Python snippets
 
 ### Pre-commit Hooks
 
