@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
-# typecheck-snippets.sh
-# Typechecks Python code snippets in public/examples/ and public/extracted-snippets/
-# Uses uv for dependency management and pyright for typechecking
+# validate-snippets.sh
+# Validates Python code snippets in public/examples/ and public/extracted-snippets/
+# Runs both type checking (pyright) and style checking (ruff)
+# Uses uv for dependency management
 
 set -e
 
@@ -13,16 +14,11 @@ YELLOW='\033[0;33m'
 NC='\033[0m' # No Color
 
 # Parse arguments
-CHECK_MODE=false
 VERBOSE=false
 SPECIFIC_PATH=""
 
 for arg in "$@"; do
   case $arg in
-    --check)
-      CHECK_MODE=true
-      shift
-      ;;
     --verbose)
       VERBOSE=true
       shift
@@ -35,8 +31,7 @@ for arg in "$@"; do
       echo "Usage: $0 [options]"
       echo ""
       echo "Options:"
-      echo "  --check          Only check if typechecking passes, don't show detailed errors"
-      echo "  --verbose        Show more detailed output including uv and pyright logs"
+      echo "  --verbose        Show more detailed output including uv and tool logs"
       echo "  --path=<path>    Check only a specific file or directory"
       echo "  --help           Show this help message"
       exit 0
@@ -78,13 +73,8 @@ else
 fi
 log $GREEN "Dependencies installed"
 
-# Run pyright for typechecking
-log $YELLOW "Running pyright typechecking..."
-
-# Prepare pyright command
+# Prepare tool commands
 PYRIGHT_CMD="uv run pyright"
-
-# Prepare ruff command
 RUFF_CMD="uv run ruff check"
 
 # Add specific path if provided
@@ -103,45 +93,32 @@ else
 fi
 
 # Run pyright
+log $YELLOW "Running pyright type checking..."
 PYRIGHT_OK=true
-if [ "$CHECK_MODE" = true ]; then
-  # Only check for errors without showing details
-  if ! $PYRIGHT_CMD > /dev/null 2>&1; then
-    PYRIGHT_OK=false
-  fi
-else
-  # Show detailed errors
-  TEMP_OUTPUT=$(mktemp)
-  $PYRIGHT_CMD | tee $TEMP_OUTPUT
+TEMP_OUTPUT=$(mktemp)
+$PYRIGHT_CMD | tee $TEMP_OUTPUT
+
+# Check exit status from the pyright command
+if [ ${PIPESTATUS[0]} -ne 0 ]; then
+  # Count errors
+  ERROR_COUNT=$(grep -c "error:" $TEMP_OUTPUT || echo "0")
+  WARNING_COUNT=$(grep -c "warning:" $TEMP_OUTPUT || echo "0")
   
-  # Check exit status from the pyright command
-  if [ ${PIPESTATUS[0]} -ne 0 ]; then
-    # Count errors
-    ERROR_COUNT=$(grep -c "error:" $TEMP_OUTPUT || echo "0")
-    WARNING_COUNT=$(grep -c "warning:" $TEMP_OUTPUT || echo "0")
-    
-    log $RED "❌ Typechecking failed with $ERROR_COUNT errors and $WARNING_COUNT warnings"
-    PYRIGHT_OK=false
-  fi
-  rm $TEMP_OUTPUT
+  log $RED "❌ Type checking failed with $ERROR_COUNT errors and $WARNING_COUNT warnings"
+  PYRIGHT_OK=false
+else
+  log $GREEN "✅ Type checking passed"
 fi
+rm $TEMP_OUTPUT
 
 # Run ruff
 log $YELLOW "Running ruff code style checking..."
 RUFF_OK=true
-if [ "$CHECK_MODE" = true ]; then
-  # Only check for errors without showing details
-  if ! $RUFF_CMD > /dev/null 2>&1; then
-    RUFF_OK=false
-  fi
+if ! $RUFF_CMD; then
+  log $RED "❌ Code style checking failed"
+  RUFF_OK=false
 else
-  # Show detailed errors
-  if ! $RUFF_CMD; then
-    log $RED "❌ Code style checking failed"
-    RUFF_OK=false
-  else
-    log $GREEN "✅ Code style checking passed"
-  fi
+  log $GREEN "✅ Code style checking passed"
 fi
 
 # Final result
@@ -149,11 +126,7 @@ if [ "$PYRIGHT_OK" = true ] && [ "$RUFF_OK" = true ]; then
   log $GREEN "✅ All checks passed"
   exit 0
 else
-  if [ "$CHECK_MODE" = true ]; then
-    log $RED "❌ Checks failed, run without --check flag to see details"
-  else
-    [ "$PYRIGHT_OK" = false ] && log $RED "❌ Typechecking failed"
-    [ "$RUFF_OK" = false ] && log $RED "❌ Code style checking failed"
-  fi
+  [ "$PYRIGHT_OK" = false ] && log $RED "❌ Type checking failed"
+  [ "$RUFF_OK" = false ] && log $RED "❌ Code style checking failed"
   exit 1
 fi

@@ -1,4 +1,4 @@
-name: Python Typecheck
+name: Python Validation
 
 on:
   push:
@@ -24,12 +24,12 @@ jobs:
         echo "$HOME/.cargo/bin" >> $GITHUB_PATH
     
     - name: Make script executable
-      run: chmod +x ./scripts/typecheck-snippets.sh
+      run: chmod +x ./scripts/validate-snippets.sh
       
-    - name: Install dependencies and run typecheck
-      run: ./scripts/typecheck-snippets.sh --check
+    - name: Install dependencies and run validation
+      run: ./scripts/validate-snippets.sh
       
-    - name: Add comment when typechecking fails (PR only)
+    - name: Add comment when validation fails (PR only)
       if: failure() && github.event_name == 'pull_request'
       uses: actions/github-script@v7
       with:
@@ -40,13 +40,14 @@ jobs:
             issue_number: issue.number,
             owner: repo.owner,
             repo: repo.repo,
-            body: `❌ Python typechecking failed for code snippets.
+            body: `❌ Python validation failed for code snippets.
 
-Please check the GitHub Actions log for details and fix the type errors in the extracted snippets.
+Please check the GitHub Actions log for details and fix the errors in the extracted snippets.
 
 Common fixes:
 1. Make sure all code blocks in MDX files have necessary imports
 2. Fix type annotations in the code
-3. Update the snippets with \`npm run update-snippets\`
+3. Fix code style issues if any are reported
+4. Update the snippets with \`npm run update-snippets\`
 `
           });
