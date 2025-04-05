@@ -31,6 +31,9 @@ jobs:
     - name: Make script executable
       run: chmod +x ./scripts/validate-snippets.sh
       
+    - name: Create virtual environment
+      run: uv venv
+      
     - name: Install dependencies and run validation
       run: ./scripts/validate-snippets.sh --verbose
       
