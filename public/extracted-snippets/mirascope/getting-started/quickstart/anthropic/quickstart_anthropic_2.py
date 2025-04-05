@@ -3,6 +3,9 @@
 # Generated for provider: anthropic
 # This file is auto-generated and should not be edited directly
 
+from mirascope import llm
+
+
 @llm.call(provider="anthropic", model="claude-3-5-sonnet-latest", stream=True)
 def stream_city_info(city: str) -> str:
     return f"Provide a brief description of {city}."

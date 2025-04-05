@@ -50,6 +50,9 @@ This approach allows you to use LLMs as if they were regular Python functions, m
 Streaming allows you to process LLM responses in real-time, which is particularly useful for long-form content generation or when you want to provide immediate feedback to users.
 
 ```python
+from mirascope import llm
+
+
 @llm.call(provider="$PROVIDER", model="$MODEL", stream=True)
 def stream_city_info(city: str) -> str:
     return f"Provide a brief description of {city}."
@@ -106,6 +109,9 @@ city='Paris' country='France'
 JSON mode allows you to directly parse LLM outputs as JSON. This is particularly useful when you need structured data from your LLM calls.
 
 ```python
+from mirascope import llm
+
+
 @llm.call(provider="$PROVIDER", model="$MODEL", json_mode=True)
 def city_info(city: str) -> str:
     return f"Provide information about {city} in JSON format"
@@ -231,10 +237,12 @@ async def main():
         print(f"The capital of {capital.country} is {capital.city}")
 
 
-# await main() when running in a Jupyter notebook
-await main()
+# For a Python script, uncomment this line:
+# asyncio.run(main())
 
-# asyncio.run(main()) when running in a Python script
+# For demonstration purposes only (this won't work in a regular Python script):
+# In a Jupyter notebook or interactive environment you would use:
+# await main()
 ```
 
 ```
