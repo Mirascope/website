@@ -5,11 +5,17 @@
  * and generating runnable Python examples for different providers.
  */
 
-import * as fs from "fs";
-import * as path from "path";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+// Get __dirname equivalent in ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 // Import from shared provider config
-import { providerDefaults } from "../../src/config/providers";
-import type { Provider } from "../../src/config/providers";
+import { providerDefaults } from "../../src/config/providers.js";
+import type { Provider } from "../../src/config/providers.js";
 
 /**
  * Extract Python snippets from an MDX file
@@ -156,7 +162,17 @@ export function processFile(
       ? dirName.split("src/docs/")[1]
       : path.basename(dirName);
 
-    outputDir = path.join("public", "extracted-snippets", relativePath, baseName, provider);
+    // Get the project root directory
+    const projectRoot = path.resolve(path.join(__dirname, "../.."));
+
+    outputDir = path.join(
+      projectRoot,
+      "public",
+      "extracted-snippets",
+      relativePath,
+      baseName,
+      provider
+    );
   }
 
   // Generate a separate Python file for each snippet

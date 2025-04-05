@@ -18,24 +18,32 @@
  *   1: Error (snippets out of date or other error)
  */
 
-import * as fs from "fs";
-import * as path from "path";
-import * as crypto from "crypto";
+import fs from "fs";
+import path from "path";
+import crypto from "crypto";
+import { fileURLToPath } from "url";
+
+// Get __dirname equivalent in ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Import our low-level extraction functions
-import { processFile } from "./lib/snippet-extractor";
+import { processFile } from "./lib/snippet-extractor.js";
 
 // Import doc meta types and data
-import { getAllDocs } from "../src/docs/_meta";
+import { getAllDocs } from "../src/docs/_meta.js";
 
 // Provider list to generate examples for
 const PROVIDERS = ["openai", "anthropic"];
 
+// Root directory of the project
+const PROJECT_ROOT = path.resolve(path.join(__dirname, ".."));
+
 // Root directory for extracted snippets
-const SNIPPETS_ROOT = path.join(process.cwd(), "public", "extracted-snippets");
+const SNIPPETS_ROOT = path.join(PROJECT_ROOT, "public", "extracted-snippets");
 
 // Docs root directory
-const DOCS_ROOT = path.join(process.cwd(), "src", "docs");
+const DOCS_ROOT = path.join(PROJECT_ROOT, "src", "docs");
 
 /**
  * Interface for a document with extractable snippets
@@ -233,7 +241,7 @@ function checkDocSnippets(doc: ExtractableDoc, providers: string[], verbose = fa
   let allUpToDate = true;
 
   // Create a shared temp directory
-  const tempDir = path.join(process.cwd(), ".temp-snippet-check");
+  const tempDir = path.join(PROJECT_ROOT, ".temp-snippet-check");
 
   try {
     // Ensure temp directory exists

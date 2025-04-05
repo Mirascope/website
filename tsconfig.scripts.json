@@ -1,12 +1,14 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "CommonJS",
-    "moduleResolution": "node",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "esModuleInterop": true,
     "verbatimModuleSyntax": false,
     "allowImportingTsExtensions": false,
-    "types": ["node"]
+    "types": ["node"],
+    "noEmit": true,
+    "skipLibCheck": true
   },
   "include": ["scripts/**/*.ts"]
 }
