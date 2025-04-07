@@ -42,7 +42,7 @@ function extractFrontmatter(source: string): { content: string; frontmatter: Rec
 }
 
 /**
- * Processes MDX content using next-mdx-remote/serialize
+ * Processes MDX content using next-mdx-remote/serialize with enhanced error handling
  */
 export async function processMDX(source: string): Promise<ProcessedMDX> {
   if (!source) {

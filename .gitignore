@@ -6,11 +6,9 @@ dist-ssr
 scratch
 
 # Claude Code
-
 CLAUDE.md
 
 # Cursor
-
 .cursorrules
 
 # Python
@@ -18,3 +16,6 @@ __pycache__/
 *.py[cod]
 *.egg-info/
 .venv/
+
+# Generated files
+public/static/
