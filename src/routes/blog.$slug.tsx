@@ -68,10 +68,42 @@ function BlogPostPage() {
           console.log("Got post data:", result);
           setPost(result ? { ...result.meta, content: result.content } : null);
 
-          // Process the MDX content with the new compiler
+          // Process the MDX content with the compiler
           if (result && result.content) {
-            const mdxResult = await processMDX(result.content);
-            setCompiledMDX(mdxResult);
+            try {
+              // Add a fallback mechanism for posts with problematic MDX
+              let content = result.content;
+
+              // Try to process MDX with our enhanced preprocessor
+              const mdxResult = await processMDX(content);
+              setCompiledMDX(mdxResult);
+            } catch (parseErr) {
+              console.error("Error processing MDX:", parseErr);
+
+              // Create a simplified fallback version without complex HTML
+              try {
+                // Extract just the plain text and simple markdown
+                const simplifiedContent = result.content
+                  .replace(/<[^>]*>/g, "") // Strip HTML tags
+                  .replace(/\{[^}]*\}/g, ""); // Strip JS expressions
+
+                const fallbackMdx = await processMDX(`
+# ${result.meta.title}
+
+${result.meta.description}
+
+**Error rendering full content. Showing simplified version.**
+
+${simplifiedContent}
+                `);
+                setCompiledMDX(fallbackMdx);
+              } catch (fallbackErr) {
+                // Last resort error message
+                setError(
+                  `Could not render post content: ${parseErr instanceof Error ? parseErr.message : String(parseErr)}`
+                );
+              }
+            }
           }
         } catch (fetchErr) {
           console.error("Error in getPostBySlug:", fetchErr);
