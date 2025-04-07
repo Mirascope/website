@@ -58,7 +58,7 @@ export default function CookieBanner({ onAccept, onReject }: CookieBannerProps) 
       role="alertdialog"
       aria-labelledby="cookie-title"
       aria-describedby="cookie-description"
-      className="fixed bottom-12 left-4 w-[180px] p-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-primary shadow-lg rounded-lg z-50"
+      className="fixed 2xl:bottom-4 xl:bottom-12 sm:bottom-12 xs:bottom-18 bottom-18 lg:left-4 md:left-4 sm:left-4 left-4 w-[180px] p-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-primary shadow-lg rounded-lg z-50"
       tabIndex={-1}
     >
       <div className="flex flex-col gap-2">

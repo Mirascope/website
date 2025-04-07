@@ -12,10 +12,10 @@ export default function Footer() {
         isLandingPage ? "bg-transparent" : "bg-background"
       )}
     >
-      <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center md:items-center">
+      <div className="max-w-5xl mx-auto flex flex-col-reverse md:flex-row justify-between items-center md:items-center">
         <div
           className={cn(
-            "text-sm sm:text-base mb-4 md:mb-0 text-center md:text-left",
+            "text-sm sm:text-base mt-4 md:mt-0 text-center md:text-left",
             isLandingPage ? "text-white" : "text-slate-800 dark:text-white"
           )}
         >
