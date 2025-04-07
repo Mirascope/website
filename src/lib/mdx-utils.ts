@@ -1,5 +1,3 @@
-import { serialize } from "next-mdx-remote/serialize";
-
 export interface ProcessedMDX {
   code: string;
   frontmatter: Record<string, any>;
@@ -53,6 +51,9 @@ export async function processMDX(source: string): Promise<ProcessedMDX> {
     // Extract frontmatter - note that serialize handles this automatically,
     // but we need to extract it ourselves to return it separately
     const { content, frontmatter } = extractFrontmatter(source);
+
+    // Dynamically import next-mdx-remote/serialize since it's an ESM module
+    const { serialize } = await import("next-mdx-remote/serialize");
 
     // Use next-mdx-remote's serialize function to compile the MDX
     // We'll handle code highlighting in the custom component instead of rehype
