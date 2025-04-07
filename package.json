@@ -2,23 +2,23 @@
   "name": "my-app",
   "private": true,
   "scripts": {
-    "start": "vite --port 3000",
-    "preprocess-content": "ts-node --project tsconfig.scripts.json scripts/preprocess-content.ts",
-    "prebuild": "npm run preprocess-content",
-    "build": "vite build && tsc",
-    "serve": "vite preview",
-    "test": "vitest run",
-    "typecheck": "tsc --noEmit",
+    "start": "bun --bun vite --port 3000",
+    "preprocess-content": "bun run scripts/preprocess-content.ts",
+    "prebuild": "bun run preprocess-content",
+    "build": "bun run --bun vite build && bun run tsc",
+    "serve": "bun --bun vite preview",
+    "test": "bun --bun vitest run",
+    "typecheck": "bun run tsc --noEmit",
     "validate:python": "./scripts/validate-snippets.sh",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\"",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\"",
     "prepare": "husky",
-    "pre-commit": "lint-staged && npm run typecheck",
-    "update-snippets": "ts-node --project tsconfig.scripts.json scripts/update-snippets.ts"
+    "pre-commit": "lint-staged && bun run typecheck",
+    "update-snippets": "bun run scripts/update-snippets.ts"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,css,md,mdx}": "prettier --write",
-    "src/docs/**/*.mdx": "ts-node --project tsconfig.scripts.json scripts/update-snippets.ts --check"
+    "src/docs/**/*.mdx": "bun run scripts/update-snippets.ts --check"
   },
   "dependencies": {
     "@mdx-js/react": "^3.1.0",
