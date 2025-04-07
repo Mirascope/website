@@ -4,6 +4,7 @@ dist
 dist-ssr
 *.local
 scratch
+package-lock.json
 
 # Claude Code
 CLAUDE.md

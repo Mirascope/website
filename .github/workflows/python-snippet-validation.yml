@@ -37,17 +37,17 @@ jobs:
     - name: Install dependencies and run validation
       run: ./scripts/validate-snippets.sh --verbose
       
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v1
       with:
-        node-version: 20
+        bun-version: latest
     
-    - name: Install Node dependencies
-      run: npm install
+    - name: Install dependencies
+      run: bun install
       
     - name: Verify code snippets are up-to-date
       id: check-snippets
-      run: npm run update-snippets -- --check
+      run: bun run update-snippets -- --check
       
     - name: Add comment when snippets are out of date (PR only)
       if: failure() && github.event_name == 'pull_request' && steps.check-snippets.outcome == 'failure'
@@ -60,7 +60,7 @@ jobs:
             issue_number: issue.number,
             owner: repo.owner,
             repo: repo.repo,
-            body: "❌ The code snippets in the documentation are out of date.\n\nPlease run `npm run update-snippets` locally and commit the updated snippets.\n\nThis ensures that the runnable code examples in the docs stay in sync with the documentation content."
+            body: "❌ The code snippets in the documentation are out of date.\n\nPlease run `bun run update-snippets` locally and commit the updated snippets.\n\nThis ensures that the runnable code examples in the docs stay in sync with the documentation content."
           });
       
     - name: Add comment when Python validation fails (PR only)
@@ -74,5 +74,5 @@ jobs:
             issue_number: issue.number,
             owner: repo.owner,
             repo: repo.repo,
-            body: "❌ Python validation failed for code snippets.\n\nPlease check the GitHub Actions log for details and fix the errors in the extracted snippets.\n\nCommon fixes:\n1. Make sure all code blocks in MDX files have necessary imports\n2. Fix type annotations in the code\n3. Fix code style issues if any are reported\n4. Update the snippets with `npm run update-snippets`"
+            body: "❌ Python validation failed for code snippets.\n\nPlease check the GitHub Actions log for details and fix the errors in the extracted snippets.\n\nCommon fixes:\n1. Make sure all code blocks in MDX files have necessary imports\n2. Fix type annotations in the code\n3. Fix code style issues if any are reported\n4. Update the snippets with `bun run update-snippets`"
           });
