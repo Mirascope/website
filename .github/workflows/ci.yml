@@ -35,5 +35,8 @@ jobs:
     - name: Prettier check
       run: bun run format:check
     
+    - name: Validate MDX
+      run: bun run validate:mdx
+      
     - name: Build
       run: bun run build
