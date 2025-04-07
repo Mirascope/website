@@ -3,11 +3,14 @@ import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import CookieBanner from "../components/CookieBanner";
+import useAnalyticsConsent from "../lib/hooks/useAnalyticsConsent";
 
 export const Route = createRootRoute({
   component: () => {
     const router = useRouterState();
     const isLandingPage = router.location.pathname === "/";
+    const { updateConsent } = useAnalyticsConsent();
 
     return (
       <>
@@ -24,6 +27,12 @@ export const Route = createRootRoute({
             </main>
           </div>
           <Footer />
+
+          {/* Cookie consent banner */}
+          <CookieBanner
+            onAccept={() => updateConsent(true)}
+            onReject={() => updateConsent(false)}
+          />
         </div>
         <TanStackRouterDevtools />
       </>

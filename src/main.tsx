@@ -7,6 +7,7 @@ import { routeTree } from "./routeTree.gen";
 
 import "./styles.css";
 import reportWebVitals from "./reportWebVitals.ts";
+import { hasAnalyticsConsent } from "./lib/services/analytics";
 
 // Initial theme setup (later handled by ThemeSwitcher component)
 const initializeTheme = () => {
@@ -62,7 +63,12 @@ if (rootElement && !rootElement.innerHTML) {
   );
 }
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// Only initialize web vitals reporting if consent is given
+if (hasAnalyticsConsent()) {
+  reportWebVitals();
+} else {
+  // Still allow performance tracking locally, but don't send to analytics
+  reportWebVitals(() => {
+    // No-op - this prevents sending analytics data
+  });
+}
