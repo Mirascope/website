@@ -6,25 +6,27 @@ URL: [https://mirascope.com](https://mirascope.com)
 
 ### Setup
 
+This project uses [Bun](https://bun.sh/) - a fast all-in-one JavaScript runtime and toolkit.
+
 ```bash
 # Install dependencies
-npm install
+bun install
 
 # Start development server
-npm start
+bun run start
 ```
 
 ### Commands
 
-- `npm start` - Start development server
-- `npm run build` - Build for production
-- `npm run serve` - Preview production build
-- `npm run test` - Run tests
-- `npm run typecheck` - Check TypeScript types
-- `npm run format` - Format all files with Prettier
-- `npm run format:check` - Check if files need formatting
-- `npm run update-snippets` - Update or check extractable code snippets (use --help for options)
-- `npm run validate:python` - Runs typechecking and linting on extracted Python snippets
+- `bun run start` - Start development server
+- `bun run build` - Build for production
+- `bun run serve` - Preview production build
+- `bun run test` - Run tests
+- `bun run typecheck` - Check TypeScript types
+- `bun run format` - Format all files with Prettier
+- `bun run format:check` - Check if files need formatting
+- `bun run update-snippets` - Update or check extractable code snippets (use --help for options)
+- `bun run validate:python` - Runs typechecking and linting on extracted Python snippets
 
 ### Pre-commit Hooks
 
@@ -48,14 +50,14 @@ The documentation contains Python code snippets that are automatically extracted
 
 #### Commands
 
-- `npm run update-snippets` - Update all extractable snippets for all providers
-- `npm run update-snippets -- --check` - Check if snippets are up-to-date
-- `npm run update-snippets -- --path=<file-path>` - Update snippets only for a specific file
-- `npm run update-snippets -- --check --path=<file-path>` - Check if snippets for a specific file are up-to-date
+- `bun run update-snippets` - Update all extractable snippets for all providers
+- `bun run update-snippets -- --check` - Check if snippets are up-to-date
+- `bun run update-snippets -- --path=<file-path>` - Update snippets only for a specific file
+- `bun run update-snippets -- --check --path=<file-path>` - Check if snippets for a specific file are up-to-date
 
 #### CI Integration
 
-A GitHub workflow automatically verifies that all extracted snippets are up-to-date with the source documentation. If you modify a document with code snippets, make sure to run `npm run update-snippets` and commit the updated snippets.
+A GitHub workflow automatically verifies that all extracted snippets are up-to-date with the source documentation. If you modify a document with code snippets, make sure to run `bun run update-snippets` and commit the updated snippets.
 
 ## License
 
