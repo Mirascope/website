@@ -1,7 +1,8 @@
 /**
  * Analytics service to handle all tracking functionality.
- * Currently set up for future Google Analytics integration.
+ * Integrated with Google Analytics 4.
  */
+import { GA_MEASUREMENT_ID, SITE_VERSION } from "../constants/site";
 
 // Centralized check for browser environment
 export const isBrowser = typeof window !== "undefined";
@@ -9,6 +10,12 @@ export const isBrowser = typeof window !== "undefined";
 // Check if analytics consent has been given
 export const hasAnalyticsConsent = (): boolean => {
   if (!isBrowser) return false;
+
+  // Disable analytics in development environment
+  if (process.env.NODE_ENV === "development") {
+    return false;
+  }
+
   return localStorage.getItem("cookie-consent") === "accepted";
 };
 
@@ -36,36 +43,34 @@ export const initializeAnalytics = (): void => {
   analyticsInitialized = true;
   console.log(`Analytics initialized with consent: ${hasConsent}`);
 
-  // Example Google Analytics initialization with consent mode (uncomment when adding GA)
-  /*
-  // Add the script dynamically only when needed
-  if (!document.getElementById('ga-script')) {
-    const script = document.createElement('script');
-    script.id = 'ga-script';
+  // Add the Google Analytics script dynamically
+  if (!document.getElementById("ga-script")) {
+    const script = document.createElement("script");
+    script.id = "ga-script";
     script.async = true;
-    script.src = `https://www.googletagmanager.com/gtag/js?id=YOUR_GA_MEASUREMENT_ID`;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
     document.head.appendChild(script);
-    
+
     window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      dataLayer.push(arguments);
+    function gtag(...args: any[]) {
+      window.dataLayer?.push(args);
     }
     window.gtag = gtag;
-    gtag('js', new Date());
-    
+    gtag("js", new Date());
+
     // Set default consent settings
-    gtag('consent', 'default', {
-      'analytics_storage': 'granted', // We only initialize if consent is given
-      'ad_storage': 'denied', // Always deny ad storage by default
+    gtag("consent", "default", {
+      analytics_storage: "granted", // We only initialize if consent is given
+      ad_storage: "denied", // Always deny ad storage by default
     });
-    
+
     // Initialize with the measurement ID
-    gtag('config', 'YOUR_GA_MEASUREMENT_ID', {
-      'anonymize_ip': true,
-      'send_page_view': true,
+    gtag("config", GA_MEASUREMENT_ID, {
+      anonymize_ip: true,
+      send_page_view: true,
+      site_version: SITE_VERSION, // Track site version as a custom dimension
     });
   }
-  */
 };
 
 // Update consent settings in analytics platforms
@@ -84,14 +89,12 @@ export const updateAnalyticsConsent = (consent: boolean): void => {
     // Handle revoking consent
     analyticsInitialized = false;
 
-    // Example code for updating Google Analytics consent (uncomment when adding GA)
-    /*
+    // Update Google Analytics consent settings if already loaded
     if (window.gtag) {
-      window.gtag('consent', 'update', {
-        'analytics_storage': 'denied',
+      window.gtag("consent", "update", {
+        analytics_storage: "denied",
       });
     }
-    */
   }
 };
 
@@ -101,14 +104,12 @@ export const trackPageView = (path: string): void => {
 
   console.log(`Page view tracked: ${path}`);
 
-  // Example code for tracking pageview in Google Analytics (uncomment when adding GA)
-  /*
+  // Send pageview to Google Analytics
   if (window.gtag) {
-    window.gtag('config', 'YOUR_GA_MEASUREMENT_ID', {
-      'page_path': path,
+    window.gtag("config", GA_MEASUREMENT_ID, {
+      page_path: path,
     });
   }
-  */
 };
 
 // Track a custom event
@@ -122,16 +123,15 @@ export const trackEvent = (
 
   console.log(`Event tracked: ${category} - ${action} - ${label} - ${value}`);
 
-  // Example code for tracking event in Google Analytics (uncomment when adding GA)
-  /*
+  // Send event to Google Analytics
   if (window.gtag) {
-    window.gtag('event', action, {
-      'event_category': category,
-      'event_label': label,
-      'value': value,
+    window.gtag("event", action, {
+      event_category: category,
+      event_label: label,
+      value: value,
+      site_version: SITE_VERSION, // Include site version in all events
     });
   }
-  */
 };
 
 // Web vitals reporting function that respects consent
@@ -140,15 +140,14 @@ export const reportWebVitalsToAnalytics = (metric: any): void => {
 
   console.log(`Web vital reported: ${metric.name} - ${Math.round(metric.value * 100) / 100}`);
 
-  // Example code for tracking web vitals in Google Analytics (uncomment when adding GA)
-  /*
+  // Send web vitals to Google Analytics
   if (window.gtag) {
-    window.gtag('event', 'web-vitals', {
-      event_category: 'Web Vitals',
+    window.gtag("event", "web-vitals", {
+      event_category: "Web Vitals",
       event_label: metric.id,
       value: Math.round(metric.value * 100) / 100,
       non_interaction: true,
+      site_version: SITE_VERSION,
     });
   }
-  */
 };

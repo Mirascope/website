@@ -3,29 +3,37 @@ import {
   hasAnalyticsConsent,
   updateAnalyticsConsent,
   initializeAnalytics,
+  isBrowser,
 } from "../services/analytics";
+import { SITE_VERSION } from "../constants/site";
 
 // Hook to manage analytics consent
 export function useAnalyticsConsent() {
   const [consent, setConsent] = useState<boolean | null>(null);
 
   useEffect(() => {
+    if (!isBrowser) return;
+
     // Check for existing consent
     const hasConsent = hasAnalyticsConsent();
     setConsent(hasConsent);
 
     // Initialize analytics with the current consent setting
-    if (typeof window !== "undefined") {
-      initializeAnalytics();
+    initializeAnalytics();
+
+    // Log debug information in development
+    if (process.env.NODE_ENV === "development") {
+      console.log(`Site Version: ${SITE_VERSION}`);
+      console.log("Analytics tracking disabled in development environment");
     }
   }, []);
 
   // Update consent and handle analytics accordingly
   const updateConsent = (newConsent: boolean) => {
     setConsent(newConsent);
-    localStorage.setItem("cookie-consent", newConsent ? "accepted" : "rejected");
 
     // Update analytics services with new consent setting
+    // (This function handles localStorage updates internally)
     updateAnalyticsConsent(newConsent);
   };
 

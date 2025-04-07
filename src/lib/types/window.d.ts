@@ -8,4 +8,7 @@ interface Window {
       [key: string]: any;
     }
   ) => void;
+
+  // Google Analytics data layer
+  dataLayer?: any[];
 }
