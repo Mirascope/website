@@ -8,7 +8,7 @@ export default function Footer() {
   return (
     <footer
       className={cn(
-        "w-full py-6 px-4 sm:px-6 md:px-12 mt-auto",
+        "w-full pt-6 pb-3 px-4 sm:px-6 md:px-12 mt-auto",
         isLandingPage ? "bg-transparent" : "bg-background"
       )}
     >
