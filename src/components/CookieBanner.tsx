@@ -4,11 +4,23 @@ import { isBrowser } from "../lib/services/analytics";
 interface CookieBannerProps {
   onAccept: () => void;
   onReject: () => void;
+  onVisibilityChange?: (isVisible: boolean) => void;
 }
 
-export default function CookieBanner({ onAccept, onReject }: CookieBannerProps) {
+export default function CookieBanner({
+  onAccept,
+  onReject,
+  onVisibilityChange,
+}: CookieBannerProps) {
   const [isVisible, setIsVisible] = useState(false);
   const bannerRef = useRef<HTMLDivElement>(null);
+
+  // Notify parent when visibility changes
+  useEffect(() => {
+    if (onVisibilityChange) {
+      onVisibilityChange(isVisible);
+    }
+  }, [isVisible, onVisibilityChange]);
 
   useEffect(() => {
     // Only run in browser environment
@@ -58,7 +70,7 @@ export default function CookieBanner({ onAccept, onReject }: CookieBannerProps) 
       role="alertdialog"
       aria-labelledby="cookie-title"
       aria-describedby="cookie-description"
-      className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 shadow-lg"
+      className="p-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 shadow-lg w-full"
       tabIndex={-1}
     >
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">

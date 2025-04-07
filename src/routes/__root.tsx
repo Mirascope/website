@@ -1,6 +1,6 @@
 import { Outlet, createRootRoute, useRouterState } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -14,6 +14,7 @@ export const Route = createRootRoute({
     const router = useRouterState();
     const isLandingPage = router.location.pathname === "/";
     const { updateConsent, hasConsent } = useAnalyticsConsent();
+    const [bannerVisible, setBannerVisible] = useState(false);
 
     // Track page views when route changes
     useEffect(() => {
@@ -28,7 +29,9 @@ export const Route = createRootRoute({
     return (
       <>
         <div
-          className={`px-4 sm:px-6 flex flex-col min-h-screen ${isLandingPage ? "bg-watercolor-flipped" : ""} handwriting-enabled`}
+          className={`px-4 sm:px-6 flex flex-col min-h-screen ${
+            isLandingPage ? "bg-watercolor-flipped" : ""
+          } handwriting-enabled`}
         >
           {/* Header is fixed, so it's outside the content flow */}
           <Header />
@@ -41,12 +44,25 @@ export const Route = createRootRoute({
           </div>
           <Footer />
 
-          {/* Cookie consent banner */}
+          {/* Spacer div that takes up space when banner is visible */}
+          {bannerVisible && <div style={{ height: "80px" }} aria-hidden="true" />}
+        </div>
+
+        {/* Cookie consent banner - fixed position */}
+        <div className="fixed bottom-0 left-0 right-0 z-50">
           <CookieBanner
-            onAccept={() => updateConsent(true)}
-            onReject={() => updateConsent(false)}
+            onAccept={() => {
+              updateConsent(true);
+              setBannerVisible(false);
+            }}
+            onReject={() => {
+              updateConsent(false);
+              setBannerVisible(false);
+            }}
+            onVisibilityChange={setBannerVisible}
           />
         </div>
+
         <TanStackRouterDevtools />
       </>
     );
