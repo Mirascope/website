@@ -3,6 +3,8 @@
   "private": true,
   "scripts": {
     "start": "vite --port 3000",
+    "preprocess-content": "ts-node --project tsconfig.scripts.json scripts/preprocess-content.ts",
+    "prebuild": "npm run preprocess-content",
     "build": "vite build && tsc",
     "serve": "vite preview",
     "test": "vitest run",
@@ -12,8 +14,7 @@
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\"",
     "prepare": "husky",
     "pre-commit": "lint-staged && npm run typecheck",
-    "update-snippets": "ts-node --project tsconfig.scripts.json scripts/update-snippets.ts",
-    "validate:python": "./scripts/validate-snippets.sh"
+    "update-snippets": "ts-node --project tsconfig.scripts.json scripts/update-snippets.ts"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,css,md,mdx}": "prettier --write",
