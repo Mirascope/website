@@ -224,9 +224,7 @@ Our `KnowledgeGraph` class serves as the container for all nodes and edges, and 
 
 We create a structured knowledge graph from the text of a Wikipedia article in Python:
 
-{% raw %}
-
-```py
+```python
 import os
 from bs4 import BeautifulSoup
 import requests
@@ -258,8 +256,6 @@ def generate_knowledge_graph(url: str) -> openai.OpenAIDynamicConfig:
 
 kg = generate_knowledge_graph("https://en.wikipedia.org/wiki/Algorithmic_bias")
 ```
-
-{% endraw %}
 
 In the code sample above, we:
 
@@ -373,8 +369,6 @@ First, you'll need to set up your Neo4j graph database, which you can do [locall
 We created a local "KG Blog Post DBMS" database with the password "password" for the example.
 
 Next, you'll need to install the neo4j package and connect using the Python GraphDatabase driver:
-
-{% raw %}
 
 ```py
 !pip install neo4j
@@ -503,8 +497,6 @@ print(response.content)
 
 driver.close()
 ```
-
-{% endraw %}
 
 In the code sample above, we:
 
