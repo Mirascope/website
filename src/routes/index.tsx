@@ -7,7 +7,7 @@ export const Route = createFileRoute("/")({
 
 function LandingPage() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-136px)] mt-0 md:-mt-16 py-8 md:py-0 overflow-hidden">
+    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)] mt-0 md:-mt-16 py-8 md:py-0 overflow-hidden">
       <div className="text-center flex flex-col items-center w-full px-4">
         <div className="mb-6 sm:mb-8 md:mb-10flex justify-center">
           <Logo
