@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { isBrowser } from "../lib/services/analytics";
 
 interface CookieBannerProps {
   onAccept: () => void;
@@ -9,6 +10,9 @@ export default function CookieBanner({ onAccept, onReject }: CookieBannerProps) 
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    // Only run in browser environment
+    if (!isBrowser) return;
+
     // Check if user has already made a choice
     const cookieConsent = localStorage.getItem("cookie-consent");
     if (!cookieConsent) {
@@ -17,17 +21,24 @@ export default function CookieBanner({ onAccept, onReject }: CookieBannerProps) 
   }, []);
 
   const handleAccept = () => {
-    localStorage.setItem("cookie-consent", "accepted");
+    // Only attempt to use localStorage in browser
+    if (isBrowser) {
+      localStorage.setItem("cookie-consent", "accepted");
+    }
     setIsVisible(false);
     onAccept();
   };
 
   const handleReject = () => {
-    localStorage.setItem("cookie-consent", "rejected");
+    // Only attempt to use localStorage in browser
+    if (isBrowser) {
+      localStorage.setItem("cookie-consent", "rejected");
+    }
     setIsVisible(false);
     onReject();
   };
 
+  // Don't render anything during SSR or if user has already made a choice
   if (!isVisible) return null;
 
   return (

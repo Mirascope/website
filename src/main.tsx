@@ -7,7 +7,6 @@ import { routeTree } from "./routeTree.gen";
 
 import "./styles.css";
 import reportWebVitals from "./reportWebVitals.ts";
-import { hasAnalyticsConsent } from "./lib/services/analytics";
 
 // Initial theme setup (later handled by ThemeSwitcher component)
 const initializeTheme = () => {
@@ -63,12 +62,5 @@ if (rootElement && !rootElement.innerHTML) {
   );
 }
 
-// Only initialize web vitals reporting if consent is given
-if (hasAnalyticsConsent()) {
-  reportWebVitals();
-} else {
-  // Still allow performance tracking locally, but don't send to analytics
-  reportWebVitals(() => {
-    // No-op - this prevents sending analytics data
-  });
-}
+// Initialize web vitals reporting (it will check for consent internally)
+reportWebVitals();
