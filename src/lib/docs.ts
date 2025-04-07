@@ -3,6 +3,9 @@ import docsMetadata from "../docs/_meta";
 import type { ProductDocs } from "../docs/_meta";
 import { docsAPI } from "./utils";
 
+// Check if we're in production environment
+const isProduction = import.meta.env.PROD;
+
 // Types for documentation handling
 export type DocType = "item" | "group-item" | "section-item" | "section-group-item";
 
@@ -140,21 +143,38 @@ export const getDoc = async (path: string): Promise<DocWithContent> => {
 
     // Attempt to load the file
     let content;
+
     try {
       // Check cache first
       if (contentCache[filePath]) {
         content = contentCache[filePath];
         console.log(`[getDoc] Using cached content for: ${filePath}`);
       } else {
-        // Use the docsAPI to fetch the file content
-        console.log(`[getDoc] Attempting to fetch document: ${filePath}`);
-
         // For product index pages like mirascope/index.mdx, also check the _meta.ts
         // to ensure we have valid metadata even if the file doesn't physically exist
         const isProductIndex = filePath.split("/").length === 2 && filePath.endsWith("/index.mdx");
 
         try {
-          content = await docsAPI.getDocContent(filePath);
+          // In development mode, use the docsAPI to fetch content
+          // In production mode, fetch static JSON files
+          if (!isProduction) {
+            // Development mode - use the API
+            console.log(`[getDoc] Attempting to fetch document via API: ${filePath}`);
+            content = await docsAPI.getDocContent(filePath);
+          } else {
+            // Production mode - use static files
+            console.log(`[getDoc] Attempting to fetch document from static files: ${filePath}`);
+            const normalizedPath = filePath.replace(/\\/g, "/");
+            const response = await fetch(`/static/docs/${normalizedPath}.json`);
+
+            if (!response.ok) {
+              throw new Error(`Error fetching doc content: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            content = data.content;
+          }
+
           console.log(`[getDoc] Successfully fetched content for: ${filePath}`);
           contentCache[filePath] = content;
         } catch (error) {
