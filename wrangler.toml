@@ -1,0 +1,10 @@
+name = "mirascope-website"
+compatibility_date = "2024-04-07"
+
+# Static site configuration
+[site]
+bucket = "./dist"
+
+# Build configuration with clean bun install
+[build]
+command = "rm -rf node_modules bun.lock && bun install && bun run build"
