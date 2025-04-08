@@ -195,6 +195,10 @@ const meta: DocsStructure = {
       index: {
         title: "Welcome",
       },
+      pricing: {
+        title: "Pricing",
+        description: "Lilypad pricing plans and features",
+      },
     },
 
     // Grouped pages in main area
