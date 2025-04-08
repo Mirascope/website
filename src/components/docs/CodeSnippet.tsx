@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { useProvider } from "./ProviderContext";
 import { CodeBlock } from "../CodeBlock";
+import { replaceProviderVariables } from "../../config/providers";
 
 interface CodeSnippetProps {
   code?: string;
@@ -16,7 +17,7 @@ export function CodeSnippet({
   language = "python",
   className = "",
 }: CodeSnippetProps) {
-  const { provider, providerInfo } = useProvider();
+  const { provider } = useProvider();
 
   // Determine which code to use
   let content: string;
@@ -50,10 +51,8 @@ export function CodeSnippet({
     }
   }
 
-  // Replace template variables
-  const processedContent = String(content)
-    .replace(/\$PROVIDER/g, provider)
-    .replace(/\$MODEL/g, providerInfo.defaultModel);
+  // Replace template variables using the shared function
+  const processedContent = replaceProviderVariables(String(content), provider);
 
   return (
     <div className={`my-4 ${className}`}>

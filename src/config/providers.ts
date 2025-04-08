@@ -81,3 +81,35 @@ export const providerDefaults: Record<
     defaultModel: "amazon.nova-lite-v1:0",
   },
 };
+
+/**
+ * Get the default alternative provider and model
+ * Uses Anthropic as the alternative unless the primary provider is Anthropic,
+ * in which case it uses OpenAI
+ */
+export function getAlternativeProvider(primaryProvider: Provider): {
+  provider: Provider;
+  model: string;
+} {
+  const alternativeProvider = primaryProvider === "anthropic" ? "openai" : "anthropic";
+  return {
+    provider: alternativeProvider,
+    model: providerDefaults[alternativeProvider].defaultModel,
+  };
+}
+
+/**
+ * Replace provider variables in content
+ * Replaces $PROVIDER, $MODEL, $OTHER_PROVIDER, and $OTHER_MODEL
+ */
+export function replaceProviderVariables(content: string, primaryProvider: Provider): string {
+  const primaryInfo = providerDefaults[primaryProvider];
+  const { provider: secondaryProvider, model: secondaryModel } =
+    getAlternativeProvider(primaryProvider);
+
+  return content
+    .replace(/\$PROVIDER/g, primaryProvider)
+    .replace(/\$MODEL/g, primaryInfo.defaultModel)
+    .replace(/\$OTHER_PROVIDER/g, secondaryProvider)
+    .replace(/\$OTHER_MODEL/g, secondaryModel);
+}
