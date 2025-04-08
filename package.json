@@ -7,20 +7,25 @@
     "prebuild": "bun run preprocess-content",
     "build": "bun run --bun vite build && bun run tsc",
     "serve": "bun --bun vite preview",
-    "test": "bun --bun vitest run",
-    "typecheck": "bun run tsc --noEmit",
-    "validate:python": "./scripts/validate-snippets.sh",
-    "validate:mdx": "bun run scripts/validate-mdx.ts",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\"",
-    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\"",
+    "lint": "bun run lint:ts && bun run lint:mdx && bun run lint:snippets && bun run lint:py && bun run lint:format",
+    "lint:ts": "bun run tsc --noEmit",
+    "lint:mdx": "bun run scripts/validate-mdx.ts",
+    "lint:snippets": "bun run scripts/update-snippets.ts --check",
+    "lint:py": "./scripts/lint-python.sh",
+    "lint:format": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\"",
+    "fix": "bun run fix:format && bun run fix:snippets",
+    "fix:format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\"",
+    "fix:snippets": "bun run scripts/update-snippets.ts",
     "prepare": "husky",
-    "pre-commit": "lint-staged && bun run typecheck",
-    "update-snippets": "bun run scripts/update-snippets.ts"
+    "pre-commit": "lint-staged && bun run lint:ts"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,css,md,mdx}": "prettier --write",
-    "src/docs/**/*.mdx": "bun run scripts/update-snippets.ts --check",
-    "**/*.mdx": "bun run validate:mdx"
+    "*.mdx": [
+      "bun run lint:mdx",
+      "bun run lint:snippets"
+    ],
+    "*.py": "./scripts/lint-python.sh --path"
   },
   "dependencies": {
     "@mdx-js/react": "^3.1.0",
