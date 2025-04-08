@@ -108,6 +108,7 @@ const meta: DocsStructure = {
           },
           response_models: {
             title: "Response Models",
+            hasExtractableSnippets: true,
           },
           json_mode: {
             title: "JSON Mode",
