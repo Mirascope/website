@@ -112,6 +112,7 @@ const meta: DocsStructure = {
           },
           json_mode: {
             title: "JSON Mode",
+            hasExtractableSnippets: true,
           },
           output_parsers: {
             title: "Output Parsers",
