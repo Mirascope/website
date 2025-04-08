@@ -55,9 +55,6 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
         const logPrefix = section
           ? `[Docs${section.charAt(0).toUpperCase() + section.slice(1)}Page]`
           : `[DocsProductPage]`;
-        console.log(
-          `${logPrefix} Full path: ${fullPath}, Product: ${product}, Section: ${section || "none"}, Group: ${group}, Slug: ${currentSlug}`
-        );
 
         try {
           // Get the document with a fallback system
@@ -71,9 +68,7 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
               : `/docs/${product}/index`;
             try {
               doc = await getDoc(indexPath);
-              console.log(`${logPrefix} Successfully loaded index`);
             } catch (indexError) {
-              console.log(`${logPrefix} Index not found, trying normal path`);
               doc = await getDoc(fullPath);
             }
           } else {
@@ -81,14 +76,11 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
             try {
               doc = await getDoc(fullPath);
             } catch (exactPathError) {
-              console.log(`${logPrefix} Exact path not found, trying index fallback`);
-
               // If the path doesn't end with a slash, try with /index
               if (!splat.endsWith("/") && !splat.endsWith(".mdx")) {
                 try {
                   const indexPath = `${fullPath}/index`;
                   doc = await getDoc(indexPath);
-                  console.log(`${logPrefix} Successfully loaded index document for sub-path`);
                 } catch (indexError) {
                   // If index doesn't exist either, throw the original error
                   console.error(`${logPrefix} Index not found either`, indexError);
@@ -122,7 +114,6 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
             doc.content = `# ${doc.meta.title || fallbackTitle}`;
           }
 
-          console.log(`${logPrefix} Document loaded successfully: ${doc.meta.title}`);
           setDocument(doc);
           setLoading(false);
         } catch (fetchErr) {
@@ -132,8 +123,6 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
 
           // If this is an index page, create a fallback
           if (splat === "" || splat === "/") {
-            console.log(`${logPrefix} Creating landing page fallback`);
-
             // Determine title and content based on section
             let title, content;
             const productCapitalized = product.charAt(0).toUpperCase() + product.slice(1);

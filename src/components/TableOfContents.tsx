@@ -47,7 +47,6 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ contentId, product, s
 
       // Only update state if we have new headings that are different from current ones
       if (items.length > 0 && JSON.stringify(items) !== JSON.stringify(headings)) {
-        console.log(`TableOfContents: Setting ${items.length} headings for ${contentId}`);
         setHeadings(items);
       }
     };

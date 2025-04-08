@@ -94,7 +94,6 @@ ${processedSnippet}
 
   // Write the file
   fs.writeFileSync(outputFile, content);
-  console.log(`Generated ${outputFile}`);
 
   return outputFile;
 }
@@ -115,8 +114,6 @@ export function processFile(
   // Extract snippets and headings
   const snippets = extractSnippets(mdxFile);
   const headings = extractHeadings(mdxFile);
-
-  console.log(`Found ${snippets.length} Python snippets in ${mdxFile}`);
 
   if (snippets.length === 0) {
     console.warn("No Python snippets found in the file.");
@@ -156,6 +153,5 @@ export function processFile(
     generatedFiles.push(file);
   });
 
-  console.log(`Successfully generated ${snippets.length} example files in ${outputDir}`);
   return generatedFiles;
 }
