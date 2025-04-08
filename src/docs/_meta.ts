@@ -84,6 +84,86 @@ const meta: DocsStructure = {
           },
         },
       },
+      learn: {
+        title: "Learn",
+        items: {
+          index: {
+            title: "Overview",
+          },
+          prompts: {
+            title: "Prompts",
+          },
+          calls: {
+            title: "Calls",
+          },
+          streams: {
+            title: "Streams",
+          },
+          chaining: {
+            title: "Chaining",
+          },
+          response_models: {
+            title: "Response Models",
+          },
+          json_mode: {
+            title: "JSON Mode",
+          },
+          output_parsers: {
+            title: "Output Parsers",
+          },
+          tools: {
+            title: "Tools",
+          },
+          agents: {
+            title: "Agents",
+          },
+          evals: {
+            title: "Evals",
+          },
+          async: {
+            title: "Async",
+          },
+          retries: {
+            title: "Retries",
+          },
+          local_models: {
+            title: "Local Models",
+          },
+        },
+      },
+      // Provider-specific features
+      "learn/provider-specific": {
+        title: "Provider-Specific Features",
+        items: {
+          openai: {
+            title: "OpenAI",
+          },
+          anthropic: {
+            title: "Anthropic",
+          },
+        },
+      },
+      // Extensions
+      "learn/extensions": {
+        title: "Extensions",
+        items: {
+          middleware: {
+            title: "Middleware",
+          },
+          custom_provider: {
+            title: "Custom LLM Provider",
+          },
+        },
+      },
+      // MCP - Model Context Protocol
+      "learn/mcp": {
+        title: "MCP - Model Context Protocol",
+        items: {
+          client: {
+            title: "Client",
+          },
+        },
+      },
     },
 
     // Sections (like API, Guides)
@@ -125,7 +205,7 @@ const meta: DocsStructure = {
       },
     },
 
-    // Sections (like API, Guides)
+    // Sections (like API)
     sections: {
       api: {
         title: "API",
