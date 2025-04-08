@@ -3,17 +3,19 @@ title: Quickstart
 description: Start using Lilypad in one line of code.
 ---
 
+# Quickstart
+
 ## Create an account
 
-> You'll need a GitHub or Google account to sign up.
+<Note>
+  You'll need a GitHub or Google account to sign up.
+</Note>
 
 First, navigate to [https://lilypad.mirascope.com](https://lilypad.mirascope.com) and create an account.
 
-:::information
-**Would you rather start with a no-code playground?**
-
-Check out the [Playground](./playground) section to get started running and experimenting right in the UI.
-:::
+<Info title="Would you rather start with a no-code playground?">
+  Check out the [Playground](./playground) section to get started running and experimenting right in the UI.
+</Info>
 
 ## Environment Variables
 
@@ -43,8 +45,9 @@ They have a very generous free tier.
 
 Install the `lilypad-sdk` with any additional dependencies you may need:
 
-##############
-NEEDS TABBING
+<TabbedSection>
+<Tab value="uv">
+```bash
 # For spans / tracing
 uv add lilypad-sdk
 
@@ -53,8 +56,10 @@ uv add "lilypad-sdk[google]"
 
 # For multiple providers
 uv add "lilypad-sdk[google,openai,anthropic]"
-
-
+```
+</Tab>
+<Tab value="pip">
+```bash
 # For spans / tracing
 pip install lilypad-sdk
 
@@ -63,7 +68,9 @@ pip install "lilypad-sdk[openai]"
 
 # For multiple providers
 pip install "lilypad-sdk[openai,anthropic,google]"
-###############
+```
+</Tab>
+</TabbedSection>
 
 Available provider extras:
 
@@ -79,9 +86,8 @@ Available provider extras:
 
 Run your first automatically traced and versioned function:
 
-
-NEEDS TABBING
-#########
+<TabbedSection>
+<Tab value="Google">
 ```python
 from google.genai import Client
 import lilypad
@@ -100,6 +106,10 @@ def answer_question(question: str) -> str | None:
 response = answer_question("What is the capital of France?")
 print(response)
 # > The capital of France is Paris.
+```
+</Tab>
+<Tab value="OpenAI">
+```python
 import lilypad
 from openai import OpenAI
 
@@ -117,6 +127,10 @@ def answer_question(question: str) -> str | None:
 response = answer_question("What is the capital of France?")
 print(response)
 # > The capital of France is Paris.
+```
+</Tab>
+<Tab value="Anthropic">
+```python
 from anthropic import Anthropic
 import lilypad
 
@@ -136,6 +150,10 @@ def answer_question(question: str) -> str | None:
 response = answer_question("What is the capital of France?")
 print(response)
 # > The capital of France is Paris.
+```
+</Tab>
+<Tab value="Mistral">
+```python
 import os
 
 import lilypad
@@ -155,6 +173,10 @@ def answer_question(question: str) -> str | None:
 response = answer_question("What is the capital of France?")
 print(response)
 # > The capital of France is Paris.
+```
+</Tab>
+<Tab value="Bedrock">
+```python
 import os
 
 from boto3.session import Session
@@ -177,6 +199,10 @@ def answer_question(question: str) -> str | None:
 response = answer_question("What is the capital of France?")
 print(response)
 # > The capital of France is Paris.
+```
+</Tab>
+<Tab value="Azure">
+```python
 from azure.ai.inference import ChatCompletionsClient
 from azure.core.credentials import AzureKeyCredential
 import lilypad
@@ -198,6 +224,10 @@ def answer_question(question: str) -> str | None:
 response = answer_question("What is the capital of France?")
 print(response)
 # > The capital of France is Paris.
+```
+</Tab>
+<Tab value="Outlines">
+```python
 import lilypad
 import outlines
 
@@ -217,7 +247,8 @@ response = answer_question("What is the capital of France?")
 print(response)
 # > The capital of France is Paris.
 ```
-###################
+</Tab>
+</TabbedSection>
 
 Follow the link output in your terminal to view the captured version and corresponding trace.
 
