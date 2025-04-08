@@ -106,23 +106,8 @@ async function getRepoStats(repo: string): Promise<RepoStats> {
   };
 }
 
-/**
- * Format star count with appropriate suffix
- */
-function formatStarCount(count: number): string {
-  if (count >= 1000) {
-    // Round to the nearest hundred for counts over 1000
-    const rounded = Math.round(count / 100) * 100;
-    return `${rounded / 1000}k+`;
-  } else if (count > 0) {
-    // For small numbers, just append a plus
-    return `${count}+`;
-  }
-  return "0";
-}
-
 async function main() {
-  const results: Record<string, { stars: string; starsExact: number; version: string }> = {};
+  const results: Record<string, { stars: number; version: string }> = {};
 
   // Fetch data for each repo
   for (const repo of REPOS) {
@@ -133,8 +118,7 @@ async function main() {
     const product = repo.split("/")[1].toLowerCase();
 
     results[product] = {
-      stars: formatStarCount(stats.stars),
-      starsExact: stats.stars,
+      stars: stats.stars,
       version: stats.latestVersion,
     };
   }
