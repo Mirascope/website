@@ -6,10 +6,8 @@ on:
   pull_request:
     branches: [ main ]
 
-# Add permissions to create comments on PRs
 permissions:
   contents: read
-  pull-requests: write
 
 jobs:
   build:
@@ -17,26 +15,45 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Setup Bun
       uses: oven-sh/setup-bun@v1
       with:
         bun-version: latest
-    
+
     - name: Install dependencies
       # Use clean install to work around dependency issues on Linux
       run: |
         rm -rf node_modules bun.lock
         bun install
-    
-    - name: TypeScript check
-      run: bun run typecheck
-    
-    - name: Prettier check
-      run: bun run format:check
-    
-    - name: Validate MDX
-      run: bun run validate:mdx
-      
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install uv
+      run: |
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+    - name: Create Python virtual environment
+      run: uv venv
+
+    - name: TypeScript Check
+      run: bun run lint:ts
+
+    - name: Prettier Check
+      run: bun run lint:format
+
+    - name: MDX Validation
+      run: bun run lint:mdx
+
+    - name: Check Snippets Up-to-date
+      run: bun run lint:snippets
+
+    - name: Python Code Validation
+      run: bun run lint:py
+
     - name: Build
       run: bun run build
