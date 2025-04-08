@@ -1,0 +1,129 @@
+---
+title: Versioning
+description: Track versions of your LLM functions
+---
+
+# Versioning
+
+> If you haven't already, we recommend reading [Traces](/docs/lilypad/observability/traces) first.
+
+When working with non-determinism (cough cough LLMs), it's extremely important that we take a snapshot of the exact version of the code that was used to produce an output. This reproducibility is necessary for proper [evaluation](/docs/lilypad/evaluation).
+
+## Automatic Versioning
+
+Setting `versioning="automatic"` will tell Lilypad to automatically version the decorated function every time it's executed:
+
+```python
+from google.genai import Client
+import lilypad
+
+lilypad.configure()
+client = Client()
+    
+@lilypad.trace(versioning="automatic") 
+def answer_question(question: str) -> str | None:
+    response = client.models.generate_content(
+        model="gemini-2.0-flash-001",
+        contents=f"Answer this question: {question}",
+    )
+    return response.text
+    
+response = answer_question("What is the capital of France?")  # automatically versioned
+print(response.content)
+# > The capital of France is Paris.
+```
+
+<Success>
+**The version is the "runnable closure" snapshot**
+
+Whenever you run a `trace`-decorated function with `versioning="automatic"`, we compute the entire code execution graph necessary to reproduce the current execution of the function.
+
+_This is what we use to determine the version._
+
+This means that changing the code to an existing version will automatically attach the trace to that version.
+
+It also means that changes to anything that would change how the function is executed will be captured:
+
+```python
+# This function will be included in the version and any changes
+# to it will result in a new version of `answer_question`
+def answer_question_prompt(question: str) -> str:
+    return f"Answer this question: {question}"
+
+@lilypad.trace(name="Answer Question", versioning="automatic") 
+def answer_question(question: str) -> str | None:
+    response = client.models.generate_content(
+        model="gemini-2.0-flash-001",
+        contents=answer_question_prompt(question),
+    )
+    return response.text
+```
+</Success>
+
+## Version Override
+
+Since a functions version is a snapshot, we can re-run the exact code for a given version.
+
+First, generate type-safe stubs for all available versions:
+
+```bash
+lilypad sync
+```
+
+This ensures that the `.version` and `.remote` methods return type-safe function signatures matching the expected arguments for that version, which you can then run in a sandbox:
+
+\[INSERT IMAGE]
+
+```python
+response = answer_question.version(1)("What is the capital of France?")
+```
+
+## Remote Deployment
+
+In the UI you can deploy a specific version to your `development` environment:
+
+\[INSERT IMAGE]
+
+<Warning>
+Make sure to run `lilypad sync` again to pull the updates type-safe signatures.
+</Warning>
+
+You can then run this remote version of the function:
+
+```python
+response = answer_question.remote("What is the capital of France?")
+```
+
+The deployment flow works like this:
+
+1. Deploy the specific function version as above
+2. Version goes into a "pending" state.
+3. Version is marked "active" the first time a matching signature runs.
+
+<Success>
+**For matching signatures, deployment is instant.**
+
+This means you can easily redeploy specific function versions to production without having to redeploy production itself.
+</Success>
+
+Once deployed in development, you can deploy into `staging` and/or `production`, which will follow the same flow as defined above.
+
+If you ever run a signature that is different from the one currently deployed, the [default version](./versioning#default-version) will run. For example, maybe you had to roll something back and forgot to update the deployed version to match. In such cases, Lilypad will do it's best to identify and make clear when the version running is different from the deployed version.
+
+### Default Version
+
+For building more reliable systems, we recommend wrapping any call to `.version` or `.remote` in production with a `try/except` that runs the original code as-written as a fallback:
+
+```python
+question = "What is the capital of France?"
+try:
+    response = answer_question.remote(question)
+except lilypad.RemoteFunctionError as e:
+    response = answer_question(question)
+```
+
+## A/B Testing
+
+You can use the `.version` method to run different versions of the same function easily. This makes A/B testing quite easy — just run each version for a subset of users and evaluate which one is better.
+
+Learn more about how to evaluate your system in the next section.
