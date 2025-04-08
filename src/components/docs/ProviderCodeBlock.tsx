@@ -61,7 +61,7 @@ export function ProviderCodeBlock({
             }
           }
         } catch (err) {
-          console.log(`Failed to load example for ${provider}:`, err);
+          console.error(`Failed to load example for ${provider}:`, err);
         }
 
         setCodeMap(newCodeMap);

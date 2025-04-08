@@ -65,7 +65,6 @@ export function useProvider() {
   if (context === undefined) {
     // Return a default context when no provider is available
     // This happens in blog posts or other areas without the provider dropdown
-    console.log("No ProviderContext found, using default provider:", defaultProvider);
     return {
       provider: defaultProvider,
       setProvider: () => {
