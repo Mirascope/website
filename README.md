@@ -29,12 +29,12 @@ bun run start
 
 #### Specialized Commands
 - `bun run lint:ts` - Check TypeScript types
-- `bun run lint:mdx` - Validate MDX files and check if snippets are up-to-date
+- `bun run lint:mdx` - Validate MDX files
+- `bun run lint:snippets` - Check if code snippets are up-to-date
 - `bun run lint:py` - Run typechecking and linting on Python snippets
-- `bun run lint:format` - Check if files need formatting
+- `bun run lint:format` - Check formatting with Prettier
 - `bun run fix:format` - Format all files with Prettier
 - `bun run fix:snippets` - Update extractable code snippets
-- `bun run snippets:check` - Check if snippets are up-to-date (alias for `scripts/update-snippets.ts --check`)
 
 ### Pre-commit Hooks
 
@@ -61,7 +61,7 @@ The documentation contains Python code snippets that are automatically extracted
 #### Working with Snippets
 
 - `bun run fix:snippets` - Update all extractable snippets for all providers
-- `bun run snippets:check` - Check if snippets are up-to-date
+- `bun run lint:snippets` - Check if snippets are up-to-date
 - You can also use the original script with more options:
   - `bun run scripts/update-snippets.ts --path=<file-path>` - Update snippets for a specific file
   - `bun run scripts/update-snippets.ts --check --path=<file-path>` - Check if snippets for a specific file are up-to-date

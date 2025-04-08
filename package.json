@@ -7,9 +7,10 @@
     "prebuild": "bun run preprocess-content",
     "build": "bun run --bun vite build && bun run tsc",
     "serve": "bun --bun vite preview",
-    "lint": "bun run lint:ts && bun run lint:mdx && bun run lint:py && bun run lint:format",
+    "lint": "bun run lint:ts && bun run lint:mdx && bun run lint:snippets && bun run lint:py && bun run lint:format",
     "lint:ts": "bun run tsc --noEmit",
-    "lint:mdx": "bun run scripts/validate-mdx.ts && bun run scripts/update-snippets.ts --check",
+    "lint:mdx": "bun run scripts/validate-mdx.ts",
+    "lint:snippets": "bun run scripts/update-snippets.ts --check",
     "lint:py": "./scripts/lint-python.sh",
     "lint:format": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\"",
     "fix": "bun run fix:format && bun run fix:snippets",
@@ -21,8 +22,8 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,css,md,mdx}": "prettier --write",
     "*.mdx": [
-      "bun run scripts/validate-mdx.ts",
-      "bun run scripts/update-snippets.ts --check"
+      "bun run lint:mdx",
+      "bun run lint:snippets"
     ],
     "*.py": "./scripts/lint-python.sh --path"
   },

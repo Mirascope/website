@@ -6,10 +6,8 @@ on:
   pull_request:
     branches: [ main ]
 
-# Add permissions to create comments on PRs
 permissions:
   contents: read
-  pull-requests: write
 
 jobs:
   build:
@@ -39,26 +37,26 @@ jobs:
         curl -LsSf https://astral.sh/uv/install.sh | sh
         echo "$HOME/.cargo/bin" >> $GITHUB_PATH
     
+    - name: Create Python virtual environment
+      run: uv venv
+    
     - name: Make script executable
       run: chmod +x ./scripts/lint-python.sh
     
-    - name: Lint
-      id: lint
-      run: bun run lint
+    - name: TypeScript Check
+      run: bun run lint:ts
       
-    - name: Add comment when snippets are out of date (PR only)
-      if: failure() && github.event_name == 'pull_request'
-      uses: actions/github-script@v7
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          const { issue, repo } = context;
-          github.rest.issues.createComment({
-            issue_number: issue.number,
-            owner: repo.owner,
-            repo: repo.repo,
-            body: "❌ Linting failed. This could be due to:\n\n1. Out-of-date code snippets in documentation\n2. Python validation issues\n3. TypeScript type errors\n4. Formatting issues\n\nPlease check the GitHub Actions log for details and run `bun run fix` locally to fix automatic issues."
-          });
+    - name: Prettier Check
+      run: bun run lint:format
+      
+    - name: MDX Validation
+      run: bun run lint:mdx
+      
+    - name: Check Snippets Up-to-date
+      run: bun run lint:snippets
+      
+    - name: Python Code Validation
+      run: bun run lint:py
       
     - name: Build
       run: bun run build
