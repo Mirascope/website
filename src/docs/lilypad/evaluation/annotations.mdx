@@ -1,0 +1,62 @@
+---
+title: Annotations
+description: Add labels and feedback to your LLM outputs
+---
+
+# Annotations
+
+When you click on a trace to view more details, there's a panel for annotations.
+
+Click on that to annotate the trace:
+
+\[INSERT IMAGE]
+
+You can also navigate to a specific function version and click on the "Annotations" tab to see a table with columns for inputs, output, ideal output, label, and reasoning:
+
+\[INSERT IMAGE]
+
+Clicking on an annotation row will open the underlying trace details.
+
+## Exact Match
+
+You can mark a function as exact match. This indicates that you expect the output to have a label that it should match exactly. Once you've entered the exact match for a specific input, any function that is run with that input will have it's ideal output automatically populated with the predefined exact match.
+
+You can view aggregate metrics in the "Annotations" tab for a function version.
+
+\[INSERT IMAGE]
+
+## Fuzzy Metrics
+
+When there isn't necessarily an exact output you're looking for, you can provide PASS/FAIL labels with a reason. This can help to better categorize and understand where your functions are failing:
+
+\[INSERT IMAGE]
+
+These annotations will prove to be extremely useful for later automating parts of your annotation flow.
+
+We're working on some new tooling called [vibe synthesis](/docs/lilypad/vibe-synthesis) to help with this.
+
+## Annotate In Code
+
+Setting `mode="wrap"` in the `trace` decorator converts the original return type of the decorated function into a `Traced[R]` that provides methods for operating on the corresponding trace directly.
+
+For example, you might want to enable passthrough annotation so that your users can annotate traces directly:
+
+```python
+import lilypad
+
+lilypad.configure()
+
+@lilypad.trace(name="Answer Question", versioning="automatic", mode="wrap") 
+def answer_question(question: str) -> str | None:
+    response = client.models.generate_content(
+        model="gemini-2.0-flash-001",
+        contents=f"Answer this question: {question}",
+    )
+    return response.text
+    
+trace: lilypad.Trace[str | None] = answer_question("What is the capital of France?")
+print(trace.response)  # original response
+# > The capital of France is Paris.
+
+trace.annotate(label="PASS", reason="The answer was correct")
+```

@@ -206,12 +206,68 @@ const meta: DocsStructure = {
             title: "Quickstart",
             description: "Start using Lilypad in one line of code",
           },
-          installation: {
-            title: "Installation",
+          playground: {
+            title: "Playground",
+            description: "No-code interface for experimenting with Lilypad",
           },
           "open-source": {
-            title: "Open Source & Self-Hosting",
-            description: "Learn about Lilypad's open-source initiative and how to self-host it",
+            title: "Open Source",
+            description: "Learn about Lilypad's open-source initiative",
+          },
+          "self-hosting": {
+            title: "Self-Hosting",
+            description: "Run Lilypad in your own infrastructure",
+          },
+        },
+      },
+      evaluation: {
+        title: "Evaluation",
+        items: {
+          annotations: {
+            title: "Annotations",
+            description: "Add labels and feedback to your LLM outputs",
+          },
+          comparisons: {
+            title: "Comparisons",
+            description: "Compare different LLM function implementations",
+          },
+          "cost-and-latency-tracking": {
+            title: "Cost & Latency Tracking",
+            description: "Monitor the performance and cost of your LLM functions",
+          },
+        },
+      },
+      observability: {
+        title: "Observability",
+        items: {
+          opentelemetry: {
+            title: "OpenTelemetry",
+            description: "Observability made easy",
+          },
+          spans: {
+            title: "Spans",
+            description: "Easily instrument arbitrary blocks of code with OpenTelemetry",
+          },
+          traces: {
+            title: "Traces",
+            description: "Structured collections of spans",
+          },
+          versioning: {
+            title: "Versioning",
+            description: "Track versions of your LLM functions",
+          },
+        },
+      },
+      "under-development": {
+        title: "Under Development",
+        items: {
+          "vibe-synthesis": {
+            title: "Vibe Synthesis",
+            description: "Automated synthesis of evaluation criteria",
+          },
+          experiments: {
+            title: "Experiments",
+            description: "Run experiments with Lilypad",
           },
         },
       },
