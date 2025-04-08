@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 import { getProductRoute } from "@/lib/routes";
 import Logo from "@/components/Logo";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
+import GitHubRepoButton from "@/components/GitHubRepoButton";
 
 // Reusable navigation link component
 interface NavLinkProps {
@@ -149,7 +150,8 @@ export default function Header() {
           <NavLink href="/pricing">Pricing</NavLink>
         </div>
 
-        <div className="hidden md:flex items-center">
+        <div className="hidden md:flex items-center gap-3">
+          <GitHubRepoButton />
           <ThemeSwitcher />
         </div>
 
