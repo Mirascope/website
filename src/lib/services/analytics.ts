@@ -49,22 +49,40 @@ export const initializeAnalytics = (): void => {
     script.id = "ga-script";
     script.async = true;
     script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+
+    // Add error handling for script loading
+    script.onerror = () => {
+      console.error("Failed to load Google Analytics script");
+      analyticsInitialized = false;
+    };
+
     document.head.appendChild(script);
 
     window.dataLayer = window.dataLayer || [];
-    function gtag(...args: any[]) {
-      window.dataLayer?.push(args);
+    // Define the gtag function as it is in the official GA4 snippet
+    // @ts-ignore - We need to use arguments here which TS doesn't like
+    function gtag() {
+      if (!window.dataLayer) {
+        console.error("Analytics error: dataLayer is not defined");
+        return;
+      }
+      window.dataLayer.push(arguments);
     }
     window.gtag = gtag;
+
+    // Initialize gtag with proper arguments
+    // @ts-ignore - Using arguments in the expected way for GA4
     gtag("js", new Date());
 
     // Set default consent settings
+    // @ts-ignore - Using arguments in the expected way for GA4
     gtag("consent", "default", {
       analytics_storage: "granted", // We only initialize if consent is given
       ad_storage: "denied", // Always deny ad storage by default
     });
 
     // Initialize with the measurement ID
+    // @ts-ignore - Using arguments in the expected way for GA4
     gtag("config", GA_MEASUREMENT_ID, {
       anonymize_ip: true,
       send_page_view: true,
@@ -91,6 +109,7 @@ export const updateAnalyticsConsent = (consent: boolean): void => {
 
     // Update Google Analytics consent settings if already loaded
     if (window.gtag) {
+      // @ts-ignore - Using arguments in the expected way for GA4
       window.gtag("consent", "update", {
         analytics_storage: "denied",
       });
@@ -106,6 +125,7 @@ export const trackPageView = (path: string): void => {
 
   // Send pageview to Google Analytics
   if (window.gtag) {
+    // @ts-ignore - Using arguments in the expected way for GA4
     window.gtag("config", GA_MEASUREMENT_ID, {
       page_path: path,
     });
@@ -125,6 +145,7 @@ export const trackEvent = (
 
   // Send event to Google Analytics
   if (window.gtag) {
+    // @ts-ignore - Using arguments in the expected way for GA4
     window.gtag("event", action, {
       event_category: category,
       event_label: label,
@@ -142,6 +163,7 @@ export const reportWebVitalsToAnalytics = (metric: any): void => {
 
   // Send web vitals to Google Analytics
   if (window.gtag) {
+    // @ts-ignore - Using arguments in the expected way for GA4
     window.gtag("event", "web-vitals", {
       event_category: "Web Vitals",
       event_label: metric.id,
