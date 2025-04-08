@@ -116,6 +116,7 @@ const meta: DocsStructure = {
           },
           output_parsers: {
             title: "Output Parsers",
+            hasExtractableSnippets: true,
           },
           tools: {
             title: "Tools",
