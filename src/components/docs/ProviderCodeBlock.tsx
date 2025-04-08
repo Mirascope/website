@@ -42,7 +42,7 @@ export function ProviderCodeBlock({
 
       try {
         // Load the current provider's example
-        const url = `/examples/${examplePath}/sdk/${provider}.py`;
+        const url = `/examples/${examplePath}/${provider}.py`;
 
         try {
           const response = await fetch(url);
