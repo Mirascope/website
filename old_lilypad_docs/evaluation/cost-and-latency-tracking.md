@@ -1,0 +1,30 @@
+---
+icon: piggy-bank
+---
+
+# Cost & Latency Tracking
+
+Lilypad automatically captures the latency of every span. For spans containing LLM API calls, Lilypad also automatically captures the cost of that call.
+
+## Trace View
+
+When you select a trace to view more details, you'll find the latency of the span as a tag at the top:
+
+\[INSERT IMAGE]
+
+If the span is or contains an LLM call, there will also be a tag for cost.
+
+## Project Dashboard
+
+The home page for each project acts as a dashboard overview of the project.
+
+You can see cost and latency charts amongst other stats:
+
+\[INSERT IMAGE]
+
+## Function Dashboard
+
+The main page for a versioned function will show you cost and latency charts at the top:
+
+\[INSERT IMAGE]
+
