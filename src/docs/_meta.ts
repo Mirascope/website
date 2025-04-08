@@ -204,9 +204,14 @@ const meta: DocsStructure = {
         items: {
           quickstart: {
             title: "Quickstart",
+            description: "Start using Lilypad in one line of code",
           },
           installation: {
             title: "Installation",
+          },
+          "open-source": {
+            title: "Open Source & Self-Hosting",
+            description: "Learn about Lilypad's open-source initiative and how to self-host it",
           },
         },
       },
