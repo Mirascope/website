@@ -8,7 +8,7 @@
 import * as fs from "fs";
 import * as path from "path";
 // Import from shared provider config
-import { providerDefaults } from "../../src/config/providers";
+import { replaceProviderVariables } from "../../src/config/providers";
 import type { Provider } from "../../src/config/providers";
 
 /**
@@ -58,26 +58,6 @@ export function extractHeadings(filePath: string): string[] {
 }
 
 /**
- * Replace provider-specific variables in a code string
- */
-export function replaceProviderVariables(code: string, provider: string): string {
-  // Convert provider to lowercase for case-insensitive matching
-  const providerKey = provider.toLowerCase() as Provider;
-
-  // Check if provider exists
-  if (!providerDefaults[providerKey]) {
-    console.error(`Error: Provider "${provider}" not found in defaults.`);
-    console.error(`Available providers: ${Object.keys(providerDefaults).join(", ")}`);
-    process.exit(1);
-  }
-
-  const info = providerDefaults[providerKey];
-
-  // Replace variables in code
-  return code.replace(/\$PROVIDER/g, providerKey).replace(/\$MODEL/g, info.defaultModel);
-}
-
-/**
  * Generate a runnable Python file for a single snippet
  */
 export function generatePythonFile(
@@ -88,8 +68,11 @@ export function generatePythonFile(
   heading: string,
   baseName: string = "example"
 ): string {
-  // Replace provider variables
-  const processedSnippet = replaceProviderVariables(snippet, provider);
+  // Convert provider to lowercase for case-insensitive matching
+  const providerKey = provider.toLowerCase() as Provider;
+
+  // Replace provider variables using shared function
+  const processedSnippet = replaceProviderVariables(snippet, providerKey);
 
   // Ensure the output directory exists
   if (!fs.existsSync(outputDir)) {
