@@ -89,7 +89,6 @@ const meta: DocsStructure = {
         items: {
           index: {
             title: "Overview",
-            hasExtractableSnippets: true,
           },
           prompts: {
             title: "Prompts",
@@ -97,51 +96,39 @@ const meta: DocsStructure = {
           },
           calls: {
             title: "Calls",
-            hasExtractableSnippets: true,
           },
           streams: {
             title: "Streams",
-            hasExtractableSnippets: true,
           },
           chaining: {
             title: "Chaining",
-            hasExtractableSnippets: true,
           },
           response_models: {
             title: "Response Models",
-            hasExtractableSnippets: true,
           },
           json_mode: {
             title: "JSON Mode",
-            hasExtractableSnippets: true,
           },
           output_parsers: {
             title: "Output Parsers",
-            hasExtractableSnippets: true,
           },
           tools: {
             title: "Tools",
-            hasExtractableSnippets: true,
           },
           agents: {
             title: "Agents",
-            hasExtractableSnippets: true,
           },
           evals: {
             title: "Evals",
-            hasExtractableSnippets: true,
           },
           async: {
             title: "Async",
-            hasExtractableSnippets: true,
           },
           retries: {
             title: "Retries",
-            hasExtractableSnippets: true,
           },
           local_models: {
             title: "Local Models",
-            hasExtractableSnippets: true,
           },
         },
       },
@@ -151,11 +138,9 @@ const meta: DocsStructure = {
         items: {
           openai: {
             title: "OpenAI",
-            hasExtractableSnippets: true,
           },
           anthropic: {
             title: "Anthropic",
-            hasExtractableSnippets: true,
           },
         },
       },
@@ -165,11 +150,9 @@ const meta: DocsStructure = {
         items: {
           middleware: {
             title: "Middleware",
-            hasExtractableSnippets: true,
           },
           custom_provider: {
             title: "Custom LLM Provider",
-            hasExtractableSnippets: true,
           },
         },
       },
@@ -179,7 +162,6 @@ const meta: DocsStructure = {
         items: {
           client: {
             title: "Client",
-            hasExtractableSnippets: true,
           },
         },
       },

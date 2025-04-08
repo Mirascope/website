@@ -10,6 +10,8 @@ dependencies = [
     # Core dependencies
     "mirascope>=1.22.2",
     "pydantic>=2.7.4,<3.0",
+    "pydub>=0.25.1,<1.0",
+    "pillow>=10.4.0,<11.0",
 ]
 
 [project.optional-dependencies]
