@@ -122,7 +122,7 @@ function formatStarCount(count: number): string {
 }
 
 async function main() {
-  const results: Record<string, { stars: string; version: string }> = {};
+  const results: Record<string, { stars: string; starsExact: number; version: string }> = {};
 
   // Fetch data for each repo
   for (const repo of REPOS) {
@@ -134,6 +134,7 @@ async function main() {
 
     results[product] = {
       stars: formatStarCount(stats.stars),
+      starsExact: stats.stars,
       version: stats.latestVersion,
     };
   }
