@@ -104,6 +104,7 @@ const meta: DocsStructure = {
           },
           chaining: {
             title: "Chaining",
+            hasExtractableSnippets: true,
           },
           response_models: {
             title: "Response Models",
