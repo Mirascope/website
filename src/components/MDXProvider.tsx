@@ -15,6 +15,7 @@ import {
 } from "./docs";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
 import Logo from "./Logo";
+import { Underline } from "./Underline";
 import { ProviderCodeWrapper } from "./ProviderCodeWrapper";
 
 // Helper function to generate heading ID from text
@@ -59,6 +60,7 @@ export const components = {
 
   // Shorthand components
   Install: InstallSnippet,
+  U: Underline,
 
   // Standard HTML elements
   h1: ({ children, ...props }: React.ComponentPropsWithoutRef<"h1">) => {
