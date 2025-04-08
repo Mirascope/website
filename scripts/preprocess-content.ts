@@ -8,10 +8,14 @@ import type { PostMeta } from "../src/lib/mdx";
 const STATIC_DIR = path.join(process.cwd(), "public", "static");
 const POSTS_DIR = path.join(STATIC_DIR, "posts");
 const DOCS_DIR = path.join(STATIC_DIR, "docs");
+const POLICIES_DIR = path.join(STATIC_DIR, "policies");
+const TERMS_DIR = path.join(POLICIES_DIR, "terms");
 
 fs.mkdirSync(STATIC_DIR, { recursive: true });
 fs.mkdirSync(POSTS_DIR, { recursive: true });
 fs.mkdirSync(DOCS_DIR, { recursive: true });
+fs.mkdirSync(POLICIES_DIR, { recursive: true });
+fs.mkdirSync(TERMS_DIR, { recursive: true });
 
 /**
  * Extract frontmatter from MDX content
@@ -169,12 +173,62 @@ async function processDocsFiles(): Promise<void> {
 }
 
 /**
+ * Process policy files
+ */
+async function processPolicyFiles(): Promise<void> {
+  console.log("Processing policy files...");
+
+  // Privacy policy
+  const privacyPath = path.join(process.cwd(), "src", "policies", "privacy.mdx");
+  if (fs.existsSync(privacyPath)) {
+    const fileContent = fs.readFileSync(privacyPath, "utf-8");
+    try {
+      const { frontmatter } = extractFrontmatter(fileContent);
+      await processMDX(fileContent); // Validate the MDX
+      fs.writeFileSync(
+        path.join(POLICIES_DIR, "privacy.json"),
+        JSON.stringify({
+          content: fileContent,
+          frontmatter,
+        })
+      );
+    } catch (error) {
+      console.error(`Error processing privacy policy:`, error);
+    }
+  }
+
+  // Terms files
+  const termsDir = path.join(process.cwd(), "src", "policies", "terms");
+  if (fs.existsSync(termsDir)) {
+    const files = fs.readdirSync(termsDir).filter((file) => file.endsWith(".mdx"));
+    for (const filename of files) {
+      const filepath = path.join(termsDir, filename);
+      const fileContent = fs.readFileSync(filepath, "utf-8");
+      try {
+        const { frontmatter } = extractFrontmatter(fileContent);
+        await processMDX(fileContent); // Validate the MDX
+        fs.writeFileSync(
+          path.join(TERMS_DIR, `${filename}.json`),
+          JSON.stringify({
+            content: fileContent,
+            frontmatter,
+          })
+        );
+      } catch (error) {
+        console.error(`Error processing terms file ${filename}:`, error);
+      }
+    }
+  }
+}
+
+/**
  * Main processing function that generates static JSON files for all MDX content
  */
 async function preprocessContent(): Promise<void> {
   try {
     await processBlogPosts();
     await processDocsFiles();
+    await processPolicyFiles();
     console.log("Content preprocessing complete!");
     console.log("Static files are available in the public/static directory");
   } catch (error) {
