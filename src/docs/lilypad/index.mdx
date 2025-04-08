@@ -1,3 +1,158 @@
-This is the Lilypad Docs Index content.
+# Welcome
 
-## Sub-header
+Welcome to the Lilypad documentation! We're excited you're here.
+
+## Why Lilypad (we think you should read this)
+
+When building with LLMs, a typical development flow might look like this:
+
+1. [Prototype](#1-prototype) — make sure everything is functional
+2. [Vibe Check](#2-vibe-check) — gut feeling should be "good enough"
+3. [Annotate](#3-annotate) — systematically label the data you look at
+4. [Analyze](#4-analyze) — understand where and why the system is failing
+5. [Optimize](#5-optimize) — apply your learnings to improve the system (e.g. your prompt)
+6. [Iterate](#6-iterate) — repeat steps 3-5 (forever, or at least until it's "good enough")
+
+Let's break each of these steps down further.
+
+## 1. Prototype
+
+The first and most important step is simply getting started.
+
+We recommend taking a look at our open-source LLM library `mirascope`, which we've purpose built to make both prototyping and the steps that follow simple, easy, and elegant.
+
+For the remaining sections, let's use a simple LLM call as an example:
+
+```python
+from mirascope import llm
+
+@llm.call(
+    provider="$PROVIDER",
+    model="$MODEL",
+)
+def answer_question(question: str) -> str:
+    return f"Answer this question: {question}"
+
+response = answer_question("What is the capital of France?")
+print(response.content)
+# > The capital of France is Paris.
+```
+
+We're using the `@llm.call()` decorator to turn the `answer_question` function into an LLM API call.
+
+## 2. Vibe Check
+
+How do we feel about "The capital of France is Paris." as the answer to our question?
+
+Let's say our gut feeling is "not good enough" because we want a single word answer, so we update our prompt to make this more clear:
+
+```python
+from mirascope import llm
+
+@llm.call(
+    provider="$PROVIDER",
+    model="$MODEL",
+)
+def answer_question(question: str) -> str:
+    return f"Answer this question in one word: {question}"
+
+response = answer_question("What is the capital of France?")
+print(response.content)
+# > Paris
+```
+
+Oops, we forgot to commit our previous prompt.
+
+For a simple example this might not seems like a big deal, but LLMs are fickle. What if the prompt we just lost happened to be the one that would've performed the best, and now you can't replicate it.
+
+Not good.
+
+This is the point at which most people reach for observability tooling. This is *almost* the right choice.
+
+The issue is that today's observability tooling was not built for the LLM era. It was built for deterministic software, but LLMs are non-deterministic.
+
+You need more than just observability — you need to build a data flywheel.
+
+This requires:
+
+1. Some place to put your data
+2. Some place to see / query / etc. that data
+3. Some way to annotate that data
+4. Some way to track / version artifacts (so you can compare performance over time)
+
+Current observability tools provide 1 and 2 but not 3 or 4, which are critical.
+
+Lilypad provides all four — in just two lines of code.
+
+```python
+import lilypad
+from mirascope import llm
+
+lilypad.configure(auto_llm=True)  # automatically version and track
+@lilypad.trace(versioning="automatic")
+@llm.call(
+    provider="$PROVIDER",
+    model="$MODEL",
+)
+def answer_question(question: str) -> str:
+    return f"Answer this question in one word: {question}"
+
+response = answer_question("What is the capital of France?")
+print(response.content)
+# > Paris
+```
+
+Check out the Versioning section for more information.
+
+## 3. Annotate
+
+The next step is to look at real (or synthetic) data and systematically label it.
+
+With Lilypad, you annotate the data right where you look at it. This makes it seamless.
+
+It's also extremely important that we annotate not just the inputs/outputs but also everything about the trace. This includes the code, the prompt, the call parameters, the cost, the latency — everything you might need to know if you'd consider it "good enough" or not.
+
+## 4. Analyze
+
+Once you've annotated enough data, it's time to look for trends — common failure points.
+
+Compare outputs from different versions on the same input. Did the changes help?
+
+Distilling your annotations into action items makes for much easier optimization.
+
+## 5. Optimize
+
+Now we can apply our analysis and update the system to improve it.
+
+For example, we could identify the most common point of failure and work to resolve that first. Consider our earlier example. We could have identified that there were a lot of longer answers and we really want single word answers. So we added "in one word" to the prompt and ran it again.
+
+This step is just the more advanced and systematic version of that.
+
+This is also often the stage where developers realize they need to involve domain experts who can properly annotate, analyze, and optimize their prompts. And for the first time ever, non-technical team members need to be involved in the writing of the actual software itself.
+
+Check out the Managed Generations section for more information on how Lilypad helps.
+
+## 6. Iterate
+
+Part of the optimization process involves making changes — a new version.
+
+All we have to do is repeat steps 3 through 5 until we deem the system "good enough".
+
+## Getting Started
+
+- 🚀 [Quickstart](#)
+- 🔄 [Open-Source](#)
+- 🎮 [Playground](#)
+
+## Observability
+
+- 🔄 [Spans](#)
+- 🔍 [Traces](#)
+- 📚 [Versioning](#)
+
+## Evaluation
+
+- 💰 [Cost & Latency Tracking](#)
+- 📊 [Comparisons](#)
+- 📝 [Annotations](#)
+
