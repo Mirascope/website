@@ -120,6 +120,7 @@ const meta: DocsStructure = {
           },
           tools: {
             title: "Tools",
+            hasExtractableSnippets: true,
           },
           agents: {
             title: "Agents",
