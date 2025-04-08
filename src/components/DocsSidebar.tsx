@@ -1,3 +1,4 @@
+import React from "react";
 import { Link, useMatches } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import docsMetadata from "@/docs/_meta";
@@ -25,6 +26,39 @@ const DocsSidebar = ({ product, currentGroup }: DocsSidebarProps) => {
   // Get metadata for this product
   const productData = docsMetadata[product];
   const sections = getSectionsForProduct(product);
+
+  // Store and restore scroll position
+  const sidebarRef = React.useRef<HTMLDivElement>(null);
+
+  // Use state to track the last path, to know when navigation happens
+  const [lastPath, setLastPath] = React.useState(currentPath);
+
+  // When the current path changes, update lastPath state
+  React.useEffect(() => {
+    // Save the current scroll position before changing paths
+    if (lastPath !== currentPath && sidebarRef.current) {
+      const scrollKey = `sidebar-scroll-${product}`;
+      sessionStorage.setItem(scrollKey, sidebarRef.current.scrollTop.toString());
+    }
+
+    setLastPath(currentPath);
+  }, [currentPath, lastPath, product]);
+
+  // Restore scroll position on mount and after page changes
+  React.useEffect(() => {
+    const scrollKey = `sidebar-scroll-${product}`;
+
+    // Restore scroll position with minimal delay to ensure rendering is complete
+    // Use requestAnimationFrame for the best timing with browser rendering cycle
+    const timer = requestAnimationFrame(() => {
+      const savedScroll = sessionStorage.getItem(scrollKey);
+      if (savedScroll && sidebarRef.current) {
+        sidebarRef.current.scrollTop = parseInt(savedScroll, 10);
+      }
+    });
+
+    return () => cancelAnimationFrame(timer);
+  }, [product, currentPath]);
 
   // Create ordered sections with Guides between Docs and API
   let orderedSections = [...sections]; // Clone the array
@@ -118,7 +152,7 @@ const DocsSidebar = ({ product, currentGroup }: DocsSidebarProps) => {
   };
 
   return (
-    <aside className="h-full pt-6 pb-12">
+    <aside className="h-full pt-6 overflow-hidden">
       <div className="mb-2">
         {/* Product selector */}
         <div className="flex mb-5 space-x-4">
@@ -146,12 +180,12 @@ const DocsSidebar = ({ product, currentGroup }: DocsSidebarProps) => {
         </div>
 
         {/* Section tabs (Docs, API, Guides, etc.) - Displayed vertically */}
-        <div className="flex flex-col space-y-1">
+        <div className="flex flex-col space-y-0.5">
           {/* Main docs tab */}
           <Link
             to={getProductRoute(product)}
             className={cn(
-              "px-3 py-2 text-base rounded-md w-full",
+              "px-3 py-1 text-base rounded-md w-full",
               isDocsTabActive
                 ? product === "mirascope"
                   ? "bg-gray-100 dark:bg-gray-800 text-mirascope-purple font-medium"
@@ -169,7 +203,7 @@ const DocsSidebar = ({ product, currentGroup }: DocsSidebarProps) => {
               to={getSectionRoute(product, s.slug)}
               params={getSectionParams(product, s.slug)}
               className={cn(
-                "px-3 py-2 text-base rounded-md w-full",
+                "px-3 py-1 text-base rounded-md w-full",
                 // Section tab is active if we're in this section's URL path
                 currentPath.startsWith(`/docs/${product}/${s.slug}/`)
                   ? product === "mirascope"
@@ -189,20 +223,31 @@ const DocsSidebar = ({ product, currentGroup }: DocsSidebarProps) => {
         <div className="border-b border-gray-300"></div>
       </div>
 
-      <div>
-        <nav className="space-y-3">
-          {matchingSection ? (
-            // Show section content if we're in a section path
-            <SectionContent
-              product={product}
-              section={matchingSection}
-              isActivePath={isActivePath}
-            />
-          ) : (
-            // Show main docs content if we're not in a section
-            <MainDocsContent product={product} isActivePath={isActivePath} />
-          )}
-        </nav>
+      {/* Scrollable content area with fixed height */}
+      <div className="flex flex-col h-[calc(100vh-220px)]">
+        <div
+          ref={sidebarRef}
+          className="flex-1 overflow-y-auto" // Flexbox will allow this to fill available space
+        >
+          <nav className="space-y-1">
+            {matchingSection ? (
+              // Show section content if we're in a section path
+              <SectionContent
+                product={product}
+                section={matchingSection}
+                isActivePath={isActivePath}
+              />
+            ) : (
+              // Show main docs content if we're not in a section
+              <MainDocsContent product={product} isActivePath={isActivePath} />
+            )}
+          </nav>
+        </div>
+
+        {/* Fixed non-scrollable footer buffer */}
+        <div className="h-24 flex-shrink-0">
+          {/* Empty div to create space between content and footer */}
+        </div>
       </div>
     </aside>
   );
@@ -231,12 +276,12 @@ const SectionContent = ({ product, section, isActivePath }: SectionContentProps)
             key={slug}
             to={url}
             className={cn(
-              "block px-3 py-2 text-base rounded-md",
+              "block px-3 py-1 text-base rounded-md",
               isActivePath(url)
                 ? product === "mirascope"
                   ? "bg-mirascope-purple text-white font-medium"
                   : "bg-lilypad-green text-white font-medium"
-                : "text-gray-600 hover:bg-gray-50"
+                : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800"
             )}
           >
             {item.title}
@@ -247,14 +292,14 @@ const SectionContent = ({ product, section, isActivePath }: SectionContentProps)
       {/* Section groups */}
       {Object.entries(sectionData.groups || {}).map(([groupSlug, group]) => {
         return (
-          <div key={groupSlug} className="pt-4">
+          <div key={groupSlug} className="pt-2">
             {/* Group title - not selectable/highlightable */}
-            <div className="font-semibold px-3 py-1 block text-gray-900 cursor-default">
+            <div className="font-semibold px-3 py-1 block text-gray-900 dark:text-gray-200 cursor-default">
               {group.title}
             </div>
 
             {/* Group items */}
-            <div className="space-y-1 mt-2">
+            <div className="space-y-0.5 mt-1">
               {Object.entries(group.items || {}).map(([itemSlug, item]) => {
                 const itemUrl = `/docs/${product}/${section}/${groupSlug}/${itemSlug}`;
 
@@ -263,12 +308,12 @@ const SectionContent = ({ product, section, isActivePath }: SectionContentProps)
                     key={itemSlug}
                     to={itemUrl}
                     className={cn(
-                      "block pl-6 pr-3 py-2 text-base rounded-md",
+                      "block pl-6 pr-3 py-1 text-base rounded-md",
                       isActivePath(itemUrl)
                         ? product === "mirascope"
                           ? "bg-mirascope-purple text-white font-medium"
                           : "bg-lilypad-green text-white font-medium"
-                        : "text-gray-600 hover:bg-gray-50"
+                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800"
                     )}
                   >
                     {item.title}
@@ -304,12 +349,12 @@ const MainDocsContent = ({ product, isActivePath }: MainDocsContentProps) => {
             key={slug}
             to={url}
             className={cn(
-              "block px-3 py-2 text-base rounded-md",
+              "block px-3 py-1 text-base rounded-md",
               isActivePath(url)
                 ? product === "mirascope"
                   ? "bg-mirascope-purple text-white font-medium"
                   : "bg-lilypad-green text-white font-medium"
-                : "text-gray-600 hover:bg-gray-50"
+                : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800"
             )}
           >
             {item.title}
@@ -320,14 +365,14 @@ const MainDocsContent = ({ product, isActivePath }: MainDocsContentProps) => {
       {/* Top-level groups */}
       {Object.entries(productData.groups || {}).map(([groupSlug, group]) => {
         return (
-          <div key={groupSlug} className="pt-4">
+          <div key={groupSlug} className="pt-2">
             {/* Group title - not selectable/highlightable */}
-            <div className="font-semibold px-3 py-1 block text-gray-900 cursor-default">
+            <div className="font-semibold px-3 py-1 block text-gray-900 dark:text-gray-200 cursor-default">
               {group.title}
             </div>
 
             {/* Group items */}
-            <div className="space-y-1 mt-2">
+            <div className="space-y-0.5 mt-1">
               {Object.entries(group.items || {}).map(([itemSlug, item]) => {
                 const itemUrl = `/docs/${product}/${groupSlug}/${itemSlug}`;
 
@@ -336,12 +381,12 @@ const MainDocsContent = ({ product, isActivePath }: MainDocsContentProps) => {
                     key={itemSlug}
                     to={itemUrl}
                     className={cn(
-                      "block pl-6 pr-3 py-2 text-base rounded-md",
+                      "block pl-6 pr-3 py-1 text-base rounded-md",
                       isActivePath(itemUrl)
                         ? product === "mirascope"
                           ? "bg-mirascope-purple text-white font-medium"
                           : "bg-lilypad-green text-white font-medium"
-                        : "text-gray-600 hover:bg-gray-50"
+                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800"
                     )}
                   >
                     {item.title}
