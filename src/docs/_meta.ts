@@ -100,6 +100,7 @@ const meta: DocsStructure = {
           },
           streams: {
             title: "Streams",
+            hasExtractableSnippets: true,
           },
           chaining: {
             title: "Chaining",
