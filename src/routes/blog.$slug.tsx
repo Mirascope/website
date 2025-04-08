@@ -53,19 +53,11 @@ function BlogPostPage() {
     setTocOpen(!tocOpen);
   };
 
-  // Add visible logging for debugging
-  console.log("BlogPostPage rendered with slug:", slug);
-
   useEffect(() => {
-    console.log("Running effect with slug:", slug);
-
     const fetchPost = async () => {
       try {
-        console.log("Fetching post with slug:", slug);
-
         try {
           const result = await getPostBySlug(slug);
-          console.log("Got post data:", result);
           setPost(result ? { ...result.meta, content: result.content } : null);
 
           // Process the MDX content with the compiler
