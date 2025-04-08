@@ -11,17 +11,16 @@ const reportWebVitals = () => {
       // Log to console for now
       console.log(`Web vital: ${metric.name} - ${Math.round(metric.value * 100) / 100}`);
 
-      // When Google Analytics is added, you would uncomment this:
-      /*
+      // Send metrics to Google Analytics
       if (window.gtag) {
-        window.gtag('event', 'web-vitals', {
-          event_category: 'Web Vitals',
+        // @ts-ignore - Using arguments in the expected way for GA4
+        window.gtag("event", "web-vitals", {
+          event_category: "Web Vitals",
           event_label: metric.id,
           value: Math.round(metric.value * 100) / 100,
           non_interaction: true,
         });
       }
-      */
     };
 
     onCLS(sendToAnalytics);
