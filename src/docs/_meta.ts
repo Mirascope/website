@@ -96,6 +96,7 @@ const meta: DocsStructure = {
           },
           calls: {
             title: "Calls",
+            hasExtractableSnippets: true,
           },
           streams: {
             title: "Streams",
