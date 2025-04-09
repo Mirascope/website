@@ -150,9 +150,11 @@ const meta: DocsStructure = {
         items: {
           openai: {
             title: "OpenAI",
+            hasExtractableSnippets: true,
           },
           anthropic: {
             title: "Anthropic",
+            hasExtractableSnippets: true,
           },
         },
       },
