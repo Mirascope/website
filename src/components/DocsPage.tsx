@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import DocsLayout from "@/components/DocsLayout";
+import useSEO from "@/lib/hooks/useSEO";
 import { getDoc, getDocsForProduct, type DocMeta } from "@/lib/docs";
 import { type ProductName } from "@/lib/route-types";
 
@@ -215,6 +216,30 @@ Get started with ${product} by exploring the documentation in the sidebar.`;
       slug: currentSlug,
     };
   }
+
+  // Define SEO properties based on document meta and product
+  const title = document?.meta.title || "";
+
+  // Use product-specific descriptions
+  let description = document?.meta.description || "";
+  if (!description) {
+    if (product === "mirascope") {
+      description = "LLM abstractions that aren't obstructions.";
+    } else if (product === "lilypad") {
+      description = "An open-source prompt engineering framework.";
+    }
+  }
+
+  // Construct the URL path
+  const urlPath = section ? `/docs/${product}/${section}/${splat}` : `/docs/${product}/${splat}`;
+
+  // Apply SEO for docs page
+  useSEO({
+    title,
+    description,
+    url: urlPath,
+    product,
+  });
 
   // Use the shared layout component
   return (
