@@ -1235,6 +1235,7 @@ dependencies = [
     { name = "pillow" },
     { name = "pydantic" },
     { name = "pydub" },
+    { name = "tenacity" },
     { name = "vertexai" },
 ]
 
@@ -1282,6 +1283,7 @@ requires-dist = [
     { name = "pillow", marker = "extra == 'providers'", specifier = ">=10.4.0,<11" },
     { name = "pydantic", specifier = ">=2.7.4,<3.0" },
     { name = "pydub", specifier = ">=0.25.1,<1.0" },
+    { name = "tenacity", specifier = ">=8.0.0,<9.0" },
     { name = "vertexai", specifier = ">=0.1.0" },
 ]
 provides-extras = ["providers"]
@@ -2209,6 +2211,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/a2/87/a6771e1546d97e7e041b6ae58d80074f81b7d5121207425c964ddf5cfdbd/sniffio-1.3.1.tar.gz", hash = "sha256:f4324edc670a0f49750a81b895f35c3adb843cca46f0530f79fc1babb23789dc", size = 20372 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/e9/44/75a9c9421471a6c4805dbf2356f7c181a29c1879239abab1ea2cc8f38b40/sniffio-1.3.1-py3-none-any.whl", hash = "sha256:2f6da418d1f1e0fddd844478f41680e794e6051915791a034ff65e5f100525a2", size = 10235 },
+]
+
+[[package]]
+name = "tenacity"
+version = "8.5.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/a3/4d/6a19536c50b849338fcbe9290d562b52cbdcf30d8963d3588a68a4107df1/tenacity-8.5.0.tar.gz", hash = "sha256:8bc6c0c8a09b31e6cad13c47afbed1a567518250a9a171418582ed8d9c20ca78", size = 47309 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d2/3f/8ba87d9e287b9d385a02a7114ddcef61b26f86411e121c9003eb509a1773/tenacity-8.5.0-py3-none-any.whl", hash = "sha256:b594c2a5945830c267ce6b79a166228323ed52718f30302c1359836112346687", size = 28165 },
 ]
 
 [[package]]
