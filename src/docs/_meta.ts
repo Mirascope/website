@@ -140,6 +140,7 @@ const meta: DocsStructure = {
           },
           local_models: {
             title: "Local Models",
+            hasExtractableSnippets: true,
           },
         },
       },
