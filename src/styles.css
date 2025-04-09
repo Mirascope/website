@@ -715,6 +715,15 @@ header button:not(.font-toggle-button),
   flex: 0 0 auto;
 }
 
+/* Remove top margin from first child and bottom margin from last child in callouts */
+.callout-content > *:first-child {
+  margin-top: 0 !important;
+}
+
+.callout-content > *:last-child {
+  margin-bottom: 0 !important;
+}
+
 /* Code block styling */
 .code-block-wrapper {
   position: relative;
@@ -857,15 +866,38 @@ header button:not(.font-toggle-button),
 
 /* Code elements always use monospace in all modes */
 .mdx-content pre,
-.mdx-content code,
+.mdx-content pre code,
 .mdx-content .shiki,
 .mdx-content .shiki code,
 .mdx-content .shiki .line {
   font-family:
     "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
     "Courier New", monospace !important;
-  /* SINGLE SOURCE OF TRUTH FOR CODE FONT SIZE */
+  /* SINGLE SOURCE OF TRUTH FOR CODE BLOCK FONT SIZE */
   font-size: 0.7rem !important;
+}
+
+/* Inline code gets monospace font but scales with context */
+.mdx-content p code,
+.mdx-content li code,
+.mdx-content td code {
+  font-family:
+    "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace !important;
+  font-size: 0.9em !important;
+}
+
+/* Allow code in headings to inherit heading size */
+.mdx-content h1 code,
+.mdx-content h2 code,
+.mdx-content h3 code,
+.mdx-content h4 code,
+.mdx-content h5 code,
+.mdx-content h6 code {
+  font-family:
+    "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace !important;
+  font-size: 0.9em !important;
 }
 
 /* Fun mode (handwriting) styles - need high specificity to override defaults */
