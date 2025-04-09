@@ -136,6 +136,7 @@ const meta: DocsStructure = {
           },
           retries: {
             title: "Retries",
+            hasExtractableSnippets: true,
           },
           local_models: {
             title: "Local Models",
