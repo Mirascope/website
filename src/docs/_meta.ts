@@ -124,6 +124,7 @@ const meta: DocsStructure = {
           },
           agents: {
             title: "Agents",
+            hasExtractableSnippets: true,
           },
           evals: {
             title: "Evals",
