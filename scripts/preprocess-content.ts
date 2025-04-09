@@ -85,6 +85,14 @@ function getLastModifiedDateFromGit(filePath: string): string | null {
 
     // If we got a valid date, return it
     if (dateStr && dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) {
+      const gitDate = new Date(dateStr);
+      const today = new Date();
+
+      // If the Git date is in the future, return today's date instead
+      if (gitDate > today) {
+        return today.toISOString().split("T")[0];
+      }
+
       return dateStr;
     }
     return null;
@@ -286,14 +294,46 @@ async function generateSitemap(): Promise<void> {
   const routeDates: Record<string, string> = {};
   const routeFrequency: Record<string, string> = {};
 
+  // Track the most recent blog post date for the blog index
+  let mostRecentBlogDate = "";
+
   // Add blog post routes with their lastUpdated dates
   postsList.forEach((post) => {
     const route = `/blog/${post.slug}`;
-    // Use Git lastUpdated if available, otherwise use publication date
-    routeDates[route] = post._gitLastUpdated || post.date;
+
+    // Parse the publication date to validate it
+    let pubDate = post.date;
+    try {
+      const parsedDate = new Date(post.date);
+      // Check if the date is valid and not in the future
+      if (isNaN(parsedDate.getTime()) || parsedDate > new Date()) {
+        // Use today's date if publication date is invalid or in the future
+        const today = new Date().toISOString().split("T")[0];
+        pubDate = today;
+      }
+    } catch (e) {
+      console.error(`Invalid publication date for ${post.slug}: ${post.date}`);
+      // Use today's date if there's an error parsing the date
+      const today = new Date().toISOString().split("T")[0];
+      pubDate = today;
+    }
+
+    // Use Git lastUpdated if available, otherwise use validated publication date
+    const postDate = post._gitLastUpdated || pubDate;
+    routeDates[route] = postDate;
+
+    // Track the most recent date for the blog index
+    if (!mostRecentBlogDate || new Date(postDate) > new Date(mostRecentBlogDate)) {
+      mostRecentBlogDate = postDate;
+    }
+
     // Set blog posts to weekly
     routeFrequency[route] = "weekly";
   });
+
+  // Set the blog index page date to the most recent blog post date
+  routeDates["/blog"] = mostRecentBlogDate || new Date().toISOString().split("T")[0];
+  routeFrequency["/blog"] = "daily";
 
   const blogRoutes = postsList.map((post) => `/blog/${post.slug}`);
 
