@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { getAllPosts } from "@/lib/mdx";
 import type { PostMeta } from "@/lib/mdx";
+import useSEO from "@/lib/hooks/useSEO";
 
 // Posts per page
 const POSTS_PER_PAGE = 4;
@@ -45,6 +46,15 @@ function BlogPage() {
   };
 
   // // No need to pre-generate pagination items - we do this inline now
+
+  // Apply SEO for blog page
+  useSEO({
+    title: "Blog",
+    description:
+      "The latest news, updates, and insights about Mirascope and LLM application development.",
+    url: "/blog",
+    type: "website",
+  });
 
   return (
     <div className="flex justify-center pt-12">
