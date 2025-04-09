@@ -1,0 +1,78 @@
+---
+title: Logfire Integration
+---
+
+# Logfire
+
+Mirascope provides out-of-the-box integration with [Logfire](https://logfire.ai/).
+
+You can install the necessary packages directly or using the `logfire` extras flag:
+
+```bash
+pip install "mirascope[logfire]"
+```
+
+You can then use the `with_logfire` decorator to automatically log calls:
+
+<TabbedSection>
+<Tab value="Shorthand">
+```python
+import logfire
+from mirascope import llm
+from mirascope.integrations.logfire import with_logfire
+from pydantic import BaseModel
+
+logfire.configure()
+
+
+class Book(BaseModel):
+    title: str
+    author: str
+
+
+@with_logfire()
+@llm.call(provider="$PROVIDER", model="$MODEL", response_model=Book)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book."
+
+
+print(recommend_book("fantasy"))
+
+```
+</Tab>
+<Tab value="Template">
+```python
+import logfire
+from mirascope import llm, prompt_template
+from mirascope.integrations.logfire import with_logfire
+from pydantic import BaseModel
+
+logfire.configure()
+
+
+class Book(BaseModel):
+    title: str
+    author: str
+
+
+@with_logfire()
+@llm.call(provider="$PROVIDER", model="$MODEL", response_model=Book)
+@prompt_template("Recommend a {genre} book")
+def recommend_book(genre: str): ...
+
+
+print(recommend_book("fantasy"))
+
+```
+</Tab>
+</TabbedSection>
+
+This will give you:
+
+* A trace around the `recommend_book` function that captures LLM interactions
+* Structured logging of prompt templates, inputs, and outputs
+* Token usage and context details
+
+<Callout type="note" title="Handling streams">
+  When logging streams, the span will not be logged until the stream has been exhausted. This is a function of how streaming works.
+</Callout>
