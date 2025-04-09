@@ -128,6 +128,7 @@ const meta: DocsStructure = {
           },
           evals: {
             title: "Evals",
+            hasExtractableSnippets: true,
           },
           async: {
             title: "Async",
