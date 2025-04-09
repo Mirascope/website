@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # Example 4: Runtime Provider Overrides
 # Generated for provider: openai
-# This file is auto-generated and should not be edited directly
+# Source: src/docs/mirascope/learn/calls.mdx:108
+# This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm
 from mirascope.core import prompt_template

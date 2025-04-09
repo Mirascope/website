@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-# Example 21: Output: [BaseMessageParam(role='user', content='Recommend a fantasy book under $12.35')]
+# Example 21: Format Specifiers
 # Generated for provider: openai
-# This file is auto-generated and should not be edited directly
+# Source: src/docs/mirascope/learn/prompts.mdx:656
+# This file is auto-generated; any edits should be made in the source file
 
 from mirascope import prompt_template
 
