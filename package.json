@@ -18,10 +18,14 @@
     "fix:format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\"",
     "fix:snippets": "bun run scripts/update-snippets.ts",
     "prepare": "husky",
-    "pre-commit": "lint-staged && bun run lint:ts"
+    "pre-commit": "lint-staged"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,css,md,mdx}": "prettier --write",
+    "*.{ts,tsx}": [
+      "node scripts/check-ts.js",
+      "bun test"
+    ],
     "*.mdx": [
       "bun run lint:mdx",
       "bun run lint:snippets"
