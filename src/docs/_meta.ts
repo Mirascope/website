@@ -164,6 +164,7 @@ const meta: DocsStructure = {
         items: {
           middleware: {
             title: "Middleware",
+            hasExtractableSnippets: true,
           },
           custom_provider: {
             title: "Custom LLM Provider",
