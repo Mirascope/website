@@ -5,3 +5,4 @@ export * from "./ProviderCodeBlock";
 export * from "./InstallSnippet";
 export * from "./Callout";
 export * from "./TabbedSection";
+export * from "./MermaidDiagram";

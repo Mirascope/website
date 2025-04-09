@@ -12,6 +12,7 @@ import {
   Success,
   TabbedSection,
   Tab,
+  MermaidDiagram,
 } from "./docs";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
 import Logo from "./Logo";
@@ -52,6 +53,7 @@ export const components = {
   Info,
   Success,
   PricingContent,
+  MermaidDiagram,
 
   // UI Components
   Tabs,
@@ -223,6 +225,11 @@ export const components = {
           if (codeContent) break;
         }
       }
+    }
+
+    // Handle mermaid diagrams
+    if (language === "mermaid" && codeContent) {
+      return <MermaidDiagram chart={codeContent.trim()} />;
     }
 
     // If we found code content and a language, use our ProviderCodeWrapper component
