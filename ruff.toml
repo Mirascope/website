@@ -26,6 +26,7 @@ select = [
 # Ignore rules that are too strict for example code
 ignore = [
     "E501",   # line too long
+    "B905",   # zip() without an explicit strict= parameter
 ]
 
 [lint.isort]
