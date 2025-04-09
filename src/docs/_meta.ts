@@ -177,6 +177,7 @@ const meta: DocsStructure = {
         items: {
           client: {
             title: "Client",
+            hasExtractableSnippets: true,
           },
         },
       },
