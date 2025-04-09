@@ -140,7 +140,7 @@ export const components = {
 
     return (
       <code
-        className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-1 py-0.5 rounded text-sm font-mono"
+        className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-1 py-0.5 rounded text-[0.9em] font-mono"
         {...props}
       />
     );
