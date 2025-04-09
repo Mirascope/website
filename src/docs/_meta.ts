@@ -181,6 +181,31 @@ const meta: DocsStructure = {
           },
         },
       },
+      integrations: {
+        title: "Integrations",
+        items: {
+          langfuse: {
+            title: "Langfuse",
+            description: "Integration with Langfuse for LLM observability",
+            hasExtractableSnippets: true,
+          },
+          hyperdx: {
+            title: "HyperDX",
+            description: "Integration with HyperDX for observability and logging",
+            hasExtractableSnippets: true,
+          },
+          logfire: {
+            title: "Logfire",
+            description: "Integration with Logfire for structured logging",
+            hasExtractableSnippets: true,
+          },
+          otel: {
+            title: "OpenTelemetry",
+            description: "Integration with OpenTelemetry for distributed tracing",
+            hasExtractableSnippets: true,
+          },
+        },
+      },
     },
 
     // Sections (like API, Guides)
