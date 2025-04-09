@@ -1,4 +1,5 @@
-import { Outlet, createRootRoute, useRouterState } from "@tanstack/react-router";
+import { Outlet, createRootRoute, useRouterState, redirect } from "@tanstack/react-router";
+import { processRedirects } from "../lib/redirects";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { useEffect } from "react";
 
@@ -10,6 +11,21 @@ import { trackPageView } from "../lib/services/analytics";
 import { SITE_VERSION } from "../lib/constants/site";
 
 export const Route = createRootRoute({
+  beforeLoad: ({ location }) => {
+    // Skip redirect check for normal routes that already exist
+    // Process redirects first for all incoming requests
+    const path = location.pathname;
+
+    // Check if this is a path that needs redirection
+    const redirectTo = processRedirects(path);
+    if (redirectTo) {
+      console.log(`Root redirect: ${path} -> ${redirectTo}`);
+      throw redirect({
+        to: redirectTo,
+        replace: true,
+      });
+    }
+  },
   component: () => {
     const router = useRouterState();
     const isLandingPage = router.location.pathname === "/";

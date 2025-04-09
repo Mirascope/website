@@ -22,6 +22,7 @@ bun run start
 - `bun run start` - Start development server
 - `bun run build` - Build for production
 - `bun run serve` - Preview production build
+- `bun test` - Run tests
 
 #### Validation and Fixing
 - `bun run lint` - Run all checks (TypeScript, MDX, Python snippets, formatting)

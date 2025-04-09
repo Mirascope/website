@@ -54,6 +54,9 @@ jobs:
 
     - name: Python Code Validation
       run: bun run lint:py
+      
+    - name: Run Tests
+      run: bun test
 
     - name: Build
       run: bun run build
