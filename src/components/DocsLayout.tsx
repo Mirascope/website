@@ -111,7 +111,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
   // Initialize fun mode from localStorage if available
   const [funMode, setFunMode] = useState(() => {
     if (typeof window !== "undefined") {
-      return localStorage.getItem("docsFunMode") === "true";
+      return localStorage.getItem("funMode") === "true";
     }
     return false;
   });
@@ -123,7 +123,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
 
     // Save preference to localStorage
     if (typeof window !== "undefined") {
-      localStorage.setItem("docsFunMode", newMode.toString());
+      localStorage.setItem("funMode", newMode.toString());
     }
   };
 
