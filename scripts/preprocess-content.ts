@@ -3,6 +3,7 @@ import path from "path";
 import { processMDX } from "../src/lib/mdx-utils";
 import type { PostMeta } from "../src/lib/mdx";
 import { getAllDocs } from "../src/docs/_meta";
+import { execSync } from "child_process";
 
 // Base URL for the site
 const SITE_URL = "https://mirascope.com";
@@ -73,6 +74,27 @@ function extractFrontmatter(source: string): {
 }
 
 /**
+ * Get last modified date from Git
+ */
+function getLastModifiedDateFromGit(filePath: string): string | null {
+  try {
+    // Get the last commit date that modified this file
+    const dateStr = execSync(`git log -1 --format="%ad" --date=short -- "${filePath}"`, {
+      encoding: "utf-8",
+    }).trim();
+
+    // If we got a valid date, return it
+    if (dateStr && dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) {
+      return dateStr;
+    }
+    return null;
+  } catch (error) {
+    console.error(`Error getting git history for ${filePath}:`, error);
+    return null;
+  }
+}
+
+/**
  * Process all blog posts
  */
 async function processBlogPosts(): Promise<void> {
@@ -98,6 +120,10 @@ async function processBlogPosts(): Promise<void> {
       continue;
     }
 
+    // Get last updated date from Git (for SEO only, not for display)
+    const gitLastUpdated = getLastModifiedDateFromGit(filepath);
+
+    // Create the post metadata - without including lastUpdated in what's displayed
     const postMeta: PostMeta = {
       title: frontmatter.title || "",
       description: frontmatter.description || "",
@@ -105,16 +131,23 @@ async function processBlogPosts(): Promise<void> {
       readTime: frontmatter.readTime || "",
       author: frontmatter.author || "Mirascope Team",
       slug,
-      ...(frontmatter.lastUpdated && { lastUpdated: frontmatter.lastUpdated }),
+      // Don't include lastUpdated in the metadata so it won't be displayed
     };
 
-    postsList.push(postMeta);
+    // Create an internal version of postMeta that includes the Git date
+    // This will be used for the sitemap but not displayed to users
+    const postMetaWithSeoData = {
+      ...postMeta,
+      _gitLastUpdated: gitLastUpdated, // Use underscore to indicate it's internal
+    };
+
+    postsList.push(postMetaWithSeoData);
 
     // Write individual post data to its own file - store raw content
     fs.writeFileSync(
       path.join(POSTS_DIR, `${slug}.json`),
       JSON.stringify({
-        meta: postMeta,
+        meta: postMeta, // Use the version WITHOUT lastUpdated for display
         content: fileContent, // Store the original MDX content
       })
     );
@@ -247,24 +280,38 @@ async function generateSitemap(): Promise<void> {
 
   // Get blog post routes from the processed content
   const postsListPath = path.join(STATIC_DIR, "posts-list.json");
-  const postsList: PostMeta[] = JSON.parse(fs.readFileSync(postsListPath, "utf-8"));
+  const postsList: any[] = JSON.parse(fs.readFileSync(postsListPath, "utf-8"));
+
+  // Create a map of routes to their last modified dates from Git
+  const routeDates: Record<string, string> = {};
+  const routeFrequency: Record<string, string> = {};
+
+  // Add blog post routes with their lastUpdated dates
+  postsList.forEach((post) => {
+    const route = `/blog/${post.slug}`;
+    // Use Git lastUpdated if available, otherwise use publication date
+    routeDates[route] = post._gitLastUpdated || post.date;
+    // Set blog posts to weekly
+    routeFrequency[route] = "weekly";
+  });
+
   const blogRoutes = postsList.map((post) => `/blog/${post.slug}`);
 
   // Get doc routes from the _meta.ts structure
   const allDocs = getAllDocs();
   const docRoutes = allDocs.map((doc) => {
-    if (doc.path === "index") {
-      return `/docs/${doc.product}`;
-    } else {
-      return `/docs/${doc.product}/${doc.path}`;
-    }
+    const route =
+      doc.path === "index" ? `/docs/${doc.product}` : `/docs/${doc.product}/${doc.path}`;
+    // Set doc pages to weekly
+    routeFrequency[route] = "weekly";
+    return route;
   });
 
   // Combine all routes and remove duplicates
   const allRoutes = [...STATIC_ROUTES, ...blogRoutes, ...docRoutes];
   const uniqueRoutes = [...new Set(allRoutes)].sort();
 
-  // Generate sitemap XML
+  // Default date for routes without specific dates (today's date)
   const today = new Date().toISOString().split("T")[0];
 
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
@@ -274,8 +321,15 @@ async function generateSitemap(): Promise<void> {
   uniqueRoutes.forEach((route) => {
     xml += "  <url>\n";
     xml += `    <loc>${SITE_URL}${route}</loc>\n`;
-    xml += `    <lastmod>${today}</lastmod>\n`;
-    xml += "    <changefreq>daily</changefreq>\n";
+
+    // Use the specific date for this route if available, otherwise use today
+    const lastmod = routeDates[route] || today;
+    xml += `    <lastmod>${lastmod}</lastmod>\n`;
+
+    // Use appropriate changefreq based on route type
+    const changefreq = routeFrequency[route] || "daily";
+    xml += `    <changefreq>${changefreq}</changefreq>\n`;
+
     xml += "  </url>\n";
   });
 
