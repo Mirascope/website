@@ -14,6 +14,8 @@ dependencies = [
     "pillow>=10.4.0,<11.0",
     "vertexai>=0.1.0",
     "tenacity>=8.0.0,<9.0",
+    "sqlmodel>=0.0.14,<0.1",
+    "sqlalchemy>=2.0.0,<3.0",
 ]
 
 [project.optional-dependencies]
