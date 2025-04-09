@@ -17,6 +17,7 @@ dependencies = [
     "sqlmodel>=0.0.14,<0.1",
     "sqlalchemy>=2.0.0,<3.0",
     "mcp>=1.6.0",
+    "logfire>=0.15.0",
 ]
 
 [project.optional-dependencies]

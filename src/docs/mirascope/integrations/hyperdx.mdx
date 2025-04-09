@@ -1,0 +1,60 @@
+---
+title: HyperDX Integration
+---
+
+# HyperDX
+
+Mirascope provides out-of-the-box integration with [HyperDX](https://hyperdx.io/).
+
+You can install the necessary packages directly or using the `hyperdx` extras flag:
+
+```bash
+pip install "mirascope[hyperdx]"
+```
+
+You can then use the `with_hyperdx` decorator to automatically log calls:
+
+<TabbedSection>
+<Tab value="Shorthand">
+```python
+from mirascope import llm
+from mirascope.integrations.otel import with_hyperdx
+
+
+@with_hyperdx()
+@llm.call(provider="$PROVIDER", model="$MODEL")
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book."
+
+
+print(recommend_book("fantasy"))
+
+```
+</Tab>
+<Tab value="Template">
+```python
+from mirascope import llm, prompt_template
+from mirascope.integrations.otel import with_hyperdx
+
+
+@with_hyperdx()
+@llm.call(provider="$PROVIDER", model="$MODEL")
+@prompt_template("Recommend a {genre} book")
+def recommend_book(genre: str): ...
+
+
+print(recommend_book("fantasy"))
+
+```
+</Tab>
+</TabbedSection>
+
+This will give you:
+
+* A trace around the `recommend_book` function that captures details about the prompt, inputs, and outputs
+* Structured logging of LLM calls
+* Token usage and cost metrics
+
+<Callout type="note" title="Handling streams">
+  When logging streams, the span will not be logged until the stream has been exhausted. This is a function of how streaming works.
+</Callout>
