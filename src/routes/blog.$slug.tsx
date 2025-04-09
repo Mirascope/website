@@ -32,7 +32,7 @@ function BlogPostPage() {
   // Initialize fun mode from localStorage if available
   const [funMode, setFunMode] = useState(() => {
     if (typeof window !== "undefined") {
-      return localStorage.getItem("blogFunMode") === "true";
+      return localStorage.getItem("funMode") === "true";
     }
     return false;
   });
@@ -44,7 +44,7 @@ function BlogPostPage() {
 
     // Save preference to localStorage
     if (typeof window !== "undefined") {
-      localStorage.setItem("blogFunMode", newMode.toString());
+      localStorage.setItem("funMode", newMode.toString());
     }
   };
 

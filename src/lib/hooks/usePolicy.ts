@@ -44,10 +44,11 @@ export function usePolicy(policyPath: string, defaultTitle: string): UsePolicyRe
         // Example: "/src/policies/terms/use.mdx" -> "/static/policies/terms/use.mdx.json"
         const pathParts = policyPath.split("/");
         const fileName = pathParts[pathParts.length - 1];
-        const dirPath = pathParts.slice(3, pathParts.length - 1).join("/");
-
-        // Build the static path - note we need to use the full file name including .mdx
-        const staticPath = `/static/policies/${dirPath}/${fileName}.json`;
+        let staticPath = `/static/policies/privacy.json`;
+        if (fileName !== "privacy.mdx") {
+          const dirPath = pathParts.slice(3, pathParts.length - 1).join("/");
+          staticPath = `/static/policies/${dirPath}/${fileName}.json`;
+        }
 
         const response = await fetch(staticPath);
         if (!response.ok) {
