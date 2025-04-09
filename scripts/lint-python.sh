@@ -14,15 +14,10 @@ YELLOW='\033[0;33m'
 NC='\033[0m' # No Color
 
 # Parse arguments
-VERBOSE=false
 SPECIFIC_PATH=""
 
 for arg in "$@"; do
   case $arg in
-    --verbose)
-      VERBOSE=true
-      shift
-      ;;
     --path=*)
       SPECIFIC_PATH="${arg#*=}"
       shift
@@ -31,7 +26,6 @@ for arg in "$@"; do
       echo "Usage: $0 [options]"
       echo ""
       echo "Options:"
-      echo "  --verbose        Show more detailed output including uv and tool logs"
       echo "  --path=<path>    Check only a specific file or directory"
       echo "  --help           Show this help message"
       exit 0
@@ -64,13 +58,16 @@ TOTAL_FILES=$((EXAMPLES_FILES + SNIPPETS_FILES))
 
 log $YELLOW "Found $TOTAL_FILES Python files ($EXAMPLES_FILES in examples, $SNIPPETS_FILES in snippets)"
 
+# Check for and create a virtual environment if needed
+if [ ! -d ".venv" ]; then
+  log $YELLOW "No virtual environment found, creating one with 'uv venv'..."
+  uv venv
+  log $GREEN "Virtual environment created"
+fi
+
 # Install dependencies with uv
 log $YELLOW "Installing dependencies with uv..."
-if [ "$VERBOSE" = true ]; then
-  uv pip install -e ".[providers]"
-else
-  uv pip install -e ".[providers]" > /dev/null 2>&1
-fi
+uv pip install -e ".[providers]"
 log $GREEN "Dependencies installed"
 
 # Prepare tool commands
@@ -94,39 +91,31 @@ fi
 
 # Run pyright
 log $YELLOW "Running pyright type checking..."
-PYRIGHT_OK=true
-TEMP_OUTPUT=$(mktemp)
-$PYRIGHT_CMD | tee $TEMP_OUTPUT
+$PYRIGHT_CMD
+PYRIGHT_STATUS=$?
 
-# Check exit status from the pyright command
-if [ ${PIPESTATUS[0]} -ne 0 ]; then
-  # Count errors
-  ERROR_COUNT=$(grep -c "error:" $TEMP_OUTPUT || echo "0")
-  WARNING_COUNT=$(grep -c "warning:" $TEMP_OUTPUT || echo "0")
-  
-  log $RED "❌ Type checking failed with $ERROR_COUNT errors and $WARNING_COUNT warnings"
-  PYRIGHT_OK=false
-else
+if [ $PYRIGHT_STATUS -eq 0 ]; then
   log $GREEN "✅ Type checking passed"
+else
+  log $RED "❌ Type checking failed"
 fi
-rm $TEMP_OUTPUT
 
 # Run ruff
 log $YELLOW "Running ruff code style checking..."
-RUFF_OK=true
-if ! $RUFF_CMD; then
-  log $RED "❌ Code style checking failed"
-  RUFF_OK=false
-else
+$RUFF_CMD
+RUFF_STATUS=$?
+
+if [ $RUFF_STATUS -eq 0 ]; then
   log $GREEN "✅ Code style checking passed"
+else
+  log $RED "❌ Code style checking failed"
 fi
 
 # Final result
-if [ "$PYRIGHT_OK" = true ] && [ "$RUFF_OK" = true ]; then
+if [ $PYRIGHT_STATUS -eq 0 ] && [ $RUFF_STATUS -eq 0 ]; then
   log $GREEN "✅ All checks passed"
   exit 0
 else
-  [ "$PYRIGHT_OK" = false ] && log $RED "❌ Type checking failed"
-  [ "$RUFF_OK" = false ] && log $RED "❌ Code style checking failed"
+  log $RED "❌ Some checks failed"
   exit 1
 fi
