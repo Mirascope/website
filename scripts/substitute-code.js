@@ -140,7 +140,7 @@ codeBlocks.reverse().forEach((block) => {
 
   for (const directive of block.fromDirectives) {
     const { filePath, startLine, endLine } = directive;
-    const sourceFilePath = path.join(ROOT_DIR, "scratch", filePath);
+    const sourceFilePath = path.join(ROOT_DIR, filePath);
     console.log(`Looking for source file at: ${sourceFilePath}`);
 
     try {
