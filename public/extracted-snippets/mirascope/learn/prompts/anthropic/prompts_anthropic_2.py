@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-# Example 2: Output: [BaseMessageParam(role='user', content='Recommend a fantasy book')]
+# Example 2: Prompt Templates (Messages)
 # Generated for provider: anthropic
-# This file is auto-generated and should not be edited directly
+# Source: src/docs/mirascope/learn/prompts.mdx:37
+# This file is auto-generated; any edits should be made in the source file
 
 from mirascope import prompt_template
 

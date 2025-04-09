@@ -144,7 +144,7 @@ function compareDirectories(dir1: string, dir2: string): string[] {
     return differentFiles;
   }
 
-  // Compare the content of each file
+  // Compare the content of each file, ignoring line number information
   for (let i = 0; i < files1.length; i++) {
     const fileName = files1[i];
     if (fileName !== files2[i]) {
@@ -152,10 +152,14 @@ function compareDirectories(dir1: string, dir2: string): string[] {
       continue;
     }
 
-    const content1 = fs.readFileSync(path.join(dir1, fileName), "utf8");
-    const content2 = fs.readFileSync(path.join(dir2, fileName), "utf8");
+    let content1 = fs.readFileSync(path.join(dir1, fileName), "utf8");
+    let content2 = fs.readFileSync(path.join(dir2, fileName), "utf8");
 
-    // Hash the contents to compare them
+    // Normalize the files by removing the Source info, which may be different
+    content1 = content1.replace(/# Source: .+:\d+/g, "");
+    content2 = content2.replace(/# Source: .+:\d+/g, "");
+
+    // Hash the normalized contents to compare them
     const hash1 = crypto.createHash("md5").update(content1).digest("hex");
     const hash2 = crypto.createHash("md5").update(content2).digest("hex");
 

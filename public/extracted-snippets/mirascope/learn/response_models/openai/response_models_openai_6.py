@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-# Example 6: Output: ["The Name of the Wind", "Mistborn: The Final Empire"]
+# Example 6: Built-In Types
 # Generated for provider: openai
-# This file is auto-generated and should not be edited directly
+# Source: src/docs/mirascope/learn/response_models.mdx:174
+# This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm, prompt_template
 
