@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-# Example 8: For further information visit https://errors.pydantic.dev/2.7/v/assertion_error
+# Example 8: Validation and Error Handling
 # Generated for provider: anthropic
-# This file is auto-generated and should not be edited directly
+# Source: src/docs/mirascope/learn/response_models.mdx:392
+# This file is auto-generated; any edits should be made in the source file
 
 from typing import Annotated
 

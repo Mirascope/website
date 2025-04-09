@@ -12,18 +12,34 @@ import { replaceProviderVariables } from "../../src/config/providers";
 import type { Provider } from "../../src/config/providers";
 
 /**
+ * Interface for snippet with line number information
+ */
+export interface Snippet {
+  code: string;
+  lineNumber: number;
+}
+
+/**
  * Extract Python snippets from an MDX file
  */
-export function extractSnippets(filePath: string): string[] {
+export function extractSnippets(filePath: string): Snippet[] {
   const content = fs.readFileSync(filePath, "utf-8");
 
   // Match all Python code blocks
   const regex = /```python\n([\s\S]*?)```/g;
-  const snippets: string[] = [];
+  const snippets: Snippet[] = [];
 
+  // Count lines up to each match
   let match;
   while ((match = regex.exec(content)) !== null) {
-    snippets.push(match[1].trim());
+    // Calculate line number by counting newlines up to the match start
+    const textBeforeMatch = content.substring(0, match.index);
+    const lineNumber = (textBeforeMatch.match(/\n/g) || []).length + 1;
+
+    snippets.push({
+      code: match[1].trim(),
+      lineNumber: lineNumber,
+    });
   }
 
   return snippets;
@@ -34,21 +50,44 @@ export function extractSnippets(filePath: string): string[] {
  */
 export function extractHeadings(filePath: string): string[] {
   const content = fs.readFileSync(filePath, "utf-8");
-
-  // Find code blocks
-  const codeBlockRegex = /```python\n([\s\S]*?)```/g;
   const headings: string[] = [];
 
+  // Find all code blocks (any language, not just Python)
+  const allCodeBlocksRegex = /```(?:\w*)\n([\s\S]*?)```/g;
+  const blockLocations: { start: number; end: number }[] = [];
+
+  // Map all code block locations
+  let codeBlockMatch;
+  while ((codeBlockMatch = allCodeBlocksRegex.exec(content)) !== null) {
+    blockLocations.push({
+      start: codeBlockMatch.index,
+      end: codeBlockMatch.index + codeBlockMatch[0].length,
+    });
+  }
+
+  // Reset and find Python code blocks specifically
+  const pythonCodeBlockRegex = /```python\n([\s\S]*?)```/g;
   let match;
-  while ((match = codeBlockRegex.exec(content)) !== null) {
+
+  while ((match = pythonCodeBlockRegex.exec(content)) !== null) {
     // Look for the closest heading before the match
     const contentBeforeMatch = content.substring(0, match.index);
     const headingRegex = /#{1,6}\s+(.+)$/gm;
 
     let lastHeading = "";
     let headingMatch;
+
     while ((headingMatch = headingRegex.exec(contentBeforeMatch)) !== null) {
-      lastHeading = headingMatch[1].trim();
+      // Check if this potential heading is inside any code block
+      const headingPosition = headingMatch.index;
+      const insideCodeBlock = blockLocations.some(
+        (block) => headingPosition > block.start && headingPosition < block.end
+      );
+
+      // Only use this heading if it's not inside a code block
+      if (!insideCodeBlock) {
+        lastHeading = headingMatch[1].trim();
+      }
     }
 
     headings.push(lastHeading || "Example");
@@ -61,18 +100,19 @@ export function extractHeadings(filePath: string): string[] {
  * Generate a runnable Python file for a single snippet
  */
 export function generatePythonFile(
-  snippet: string,
+  snippet: Snippet,
   provider: string,
   outputDir: string,
   index: number,
   heading: string,
-  baseName: string = "example"
+  baseName: string = "example",
+  sourceFilePath: string = ""
 ): string {
   // Convert provider to lowercase for case-insensitive matching
   const providerKey = provider.toLowerCase() as Provider;
 
   // Replace provider variables using shared function
-  const processedSnippet = replaceProviderVariables(snippet, providerKey);
+  const processedSnippet = replaceProviderVariables(snippet.code, providerKey);
 
   // Ensure the output directory exists
   if (!fs.existsSync(outputDir)) {
@@ -84,10 +124,17 @@ export function generatePythonFile(
   const outputFile = path.join(outputDir, fileName);
 
   // Create the output file content
+  // Convert absolute path to one relative to project root
+  const projectRoot = process.cwd();
+  const relativePath = sourceFilePath.startsWith(projectRoot)
+    ? sourceFilePath.substring(projectRoot.length + 1) // +1 to remove the leading slash
+    : sourceFilePath;
+
   const content = `#!/usr/bin/env python3
 # Example ${index + 1}: ${heading}
 # Generated for provider: ${provider}
-# This file is auto-generated and should not be edited directly
+# Source: ${relativePath}:${snippet.lineNumber}
+# This file is auto-generated; any edits should be made in the source file
 
 ${processedSnippet}
 `;
@@ -149,7 +196,15 @@ export function processFile(
   // Generate a separate Python file for each snippet
   const generatedFiles: string[] = [];
   snippets.forEach((snippet, index) => {
-    const file = generatePythonFile(snippet, provider, outputDir, index, headings[index], baseName);
+    const file = generatePythonFile(
+      snippet,
+      provider,
+      outputDir,
+      index,
+      headings[index],
+      baseName,
+      mdxFile
+    );
     generatedFiles.push(file);
   });
 

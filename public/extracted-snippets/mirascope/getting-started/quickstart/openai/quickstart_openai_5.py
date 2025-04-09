@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-# Example 5: This will be a JSON-formatted string
+# Example 5: JSON Mode
 # Generated for provider: openai
-# This file is auto-generated and should not be edited directly
+# Source: src/docs/mirascope/getting-started/quickstart.mdx:186
+# This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm
 from pydantic import BaseModel

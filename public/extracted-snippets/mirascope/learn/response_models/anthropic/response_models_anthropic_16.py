@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-# Example 16: title='The Name of the Wind' author='Patrick Rothfuss'
+# Example 16: Streaming Response Models
 # Generated for provider: anthropic
-# This file is auto-generated and should not be edited directly
+# Source: src/docs/mirascope/learn/response_models.mdx:676
+# This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm, prompt_template
 from pydantic import BaseModel
