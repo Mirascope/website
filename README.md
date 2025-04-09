@@ -67,6 +67,20 @@ The documentation contains Python code snippets that are automatically extracted
   - `bun run scripts/update-snippets.ts --check --path=<file-path>` - Check if snippets for a specific file are up-to-date
   - `bun run scripts/update-snippets.ts --help` - View all available options
 
+#### Handling Partial Code Examples
+
+For code blocks that represent partial snippets (not meant to be valid on their own), use the `python-no-extract` language tag instead of `python`:
+
+```markdown
+```python-no-extract
+@app.receiver("audio")
+async def receive_audio(response: AudioSegment, context: dict[str, Any]) -> None:
+    play(response)
+```
+```
+
+This prevents these partial examples from being extracted as standalone snippets and avoids validation errors for code that's missing imports or context. The syntax highlighting still works correctly in the rendered documentation.
+
 #### CI Integration
 
 Our CI workflow automatically verifies that all code is properly formatted, type-checked, and that extracted snippets are up-to-date with the source documentation. If you modify MDX files with code snippets, make sure to run `bun run fix` before committing to update all snippets and formatting.
