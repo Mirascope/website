@@ -1,11 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
 import Logo from "@/components/Logo";
+import useSEO from "@/lib/hooks/useSEO";
 
 export const Route = createFileRoute("/")({
   component: LandingPage,
 });
 
 function LandingPage() {
+  // Apply SEO for landing page
+  useSEO({
+    title: "Home",
+    description: "The AI Engineer's Developer Stack",
+    image: "/frog-logo.png",
+  });
+
   return (
     <div className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)] mt-0 md:-mt-16 py-8 md:py-0 overflow-hidden">
       <div className="text-center flex flex-col items-center w-full px-4">
