@@ -105,7 +105,7 @@ async function processBlogPosts(): Promise<void> {
       readTime: frontmatter.readTime || "",
       author: frontmatter.author || "Mirascope Team",
       slug,
-      ...(frontmatter.lastUpdated && { lastUpdated: frontmatter.lastUpdated }),
+      lastUpdated: frontmatter.lastUpdated || frontmatter.date || "",
     };
 
     postsList.push(postMeta);
@@ -250,6 +250,12 @@ async function generateSitemap(): Promise<void> {
   const postsList: PostMeta[] = JSON.parse(fs.readFileSync(postsListPath, "utf-8"));
   const blogRoutes = postsList.map((post) => `/blog/${post.slug}`);
 
+  // Get the date of the latest blog post for the /blog route
+  const latestBlogDate =
+    postsList.length > 0
+      ? postsList[0].lastUpdated || postsList[0].date
+      : new Date().toISOString().split("T")[0];
+
   // Get doc routes from the _meta.ts structure
   const allDocs = getAllDocs();
   const docRoutes = allDocs.map((doc) => {
@@ -274,8 +280,26 @@ async function generateSitemap(): Promise<void> {
   uniqueRoutes.forEach((route) => {
     xml += "  <url>\n";
     xml += `    <loc>${SITE_URL}${route}</loc>\n`;
-    xml += `    <lastmod>${today}</lastmod>\n`;
-    xml += "    <changefreq>daily</changefreq>\n";
+
+    // Set lastmod based on whether it's a blog post, blog index, or other page
+    if (route === "/blog") {
+      xml += `    <lastmod>${latestBlogDate}</lastmod>\n`;
+      xml += "    <changefreq>daily</changefreq>\n";
+    } else if (route.startsWith("/blog/")) {
+      // Find the post to get its lastUpdated date
+      const postSlug = route.replace("/blog/", "");
+      const post = postsList.find((p) => p.slug === postSlug);
+      if (post) {
+        xml += `    <lastmod>${post.lastUpdated || post.date}</lastmod>\n`;
+      } else {
+        xml += `    <lastmod>${today}</lastmod>\n`;
+      }
+      xml += "    <changefreq>weekly</changefreq>\n";
+    } else {
+      xml += `    <lastmod>${today}</lastmod>\n`;
+      xml += "    <changefreq>daily</changefreq>\n";
+    }
+
     xml += "  </url>\n";
   });
 
