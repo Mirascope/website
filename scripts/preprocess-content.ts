@@ -2,6 +2,24 @@ import fs from "fs";
 import path from "path";
 import { processMDX } from "../src/lib/mdx-utils";
 import type { PostMeta } from "../src/lib/mdx";
+import { getAllDocs } from "../src/docs/_meta";
+
+// Base URL for the site
+const SITE_URL = "https://mirascope.com";
+
+// Define static routes - update this when adding new static pages
+const STATIC_ROUTES = [
+  "/", // Home
+  "/blog", // Blog index
+  "/docs", // Docs index
+  "/docs/mirascope", // Mirascope docs
+  "/docs/lilypad", // Lilypad docs
+  "/pricing", // Pricing page
+  "/privacy", // Privacy policy
+  "/terms", // Terms index
+  "/terms/service", // Terms of service
+  "/terms/use", // Terms of use
+];
 
 // Create static directories directly in public folder
 // This ensures they get copied to the right place in the final build
@@ -222,13 +240,64 @@ async function processPolicyFiles(): Promise<void> {
 }
 
 /**
+ * Generate sitemap.xml file based on the processed content
+ */
+async function generateSitemap(): Promise<void> {
+  console.log("Generating sitemap.xml...");
+
+  // Get blog post routes from the processed content
+  const postsListPath = path.join(STATIC_DIR, "posts-list.json");
+  const postsList: PostMeta[] = JSON.parse(fs.readFileSync(postsListPath, "utf-8"));
+  const blogRoutes = postsList.map((post) => `/blog/${post.slug}`);
+
+  // Get doc routes from the _meta.ts structure
+  const allDocs = getAllDocs();
+  const docRoutes = allDocs.map((doc) => {
+    if (doc.path === "index") {
+      return `/docs/${doc.product}`;
+    } else {
+      return `/docs/${doc.product}/${doc.path}`;
+    }
+  });
+
+  // Combine all routes and remove duplicates
+  const allRoutes = [...STATIC_ROUTES, ...blogRoutes, ...docRoutes];
+  const uniqueRoutes = [...new Set(allRoutes)].sort();
+
+  // Generate sitemap XML
+  const today = new Date().toISOString().split("T")[0];
+
+  let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+  xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+
+  // Add each URL
+  uniqueRoutes.forEach((route) => {
+    xml += "  <url>\n";
+    xml += `    <loc>${SITE_URL}${route}</loc>\n`;
+    xml += `    <lastmod>${today}</lastmod>\n`;
+    xml += "    <changefreq>daily</changefreq>\n";
+    xml += "  </url>\n";
+  });
+
+  xml += "</urlset>";
+
+  // Write to file
+  const outFile = path.join(process.cwd(), "public", "sitemap.xml");
+  fs.writeFileSync(outFile, xml);
+
+  console.log(`Sitemap generated with ${uniqueRoutes.length} URLs`);
+}
+
+/**
  * Main processing function that generates static JSON files for all MDX content
+ * and creates a sitemap.xml file
  */
 async function preprocessContent(): Promise<void> {
   try {
     await processBlogPosts();
     await processDocsFiles();
     await processPolicyFiles();
+    await generateSitemap();
     console.log("Content preprocessing complete!");
     console.log("Static files are available in the public/static directory");
   } catch (error) {
