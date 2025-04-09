@@ -132,6 +132,7 @@ const meta: DocsStructure = {
           },
           async: {
             title: "Async",
+            hasExtractableSnippets: true,
           },
           retries: {
             title: "Retries",
