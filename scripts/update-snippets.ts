@@ -28,8 +28,8 @@ import { processFile } from "./lib/snippet-extractor";
 // Import doc meta types and data
 import { getAllDocs } from "../src/docs/_meta";
 
-// Provider list to generate examples for
-const PROVIDERS = ["openai", "anthropic"];
+// Provider to generate examples for
+const PROVIDER = "anthropic";
 
 // Root directory for extracted snippets
 const SNIPPETS_ROOT = path.join(process.cwd(), "public", "extracted-snippets");
@@ -193,38 +193,31 @@ function cleanSnippets(doc: ExtractableDoc): void {
 }
 
 /**
- * Update snippets for a single doc with specified providers
+ * Update snippets for a single doc with provider
  */
-function updateDocSnippets(doc: ExtractableDoc, providers: string[], verbose = false): boolean {
+function updateDocSnippets(doc: ExtractableDoc, provider: string, verbose = false): boolean {
   let allSuccessful = true;
 
   // First clean existing snippets for this doc
   cleanSnippets(doc);
 
-  for (const provider of providers) {
-    try {
-      // Extract new snippets
-      const files = processFile(doc.filePath, provider);
+  try {
+    // Extract new snippets
+    const files = processFile(doc.filePath, provider);
 
-      if (files.length > 0) {
-        if (verbose) {
-          console.log(
-            `Generated ${files.length} snippets for ${doc.filePath} with provider ${provider}`
-          );
-        }
-      } else {
-        console.warn(
-          `Warning: No snippets extracted from ${doc.filePath} for provider ${provider}`
+    if (files.length > 0) {
+      if (verbose) {
+        console.log(
+          `Generated ${files.length} snippets for ${doc.filePath} with provider ${provider}`
         );
-        allSuccessful = false;
       }
-    } catch (error) {
-      console.error(
-        `Error updating snippets for ${doc.filePath} with provider ${provider}:`,
-        error
-      );
+    } else {
+      console.warn(`Warning: No snippets extracted from ${doc.filePath} for provider ${provider}`);
       allSuccessful = false;
     }
+  } catch (error) {
+    console.error(`Error updating snippets for ${doc.filePath} with provider ${provider}:`, error);
+    allSuccessful = false;
   }
 
   return allSuccessful;
@@ -233,7 +226,7 @@ function updateDocSnippets(doc: ExtractableDoc, providers: string[], verbose = f
 /**
  * Check if snippets for a doc are up-to-date
  */
-function checkDocSnippets(doc: ExtractableDoc, providers: string[], verbose = false): boolean {
+function checkDocSnippets(doc: ExtractableDoc, provider: string, verbose = false): boolean {
   let allUpToDate = true;
 
   // Create a shared temp directory
@@ -245,61 +238,51 @@ function checkDocSnippets(doc: ExtractableDoc, providers: string[], verbose = fa
       fs.mkdirSync(tempDir, { recursive: true });
     }
 
-    for (const provider of providers) {
+    try {
+      // Clean the temp directory first
+      if (fs.existsSync(tempDir)) {
+        fs.readdirSync(tempDir).forEach((file) => {
+          fs.unlinkSync(path.join(tempDir, file));
+        });
+      }
+
+      // Get existing snippets paths
+      const relativePath = doc.logicalPath.replace(/\/index$/, "");
+      const snippetDir = path.join(SNIPPETS_ROOT, doc.product, relativePath);
+
+      if (!fs.existsSync(snippetDir)) {
+        console.error(`Snippets not found for ${doc.filePath}`);
+        allUpToDate = false;
+        return allUpToDate;
+      }
+
+      // Extract snippets from MDX file to temporary directory
+      const tempFiles = processFile(doc.filePath, provider, tempDir);
+
+      if (tempFiles.length === 0) {
+        console.warn(`Warning: No snippets extracted from ${doc.filePath}`);
+        return allUpToDate;
+      }
+
+      // Compare the existing and newly generated snippets
       try {
-        // Clean the temp directory first
-        if (fs.existsSync(tempDir)) {
-          fs.readdirSync(tempDir).forEach((file) => {
-            fs.unlinkSync(path.join(tempDir, file));
-          });
-        }
+        const differentFiles = compareDirectories(snippetDir, tempDir);
 
-        // Get existing snippets paths
-        const relativePath = doc.logicalPath.replace(/\/index$/, "");
-        const snippetDir = path.join(SNIPPETS_ROOT, doc.product, relativePath, provider);
-
-        if (!fs.existsSync(snippetDir)) {
-          console.error(`Snippets not found for ${doc.filePath} with provider ${provider}`);
-          allUpToDate = false;
-          continue;
-        }
-
-        // Extract snippets from MDX file to temporary directory
-        const tempFiles = processFile(doc.filePath, provider, tempDir);
-
-        if (tempFiles.length === 0) {
-          console.warn(
-            `Warning: No snippets extracted from ${doc.filePath} for provider ${provider}`
-          );
-          continue;
-        }
-
-        // Compare the existing and newly generated snippets
-        try {
-          const differentFiles = compareDirectories(snippetDir, tempDir);
-
-          if (differentFiles.length > 0) {
-            console.error(
-              `Snippets out of date for ${doc.filePath} with provider ${provider}. Files: ${differentFiles.join(", ")}`
-            );
-            allUpToDate = false;
-          } else if (verbose) {
-            console.log(`Snippets up to date for ${doc.filePath} with provider ${provider}`);
-          }
-        } catch (error) {
+        if (differentFiles.length > 0) {
           console.error(
-            `Error comparing snippets for ${doc.filePath} with provider ${provider}:`,
-            error
+            `Snippets out of date for ${doc.filePath}. Files: ${differentFiles.join(", ")}`
           );
           allUpToDate = false;
+        } else if (verbose) {
+          console.log(`Snippets up to date for ${doc.filePath}`);
         }
       } catch (error) {
-        console.error(
-          `Error checking snippets for ${doc.filePath} with provider ${provider}:`,
-          error
-        );
+        console.error(`Error comparing snippets for ${doc.filePath}:`, error);
         allUpToDate = false;
       }
+    } catch (error) {
+      console.error(`Error checking snippets for ${doc.filePath}:`, error);
+      allUpToDate = false;
     }
   } finally {
     // Always clean up temp directory, even if there were errors
@@ -397,7 +380,7 @@ function main(): number {
     // Check snippets for each doc
     let allUpToDate = true;
     for (const doc of docs) {
-      const upToDate = checkDocSnippets(doc, PROVIDERS, args.verbose);
+      const upToDate = checkDocSnippets(doc, PROVIDER, args.verbose);
       allUpToDate = allUpToDate && upToDate;
     }
 
@@ -414,7 +397,7 @@ function main(): number {
     // Update snippets for each doc
     let allSuccessful = true;
     for (const doc of docs) {
-      const success = updateDocSnippets(doc, PROVIDERS, args.verbose);
+      const success = updateDocSnippets(doc, PROVIDER, args.verbose);
       allSuccessful = allSuccessful && success;
     }
 
