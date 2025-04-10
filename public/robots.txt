@@ -1,7 +1,6 @@
 # robots.txt for mirascope.com
 User-agent: *
-Allow: /
-Disallow: /assets/blog/  # No need to index blog assets directly
+Disallow: /
 
 # Sitemap location
 Sitemap: https://mirascope.com/sitemap.xml
