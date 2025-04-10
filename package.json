@@ -5,6 +5,7 @@
     "start": "bun --bun vite --port 3000",
     "preprocess-content": "bun run scripts/preprocess-content.ts",
     "fetch-github-stats": "bun run --bun scripts/fetch-github-stats.ts",
+    "enumerate-routes": "bun run scripts/enumerate-routes.ts",
     "prebuild": "bun run preprocess-content",
     "build": "bun run --bun vite build && bun run tsc",
     "serve": "bun --bun vite preview",
