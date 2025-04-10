@@ -2,24 +2,7 @@ import fs from "fs";
 import path from "path";
 import { processMDX } from "../src/lib/mdx-utils";
 import type { PostMeta } from "../src/lib/mdx";
-import { getAllDocs } from "../src/docs/_meta";
-
-// Base URL for the site
-const SITE_URL = "https://mirascope.com";
-
-// Define static routes - update this when adding new static pages
-const STATIC_ROUTES = [
-  "/", // Home
-  "/blog", // Blog index
-  "/docs", // Docs index
-  "/docs/mirascope", // Mirascope docs
-  "/docs/lilypad", // Lilypad docs
-  "/pricing", // Pricing page
-  "/privacy", // Privacy policy
-  "/terms", // Terms index
-  "/terms/service", // Terms of service
-  "/terms/use", // Terms of use
-];
+import { SITE_URL, getAllRoutes, getBlogPostsWithMeta } from "../src/lib/router-utils";
 
 // Create static directories directly in public folder
 // This ensures they get copied to the right place in the final build
@@ -245,34 +228,20 @@ async function processPolicyFiles(): Promise<void> {
 async function generateSitemap(): Promise<void> {
   console.log("Generating sitemap.xml...");
 
-  // Get blog post routes from the processed content
-  const postsListPath = path.join(STATIC_DIR, "posts-list.json");
-  const postsList: PostMeta[] = JSON.parse(fs.readFileSync(postsListPath, "utf-8"));
-  const blogRoutes = postsList.map((post) => `/blog/${post.slug}`);
+  // Get all routes using our centralized utility
+  const uniqueRoutes = await getAllRoutes();
+
+  // Get blog posts metadata for setting lastmod dates
+  const postsList = await getBlogPostsWithMeta();
+
+  // Current date for default lastmod
+  const today = new Date().toISOString().split("T")[0];
 
   // Get the date of the latest blog post for the /blog route
   const latestBlogDate =
-    postsList.length > 0
-      ? postsList[0].lastUpdated || postsList[0].date
-      : new Date().toISOString().split("T")[0];
-
-  // Get doc routes from the _meta.ts structure
-  const allDocs = getAllDocs();
-  const docRoutes = allDocs.map((doc) => {
-    if (doc.path === "index") {
-      return `/docs/${doc.product}`;
-    } else {
-      return `/docs/${doc.product}/${doc.path}`;
-    }
-  });
-
-  // Combine all routes and remove duplicates
-  const allRoutes = [...STATIC_ROUTES, ...blogRoutes, ...docRoutes];
-  const uniqueRoutes = [...new Set(allRoutes)].sort();
+    postsList.length > 0 ? postsList[0].lastUpdated || postsList[0].date : today;
 
   // Generate sitemap XML
-  const today = new Date().toISOString().split("T")[0];
-
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
   xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
 
