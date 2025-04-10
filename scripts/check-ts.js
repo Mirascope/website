@@ -16,8 +16,17 @@ try {
   // Execute the type checking command - using the same as our lint:ts script
   execSync("bun run tsc --noEmit", { stdio: "inherit" });
   console.log("TypeScript check passed");
-  process.exit(0);
 } catch (error) {
   console.error("TypeScript check failed!");
+  process.exit(1);
+}
+
+try {
+  // Execute the type checking command - using the same as our lint:ts script
+  execSync("bun test", { stdio: "inherit" });
+  console.log("TypeScript tests passed");
+  process.exit(0);
+} catch (error) {
+  console.error("TypeScript tests failed!");
   process.exit(1);
 }

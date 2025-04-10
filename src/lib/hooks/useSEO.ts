@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "@tanstack/react-router";
 import { PRODUCT_CONFIGS } from "../constants/site";
 
 interface SEOProps {
@@ -16,8 +17,16 @@ interface SEOProps {
   };
 }
 
+// Helper function to convert a route path to a consistent image path
+export function routeToImagePath(route: string): string {
+  // Convert "/" to "index" and other routes to a filename-safe format
+  const filename = route === "/" ? "index" : route.replace(/^\//, "").replace(/\//g, "-");
+
+  return `/social-cards/${filename}.png`;
+}
+
 const DEFAULT_DESCRIPTION = "Mirascope provides LLM abstractions that aren't obstructions.";
-const DEFAULT_IMAGE = "/frog-logo.png";
+const DEFAULT_IMAGE = "/social-cards/_default.png";
 
 export function useSEO({
   title,
@@ -28,6 +37,38 @@ export function useSEO({
   product,
   article,
 }: SEOProps) {
+  const router = useRouter();
+  const [socialImage, setSocialImage] = useState<string | null>(null);
+
+  // Effect to get the OG image for the current route
+  useEffect(() => {
+    // If custom image is provided, use that instead of generated one
+    if (image) {
+      setSocialImage(null);
+      return;
+    }
+
+    const currentPath = router.state.location.pathname;
+
+    // Try to use the generated social image for this route
+    const generatedImagePath = routeToImagePath(currentPath);
+
+    // Check if the file exists
+    fetch(generatedImagePath)
+      .then((response) => {
+        if (response.ok) {
+          setSocialImage(generatedImagePath);
+        } else {
+          // Fall back to null to use default or custom image
+          setSocialImage(null);
+        }
+      })
+      .catch(() => {
+        // On error, use null to fall back
+        setSocialImage(null);
+      });
+  }, [router.state.location.pathname, image]);
+
   useEffect(() => {
     // Calculate values
     const siteTitle = product ? `${PRODUCT_CONFIGS[product].title}` : "Mirascope";
@@ -39,13 +80,15 @@ export function useSEO({
     // Get the current base URL from the browser
     const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
 
-    // Normalize image path
-    const ogImage = image || DEFAULT_IMAGE;
+    // Normalize image path - use social image if available, otherwise use custom image or default
+    const ogImage = socialImage || image || DEFAULT_IMAGE;
 
     // Create URLs with proper joining
     const ogUrl = url
       ? new URL(url.startsWith("/") ? url : `/${url}`, baseUrl).toString()
-      : baseUrl;
+      : typeof window !== "undefined"
+        ? window.location.href
+        : baseUrl;
 
     // Only add baseUrl for relative image paths
     const absoluteImageUrl = ogImage.startsWith("http")
@@ -125,7 +168,17 @@ export function useSEO({
       // between route changes. Instead, they will be overwritten by the
       // next component that uses useSEO
     };
-  }, [title, description, image, url, type, product, article]);
+  }, [
+    title,
+    description,
+    image,
+    socialImage,
+    url,
+    type,
+    product,
+    article,
+    router.state.location.pathname,
+  ]);
 }
 
 export default useSEO;

@@ -11,7 +11,6 @@ function LandingPage() {
   useSEO({
     title: "Home",
     description: "The AI Engineer's Developer Stack",
-    image: "/frog-logo.png",
   });
 
   return (

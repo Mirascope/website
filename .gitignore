@@ -21,3 +21,5 @@ __pycache__/
 # Generated files
 public/static/
 public/sitemap.xml
+public/og-html/
+public/_redirects
