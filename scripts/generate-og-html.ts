@@ -59,8 +59,7 @@ function generateOgHtml(
   route: string,
   title: string,
   description: string | null,
-  image: string | null,
-  siteUrl: string = "https://mirascope.com"
+  image: string | null
 ): string {
   const siteName = "Mirascope";
   const pageTitle = title || siteName;
@@ -80,8 +79,8 @@ function generateOgHtml(
     imagePath = image;
   }
 
-  // Create the URL for this route
-  const url = route === "/" ? siteUrl : `${siteUrl}${route}`;
+  // Use relative URLs for better support across domains
+  const url = route;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -93,7 +92,7 @@ function generateOgHtml(
   
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="${url}">
+  <meta property="og:url" content="${route}">
   <meta property="og:title" content="${pageTitle}">
   <meta property="og:description" content="${metaDescription}">
   <meta property="og:image" content="${imagePath}">
