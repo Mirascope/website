@@ -3,12 +3,17 @@
   "private": true,
   "scripts": {
     "start": "bun --bun vite --port 3000",
+    "dev": "bun --bun vite",
     "preprocess-content": "bun run scripts/preprocess-content.ts",
     "fetch-github-stats": "bun run --bun scripts/fetch-github-stats.ts",
     "enumerate-routes": "bun run scripts/enumerate-routes.ts",
+    "extract-seo": "bun scripts/extract-seo-metadata.ts",
+    "generate-og": "bun scripts/generate-og-images.ts",
+    "generate-social": "bun run extract-seo && bun run generate-og",
     "prebuild": "bun run preprocess-content",
     "build": "bun run --bun vite build && bun run tsc",
     "serve": "bun --bun vite preview",
+    "test": "bun --bun vitest run",
     "lint": "bun run lint:ts && bun run lint:mdx && bun run lint:snippets && bun run lint:py && bun run lint:format",
     "lint:ts": "bun run tsc --noEmit",
     "lint:mdx": "bun run scripts/validate-mdx.ts",
@@ -24,8 +29,7 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,css,md,mdx}": "prettier --write",
     "*.{ts,tsx}": [
-      "node scripts/check-ts.js",
-      "bun test"
+      "node scripts/check-ts.js"
     ],
     "*.mdx": [
       "bun run lint:mdx",
@@ -63,6 +67,7 @@
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.2.0",
     "@types/node": "^22.14.0",
+    "@types/puppeteer": "^7.0.4",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
     "@vitejs/plugin-react": "^4.3.4",
@@ -70,6 +75,7 @@
     "jsdom": "^26.0.0",
     "lint-staged": "^15.5.0",
     "prettier": "^3.5.3",
+    "puppeteer": "^24.6.1",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.3",
     "typescript": "^5.7.2",
