@@ -11,6 +11,7 @@
 import fs from "fs";
 import path from "path";
 import { getProjectRoot } from "../src/lib/router-utils";
+import { BASE_URL } from "../src/lib/constants/site";
 
 // ANSI color codes for better output
 const RESET = "\x1b[0m";
@@ -68,19 +69,20 @@ function generateOgHtml(
   // Always use our generated social cards when available
   const routeFilename = route === "/" ? "index" : route.replace(/^\//, "").replace(/\//g, "-");
 
-  // This is our preferred social card path
-  const socialCardPath = `/social-cards/${routeFilename}.png`;
+  // This is our preferred social card path - use absolute URL
+  const socialCardPath = `${BASE_URL}/social-cards/${routeFilename}.png`;
 
   // Default path to our custom generated image
   let imagePath = socialCardPath;
 
   // Only use a custom image if specified and not from localhost
   if (image && !image.includes("localhost")) {
-    imagePath = image;
+    // Make sure image has absolute URL if it's a relative path
+    imagePath = image.startsWith("/") ? `${BASE_URL}${image}` : image;
   }
 
-  // Use relative URLs for better support across domains
-  const url = route;
+  // Use absolute URLs for better social media crawler support
+  const url = `${BASE_URL}${route}`;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -92,7 +94,7 @@ function generateOgHtml(
   
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="${route}">
+  <meta property="og:url" content="${url}">
   <meta property="og:title" content="${pageTitle}">
   <meta property="og:description" content="${metaDescription}">
   <meta property="og:image" content="${imagePath}">
@@ -100,7 +102,7 @@ function generateOgHtml(
   
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:url" content="${route}">
+  <meta name="twitter:url" content="${url}">
   <meta name="twitter:title" content="${pageTitle}">
   <meta name="twitter:description" content="${metaDescription}">
   <meta name="twitter:image" content="${imagePath}">
