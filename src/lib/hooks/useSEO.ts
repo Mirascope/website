@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "@tanstack/react-router";
 import { PRODUCT_CONFIGS } from "../constants/site";
+import { routeToFilename } from "../utils";
 
 interface SEOProps {
   title?: string;
@@ -19,9 +20,7 @@ interface SEOProps {
 
 // Helper function to convert a route path to a consistent image path
 export function routeToImagePath(route: string): string {
-  // Convert "/" to "index" and other routes to a filename-safe format
-  const filename = route === "/" ? "index" : route.replace(/^\//, "").replace(/\//g, "-");
-
+  const filename = routeToFilename(route);
   return `/social-cards/${filename}.png`;
 }
 
