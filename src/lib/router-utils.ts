@@ -11,6 +11,14 @@ export const SITE_URL = "https://mirascope.com";
 // Exclude these static routes as they auto-redirect to other pages
 const ROUTES_TO_EXCLUDE = ["/docs/", "/terms/"];
 
+// Patterns for hidden routes (not included in sitemap or SEO metadata)
+export const EXCLUDE_DEV = /^\/dev\/.*/;
+export const HIDDEN_ROUTE_PATTERNS = [EXCLUDE_DEV];
+
+export function isHiddenRoute(route: string): boolean {
+  return HIDDEN_ROUTE_PATTERNS.some((pattern) => pattern.test(route));
+}
+
 // Get the project root directory
 export function getProjectRoot(): string {
   // Get the directory name for the current module
@@ -133,14 +141,14 @@ export function getDocsRoutes(): string[] {
 /**
  * Get all routes (static + blogs + docs)
  */
-export async function getAllRoutes(): Promise<string[]> {
+export async function getAllRoutes(includeHidden = false): Promise<string[]> {
   const staticRoutes = getStaticRoutes();
   const blogRoutes = await getBlogRoutes();
   const docRoutes = getDocsRoutes();
 
   // Combine all routes and remove duplicates
   const allRoutes = [...staticRoutes, ...blogRoutes, ...docRoutes];
-  return [...new Set(allRoutes)].sort();
+  return [...new Set(allRoutes)].filter((route) => includeHidden || !isHiddenRoute(route)).sort();
 }
 
 /**
