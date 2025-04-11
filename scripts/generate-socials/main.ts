@@ -6,7 +6,7 @@
  * --regenerate           : Regenerate all metadata and images
  * --update               : Update metadata and regenerate images only for changed routes
  * --regenerate-images    : Regenerate all images using existing metadata
- * --regenerate-route <path> : Update specific route only
+ * --only <path>          : Update specific route only
  * --check                : Check for missing metadata or images
  * --build-html           : Generate OG HTML files only (for build process)
  * --help                 : Show help
@@ -36,7 +36,7 @@ interface CommandOptions {
   regenerateImages: boolean;
   buildHtml: boolean;
   check: boolean;
-  regenerateRoute?: string;
+  only?: string;
 }
 
 // Parse arguments
@@ -55,14 +55,12 @@ const options: CommandOptions = {
   regenerateImages: args.includes("--regenerate-images"),
   buildHtml: args.includes("--build-html"),
   check: args.includes("--check"),
-  regenerateRoute: args.includes("--regenerate-route")
-    ? args[args.indexOf("--regenerate-route") + 1]
-    : undefined,
+  only: args.includes("--only") ? args[args.indexOf("--only") + 1] : undefined,
 };
 
 // Check that only one option was provided to avoid ambiguous execution
 const enabledOptions = Object.entries(options).filter(
-  ([key, value]) => key !== "regenerateRoute" && Boolean(value)
+  ([key, value]) => key !== "only" && Boolean(value)
 ).length;
 
 if (enabledOptions > 1) {
@@ -340,7 +338,7 @@ async function regenerateImages() {
 /**
  * Handle specific route update
  */
-async function handleRouteUpdate(route: string) {
+async function handleSpecificRoute(route: string) {
   if (!route) {
     console.error(`${colorize("No route specified", "red")}`);
     process.exit(1);
@@ -481,7 +479,7 @@ function showHelp() {
     "  --update               Update metadata and regenerate images only for changed routes"
   );
   console.log("  --regenerate-images    Regenerate all images using existing metadata");
-  console.log("  --regenerate-route <path>  Update specific route only");
+  console.log("  --only <path>          Update specific route only");
   console.log("  --check                Check for missing metadata or images");
   console.log("  --build-html           Generate OG HTML files only (for build process)");
   console.log("  --help                 Show this help message");
@@ -489,7 +487,7 @@ function showHelp() {
   console.log("Examples:");
   console.log("  bun run generate-social --regenerate");
   console.log("  bun run generate-social --update");
-  console.log("  bun run generate-social --regenerate-route /blog/new-post");
+  console.log("  bun run generate-social --only /blog/new-post");
   console.log("  bun run generate-social --check");
 }
 
@@ -504,8 +502,8 @@ async function main() {
       await updateChangedMetadata();
     } else if (options.regenerateImages) {
       await regenerateImages();
-    } else if (options.regenerateRoute) {
-      await handleRouteUpdate(options.regenerateRoute);
+    } else if (options.only) {
+      await handleSpecificRoute(options.only);
     } else if (options.buildHtml) {
       await buildHtml();
     } else if (options.check) {
