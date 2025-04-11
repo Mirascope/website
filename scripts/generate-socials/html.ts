@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { routeToFilename } from "../../src/lib/utils";
+import { BASE_URL } from "../../src/lib/constants/site";
 import type { SEOMetadata } from "./metadata";
 
 export function generateOgHtml(
@@ -27,8 +28,9 @@ export function generateOgHtml(
     imagePath = image;
   }
 
-  // Use relative URLs for better support across domains
-  const url = route;
+  // Use absolute URLs for better SEO and sharing
+  const absoluteUrl = `${BASE_URL}${route}`;
+  const absoluteImagePath = `${BASE_URL}${imagePath}`;
 
   return `<!DOCTYPE html>
   <html lang="en">
@@ -40,24 +42,24 @@ export function generateOgHtml(
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="${route}">
+    <meta property="og:url" content="${absoluteUrl}">
     <meta property="og:title" content="${pageTitle}">
     <meta property="og:description" content="${metaDescription}">
-    <meta property="og:image" content="${imagePath}">
+    <meta property="og:image" content="${absoluteImagePath}">
     <meta property="og:site_name" content="${siteName}">
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="${route}">
+    <meta name="twitter:url" content="${absoluteUrl}">
     <meta name="twitter:title" content="${pageTitle}">
     <meta name="twitter:description" content="${metaDescription}">
-    <meta name="twitter:image" content="${imagePath}">
+    <meta name="twitter:image" content="${absoluteImagePath}">
     
     <!-- Redirect to the actual page -->
-    <meta http-equiv="refresh" content="0;url=${url}">
+    <meta http-equiv="refresh" content="0;url=${absoluteUrl}">
   </head>
   <body>
-    <p>Redirecting to <a href="${url}">${pageTitle}</a>...</p>
+    <p>Redirecting to <a href="${absoluteUrl}">${pageTitle}</a>...</p>
   </body>
   </html>`;
 }
