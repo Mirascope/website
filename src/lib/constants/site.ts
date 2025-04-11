@@ -8,6 +8,9 @@ import githubStats from "./github-stats.json";
 // Site version information
 export const SITE_VERSION = "1.1";
 
+// Base URL for absolute URLs
+export const BASE_URL = "https://beta.mirascope.com";
+
 // Analytics constants
 export const GA_MEASUREMENT_ID = "G-DJHT1QG9GK";
 
