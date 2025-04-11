@@ -196,7 +196,8 @@ export const getDoc = async (path: string): Promise<DocWithContent> => {
               const title =
                 indexItem?.title ||
                 `${product.charAt(0).toUpperCase() + product.slice(1)} Documentation`;
-              const description = indexItem?.description || `Welcome to ${product} documentation`;
+              // For placeholder fallback, we'll use a default welcome message
+              const description = `Welcome to ${product} documentation`;
 
               // Generate a placeholder content with proper metadata
               content = `---
@@ -238,17 +239,16 @@ description:
     // Parse frontmatter and get content
     const { frontmatter, content: cleanContent } = parseFrontmatter(content);
 
-    // Get metadata from _meta.ts
+    // Get base metadata from _meta.ts (for structure, slug, types, etc.)
     let meta = getMetadataFromStructure(path);
 
-    // Override title and description with frontmatter values if they exist
+    // Always use frontmatter title if available, otherwise keep the one from _meta.ts
     if (frontmatter.title) {
       meta.title = frontmatter.title;
     }
 
-    if (frontmatter.description) {
-      meta.description = frontmatter.description;
-    }
+    // Always use frontmatter description as source of truth
+    meta.description = frontmatter.description || "";
 
     console.log(`[getDoc] Final metadata:`, meta);
 
@@ -256,11 +256,13 @@ description:
   } catch (error) {
     // Fallback
     const meta = getMetadataFromStructure(path);
+    // For fallback, we'll use an empty description since we want frontmatter to be the source of truth
+    meta.description = "";
 
     // Create fallback content with frontmatter
     const content = `---
 title: ${meta.title}
-description: ${meta.description || ""}
+description: ${meta.description}
 ---
 
 # ${meta.title}
@@ -337,14 +339,14 @@ const getMetadataFromStructure = (path: string): DocMeta => {
     const item = productDocs.items?.[slug];
     if (item) {
       title = item.title;
-      description = item.description || `${title} documentation`;
+      description = ""; // Empty description, will be populated from frontmatter
       console.log(`[getMetadataFromStructure] Found item metadata:`, {
         title,
         description,
       });
     } else {
       title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
-      description = `Documentation for ${title}`;
+      description = ""; // Empty description, will be populated from frontmatter
       console.log(`[getMetadataFromStructure] Using default item metadata:`, {
         title,
         description,
@@ -373,7 +375,7 @@ const getMetadataFromStructure = (path: string): DocMeta => {
 
       if (indexItem) {
         title = indexItem.title;
-        description = indexItem.description || "";
+        description = ""; // Empty description, will be populated from frontmatter
         console.log(`[getMetadataFromStructure] Using metadata from _meta.ts for index:`, {
           title,
           description,
@@ -392,7 +394,7 @@ const getMetadataFromStructure = (path: string): DocMeta => {
       console.log(`[getMetadataFromStructure] Looking for item metadata for slug: ${slug}`, item);
       if (item) {
         title = item.title;
-        description = item.description || "";
+        description = ""; // Empty description, will be populated from frontmatter
       } else {
         title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
         description = "";
@@ -410,7 +412,7 @@ const getMetadataFromStructure = (path: string): DocMeta => {
       docType = "item";
       const item = productDocs.items[slug];
       title = item.title;
-      description = item.description || "";
+      description = ""; // Empty description, will be populated from frontmatter
       console.log(`[getMetadataFromStructure] Found top-level item:`, {
         slug,
         title,
@@ -435,13 +437,13 @@ const getMetadataFromStructure = (path: string): DocMeta => {
       if (slug === "index" || slug === "" || slug === "overview") {
         // Group index: /docs/mirascope/getting-started/
         title = groupTitle;
-        description = productDocs.groups[group].description || "";
+        description = ""; // Empty description, will be populated from frontmatter
       } else {
         // Group item: /docs/mirascope/getting-started/quickstart
         const item = productDocs.groups[group].items?.[slug];
         if (item) {
           title = item.title;
-          description = item.description || "";
+          description = ""; // Empty description, will be populated from frontmatter
         } else {
           title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
           description = "";
@@ -457,13 +459,13 @@ const getMetadataFromStructure = (path: string): DocMeta => {
       if (slug === "index" || slug === "" || slug === "overview") {
         // Section index: /docs/mirascope/api/
         title = sectionTitle;
-        description = productDocs.sections[section].description || "";
+        description = ""; // Empty description, will be populated from frontmatter
       } else {
         // Section item: /docs/mirascope/api/quickstart
         const item = productDocs.sections[section].items?.[slug];
         if (item) {
           title = item.title;
-          description = item.description || "";
+          description = ""; // Empty description, will be populated from frontmatter
         } else {
           title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
           description = "";
@@ -497,13 +499,13 @@ const getMetadataFromStructure = (path: string): DocMeta => {
       if (slug === "index" || slug === "" || slug === "overview") {
         // Section+group index: /docs/mirascope/api/llm/
         title = groupTitle;
-        description = productDocs.sections[section].groups![group].description || "";
+        description = ""; // Empty description, will be populated from frontmatter
       } else {
         // Section+group item: /docs/mirascope/api/llm/generation
         const item = productDocs.sections[section].groups![group].items?.[slug];
         if (item) {
           title = item.title;
-          description = item.description || "";
+          description = ""; // Empty description, will be populated from frontmatter
         } else {
           title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
           description = "";
@@ -535,7 +537,7 @@ const getMetadataFromStructure = (path: string): DocMeta => {
       const item = productDocs.sections[section].groups![group].items?.[slug];
       if (item) {
         title = item.title;
-        description = item.description || "";
+        description = ""; // Empty description, will be populated from frontmatter
       } else {
         title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
         description = "";
@@ -595,7 +597,7 @@ export const getDocsForProduct = (product: string): DocMeta[] => {
     const path = `${product}/${slug}`;
     docs.push({
       title: item.title,
-      description: item.description,
+      description: "", // Empty description, will be populated from frontmatter
       slug,
       path,
       product,
@@ -613,7 +615,7 @@ export const getDocsForProduct = (product: string): DocMeta[] => {
       const path = `${product}/${groupSlug}/${itemSlug}`;
       docs.push({
         title: item.title,
-        description: item.description,
+        description: "", // Empty description, will be populated from frontmatter
         slug: itemSlug,
         path,
         product,
@@ -634,7 +636,7 @@ export const getDocsForProduct = (product: string): DocMeta[] => {
       const path = `${product}/${sectionSlug}/${itemSlug}`;
       docs.push({
         title: item.title,
-        description: item.description,
+        description: "", // Empty description, will be populated from frontmatter
         slug: itemSlug,
         path,
         product,
@@ -655,7 +657,7 @@ export const getDocsForProduct = (product: string): DocMeta[] => {
           const path = `${product}/${sectionSlug}/${groupSlug}/${itemSlug}`;
           docs.push({
             title: item.title,
-            description: item.description,
+            description: "", // Empty description, will be populated from frontmatter
             slug: itemSlug,
             path,
             product,

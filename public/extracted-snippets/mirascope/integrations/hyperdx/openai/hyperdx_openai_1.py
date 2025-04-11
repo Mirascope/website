@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 1: HyperDX
 # Generated for provider: openai
-# Source: src/docs/mirascope/integrations/hyperdx.mdx:19
+# Source: src/docs/mirascope/integrations/hyperdx.mdx:20
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm

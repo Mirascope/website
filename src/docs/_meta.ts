@@ -14,21 +14,18 @@
 // Basic item structure
 export interface DocMetaItem {
   title: string;
-  description?: string;
   hasExtractableSnippets?: boolean; // Flag to indicate the doc has code snippets that should be extracted
 }
 
 // Group of documents
 export interface DocGroup {
   title: string;
-  description?: string;
   items: Record<string, DocMetaItem>;
 }
 
 // Section of documentation (like API)
 export interface DocSection {
   title: string;
-  description?: string;
   defaultSlug?: string;
   items: Record<string, DocMetaItem>; // Direct section items
   groups?: Record<string, DocGroup>; // Grouped section items
@@ -64,7 +61,7 @@ const meta: DocsStructure = {
         items: {
           quickstart: {
             title: "Quickstart",
-            description: "Get started with Mirascope",
+
             hasExtractableSnippets: true,
           },
           why: {
@@ -73,11 +70,9 @@ const meta: DocsStructure = {
           },
           help: {
             title: "Help",
-            description: "How to get help with Mirascope",
           },
           contributing: {
             title: "Contributing",
-            description: "How to contribute to Mirascope",
           },
           migration: {
             title: "0.x Migration Guide",
@@ -186,22 +181,22 @@ const meta: DocsStructure = {
         items: {
           langfuse: {
             title: "Langfuse",
-            description: "Integration with Langfuse for LLM observability",
+
             hasExtractableSnippets: true,
           },
           hyperdx: {
             title: "HyperDX",
-            description: "Integration with HyperDX for observability and logging",
+
             hasExtractableSnippets: true,
           },
           logfire: {
             title: "Logfire",
-            description: "Integration with Logfire for structured logging",
+
             hasExtractableSnippets: true,
           },
           otel: {
             title: "OpenTelemetry",
-            description: "Integration with OpenTelemetry for distributed tracing",
+
             hasExtractableSnippets: true,
           },
         },
@@ -232,7 +227,6 @@ const meta: DocsStructure = {
       },
       pricing: {
         title: "Pricing",
-        description: "Lilypad pricing plans and features",
       },
     },
 
@@ -243,19 +237,15 @@ const meta: DocsStructure = {
         items: {
           quickstart: {
             title: "Quickstart",
-            description: "Start using Lilypad in one line of code",
           },
           playground: {
             title: "Playground",
-            description: "No-code interface for experimenting with Lilypad",
           },
           "open-source": {
             title: "Open Source",
-            description: "Learn about Lilypad's open-source initiative",
           },
           "self-hosting": {
             title: "Self-Hosting",
-            description: "Run Lilypad in your own infrastructure",
           },
         },
       },
@@ -264,15 +254,12 @@ const meta: DocsStructure = {
         items: {
           annotations: {
             title: "Annotations",
-            description: "Add labels and feedback to your LLM outputs",
           },
           comparisons: {
             title: "Comparisons",
-            description: "Compare different LLM function implementations",
           },
           "cost-and-latency-tracking": {
             title: "Cost & Latency Tracking",
-            description: "Monitor the performance and cost of your LLM functions",
           },
         },
       },
@@ -281,19 +268,15 @@ const meta: DocsStructure = {
         items: {
           opentelemetry: {
             title: "OpenTelemetry",
-            description: "Observability made easy",
           },
           spans: {
             title: "Spans",
-            description: "Easily instrument arbitrary blocks of code with OpenTelemetry",
           },
           traces: {
             title: "Traces",
-            description: "Structured collections of spans",
           },
           versioning: {
             title: "Versioning",
-            description: "Track versions of your LLM functions",
           },
         },
       },
@@ -302,11 +285,9 @@ const meta: DocsStructure = {
         items: {
           "vibe-synthesis": {
             title: "Vibe Synthesis",
-            description: "Automated synthesis of evaluation criteria",
           },
           experiments: {
             title: "Experiments",
-            description: "Run experiments with Lilypad",
           },
         },
       },
