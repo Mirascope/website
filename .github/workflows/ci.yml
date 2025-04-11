@@ -55,6 +55,9 @@ jobs:
     - name: Python Code Validation
       run: bun run lint:py
       
+    - name: Social Metadata Check
+      run: bun run lint:social
+      
     - name: Run Tests
       run: bun test
 

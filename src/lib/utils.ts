@@ -64,3 +64,11 @@ export const docsAPI = {
     }
   },
 };
+
+/**
+ * Converts a route path to a filename-safe string
+ * Example: "/blog/my-post" -> "blog-my-post"
+ */
+export const routeToFilename = (route: string): string => {
+  return route === "/" ? "index" : route.replace(/^\//, "").replace(/\//g, "-");
+};
