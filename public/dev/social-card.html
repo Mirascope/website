@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Card</title>
+  <style>
+    @font-face {
+      font-family: "Williams Handwriting";
+      src: url("/fonts/Williams-Handwriting-Regular-v1.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+    
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: sans-serif;
+    }
+    
+    .card-container {
+      width: 1200px;
+      height: 630px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-image: url("/dark-mode-watercolor-background.png");
+      background-size: cover;
+      background-position: center bottom;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .torn-paper-effect {
+      clip-path: polygon(
+        0% 4%, 10% 0%, 20% 2%, 30% 0%, 40% 3%, 50% 0%, 60% 2%, 70% 0%, 
+        80% 3%, 90% 0%, 100% 4%, 99% 20%, 100% 35%, 98% 50%, 100% 65%, 
+        99% 80%, 100% 96%, 90% 100%, 80% 97%, 70% 100%, 60% 98%, 50% 100%, 
+        40% 97%, 30% 100%, 20% 98%, 10% 100%, 0% 96%, 1% 80%, 0% 65%, 
+        2% 50%, 0% 35%, 1% 20%
+      );
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+    
+    .logo-banner {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      z-index: 10;
+    }
+    
+    .logo-inner {
+      position: relative;
+      padding: 10px 15px;
+    }
+    
+    .logo-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: white;
+    }
+    
+    .logo-content {
+      display: flex;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .logo-img {
+      width: 40px;
+      height: 40px;
+      margin-right: 10px;
+    }
+    
+    .logo-text {
+      font-family: "Williams Handwriting", cursive;
+      font-size: 42px;
+      color: #6366f1;
+    }
+    
+    .content {
+      position: absolute;
+      top: 53%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      max-width: 950px;
+      text-align: center;
+      padding: 0 20px;
+    }
+    
+    .title {
+      font-family: "Williams Handwriting", cursive;
+      color: #ffffff;
+      margin: 0 0 20px 0;
+      word-break: break-word;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5), -1px -1px 3px rgba(0, 0, 0, 0.5), 
+                   1px -1px 3px rgba(0, 0, 0, 0.5), -1px 1px 3px rgba(0, 0, 0, 0.5);
+    }
+    
+    .description {
+      font-family: "Williams Handwriting", cursive;
+      color: #ffffff;
+      margin: 0;
+      line-height: 1.4;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5), -1px -1px 3px rgba(0, 0, 0, 0.5), 
+                   1px -1px 3px rgba(0, 0, 0, 0.5), -1px 1px 3px rgba(0, 0, 0, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="card-container">
+    <div class="logo-banner">
+      <div class="logo-inner">
+        <div class="logo-bg torn-paper-effect"></div>
+        <div class="logo-content">
+          <img src="/frog-logo.png" alt="Mirascope Logo" class="logo-img">
+          <span class="logo-text">Mirascope</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="content">
+      <h1 id="title-element" class="title" style="font-size: 72px; line-height: 1.2;">
+        Your Title Goes Here
+      </h1>
+      <p id="description-element" class="description" style="font-size: 42px;">
+        Your description text here. This will be shown below the title.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Function to calculate title font size based on length
+    function calculateTitleFontSize(titleLength) {
+      if (titleLength > 70) return "48px"; // Very long titles
+      if (titleLength > 50) return "56px"; // Long titles
+      if (titleLength > 30) return "64px"; // Medium titles
+      return "72px"; // Short titles
+    }
+
+    // Function to update the social card
+    function updateSocialCard(title, description) {
+      // Update the content
+      document.getElementById('title-element').textContent = title;
+      document.getElementById('description-element').textContent = description || '';
+      
+      // Calculate and update font sizes
+      const titleFontSize = calculateTitleFontSize(title.length);
+      const lineHeight = title.length > 40 ? "1.3" : "1.2";
+      const descriptionFontSize = title.length > 50 ? "36px" : "42px";
+      
+      document.getElementById('title-element').style.fontSize = titleFontSize;
+      document.getElementById('title-element').style.lineHeight = lineHeight;
+      document.getElementById('description-element').style.fontSize = descriptionFontSize;
+    }
+
+    // Expose the update function globally for iframe and Puppeteer communication
+    window.updateSocialCard = updateSocialCard;
+
+    // Check for URL parameters that might be passed to this template
+    const urlParams = new URLSearchParams(window.location.search);
+    const titleParam = urlParams.get('title');
+    const descriptionParam = urlParams.get('description');
+    
+    if (titleParam) {
+      updateSocialCard(
+        titleParam,
+        descriptionParam || 'Your description text here. This will be shown below the title.'
+      );
+    }
+  </script>
+</body>
+</html>
