@@ -20,6 +20,7 @@ import { Route as BlogIndexImport } from './routes/blog.index'
 import { Route as TermsUseImport } from './routes/terms/use'
 import { Route as TermsServiceImport } from './routes/terms/service'
 import { Route as DocsSplatImport } from './routes/docs.$'
+import { Route as DevSocialCardImport } from './routes/dev/social-card'
 import { Route as BlogSlugImport } from './routes/blog.$slug'
 import { Route as DocsProductSplatImport } from './routes/docs.$product.$'
 import { Route as DocsProductGuidesSplatImport } from './routes/docs.$product.guides.$'
@@ -81,6 +82,12 @@ const DocsSplatRoute = DocsSplatImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const DevSocialCardRoute = DevSocialCardImport.update({
+  id: '/dev/social-card',
+  path: '/dev/social-card',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const BlogSlugRoute = BlogSlugImport.update({
   id: '/blog/$slug',
   path: '/blog/$slug',
@@ -135,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/blog/$slug'
       fullPath: '/blog/$slug'
       preLoaderRoute: typeof BlogSlugImport
+      parentRoute: typeof rootRoute
+    }
+    '/dev/social-card': {
+      id: '/dev/social-card'
+      path: '/dev/social-card'
+      fullPath: '/dev/social-card'
+      preLoaderRoute: typeof DevSocialCardImport
       parentRoute: typeof rootRoute
     }
     '/docs/$': {
@@ -210,6 +224,7 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/dev/social-card': typeof DevSocialCardRoute
   '/docs/$': typeof DocsSplatRoute
   '/terms/service': typeof TermsServiceRoute
   '/terms/use': typeof TermsUseRoute
@@ -226,6 +241,7 @@ export interface FileRoutesByTo {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/dev/social-card': typeof DevSocialCardRoute
   '/docs/$': typeof DocsSplatRoute
   '/terms/service': typeof TermsServiceRoute
   '/terms/use': typeof TermsUseRoute
@@ -243,6 +259,7 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/dev/social-card': typeof DevSocialCardRoute
   '/docs/$': typeof DocsSplatRoute
   '/terms/service': typeof TermsServiceRoute
   '/terms/use': typeof TermsUseRoute
@@ -261,6 +278,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/blog/$slug'
+    | '/dev/social-card'
     | '/docs/$'
     | '/terms/service'
     | '/terms/use'
@@ -276,6 +294,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/blog/$slug'
+    | '/dev/social-card'
     | '/docs/$'
     | '/terms/service'
     | '/terms/use'
@@ -291,6 +310,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/blog/$slug'
+    | '/dev/social-card'
     | '/docs/$'
     | '/terms/service'
     | '/terms/use'
@@ -308,6 +328,7 @@ export interface RootRouteChildren {
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  DevSocialCardRoute: typeof DevSocialCardRoute
   DocsSplatRoute: typeof DocsSplatRoute
   TermsServiceRoute: typeof TermsServiceRoute
   TermsUseRoute: typeof TermsUseRoute
@@ -324,6 +345,7 @@ const rootRouteChildren: RootRouteChildren = {
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   BlogSlugRoute: BlogSlugRoute,
+  DevSocialCardRoute: DevSocialCardRoute,
   DocsSplatRoute: DocsSplatRoute,
   TermsServiceRoute: TermsServiceRoute,
   TermsUseRoute: TermsUseRoute,
@@ -349,6 +371,7 @@ export const routeTree = rootRoute
         "/pricing",
         "/privacy",
         "/blog/$slug",
+        "/dev/social-card",
         "/docs/$",
         "/terms/service",
         "/terms/use",
@@ -371,6 +394,9 @@ export const routeTree = rootRoute
     },
     "/blog/$slug": {
       "filePath": "blog.$slug.tsx"
+    },
+    "/dev/social-card": {
+      "filePath": "dev/social-card.tsx"
     },
     "/docs/$": {
       "filePath": "docs.$.tsx"
