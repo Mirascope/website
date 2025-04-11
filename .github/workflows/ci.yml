@@ -41,7 +41,7 @@ jobs:
       run: uv venv
 
     - name: TypeScript Check
-      run: bun run lint:ts
+      run: bun run typecheck
 
     - name: Prettier Check
       run: bun run lint:format
