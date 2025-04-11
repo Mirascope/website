@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 2: Langfuse
 # Generated for provider: openai
-# Source: src/docs/mirascope/integrations/langfuse.mdx:35
+# Source: src/docs/mirascope/integrations/langfuse.mdx:36
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm, prompt_template

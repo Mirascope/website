@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 1: Logfire
 # Generated for provider: anthropic
-# Source: src/docs/mirascope/integrations/logfire.mdx:19
+# Source: src/docs/mirascope/integrations/logfire.mdx:20
 # This file is auto-generated; any edits should be made in the source file
 
 import logfire
