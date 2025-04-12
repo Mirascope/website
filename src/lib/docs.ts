@@ -34,7 +34,8 @@ export type DocWithContent = {
 };
 
 // Cache for loaded documentation content
-let contentCache: Record<string, string> = {};
+import { createContentCache } from "./content/content-cache";
+const docsCache = createContentCache();
 
 // Get document by path
 export const getDoc = async (path: string): Promise<DocWithContent> => {
@@ -61,8 +62,8 @@ export const getDoc = async (path: string): Promise<DocWithContent> => {
 
     try {
       // Check cache first
-      if (contentCache[filePath]) {
-        content = contentCache[filePath];
+      content = docsCache.get("doc", filePath);
+      if (content) {
         console.log(`[getDoc] Using cached content for: ${filePath}`);
       } else {
         // For product index pages like mirascope/index.mdx, also check the _meta.ts
@@ -91,7 +92,7 @@ export const getDoc = async (path: string): Promise<DocWithContent> => {
           }
 
           console.log(`[getDoc] Successfully fetched content for: ${filePath}`);
-          contentCache[filePath] = content;
+          docsCache.set("doc", filePath, content);
         } catch (error) {
           const fetchError = error as Error;
           console.error(`[getDoc] Error fetching doc content: ${fetchError.message}`);
@@ -137,7 +138,7 @@ description:
               console.log(`[getDoc] Generated "Untitled Document" for unknown product index`);
             }
 
-            contentCache[filePath] = content;
+            docsCache.set("doc", filePath, content);
           } else {
             throw fetchError;
           }

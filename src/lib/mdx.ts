@@ -19,16 +19,22 @@ type PostContent = { meta: PostMeta; content: string };
 // Check if we're in production environment
 const isProduction = import.meta.env.PROD;
 
-// Shared caches
-let postsCache: Record<string, PostContent> | null = null;
-let postListCache: PostMeta[] | null = null;
+// Import the content cache implementation
+import { createContentCache } from "./content/content-cache";
+
+// Single cache for all blog content
+const blogCache = createContentCache();
 
 // ==== DEVELOPMENT MODE IMPLEMENTATION ====
 
 // Function to load all posts in development
 const loadAllPostsDev = async (): Promise<Record<string, PostContent>> => {
-  if (postsCache) {
-    return postsCache;
+  // Create a key for the entire posts collection
+  const allPostsCacheKey = "all-posts";
+  const cachedPosts = blogCache.get("blog", allPostsCacheKey);
+
+  if (cachedPosts) {
+    return JSON.parse(cachedPosts);
   }
 
   try {
@@ -61,7 +67,8 @@ const loadAllPostsDev = async (): Promise<Record<string, PostContent>> => {
       };
     }
 
-    postsCache = posts;
+    // Store all posts in the cache
+    blogCache.set("blog", allPostsCacheKey, JSON.stringify(posts));
     return posts;
   } catch (error) {
     console.error("Error loading posts:", error);
@@ -73,11 +80,21 @@ const loadAllPostsDev = async (): Promise<Record<string, PostContent>> => {
 const getPostBySlugDev = async (slug: string): Promise<PostContent> => {
   console.log(`[MDX] Development: getPostBySlug called with slug: ${slug}`);
 
+  // Check if the post is cached individually
+  const cachedPost = blogCache.get("blog", `post:${slug}`);
+  if (cachedPost) {
+    console.log(`[MDX] Using cached post for slug: ${slug}`);
+    return JSON.parse(cachedPost);
+  }
+
+  // Otherwise, try to get it from the full posts collection
   const posts = await loadAllPostsDev();
   const post = posts[slug];
 
   if (post) {
     console.log(`[MDX] Found post data for slug: ${slug}`);
+    // Cache the individual post
+    blogCache.set("blog", `post:${slug}`, JSON.stringify(post));
     return post;
   }
 
@@ -89,8 +106,12 @@ const getPostBySlugDev = async (slug: string): Promise<PostContent> => {
 const getAllPostsDev = async (): Promise<PostMeta[]> => {
   console.log("[MDX] Development: Getting all posts");
 
-  if (postListCache) {
-    return postListCache;
+  // Create a key for the posts list
+  const postsListKey = "posts-list";
+  const cachedPostsList = blogCache.get("blog", postsListKey);
+
+  if (cachedPostsList) {
+    return JSON.parse(cachedPostsList);
   }
 
   const posts = await loadAllPostsDev();
@@ -101,7 +122,8 @@ const getAllPostsDev = async (): Promise<PostMeta[]> => {
     return new Date(b.date).getTime() - new Date(a.date).getTime();
   });
 
-  postListCache = sortedPosts;
+  // Store sorted posts in the cache
+  blogCache.set("blog", postsListKey, JSON.stringify(sortedPosts));
   return sortedPosts;
 };
 
@@ -110,6 +132,13 @@ const getAllPostsDev = async (): Promise<PostMeta[]> => {
 // Get post by slug in production mode
 const getPostBySlugProd = async (slug: string): Promise<PostContent> => {
   console.log(`[MDX] Production: getPostBySlug called with slug: ${slug}`);
+
+  // Check if the post is cached individually
+  const cachedPost = blogCache.get("blog", `post:${slug}`);
+  if (cachedPost) {
+    console.log(`[MDX] Using cached post for slug: ${slug}`);
+    return JSON.parse(cachedPost);
+  }
 
   try {
     // Get the content path for the current environment
@@ -123,11 +152,17 @@ const getPostBySlugProd = async (slug: string): Promise<PostContent> => {
 
     const data = await response.json();
 
-    // Return the raw content directly - we'll process it when rendering
-    return {
+    // Prepare the post data
+    const post = {
       meta: data.meta,
       content: data.content, // Raw MDX content
     };
+
+    // Cache the individual post
+    blogCache.set("blog", `post:${slug}`, JSON.stringify(post));
+
+    // Return the raw content directly - we'll process it when rendering
+    return post;
   } catch (error) {
     console.error(`[MDX] Error loading static post data for ${slug}:`, error);
     throw new Error(`Post not found: ${slug}`);
@@ -138,8 +173,12 @@ const getPostBySlugProd = async (slug: string): Promise<PostContent> => {
 const getAllPostsProd = async (): Promise<PostMeta[]> => {
   console.log("[MDX] Production: Getting all posts");
 
-  if (postListCache) {
-    return postListCache;
+  // Create a key for the posts list
+  const postsListKey = "posts-list";
+  const cachedPostsList = blogCache.get("blog", postsListKey);
+
+  if (cachedPostsList) {
+    return JSON.parse(cachedPostsList);
   }
 
   try {
@@ -150,7 +189,8 @@ const getAllPostsProd = async (): Promise<PostMeta[]> => {
     }
 
     const data: PostMeta[] = await response.json();
-    postListCache = data;
+    // Store the data in the cache
+    blogCache.set("blog", postsListKey, JSON.stringify(data));
     return data;
   } catch (error) {
     console.error("[MDX] Error loading static posts list:", error);
