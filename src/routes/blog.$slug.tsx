@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, Sparkles } from "lucide-react";
 import { getPostBySlug } from "@/lib/mdx";
 import { MDXRenderer } from "@/components/MDXRenderer";
-import LoadingContent from "@/components/LoadingContent";
+import { LoadingContent } from "@/components/docs";
 import ErrorContent from "@/components/ErrorContent";
 import useFunMode from "@/lib/hooks/useFunMode";
 import useMDXProcessor from "@/lib/hooks/useMDXProcessor";

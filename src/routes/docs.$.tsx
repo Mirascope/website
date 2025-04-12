@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { getDoc, getDocsForProduct } from "@/lib/docs";
 import { MDXRenderer } from "@/components/MDXRenderer";
 import { processMDX } from "@/lib/mdx-utils";
-import DocsSidebar from "@/components/DocsSidebar";
+import { DocsSidebar } from "@/components/docs";
 import TableOfContents from "@/components/TableOfContents";
 import { type ProductName } from "@/lib/route-types";
 import docsMetadata from "@/docs/_meta";

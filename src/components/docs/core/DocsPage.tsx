@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import DocsLayout from "@/components/DocsLayout";
+import DocsLayout from "./DocsLayout";
 import useSEO from "@/lib/hooks/useSEO";
 import { getDoc, getDocsForProduct, type DocMeta } from "@/lib/docs";
 import { type ProductName } from "@/lib/route-types";
