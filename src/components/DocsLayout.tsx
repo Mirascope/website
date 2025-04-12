@@ -20,14 +20,6 @@ type DocsLayoutProps = {
   docs: DocMeta[];
   loading: boolean;
   error: string | null;
-  errorDetails?: {
-    expectedPath: string;
-    path: string;
-    product: ProductName;
-    section?: string | null;
-    group?: string | null;
-    slug: string;
-  };
 };
 
 /**
@@ -45,7 +37,6 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
   docs,
   loading,
   error,
-  errorDetails,
 }) => {
   // Use custom hooks for state management
   const [funMode, toggleFunMode] = useFunMode();
@@ -94,8 +85,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
           {/* Main content area with error message */}
           <ErrorContent
             title="Document Not Found"
-            message={error || "The document you're looking for doesn't exist."}
-            debugInfo={errorDetails}
+            message={error || "The document you're looking for doesn't exist or is invalid."}
           />
 
           {/* Empty TOC sidebar during error state */}

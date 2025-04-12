@@ -11,7 +11,6 @@ interface ErrorContentProps {
   backTo?: string;
   backLabel?: string;
   children?: ReactNode;
-  debugInfo?: Record<string, any>;
 }
 
 /**
@@ -26,7 +25,6 @@ const ErrorContent: React.FC<ErrorContentProps> = ({
   backTo = "",
   backLabel = "Back",
   children,
-  debugInfo,
 }) => {
   return (
     <div className="flex-1 min-w-0 py-6 px-4">
@@ -47,19 +45,6 @@ const ErrorContent: React.FC<ErrorContentProps> = ({
         {message && <p className="text-gray-500 dark:text-gray-400 mb-4">{message}</p>}
 
         {children}
-
-        {debugInfo && (
-          <div className="mt-4 p-4 bg-gray-100 dark:bg-gray-800 rounded text-sm">
-            <p className="mt-2">Debug info:</p>
-            <ul className="list-disc ml-5 mt-1">
-              {Object.entries(debugInfo).map(([key, value]) => (
-                <li key={key}>
-                  {key}: {String(value)}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
       </div>
     </div>
   );
