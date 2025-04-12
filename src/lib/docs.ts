@@ -4,28 +4,20 @@ import type { ProductDocs } from "../docs/_meta";
 import { docsAPI } from "./utils";
 import { parseFrontmatter } from "./content/frontmatter";
 import { normalizePath, getContentPath, isValidPath } from "./content/path-resolver";
+import {
+  getMetadataFromStructure,
+  extractMetadataFromFrontmatter,
+  mergeMetadata,
+} from "./content/metadata-service";
+import { DocumentNotFoundError } from "./content/errors";
 
 // Check if we're in production environment
 const isProduction = import.meta.env.PROD;
 
-// Types for documentation handling
-export type DocType = "item" | "group-item" | "section-item" | "section-group-item";
-
-// Document metadata
-export type DocMeta = {
-  title: string;
-  description?: string;
-  slug: string;
-  path: string;
-  product: string;
-  type: DocType;
-
-  // Optional group/section information
-  group?: string;
-  section?: string;
-  groupTitle?: string;
-  sectionTitle?: string;
-};
+// Import and re-export DocMeta type from content-types
+import type { DocMeta, ContentType } from "./content/content-types";
+// Re-export DocMeta so other components can still import it from docs.ts
+export type { DocMeta };
 
 // Document with content
 export type DocWithContent = {
@@ -48,14 +40,8 @@ export const getDoc = async (path: string): Promise<DocWithContent> => {
     // Use the path resolver to normalize the path
     const filePath = normalizePath(path, "doc");
 
-    // Save the original path parts for metadata lookup
-    const originalPathParts = filePath.split("/").filter((part) => part !== "");
-
-    // Debug log for diagnosing path issues
-    console.log(
-      `[getDoc] Original path: ${path}, Normalized file path: ${filePath}, Path parts:`,
-      originalPathParts
-    );
+    // Normalize the path but we no longer need to extract path parts separately
+    // since that's now handled by the metadata service
 
     // Attempt to load the file
     let content;
@@ -129,13 +115,8 @@ Get started with ${product} by exploring the documentation in the sidebar.`;
 
               console.log(`[getDoc] Generated fallback content for known product index`);
             } else {
-              // For unknown products, use "Untitled Document" with empty content
-              content = `---
-title: Untitled Document
-description: 
----
-`;
-              console.log(`[getDoc] Generated "Untitled Document" for unknown product index`);
+              // For unknown products, throw an error
+              throw new DocumentNotFoundError("doc", path);
             }
 
             docsCache.set("doc", filePath, content);
@@ -156,346 +137,39 @@ description:
     const { frontmatter, content: cleanContent } = parseFrontmatter(content);
 
     // Get base metadata from _meta.ts (for structure, slug, types, etc.)
-    let meta = getMetadataFromStructure(path);
+    const structureMeta = getMetadataFromStructure(path, "doc");
 
-    // Always use frontmatter title if available, otherwise keep the one from _meta.ts
-    if (frontmatter.title) {
-      meta.title = frontmatter.title;
-    }
+    // Extract metadata from frontmatter
+    const frontmatterMeta = extractMetadataFromFrontmatter(frontmatter, "doc", path);
 
-    // Always use frontmatter description as source of truth
-    meta.description = frontmatter.description || "";
+    // Merge the two metadata sources and cast to DocMeta (both metadata objects have doc type)
+    const meta = mergeMetadata(structureMeta, frontmatterMeta) as DocMeta;
 
     console.log(`[getDoc] Final metadata:`, meta);
 
     return { meta, content: cleanContent };
   } catch (error) {
-    // Fallback
-    const meta = getMetadataFromStructure(path);
-    // For fallback, we'll use an empty description since we want frontmatter to be the source of truth
-    meta.description = "";
+    // Log the error but always rethrow
+    console.error("[getDoc] Error fetching document:", error);
 
-    // Create fallback content with frontmatter
-    const content = `---
-title: ${meta.title}
-description: ${meta.description}
----
+    // If it's already a DocumentNotFoundError, just throw it
+    if (error instanceof DocumentNotFoundError) {
+      throw error;
+    }
 
-# ${meta.title}
-
-Content not available.`;
-
-    return { meta, content };
+    // Otherwise, convert to a DocumentNotFoundError
+    throw new DocumentNotFoundError("doc", path);
   }
 };
 
-// Helper function to get metadata from the structure
-const getMetadataFromStructure = (path: string): DocMeta => {
-  // Remove /docs/ prefix and extract path parts
-  const pathParts = path
-    .replace(/^\/docs\//, "")
-    .split("/")
-    .filter((part) => part !== "");
-  console.log(`[getMetadataFromStructure] Path parts:`, pathParts);
-
-  if (pathParts.length === 0) {
-    return {
-      title: "Documentation",
-      description: "",
-      slug: "index",
-      path: "index",
-      product: "",
-      type: "item",
-    };
-  }
-
-  const product = pathParts[0];
-  const productDocs = docsMetadata[product] as ProductDocs;
-
-  if (!productDocs) {
-    // Product not found, return "Untitled Document" metadata
-    return {
-      title: "Untitled Document",
-      description: "",
-      slug: "",
-      path: pathParts.join("/"),
-      product,
-      type: "item",
-    };
-  }
-
-  // Initialize variables
-  let title = "";
-  let description = "";
-  let docType: DocType = "item";
-  let section = "";
-  let group = "";
-  let sectionTitle = "";
-  let groupTitle = "";
-  let slug = pathParts.length > 1 ? pathParts[pathParts.length - 1] : "index";
-
-  // Define a function to get a default slug if needed
-  const getSlug = (parts: string[]) => {
-    // If path ends with a slash, use index
-    if (path.endsWith("/")) return "index";
-
-    // Otherwise use the last part
-    return parts[parts.length - 1] || "index";
-  };
-
-  // Handle top-level items with special case for paths like /docs/mirascope/migration/
-  if (pathParts.length <= 2 && path.endsWith("/") && pathParts.length > 1) {
-    // Treat this as a top-level item (not an index)
-    // For paths like /docs/mirascope/migration/
-    docType = "item";
-    slug = pathParts[1]; // Use the second part
-    console.log(`[getMetadataFromStructure] Top-level item with trailing slash: ${slug}`);
-
-    // Look for the metadata in top-level items
-    const item = productDocs.items?.[slug];
-    if (item) {
-      title = item.title;
-      description = ""; // Empty description, will be populated from frontmatter
-      console.log(`[getMetadataFromStructure] Found item metadata:`, {
-        title,
-        description,
-      });
-    } else {
-      title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
-      description = ""; // Empty description, will be populated from frontmatter
-      console.log(`[getMetadataFromStructure] Using default item metadata:`, {
-        title,
-        description,
-      });
-    }
-    return {
-      title,
-      description,
-      slug,
-      path: pathParts.join("/"),
-      product,
-      type: docType,
-    };
-  }
-
-  // Determine the type and extract metadata based on path structure
-  if (pathParts.length === 1) {
-    // Product root: /docs/mirascope/
-    docType = "item";
-    slug = getSlug(pathParts);
-
-    if (slug === "index" || slug === "" || slug === "welcome" || slug === "overview") {
-      // Use product index item
-      const indexItem = productDocs.items?.index;
-      console.log(`[getMetadataFromStructure] Checking for index item for ${product}`, indexItem);
-
-      if (indexItem) {
-        title = indexItem.title;
-        description = ""; // Empty description, will be populated from frontmatter
-        console.log(`[getMetadataFromStructure] Using metadata from _meta.ts for index:`, {
-          title,
-          description,
-        });
-      } else {
-        title = `${product.charAt(0).toUpperCase() + product.slice(1)} Documentation`;
-        description = "";
-        console.log(`[getMetadataFromStructure] Using fallback metadata for index:`, {
-          title,
-          description,
-        });
-      }
-    } else {
-      // Regular top-level item: /docs/mirascope/migration
-      const item = productDocs.items?.[slug];
-      console.log(`[getMetadataFromStructure] Looking for item metadata for slug: ${slug}`, item);
-      if (item) {
-        title = item.title;
-        description = ""; // Empty description, will be populated from frontmatter
-      } else {
-        title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
-        description = "";
-      }
-    }
-  } else if (pathParts.length === 2) {
-    // Could be a group or section: /docs/mirascope/getting-started/ or /docs/mirascope/api/
-    // OR a direct top-level item: /docs/mirascope/migration
-    slug = getSlug(pathParts);
-    const potentialGroupOrSection = pathParts[1];
-
-    // First check if this is a direct top-level item like migration.mdx
-    if (slug !== "index" && productDocs.items && productDocs.items[slug]) {
-      // This is a direct top-level item like /docs/mirascope/migration
-      docType = "item";
-      const item = productDocs.items[slug];
-      title = item.title;
-      description = ""; // Empty description, will be populated from frontmatter
-      console.log(`[getMetadataFromStructure] Found top-level item:`, {
-        slug,
-        title,
-        description,
-      });
-      return {
-        title,
-        description,
-        slug,
-        path: pathParts.join("/"),
-        product,
-        type: docType,
-      };
-    }
-
-    // Check if it's a group
-    if (productDocs.groups && productDocs.groups[potentialGroupOrSection]) {
-      docType = "group-item";
-      group = potentialGroupOrSection;
-      groupTitle = productDocs.groups[group].title;
-
-      if (slug === "index" || slug === "" || slug === "overview") {
-        // Group index: /docs/mirascope/getting-started/
-        title = groupTitle;
-        description = ""; // Empty description, will be populated from frontmatter
-      } else {
-        // Group item: /docs/mirascope/getting-started/quickstart
-        const item = productDocs.groups[group].items?.[slug];
-        if (item) {
-          title = item.title;
-          description = ""; // Empty description, will be populated from frontmatter
-        } else {
-          title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
-          description = "";
-        }
-      }
-    }
-    // Check if it's a section
-    else if (productDocs.sections && productDocs.sections[potentialGroupOrSection]) {
-      docType = "section-item";
-      section = potentialGroupOrSection;
-      sectionTitle = productDocs.sections[section].title;
-
-      if (slug === "index" || slug === "" || slug === "overview") {
-        // Section index: /docs/mirascope/api/
-        title = sectionTitle;
-        description = ""; // Empty description, will be populated from frontmatter
-      } else {
-        // Section item: /docs/mirascope/api/quickstart
-        const item = productDocs.sections[section].items?.[slug];
-        if (item) {
-          title = item.title;
-          description = ""; // Empty description, will be populated from frontmatter
-        } else {
-          title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
-          description = "";
-        }
-      }
-    } else {
-      // Unknown structure, use fallback
-      docType = "item";
-      title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
-      description = "";
-    }
-  } else if (pathParts.length === 3) {
-    // Section + group or deeper: /docs/mirascope/api/llm/
-    slug = getSlug(pathParts);
-    const potentialSection = pathParts[1];
-    const potentialGroup = pathParts[2];
-
-    // Check if it's a section+group structure
-    if (
-      productDocs.sections &&
-      productDocs.sections[potentialSection] &&
-      productDocs.sections[potentialSection].groups &&
-      productDocs.sections[potentialSection].groups![potentialGroup]
-    ) {
-      docType = "section-group-item";
-      section = potentialSection;
-      group = potentialGroup;
-      sectionTitle = productDocs.sections[section].title;
-      groupTitle = productDocs.sections[section].groups![group].title;
-
-      if (slug === "index" || slug === "" || slug === "overview") {
-        // Section+group index: /docs/mirascope/api/llm/
-        title = groupTitle;
-        description = ""; // Empty description, will be populated from frontmatter
-      } else {
-        // Section+group item: /docs/mirascope/api/llm/generation
-        const item = productDocs.sections[section].groups![group].items?.[slug];
-        if (item) {
-          title = item.title;
-          description = ""; // Empty description, will be populated from frontmatter
-        } else {
-          title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
-          description = "";
-        }
-      }
-    } else {
-      // Unknown structure, use fallback
-      docType = "item";
-      title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
-      description = "";
-    }
-  } else if (pathParts.length >= 4) {
-    // Section + group + item: /docs/mirascope/api/llm/generation
-    docType = "section-group-item";
-    section = pathParts[1];
-    group = pathParts[2];
-    slug = pathParts[3];
-
-    // Check if the structure exists
-    if (
-      productDocs.sections &&
-      productDocs.sections[section] &&
-      productDocs.sections[section].groups &&
-      productDocs.sections[section].groups![group]
-    ) {
-      sectionTitle = productDocs.sections[section].title;
-      groupTitle = productDocs.sections[section].groups![group].title;
-
-      const item = productDocs.sections[section].groups![group].items?.[slug];
-      if (item) {
-        title = item.title;
-        description = ""; // Empty description, will be populated from frontmatter
-      } else {
-        title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
-        description = "";
-      }
-    } else {
-      // Unknown structure, use fallback
-      title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
-      description = "";
-    }
-  }
-
-  // If title is still empty, generate one from the slug
-  if (!title) {
-    title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
-  }
-
-  const meta = {
-    title,
-    description,
-    slug,
-    path: pathParts.join("/"),
-    product,
-    type: docType,
-    section,
-    group,
-    sectionTitle,
-    groupTitle,
-  };
-
-  return meta;
-};
+// The getMetadataFromStructure function has been removed.
+// Now using the version from metadata-service.ts
 
 // (buildPath function removed since we now use the path directly)
 
-// Helper function to create placeholder content
-const createPlaceholderContent = (_path: string): string => {
-  // For all cases, just return "Untitled Document" as the title with no content
-  return `---
-title: Untitled Document
-description: 
----
-`;
+// Helper function that throws instead of creating placeholder content
+const createPlaceholderContent = (path: string): never => {
+  throw new DocumentNotFoundError("doc", path);
 };
 
 // Get all documentation for a product
@@ -517,7 +191,7 @@ export const getDocsForProduct = (product: string): DocMeta[] => {
       slug,
       path,
       product,
-      type: "item",
+      type: "doc" as ContentType,
     });
   });
 
@@ -535,7 +209,7 @@ export const getDocsForProduct = (product: string): DocMeta[] => {
         slug: itemSlug,
         path,
         product,
-        type: "group-item",
+        type: "doc" as ContentType,
         group: groupSlug,
         groupTitle: group.title,
       });
@@ -556,7 +230,7 @@ export const getDocsForProduct = (product: string): DocMeta[] => {
         slug: itemSlug,
         path,
         product,
-        type: "section-item",
+        type: "doc" as ContentType,
         section: sectionSlug,
         sectionTitle: section.title,
       });
@@ -577,7 +251,7 @@ export const getDocsForProduct = (product: string): DocMeta[] => {
             slug: itemSlug,
             path,
             product,
-            type: "section-group-item",
+            type: "doc" as ContentType,
             section: sectionSlug,
             sectionTitle: section.title,
             group: groupSlug,

@@ -100,7 +100,7 @@ function DocsPage() {
                 product,
                 section,
                 group,
-                type: "item",
+                type: "doc",
               },
               content: "", // Empty content as requested
             };
@@ -199,7 +199,7 @@ Get started with ${product} by exploring the documentation in the sidebar.`;
                   slug: "index",
                   path: product,
                   product,
-                  type: "item",
+                  type: "doc",
                 },
                 content: welcomeContent,
               });
@@ -212,7 +212,7 @@ Get started with ${product} by exploring the documentation in the sidebar.`;
                   slug: "",
                   path: product,
                   product,
-                  type: "item",
+                  type: "doc",
                 },
                 content: "",
               });

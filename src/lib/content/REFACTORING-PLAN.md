@@ -213,32 +213,34 @@ cache.set('doc', 'mirascope/getting-started.mdx', 'content');
 const content = cache.get('doc', 'mirascope/getting-started.mdx');
 ```
 
-#### Step 6: Metadata Service
+#### ✅ Step 6: Metadata Service (COMPLETED)
 
 **Changes:**
-- Implement `metadata-service.ts` for handling metadata
-- Extract metadata handling from existing code
-- Add tests for metadata operations
+- ✅ Implement `metadata-service.ts` for handling metadata
+- ✅ Extract metadata handling from existing code
+- ✅ Add tests for metadata operations
 
 **Tests:**
-- Get metadata from structure
-- Extract metadata from frontmatter
-- Merge metadata
-- Validate metadata
+- ✅ Get metadata from structure
+- ✅ Extract metadata from frontmatter
+- ✅ Merge metadata
+- ✅ Validate metadata
 
 **Files:**
-- `src/lib/content/metadata-service.ts`
-- `src/lib/content/tests/metadata-service.test.ts`
+- ✅ `src/lib/content/metadata-service.ts`
+- ✅ `src/lib/content/tests/metadata-service.test.ts`
 
 **Current Dependencies:**
 - Metadata handling in `docs.ts` (lines 276-571)
 - Existing `docsMetadata` import from `../docs/_meta`
 
-**Existing Logic:**
-- Complex metadata extraction from `_meta.ts`
-- Path-based inference of document type, section, group, etc.
-- Fallback title generation
-- Untitled Document generation for invalid paths
+**Known Issues:**
+- Complex metadata extraction with path-based logic
+- Special casing for different path depths
+- Multiple code paths for similar operations
+
+**Note:**
+While there are opportunities to improve the internal implementation of the metadata service (such as using a node-based hierarchical model), we've decided to proceed with the current implementation for now and focus on completing the overall content system refactoring. A more comprehensive redesign of the metadata handling may be undertaken as a separate future task.
 
 **Expected Usage:**
 ```typescript
