@@ -48,32 +48,32 @@ This document outlines a step-by-step plan for implementing the unified content 
 - Integrate improvements as we go rather than waiting until the end
 - Maintain a working application at each step
 - Add tests for each new component
+- Encapsulate environment-specific logic within each module
+  - Use unified APIs that handle both development and production environments
+  - Avoid leaking environment checks into consuming components
 
 ## Implementation Plan
 
 ### Phase 1: Foundation
 
-#### Step 1: Directory Structure and Content Types
+#### ✅ Step 1: Directory Structure and Content Types (COMPLETED)
 
 **Changes:**
-- Create `src/lib/content/` directory
-- Implement `content-types.ts` with basic type definitions
-- Add unit tests for content types
+- ✅ Created `src/lib/content/` directory
+- ✅ Implemented `content-types.ts` with basic type definitions
+- ✅ Added unit tests for content types
 
 **Tests:**
-- Type validation
-- Type extension
+- ✅ Type validation
+- ✅ Type extension
 
 **Files:**
-- `src/lib/content/content-types.ts`
-- `src/lib/content/tests/content-types.test.ts`
+- ✅ `src/lib/content/content-types.ts`
+- ✅ `src/lib/content/tests/content-types.test.ts`
 
-**Current Dependencies:**
-- None
-
-**Expected Usage:**
+**Actual Usage:**
 ```typescript
-import { ContentType, ContentMeta, DocMeta } from '@/lib/content/content-types';
+import type { ContentType, ContentMeta, DocMeta } from './content/content-types';
 
 // Example usage
 const docType: ContentType = 'doc';
@@ -87,27 +87,24 @@ const meta: DocMeta = {
 };
 ```
 
-#### Step 2: Error Types
+#### ✅ Step 2: Error Types (COMPLETED)
 
 **Changes:**
-- Implement `errors.ts` with error classes
-- Add tests for error handling
+- ✅ Implemented `errors.ts` with error classes
+- ✅ Added tests for error handling
 
 **Tests:**
-- Error instantiation
-- Error inheritance
-- Error serialization
+- ✅ Error instantiation
+- ✅ Error inheritance
+- ✅ Error serialization 
 
 **Files:**
-- `src/lib/content/errors.ts`
-- `src/lib/content/tests/errors.test.ts`
+- ✅ `src/lib/content/errors.ts`
+- ✅ `src/lib/content/tests/errors.test.ts`
 
-**Current Dependencies:**
-- `ContentType` from `content-types.ts`
-
-**Expected Usage:**
+**Actual Usage:**
 ```typescript
-import { DocumentNotFoundError } from '@/lib/content/errors';
+import { DocumentNotFoundError } from './content/errors';
 
 // In error handling
 try {
@@ -121,103 +118,78 @@ try {
 }
 ```
 
-#### Step 3: Frontmatter Parser
+#### ✅ Step 3: Frontmatter Parser (COMPLETED)
 
 **Changes:**
-- Extract and improve frontmatter parsing from existing code
-- Create unified parser in `frontmatter.ts`
-- Add comprehensive tests
+- ✅ Extracted and improved frontmatter parsing from existing code
+- ✅ Created unified parser in `frontmatter.ts`
+- ✅ Added comprehensive tests
+- ✅ Updated all existing code to use the new parser
 
 **Tests:**
-- Parse valid frontmatter
-- Handle invalid frontmatter
-- Extract content correctly
-- Handle edge cases
+- ✅ Parse valid frontmatter
+- ✅ Handle invalid frontmatter
+- ✅ Extract content correctly
+- ✅ Handle edge cases
 
 **Files:**
-- `src/lib/content/frontmatter.ts`
-- `src/lib/content/tests/frontmatter.test.ts`
-
-**Current Dependencies:**
-- Existing frontmatter parsing in `docs.ts` (lines 38-92) and `mdx.ts` (lines 25-56)
-
-**Existing Logic:**
-- Both implementations use a regex-based approach to extract frontmatter between `---` delimiters
-- Both parse key-value pairs from the frontmatter section
-- Both handle quote stripping from values
-
-**Expected Usage:**
-```typescript
-import { parseFrontmatter } from '@/lib/content/frontmatter';
-
-const content = `---
-title: My Document
-description: This is a description
----
-
-# My Document
-
-Content here...`;
-
-const { frontmatter, content: cleanContent } = parseFrontmatter(content);
-// frontmatter = { title: 'My Document', description: 'This is a description' }
-// cleanContent = '# My Document\n\nContent here...'
-```
+- ✅ `src/lib/content/frontmatter.ts`
+- ✅ `src/lib/content/tests/frontmatter.test.ts`
 
 **Integration:**
-- Update `parseFrontmatter` in `docs.ts` to use the new implementation
-- Update `parseFrontmatter` in `mdx.ts` to use the new implementation
+- ✅ Replaced `parseFrontmatter` in `docs.ts` with import from new module
+- ✅ Replaced `parseFrontmatter` in `mdx.ts` with import from new module
+- ✅ Replaced `parseFrontmatter` in `policy-utils.ts` with import from new module
+- ✅ Added cleanup function in `policy-utils.ts` for source map URLs
 
 ### Phase 2: Core Services
 
-#### Step 4: Path Resolver
+#### ✅ Step 4: Path Resolver (COMPLETED)
 
 **Changes:**
-- Implement `path-resolver.ts` for path normalization 
-- Extract path handling from existing code
-- Add tests for all path formats
+- ✅ Implemented `path-resolver.ts` for path normalization 
+- ✅ Created functions for different path operations
+- ✅ Added comprehensive tests for all path formats
 
 **Tests:**
-- Normalize different path formats
-- Handle invalid paths
-- Generate file paths
+- ✅ Normalize different path formats
+- ✅ Handle invalid paths
+- ✅ Generate file paths
+- ✅ Create static paths for production
 
 **Files:**
-- `src/lib/content/path-resolver.ts`
-- `src/lib/content/tests/path-resolver.test.ts`
+- ✅ `src/lib/content/path-resolver.ts`
+- ✅ `src/lib/content/tests/path-resolver.test.ts`
 
-**Current Dependencies:**
-- Path handling in `docs.ts` (lines 97-136)
-
-**Existing Logic:**
-- Complex handling for trailing slashes, index paths, etc.
-- Examples:
-  - `/docs/mirascope/getting-started` → `mirascope/getting-started.mdx`
-  - `/docs/mirascope/getting-started/` → `mirascope/getting-started/index.mdx`
-
-**Expected Usage:**
+**Actual Usage:**
 ```typescript
-import { normalizePath, buildFilePath } from '@/lib/content/path-resolver';
+import { normalizePath, buildFilePath, isValidPath, getStaticPath } from './content/path-resolver';
 
 const path = '/docs/mirascope/getting-started';
 const normalized = normalizePath(path, 'doc'); // 'mirascope/getting-started.mdx'
 const filePath = buildFilePath(normalized, 'doc'); // '/src/docs/mirascope/getting-started.mdx'
+const isValid = isValidPath(path, 'doc'); // true
+const staticPath = getStaticPath(normalized, 'doc'); // '/static/docs/mirascope/getting-started.mdx.json'
 ```
 
-**Integration:**
-- Update path handling in `getDoc` function in `docs.ts`
+**Integration (Completed):**
+- ✅ Updated path handling in `getDoc` function in `docs.ts`
+- ✅ Updated path handling in `getPostBySlugProd` function in `mdx.ts`
+- ✅ Updated path handling in `fetchPolicyContent` function in `policy-utils.ts`
 
 #### Step 5: Cache Implementation
 
 **Changes:**
 - Implement `content-cache.ts` with unified caching
 - Add tests for cache operations
+- Handle environment-specific caching strategies
 
 **Tests:**
 - Cache items
 - Retrieve cached items
 - Handle expiration
 - Test LRU behavior
+- Test environment-specific configuration
 
 **Files:**
 - `src/lib/content/content-cache.ts`
@@ -230,11 +202,27 @@ const filePath = buildFilePath(normalized, 'doc'); // '/src/docs/mirascope/getti
 - Simple object-based caching without expiration
 - No size limits or LRU eviction
 
+**Design Considerations:**
+- Following the pattern established with path-resolver, the cache should:
+  - Provide a clean API that works in both development and production
+  - Handle environment-specific configuration internally
+  - Use appropriate cache durations based on environment (shorter for dev, longer for prod)
+
 **Expected Usage:**
 ```typescript
 import { createContentCache } from '@/lib/content/content-cache';
 
-const cache = createContentCache({ maxSize: 100, defaultExpiration: 5 * 60 * 1000 });
+// Create cache with default settings (auto-configured for current environment)
+const cache = createContentCache();
+
+// Or with custom configuration
+const customCache = createContentCache({ 
+  maxSize: 100, 
+  defaultExpiration: 5 * 60 * 1000,
+  enabled: true
+});
+
+// Use consistent API regardless of environment
 cache.set('doc:mirascope/getting-started.mdx', 'content');
 const entry = cache.get('doc:mirascope/getting-started.mdx');
 ```

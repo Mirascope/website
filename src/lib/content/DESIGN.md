@@ -423,6 +423,14 @@ The system adapts to different environments:
   - Ability to inject test content
   - Flexible configuration for different test scenarios
 
+### Implementation Strategy for Environment Handling
+
+- **Encapsulation**: Environment-specific logic is encapsulated within each service module
+- **Unified API**: Services expose a consistent API regardless of environment
+- **Internal Detection**: Modules detect the environment internally rather than requiring consumers to handle it
+- **Configuration**: Environment-specific defaults are applied automatically, with the ability to override them
+- **Abstraction**: Consumers should not need to know which environment they're in to use the services correctly
+
 ## Error Handling Philosophy
 
 1. **Early Validation**: Validate inputs at the earliest possible point

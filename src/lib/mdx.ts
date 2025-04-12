@@ -1,5 +1,6 @@
 import { mockAPI } from "./utils";
 import { parseFrontmatter } from "./content/frontmatter";
+import { getContentPath } from "./content/path-resolver";
 
 // Define the PostMeta type for frontmatter
 export type PostMeta = {
@@ -111,7 +112,10 @@ const getPostBySlugProd = async (slug: string): Promise<PostContent> => {
   console.log(`[MDX] Production: getPostBySlug called with slug: ${slug}`);
 
   try {
-    const response = await fetch(`/static/posts/${slug}.json`);
+    // Get the content path for the current environment
+    const blogPath = `/blog/${slug}`;
+    const staticPath = getContentPath(blogPath, "blog");
+    const response = await fetch(staticPath);
 
     if (!response.ok) {
       throw new Error(`Failed to fetch post: ${response.statusText}`);
