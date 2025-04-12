@@ -48,8 +48,10 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
           ? `/docs/${product}/${section}/${splat}`
           : `/docs/${product}/${splat}`;
 
-        // For index pages, append /index
-        const finalPath = splat === "" || splat === "/" ? `${docPath}/index` : docPath;
+        // For index pages, append /index, ensuring no double slashes
+        const docPathNoTrailingSlash = docPath.endsWith("/") ? docPath.slice(0, -1) : docPath;
+        const finalPath =
+          splat === "" || splat === "/" ? `${docPathNoTrailingSlash}/index` : docPath;
 
         // Fetch the document
         const doc = await getDoc(finalPath);
