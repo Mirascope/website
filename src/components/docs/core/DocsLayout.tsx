@@ -1,4 +1,5 @@
 import React from "react";
+import BaseLayout from "@/components/BaseLayout";
 import SidebarContainer from "@/components/SidebarContainer";
 import ErrorContent from "@/components/ErrorContent";
 import { type DocMeta } from "@/lib/docs";
@@ -45,87 +46,52 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
   // Process MDX content using the custom hook
   const { compiledMDX } = useMDXProcessor(document?.content, document?.meta);
 
-  // Loading state
+  // Left sidebar content
+  const leftSidebar = (
+    <SidebarContainer
+      product={product}
+      section={section}
+      slug={slug}
+      group={group}
+      docs={loading ? [] : docs}
+    />
+  );
+
+  // Right sidebar content (TOC)
+  const rightSidebar =
+    !loading && !error && document ? (
+      <TocSidebar
+        product={product}
+        section={section}
+        slug={slug}
+        funMode={funMode}
+        toggleFunMode={toggleFunMode}
+      />
+    ) : (
+      <div className="w-56 flex-shrink-0 hidden lg:block"></div>
+    );
+
+  // Main content
+  let mainContent;
   if (loading) {
-    return (
-      <div className="flex justify-center pt-[60px]">
-        <div className="flex mx-auto w-full max-w-7xl">
-          {/* Left sidebar */}
-          <SidebarContainer
-            product={product}
-            section={section}
-            slug={slug}
-            group={group}
-            docs={[]}
-          />
-
-          {/* Main content area with loading spinner */}
-          <LoadingContent className="flex-1 min-w-0 px-8" />
-
-          {/* Empty TOC sidebar during loading */}
-          <div className="w-56 flex-shrink-0 hidden lg:block"></div>
-        </div>
-      </div>
+    mainContent = <LoadingContent className="flex-1 min-w-0 px-8" />;
+  } else if (error || !document) {
+    mainContent = (
+      <ErrorContent
+        title="Document Not Found"
+        message={error || "The document you're looking for doesn't exist or is invalid."}
+      />
     );
+  } else {
+    mainContent = <MainContent document={document} compiledMDX={compiledMDX} funMode={funMode} />;
   }
 
-  // Error state
-  if (error || !document) {
-    return (
-      <div className="flex justify-center pt-[60px]">
-        <div className="flex mx-auto w-full max-w-7xl">
-          {/* Left sidebar */}
-          <SidebarContainer
-            product={product}
-            section={section}
-            slug={slug}
-            group={group}
-            docs={docs}
-          />
-
-          {/* Main content area with error message */}
-          <ErrorContent
-            title="Document Not Found"
-            message={error || "The document you're looking for doesn't exist or is invalid."}
-          />
-
-          {/* Empty TOC sidebar during error state */}
-          <div className="w-56 flex-shrink-0 hidden lg:block"></div>
-        </div>
-      </div>
-    );
-  }
-
-  // Regular document display
   return (
     <ProviderContextProvider
       defaultProvider={selectedProvider}
       onProviderChange={handleProviderChange}
     >
-      <div className="flex justify-center pt-[60px]">
-        <div className="flex mx-auto w-full max-w-7xl">
-          {/* Left sidebar */}
-          <SidebarContainer
-            product={product}
-            section={section}
-            slug={slug}
-            group={group}
-            docs={docs}
-          />
-
-          {/* Main content area */}
-          <MainContent document={document} compiledMDX={compiledMDX} funMode={funMode} />
-
-          {/* Right TOC sidebar */}
-          <TocSidebar
-            product={product}
-            section={section}
-            slug={slug}
-            funMode={funMode}
-            toggleFunMode={toggleFunMode}
-          />
-        </div>
-      </div>
+      <BaseLayout leftSidebar={leftSidebar} mainContent={mainContent} rightSidebar={rightSidebar} />
     </ProviderContextProvider>
   );
 };
