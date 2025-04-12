@@ -177,54 +177,40 @@ const staticPath = getStaticPath(normalized, 'doc'); // '/static/docs/mirascope/
 - ✅ Updated path handling in `getPostBySlugProd` function in `mdx.ts`
 - ✅ Updated path handling in `fetchPolicyContent` function in `policy-utils.ts`
 
-#### Step 5: Cache Implementation
+#### ✅ Step 5: Cache Implementation (COMPLETED)
 
 **Changes:**
-- Implement `content-cache.ts` with unified caching
-- Add tests for cache operations
-- Handle environment-specific caching strategies
+- ✅ Implemented `content-cache.ts` with unified caching
+- ✅ Added tests for cache operations
+- ✅ Implemented environment-specific caching strategies
+- ✅ Integrated with existing code in docs.ts and mdx.ts
 
 **Tests:**
-- Cache items
-- Retrieve cached items
-- Handle expiration
-- Test LRU behavior
-- Test environment-specific configuration
+- ✅ Cache items
+- ✅ Retrieve cached items
+- ✅ Handle expiration
+- ✅ Test LRU behavior
+- ✅ Test environment-specific configuration
 
 **Files:**
-- `src/lib/content/content-cache.ts`
-- `src/lib/content/tests/content-cache.test.ts`
+- ✅ `src/lib/content/content-cache.ts`
+- ✅ `src/lib/content/tests/content-cache.test.ts`
 
-**Current Dependencies:**
-- Existing caches: `contentCache` in `docs.ts` (line 35), `postsCache` and `postListCache` in `mdx.ts` (lines 21-22)
+**Integration:**
+- ✅ Updated `docs.ts` to use ContentCache instead of simple object cache
+- ✅ Updated `mdx.ts` to use ContentCache instead of separate object caches
+- ✅ Consolidated separate blog caches into a single instance
 
-**Existing Logic:**
-- Simple object-based caching without expiration
-- No size limits or LRU eviction
-
-**Design Considerations:**
-- Following the pattern established with path-resolver, the cache should:
-  - Provide a clean API that works in both development and production
-  - Handle environment-specific configuration internally
-  - Use appropriate cache durations based on environment (shorter for dev, longer for prod)
-
-**Expected Usage:**
+**Actual Usage:**
 ```typescript
-import { createContentCache } from '@/lib/content/content-cache';
+import { createContentCache } from './content/content-cache';
 
 // Create cache with default settings (auto-configured for current environment)
 const cache = createContentCache();
 
-// Or with custom configuration
-const customCache = createContentCache({ 
-  maxSize: 100, 
-  defaultExpiration: 5 * 60 * 1000,
-  enabled: true
-});
-
-// Use consistent API regardless of environment
-cache.set('doc:mirascope/getting-started.mdx', 'content');
-const entry = cache.get('doc:mirascope/getting-started.mdx');
+// Use type-safe API with content type and path
+cache.set('doc', 'mirascope/getting-started.mdx', 'content');
+const content = cache.get('doc', 'mirascope/getting-started.mdx');
 ```
 
 #### Step 6: Metadata Service
