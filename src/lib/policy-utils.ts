@@ -1,4 +1,5 @@
 import { processMDX } from "./mdx-utils";
+import { parseFrontmatter } from "./content/frontmatter";
 
 /**
  * PolicyMeta - Type for policy/terms metadata from frontmatter
@@ -9,39 +10,10 @@ export interface PolicyMeta {
 }
 
 /**
- * Parse frontmatter from MDX content
+ * Cleans up content after frontmatter parsing by removing source map URLs
  */
-export const parseFrontmatter = (
-  fileContent: string
-): { frontmatter: Record<string, string>; content: string } => {
-  const frontmatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/;
-  const match = fileContent.match(frontmatterRegex);
-
-  if (!match) {
-    throw new Error("Invalid frontmatter format");
-  }
-
-  const frontmatterStr = match[1];
-  const content = match[2].replace(/\/\/# sourceMappingURL=.*$/gm, "");
-
-  // Parse frontmatter into key-value pairs
-  const frontmatter: Record<string, string> = {};
-  const lines = frontmatterStr.split("\n");
-
-  for (const line of lines) {
-    const colonIndex = line.indexOf(":");
-    if (colonIndex !== -1) {
-      const key = line.slice(0, colonIndex).trim();
-      // Remove quotes from value if present
-      const value = line
-        .slice(colonIndex + 1)
-        .trim()
-        .replace(/^"(.*)"$/, "$1");
-      frontmatter[key] = value;
-    }
-  }
-
-  return { frontmatter, content };
+const cleanContent = (content: string): string => {
+  return content.replace(/\/\/# sourceMappingURL=.*$/gm, "");
 };
 
 /**
@@ -64,7 +36,8 @@ export const fetchPolicyContent = async (
     const mdxContent = await response.text();
 
     // Parse frontmatter and content
-    const { frontmatter, content } = parseFrontmatter(mdxContent);
+    const { frontmatter, content: rawContent } = parseFrontmatter(mdxContent);
+    const content = cleanContent(rawContent);
 
     // Create meta object from frontmatter
     const meta: PolicyMeta = {
