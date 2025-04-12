@@ -9,6 +9,7 @@ import githubStats from "./github-stats.json";
 export const SITE_VERSION = "1.1";
 
 // Base URL for absolute URLs
+// IMPORTANT: When changing this value, also update the hardcoded URLs in index.html
 export const BASE_URL = "https://beta.mirascope.com";
 
 // Analytics constants
