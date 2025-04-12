@@ -1,8 +1,5 @@
 import React from "react";
 import SidebarContainer from "@/components/SidebarContainer";
-import TocSidebar from "@/components/TocSidebar";
-import MainContent from "@/components/MainContent";
-import LoadingContent from "@/components/LoadingContent";
 import ErrorContent from "@/components/ErrorContent";
 import { type DocMeta } from "@/lib/docs";
 import { type ProductName } from "@/lib/route-types";
@@ -10,6 +7,9 @@ import useFunMode from "@/lib/hooks/useFunMode";
 import useProviderSelection from "@/lib/hooks/useProviderSelection";
 import useMDXProcessor from "@/lib/hooks/useMDXProcessor";
 import { ProviderContextProvider } from "@/components/docs";
+import TocSidebar from "./TocSidebar";
+import MainContent from "./MainContent";
+import LoadingContent from "./LoadingContent";
 
 type DocsLayoutProps = {
   product: ProductName;
@@ -44,6 +44,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
 
   // Process MDX content using the custom hook
   const { compiledMDX } = useMDXProcessor(document?.content, document?.meta);
+
   // Loading state
   if (loading) {
     return (

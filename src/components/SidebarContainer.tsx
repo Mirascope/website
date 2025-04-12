@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import DocsSidebar from "@/components/DocsSidebar";
+import DocsSidebar from "@/components/docs/core/DocsSidebar";
 import { type ProductName } from "@/lib/route-types";
 import { type DocMeta } from "@/lib/docs";
 
