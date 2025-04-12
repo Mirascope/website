@@ -9,6 +9,186 @@
     "title": "Blog | Mirascope",
     "description": "The latest news, updates, and insights about Mirascope and LLM application development."
   },
+  "/blog/advanced-prompt-engineering": {
+    "route": "/blog/advanced-prompt-engineering",
+    "title": "A Guide to Advanced Prompt Engineering | Mirascope",
+    "description": "Learn how advanced prompt engineering techniques like in-context learning and few-shot prompts can boost LLM performance and accuracy."
+  },
+  "/blog/engineers-should-handle-prompting-llms": {
+    "route": "/blog/engineers-should-handle-prompting-llms",
+    "title": "Engineers Should Handle Prompting LLMs (and Prompts Should Live in Your Codebase) | Mirascope",
+    "description": "Many prompt engineering tools neither follow developer best practices, nor manage prompts with their LLM calls. We created Mirascope to address this."
+  },
+  "/blog/how-to-build-a-knowledge-graph": {
+    "route": "/blog/how-to-build-a-knowledge-graph",
+    "title": "How to Build a Knowledge Graph from Unstructured Information | Mirascope",
+    "description": "Learn how to build a knowledge graph from unstructured data to efficiently extract entities and relationships from unstructured sources."
+  },
+  "/blog/how-to-make-a-chatbot": {
+    "route": "/blog/how-to-make-a-chatbot",
+    "title": "How to Make a Chatbot from Scratch (That Uses LLMs) | Mirascope",
+    "description": "Learn how to make a chatbot from scratch with this step-by-step guide, including tips on integrating LLMs for smarter conversations."
+  },
+  "/blog/langchain-alternatives": {
+    "route": "/blog/langchain-alternatives",
+    "title": "Top 12 LangChain Alternatives for AI Development | Mirascope",
+    "description": "We present 12 LangChain alternatives for developing LLM applications in the areas of prompt engineering, agents, LLM orchestration, and data extraction."
+  },
+  "/blog/langchain-prompt-template": {
+    "route": "/blog/langchain-prompt-template",
+    "title": "A Guide to Prompt Templates in LangChain | Mirascope",
+    "description": "We explain what a LangChain prompt template is, and how to use it. We also compare this with prompting in Mirascope."
+  },
+  "/blog/langchain-rag": {
+    "route": "/blog/langchain-rag",
+    "title": "Getting Started with LangChain RAG | Mirascope",
+    "description": "This LangChain RAG tutorial shows you how to build a RAG pipeline by combining the best elements of LangChain and Mirascope, our lightweight Python toolkit."
+  },
+  "/blog/langchain-runnables": {
+    "route": "/blog/langchain-runnables",
+    "title": "Understanding LangChain Runnables | Mirascope",
+    "description": "Learn about LangChain runnables, how they work, and when best to use them. We also contrast runnables with Mirascope's pythonic chaining techniques."
+  },
+  "/blog/langchain-structured-output": {
+    "route": "/blog/langchain-structured-output",
+    "title": "LangChain Structured Output - A Guide to Tools and Methods | Mirascope",
+    "description": "This guide covers how to work with LangChain structured output and showcases how Mirascope provides an accessible and flexible solution for developers."
+  },
+  "/blog/langchain-sucks": {
+    "route": "/blog/langchain-sucks",
+    "title": "Does LangChain Suck? Our Thoughts on Maximizing Its Potential | Mirascope",
+    "description": "Some developers believe LangChain sucks, but you can leverage its RAG functionality with Mirascope's prompt engineering."
+  },
+  "/blog/langfuse-integration": {
+    "route": "/blog/langfuse-integration",
+    "title": "Mirascope and Langfuse Integration | Mirascope",
+    "description": "Mirascope now integrates with Langfuse. Decorated LLM functions can now easily be sent to Langfuse."
+  },
+  "/blog/llamaindex-vs-langchain": {
+    "route": "/blog/llamaindex-vs-langchain",
+    "title": "LlamaIndex vs LangChain vs Mirascope - An In-Depth Comparison | Mirascope",
+    "description": "Explore our comprehensive guide on LlamaIndex vs LangChain. We also introduce Mirascope's modular toolkit for LLM application development."
+  },
+  "/blog/llm-agents": {
+    "route": "/blog/llm-agents",
+    "title": "LLM Agents - What They Are, Tools, and Examples | Mirascope",
+    "description": "Learn what LLM agents are, how they work, and the tools behind them. Explore real-world examples and see how to build an LLM agent for your projects."
+  },
+  "/blog/llm-applications": {
+    "route": "/blog/llm-applications",
+    "title": "LLM Applications - What They Are and 6 Examples | Mirascope",
+    "description": "Curious about LLM applications? Discover what they are and see 6 practical examples of how large language models are being applied across sectors."
+  },
+  "/blog/llm-as-judge": {
+    "route": "/blog/llm-as-judge",
+    "title": "Using LLM-as-a-Judge to Evaluate AI Outputs | Mirascope",
+    "description": "Learn how LLM as a judge offers scalable and reliable AI output evaluation by leveraging advanced reasoning and scoring. We also show a basic example of how to build one."
+  },
+  "/blog/llm-chaining": {
+    "route": "/blog/llm-chaining",
+    "title": "LLM Chaining - Techniques and Best Practices | Mirascope",
+    "description": "Learn how LLM chaining improves generative AI workflows, enhances responses, and powers sophisticated applications like RAG and autonomous agents."
+  },
+  "/blog/llm-evaluation": {
+    "route": "/blog/llm-evaluation",
+    "title": "Overview of LLM Evaluation Metrics and Approaches | Mirascope",
+    "description": "Discover key metrics and methods for comprehensive LLM evaluation. Improve your language model's performance with these proven strategies."
+  },
+  "/blog/llm-frameworks": {
+    "route": "/blog/llm-frameworks",
+    "title": "Top LLM Frameworks for AI Application Development | Mirascope",
+    "description": "Learn which LLM frameworks are best suited for building robust AI applications and orchestrating complex workflows, from data retrieval to prompt engineering."
+  },
+  "/blog/llm-integration": {
+    "route": "/blog/llm-integration",
+    "title": "LLM Integration - Key Tools and Techniques | Mirascope",
+    "description": "A complete guide to LLM integration-explore technologies, frameworks, best practices, and examples for seamless implementations of language models in your applications."
+  },
+  "/blog/llm-orchestration": {
+    "route": "/blog/llm-orchestration",
+    "title": "A Guide to LLM Orchestration | Mirascope",
+    "description": "Explore our detailed guide to LLM orchestration and discover how it improves the performance and efficiency of applications driven by large language models."
+  },
+  "/blog/llm-pipeline": {
+    "route": "/blog/llm-pipeline",
+    "title": "Building an LLM Pipeline - Tools and Techniques | Mirascope",
+    "description": "Learn how to build an efficient LLM pipeline, focusing on effective data handling and query generation techniques for retrieval augmented generation."
+  },
+  "/blog/llm-prompt": {
+    "route": "/blog/llm-prompt",
+    "title": "LLM Prompt - Examples and Best Practices | Mirascope",
+    "description": "Everything you want to know about LLM prompts, including examples, tips, and coding examples for creating well-structured and effective prompts."
+  },
+  "/blog/llm-tools": {
+    "route": "/blog/llm-tools",
+    "title": "12 LLM Tools to Help You Build LLM Applications | Mirascope",
+    "description": "Here is our short list of LLM tools for any LLM stack, including application development, model serving, chatbots, vector databases, and more."
+  },
+  "/blog/mirascope-v1-release": {
+    "route": "/blog/mirascope-v1-release",
+    "title": "Mirascope V1 Release - Lessons Learned from Building an LLM Package | Mirascope",
+    "description": "Mirascope's stable release, V1 has been released. We discuss the reasons behind creating Mirascope and what led us to the changes from the original design to our V1 and what's coming down the road."
+  },
+  "/blog/openai-function-calling": {
+    "route": "/blog/openai-function-calling",
+    "title": "A Guide to Function Calling in OpenAI | Mirascope",
+    "description": "OpenAI function calling extends the capabilities of large language models by providing them with tools for calling external APIs and applications."
+  },
+  "/blog/prompt-chaining": {
+    "route": "/blog/prompt-chaining",
+    "title": "Prompt Chaining in AI Development | Mirascope",
+    "description": "Prompt chaining is a way to simplify large, complex prompts by breaking them down into smaller prompts, each making their own separate LLM call."
+  },
+  "/blog/prompt-engineering-best-practices": {
+    "route": "/blog/prompt-engineering-best-practices",
+    "title": "8 Prompt Engineering Best Practices and Techniques | Mirascope",
+    "description": "Following prompt engineering best practices helps you elicit accurate and reliable responses from the LLM. Here are 8 best practices with examples."
+  },
+  "/blog/prompt-engineering-examples": {
+    "route": "/blog/prompt-engineering-examples",
+    "title": "Prompt Engineering Examples and Techniques | Mirascope",
+    "description": "Learn about prompt engineering examples and techniques for designing clear AI requests. Get the best LLM outputs with our list of practical tips and strategies."
+  },
+  "/blog/prompt-engineering-tools": {
+    "route": "/blog/prompt-engineering-tools",
+    "title": "8 of the Best Prompt Engineering Tools in 2025 | Mirascope",
+    "description": "In this article, we list our 8 top prompt engineering tools to simplify your LLM prompting workflows and provide a great development experience."
+  },
+  "/blog/prompt-engineering-vs-fine-tuning": {
+    "route": "/blog/prompt-engineering-vs-fine-tuning",
+    "title": "Comparing Prompt Engineering vs Fine-Tuning | Mirascope",
+    "description": "Learn when to use prompt engineering, fine-tuning, or RAG for tasks ranging from simple queries to specialized applications."
+  },
+  "/blog/prompt-evaluation": {
+    "route": "/blog/prompt-evaluation",
+    "title": "Prompt Evaluation - Methods, Tools, And Best Practices | Mirascope",
+    "description": "What is prompt evaluation, and why does it matter? Learn key methods, tools, and best practices to improve LLM outputs and ensure high-quality responses."
+  },
+  "/blog/prompt-flow-vs-langchain": {
+    "route": "/blog/prompt-flow-vs-langchain",
+    "title": "Comparing Prompt Flow vs LangChain vs Mirascope | Mirascope",
+    "description": "We do a head-to-head comparison of Prompt Flow vs LangChain, along with our own modular LLM development toolkit, Mirascope."
+  },
+  "/blog/prompt-versioning": {
+    "route": "/blog/prompt-versioning",
+    "title": "Five Tools to Help You Leverage Prompt Versioning in Your LLM Workflow | Mirascope",
+    "description": "Complex prompts require adequate prompt versioning. This article explores five tools to help you track changes in your LLM prompts."
+  },
+  "/blog/rag-application": {
+    "route": "/blog/rag-application",
+    "title": "RAG Application - Benefits, Challenges & How to Build One | Mirascope",
+    "description": "Learn how a RAG application minimizes hallucinations and delivers domain expertise to your LLM applications. We also show you an example of how to build one."
+  },
+  "/blog/rag-llm-example": {
+    "route": "/blog/rag-llm-example",
+    "title": "Retrieval Augmented Generation - Examples & How to Build One | Mirascope",
+    "description": "Understand how RAG works in AI with a real-world RAG LLM example and step-by-step instructions to build a question-answering chatbot application."
+  },
+  "/blog/synthetic-data-generation": {
+    "route": "/blog/synthetic-data-generation",
+    "title": "A Guide to Synthetic Data Generation | Mirascope",
+    "description": "Get started with synthetic data generation and learn how to create high-quality artificial datasets for machine learning and analytics."
+  },
   "/docs/lilypad": {
     "route": "/docs/lilypad",
     "title": "Index | Lilypad",

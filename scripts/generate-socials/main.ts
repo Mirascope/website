@@ -3,7 +3,7 @@
  * Unified social media generation tool
  *
  * Supports:
- * --regenerate           : Regenerate all metadata and images
+ * --all                  : Regenerate all metadata and images
  * --update               : Update metadata and regenerate images only for changed routes
  * --regenerate-images    : Regenerate all images using existing metadata
  * --only <path>          : Update specific route only
@@ -26,12 +26,13 @@ import { generateOgImages as generateImages } from "./images";
 import { generateOgHtml } from "./html";
 import { getAllRoutes, getProjectRoot } from "../../src/lib/router-utils";
 import { routeToFilename } from "../../src/lib/utils";
+import { preprocessContent } from "../preprocess-content";
 import fs from "fs";
 import path from "path";
 
 // Define interface for command line options
 interface CommandOptions {
-  regenerate: boolean;
+  all: boolean;
   update: boolean;
   regenerateImages: boolean;
   buildHtml: boolean;
@@ -50,7 +51,7 @@ if (args.includes("--help") || args.includes("-h") || args.length === 0) {
 
 // Parse command-line options
 const options: CommandOptions = {
-  regenerate: args.includes("--regenerate"),
+  all: args.includes("--all"),
   update: args.includes("--update"),
   regenerateImages: args.includes("--regenerate-images"),
   buildHtml: args.includes("--build-html"),
@@ -217,7 +218,7 @@ async function updateChangedMetadata() {
             // Clean up any existing social card images for removed routes
             const projectRoot = getProjectRoot();
             const filename = routeToFilename(route);
-            const imagePath = path.join(projectRoot, "public", "social-cards", `${filename}.png`);
+            const imagePath = path.join(projectRoot, "public", "social-cards", `${filename}.webp`);
 
             if (fs.existsSync(imagePath)) {
               try {
@@ -375,7 +376,7 @@ async function checkMissingImages(metadata: SEOMetadata[]): Promise<string[]> {
   for (const item of metadata) {
     const route = item.route;
     const filename = routeToFilename(route);
-    const imagePath = path.join(projectRoot, "public", "social-cards", `${filename}.png`);
+    const imagePath = path.join(projectRoot, "public", "social-cards", `${filename}.webp`);
 
     if (!fs.existsSync(imagePath)) {
       missingImages.push(route);
@@ -422,7 +423,7 @@ function showHelp() {
   console.log("Usage: bun run generate-social [options]");
   console.log("");
   console.log("Options:");
-  console.log("  --regenerate           Regenerate all metadata and images");
+  console.log("  --all                  Regenerate all metadata and images");
   console.log(
     "  --update               Update metadata and regenerate images only for changed routes"
   );
@@ -433,10 +434,25 @@ function showHelp() {
   console.log("  --help                 Show this help message");
   console.log("");
   console.log("Examples:");
-  console.log("  bun run generate-social --regenerate");
+  console.log("  bun run generate-social --all");
   console.log("  bun run generate-social --update");
   console.log("  bun run generate-social --only /blog/new-post");
   console.log("  bun run generate-social --check");
+}
+
+/**
+ * Run content preprocessing to ensure we have the latest blog posts
+ */
+async function ensureContentPreprocessed() {
+  printHeader("Preprocessing Content", "blue");
+
+  try {
+    // Run preprocessContent with verbose=false to reduce noise
+    await preprocessContent(false);
+    coloredLog("Content preprocessing complete", "green");
+  } catch (error) {
+    throw new Error(`Failed to preprocess content: ${error}`);
+  }
 }
 
 /**
@@ -444,7 +460,10 @@ function showHelp() {
  */
 async function main() {
   try {
-    if (options.regenerate) {
+    // Ensure content is preprocessed before running any commands
+    await ensureContentPreprocessed();
+
+    if (options.all) {
       await regenerate();
     } else if (options.update) {
       await updateChangedMetadata();
