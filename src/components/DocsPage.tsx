@@ -43,142 +43,18 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
         const docsForProduct = getDocsForProduct(product);
         setProductDocs(docsForProduct);
 
-        // Build the full path for getDoc
-        let fullPath;
-        if (section) {
-          // Section-specific path like /docs/product/api/...
-          fullPath = `/docs/${product}/${section}/${splat}`;
-        } else {
-          // Regular product path like /docs/product/...
-          fullPath = `/docs/${product}/${splat}`;
-        }
+        // Build the path based on whether this is in a section or not
+        const docPath = section
+          ? `/docs/${product}/${section}/${splat}`
+          : `/docs/${product}/${splat}`;
 
-        const logPrefix = section
-          ? `[Docs${section.charAt(0).toUpperCase() + section.slice(1)}Page]`
-          : `[DocsProductPage]`;
+        // For index pages, append /index
+        const finalPath = splat === "" || splat === "/" ? `${docPath}/index` : docPath;
 
-        try {
-          // Get the document with a fallback system
-          let doc = null;
-
-          // Handle the index case (empty splat)
-          if (splat === "" || splat === "/") {
-            // Section or product landing page
-            const indexPath = section
-              ? `/docs/${product}/${section}/index`
-              : `/docs/${product}/index`;
-            try {
-              doc = await getDoc(indexPath);
-            } catch (indexError) {
-              doc = await getDoc(fullPath);
-            }
-          } else {
-            // For other paths, try the exact path first
-            try {
-              doc = await getDoc(fullPath);
-            } catch (exactPathError) {
-              // If the path doesn't end with a slash, try with /index
-              if (!splat.endsWith("/") && !splat.endsWith(".mdx")) {
-                try {
-                  const indexPath = `${fullPath}/index`;
-                  doc = await getDoc(indexPath);
-                } catch (indexError) {
-                  // If index doesn't exist either, throw the original error
-                  console.error(`${logPrefix} Index not found either`, indexError);
-                  throw exactPathError;
-                }
-              } else {
-                // If it's already a specific path that failed, just throw the error
-                throw exactPathError;
-              }
-            }
-          }
-
-          if (!doc) {
-            throw new Error("Document is null or undefined");
-          }
-
-          // Check for empty content and provide fallback
-          if (!doc.content || doc.content.trim() === "") {
-            console.warn(`${logPrefix} Empty content for ${fullPath}, using fallback`);
-
-            // Create appropriate title based on section
-            let fallbackTitle;
-            if (section === "api") {
-              fallbackTitle = "API Documentation";
-            } else if (section === "guides") {
-              fallbackTitle = "Guides";
-            } else {
-              fallbackTitle = "Documentation";
-            }
-
-            doc.content = `# ${doc.meta.title || fallbackTitle}`;
-          }
-
-          setDocument(doc);
-          setLoading(false);
-        } catch (fetchErr) {
-          console.error(
-            `${logPrefix} Error fetching document: ${fetchErr instanceof Error ? fetchErr.message : String(fetchErr)}`
-          );
-
-          // If this is an index page, create a fallback
-          if (splat === "" || splat === "/") {
-            // Determine title and content based on section
-            let title, content;
-            const productCapitalized = product.charAt(0).toUpperCase() + product.slice(1);
-
-            if (section === "api") {
-              title = `${productCapitalized} API Documentation`;
-              content = `---
-title: ${title}
-description: ""
----
-
-# ${title}
-
-Explore the API documentation using the sidebar.`;
-            } else if (section === "guides") {
-              title = `${productCapitalized} Guides`;
-              content = `---
-title: ${title}
-description: ""
----
-
-# ${title}
-
-Explore the guides using the sidebar navigation.`;
-            } else {
-              title = `${productCapitalized} Documentation`;
-              content = `---
-title: ${title}
-description: ""
----
-
-# ${title}
-
-Get started with ${product} by exploring the documentation in the sidebar.`;
-            }
-
-            // Create the document with appropriate metadata
-            setDocument({
-              meta: {
-                title,
-                description: "",
-                slug: "index",
-                path: section ? `${product}/${section}` : product,
-                product,
-                section: section || undefined,
-                type: section ? "section-item" : "item",
-              },
-              content,
-            });
-            setLoading(false);
-            return;
-          }
-
-          throw fetchErr;
-        }
+        // Fetch the document
+        const doc = await getDoc(finalPath);
+        setDocument(doc);
+        setLoading(false);
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : String(err);
         console.error(`[DocsPage] Failed to load document: ${errorMessage}`);
@@ -188,7 +64,7 @@ Get started with ${product} by exploring the documentation in the sidebar.`;
     };
 
     fetchData();
-  }, [splat, product, section, group, currentSlug]);
+  }, [splat, product, section]);
 
   // Generate debug error details if needed
   let errorDetails:
