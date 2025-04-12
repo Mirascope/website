@@ -12,7 +12,7 @@ export const SITE_URL = "https://mirascope.com";
 const ROUTES_TO_EXCLUDE = ["/docs/", "/terms/"];
 
 // Patterns for hidden routes (not included in sitemap or SEO metadata)
-export const EXCLUDE_DEV = /^\/dev\/.*/;
+export const EXCLUDE_DEV = /^\/dev(\/.*)?$/;
 export const HIDDEN_ROUTE_PATTERNS = [EXCLUDE_DEV];
 
 export function isHiddenRoute(route: string): boolean {
