@@ -16,7 +16,68 @@ export const hasAnalyticsConsent = (): boolean => {
     return false;
   }
 
-  return localStorage.getItem("cookie-consent") === "accepted";
+  // Get the stored consent value
+  const storedConsent = localStorage.getItem("cookie-consent");
+
+  // If user has explicitly set a preference, respect it
+  if (storedConsent === "accepted") return true;
+  if (storedConsent === "rejected") return false;
+
+  // If no preference set, check if user is in EU
+  const isEUUser = checkIfUserInEU();
+
+  // Default to opt-out for non-EU users, opt-in for EU users
+  return !isEUUser;
+};
+
+// Check if the user is in the EU based on Cloudflare country header
+export const checkIfUserInEU = (): boolean => {
+  if (!isBrowser) return true; // Default to true for SSR
+
+  // EU country codes (including UK for GDPR compliance)
+  const euCountryCodes = [
+    "AT",
+    "BE",
+    "BG",
+    "HR",
+    "CY",
+    "CZ",
+    "DK",
+    "EE",
+    "FI",
+    "FR",
+    "DE",
+    "GR",
+    "HU",
+    "IE",
+    "IT",
+    "LV",
+    "LT",
+    "LU",
+    "MT",
+    "NL",
+    "PL",
+    "PT",
+    "RO",
+    "SK",
+    "SI",
+    "ES",
+    "SE",
+    "GB",
+    "UK",
+  ];
+
+  // Get country from meta tag that should be injected server-side
+  const countryMetaTag = document.querySelector('meta[name="cf-ipcountry"]');
+  const countryCode = countryMetaTag?.getAttribute("content") || "";
+
+  // If no country code is found, assume EU to be conservative
+  if (!countryCode) {
+    console.log("No country code found from Cloudflare, defaulting to EU user");
+    return true;
+  }
+
+  return euCountryCodes.includes(countryCode);
 };
 
 // Analytics script status tracking
