@@ -13,7 +13,6 @@ export async function generateOgImage(
   browser: Browser,
   route: string,
   title: string,
-  description: string | null,
   outputDir: string
 ): Promise<string> {
   // Create a safe filename
@@ -75,14 +74,10 @@ export async function generateOgImage(
       throw new Error("Template is missing updateSocialCard function");
     }
 
-    // Update the social card with the provided title and description
-    await page.evaluate(
-      (title, description) => {
-        window.updateSocialCard!(title, description || "");
-      },
-      title,
-      description
-    );
+    // Update the social card with the provided title
+    await page.evaluate((title) => {
+      window.updateSocialCard!(title);
+    }, title);
 
     // Brief delay to ensure rendering is complete
     await new Promise((resolve) => setTimeout(resolve, 300));
@@ -143,7 +138,7 @@ export async function generateOgImages(
 
   // Process each route
   for (let i = 0; i < metadata.length; i++) {
-    const { route, title, description } = metadata[i];
+    const { route, title } = metadata[i];
     if (verbose) {
       console.log(`[${i + 1}/${metadata.length}] Processing: ${route}`);
     }
@@ -156,7 +151,7 @@ export async function generateOgImages(
     }
 
     try {
-      const imagePath = await generateOgImage(browser, route, title, description, outputDir);
+      const imagePath = await generateOgImage(browser, route, title, outputDir);
       successCount++;
       if (verbose) {
         console.log(`✓ Generated image for: ${route} at ${imagePath}`);
