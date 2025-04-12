@@ -47,6 +47,9 @@ async function extractPageMetadata(
     // Navigate to the page and wait for it to load
     await page.goto(url, { waitUntil: "networkidle0" });
 
+    // Add extra delay to ensure JavaScript has fully executed and content is loaded
+    await new Promise((resolve) => setTimeout(resolve, 200));
+
     // Extract metadata
     const metadata = await page.evaluate(() => {
       // Helper to get meta tag content

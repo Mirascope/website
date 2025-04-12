@@ -109,16 +109,14 @@ export function getStaticRoutes(): string[] {
 export async function getBlogRoutes(): Promise<string[]> {
   const postsListPath = getPostsListPath();
   if (!fs.existsSync(postsListPath)) {
-    console.warn("Blog posts list not found at:", postsListPath);
-    return [];
+    throw new Error(`Blog posts list not found at: ${postsListPath}`);
   }
 
   try {
     const postsList: PostMeta[] = JSON.parse(fs.readFileSync(postsListPath, "utf8"));
     return postsList.map((post) => `/blog/${post.slug}`).sort();
   } catch (error) {
-    console.warn("Failed to load blog posts list:", error);
-    return [];
+    throw new Error(`Failed to load blog posts list: ${error}`);
   }
 }
 
@@ -157,14 +155,12 @@ export async function getAllRoutes(includeHidden = false): Promise<string[]> {
 export async function getBlogPostsWithMeta(): Promise<PostMeta[]> {
   const postsListPath = getPostsListPath();
   if (!fs.existsSync(postsListPath)) {
-    console.warn("Blog posts list not found at:", postsListPath);
-    return [];
+    throw new Error(`Blog posts list not found at: ${postsListPath}`);
   }
 
   try {
     return JSON.parse(fs.readFileSync(postsListPath, "utf8"));
   } catch (error) {
-    console.warn("Failed to load blog posts list:", error);
-    return [];
+    throw new Error(`Failed to load blog posts list: ${error}`);
   }
 }

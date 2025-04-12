@@ -4,6 +4,13 @@ import { processMDX } from "../src/lib/mdx-utils";
 import type { PostMeta } from "../src/lib/mdx";
 import { SITE_URL, getAllRoutes, getBlogPostsWithMeta } from "../src/lib/router-utils";
 
+// Add Bun-specific type declaration
+declare global {
+  interface ImportMeta {
+    main?: boolean;
+  }
+}
+
 // Create static directories directly in public folder
 // This ensures they get copied to the right place in the final build
 const STATIC_DIR = path.join(process.cwd(), "public", "static");
@@ -58,8 +65,8 @@ function extractFrontmatter(source: string): {
 /**
  * Process all blog posts
  */
-async function processBlogPosts(): Promise<void> {
-  console.log("Processing blog posts...");
+async function processBlogPosts(verbose = true): Promise<void> {
+  if (verbose) console.log("Processing blog posts...");
   const postsDir = path.join(process.cwd(), "src", "posts");
   const files = fs.readdirSync(postsDir).filter((file) => file.endsWith(".mdx"));
 
@@ -77,6 +84,7 @@ async function processBlogPosts(): Promise<void> {
     try {
       await processMDX(fileContent);
     } catch (error) {
+      // Always log errors regardless of verbosity
       console.error(`Error processing ${filename}:`, error);
       continue;
     }
@@ -111,14 +119,14 @@ async function processBlogPosts(): Promise<void> {
   // Write just the metadata to the posts list
   fs.writeFileSync(path.join(STATIC_DIR, "posts-list.json"), JSON.stringify(postsList));
 
-  console.log(`Processed ${postsList.length} blog posts`);
+  if (verbose) console.log(`Processed ${postsList.length} blog posts`);
 }
 
 /**
  * Process all docs files
  */
-async function processDocsFiles(): Promise<void> {
-  console.log("Processing docs files...");
+async function processDocsFiles(verbose = true): Promise<void> {
+  if (verbose) console.log("Processing docs files...");
   const docsDir = path.join(process.cwd(), "src", "docs");
   const docsIndex: Record<string, { path: string }> = {};
 
@@ -159,6 +167,7 @@ async function processDocsFiles(): Promise<void> {
           // Add to index - store just the file name without .mdx
           docsIndex[filePath.replace(/\.mdx$/, "")] = { path: `${filePath}.json` };
         } catch (error) {
+          // Always log errors regardless of verbosity
           console.error(`Error processing doc ${filePath}:`, error);
         }
       }
@@ -170,14 +179,14 @@ async function processDocsFiles(): Promise<void> {
   // Write the docs index
   fs.writeFileSync(path.join(STATIC_DIR, "docs-index.json"), JSON.stringify(docsIndex));
 
-  console.log(`Processed ${Object.keys(docsIndex).length} doc files`);
+  if (verbose) console.log(`Processed ${Object.keys(docsIndex).length} doc files`);
 }
 
 /**
  * Process policy files
  */
-async function processPolicyFiles(): Promise<void> {
-  console.log("Processing policy files...");
+async function processPolicyFiles(verbose = true): Promise<void> {
+  if (verbose) console.log("Processing policy files...");
 
   // Privacy policy
   const privacyPath = path.join(process.cwd(), "src", "policies", "privacy.mdx");
@@ -225,8 +234,8 @@ async function processPolicyFiles(): Promise<void> {
 /**
  * Generate sitemap.xml file based on the processed content
  */
-async function generateSitemap(): Promise<void> {
-  console.log("Generating sitemap.xml...");
+async function generateSitemap(verbose = true): Promise<void> {
+  if (verbose) console.log("Generating sitemap.xml...");
 
   // Get all routes using our centralized utility
   const uniqueRoutes = await getAllRoutes();
@@ -278,26 +287,34 @@ async function generateSitemap(): Promise<void> {
   const outFile = path.join(process.cwd(), "public", "sitemap.xml");
   fs.writeFileSync(outFile, xml);
 
-  console.log(`Sitemap generated with ${uniqueRoutes.length} URLs`);
+  if (verbose) console.log(`Sitemap generated with ${uniqueRoutes.length} URLs`);
 }
 
 /**
  * Main processing function that generates static JSON files for all MDX content
  * and creates a sitemap.xml file
  */
-async function preprocessContent(): Promise<void> {
+export async function preprocessContent(verbose = true): Promise<void> {
   try {
-    await processBlogPosts();
-    await processDocsFiles();
-    await processPolicyFiles();
-    await generateSitemap();
-    console.log("Content preprocessing complete!");
-    console.log("Static files are available in the public/static directory");
+    await processBlogPosts(verbose);
+    await processDocsFiles(verbose);
+    await processPolicyFiles(verbose);
+    await generateSitemap(verbose);
+    if (verbose) {
+      console.log("Content preprocessing complete!");
+      console.log("Static files are available in the public/static directory");
+    }
+    return;
   } catch (error) {
     console.error("Error during preprocessing:", error);
-    process.exit(1);
+    throw error; // Let the caller handle the error
   }
 }
 
-// Run the preprocessing when this script is executed
-preprocessContent();
+// Run the preprocessing when this script is executed directly
+if (import.meta.main) {
+  preprocessContent().catch((error) => {
+    console.error("Fatal error during preprocessing:", error);
+    process.exit(1);
+  });
+}

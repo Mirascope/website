@@ -17,7 +17,7 @@ export async function generateOgImage(
 ): Promise<string> {
   // Create a safe filename
   const filename = routeToFilename(route);
-  const outputPath = path.join(outputDir, `${filename}.png`);
+  const outputPath = path.join(outputDir, `${filename}.webp`);
 
   // Create directory if it doesn't exist
   const directory = path.dirname(outputPath);
@@ -82,10 +82,11 @@ export async function generateOgImage(
     // Brief delay to ensure rendering is complete
     await new Promise((resolve) => setTimeout(resolve, 300));
 
-    // Take screenshot
+    // Take screenshot with WebP compression
     await page.screenshot({
       path: outputPath,
-      type: "png",
+      type: "webp",
+      quality: 80, // Adjust compression level (0-100, higher is better quality)
       clip: {
         x: 0,
         y: 0,

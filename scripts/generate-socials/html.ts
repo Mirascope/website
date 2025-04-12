@@ -18,7 +18,7 @@ export function generateOgHtml(
   const routeFilename = routeToFilename(route);
 
   // This is our preferred social card path
-  const socialCardPath = `/social-cards/${routeFilename}.png`;
+  const socialCardPath = `/social-cards/${routeFilename}.webp`;
 
   // Default path to our custom generated image
   let imagePath = socialCardPath;
