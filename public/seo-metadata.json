@@ -421,8 +421,8 @@
   },
   "/pricing": {
     "route": "/pricing",
-    "title": "Mirascope",
-    "description": "The AI Engineer's Developer Stack"
+    "title": "Lilypad Pricing | Lilypad",
+    "description": "Lilypad's pricing plans and features"
   },
   "/privacy": {
     "route": "/privacy",
