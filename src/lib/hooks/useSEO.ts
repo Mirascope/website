@@ -21,11 +21,11 @@ interface SEOProps {
 // Helper function to convert a route path to a consistent image path
 export function routeToImagePath(route: string): string {
   const filename = routeToFilename(route);
-  return `/social-cards/${filename}.png`;
+  return `/social-cards/${filename}.webp`;
 }
 
 const DEFAULT_DESCRIPTION = "Mirascope provides LLM abstractions that aren't obstructions.";
-const DEFAULT_IMAGE = "/social-cards/_default.png";
+const DEFAULT_IMAGE = "/social-cards/_default.webp";
 
 export function useSEO({
   title,

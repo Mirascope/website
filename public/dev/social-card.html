@@ -4,6 +4,55 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Social Card</title>
+  <script>
+    // Font size configuration - single source of truth
+    window.SOCIAL_CARD_CONFIG = {
+      fontSizes: [
+        { maxChars: 13, fontSize: "152px", label: "XS" },
+        { maxChars: 27, fontSize: "128px", label: "S" },
+        { maxChars: 42, fontSize: "100px", label: "SM" },
+        { maxChars: 59, fontSize: "95px", label: "M" },
+        { maxChars: 80, fontSize: "75px", label: "L" },
+        { maxChars: Infinity, fontSize: "60px", label: "XL" }
+      ]
+    };
+
+    // Function to calculate title font size based on length
+    function calculateTitleFontSize(titleLength) {
+      const config = window.SOCIAL_CARD_CONFIG.fontSizes;
+      for (const rule of config) {
+        if (titleLength <= rule.maxChars) {
+          return rule.fontSize;
+        }
+      }
+      return config[config.length - 1].fontSize; // Default to the last rule
+    }
+
+    // Function to update the social card
+    function updateSocialCard(title) {
+      // Update the content
+      document.getElementById('title-element').textContent = title;
+
+      // Calculate and update font sizes
+      const titleFontSize = calculateTitleFontSize(title.length);
+      const lineHeight = title.length > 40 ? "1.3" : "1.2";
+
+      document.getElementById('title-element').style.fontSize = titleFontSize;
+      document.getElementById('title-element').style.lineHeight = lineHeight;
+    }
+
+    // Expose the update function globally for iframe and Puppeteer communication
+    window.updateSocialCard = updateSocialCard;
+
+    // Check for URL parameters that might be passed to this template
+    const urlParams = new URLSearchParams(window.location.search);
+    const titleParam = urlParams.get('title');
+    const descriptionParam = urlParams.get('description');
+
+    if (titleParam) {
+      updateSocialCard(titleParam);
+    }
+  </script>
   <style>
     @font-face {
       font-family: "Williams Handwriting";
@@ -153,54 +202,5 @@
     </div>
   </div>
 
-  <script>
-    // Font size configuration - single source of truth
-    window.SOCIAL_CARD_CONFIG = {
-      fontSizes: [
-        { maxChars: 13, fontSize: "152px", label: "XS" },
-        { maxChars: 27, fontSize: "128px", label: "S" },
-        { maxChars: 42, fontSize: "100px", label: "SM" },
-        { maxChars: 64, fontSize: "95px", label: "M" },
-        { maxChars: 80, fontSize: "75px", label: "L" },
-        { maxChars: Infinity, fontSize: "60px", label: "XL" }
-      ]
-    };
-
-    // Function to calculate title font size based on length
-    function calculateTitleFontSize(titleLength) {
-      const config = window.SOCIAL_CARD_CONFIG.fontSizes;
-      for (const rule of config) {
-        if (titleLength <= rule.maxChars) {
-          return rule.fontSize;
-        }
-      }
-      return config[config.length - 1].fontSize; // Default to the last rule
-    }
-
-    // Function to update the social card
-    function updateSocialCard(title) {
-      // Update the content
-      document.getElementById('title-element').textContent = title;
-
-      // Calculate and update font sizes
-      const titleFontSize = calculateTitleFontSize(title.length);
-      const lineHeight = title.length > 40 ? "1.3" : "1.2";
-
-      document.getElementById('title-element').style.fontSize = titleFontSize;
-      document.getElementById('title-element').style.lineHeight = lineHeight;
-    }
-
-    // Expose the update function globally for iframe and Puppeteer communication
-    window.updateSocialCard = updateSocialCard;
-
-    // Check for URL parameters that might be passed to this template
-    const urlParams = new URLSearchParams(window.location.search);
-    const titleParam = urlParams.get('title');
-    const descriptionParam = urlParams.get('description');
-
-    if (titleParam) {
-      updateSocialCard(titleParam);
-    }
-  </script>
 </body>
 </html>

@@ -92,7 +92,7 @@ function AuditMetadata() {
               <div>
                 <div className="border rounded overflow-hidden">
                   <img
-                    src={`/social-cards/${routeToFilename(item.route)}.png`}
+                    src={`/social-cards/${routeToFilename(item.route)}.webp`}
                     alt={`Social card for ${item.route}`}
                     className="w-full"
                     onError={(e) => {
