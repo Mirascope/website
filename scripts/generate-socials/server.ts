@@ -9,8 +9,70 @@ import { spawn, ChildProcess } from "child_process";
 import { coloredLog, colorize } from "../lib/terminal";
 import { Browser, launch } from "puppeteer";
 
-// Port for development server
-const DEFAULT_PORT = 3939;
+// Port range for development server
+const BASE_PORT = 3939;
+const MAX_PORT_ATTEMPTS = 10;
+
+/**
+ * Check if a port is already in use
+ *
+ * @param port - The port to check
+ * @returns True if the port is already in use
+ */
+async function isPortInUse(port: number): Promise<boolean> {
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 500);
+
+    // Try to connect to the port
+    await fetch(`http://localhost:${port}`, {
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    // If we get a response, something is already running on this port
+    return true;
+  } catch (e) {
+    // If there's an error, the port is probably not in use
+    return false;
+  }
+}
+
+/**
+ * Find an available port to use
+ *
+ * @param startPort - The starting port number
+ * @param maxAttempts - Maximum number of port numbers to try
+ * @param verbose - Whether to print verbose output
+ * @returns An available port number or throws if none available
+ */
+async function findAvailablePort(
+  startPort: number,
+  maxAttempts: number = 10,
+  verbose: boolean = false
+): Promise<number> {
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    const port = startPort + attempt;
+
+    if (await isPortInUse(port)) {
+      if (verbose) {
+        coloredLog(`Port ${port} is already in use, trying next port...`, "yellow");
+      }
+      continue;
+    }
+
+    if (verbose && attempt > 0) {
+      coloredLog(`Using available port: ${port}`, "green");
+    }
+
+    return port;
+  }
+
+  throw new Error(
+    `Failed to find an available port after ${maxAttempts} attempts starting from ${startPort}`
+  );
+}
 
 /**
  * Wait for the development server to be ready
@@ -49,14 +111,25 @@ async function waitForServer(port: number, maxWaitTimeMs: number = 30000): Promi
  *
  * @param port - Server port
  * @param verbose - Whether to print verbose output
- * @returns The server process
+ * @returns The server process and the port it's running on
  */
-async function startDevServer(port: number, verbose = false): Promise<ChildProcess> {
-  if (verbose) {
-    coloredLog(`Starting development server on port ${port}...`, "cyan");
+async function startDevServer(
+  port: number,
+  verbose = false
+): Promise<{ server: ChildProcess; port: number }> {
+  // Try to find an available port first
+  let availablePort: number;
+  try {
+    availablePort = await findAvailablePort(port, MAX_PORT_ATTEMPTS, verbose);
+  } catch (error) {
+    throw new Error(`Failed to find an available port: ${error}`);
   }
 
-  const devServer = spawn("bun", ["run", "dev", "--port", port.toString()], {
+  if (verbose) {
+    coloredLog(`Starting development server on port ${availablePort}...`, "cyan");
+  }
+
+  const devServer = spawn("bun", ["run", "dev", "--port", availablePort.toString()], {
     stdio: ["ignore", "pipe", "pipe"],
     detached: true,
   });
@@ -83,35 +156,63 @@ async function startDevServer(port: number, verbose = false): Promise<ChildProce
     }
   });
 
-  const serverReady = await waitForServer(port);
+  // Add error handler to catch unhandled errors
+  devServer.on("error", (error) => {
+    console.error(`${colorize("[Dev Server Error]", "red")} ${error}`);
+  });
+
+  // Add exit handler to log if the server exits unexpectedly
+  devServer.on("exit", (code, signal) => {
+    if (code !== null && code !== 0) {
+      console.error(`${colorize("[Dev Server Exit]", "red")} with code ${code}`);
+    } else if (signal) {
+      if (verbose) {
+        console.log(`${colorize("[Dev Server]", "yellow")} terminated by signal ${signal}`);
+      }
+    }
+  });
+
+  const serverReady = await waitForServer(availablePort);
   if (!serverReady) {
-    throw new Error(`Development server failed to start within timeout`);
+    throw new Error(`Development server failed to start within timeout on port ${availablePort}`);
   }
 
   if (verbose) {
-    coloredLog("Development server started", "green");
+    coloredLog(`Development server started on port ${availablePort}`, "green");
   }
 
-  return devServer;
+  return { server: devServer, port: availablePort };
 }
 
 /**
  * Stop the development server
  *
  * @param server - The server process
+ * @param port - The port the server is running on
  * @param verbose - Whether to print verbose output
  */
-function stopDevServer(server: ChildProcess, verbose = false): void {
+async function stopDevServer(server: ChildProcess, port: number, verbose = false): Promise<void> {
   if (verbose) {
-    coloredLog("Stopping development server...", "cyan");
+    coloredLog(`Stopping development server on port ${port}...`, "cyan");
   }
 
   try {
     if (server.pid) {
       process.kill(-server.pid, "SIGTERM");
 
-      if (verbose) {
-        coloredLog("Development server stopped", "green");
+      // Give it a moment to shut down
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      // Check if it's still running
+      if (await isPortInUse(port)) {
+        console.warn(
+          `${colorize(`Warning: Port ${port} still in use after server termination.`, "yellow")}`
+        );
+        console.warn(
+          `${colorize(`You may need to manually terminate the process listening on port ${port}.`, "yellow")}`
+        );
+      } else if (verbose) {
+        coloredLog(`Development server stopped on port ${port}`, "green");
       }
     } else {
       console.error(`${colorize("Server has no PID", "red")}`);
@@ -133,13 +234,17 @@ export async function withDevServer<T>(
   fn: (port: number) => Promise<T>,
   options: { port?: number; verbose?: boolean } = {}
 ): Promise<T> {
-  const { port = DEFAULT_PORT, verbose = false } = options;
-  const server = await startDevServer(port, verbose);
+  const { port = BASE_PORT, verbose = false } = options;
+
+  // Launch dev server and get the port it's actually running on
+  const { server, port: actualPort } = await startDevServer(port, verbose);
 
   try {
-    return await fn(port);
+    // Pass the actual port to the function
+    return await fn(actualPort);
   } finally {
-    stopDevServer(server, verbose);
+    // Use the actual port when stopping the server
+    await stopDevServer(server, actualPort, verbose);
   }
 }
 
