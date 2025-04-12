@@ -91,6 +91,9 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
       group,
       slug: currentSlug,
     };
+
+    // Log detailed error information to console
+    console.error("[DocsPage] Document not found or invalid:", errorDetails);
   }
 
   // Define SEO properties based on document meta and product
@@ -128,7 +131,6 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
       docs={productDocs}
       loading={loading}
       error={error}
-      errorDetails={errorDetails}
     />
   );
 };
