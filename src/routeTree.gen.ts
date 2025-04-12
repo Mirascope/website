@@ -21,6 +21,7 @@ import { Route as TermsUseImport } from './routes/terms/use'
 import { Route as TermsServiceImport } from './routes/terms/service'
 import { Route as DocsSplatImport } from './routes/docs.$'
 import { Route as DevSocialCardImport } from './routes/dev/social-card'
+import { Route as DevAuditMetadataImport } from './routes/dev/audit-metadata'
 import { Route as BlogSlugImport } from './routes/blog.$slug'
 import { Route as DocsProductSplatImport } from './routes/docs.$product.$'
 import { Route as DocsProductGuidesSplatImport } from './routes/docs.$product.guides.$'
@@ -88,6 +89,12 @@ const DevSocialCardRoute = DevSocialCardImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const DevAuditMetadataRoute = DevAuditMetadataImport.update({
+  id: '/dev/audit-metadata',
+  path: '/dev/audit-metadata',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const BlogSlugRoute = BlogSlugImport.update({
   id: '/blog/$slug',
   path: '/blog/$slug',
@@ -142,6 +149,13 @@ declare module '@tanstack/react-router' {
       path: '/blog/$slug'
       fullPath: '/blog/$slug'
       preLoaderRoute: typeof BlogSlugImport
+      parentRoute: typeof rootRoute
+    }
+    '/dev/audit-metadata': {
+      id: '/dev/audit-metadata'
+      path: '/dev/audit-metadata'
+      fullPath: '/dev/audit-metadata'
+      preLoaderRoute: typeof DevAuditMetadataImport
       parentRoute: typeof rootRoute
     }
     '/dev/social-card': {
@@ -224,6 +238,7 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/dev/audit-metadata': typeof DevAuditMetadataRoute
   '/dev/social-card': typeof DevSocialCardRoute
   '/docs/$': typeof DocsSplatRoute
   '/terms/service': typeof TermsServiceRoute
@@ -241,6 +256,7 @@ export interface FileRoutesByTo {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/dev/audit-metadata': typeof DevAuditMetadataRoute
   '/dev/social-card': typeof DevSocialCardRoute
   '/docs/$': typeof DocsSplatRoute
   '/terms/service': typeof TermsServiceRoute
@@ -259,6 +275,7 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/dev/audit-metadata': typeof DevAuditMetadataRoute
   '/dev/social-card': typeof DevSocialCardRoute
   '/docs/$': typeof DocsSplatRoute
   '/terms/service': typeof TermsServiceRoute
@@ -278,6 +295,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/blog/$slug'
+    | '/dev/audit-metadata'
     | '/dev/social-card'
     | '/docs/$'
     | '/terms/service'
@@ -294,6 +312,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/blog/$slug'
+    | '/dev/audit-metadata'
     | '/dev/social-card'
     | '/docs/$'
     | '/terms/service'
@@ -310,6 +329,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/blog/$slug'
+    | '/dev/audit-metadata'
     | '/dev/social-card'
     | '/docs/$'
     | '/terms/service'
@@ -328,6 +348,7 @@ export interface RootRouteChildren {
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  DevAuditMetadataRoute: typeof DevAuditMetadataRoute
   DevSocialCardRoute: typeof DevSocialCardRoute
   DocsSplatRoute: typeof DocsSplatRoute
   TermsServiceRoute: typeof TermsServiceRoute
@@ -345,6 +366,7 @@ const rootRouteChildren: RootRouteChildren = {
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   BlogSlugRoute: BlogSlugRoute,
+  DevAuditMetadataRoute: DevAuditMetadataRoute,
   DevSocialCardRoute: DevSocialCardRoute,
   DocsSplatRoute: DocsSplatRoute,
   TermsServiceRoute: TermsServiceRoute,
@@ -371,6 +393,7 @@ export const routeTree = rootRoute
         "/pricing",
         "/privacy",
         "/blog/$slug",
+        "/dev/audit-metadata",
         "/dev/social-card",
         "/docs/$",
         "/terms/service",
@@ -394,6 +417,9 @@ export const routeTree = rootRoute
     },
     "/blog/$slug": {
       "filePath": "blog.$slug.tsx"
+    },
+    "/dev/audit-metadata": {
+      "filePath": "dev/audit-metadata.tsx"
     },
     "/dev/social-card": {
       "filePath": "dev/social-card.tsx"
