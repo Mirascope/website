@@ -52,8 +52,8 @@ jobs:
     - name: Check Snippets Up-to-date
       run: bun run lint:snippets
 
-    - name: Python Code Validation
-      run: bun run lint:py
+    - name: Python Snippet Validation
+      run: bun run lint:py-snippets
       
     - name: Social Metadata Check
       run: bun run lint:social
