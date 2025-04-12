@@ -3,6 +3,7 @@ import { Check, Info, X } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import useSEO from "@/lib/hooks/useSEO";
 
 export const Route = createFileRoute("/pricing")({
   component: PricingPage,
@@ -125,6 +126,14 @@ const PricingTier = ({
 );
 
 function PricingPage() {
+  // Set SEO metadata
+  useSEO({
+    title: "Lilypad Pricing",
+    description: "Lilypad's pricing plans and features",
+    product: "lilypad",
+    url: "/pricing",
+  });
+
   // Cloud hosted features
   const cloudHostedFeatures = [
     { feature: "Projects", free: "Unlimited", pro: "Unlimited" },
