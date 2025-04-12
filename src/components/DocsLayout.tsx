@@ -8,12 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Sparkles, Server } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { type ProductName } from "@/lib/route-types";
-import {
-  ProviderContextProvider,
-  ProviderDropdown,
-  providers,
-  type Provider,
-} from "@/components/docs";
+import useFunMode from "@/lib/hooks/useFunMode";
+import useProviderSelection from "@/lib/hooks/useProviderSelection";
+import { ProviderContextProvider, ProviderDropdown } from "@/components/docs";
 
 type DocsLayoutProps = {
   product: ProductName;
@@ -57,50 +54,9 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
     frontmatter: Record<string, any>;
   } | null>(null);
 
-  // Initialize fun mode from localStorage if available
-  const [funMode, setFunMode] = useState(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("funMode") === "true";
-    }
-    return false;
-  });
-
-  // Toggle fun mode (handwriting font for docs content)
-  const toggleFunMode = () => {
-    const newMode = !funMode;
-    setFunMode(newMode);
-
-    // Save preference to localStorage
-    if (typeof window !== "undefined") {
-      localStorage.setItem("funMode", newMode.toString());
-    }
-  };
-
-  // Helper function to validate a provider string
-  const validateProvider = (provider: string | null): Provider => {
-    if (!provider || !providers.includes(provider as Provider)) {
-      return "openai"; // Default fallback if invalid
-    }
-    return provider as Provider;
-  };
-
-  // Initialize Provider from localStorage if available
-  const [selectedProvider, setSelectedProvider] = useState<Provider>(() => {
-    if (typeof window !== "undefined") {
-      const savedProvider = localStorage.getItem("selectedProvider");
-      return validateProvider(savedProvider);
-    }
-    return "openai";
-  });
-
-  // Handle provider change and save to localStorage
-  const handleProviderChange = (provider: string) => {
-    const validProvider = validateProvider(provider);
-    setSelectedProvider(validProvider);
-    if (typeof window !== "undefined") {
-      localStorage.setItem("selectedProvider", validProvider);
-    }
-  };
+  // Use custom hooks for localStorage state management
+  const [funMode, toggleFunMode] = useFunMode();
+  const [selectedProvider, handleProviderChange] = useProviderSelection();
 
   // Process MDX content when document changes
   useEffect(() => {
