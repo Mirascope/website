@@ -1,882 +1,262 @@
-[
-  {
+{
+  "/": {
     "route": "/",
     "title": "Home | Mirascope",
-    "description": "The AI Engineer's Developer Stack",
-    "image": null,
-    "ogTitle": "Home | Mirascope",
-    "ogDescription": "The AI Engineer's Developer Stack",
-    "ogImage": "http://localhost:33330/frog-logo.png",
-    "lastUpdated": "2025-04-10T06:45:12.017Z"
+    "description": "The AI Engineer's Developer Stack"
   },
-  {
+  "/blog": {
     "route": "/blog",
     "title": "Blog | Mirascope",
-    "description": "The latest news, updates, and insights about Mirascope and LLM application development.",
-    "image": null,
-    "ogTitle": "Blog | Mirascope",
-    "ogDescription": "The latest news, updates, and insights about Mirascope and LLM application development.",
-    "ogImage": "http://localhost:33330/social-cards/blog.png",
-    "lastUpdated": "2025-04-10T06:45:14.042Z"
+    "description": "The latest news, updates, and insights about Mirascope and LLM application development."
   },
-  {
-    "route": "/blog/advanced-prompt-engineering",
-    "title": "A Guide to Advanced Prompt Engineering | Mirascope",
-    "description": "Learn how advanced prompt engineering techniques like in-context learning and few-shot prompts can boost LLM performance and accuracy.",
-    "image": null,
-    "ogTitle": "A Guide to Advanced Prompt Engineering | Mirascope",
-    "ogDescription": "Learn how advanced prompt engineering techniques like in-context learning and few-shot prompts can boost LLM performance and accuracy.",
-    "ogImage": "http://localhost:33330/social-cards/blog-advanced-prompt-engineering.png",
-    "lastUpdated": "2025-04-10T06:45:16.016Z"
-  },
-  {
-    "route": "/blog/engineers-should-handle-prompting-llms",
-    "title": "Engineers Should Handle Prompting LLMs (and Prompts Should Live in Your Codebase) | Mirascope",
-    "description": "Many prompt engineering tools neither follow developer best practices, nor manage prompts with their LLM calls. We created Mirascope to address this.",
-    "image": null,
-    "ogTitle": "Engineers Should Handle Prompting LLMs (and Prompts Should Live in Your Codebase) | Mirascope",
-    "ogDescription": "Many prompt engineering tools neither follow developer best practices, nor manage prompts with their LLM calls. We created Mirascope to address this.",
-    "ogImage": "http://localhost:33330/social-cards/blog-engineers-should-handle-prompting-llms.png",
-    "lastUpdated": "2025-04-10T06:45:17.727Z"
-  },
-  {
-    "route": "/blog/how-to-build-a-knowledge-graph",
-    "title": "How to Build a Knowledge Graph from Unstructured Information | Mirascope",
-    "description": "Learn how to build a knowledge graph from unstructured data to efficiently extract entities and relationships from unstructured sources.",
-    "image": null,
-    "ogTitle": "How to Build a Knowledge Graph from Unstructured Information | Mirascope",
-    "ogDescription": "Learn how to build a knowledge graph from unstructured data to efficiently extract entities and relationships from unstructured sources.",
-    "ogImage": "http://localhost:33330/social-cards/blog-how-to-build-a-knowledge-graph.png",
-    "lastUpdated": "2025-04-10T06:45:19.568Z"
-  },
-  {
-    "route": "/blog/how-to-make-a-chatbot",
-    "title": "How to Make a Chatbot from Scratch (That Uses LLMs) | Mirascope",
-    "description": "Learn how to make a chatbot from scratch with this step-by-step guide, including tips on integrating LLMs for smarter conversations.",
-    "image": null,
-    "ogTitle": "How to Make a Chatbot from Scratch (That Uses LLMs) | Mirascope",
-    "ogDescription": "Learn how to make a chatbot from scratch with this step-by-step guide, including tips on integrating LLMs for smarter conversations.",
-    "ogImage": "http://localhost:33330/social-cards/blog-how-to-make-a-chatbot.png",
-    "lastUpdated": "2025-04-10T06:45:21.145Z"
-  },
-  {
-    "route": "/blog/langchain-alternatives",
-    "title": "Top 12 LangChain Alternatives for AI Development | Mirascope",
-    "description": "We present 12 LangChain alternatives for developing LLM applications in the areas of prompt engineering, agents, LLM orchestration, and data extraction.",
-    "image": null,
-    "ogTitle": "Top 12 LangChain Alternatives for AI Development | Mirascope",
-    "ogDescription": "We present 12 LangChain alternatives for developing LLM applications in the areas of prompt engineering, agents, LLM orchestration, and data extraction.",
-    "ogImage": "http://localhost:33330/social-cards/blog-langchain-alternatives.png",
-    "lastUpdated": "2025-04-10T06:45:22.953Z"
-  },
-  {
-    "route": "/blog/langchain-prompt-template",
-    "title": "A Guide to Prompt Templates in LangChain | Mirascope",
-    "description": "We explain what a LangChain prompt template is, and how to use it. We also compare this with prompting in Mirascope.",
-    "image": null,
-    "ogTitle": "A Guide to Prompt Templates in LangChain | Mirascope",
-    "ogDescription": "We explain what a LangChain prompt template is, and how to use it. We also compare this with prompting in Mirascope.",
-    "ogImage": "http://localhost:33330/social-cards/blog-langchain-prompt-template.png",
-    "lastUpdated": "2025-04-10T06:45:24.762Z"
-  },
-  {
-    "route": "/blog/langchain-rag",
-    "title": "Getting Started with LangChain RAG | Mirascope",
-    "description": "This LangChain RAG tutorial shows you how to build a RAG pipeline by combining the best elements of LangChain and Mirascope, our lightweight Python toolkit.",
-    "image": null,
-    "ogTitle": "Getting Started with LangChain RAG | Mirascope",
-    "ogDescription": "This LangChain RAG tutorial shows you how to build a RAG pipeline by combining the best elements of LangChain and Mirascope, our lightweight Python toolkit.",
-    "ogImage": "http://localhost:33330/social-cards/blog-langchain-rag.png",
-    "lastUpdated": "2025-04-10T06:45:26.388Z"
-  },
-  {
-    "route": "/blog/langchain-runnables",
-    "title": "Understanding LangChain Runnables | Mirascope",
-    "description": "Learn about LangChain runnables, how they work, and when best to use them. We also contrast runnables with Mirascope's pythonic chaining techniques.",
-    "image": null,
-    "ogTitle": "Understanding LangChain Runnables | Mirascope",
-    "ogDescription": "Learn about LangChain runnables, how they work, and when best to use them. We also contrast runnables with Mirascope's pythonic chaining techniques.",
-    "ogImage": "http://localhost:33330/social-cards/blog-langchain-runnables.png",
-    "lastUpdated": "2025-04-10T06:45:28.167Z"
-  },
-  {
-    "route": "/blog/langchain-structured-output",
-    "title": "LangChain Structured Output - A Guide to Tools and Methods | Mirascope",
-    "description": "This guide covers how to work with LangChain structured output and showcases how Mirascope provides an accessible and flexible solution for developers.",
-    "image": null,
-    "ogTitle": "LangChain Structured Output - A Guide to Tools and Methods | Mirascope",
-    "ogDescription": "This guide covers how to work with LangChain structured output and showcases how Mirascope provides an accessible and flexible solution for developers.",
-    "ogImage": "http://localhost:33330/social-cards/blog-langchain-structured-output.png",
-    "lastUpdated": "2025-04-10T06:45:29.948Z"
-  },
-  {
-    "route": "/blog/langchain-sucks",
-    "title": "Does LangChain Suck? Our Thoughts on Maximizing Its Potential | Mirascope",
-    "description": "Some developers believe LangChain sucks, but you can leverage its RAG functionality with Mirascope's prompt engineering.",
-    "image": null,
-    "ogTitle": "Does LangChain Suck? Our Thoughts on Maximizing Its Potential | Mirascope",
-    "ogDescription": "Some developers believe LangChain sucks, but you can leverage its RAG functionality with Mirascope's prompt engineering.",
-    "ogImage": "http://localhost:33330/social-cards/blog-langchain-sucks.png",
-    "lastUpdated": "2025-04-10T06:45:31.745Z"
-  },
-  {
-    "route": "/blog/langfuse-integration",
-    "title": "Mirascope and Langfuse Integration | Mirascope",
-    "description": "Mirascope now integrates with Langfuse. Decorated LLM functions can now easily be sent to Langfuse.",
-    "image": null,
-    "ogTitle": "Mirascope and Langfuse Integration | Mirascope",
-    "ogDescription": "Mirascope now integrates with Langfuse. Decorated LLM functions can now easily be sent to Langfuse.",
-    "ogImage": "http://localhost:33330/social-cards/blog-langfuse-integration.png",
-    "lastUpdated": "2025-04-10T06:45:33.173Z"
-  },
-  {
-    "route": "/blog/llamaindex-vs-langchain",
-    "title": "LlamaIndex vs LangChain vs Mirascope - An In-Depth Comparison | Mirascope",
-    "description": "Explore our comprehensive guide on LlamaIndex vs LangChain. We also introduce Mirascope's modular toolkit for LLM application development.",
-    "image": null,
-    "ogTitle": "LlamaIndex vs LangChain vs Mirascope - An In-Depth Comparison | Mirascope",
-    "ogDescription": "Explore our comprehensive guide on LlamaIndex vs LangChain. We also introduce Mirascope's modular toolkit for LLM application development.",
-    "ogImage": "http://localhost:33330/social-cards/blog-llamaindex-vs-langchain.png",
-    "lastUpdated": "2025-04-10T06:45:34.796Z"
-  },
-  {
-    "route": "/blog/llm-agents",
-    "title": "LLM Agents - What They Are, Tools, and Examples | Mirascope",
-    "description": "Learn what LLM agents are, how they work, and the tools behind them. Explore real-world examples and see how to build an LLM agent for your projects.",
-    "image": null,
-    "ogTitle": "LLM Agents - What They Are, Tools, and Examples | Mirascope",
-    "ogDescription": "Learn what LLM agents are, how they work, and the tools behind them. Explore real-world examples and see how to build an LLM agent for your projects.",
-    "ogImage": "http://localhost:33330/social-cards/blog-llm-agents.png",
-    "lastUpdated": "2025-04-10T06:45:36.613Z"
-  },
-  {
-    "route": "/blog/llm-applications",
-    "title": "LLM Applications - What They Are and 6 Examples | Mirascope",
-    "description": "Curious about LLM applications? Discover what they are and see 6 practical examples of how large language models are being applied across sectors.",
-    "image": null,
-    "ogTitle": "LLM Applications - What They Are and 6 Examples | Mirascope",
-    "ogDescription": "Curious about LLM applications? Discover what they are and see 6 practical examples of how large language models are being applied across sectors.",
-    "ogImage": "http://localhost:33330/social-cards/blog-llm-applications.png",
-    "lastUpdated": "2025-04-10T06:45:38.180Z"
-  },
-  {
-    "route": "/blog/llm-as-judge",
-    "title": "Using LLM-as-a-Judge to Evaluate AI Outputs | Mirascope",
-    "description": "Learn how LLM as a judge offers scalable and reliable AI output evaluation by leveraging advanced reasoning and scoring. We also show a basic example of how to build one.",
-    "image": null,
-    "ogTitle": "Using LLM-as-a-Judge to Evaluate AI Outputs | Mirascope",
-    "ogDescription": "Learn how LLM as a judge offers scalable and reliable AI output evaluation by leveraging advanced reasoning and scoring. We also show a basic example of how to build one.",
-    "ogImage": "http://localhost:33330/social-cards/blog-llm-as-judge.png",
-    "lastUpdated": "2025-04-10T06:45:39.956Z"
-  },
-  {
-    "route": "/blog/llm-chaining",
-    "title": "LLM Chaining - Techniques and Best Practices | Mirascope",
-    "description": "Learn how LLM chaining improves generative AI workflows, enhances responses, and powers sophisticated applications like RAG and autonomous agents.",
-    "image": null,
-    "ogTitle": "LLM Chaining - Techniques and Best Practices | Mirascope",
-    "ogDescription": "Learn how LLM chaining improves generative AI workflows, enhances responses, and powers sophisticated applications like RAG and autonomous agents.",
-    "ogImage": "http://localhost:33330/social-cards/blog-llm-chaining.png",
-    "lastUpdated": "2025-04-10T06:45:41.777Z"
-  },
-  {
-    "route": "/blog/llm-evaluation",
-    "title": "Overview of LLM Evaluation Metrics and Approaches | Mirascope",
-    "description": "Discover key metrics and methods for comprehensive LLM evaluation. Improve your language model's performance with these proven strategies.",
-    "image": null,
-    "ogTitle": "Overview of LLM Evaluation Metrics and Approaches | Mirascope",
-    "ogDescription": "Discover key metrics and methods for comprehensive LLM evaluation. Improve your language model's performance with these proven strategies.",
-    "ogImage": "http://localhost:33330/social-cards/blog-llm-evaluation.png",
-    "lastUpdated": "2025-04-10T06:45:43.569Z"
-  },
-  {
-    "route": "/blog/llm-frameworks",
-    "title": "Top LLM Frameworks for AI Application Development | Mirascope",
-    "description": "Learn which LLM frameworks are best suited for building robust AI applications and orchestrating complex workflows, from data retrieval to prompt engineering.",
-    "image": null,
-    "ogTitle": "Top LLM Frameworks for AI Application Development | Mirascope",
-    "ogDescription": "Learn which LLM frameworks are best suited for building robust AI applications and orchestrating complex workflows, from data retrieval to prompt engineering.",
-    "ogImage": "http://localhost:33330/social-cards/blog-llm-frameworks.png",
-    "lastUpdated": "2025-04-10T06:45:45.215Z"
-  },
-  {
-    "route": "/blog/llm-integration",
-    "title": "LLM Integration - Key Tools and Techniques | Mirascope",
-    "description": "A complete guide to LLM integration-explore technologies, frameworks, best practices, and examples for seamless implementations of language models in your applications.",
-    "image": null,
-    "ogTitle": "LLM Integration - Key Tools and Techniques | Mirascope",
-    "ogDescription": "A complete guide to LLM integration-explore technologies, frameworks, best practices, and examples for seamless implementations of language models in your applications.",
-    "ogImage": "http://localhost:33330/social-cards/blog-llm-integration.png",
-    "lastUpdated": "2025-04-10T06:45:46.877Z"
-  },
-  {
-    "route": "/blog/llm-orchestration",
-    "title": "A Guide to LLM Orchestration | Mirascope",
-    "description": "Explore our detailed guide to LLM orchestration and discover how it improves the performance and efficiency of applications driven by large language models.",
-    "image": null,
-    "ogTitle": "A Guide to LLM Orchestration | Mirascope",
-    "ogDescription": "Explore our detailed guide to LLM orchestration and discover how it improves the performance and efficiency of applications driven by large language models.",
-    "ogImage": "http://localhost:33330/social-cards/blog-llm-orchestration.png",
-    "lastUpdated": "2025-04-10T06:45:48.679Z"
-  },
-  {
-    "route": "/blog/llm-pipeline",
-    "title": "Building an LLM Pipeline - Tools and Techniques | Mirascope",
-    "description": "Learn how to build an efficient LLM pipeline, focusing on effective data handling and query generation techniques for retrieval augmented generation.",
-    "image": null,
-    "ogTitle": "Building an LLM Pipeline - Tools and Techniques | Mirascope",
-    "ogDescription": "Learn how to build an efficient LLM pipeline, focusing on effective data handling and query generation techniques for retrieval augmented generation.",
-    "ogImage": "http://localhost:33330/social-cards/blog-llm-pipeline.png",
-    "lastUpdated": "2025-04-10T06:45:50.223Z"
-  },
-  {
-    "route": "/blog/llm-prompt",
-    "title": "Loading... | Mirascope",
-    "description": "Everything you want to know about LLM prompts, including examples, tips, and coding examples for creating well-structured and effective prompts.",
-    "image": null,
-    "ogTitle": "Loading... | Mirascope",
-    "ogDescription": "Everything you want to know about LLM prompts, including examples, tips, and coding examples for creating well-structured and effective prompts.",
-    "ogImage": "http://localhost:33330/social-cards/blog-llm-prompt.png",
-    "lastUpdated": "2025-04-10T06:45:52.226Z"
-  },
-  {
-    "route": "/blog/llm-tools",
-    "title": "12 LLM Tools to Help You Build LLM Applications | Mirascope",
-    "description": "Here is our short list of LLM tools for any LLM stack, including application development, model serving, chatbots, vector databases, and more.",
-    "image": null,
-    "ogTitle": "12 LLM Tools to Help You Build LLM Applications | Mirascope",
-    "ogDescription": "Here is our short list of LLM tools for any LLM stack, including application development, model serving, chatbots, vector databases, and more.",
-    "ogImage": "http://localhost:33330/social-cards/blog-llm-tools.png",
-    "lastUpdated": "2025-04-10T06:45:53.999Z"
-  },
-  {
-    "route": "/blog/mirascope-v1-release",
-    "title": "Mirascope V1 Release - Lessons Learned from Building an LLM Package | Mirascope",
-    "description": "Mirascope's stable release, V1 has been released. We discuss the reasons behind creating Mirascope and what led us to the changes from the original design to our V1 and what's coming down the road.",
-    "image": null,
-    "ogTitle": "Mirascope V1 Release - Lessons Learned from Building an LLM Package | Mirascope",
-    "ogDescription": "Mirascope's stable release, V1 has been released. We discuss the reasons behind creating Mirascope and what led us to the changes from the original design to our V1 and what's coming down the road.",
-    "ogImage": "http://localhost:33330/social-cards/blog-mirascope-v1-release.png",
-    "lastUpdated": "2025-04-10T06:45:55.794Z"
-  },
-  {
-    "route": "/blog/openai-function-calling",
-    "title": "A Guide to Function Calling in OpenAI | Mirascope",
-    "description": "OpenAI function calling extends the capabilities of large language models by providing them with tools for calling external APIs and applications.",
-    "image": null,
-    "ogTitle": "A Guide to Function Calling in OpenAI | Mirascope",
-    "ogDescription": "OpenAI function calling extends the capabilities of large language models by providing them with tools for calling external APIs and applications.",
-    "ogImage": "http://localhost:33330/social-cards/blog-openai-function-calling.png",
-    "lastUpdated": "2025-04-10T06:45:57.307Z"
-  },
-  {
-    "route": "/blog/prompt-chaining",
-    "title": "Prompt Chaining in AI Development | Mirascope",
-    "description": "Prompt chaining is a way to simplify large, complex prompts by breaking them down into smaller prompts, each making their own separate LLM call.",
-    "image": null,
-    "ogTitle": "Prompt Chaining in AI Development | Mirascope",
-    "ogDescription": "Prompt chaining is a way to simplify large, complex prompts by breaking them down into smaller prompts, each making their own separate LLM call.",
-    "ogImage": "http://localhost:33330/social-cards/blog-prompt-chaining.png",
-    "lastUpdated": "2025-04-10T06:45:59.103Z"
-  },
-  {
-    "route": "/blog/prompt-engineering-best-practices",
-    "title": "8 Prompt Engineering Best Practices and Techniques | Mirascope",
-    "description": "Following prompt engineering best practices helps you elicit accurate and reliable responses from the LLM. Here are 8 best practices with examples.",
-    "image": null,
-    "ogTitle": "8 Prompt Engineering Best Practices and Techniques | Mirascope",
-    "ogDescription": "Following prompt engineering best practices helps you elicit accurate and reliable responses from the LLM. Here are 8 best practices with examples.",
-    "ogImage": "http://localhost:33330/social-cards/blog-prompt-engineering-best-practices.png",
-    "lastUpdated": "2025-04-10T06:46:00.901Z"
-  },
-  {
-    "route": "/blog/prompt-engineering-examples",
-    "title": "Prompt Engineering Examples and Techniques | Mirascope",
-    "description": "Learn about prompt engineering examples and techniques for designing clear AI requests. Get the best LLM outputs with our list of practical tips and strategies.",
-    "image": null,
-    "ogTitle": "Prompt Engineering Examples and Techniques | Mirascope",
-    "ogDescription": "Learn about prompt engineering examples and techniques for designing clear AI requests. Get the best LLM outputs with our list of practical tips and strategies.",
-    "ogImage": "http://localhost:33330/social-cards/blog-prompt-engineering-examples.png",
-    "lastUpdated": "2025-04-10T06:46:02.693Z"
-  },
-  {
-    "route": "/blog/prompt-engineering-tools",
-    "title": "8 of the Best Prompt Engineering Tools in 2025 | Mirascope",
-    "description": "In this article, we list our 8 top prompt engineering tools to simplify your LLM prompting workflows and provide a great development experience.",
-    "image": null,
-    "ogTitle": "8 of the Best Prompt Engineering Tools in 2025 | Mirascope",
-    "ogDescription": "In this article, we list our 8 top prompt engineering tools to simplify your LLM prompting workflows and provide a great development experience.",
-    "ogImage": "http://localhost:33330/social-cards/blog-prompt-engineering-tools.png",
-    "lastUpdated": "2025-04-10T06:46:04.342Z"
-  },
-  {
-    "route": "/blog/prompt-engineering-vs-fine-tuning",
-    "title": "Comparing Prompt Engineering vs Fine-Tuning | Mirascope",
-    "description": "Learn when to use prompt engineering, fine-tuning, or RAG for tasks ranging from simple queries to specialized applications.",
-    "image": null,
-    "ogTitle": "Comparing Prompt Engineering vs Fine-Tuning | Mirascope",
-    "ogDescription": "Learn when to use prompt engineering, fine-tuning, or RAG for tasks ranging from simple queries to specialized applications.",
-    "ogImage": "http://localhost:33330/social-cards/blog-prompt-engineering-vs-fine-tuning.png",
-    "lastUpdated": "2025-04-10T06:46:05.753Z"
-  },
-  {
-    "route": "/blog/prompt-evaluation",
-    "title": "Prompt Evaluation - Methods, Tools, And Best Practices | Mirascope",
-    "description": "What is prompt evaluation, and why does it matter? Learn key methods, tools, and best practices to improve LLM outputs and ensure high-quality responses.",
-    "image": null,
-    "ogTitle": "Prompt Evaluation - Methods, Tools, And Best Practices | Mirascope",
-    "ogDescription": "What is prompt evaluation, and why does it matter? Learn key methods, tools, and best practices to improve LLM outputs and ensure high-quality responses.",
-    "ogImage": "http://localhost:33330/social-cards/blog-prompt-evaluation.png",
-    "lastUpdated": "2025-04-10T06:46:07.348Z"
-  },
-  {
-    "route": "/blog/prompt-flow-vs-langchain",
-    "title": "Comparing Prompt Flow vs LangChain vs Mirascope | Mirascope",
-    "description": "We do a head-to-head comparison of Prompt Flow vs LangChain, along with our own modular LLM development toolkit, Mirascope.",
-    "image": null,
-    "ogTitle": "Comparing Prompt Flow vs LangChain vs Mirascope | Mirascope",
-    "ogDescription": "We do a head-to-head comparison of Prompt Flow vs LangChain, along with our own modular LLM development toolkit, Mirascope.",
-    "ogImage": "http://localhost:33330/social-cards/blog-prompt-flow-vs-langchain.png",
-    "lastUpdated": "2025-04-10T06:46:09.158Z"
-  },
-  {
-    "route": "/blog/prompt-versioning",
-    "title": "Five Tools to Help You Leverage Prompt Versioning in Your LLM Workflow | Mirascope",
-    "description": "Complex prompts require adequate prompt versioning. This article explores five tools to help you track changes in your LLM prompts.",
-    "image": null,
-    "ogTitle": "Five Tools to Help You Leverage Prompt Versioning in Your LLM Workflow | Mirascope",
-    "ogDescription": "Complex prompts require adequate prompt versioning. This article explores five tools to help you track changes in your LLM prompts.",
-    "ogImage": "http://localhost:33330/social-cards/blog-prompt-versioning.png",
-    "lastUpdated": "2025-04-10T06:46:10.937Z"
-  },
-  {
-    "route": "/blog/rag-application",
-    "title": "RAG Application - Benefits, Challenges & How to Build One | Mirascope",
-    "description": "Learn how a RAG application minimizes hallucinations and delivers domain expertise to your LLM applications. We also show you an example of how to build one.",
-    "image": null,
-    "ogTitle": "RAG Application - Benefits, Challenges & How to Build One | Mirascope",
-    "ogDescription": "Learn how a RAG application minimizes hallucinations and delivers domain expertise to your LLM applications. We also show you an example of how to build one.",
-    "ogImage": "http://localhost:33330/social-cards/blog-rag-application.png",
-    "lastUpdated": "2025-04-10T06:46:12.353Z"
-  },
-  {
-    "route": "/blog/rag-llm-example",
-    "title": "Retrieval Augmented Generation - Examples & How to Build One | Mirascope",
-    "description": "Understand how RAG works in AI with a real-world RAG LLM example and step-by-step instructions to build a question-answering chatbot application.",
-    "image": null,
-    "ogTitle": "Retrieval Augmented Generation - Examples & How to Build One | Mirascope",
-    "ogDescription": "Understand how RAG works in AI with a real-world RAG LLM example and step-by-step instructions to build a question-answering chatbot application.",
-    "ogImage": "http://localhost:33330/social-cards/blog-rag-llm-example.png",
-    "lastUpdated": "2025-04-10T06:46:14.008Z"
-  },
-  {
-    "route": "/blog/synthetic-data-generation",
-    "title": "A Guide to Synthetic Data Generation | Mirascope",
-    "description": "Get started with synthetic data generation and learn how to create high-quality artificial datasets for machine learning and analytics.",
-    "image": null,
-    "ogTitle": "A Guide to Synthetic Data Generation | Mirascope",
-    "ogDescription": "Get started with synthetic data generation and learn how to create high-quality artificial datasets for machine learning and analytics.",
-    "ogImage": "http://localhost:33330/social-cards/blog-synthetic-data-generation.png",
-    "lastUpdated": "2025-04-10T06:46:15.809Z"
-  },
-  {
+  "/docs/lilypad": {
     "route": "/docs/lilypad",
     "title": "Index | Lilypad",
-    "description": "An open-source prompt engineering framework.",
-    "image": null,
-    "ogTitle": "Index | Lilypad",
-    "ogDescription": "An open-source prompt engineering framework.",
-    "ogImage": "http://localhost:33330/social-cards/docs-lilypad.png",
-    "lastUpdated": "2025-04-10T06:46:17.361Z"
+    "description": "An open-source prompt engineering framework."
   },
-  {
+  "/docs/lilypad/api/index": {
     "route": "/docs/lilypad/api/index",
     "title": "Under construction | Lilypad",
-    "description": "An open-source prompt engineering framework.",
-    "image": null,
-    "ogTitle": "Under construction | Lilypad",
-    "ogDescription": "An open-source prompt engineering framework.",
-    "ogImage": "http://localhost:33330/social-cards/docs-lilypad-api-index.png",
-    "lastUpdated": "2025-04-10T06:46:19.020Z"
+    "description": "An open-source prompt engineering framework."
   },
-  {
+  "/docs/lilypad/evaluation/annotations": {
     "route": "/docs/lilypad/evaluation/annotations",
     "title": "Annotations | Lilypad",
-    "description": "Add labels and feedback to your LLM outputs",
-    "image": null,
-    "ogTitle": "Annotations | Lilypad",
-    "ogDescription": "Add labels and feedback to your LLM outputs",
-    "ogImage": "http://localhost:33330/social-cards/docs-lilypad-evaluation-annotations.png",
-    "lastUpdated": "2025-04-10T06:46:20.407Z"
+    "description": "Add labels and feedback to your LLM outputs"
   },
-  {
+  "/docs/lilypad/evaluation/comparisons": {
     "route": "/docs/lilypad/evaluation/comparisons",
     "title": "Comparisons | Lilypad",
-    "description": "Compare different LLM function implementations",
-    "image": null,
-    "ogTitle": "Comparisons | Lilypad",
-    "ogDescription": "Compare different LLM function implementations",
-    "ogImage": "http://localhost:33330/social-cards/docs-lilypad-evaluation-comparisons.png",
-    "lastUpdated": "2025-04-10T06:46:22.066Z"
+    "description": "Compare different LLM function implementations"
   },
-  {
+  "/docs/lilypad/evaluation/cost-and-latency-tracking": {
     "route": "/docs/lilypad/evaluation/cost-and-latency-tracking",
     "title": "Cost & Latency Tracking | Lilypad",
-    "description": "Monitor the performance and cost of your LLM functions",
-    "image": null,
-    "ogTitle": "Cost & Latency Tracking | Lilypad",
-    "ogDescription": "Monitor the performance and cost of your LLM functions",
-    "ogImage": "http://localhost:33330/social-cards/docs-lilypad-evaluation-cost-and-latency-tracking.png",
-    "lastUpdated": "2025-04-10T06:46:23.370Z"
+    "description": "Monitor the performance and cost of your LLM functions"
   },
-  {
+  "/docs/lilypad/getting-started/open-source": {
     "route": "/docs/lilypad/getting-started/open-source",
     "title": "Open-Source | Lilypad",
-    "description": "At Mirascope, we're strong believers in the power of open-source software.",
-    "image": null,
-    "ogTitle": "Open-Source | Lilypad",
-    "ogDescription": "At Mirascope, we're strong believers in the power of open-source software.",
-    "ogImage": "http://localhost:33330/social-cards/docs-lilypad-getting-started-open-source.png",
-    "lastUpdated": "2025-04-10T06:46:24.729Z"
+    "description": "How Lilypad balances open-source and enterprise features"
   },
-  {
+  "/docs/lilypad/getting-started/playground": {
     "route": "/docs/lilypad/getting-started/playground",
     "title": "Playground | Lilypad",
-    "description": "No-code interface for experimenting with Lilypad",
-    "image": null,
-    "ogTitle": "Playground | Lilypad",
-    "ogDescription": "No-code interface for experimenting with Lilypad",
-    "ogImage": "http://localhost:33330/social-cards/docs-lilypad-getting-started-playground.png",
-    "lastUpdated": "2025-04-10T06:46:26.115Z"
+    "description": "No-code interface for experimenting with Lilypad"
   },
-  {
+  "/docs/lilypad/getting-started/quickstart": {
     "route": "/docs/lilypad/getting-started/quickstart",
     "title": "Quickstart | Lilypad",
-    "description": "Start using Lilypad in one line of code.",
-    "image": null,
-    "ogTitle": "Quickstart | Lilypad",
-    "ogDescription": "Start using Lilypad in one line of code.",
-    "ogImage": "http://localhost:33330/social-cards/docs-lilypad-getting-started-quickstart.png",
-    "lastUpdated": "2025-04-10T06:46:27.783Z"
+    "description": "Start using Lilypad in one line of code"
   },
-  {
+  "/docs/lilypad/getting-started/self-hosting": {
     "route": "/docs/lilypad/getting-started/self-hosting",
     "title": "Self Hosting | Lilypad",
-    "description": "Run Lilypad in your own infrastructure",
-    "image": null,
-    "ogTitle": "Self Hosting | Lilypad",
-    "ogDescription": "Run Lilypad in your own infrastructure",
-    "ogImage": "http://localhost:33330/social-cards/docs-lilypad-getting-started-self-hosting.png",
-    "lastUpdated": "2025-04-10T06:46:29.398Z"
+    "description": "Run Lilypad in your own infrastructure"
   },
-  {
+  "/docs/lilypad/observability/opentelemetry": {
     "route": "/docs/lilypad/observability/opentelemetry",
     "title": "OpenTelemetry | Lilypad",
-    "description": "Observability made easy.",
-    "image": null,
-    "ogTitle": "OpenTelemetry | Lilypad",
-    "ogDescription": "Observability made easy.",
-    "ogImage": "http://localhost:33330/social-cards/docs-lilypad-observability-opentelemetry.png",
-    "lastUpdated": "2025-04-10T06:46:30.998Z"
+    "description": "Observability made easy"
   },
-  {
+  "/docs/lilypad/observability/spans": {
     "route": "/docs/lilypad/observability/spans",
     "title": "Spans | Lilypad",
-    "description": "Easily instrument arbitrary blocks of code with OpenTelemetry.",
-    "image": null,
-    "ogTitle": "Spans | Lilypad",
-    "ogDescription": "Easily instrument arbitrary blocks of code with OpenTelemetry.",
-    "ogImage": "http://localhost:33330/social-cards/docs-lilypad-observability-spans.png",
-    "lastUpdated": "2025-04-10T06:46:32.401Z"
+    "description": "Easily instrument arbitrary blocks of code with OpenTelemetry"
   },
-  {
+  "/docs/lilypad/observability/traces": {
     "route": "/docs/lilypad/observability/traces",
     "title": "Traces | Lilypad",
-    "description": "Structured collections of spans.",
-    "image": null,
-    "ogTitle": "Traces | Lilypad",
-    "ogDescription": "Structured collections of spans.",
-    "ogImage": "http://localhost:33330/social-cards/docs-lilypad-observability-traces.png",
-    "lastUpdated": "2025-04-10T06:46:34.106Z"
+    "description": "Structured collections of spans"
   },
-  {
+  "/docs/lilypad/observability/versioning": {
     "route": "/docs/lilypad/observability/versioning",
     "title": "Versioning | Lilypad",
-    "description": "Track versions of your LLM functions",
-    "image": null,
-    "ogTitle": "Versioning | Lilypad",
-    "ogDescription": "Track versions of your LLM functions",
-    "ogImage": "http://localhost:33330/social-cards/docs-lilypad-observability-versioning.png",
-    "lastUpdated": "2025-04-10T06:46:35.869Z"
+    "description": "Track versions of your LLM functions"
   },
-  {
+  "/docs/lilypad/pricing": {
     "route": "/docs/lilypad/pricing",
     "title": "Pricing | Lilypad",
-    "description": "Lilypad pricing plans and features",
-    "image": null,
-    "ogTitle": "Pricing | Lilypad",
-    "ogDescription": "Lilypad pricing plans and features",
-    "ogImage": "http://localhost:33330/social-cards/docs-lilypad-pricing.png",
-    "lastUpdated": "2025-04-10T06:46:37.412Z"
+    "description": "Lilypad pricing plans and features"
   },
-  {
+  "/docs/lilypad/under-development/experiments": {
     "route": "/docs/lilypad/under-development/experiments",
     "title": "Experiments | Lilypad",
-    "description": "Run experiments with Lilypad",
-    "image": null,
-    "ogTitle": "Experiments | Lilypad",
-    "ogDescription": "Run experiments with Lilypad",
-    "ogImage": "http://localhost:33330/social-cards/docs-lilypad-under-development-experiments.png",
-    "lastUpdated": "2025-04-10T06:46:39.116Z"
+    "description": "Run experiments with Lilypad"
   },
-  {
+  "/docs/lilypad/under-development/vibe-synthesis": {
     "route": "/docs/lilypad/under-development/vibe-synthesis",
     "title": "Vibe Synthesis | Lilypad",
-    "description": "Automated synthesis of evaluation criteria",
-    "image": null,
-    "ogTitle": "Vibe Synthesis | Lilypad",
-    "ogDescription": "Automated synthesis of evaluation criteria",
-    "ogImage": "http://localhost:33330/social-cards/docs-lilypad-under-development-vibe-synthesis.png",
-    "lastUpdated": "2025-04-10T06:46:41.119Z"
+    "description": "Automated synthesis of evaluation criteria"
   },
-  {
+  "/docs/mirascope": {
     "route": "/docs/mirascope",
     "title": "Mirascope | Mirascope",
-    "description": "Mirascope is a Python library that streamlines working with LLMs",
-    "image": null,
-    "ogTitle": "Mirascope | Mirascope",
-    "ogDescription": "Mirascope is a Python library that streamlines working with LLMs",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope.png",
-    "lastUpdated": "2025-04-10T06:46:42.716Z"
+    "description": "Mirascope is a Python library that streamlines working with LLMs"
   },
-  {
+  "/docs/mirascope/api/index": {
     "route": "/docs/mirascope/api/index",
     "title": "Under construction | Mirascope",
-    "description": "LLM abstractions that aren't obstructions.",
-    "image": null,
-    "ogTitle": "Under construction | Mirascope",
-    "ogDescription": "LLM abstractions that aren't obstructions.",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-api-index.png",
-    "lastUpdated": "2025-04-10T06:46:44.123Z"
+    "description": "LLM abstractions that aren't obstructions."
   },
-  {
+  "/docs/mirascope/getting-started/contributing": {
     "route": "/docs/mirascope/getting-started/contributing",
     "title": "Contributing | Mirascope",
-    "description": "How to contribute to Mirascope",
-    "image": null,
-    "ogTitle": "Contributing | Mirascope",
-    "ogDescription": "How to contribute to Mirascope",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-getting-started-contributing.png",
-    "lastUpdated": "2025-04-10T06:46:45.885Z"
+    "description": "How to contribute to Mirascope"
   },
-  {
+  "/docs/mirascope/getting-started/help": {
     "route": "/docs/mirascope/getting-started/help",
     "title": "Help | Mirascope",
-    "description": "How to get help with Mirascope",
-    "image": null,
-    "ogTitle": "Help | Mirascope",
-    "ogDescription": "How to get help with Mirascope",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-getting-started-help.png",
-    "lastUpdated": "2025-04-10T06:46:47.426Z"
+    "description": "How to get help with Mirascope"
   },
-  {
+  "/docs/mirascope/getting-started/migration": {
     "route": "/docs/mirascope/getting-started/migration",
     "title": "Migration Guide: v0 → v1 | Mirascope",
-    "description": "Learn how to upgrade from Mirascope v0 to v1 with our comprehensive migration guide.",
-    "image": null,
-    "ogTitle": "Migration Guide: v0 → v1 | Mirascope",
-    "ogDescription": "Learn how to upgrade from Mirascope v0 to v1 with our comprehensive migration guide.",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-getting-started-migration.png",
-    "lastUpdated": "2025-04-10T06:46:49.145Z"
+    "description": "Learn how to upgrade from Mirascope v0 to v1 with our comprehensive migration guide."
   },
-  {
+  "/docs/mirascope/getting-started/quickstart": {
     "route": "/docs/mirascope/getting-started/quickstart",
     "title": "Quickstart | Mirascope",
-    "description": "Get started with Mirascope across various LLM providers.",
-    "image": null,
-    "ogTitle": "Quickstart | Mirascope",
-    "ogDescription": "Get started with Mirascope across various LLM providers.",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-getting-started-quickstart.png",
-    "lastUpdated": "2025-04-10T06:46:50.924Z"
+    "description": "Get started with Mirascope across various LLM providers"
   },
-  {
+  "/docs/mirascope/getting-started/why": {
     "route": "/docs/mirascope/getting-started/why",
     "title": "Why Mirascope? | Mirascope",
-    "description": "Why use Mirascope for your LLM applications",
-    "image": null,
-    "ogTitle": "Why Mirascope? | Mirascope",
-    "ogDescription": "Why use Mirascope for your LLM applications",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-getting-started-why.png",
-    "lastUpdated": "2025-04-10T06:46:53.432Z"
+    "description": "Why use Mirascope for your LLM applications"
   },
-  {
+  "/docs/mirascope/integrations/hyperdx": {
     "route": "/docs/mirascope/integrations/hyperdx",
     "title": "HyperDX Integration | Mirascope",
-    "description": "LLM abstractions that aren't obstructions.",
-    "image": null,
-    "ogTitle": "HyperDX Integration | Mirascope",
-    "ogDescription": "LLM abstractions that aren't obstructions.",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-integrations-hyperdx.png",
-    "lastUpdated": "2025-04-10T06:46:54.935Z"
+    "description": "Integration with HyperDX for observability and logging"
   },
-  {
+  "/docs/mirascope/integrations/langfuse": {
     "route": "/docs/mirascope/integrations/langfuse",
     "title": "Langfuse Integration | Mirascope",
-    "description": "LLM abstractions that aren't obstructions.",
-    "image": null,
-    "ogTitle": "Langfuse Integration | Mirascope",
-    "ogDescription": "LLM abstractions that aren't obstructions.",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-integrations-langfuse.png",
-    "lastUpdated": "2025-04-10T06:46:56.437Z"
+    "description": "Integration with Langfuse for LLM observability"
   },
-  {
+  "/docs/mirascope/integrations/logfire": {
     "route": "/docs/mirascope/integrations/logfire",
     "title": "Logfire Integration | Mirascope",
-    "description": "LLM abstractions that aren't obstructions.",
-    "image": null,
-    "ogTitle": "Logfire Integration | Mirascope",
-    "ogDescription": "LLM abstractions that aren't obstructions.",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-integrations-logfire.png",
-    "lastUpdated": "2025-04-10T06:46:58.078Z"
+    "description": "Integration with Logfire for structured logging"
   },
-  {
+  "/docs/mirascope/integrations/otel": {
     "route": "/docs/mirascope/integrations/otel",
     "title": "OpenTelemetry Integration | Mirascope",
-    "description": "LLM abstractions that aren't obstructions.",
-    "image": null,
-    "ogTitle": "OpenTelemetry Integration | Mirascope",
-    "ogDescription": "LLM abstractions that aren't obstructions.",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-integrations-otel.png",
-    "lastUpdated": "2025-04-10T06:46:59.824Z"
+    "description": "Integration with OpenTelemetry for distributed tracing"
   },
-  {
+  "/docs/mirascope/learn/agents": {
     "route": "/docs/mirascope/learn/agents",
     "title": "Agents | Mirascope",
-    "description": "LLM abstractions that aren't obstructions.",
-    "image": null,
-    "ogTitle": "Agents | Mirascope",
-    "ogDescription": "LLM abstractions that aren't obstructions.",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-learn-agents.png",
-    "lastUpdated": "2025-04-10T06:47:01.494Z"
+    "description": "LLM abstractions that aren't obstructions."
   },
-  {
+  "/docs/mirascope/learn/async": {
     "route": "/docs/mirascope/learn/async",
     "title": "Async | Mirascope",
-    "description": "LLM abstractions that aren't obstructions.",
-    "image": null,
-    "ogTitle": "Async | Mirascope",
-    "ogDescription": "LLM abstractions that aren't obstructions.",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-learn-async.png",
-    "lastUpdated": "2025-04-10T06:47:03.205Z"
+    "description": "LLM abstractions that aren't obstructions."
   },
-  {
+  "/docs/mirascope/learn/calls": {
     "route": "/docs/mirascope/learn/calls",
     "title": "Calls | Mirascope",
-    "description": "LLM abstractions that aren't obstructions.",
-    "image": null,
-    "ogTitle": "Calls | Mirascope",
-    "ogDescription": "LLM abstractions that aren't obstructions.",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-learn-calls.png",
-    "lastUpdated": "2025-04-10T06:47:05.002Z"
+    "description": "LLM abstractions that aren't obstructions."
   },
-  {
+  "/docs/mirascope/learn/chaining": {
     "route": "/docs/mirascope/learn/chaining",
     "title": "Chaining | Mirascope",
-    "description": "LLM abstractions that aren't obstructions.",
-    "image": null,
-    "ogTitle": "Chaining | Mirascope",
-    "ogDescription": "LLM abstractions that aren't obstructions.",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-learn-chaining.png",
-    "lastUpdated": "2025-04-10T06:47:06.501Z"
+    "description": "LLM abstractions that aren't obstructions."
   },
-  {
+  "/docs/mirascope/learn/evals": {
     "route": "/docs/mirascope/learn/evals",
     "title": "Evals | Mirascope",
-    "description": "LLM abstractions that aren't obstructions.",
-    "image": null,
-    "ogTitle": "Evals | Mirascope",
-    "ogDescription": "LLM abstractions that aren't obstructions.",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-learn-evals.png",
-    "lastUpdated": "2025-04-10T06:47:08.243Z"
+    "description": "LLM abstractions that aren't obstructions."
   },
-  {
+  "/docs/mirascope/learn/extensions/custom_provider": {
     "route": "/docs/mirascope/learn/extensions/custom_provider",
     "title": "Custom LLM Provider | Mirascope",
-    "description": "LLM abstractions that aren't obstructions.",
-    "image": null,
-    "ogTitle": "Custom LLM Provider | Mirascope",
-    "ogDescription": "LLM abstractions that aren't obstructions.",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-learn-extensions-custom_provider.png",
-    "lastUpdated": "2025-04-10T06:47:09.756Z"
+    "description": "LLM abstractions that aren't obstructions."
   },
-  {
+  "/docs/mirascope/learn/extensions/middleware": {
     "route": "/docs/mirascope/learn/extensions/middleware",
     "title": "Middleware | Mirascope",
-    "description": "LLM abstractions that aren't obstructions.",
-    "image": null,
-    "ogTitle": "Middleware | Mirascope",
-    "ogDescription": "LLM abstractions that aren't obstructions.",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-learn-extensions-middleware.png",
-    "lastUpdated": "2025-04-10T06:47:11.248Z"
+    "description": "LLM abstractions that aren't obstructions."
   },
-  {
+  "/docs/mirascope/learn/index": {
     "route": "/docs/mirascope/learn/index",
     "title": "Overview | Mirascope",
-    "description": "LLM abstractions that aren't obstructions.",
-    "image": null,
-    "ogTitle": "Overview | Mirascope",
-    "ogDescription": "LLM abstractions that aren't obstructions.",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-learn-index.png",
-    "lastUpdated": "2025-04-10T06:47:13.252Z"
+    "description": "LLM abstractions that aren't obstructions."
   },
-  {
+  "/docs/mirascope/learn/json_mode": {
     "route": "/docs/mirascope/learn/json_mode",
     "title": "JSON Mode | Mirascope",
-    "description": "LLM abstractions that aren't obstructions.",
-    "image": null,
-    "ogTitle": "JSON Mode | Mirascope",
-    "ogDescription": "LLM abstractions that aren't obstructions.",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-learn-json_mode.png",
-    "lastUpdated": "2025-04-10T06:47:14.979Z"
+    "description": "LLM abstractions that aren't obstructions."
   },
-  {
+  "/docs/mirascope/learn/local_models": {
     "route": "/docs/mirascope/learn/local_models",
     "title": "Local (Open-Source) Models | Mirascope",
-    "description": "LLM abstractions that aren't obstructions.",
-    "image": null,
-    "ogTitle": "Local (Open-Source) Models | Mirascope",
-    "ogDescription": "LLM abstractions that aren't obstructions.",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-learn-local_models.png",
-    "lastUpdated": "2025-04-10T06:47:16.533Z"
+    "description": "LLM abstractions that aren't obstructions."
   },
-  {
+  "/docs/mirascope/learn/mcp/client": {
     "route": "/docs/mirascope/learn/mcp/client",
     "title": "Client | Mirascope",
-    "description": "LLM abstractions that aren't obstructions.",
-    "image": null,
-    "ogTitle": "Client | Mirascope",
-    "ogDescription": "LLM abstractions that aren't obstructions.",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-learn-mcp-client.png",
-    "lastUpdated": "2025-04-10T06:47:18.270Z"
+    "description": "LLM abstractions that aren't obstructions."
   },
-  {
+  "/docs/mirascope/learn/output_parsers": {
     "route": "/docs/mirascope/learn/output_parsers",
     "title": "Output Parsers | Mirascope",
-    "description": "LLM abstractions that aren't obstructions.",
-    "image": null,
-    "ogTitle": "Output Parsers | Mirascope",
-    "ogDescription": "LLM abstractions that aren't obstructions.",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-learn-output_parsers.png",
-    "lastUpdated": "2025-04-10T06:47:19.996Z"
+    "description": "LLM abstractions that aren't obstructions."
   },
-  {
+  "/docs/mirascope/learn/prompts": {
     "route": "/docs/mirascope/learn/prompts",
     "title": "Prompts | Mirascope",
-    "description": "LLM abstractions that aren't obstructions.",
-    "image": null,
-    "ogTitle": "Prompts | Mirascope",
-    "ogDescription": "LLM abstractions that aren't obstructions.",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-learn-prompts.png",
-    "lastUpdated": "2025-04-10T06:47:21.540Z"
+    "description": "LLM abstractions that aren't obstructions."
   },
-  {
+  "/docs/mirascope/learn/provider-specific/anthropic": {
     "route": "/docs/mirascope/learn/provider-specific/anthropic",
     "title": "Anthropic | Mirascope",
-    "description": "LLM abstractions that aren't obstructions.",
-    "image": null,
-    "ogTitle": "Anthropic | Mirascope",
-    "ogDescription": "LLM abstractions that aren't obstructions.",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-learn-provider-specific-anthropic.png",
-    "lastUpdated": "2025-04-10T06:47:23.283Z"
+    "description": "LLM abstractions that aren't obstructions."
   },
-  {
+  "/docs/mirascope/learn/provider-specific/openai": {
     "route": "/docs/mirascope/learn/provider-specific/openai",
     "title": "OpenAI | Mirascope",
-    "description": "LLM abstractions that aren't obstructions.",
-    "image": null,
-    "ogTitle": "OpenAI | Mirascope",
-    "ogDescription": "LLM abstractions that aren't obstructions.",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-learn-provider-specific-openai.png",
-    "lastUpdated": "2025-04-10T06:47:25.023Z"
+    "description": "LLM abstractions that aren't obstructions."
   },
-  {
+  "/docs/mirascope/learn/response_models": {
     "route": "/docs/mirascope/learn/response_models",
     "title": "Response Models | Mirascope",
-    "description": "LLM abstractions that aren't obstructions.",
-    "image": null,
-    "ogTitle": "Response Models | Mirascope",
-    "ogDescription": "LLM abstractions that aren't obstructions.",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-learn-response_models.png",
-    "lastUpdated": "2025-04-10T06:47:26.548Z"
+    "description": "LLM abstractions that aren't obstructions."
   },
-  {
+  "/docs/mirascope/learn/retries": {
     "route": "/docs/mirascope/learn/retries",
     "title": "Retries | Mirascope",
-    "description": "LLM abstractions that aren't obstructions.",
-    "image": null,
-    "ogTitle": "Retries | Mirascope",
-    "ogDescription": "LLM abstractions that aren't obstructions.",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-learn-retries.png",
-    "lastUpdated": "2025-04-10T06:47:28.289Z"
+    "description": "LLM abstractions that aren't obstructions."
   },
-  {
+  "/docs/mirascope/learn/streams": {
     "route": "/docs/mirascope/learn/streams",
     "title": "Streams | Mirascope",
-    "description": "LLM abstractions that aren't obstructions.",
-    "image": null,
-    "ogTitle": "Streams | Mirascope",
-    "ogDescription": "LLM abstractions that aren't obstructions.",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-learn-streams.png",
-    "lastUpdated": "2025-04-10T06:47:30.055Z"
+    "description": "LLM abstractions that aren't obstructions."
   },
-  {
+  "/docs/mirascope/learn/tools": {
     "route": "/docs/mirascope/learn/tools",
     "title": "Tools | Mirascope",
-    "description": "LLM abstractions that aren't obstructions.",
-    "image": null,
-    "ogTitle": "Tools | Mirascope",
-    "ogDescription": "LLM abstractions that aren't obstructions.",
-    "ogImage": "http://localhost:33330/social-cards/docs-mirascope-learn-tools.png",
-    "lastUpdated": "2025-04-10T06:47:31.902Z"
+    "description": "LLM abstractions that aren't obstructions."
   },
-  {
+  "/pricing": {
     "route": "/pricing",
     "title": "Mirascope",
-    "description": "The AI Engineer's Developer Stack",
-    "image": null,
-    "ogTitle": "Mirascope",
-    "ogDescription": "The AI Engineer's Developer Stack",
-    "ogImage": "https://mirascope.com/frog-logo.png",
-    "lastUpdated": "2025-04-10T06:47:33.299Z"
+    "description": "The AI Engineer's Developer Stack"
   },
-  {
+  "/privacy": {
     "route": "/privacy",
-    "title": "Mirascope",
-    "description": "The AI Engineer's Developer Stack",
-    "image": null,
-    "ogTitle": "Mirascope",
-    "ogDescription": "The AI Engineer's Developer Stack",
-    "ogImage": "https://mirascope.com/frog-logo.png",
-    "lastUpdated": "2025-04-10T06:47:35.136Z"
+    "title": "Privacy Policy | Mirascope",
+    "description": "How Mirascope collects, uses, and protects your personal information."
   },
-  {
+  "/terms/service": {
     "route": "/terms/service",
-    "title": "Mirascope",
-    "description": "The AI Engineer's Developer Stack",
-    "image": null,
-    "ogTitle": "Mirascope",
-    "ogDescription": "The AI Engineer's Developer Stack",
-    "ogImage": "https://mirascope.com/frog-logo.png",
-    "lastUpdated": "2025-04-10T06:47:36.563Z"
+    "title": "TERMS OF SERVICE | Mirascope",
+    "description": "Legal terms governing your use of Mirascope's platform and services."
   },
-  {
+  "/terms/use": {
     "route": "/terms/use",
-    "title": "Mirascope",
-    "description": "The AI Engineer's Developer Stack",
-    "image": null,
-    "ogTitle": "Mirascope",
-    "ogDescription": "The AI Engineer's Developer Stack",
-    "ogImage": "https://mirascope.com/frog-logo.png",
-    "lastUpdated": "2025-04-10T06:47:38.307Z"
+    "title": "Terms of Use | Mirascope",
+    "description": "Guidelines and rules for using the Mirascope website."
   }
-]
+}
