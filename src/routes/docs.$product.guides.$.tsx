@@ -1,5 +1,5 @@
 import { createFileRoute, useParams } from "@tanstack/react-router";
-import DocsPage from "@/components/DocsPage";
+import { DocsPage } from "@/components/docs";
 import { type ProductName } from "@/lib/route-types";
 
 export const Route = createFileRoute("/docs/$product/guides/$")({

@@ -6,7 +6,7 @@ import { getSectionsForProduct } from "@/lib/docs";
 import { getProductRoute, getSectionRoute, getSectionParams } from "@/lib/routes";
 import type { ProductName } from "@/lib/route-types";
 import type { DocMeta } from "@/lib/docs";
-import { type Provider } from "./docs";
+import { type Provider } from "../ProviderContext";
 
 interface DocsSidebarProps {
   product: ProductName;
