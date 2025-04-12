@@ -111,14 +111,22 @@ export async function generateOgImage(
 
 /**
  * Generate OG images for multiple routes
+ *
+ * @param browser - Puppeteer browser instance
+ * @param metadata - Metadata items to generate images for
+ * @param verbose - Whether to log output
  */
-export async function generateOgImages(metadata: SEOMetadata[]): Promise<void> {
+export async function generateOgImages(
+  browser: Browser,
+  metadata: SEOMetadata[],
+  verbose = true
+): Promise<void> {
   if (metadata.length === 0) {
-    console.log("No routes to process for image generation");
+    if (verbose) {
+      console.log("No routes to process for image generation");
+    }
     return;
   }
-
-  console.log(`Generating images for ${metadata.length} routes`);
 
   // Ensure output directory exists
   const projectRoot = getProjectRoot();
@@ -127,37 +135,39 @@ export async function generateOgImages(metadata: SEOMetadata[]): Promise<void> {
     fs.mkdirSync(outputDir, { recursive: true });
   }
 
-  // Launch Puppeteer
-  const puppeteer = await import("puppeteer");
-  const browser = await puppeteer.launch({
-    headless: true,
-  });
+  if (verbose) {
+    console.log(`Generating images for ${metadata.length} routes`);
+  }
 
-  try {
-    let successCount = 0;
+  let successCount = 0;
 
-    // Process each route
-    for (let i = 0; i < metadata.length; i++) {
-      const { route, title, description } = metadata[i];
+  // Process each route
+  for (let i = 0; i < metadata.length; i++) {
+    const { route, title, description } = metadata[i];
+    if (verbose) {
       console.log(`[${i + 1}/${metadata.length}] Processing: ${route}`);
-
-      if (!title) {
-        console.log(`⚠ Skipping route with missing title: ${route}`);
-        continue;
-      }
-
-      try {
-        const imagePath = await generateOgImage(browser, route, title, description, outputDir);
-        successCount++;
-        console.log(`✓ Generated image for: ${route} at ${imagePath}`);
-      } catch (error) {
-        console.error(`✗ Failed to generate image for ${route}:`);
-        console.error(error);
-      }
     }
 
+    if (!title) {
+      if (verbose) {
+        console.log(`⚠ Skipping route with missing title: ${route}`);
+      }
+      continue;
+    }
+
+    try {
+      const imagePath = await generateOgImage(browser, route, title, description, outputDir);
+      successCount++;
+      if (verbose) {
+        console.log(`✓ Generated image for: ${route} at ${imagePath}`);
+      }
+    } catch (error) {
+      console.error(`✗ Failed to generate image for ${route}:`);
+      console.error(error);
+    }
+  }
+
+  if (verbose) {
     console.log(`Completed image generation. Success: ${successCount}/${metadata.length}`);
-  } finally {
-    await browser.close();
   }
 }

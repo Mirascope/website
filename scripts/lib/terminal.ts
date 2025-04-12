@@ -41,10 +41,18 @@ export function coloredLog(message: string, color: ConsoleColor): void {
  * Print a section header
  */
 export function printHeader(title: string, color: ConsoleColor = "blue"): void {
-  const separator = "=".repeat(50);
-  console.log("\n" + colorize(separator, color));
-  console.log(colorize(` ${title} `, color));
-  console.log(colorize(separator, color));
+  const headerWidth = 50;
+  const paddedTitle = ` ${title} `; // Add one space on each side
+  const separatorsLength = headerWidth - paddedTitle.length;
+
+  // Calculate equal padding on both sides (or almost equal if odd length)
+  const leftPadLength = Math.floor(separatorsLength / 2);
+  const rightPadLength = separatorsLength - leftPadLength;
+
+  const leftSeparator = "=".repeat(leftPadLength);
+  const rightSeparator = "=".repeat(rightPadLength);
+
+  console.log("\n" + colorize(`${leftSeparator}${paddedTitle}${rightSeparator}`, color));
 }
 
 /**

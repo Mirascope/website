@@ -21,13 +21,13 @@ import {
   checkMetadata,
   type SEOMetadata,
 } from "./metadata";
-import { generateOgImage } from "./images";
+import { withDevEnvironment } from "./server";
+import { generateOgImages as generateImages } from "./images";
 import { generateOgHtml } from "./html";
 import { getAllRoutes, getProjectRoot } from "../../src/lib/router-utils";
 import { routeToFilename } from "../../src/lib/utils";
 import fs from "fs";
 import path from "path";
-import { launch } from "puppeteer";
 
 // Define interface for command line options
 interface CommandOptions {
@@ -69,78 +69,7 @@ if (enabledOptions > 1) {
   process.exit(1);
 }
 
-/**
- * Generate OG images for routes
- */
-async function generateOgImages(metadata: SEOMetadata[]): Promise<void> {
-  printHeader("OG Image Generation", "cyan");
-
-  if (metadata.length === 0) {
-    coloredLog("No routes to process for OG image generation", "yellow");
-    return;
-  }
-
-  coloredLog(`Found metadata for ${metadata.length} routes`, "green");
-
-  const projectRoot = getProjectRoot();
-  const outputDir = path.join(projectRoot, "public", "social-cards");
-
-  // Ensure output directory exists
-  if (!fs.existsSync(outputDir)) {
-    fs.mkdirSync(outputDir, { recursive: true });
-  }
-
-  // Launch Puppeteer
-  const browser = await launch({ headless: true });
-
-  try {
-    let successCount = 0;
-
-    for (let i = 0; i < metadata.length; i++) {
-      const { route, title, description } = metadata[i];
-      console.log(
-        `${colorize(`[${i + 1}/${metadata.length}]`, "cyan")} Processing route: ${route}`
-      );
-
-      try {
-        // Use the most appropriate title and description
-
-        if (!title || title.includes("Failed to extract")) {
-          console.log(`${icons.warning} Skipping route with missing title: ${route}`);
-          continue;
-        }
-
-        // Generate image
-        const filename = routeToFilename(route);
-        const outputPath = path.join(outputDir, `${filename}.png`);
-
-        // Call generateOgImage function here (needs to be implemented)
-        await generateOgImage(browser, route, title, description, outputDir);
-
-        console.log(`${icons.success} Generated: ${path.relative(projectRoot, outputPath)}`);
-        successCount++;
-      } catch (error) {
-        console.error(`${icons.error} Failed to generate OG image for ${route}: ${error}`);
-      }
-    }
-
-    // Generate a default social image if it doesn't exist
-    const defaultImagePath = path.join(outputDir, "_default.png");
-    if (!fs.existsSync(defaultImagePath)) {
-      coloredLog("Creating default social image...", "yellow");
-
-      // Generate default image (implementation needed)
-      // await generateOgImage(browser, "/", "Mirascope", "The AI Engineer's Developer Stack", outputDir);
-
-      console.log(`${icons.success} Created default social image`);
-    }
-
-    printHeader("OG Image Generation Complete", "green");
-    coloredLog(`Successfully generated ${successCount} OG images`, "green");
-  } finally {
-    await browser.close();
-  }
-}
+// We don't need this function anymore as we're now using the imported generateImages
 
 /**
  * Generate OG HTML files for routes
@@ -214,14 +143,16 @@ async function generateOgHtmlFiles(metadata: SEOMetadata[]): Promise<void> {
  * Regenerate all metadata and images
  */
 async function regenerate() {
-  const record = await extractAllMetadata();
-
   try {
-    // Generate images for all routes
-    await generateOgImages(Object.values(record));
+    await withDevEnvironment(async (port, browser) => {
+      const record = await extractAllMetadata(browser, port);
 
-    // Save metadata after successful image generation
-    saveMetadataToFile(record);
+      // Generate images for all routes
+      await generateImages(browser, Object.values(record));
+
+      // Save metadata after successful image generation
+      saveMetadataToFile(record);
+    });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     console.error(`${colorize("Failed to generate images:", "red")} ${errorMessage}`);
@@ -234,95 +165,97 @@ async function regenerate() {
  * Update metadata and regenerate images only for changed routes
  */
 async function updateChangedMetadata() {
-  const oldRecord = loadMetadataFromFile();
-  const newRecord = await extractAllMetadata();
+  try {
+    const oldRecord = loadMetadataFromFile();
 
-  // Find items that are changed or new
-  const changedRoutes: string[] = [];
-  const removedRoutes: string[] = [];
+    await withDevEnvironment(async (port, browser) => {
+      const newRecord = await extractAllMetadata(browser, port);
 
-  // Check for new or modified routes
-  for (const [route, newItem] of Object.entries(newRecord)) {
-    // If the route doesn't exist in old record, it's new
-    if (!oldRecord[route]) {
-      changedRoutes.push(route);
-      continue;
-    }
+      // Find items that are changed or new
+      const changedRoutes: string[] = [];
+      const removedRoutes: string[] = [];
 
-    const oldItem = oldRecord[route];
-
-    // Compare fields that matter for image generation
-    if (oldItem.title !== newItem.title || oldItem.description !== newItem.description) {
-      changedRoutes.push(route);
-    }
-  }
-
-  // Check for removed routes
-  for (const [route, _] of Object.entries(oldRecord)) {
-    if (!newRecord[route]) {
-      removedRoutes.push(route);
-    }
-  }
-
-  // Log a summary of changes
-  if (changedRoutes.length > 0 || removedRoutes.length > 0) {
-    printHeader("Route Changes", "green");
-
-    if (changedRoutes.length > 0) {
-      coloredLog(`${changedRoutes.length} routes added or updated:`, "green");
-      changedRoutes.forEach((route) => {
-        console.log(`  ${icons.success} ${route}`);
-      });
-    }
-
-    if (removedRoutes.length > 0) {
-      coloredLog(`${removedRoutes.length} routes removed:`, "yellow");
-      removedRoutes.forEach((route) => {
-        console.log(`  ${icons.warning} ${route}`);
-
-        // Clean up any existing social card images for removed routes
-        const projectRoot = getProjectRoot();
-        const filename = routeToFilename(route);
-        const imagePath = path.join(projectRoot, "public", "social-cards", `${filename}.png`);
-
-        if (fs.existsSync(imagePath)) {
-          try {
-            fs.unlinkSync(imagePath);
-            console.log(`    ${icons.warning} Removed social card image`);
-          } catch (error) {
-            console.error(`    ${icons.error} Failed to remove social card image: ${error}`);
-          }
+      // Check for new or modified routes
+      for (const [route, newItem] of Object.entries(newRecord)) {
+        // If the route doesn't exist in old record, it's new
+        if (!oldRecord[route]) {
+          changedRoutes.push(route);
+          continue;
         }
-      });
-    }
 
-    // Generate images only for changed/new items
-    if (changedRoutes.length > 0) {
-      try {
-        // Extract the changed items for image generation
-        const changedItems = changedRoutes.map((route) => newRecord[route]);
+        const oldItem = oldRecord[route];
 
-        // Generate images only for changed items
-        await generateOgImages(changedItems);
-
-        // Only save metadata after successful image generation
-        saveMetadataToFile(newRecord);
-
-        coloredLog("Metadata and images updated successfully.", "green");
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        console.error(`${colorize("Failed to generate images:", "red")} ${errorMessage}`);
-        console.error(`${colorize("Metadata not updated to maintain consistency", "yellow")}`);
-        process.exit(1);
+        // Compare fields that matter for image generation
+        if (oldItem.title !== newItem.title || oldItem.description !== newItem.description) {
+          changedRoutes.push(route);
+        }
       }
-    } else {
-      // If we only removed routes (no additions/changes), we can safely update metadata
-      saveMetadataToFile(newRecord);
-      coloredLog("Routes removed and metadata updated.", "green");
-    }
-  } else {
-    // No changes detected
-    coloredLog("No routes have changed. No updates needed.", "green");
+
+      // Check for removed routes
+      for (const [route, _] of Object.entries(oldRecord)) {
+        if (!newRecord[route]) {
+          removedRoutes.push(route);
+        }
+      }
+
+      // Log a summary of changes
+      if (changedRoutes.length > 0 || removedRoutes.length > 0) {
+        printHeader("Route Changes", "green");
+
+        if (changedRoutes.length > 0) {
+          coloredLog(`${changedRoutes.length} routes added or updated:`, "green");
+          changedRoutes.forEach((route) => {
+            console.log(`  ${icons.success} ${route}`);
+          });
+        }
+
+        if (removedRoutes.length > 0) {
+          coloredLog(`${removedRoutes.length} routes removed:`, "yellow");
+          removedRoutes.forEach((route) => {
+            console.log(`  ${icons.warning} ${route}`);
+
+            // Clean up any existing social card images for removed routes
+            const projectRoot = getProjectRoot();
+            const filename = routeToFilename(route);
+            const imagePath = path.join(projectRoot, "public", "social-cards", `${filename}.png`);
+
+            if (fs.existsSync(imagePath)) {
+              try {
+                fs.unlinkSync(imagePath);
+                console.log(`    ${icons.warning} Removed social card image`);
+              } catch (error) {
+                console.error(`    ${icons.error} Failed to remove social card image: ${error}`);
+              }
+            }
+          });
+        }
+
+        // Generate images only for changed/new items
+        if (changedRoutes.length > 0) {
+          // Extract the changed items for image generation
+          const changedItems = changedRoutes.map((route) => newRecord[route]);
+
+          // Generate images only for changed items
+          await generateImages(browser, changedItems);
+
+          // Only save metadata after successful image generation
+          saveMetadataToFile(newRecord);
+
+          coloredLog("Metadata and images updated successfully.", "green");
+        } else {
+          // If we only removed routes (no additions/changes), we can safely update metadata
+          saveMetadataToFile(newRecord);
+          coloredLog("Routes removed and metadata updated.", "green");
+        }
+      } else {
+        // No changes detected
+        coloredLog("No routes have changed. No updates needed.", "green");
+      }
+    });
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error(`${colorize("Failed to update metadata:", "red")} ${errorMessage}`);
+    process.exit(1);
   }
 }
 
@@ -330,50 +263,65 @@ async function updateChangedMetadata() {
  * Regenerate images using existing metadata
  */
 async function regenerateImages() {
-  const record = loadMetadataFromFile();
-  const items = Object.values(record);
-  await generateOgImages(items);
+  try {
+    const record = loadMetadataFromFile();
+    const items = Object.values(record);
+
+    await withDevEnvironment(async (_, browser) => {
+      await generateImages(browser, items);
+    });
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error(`${colorize("Failed to regenerate images:", "red")} ${errorMessage}`);
+    process.exit(1);
+  }
 }
 
 /**
  * Handle specific route update
  */
-async function handleSpecificRoute(route: string) {
+async function handleSpecificRoute(route: string, verbose = true) {
   if (!route) {
     console.error(`${colorize("No route specified", "red")}`);
     process.exit(1);
   }
 
-  coloredLog(`Processing single route: ${route}`, "green");
-
-  // Get metadata for this specific route
-  const routeItems = await extractMetadataForRoutes([route]);
-
-  if (routeItems.length === 0) {
-    console.error(`${colorize("Failed to extract metadata for route:", "red")} ${route}`);
-    process.exit(1);
+  if (verbose) {
+    coloredLog(`Processing single route: ${route}`, "green");
   }
 
-  // First generate images for this route - we only update metadata if this succeeds
   try {
-    await generateOgImages(routeItems);
+    // Use the withDevEnvironment utility for clean resource management
+    await withDevEnvironment(async (port, browser) => {
+      // Get metadata for this specific route
+      const routeItems = await extractMetadataForRoutes(browser, [route], port, verbose);
 
-    // Now that image generation has succeeded, we can safely update the metadata
-    // Update the metadata record with this new/updated route
-    const existingRecord = loadMetadataFromFile();
+      if (routeItems.length === 0) {
+        console.error(`${colorize("Failed to extract metadata for route:", "red")} ${route}`);
+        process.exit(1);
+      }
 
-    // Add or update the route in the record
-    const item = routeItems[0];
-    existingRecord[route] = item;
+      // Generate images for this route - we only update metadata if this succeeds
+      await generateImages(browser, routeItems, verbose);
 
-    // Save the updated metadata
-    saveMetadataToFile(existingRecord);
+      // Now that image generation has succeeded, we can safely update the metadata
+      // Update the metadata record with this new/updated route
+      const existingRecord = loadMetadataFromFile();
 
-    coloredLog(`Successfully updated metadata and images for route: ${route}`, "green");
+      // Add or update the route in the record
+      const item = routeItems[0];
+      existingRecord[route] = item;
+
+      // Save the updated metadata
+      saveMetadataToFile(existingRecord);
+
+      if (verbose) {
+        coloredLog(`Successfully updated metadata and images for route: ${route}`, "green");
+      }
+    });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error(`${colorize("Failed to generate images:", "red")} ${errorMessage}`);
-    console.error(`${colorize("Metadata not updated to maintain consistency", "yellow")}`);
+    console.error(`${colorize("Error processing route:", "red")} ${errorMessage}`);
     process.exit(1);
   }
 }
@@ -503,7 +451,8 @@ async function main() {
     } else if (options.regenerateImages) {
       await regenerateImages();
     } else if (options.only) {
-      await handleSpecificRoute(options.only);
+      // For the --only option, use minimal verbosity
+      await handleSpecificRoute(options.only, true);
     } else if (options.buildHtml) {
       await buildHtml();
     } else if (options.check) {
