@@ -2,13 +2,12 @@
  * Social Media Metadata Management
  *
  * This module handles SEO metadata extraction and management,
- * including launching a dev server, scraping metadata, and storing results.
+ * scraping metadata and storing results.
  */
 
-import { Page, launch } from "puppeteer";
+import { Browser } from "puppeteer";
 import fs from "fs";
 import path from "path";
-import { spawn } from "child_process";
 import { getAllRoutes, getProjectRoot } from "../../src/lib/router-utils";
 import { printHeader, coloredLog, colorize, icons } from "../lib/terminal";
 
@@ -22,98 +21,55 @@ export interface SEOMetadata {
 // Metadata collection as a record for O(1) lookups
 export type MetadataRecord = Record<string, SEOMetadata>;
 
-const DEFAULT_PORT = 3939;
-
-/**
- * Wait for the development server to be ready
- */
-async function waitForServer(port = DEFAULT_PORT, maxWaitTimeMs: number = 30000): Promise<boolean> {
-  const start = Date.now();
-  while (Date.now() - start < maxWaitTimeMs) {
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 1000);
-
-      const response = await fetch(`http://localhost:${port}`, {
-        signal: controller.signal,
-      });
-
-      clearTimeout(timeoutId);
-
-      if (response.status === 200) {
-        return true;
-      }
-    } catch (e) {
-      // Retry
-      await new Promise((resolve) => setTimeout(resolve, 500));
-    }
-  }
-
-  return false;
-}
-
-/**
- * Start the development server
- */
-async function startDevServer(port = DEFAULT_PORT): Promise<any> {
-  coloredLog(`Starting development server on port ${port}...`, "cyan");
-
-  const devServer = spawn("bun", ["run", "dev", "--port", port.toString()], {
-    stdio: ["ignore", "pipe", "pipe"],
-    detached: true,
-  });
-
-  devServer.stdout.on("data", (data) => {
-    console.log(`${colorize("[Dev Server]", "yellow")} ${data.toString().trim()}`);
-  });
-
-  devServer.stderr.on("data", (data) => {
-    console.error(`${colorize("[Dev Server Error]", "red")} ${data.toString().trim()}`);
-  });
-
-  const serverReady = await waitForServer(port);
-  if (!serverReady) {
-    throw new Error(`Development server failed to start within timeout`);
-  }
-
-  coloredLog("Development server started", "green");
-
-  return devServer;
+// Options for metadata extraction
+export interface MetadataOptions {
+  verbose?: boolean;
 }
 
 /**
  * Extract SEO metadata from a page using Puppeteer
  */
 async function extractPageMetadata(
-  page: Page,
+  browser: Browser,
   route: string,
-  baseUrl: string
+  baseUrl: string,
+  verbose = true
 ): Promise<SEOMetadata> {
-  const url = new URL(route, baseUrl).toString();
-  console.log(`${colorize("Visiting", "blue")} ${url}`);
+  // Create a new page for this extraction
+  const page = await browser.newPage();
 
-  // Navigate to the page and wait for it to load
-  await page.goto(url, { waitUntil: "networkidle0" });
+  try {
+    const url = new URL(route, baseUrl).toString();
+    if (verbose) {
+      console.log(`${colorize("Visiting", "blue")} ${url}`);
+    }
 
-  // Extract metadata
-  const metadata = await page.evaluate(() => {
-    // Helper to get meta tag content
-    const getMetaContent = (name: string): string | null => {
-      const element = document.querySelector(`meta[name="${name}"], meta[property="${name}"]`);
-      return element ? element.getAttribute("content") : null;
-    };
+    // Navigate to the page and wait for it to load
+    await page.goto(url, { waitUntil: "networkidle0" });
+
+    // Extract metadata
+    const metadata = await page.evaluate(() => {
+      // Helper to get meta tag content
+      const getMetaContent = (name: string): string | null => {
+        const element = document.querySelector(`meta[name="${name}"], meta[property="${name}"]`);
+        return element ? element.getAttribute("content") : null;
+      };
+
+      return {
+        title: document.title,
+        description: getMetaContent("description"),
+      };
+    });
 
     return {
-      title: document.title,
-      description: getMetaContent("description"),
+      route,
+      title: metadata.title,
+      description: metadata.description,
     };
-  });
-
-  return {
-    route,
-    title: metadata.title,
-    description: metadata.description,
-  };
+  } finally {
+    // Close the page when done
+    await page.close();
+  }
 }
 
 /**
@@ -145,63 +101,56 @@ export async function arrayToMetadataRecord(items: SEOMetadata[]): Promise<Metad
 /**
  * Extract metadata for specific routes only
  * Returns an array of SEOMetadata objects for the successfully processed routes
+ *
+ * @param browser - Puppeteer browser instance
+ * @param routes - Array of routes to process
+ * @param port - Port the development server is running on
+ * @param verbose - Whether to output detailed logs
  */
 export async function extractMetadataForRoutes(
+  browser: Browser,
   routes: string[],
-  port = DEFAULT_PORT
+  port: number,
+  verbose = true
 ): Promise<SEOMetadata[]> {
   const baseUrl = `http://localhost:${port}`;
 
-  printHeader("SEO Metadata Extraction", "cyan");
-
   try {
-    // Start development server
-    const devServer = await startDevServer(port);
-
-    // Launch Puppeteer
-    printHeader("Launching Puppeteer", "blue");
-    const browser = await launch({
-      headless: true,
-    });
-
-    coloredLog(`Processing ${routes.length} routes`, "green");
-
-    // Create a new page
-    const page = await browser.newPage();
-
     // Extract metadata for each route
-    printHeader("Extracting Metadata", "blue");
+    if (verbose) {
+      printHeader("Extracting Metadata", "blue");
+    }
+
     const metadata: SEOMetadata[] = [];
     let failedRoutes = 0;
 
     for (let i = 0; i < routes.length; i++) {
       const route = routes[i];
-      console.log(`${colorize(`[${i + 1}/${routes.length}]`, "cyan")} Processing route: ${route}`);
+      if (verbose) {
+        console.log(
+          `${colorize(`[${i + 1}/${routes.length}]`, "cyan")} Processing route: ${route}`
+        );
+      }
 
       try {
-        const pageMetadata = await extractPageMetadata(page, route, baseUrl);
+        const pageMetadata = await extractPageMetadata(browser, route, baseUrl, verbose);
         metadata.push(pageMetadata);
 
-        console.log(`  ${icons.success} Title: ${pageMetadata.title}`);
-        console.log(`  ${icons.success} Description: ${pageMetadata.description || "Not found"}`);
+        if (verbose) {
+          console.log(`  ${icons.success} Title: ${pageMetadata.title}`);
+          console.log(`  ${icons.success} Description: ${pageMetadata.description || "Not found"}`);
+        }
       } catch (error) {
         console.error(`  ${icons.error} Failed to extract metadata for ${route}: ${error}`);
         failedRoutes++;
       }
     }
 
-    // Close the browser and server
-    await browser.close();
-
-    // Kill the dev server process and all its children
-    process.kill(-devServer.pid);
-
-    printHeader("SEO Metadata Extraction Complete", "green");
-    coloredLog(`Successfully processed ${metadata.length} routes`, "green");
-
-    if (failedRoutes > 0) {
-      coloredLog(`Failed to process ${failedRoutes} routes`, "yellow");
-      coloredLog("Use --check to identify missing routes", "yellow");
+    if (verbose) {
+      if (failedRoutes > 0) {
+        coloredLog(`Failed to process ${failedRoutes} routes`, "yellow");
+        coloredLog("Use --check to identify missing routes", "yellow");
+      }
     }
 
     return metadata;
@@ -214,13 +163,21 @@ export async function extractMetadataForRoutes(
 /**
  * Extract metadata for all routes and build a complete metadata record
  * Returns a metadata record for all successfully processed routes
+ *
+ * @param browser - Puppeteer browser instance
+ * @param port - Port the development server is running on
+ * @param verbose - Whether to output detailed logs
  */
-export async function extractAllMetadata(port = DEFAULT_PORT): Promise<MetadataRecord> {
+export async function extractAllMetadata(
+  browser: Browser,
+  port: number,
+  verbose = true
+): Promise<MetadataRecord> {
   // Get all routes in the site
   const allRoutes = await getAllRoutes();
 
   // Extract metadata for all routes
-  const items = await extractMetadataForRoutes(allRoutes, port);
+  const items = await extractMetadataForRoutes(browser, allRoutes, port, verbose);
 
   // Convert to record
   const record: MetadataRecord = {};
@@ -229,15 +186,17 @@ export async function extractAllMetadata(port = DEFAULT_PORT): Promise<MetadataR
   }
 
   // Check for missing routes
-  const processedRoutes = new Set(items.map((item) => item.route));
-  const missingRoutes = allRoutes.filter((route) => !processedRoutes.has(route));
+  if (verbose) {
+    const processedRoutes = new Set(items.map((item) => item.route));
+    const missingRoutes = allRoutes.filter((route) => !processedRoutes.has(route));
 
-  if (missingRoutes.length > 0) {
-    coloredLog(`Warning: ${missingRoutes.length} routes are missing metadata`, "yellow");
-    missingRoutes.forEach((route) => {
-      console.log(`  ${icons.warning} Missing: ${route}`);
-    });
-    coloredLog("Use --check for more details", "yellow");
+    if (missingRoutes.length > 0) {
+      coloredLog(`Warning: ${missingRoutes.length} routes are missing metadata`, "yellow");
+      missingRoutes.forEach((route) => {
+        console.log(`  ${icons.warning} Missing: ${route}`);
+      });
+      coloredLog("Use --check for more details", "yellow");
+    }
   }
 
   return record;
@@ -246,9 +205,7 @@ export async function extractAllMetadata(port = DEFAULT_PORT): Promise<MetadataR
 /**
  * Save metadata record to file
  */
-export function saveMetadataToFile(metadata: MetadataRecord): string {
-  printHeader("Saving Metadata", "blue");
-
+export function saveMetadataToFile(metadata: MetadataRecord, verbose = false): string {
   // Ensure the output directory exists
   const projectRoot = getProjectRoot();
   const outputDir = path.join(projectRoot, "public");
@@ -257,9 +214,13 @@ export function saveMetadataToFile(metadata: MetadataRecord): string {
   }
 
   const outputPath = path.join(outputDir, "seo-metadata.json");
-  fs.writeFileSync(outputPath, JSON.stringify(metadata, null, 2));
+  // Add a newline at the end to match Prettier's formatting
+  fs.writeFileSync(outputPath, JSON.stringify(metadata, null, 2) + "\n");
 
-  coloredLog(`SEO metadata saved to: ${outputPath}`, "green");
+  if (verbose) {
+    coloredLog(`SEO metadata saved to: ${outputPath}`, "green");
+  }
+
   return outputPath;
 }
 
