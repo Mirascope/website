@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect, useRef, useCallback } from "react";
+import DevLayout from "@/components/dev/DevLayout";
 
 export const Route = createFileRoute("/dev/social-card")({
   component: SocialCardPreview,
@@ -56,58 +57,59 @@ function SocialCardPreview() {
     }
   };
 
-  // No need for a separate update function since we're using the useEffect hook
-
   return (
-    <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold mb-6">Social Card Preview</h1>
+    <DevLayout>
+      <div className="container py-8">
+        <h1 className="text-3xl font-bold mb-6">Social Card Preview</h1>
 
-      <p className="mb-6 text-gray-600">
-        This page lets you preview how social cards will look. Edit the title to see the card update
-        in real-time.
-      </p>
+        <p className="mb-6 text-gray-600">
+          This page lets you preview how social cards will look. Edit the title to see the card
+          update in real-time. Useful for iterating on the social-card.html file to preview changes
+          to social cards and testing font sizing rules.
+        </p>
 
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-2">
-          <label htmlFor="title" className="font-medium">
-            Title
-          </label>
-          <span className="text-gray-500 text-sm">
-            {title.length} characters
-            {getCurrentFontSizeRule() &&
-              ` - ${getCurrentFontSizeRule()?.fontSize} (${getCurrentFontSizeRule()?.label})`}
-          </span>
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-2">
+            <label htmlFor="title" className="font-medium">
+              Title
+            </label>
+            <span className="text-gray-500 text-sm">
+              {title.length} characters
+              {getCurrentFontSizeRule() &&
+                ` - ${getCurrentFontSizeRule()?.fontSize} (${getCurrentFontSizeRule()?.label})`}
+            </span>
+          </div>
+          <input
+            id="title"
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full px-3 py-2 border rounded-md"
+          />
         </div>
-        <input
-          id="title"
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="w-full px-3 py-2 border rounded-md"
-        />
-      </div>
 
-      <div className="flex justify-center">
-        <div
-          className="border rounded-lg overflow-hidden bg-gray-50"
-          style={{ width: "600px", height: "315px" }}
-        >
+        <div className="flex justify-center">
           <div
-            className="transform scale-50 origin-top-left"
-            style={{ width: "200%", height: "200%" }}
+            className="border rounded-lg overflow-hidden bg-gray-50"
+            style={{ width: "600px", height: "315px" }}
           >
-            <iframe
-              ref={iframeRef}
-              id="social-card-iframe"
-              src="/dev/social-card.html"
-              className="border-0"
-              style={{ width: "1200px", height: "630px" }}
-              title="Social Card Preview"
-              onLoad={handleIframeLoad}
-            />
+            <div
+              className="transform scale-50 origin-top-left"
+              style={{ width: "200%", height: "200%" }}
+            >
+              <iframe
+                ref={iframeRef}
+                id="social-card-iframe"
+                src="/dev/social-card.html"
+                className="border-0"
+                style={{ width: "1200px", height: "630px" }}
+                title="Social Card Preview"
+                onLoad={handleIframeLoad}
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </DevLayout>
   );
 }

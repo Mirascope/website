@@ -16,6 +16,7 @@ import { Route as PricingImport } from './routes/pricing'
 import { Route as IndexImport } from './routes/index'
 import { Route as TermsIndexImport } from './routes/terms/index'
 import { Route as DocsIndexImport } from './routes/docs.index'
+import { Route as DevIndexImport } from './routes/dev/index'
 import { Route as BlogIndexImport } from './routes/blog.index'
 import { Route as TermsUseImport } from './routes/terms/use'
 import { Route as TermsServiceImport } from './routes/terms/service'
@@ -56,6 +57,12 @@ const TermsIndexRoute = TermsIndexImport.update({
 const DocsIndexRoute = DocsIndexImport.update({
   id: '/docs/',
   path: '/docs/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DevIndexRoute = DevIndexImport.update({
+  id: '/dev/',
+  path: '/dev/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -193,6 +200,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogIndexImport
       parentRoute: typeof rootRoute
     }
+    '/dev/': {
+      id: '/dev/'
+      path: '/dev'
+      fullPath: '/dev'
+      preLoaderRoute: typeof DevIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/docs/': {
       id: '/docs/'
       path: '/docs'
@@ -244,6 +258,7 @@ export interface FileRoutesByFullPath {
   '/terms/service': typeof TermsServiceRoute
   '/terms/use': typeof TermsUseRoute
   '/blog': typeof BlogIndexRoute
+  '/dev': typeof DevIndexRoute
   '/docs': typeof DocsIndexRoute
   '/terms': typeof TermsIndexRoute
   '/docs/$product/$': typeof DocsProductSplatRoute
@@ -262,6 +277,7 @@ export interface FileRoutesByTo {
   '/terms/service': typeof TermsServiceRoute
   '/terms/use': typeof TermsUseRoute
   '/blog': typeof BlogIndexRoute
+  '/dev': typeof DevIndexRoute
   '/docs': typeof DocsIndexRoute
   '/terms': typeof TermsIndexRoute
   '/docs/$product/$': typeof DocsProductSplatRoute
@@ -281,6 +297,7 @@ export interface FileRoutesById {
   '/terms/service': typeof TermsServiceRoute
   '/terms/use': typeof TermsUseRoute
   '/blog/': typeof BlogIndexRoute
+  '/dev/': typeof DevIndexRoute
   '/docs/': typeof DocsIndexRoute
   '/terms/': typeof TermsIndexRoute
   '/docs/$product/$': typeof DocsProductSplatRoute
@@ -301,6 +318,7 @@ export interface FileRouteTypes {
     | '/terms/service'
     | '/terms/use'
     | '/blog'
+    | '/dev'
     | '/docs'
     | '/terms'
     | '/docs/$product/$'
@@ -318,6 +336,7 @@ export interface FileRouteTypes {
     | '/terms/service'
     | '/terms/use'
     | '/blog'
+    | '/dev'
     | '/docs'
     | '/terms'
     | '/docs/$product/$'
@@ -335,6 +354,7 @@ export interface FileRouteTypes {
     | '/terms/service'
     | '/terms/use'
     | '/blog/'
+    | '/dev/'
     | '/docs/'
     | '/terms/'
     | '/docs/$product/$'
@@ -354,6 +374,7 @@ export interface RootRouteChildren {
   TermsServiceRoute: typeof TermsServiceRoute
   TermsUseRoute: typeof TermsUseRoute
   BlogIndexRoute: typeof BlogIndexRoute
+  DevIndexRoute: typeof DevIndexRoute
   DocsIndexRoute: typeof DocsIndexRoute
   TermsIndexRoute: typeof TermsIndexRoute
   DocsProductSplatRoute: typeof DocsProductSplatRoute
@@ -372,6 +393,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermsServiceRoute: TermsServiceRoute,
   TermsUseRoute: TermsUseRoute,
   BlogIndexRoute: BlogIndexRoute,
+  DevIndexRoute: DevIndexRoute,
   DocsIndexRoute: DocsIndexRoute,
   TermsIndexRoute: TermsIndexRoute,
   DocsProductSplatRoute: DocsProductSplatRoute,
@@ -399,6 +421,7 @@ export const routeTree = rootRoute
         "/terms/service",
         "/terms/use",
         "/blog/",
+        "/dev/",
         "/docs/",
         "/terms/",
         "/docs/$product/$",
@@ -435,6 +458,9 @@ export const routeTree = rootRoute
     },
     "/blog/": {
       "filePath": "blog.index.tsx"
+    },
+    "/dev/": {
+      "filePath": "dev/index.tsx"
     },
     "/docs/": {
       "filePath": "docs.index.tsx"
