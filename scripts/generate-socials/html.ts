@@ -39,6 +39,8 @@ export function generateOgHtml(
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${pageTitle}</title>
     <meta name="description" content="${metaDescription}">
+    <link rel="icon" href="${BASE_URL}/favicon.ico" />
+    <link rel="apple-touch-icon" href="${BASE_URL}/frog-logo.png" />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
@@ -47,6 +49,7 @@ export function generateOgHtml(
     <meta property="og:description" content="${metaDescription}">
     <meta property="og:image" content="${absoluteImagePath}">
     <meta property="og:site_name" content="${siteName}">
+    <meta property="og:logo" content="${BASE_URL}/frog-logo.png">
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
@@ -54,6 +57,7 @@ export function generateOgHtml(
     <meta name="twitter:title" content="${pageTitle}">
     <meta name="twitter:description" content="${metaDescription}">
     <meta name="twitter:image" content="${absoluteImagePath}">
+    <meta name="twitter:site:logo" content="${BASE_URL}/frog-logo.png">
     
     <!-- Redirect to the actual page -->
     <meta http-equiv="refresh" content="0;url=${absoluteUrl}">
