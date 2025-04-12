@@ -4,13 +4,6 @@ import { processMDX } from "../src/lib/mdx-utils";
 import type { PostMeta } from "../src/lib/mdx";
 import { SITE_URL, getAllRoutes, getBlogPostsWithMeta } from "../src/lib/router-utils";
 
-// Add Bun-specific type declaration
-declare global {
-  interface ImportMeta {
-    main?: boolean;
-  }
-}
-
 // Create static directories directly in public folder
 // This ensures they get copied to the right place in the final build
 const STATIC_DIR = path.join(process.cwd(), "public", "static");
