@@ -2,6 +2,7 @@
 import docsMetadata from "../docs/_meta";
 import type { ProductDocs } from "../docs/_meta";
 import { docsAPI } from "./utils";
+import { parseFrontmatter } from "./content/frontmatter";
 
 // Check if we're in production environment
 const isProduction = import.meta.env.PROD;
@@ -33,63 +34,6 @@ export type DocWithContent = {
 
 // Cache for loaded documentation content
 let contentCache: Record<string, string> = {};
-
-// Function to handle frontmatter - parse title and description from the frontmatter
-const parseFrontmatter = (
-  fileContent: string
-): { frontmatter: Record<string, any>; content: string } => {
-  try {
-    // We'll keep this very simple - extract anything between the first two '---' markers
-    const parts = fileContent.split("---");
-
-    // If there are at least 3 parts (before, frontmatter, content)
-    if (parts.length >= 3) {
-      // First part should be empty (or whitespace)
-      // Second part is frontmatter
-      // Everything after that is content
-      const frontmatterStr = parts[1].trim();
-      const content = parts.slice(2).join("---").trimStart();
-
-      // Parse the frontmatter into a key-value object
-      const frontmatter: Record<string, any> = {};
-
-      // Split by lines and process each line
-      frontmatterStr.split("\n").forEach((line) => {
-        const trimmedLine = line.trim();
-        if (!trimmedLine) return; // Skip empty lines
-
-        // Look for key: value format
-        const colonIndex = trimmedLine.indexOf(":");
-        if (colonIndex > 0) {
-          const key = trimmedLine.slice(0, colonIndex).trim();
-          const value = trimmedLine.slice(colonIndex + 1).trim();
-
-          // Remove quotes if present
-          frontmatter[key] = value.replace(/^["'](.*)["']$/, "$1");
-        }
-      });
-
-      console.log(`[parseFrontmatter] Extracted frontmatter:`, frontmatter);
-
-      return {
-        frontmatter,
-        content,
-      };
-    }
-
-    // If no frontmatter found, return the original content
-    return {
-      frontmatter: {},
-      content: fileContent,
-    };
-  } catch (error) {
-    console.error("[parseFrontmatter] Error parsing frontmatter:", error);
-    return {
-      frontmatter: {},
-      content: fileContent,
-    };
-  }
-};
 
 // Get document by path
 export const getDoc = async (path: string): Promise<DocWithContent> => {
