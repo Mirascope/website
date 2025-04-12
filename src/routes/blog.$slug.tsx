@@ -4,7 +4,10 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, Sparkles } from "lucide-react";
 import { getPostBySlug } from "@/lib/mdx";
 import { MDXRenderer } from "@/components/MDXRenderer";
-import { processMDX } from "@/lib/mdx-utils";
+import LoadingContent from "@/components/LoadingContent";
+import ErrorContent from "@/components/ErrorContent";
+import useFunMode from "@/lib/hooks/useFunMode";
+import useMDXProcessor from "@/lib/hooks/useMDXProcessor";
 import useSEO from "@/lib/hooks/useSEO";
 import { cn } from "@/lib/utils";
 
@@ -19,56 +22,14 @@ export const Route = createFileRoute("/blog/$slug")({
 function BlogPostPage() {
   const { slug } = useParams({ from: "/blog/$slug" });
   const [post, setPost] = useState<any>(null);
-  const [compiledMDX, setCompiledMDX] = useState<{
-    code: string;
-    frontmatter: Record<string, any>;
-  } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [tocOpen, setTocOpen] = useState(false);
-  const [funMode, setFunMode] = useState(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("funMode") === "true";
-    }
-    return false;
-  });
   const [ogImage, setOgImage] = useState<string | undefined>(undefined);
 
-  const toggleFunMode = () => {
-    const newMode = !funMode;
-    setFunMode(newMode);
-    if (typeof window !== "undefined") {
-      localStorage.setItem("funMode", newMode.toString());
-    }
-  };
-
-  // Process MDX content
-  const processMDXContent = async (content: string, meta: any) => {
-    try {
-      const mdxResult = await processMDX(content);
-      setCompiledMDX(mdxResult);
-    } catch (parseErr) {
-      console.error("Error processing MDX:", parseErr);
-      try {
-        const simplifiedContent = content.replace(/<[^>]*>/g, "").replace(/\{[^}]*\}/g, "");
-
-        const fallbackMdx = await processMDX(`
-# ${meta.title}
-
-${meta.description}
-
-**Error rendering full content. Showing simplified version.**
-
-${simplifiedContent}
-        `);
-        setCompiledMDX(fallbackMdx);
-      } catch (fallbackErr) {
-        setError(
-          `Could not render post content: ${parseErr instanceof Error ? parseErr.message : String(parseErr)}`
-        );
-      }
-    }
-  };
+  // Use custom hooks
+  const [funMode, toggleFunMode] = useFunMode();
+  const { compiledMDX } = useMDXProcessor(post?.content, post);
 
   // Find the first available image in the blog post directory
   useEffect(() => {
@@ -108,10 +69,6 @@ ${simplifiedContent}
         }
 
         setPost({ ...result.meta, content: result.content });
-
-        if (result.content) {
-          await processMDXContent(result.content, result.meta);
-        }
       } catch (err) {
         console.error("Error fetching post:", err);
         setError(`Failed to load post: ${err instanceof Error ? err.message : String(err)}`);
@@ -147,9 +104,7 @@ ${simplifiedContent}
       <div className="flex justify-center">
         <div className="flex mx-auto w-full max-w-7xl px-4">
           <div className="w-56 flex-shrink-0 hidden lg:block"></div>
-          <div className="flex-1 min-w-0 flex justify-center items-center h-[calc(100vh-136px)]">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-          </div>
+          <LoadingContent className="flex-1 min-w-0" fullHeight={true} />
           <div className="w-56 flex-shrink-0 hidden lg:block"></div>
         </div>
       </div>
@@ -162,26 +117,13 @@ ${simplifiedContent}
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-col lg:flex-row">
             <div className="w-56 flex-shrink-0 hidden lg:block"></div>
-            <div className="flex-1 min-w-0 py-6">
-              <div className="max-w-5xl mx-auto">
-                <div className="mb-6">
-                  <Link to="/blog" className="inline-block">
-                    <Button variant="outline" size="sm">
-                      <ChevronLeft className="w-4 h-4 mr-1" />
-                      Back to Blog
-                    </Button>
-                  </Link>
-                </div>
-                <div className="mb-6">
-                  <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold mb-4">
-                    Post Not Found
-                  </h1>
-                </div>
-                <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border border-gray-200 blog-content">
-                  {error && <p className="text-red-500">{error}</p>}
-                </div>
-              </div>
-            </div>
+            <ErrorContent
+              title="Post Not Found"
+              message={error}
+              showBackButton={true}
+              backTo="/blog"
+              backLabel="Back to Blog"
+            />
             <div className="w-56 flex-shrink-0 hidden lg:block"></div>
           </div>
         </div>
