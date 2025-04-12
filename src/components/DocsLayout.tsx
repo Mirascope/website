@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from "react";
 import SidebarContainer from "@/components/SidebarContainer";
-import TableOfContents from "@/components/TableOfContents";
-import { MDXRenderer } from "@/components/MDXRenderer";
+import TocSidebar from "@/components/TocSidebar";
+import MainContent from "@/components/MainContent";
 import { processMDX } from "@/lib/mdx-utils";
 import { type DocMeta } from "@/lib/docs";
-import { Button } from "@/components/ui/button";
-import { Sparkles, Server } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { type ProductName } from "@/lib/route-types";
 import useFunMode from "@/lib/hooks/useFunMode";
 import useProviderSelection from "@/lib/hooks/useProviderSelection";
-import { ProviderContextProvider, ProviderDropdown } from "@/components/docs";
+import { ProviderContextProvider } from "@/components/docs";
 
 type DocsLayoutProps = {
   product: ProductName;
@@ -95,7 +92,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
           </div>
 
-          {/* Right TOC sidebar - empty during loading */}
+          {/* Empty TOC sidebar during loading */}
           <div className="w-56 flex-shrink-0 hidden lg:block"></div>
         </div>
       </div>
@@ -138,7 +135,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
             )}
           </div>
 
-          {/* Right TOC sidebar - empty during error state */}
+          {/* Empty TOC sidebar during error state */}
           <div className="w-56 flex-shrink-0 hidden lg:block"></div>
         </div>
       </div>
@@ -163,75 +160,16 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
           />
 
           {/* Main content area */}
-          <div className="flex-1 min-w-0 px-4 lg:px-8">
-            <div className="w-full max-w-5xl mx-auto">
-              <h1 className="text-3xl lg:text-4xl font-semibold mb-4">{document.meta.title}</h1>
-              {document.meta.description && document.meta.description.trim() !== "" && (
-                <p className="text-gray-600 dark:text-gray-300 mb-6">{document.meta.description}</p>
-              )}
-              <div
-                id="doc-content"
-                className="prose prose-sm lg:prose-base prose-slate max-w-none overflow-x-auto mdx-container"
-              >
-                {document.content ? (
-                  compiledMDX ? (
-                    <MDXRenderer
-                      code={compiledMDX.code}
-                      frontmatter={compiledMDX.frontmatter}
-                      useFunMode={funMode}
-                    />
-                  ) : (
-                    <div className="animate-pulse bg-gray-100 h-40 rounded-md"></div>
-                  )
-                ) : (
-                  <div></div> /* Empty div for no content */
-                )}
-              </div>
-            </div>
-          </div>
+          <MainContent document={document} compiledMDX={compiledMDX} funMode={funMode} />
 
           {/* Right TOC sidebar */}
-          <div className="w-56 flex-shrink-0 hidden lg:block">
-            <div className="fixed w-56 top-[60px] max-h-[calc(100vh-60px)] overflow-y-auto">
-              <div className="px-4 pt-12">
-                <div className="flex flex-col gap-3 mb-4">
-                  <Button
-                    variant={funMode ? "default" : "outline"}
-                    size="sm"
-                    onClick={toggleFunMode}
-                    className={cn(
-                      funMode ? "bg-primary text-white" : "hover:bg-purple-50",
-                      "transition-colors w-full"
-                    )}
-                  >
-                    <Sparkles className="w-4 h-4 mr-1" />
-                    Fun Mode
-                  </Button>
-
-                  {/* Provider dropdown */}
-                  <div className="mt-3">
-                    <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
-                      <div className="flex items-center">
-                        <Server className="w-3 h-3 mr-1" />
-                        Provider
-                      </div>
-                    </h4>
-                    <ProviderDropdown />
-                  </div>
-
-                  <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mt-4">
-                    On this page
-                  </h4>
-                </div>
-                <TableOfContents
-                  contentId="doc-content"
-                  product={product}
-                  section={section}
-                  slug={slug}
-                />
-              </div>
-            </div>
-          </div>
+          <TocSidebar
+            product={product}
+            section={section}
+            slug={slug}
+            funMode={funMode}
+            toggleFunMode={toggleFunMode}
+          />
         </div>
       </div>
     </ProviderContextProvider>
