@@ -3,6 +3,7 @@ import docsMetadata from "../docs/_meta";
 import type { ProductDocs } from "../docs/_meta";
 import { docsAPI } from "./utils";
 import { parseFrontmatter } from "./content/frontmatter";
+import { normalizePath, getContentPath, isValidPath } from "./content/path-resolver";
 
 // Check if we're in production environment
 const isProduction = import.meta.env.PROD;
@@ -38,46 +39,16 @@ let contentCache: Record<string, string> = {};
 // Get document by path
 export const getDoc = async (path: string): Promise<DocWithContent> => {
   try {
-    // Convert /docs/mirascope/migration to mirascope/migration.mdx
-    let filePath = path.replace(/^\/docs\//, "");
+    // Validate the path
+    if (!isValidPath(path, "doc")) {
+      console.warn(`[getDoc] Invalid path format: ${path}`);
+    }
+
+    // Use the path resolver to normalize the path
+    const filePath = normalizePath(path, "doc");
 
     // Save the original path parts for metadata lookup
     const originalPathParts = filePath.split("/").filter((part) => part !== "");
-
-    // Normalize path by ensuring no trailing slash (except for root)
-    if (filePath.endsWith("/") && filePath !== "/") {
-      filePath = filePath.slice(0, -1);
-    }
-
-    // Handle various path formats - with extra debug logging
-    if (filePath === "" || filePath === "/") {
-      // Root docs path
-      filePath = "index.mdx";
-      console.log(`[getDoc] Root docs path handling: ${filePath}`);
-    } else if (filePath.endsWith("/index")) {
-      // Already has /index at the end
-      filePath = `${filePath}.mdx`;
-      console.log(`[getDoc] Path with /index handling: ${filePath}`);
-    } else if (filePath.split("/").pop() === "") {
-      // Ends with a slash, should load index
-      filePath = `${filePath}index.mdx`;
-      console.log(`[getDoc] Path with trailing slash handling: ${filePath}`);
-    } else if (filePath.endsWith("/index.mdx")) {
-      // Already properly formatted
-      console.log(`[getDoc] Already properly formatted: ${filePath}`);
-    } else if (filePath === "index") {
-      // Just 'index'
-      filePath = "index.mdx";
-      console.log(`[getDoc] Just 'index' handling: ${filePath}`);
-    } else if (filePath.includes("/") && filePath.split("/").pop() === "index") {
-      // Paths like mirascope/index
-      filePath = `${filePath}.mdx`;
-      console.log(`[getDoc] Path ending with 'index' handling: ${filePath}`);
-    } else {
-      // Normal path like mirascope/migration
-      filePath = `${filePath}.mdx`;
-      console.log(`[getDoc] Normal path handling: ${filePath}`);
-    }
 
     // Debug log for diagnosing path issues
     console.log(
@@ -108,8 +79,8 @@ export const getDoc = async (path: string): Promise<DocWithContent> => {
           } else {
             // Production mode - use static files
             console.log(`[getDoc] Attempting to fetch document from static files: ${filePath}`);
-            const normalizedPath = filePath.replace(/\\/g, "/");
-            const response = await fetch(`/static/docs/${normalizedPath}.json`);
+            const staticPath = getContentPath(path, "doc");
+            const response = await fetch(staticPath);
 
             if (!response.ok) {
               throw new Error(`Error fetching doc content: ${response.statusText}`);

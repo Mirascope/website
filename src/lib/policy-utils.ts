@@ -1,5 +1,6 @@
 import { processMDX } from "./mdx-utils";
 import { parseFrontmatter } from "./content/frontmatter";
+import { getContentPath } from "./content/path-resolver";
 
 /**
  * PolicyMeta - Type for policy/terms metadata from frontmatter
@@ -20,15 +21,18 @@ const cleanContent = (content: string): string => {
  * Fetch and process a policy or terms MDX file
  */
 export const fetchPolicyContent = async (
-  filePath: string
+  path: string
 ): Promise<{
   meta: PolicyMeta;
   content: string;
   compiledMDX: { code: string; frontmatter: Record<string, any> };
 }> => {
   try {
+    // Get the content path for the current environment
+    const staticPath = getContentPath(path, "policy");
+
     // Fetch the MDX file
-    const response = await fetch(filePath);
+    const response = await fetch(staticPath);
     if (!response.ok) {
       throw new Error(`Error fetching content: ${response.statusText}`);
     }
@@ -50,7 +54,7 @@ export const fetchPolicyContent = async (
 
     return { meta, content, compiledMDX };
   } catch (error) {
-    console.error(`Error loading content from ${filePath}:`, error);
+    console.error(`Error loading content from ${path}:`, error);
     throw error;
   }
 };
