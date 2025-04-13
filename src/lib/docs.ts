@@ -1,18 +1,14 @@
 // Import the centralized meta file
 import docsMetadata from "../docs/_meta";
 import type { ProductDocs } from "../docs/_meta";
-import { docsAPI } from "./utils";
 import { parseFrontmatter } from "./content/frontmatter";
-import { normalizePath, getContentPath, isValidPath } from "./content/path-resolver";
+import { normalizePath, isValidPath } from "./content/path-resolver";
 import {
   getMetadataFromStructure,
   extractMetadataFromFrontmatter,
   mergeMetadata,
 } from "./content/metadata-service";
 import { DocumentNotFoundError } from "./content/errors";
-
-// Check if we're in production environment
-const isProduction = import.meta.env.PROD;
 
 // Import and re-export DocMeta type from content-types
 import type { DocMeta, ContentType } from "./content/content-types";
@@ -25,9 +21,13 @@ export type DocWithContent = {
   content: string;
 };
 
-// Cache for loaded documentation content
+// Import the ContentLoader
+import { createContentLoader } from "./content/content-loader";
 import { createContentCache } from "./content/content-cache";
+
+// Create a shared content loader with cache
 const docsCache = createContentCache();
+const contentLoader = createContentLoader({ cache: docsCache });
 
 // Get document by path
 export const getDoc = async (path: string): Promise<DocWithContent> => {
@@ -37,72 +37,42 @@ export const getDoc = async (path: string): Promise<DocWithContent> => {
       console.warn(`[getDoc] Invalid path format: ${path}`);
     }
 
-    // Use the path resolver to normalize the path
-    const filePath = normalizePath(path, "doc");
-
-    // Normalize the path but we no longer need to extract path parts separately
-    // since that's now handled by the metadata service
+    // Use the path resolver to normalize the path for metadata
+    const normalizedPath = normalizePath(path, "doc");
 
     // Attempt to load the file
     let content;
 
     try {
-      // Check cache first
-      content = docsCache.get("doc", filePath);
-      if (content) {
-        console.log(`[getDoc] Using cached content for: ${filePath}`);
-      } else {
-        // For product index pages like mirascope/index.mdx, also check the _meta.ts
-        // to ensure we have valid metadata even if the file doesn't physically exist
-        const isProductIndex = filePath.split("/").length === 2 && filePath.endsWith("/index.mdx");
+      // Use the content loader to get the content (handles caching and environment)
+      content = await contentLoader.loadContent(path, "doc");
+      console.log(`[getDoc] Successfully fetched content for: ${normalizedPath}`);
+    } catch (error) {
+      console.error(`[getDoc] Error fetching doc content:`, error);
 
-        try {
-          // In development mode, use the docsAPI to fetch content
-          // In production mode, fetch static JSON files
-          if (!isProduction) {
-            // Development mode - use the API
-            console.log(`[getDoc] Attempting to fetch document via API: ${filePath}`);
-            content = await docsAPI.getDocContent(filePath);
-          } else {
-            // Production mode - use static files
-            console.log(`[getDoc] Attempting to fetch document from static files: ${filePath}`);
-            const staticPath = getContentPath(path, "doc");
-            const response = await fetch(staticPath);
+      // Special handling for product index pages
+      const isProductIndex =
+        normalizedPath.split("/").length === 2 && normalizedPath.endsWith("/index.mdx");
 
-            if (!response.ok) {
-              throw new Error(`Error fetching doc content: ${response.statusText}`);
-            }
+      if (isProductIndex) {
+        const product = normalizedPath.split("/")[0];
+        console.log(`[getDoc] Generating fallback for product index: ${product}`);
 
-            const data = await response.json();
-            content = data.content;
-          }
+        // Check if this is a known product
+        const isKnownProduct = product in docsMetadata;
 
-          console.log(`[getDoc] Successfully fetched content for: ${filePath}`);
-          docsCache.set("doc", filePath, content);
-        } catch (error) {
-          const fetchError = error as Error;
-          console.error(`[getDoc] Error fetching doc content: ${fetchError.message}`);
+        if (isKnownProduct) {
+          // Get metadata from _meta.ts if available
+          const productDocs = docsMetadata[product] as ProductDocs;
+          const indexItem = productDocs?.items?.index;
+          const title =
+            indexItem?.title ||
+            `${product.charAt(0).toUpperCase() + product.slice(1)} Documentation`;
+          // For placeholder fallback, we'll use a default welcome message
+          const description = `Welcome to ${product} documentation`;
 
-          // Special handling for product index pages
-          if (isProductIndex) {
-            const product = filePath.split("/")[0];
-            console.log(`[getDoc] Generating fallback for product index: ${product}`);
-
-            // Check if this is a known product
-            const isKnownProduct = product in docsMetadata;
-
-            if (isKnownProduct) {
-              // Get metadata from _meta.ts if available
-              const productDocs = docsMetadata[product] as ProductDocs;
-              const indexItem = productDocs?.items?.index;
-              const title =
-                indexItem?.title ||
-                `${product.charAt(0).toUpperCase() + product.slice(1)} Documentation`;
-              // For placeholder fallback, we'll use a default welcome message
-              const description = `Welcome to ${product} documentation`;
-
-              // Generate a placeholder content with proper metadata
-              content = `---
+          // Generate a placeholder content with proper metadata
+          content = `---
 title: ${title}
 description: ${description}
 ---
@@ -113,24 +83,19 @@ ${description}
 
 Get started with ${product} by exploring the documentation in the sidebar.`;
 
-              console.log(`[getDoc] Generated fallback content for known product index`);
-            } else {
-              // For unknown products, throw an error
-              throw new DocumentNotFoundError("doc", path);
-            }
-
-            docsCache.set("doc", filePath, content);
-          } else {
-            throw fetchError;
-          }
+          console.log(`[getDoc] Generated fallback content for known product index`);
+        } else {
+          // For unknown products, throw an error
+          throw new DocumentNotFoundError("doc", path);
         }
+      } else {
+        // If it's already a DocumentNotFoundError, just throw it
+        if (error instanceof DocumentNotFoundError) {
+          throw error;
+        }
+        // Otherwise, create placeholder content
+        content = createPlaceholderContent(path);
       }
-    } catch (error) {
-      console.warn(
-        `[getDoc] Could not load document content for ${path}, using placeholder`,
-        error
-      );
-      content = createPlaceholderContent(path);
     }
 
     // Parse frontmatter and get content

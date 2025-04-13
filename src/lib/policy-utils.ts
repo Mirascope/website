@@ -1,6 +1,8 @@
 import { processMDX } from "./mdx-utils";
 import { parseFrontmatter } from "./content/frontmatter";
-import { getContentPath } from "./content/path-resolver";
+import { DocumentNotFoundError } from "./content/errors";
+import { createContentCache } from "./content/content-cache";
+import { createContentLoader } from "./content/content-loader";
 
 /**
  * PolicyMeta - Type for policy/terms metadata from frontmatter
@@ -17,6 +19,10 @@ const cleanContent = (content: string): string => {
   return content.replace(/\/\/# sourceMappingURL=.*$/gm, "");
 };
 
+// Create a shared cache and content loader for policies
+const policyCache = createContentCache();
+const contentLoader = createContentLoader({ cache: policyCache });
+
 /**
  * Fetch and process a policy or terms MDX file
  */
@@ -28,16 +34,8 @@ export const fetchPolicyContent = async (
   compiledMDX: { code: string; frontmatter: Record<string, any> };
 }> => {
   try {
-    // Get the content path for the current environment
-    const staticPath = getContentPath(path, "policy");
-
-    // Fetch the MDX file
-    const response = await fetch(staticPath);
-    if (!response.ok) {
-      throw new Error(`Error fetching content: ${response.statusText}`);
-    }
-
-    const mdxContent = await response.text();
+    // Use the content loader to get the content
+    const mdxContent = await contentLoader.loadContent(path, "policy");
 
     // Parse frontmatter and content
     const { frontmatter, content: rawContent } = parseFrontmatter(mdxContent);
@@ -54,8 +52,15 @@ export const fetchPolicyContent = async (
 
     return { meta, content, compiledMDX };
   } catch (error) {
-    console.error(`Error loading content from ${path}:`, error);
-    throw error;
+    console.error(`Error loading policy content from ${path}:`, error);
+
+    // If it's already a DocumentNotFoundError, just re-throw it
+    if (error instanceof DocumentNotFoundError) {
+      throw error;
+    }
+
+    // Otherwise, throw a generic error
+    throw new Error(`Failed to load policy content from ${path}`);
   }
 };
 

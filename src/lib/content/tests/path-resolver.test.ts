@@ -150,9 +150,9 @@ describe("Path Resolver", () => {
       // In dev mode, policy paths should be returned as-is
       expect(getContentPath("/privacy", "policy")).toBe("/privacy");
 
-      // In dev mode, doc paths should be normalized
+      // In dev mode, doc paths should be prefixed with /src/docs/
       expect(getContentPath("/docs/mirascope/getting-started", "doc")).toBe(
-        "mirascope/getting-started.mdx"
+        "/src/docs/mirascope/getting-started.mdx"
       );
     });
   });
