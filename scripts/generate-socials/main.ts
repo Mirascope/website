@@ -72,8 +72,6 @@ if (enabledOptions > 1) {
   process.exit(1);
 }
 
-// We don't need this function anymore as we're now using the imported generateImages
-
 /**
  * Generate OG HTML files for routes
  */
@@ -94,10 +92,6 @@ async function generateOgHtmlFiles(metadata: SEOMetadata[]): Promise<void> {
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
   }
-
-  // Generate redirects file content
-  let redirectsContent = "# Redirects for social media crawlers\n";
-  redirectsContent += "# Format: [URL] [Destination] [Status]\n\n";
 
   let generatedCount = 0;
 
@@ -124,19 +118,11 @@ async function generateOgHtmlFiles(metadata: SEOMetadata[]): Promise<void> {
 
       console.log(`${icons.success} Generated: ${path.relative(projectRoot, outputPath)}`);
 
-      // Add to redirects file
-      redirectsContent += `${route} /og-html/${filename} 200! User-agent=facebookexternalhit\n`;
-      redirectsContent += `${route} /og-html/${filename} 200! User-agent=Twitterbot\n`;
-
       generatedCount++;
     } catch (error) {
       console.error(`${icons.error} Failed to generate OG HTML for ${route}: ${error}`);
     }
   }
-
-  // Write redirects file
-  const redirectsPath = path.join(projectRoot, "public", "_redirects");
-  fs.writeFileSync(redirectsPath, redirectsContent);
 
   printHeader("OG HTML Generation Complete", "green");
   coloredLog(`Successfully generated ${generatedCount} OG HTML files`, "green");
