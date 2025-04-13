@@ -1,106 +1,57 @@
-import type { ContentWithMeta, PolicyMeta } from "@/lib/content/content-types";
-import type { ContentTypeHandler } from "@/lib/content/handlers/content-type-handler";
-import { parseFrontmatter } from "@/lib/content/frontmatter";
-import { isValidPath } from "@/lib/content/path-resolver";
-import { extractMetadataFromFrontmatter, validateMetadata } from "@/lib/content/metadata-service";
-import {
-  ContentError,
-  DocumentNotFoundError,
-  InvalidPathError,
-  MetadataError,
-} from "@/lib/content/errors";
-import { ContentLoader, createContentLoader } from "@/lib/content/content-loader";
-import { ContentCache, createContentCache } from "@/lib/content/content-cache";
+import type { PolicyMeta } from "@/lib/content/content-types";
+import { ContentLoader } from "@/lib/content/content-loader";
+import { ContentCache } from "@/lib/content/content-cache";
+import { BaseContentHandler } from "./base-content-handler";
+import { ContentError } from "@/lib/content/errors";
 
 /**
  * Handler for policy content
  */
-export class PolicyContentHandler implements ContentTypeHandler<PolicyMeta> {
-  private loader: ContentLoader;
-  private cache: ContentCache;
-
+export class PolicyContentHandler extends BaseContentHandler<PolicyMeta> {
   /**
    * Creates a new PolicyContentHandler
    *
    * @param loader - Content loader instance
    * @param cache - Optional cache instance
    */
-  constructor(loader: ContentLoader, cache?: ContentCache) {
-    this.loader = loader;
-    this.cache = cache || createContentCache();
+  constructor(loader?: ContentLoader, cache?: ContentCache) {
+    super("policy", loader, cache);
   }
 
   /**
-   * Retrieves a policy document by path
+   * Creates metadata from frontmatter
    */
-  async getDocument(path: string): Promise<ContentWithMeta & { meta: PolicyMeta }> {
-    try {
-      // Check cache first if available
-      const cacheKey = `policy:${path}`;
-      if (this.cache) {
-        const cached = this.cache.get("policy", cacheKey);
-        if (cached) {
-          return JSON.parse(cached);
-        }
-      }
+  protected createMetaFromFrontmatter(frontmatter: Record<string, any>, path: string): PolicyMeta {
+    return {
+      title: frontmatter.title || "",
+      path,
+      slug: path.split("/").pop() || "",
+      type: "policy",
+      ...(frontmatter.lastUpdated && { lastUpdated: frontmatter.lastUpdated }),
+      description: frontmatter.description || "",
+    };
+  }
 
-      // Validate the path
-      if (!isValidPath(path, "policy")) {
-        throw new InvalidPathError("policy", path);
-      }
+  /**
+   * Normalize policy paths
+   */
+  protected normalizePath(path: string): string {
+    // Ensure policy paths start with a slash
+    return path.startsWith("/") ? path : `/${path}`;
+  }
 
-      // Load the document content
-      const rawContent = await this.loader.loadContent(path, "policy");
+  /**
+   * Gets a cache key for policy documents
+   */
+  protected getCacheKey(path: string): string {
+    return `policy:${path}`;
+  }
 
-      // Parse frontmatter
-      const { frontmatter, content } = parseFrontmatter(rawContent);
-
-      // Extract metadata from frontmatter
-      // Not using extractMetadataFromFrontmatter since we construct the meta object manually
-      extractMetadataFromFrontmatter(frontmatter, "policy", path);
-
-      // Create the meta object
-      const meta: PolicyMeta = {
-        title: frontmatter.title || "",
-        path,
-        slug: path.split("/").pop() || "",
-        type: "policy",
-        ...(frontmatter.lastUpdated && { lastUpdated: frontmatter.lastUpdated }),
-        description: frontmatter.description || "",
-      };
-
-      // Validate the final metadata
-      const validation = validateMetadata(meta, "policy");
-      if (!validation.isValid) {
-        throw new MetadataError(
-          "policy",
-          path,
-          new Error(`Invalid metadata: ${validation.errors?.join(", ")}`)
-        );
-      }
-
-      const result = { meta, content };
-
-      // Cache the result
-      if (this.cache) {
-        this.cache.set("policy", cacheKey, JSON.stringify(result));
-      }
-
-      return result;
-    } catch (error) {
-      // Re-throw known errors
-      if (
-        error instanceof DocumentNotFoundError ||
-        error instanceof InvalidPathError ||
-        error instanceof MetadataError ||
-        error instanceof ContentError
-      ) {
-        throw error;
-      }
-
-      // Wrap other errors
-      throw new ContentError(`Failed to get policy document: ${path}`, "policy", path);
-    }
+  /**
+   * Process content to clean up source mappings
+   */
+  protected processContent(content: string): string {
+    return content.replace(/\/\/# sourceMappingURL=.*$/gm, "");
   }
 
   /**
@@ -111,7 +62,7 @@ export class PolicyContentHandler implements ContentTypeHandler<PolicyMeta> {
       // Check cache first
       const cacheKey = "all-policies";
       if (this.cache) {
-        const cached = this.cache.get("policy", cacheKey);
+        const cached = this.cache.get(this.contentType, cacheKey);
         if (cached) {
           const policies = JSON.parse(cached) as PolicyMeta[];
           return filter ? policies.filter(filter) : policies;
@@ -136,7 +87,7 @@ export class PolicyContentHandler implements ContentTypeHandler<PolicyMeta> {
 
       // Cache the results
       if (this.cache) {
-        this.cache.set("policy", cacheKey, JSON.stringify(policies));
+        this.cache.set(this.contentType, cacheKey, JSON.stringify(policies));
       }
 
       // Apply filter if provided
@@ -144,7 +95,7 @@ export class PolicyContentHandler implements ContentTypeHandler<PolicyMeta> {
     } catch (error) {
       throw new ContentError(
         `Failed to get all policy documents: ${error instanceof Error ? error.message : String(error)}`,
-        "policy",
+        this.contentType,
         undefined
       );
     }
@@ -167,7 +118,7 @@ export class PolicyContentHandler implements ContentTypeHandler<PolicyMeta> {
     } catch (error) {
       throw new ContentError(
         `Failed to get policy documents for collection ${collection}: ${error instanceof Error ? error.message : String(error)}`,
-        "policy",
+        this.contentType,
         undefined
       );
     }
@@ -181,10 +132,7 @@ export function createPolicyContentHandler(
   loader?: ContentLoader,
   cache?: ContentCache
 ): PolicyContentHandler {
-  return new PolicyContentHandler(
-    loader || createContentLoader({ cache }),
-    cache || createContentCache()
-  );
+  return new PolicyContentHandler(loader, cache);
 }
 
 // Create a default singleton instance that can be used throughout the application

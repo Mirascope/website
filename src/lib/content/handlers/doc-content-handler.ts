@@ -1,21 +1,9 @@
-import type { ContentWithMeta, DocMeta } from "@/lib/content/content-types";
-import type { ContentTypeHandler } from "@/lib/content/handlers/content-type-handler";
-import { parseFrontmatter } from "@/lib/content/frontmatter";
-import { isValidPath } from "@/lib/content/path-resolver";
-import {
-  getMetadataFromStructure,
-  extractMetadataFromFrontmatter,
-  mergeMetadata,
-  validateMetadata,
-} from "@/lib/content/metadata-service";
-import {
-  ContentError,
-  DocumentNotFoundError,
-  InvalidPathError,
-  MetadataError,
-} from "@/lib/content/errors";
-import { ContentLoader, createContentLoader } from "@/lib/content/content-loader";
-import { ContentCache, createContentCache } from "@/lib/content/content-cache";
+import type { DocMeta } from "@/lib/content/content-types";
+import { ContentLoader } from "@/lib/content/content-loader";
+import { ContentCache } from "@/lib/content/content-cache";
+import { BaseContentHandler } from "./base-content-handler";
+import { ContentError } from "@/lib/content/errors";
+import { getMetadataFromStructure, mergeMetadata } from "@/lib/content/metadata-service";
 
 // Import product docs metadata
 import docsMetadata from "@/docs/_meta";
@@ -24,87 +12,41 @@ import type { ProductDocs } from "@/docs/_meta";
 /**
  * Handler for documentation content
  */
-export class DocContentHandler implements ContentTypeHandler<DocMeta> {
-  private loader: ContentLoader;
-  private cache: ContentCache;
-
+export class DocContentHandler extends BaseContentHandler<DocMeta> {
   /**
    * Creates a new DocContentHandler
    *
    * @param loader - Content loader instance
    * @param cache - Optional cache instance
    */
-  constructor(loader: ContentLoader, cache?: ContentCache) {
-    this.loader = loader;
-    this.cache = cache || createContentCache();
+  constructor(loader?: ContentLoader, cache?: ContentCache) {
+    super("doc", loader, cache);
   }
 
   /**
-   * Retrieves a document by path
+   * Creates metadata from frontmatter
+   * For docs, we need to merge structure metadata with frontmatter
    */
-  async getDocument(path: string): Promise<ContentWithMeta & { meta: DocMeta }> {
-    try {
-      // Check cache first if available
-      const cacheKey = `doc:${path}`;
-      if (this.cache) {
-        const cached = this.cache.get("doc", cacheKey);
-        if (cached) {
-          return JSON.parse(cached);
-        }
-      }
+  protected createMetaFromFrontmatter(frontmatter: Record<string, any>, path: string): DocMeta {
+    // Get metadata from structure definitions
+    const structureMeta = getMetadataFromStructure(path, "doc");
 
-      // Validate the path
-      if (!isValidPath(path, "doc")) {
-        throw new InvalidPathError("doc", path);
-      }
+    // Create basic frontmatter metadata
+    const frontmatterMeta = {
+      title: frontmatter.title,
+      description: frontmatter.description,
+      // Other frontmatter fields can be added here
+    };
 
-      // Get metadata from structure definitions
-      const structureMeta = getMetadataFromStructure(path, "doc");
+    // Merge metadata (frontmatter takes precedence)
+    return mergeMetadata(structureMeta, frontmatterMeta) as DocMeta;
+  }
 
-      // Load the document content
-      const rawContent = await this.loader.loadContent(path, "doc");
-
-      // Parse frontmatter
-      const { frontmatter, content } = parseFrontmatter(rawContent);
-
-      // Extract metadata from frontmatter
-      const frontmatterMeta = extractMetadataFromFrontmatter(frontmatter, "doc", path);
-
-      // Merge metadata (frontmatter takes precedence)
-      const meta = mergeMetadata(structureMeta, frontmatterMeta) as DocMeta;
-
-      // Validate the final metadata
-      const validation = validateMetadata(meta, "doc");
-      if (!validation.isValid) {
-        throw new MetadataError(
-          "doc",
-          path,
-          new Error(`Invalid metadata: ${validation.errors?.join(", ")}`)
-        );
-      }
-
-      const result = { meta, content };
-
-      // Cache the result
-      if (this.cache) {
-        this.cache.set("doc", cacheKey, JSON.stringify(result));
-      }
-
-      return result;
-    } catch (error) {
-      // Re-throw known errors
-      if (
-        error instanceof DocumentNotFoundError ||
-        error instanceof InvalidPathError ||
-        error instanceof MetadataError ||
-        error instanceof ContentError
-      ) {
-        throw error;
-      }
-
-      // Wrap other errors
-      throw new ContentError(`Failed to get document: ${path}`, "doc", path);
-    }
+  /**
+   * Gets a cache key for doc documents
+   */
+  protected getCacheKey(path: string): string {
+    return `doc:${path}`;
   }
 
   /**
@@ -115,7 +57,7 @@ export class DocContentHandler implements ContentTypeHandler<DocMeta> {
       // Check cache first
       const cacheKey = "all-docs";
       if (this.cache) {
-        const cached = this.cache.get("doc", cacheKey);
+        const cached = this.cache.get(this.contentType, cacheKey);
         if (cached) {
           const docs = JSON.parse(cached) as DocMeta[];
           return filter ? docs.filter(filter) : docs;
@@ -135,7 +77,7 @@ export class DocContentHandler implements ContentTypeHandler<DocMeta> {
 
       // Cache the results
       if (this.cache) {
-        this.cache.set("doc", cacheKey, JSON.stringify(allDocs));
+        this.cache.set(this.contentType, cacheKey, JSON.stringify(allDocs));
       }
 
       // Apply filter if provided
@@ -143,7 +85,7 @@ export class DocContentHandler implements ContentTypeHandler<DocMeta> {
     } catch (error) {
       throw new ContentError(
         `Failed to get all documents: ${error instanceof Error ? error.message : String(error)}`,
-        "doc",
+        this.contentType,
         undefined
       );
     }
@@ -157,7 +99,7 @@ export class DocContentHandler implements ContentTypeHandler<DocMeta> {
       // Check cache first
       const cacheKey = `product:${product}`;
       if (this.cache) {
-        const cached = this.cache.get("doc", cacheKey);
+        const cached = this.cache.get(this.contentType, cacheKey);
         if (cached) {
           return JSON.parse(cached);
         }
@@ -167,14 +109,14 @@ export class DocContentHandler implements ContentTypeHandler<DocMeta> {
 
       // Cache the results
       if (this.cache) {
-        this.cache.set("doc", cacheKey, JSON.stringify(docs));
+        this.cache.set(this.contentType, cacheKey, JSON.stringify(docs));
       }
 
       return docs;
     } catch (error) {
       throw new ContentError(
         `Failed to get documents for product ${product}: ${error instanceof Error ? error.message : String(error)}`,
-        "doc",
+        this.contentType,
         undefined
       );
     }
@@ -327,10 +269,7 @@ export function createDocContentHandler(
   loader?: ContentLoader,
   cache?: ContentCache
 ): DocContentHandler {
-  return new DocContentHandler(
-    loader || createContentLoader({ cache }),
-    cache || createContentCache()
-  );
+  return new DocContentHandler(loader, cache);
 }
 
 // Create a default singleton instance that can be used throughout the application
