@@ -91,14 +91,9 @@ export class ContentLoader {
         // In development, we get the raw content
         return await response.text();
       } else {
-        // In production, we get JSON with a content field for docs and blog
-        if (contentType === "doc" || contentType === "blog") {
-          const data = await response.json();
-          return data.content;
-        } else {
-          // Policies might be sent directly as text
-          return await response.text();
-        }
+        // In production, all content types are stored as JSON with a content field
+        const data = await response.json();
+        return data.content;
       }
     } catch (error) {
       // Check for 404 errors in the message
