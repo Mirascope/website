@@ -58,67 +58,26 @@ This document outlines a step-by-step plan for implementing the unified content 
 
 #### ✅ Step 1: Directory Structure and Content Types (COMPLETED)
 
+**Status**: Completed
+
 **Changes:**
 - ✅ Created `src/lib/content/` directory
 - ✅ Implemented `content-types.ts` with basic type definitions
 - ✅ Added unit tests for content types
 
-**Tests:**
-- ✅ Type validation
-- ✅ Type extension
-
-**Files:**
-- ✅ `src/lib/content/content-types.ts`
-- ✅ `src/lib/content/tests/content-types.test.ts`
-
-**Actual Usage:**
-```typescript
-import type { ContentType, ContentMeta, DocMeta } from './content/content-types';
-
-// Example usage
-const docType: ContentType = 'doc';
-const meta: DocMeta = {
-  title: 'Document Title',
-  description: 'Description',
-  path: 'mirascope/getting-started',
-  slug: 'getting-started',
-  type: 'doc',
-  product: 'mirascope'
-};
-```
+### Phase 2: Core Services
 
 #### ✅ Step 2: Error Types (COMPLETED)
+
+**Status**: Completed
 
 **Changes:**
 - ✅ Implemented `errors.ts` with error classes
 - ✅ Added tests for error handling
 
-**Tests:**
-- ✅ Error instantiation
-- ✅ Error inheritance
-- ✅ Error serialization 
-
-**Files:**
-- ✅ `src/lib/content/errors.ts`
-- ✅ `src/lib/content/tests/errors.test.ts`
-
-**Actual Usage:**
-```typescript
-import { DocumentNotFoundError } from './content/errors';
-
-// In error handling
-try {
-  // ...
-} catch (error) {
-  if (error instanceof DocumentNotFoundError) {
-    // Handle doc not found
-  } else {
-    // Handle other errors
-  }
-}
-```
-
 #### ✅ Step 3: Frontmatter Parser (COMPLETED)
+
+**Status**: Completed
 
 **Changes:**
 - ✅ Extracted and improved frontmatter parsing from existing code
@@ -126,58 +85,18 @@ try {
 - ✅ Added comprehensive tests
 - ✅ Updated all existing code to use the new parser
 
-**Tests:**
-- ✅ Parse valid frontmatter
-- ✅ Handle invalid frontmatter
-- ✅ Extract content correctly
-- ✅ Handle edge cases
-
-**Files:**
-- ✅ `src/lib/content/frontmatter.ts`
-- ✅ `src/lib/content/tests/frontmatter.test.ts`
-
-**Integration:**
-- ✅ Replaced `parseFrontmatter` in `docs.ts` with import from new module
-- ✅ Replaced `parseFrontmatter` in `mdx.ts` with import from new module
-- ✅ Replaced `parseFrontmatter` in `policy-utils.ts` with import from new module
-- ✅ Added cleanup function in `policy-utils.ts` for source map URLs
-
-### Phase 2: Core Services
-
 #### ✅ Step 4: Path Resolver (COMPLETED)
+
+**Status**: Completed
 
 **Changes:**
 - ✅ Implemented `path-resolver.ts` for path normalization 
 - ✅ Created functions for different path operations
 - ✅ Added comprehensive tests for all path formats
 
-**Tests:**
-- ✅ Normalize different path formats
-- ✅ Handle invalid paths
-- ✅ Generate file paths
-- ✅ Create static paths for production
-
-**Files:**
-- ✅ `src/lib/content/path-resolver.ts`
-- ✅ `src/lib/content/tests/path-resolver.test.ts`
-
-**Actual Usage:**
-```typescript
-import { normalizePath, buildFilePath, isValidPath, getStaticPath } from './content/path-resolver';
-
-const path = '/docs/mirascope/getting-started';
-const normalized = normalizePath(path, 'doc'); // 'mirascope/getting-started.mdx'
-const filePath = buildFilePath(normalized, 'doc'); // '/src/docs/mirascope/getting-started.mdx'
-const isValid = isValidPath(path, 'doc'); // true
-const staticPath = getStaticPath(normalized, 'doc'); // '/static/docs/mirascope/getting-started.mdx.json'
-```
-
-**Integration (Completed):**
-- ✅ Updated path handling in `getDoc` function in `docs.ts`
-- ✅ Updated path handling in `getPostBySlugProd` function in `mdx.ts`
-- ✅ Updated path handling in `fetchPolicyContent` function in `policy-utils.ts`
-
 #### ✅ Step 5: Cache Implementation (COMPLETED)
+
+**Status**: Completed
 
 **Changes:**
 - ✅ Implemented `content-cache.ts` with unified caching
@@ -185,327 +104,113 @@ const staticPath = getStaticPath(normalized, 'doc'); // '/static/docs/mirascope/
 - ✅ Implemented environment-specific caching strategies
 - ✅ Integrated with existing code in docs.ts and mdx.ts
 
-**Tests:**
-- ✅ Cache items
-- ✅ Retrieve cached items
-- ✅ Handle expiration
-- ✅ Test LRU behavior
-- ✅ Test environment-specific configuration
-
-**Files:**
-- ✅ `src/lib/content/content-cache.ts`
-- ✅ `src/lib/content/tests/content-cache.test.ts`
-
-**Integration:**
-- ✅ Updated `docs.ts` to use ContentCache instead of simple object cache
-- ✅ Updated `mdx.ts` to use ContentCache instead of separate object caches
-- ✅ Consolidated separate blog caches into a single instance
-
-**Actual Usage:**
-```typescript
-import { createContentCache } from './content/content-cache';
-
-// Create cache with default settings (auto-configured for current environment)
-const cache = createContentCache();
-
-// Use type-safe API with content type and path
-cache.set('doc', 'mirascope/getting-started.mdx', 'content');
-const content = cache.get('doc', 'mirascope/getting-started.mdx');
-```
-
 #### ✅ Step 6: Metadata Service (COMPLETED)
 
+**Status**: Completed
+
 **Changes:**
-- ✅ Implement `metadata-service.ts` for handling metadata
-- ✅ Extract metadata handling from existing code
-- ✅ Add tests for metadata operations
-
-**Tests:**
-- ✅ Get metadata from structure
-- ✅ Extract metadata from frontmatter
-- ✅ Merge metadata
-- ✅ Validate metadata
-
-**Files:**
-- ✅ `src/lib/content/metadata-service.ts`
-- ✅ `src/lib/content/tests/metadata-service.test.ts`
-
-**Current Dependencies:**
-- Metadata handling in `docs.ts` (lines 276-571)
-- Existing `docsMetadata` import from `../docs/_meta`
-
-**Known Issues:**
-- Complex metadata extraction with path-based logic
-- Special casing for different path depths
-- Multiple code paths for similar operations
-
-**Note:**
-While there are opportunities to improve the internal implementation of the metadata service (such as using a node-based hierarchical model), we've decided to proceed with the current implementation for now and focus on completing the overall content system refactoring. A more comprehensive redesign of the metadata handling may be undertaken as a separate future task.
-
-**Expected Usage:**
-```typescript
-import { getMetadataFromStructure, mergeMetadata } from '@/lib/content/metadata-service';
-
-const structureMeta = getMetadataFromStructure('mirascope/getting-started', 'doc');
-const frontmatterMeta = { title: 'Custom Title', description: 'Custom Description' };
-const finalMeta = mergeMetadata(structureMeta, frontmatterMeta);
-```
+- ✅ Implemented `metadata-service.ts` for handling metadata
+- ✅ Extracted metadata handling from existing code
+- ✅ Added tests for metadata operations
 
 #### ✅ Step 7: Content Loader (COMPLETED)
 
+**Status**: Completed
+
 **Changes:**
 - ✅ Implemented `content-loader.ts` with unified content loading
-- ✅ Extracted content loading from existing code in docs.ts, mdx.ts, policy-utils.ts
+- ✅ Extracted content loading from existing code
 - ✅ Added comprehensive tests for dev/prod environments and error handling
-- ✅ Integrated with existing code in docs.ts, mdx.ts, mdx-static.ts, and policy-utils.ts
-- ✅ Updated path handling in path-resolver.ts for different content types
+- ✅ Integrated with existing code
 
-**Tests:**
-- ✅ Load content in development mode for all content types
-- ✅ Load content in production mode from static files 
-- ✅ Handle error cases like 404 responses
-- ✅ Integrate with content cache
+### Phase 3: Content Handlers
 
-**Files:**
-- ✅ `src/lib/content/content-loader.ts`
-- ✅ `src/lib/content/tests/content-loader.test.ts`
-- ✅ Updated `src/lib/docs.ts`
-- ✅ Updated `src/lib/mdx.ts`
-- ✅ Updated `src/lib/mdx-static.ts`
-- ✅ Updated `src/lib/policy-utils.ts`
-- ✅ Updated `src/lib/content/path-resolver.ts`
+#### ✅ Step 8: Content Type Handler Interface (COMPLETED)
 
-**Integration:**
-- ✅ Removed `docsAPI` and `mockAPI` from utils.ts
-- ✅ Unified path handling for all content types
-- ✅ Created a single point of entry for content loading
-- ✅ Fixed blog post loading to properly handle paths in development mode
-- ✅ Improved error handling with specific error types
+**Status**: Completed
 
-**Actual Usage:**
-```typescript
-import { createContentLoader } from './content/content-loader';
-import { createContentCache } from './content/content-cache';
+**Changes:**
+- ✅ Created `content-type-handler.ts` interface for type-specific content handlers
+- ✅ Defined mapping from content types to metadata types
+- ✅ Ensured exhaustive mapping with TypeScript
+- ✅ Added documentation and type safety
 
-// Create a shared content loader with cache
-const docsCache = createContentCache();
-const contentLoader = createContentLoader({ cache: docsCache });
+#### ✅ Step 9: Doc Content Handler (COMPLETED)
 
-// Load content with unified API
-const content = await contentLoader.loadContent('/docs/mirascope/getting-started', 'doc');
-```
+**Status**: Completed
 
-### Phase 3: Integration
+**Changes:**
+- ✅ Implemented `doc-content-handler.ts` for doc-specific handling
+- ✅ Migrated doc retrieval logic from `docs.ts`
+- ✅ Added proper caching, error handling, and type safety
+- ✅ Updated `docs.ts` to use the new handler
+- ✅ Maintained backward compatibility with existing components
 
-#### Step 8: Document Service
+#### Step 10: Blog Content Handler (IN PROGRESS)
+
+**Status**: Not started
+
+**Changes:**
+- Create `blog-content-handler.ts` for blog-specific handling
+- Migrate blog post retrieval logic from `mdx.ts`
+- Add proper caching, error handling, and type safety
+- Update `mdx.ts` to use the new handler
+- Maintain backward compatibility with existing components
+
+#### Step 11: Policy Content Handler
+
+**Status**: Not started
+
+**Changes:**
+- Create `policy-content-handler.ts` for policy-specific handling
+- Migrate policy page retrieval logic from `policy-utils.ts`
+- Add proper caching, error handling, and type safety
+- Update `policy-utils.ts` to use the new handler
+- Maintain backward compatibility with existing components
+
+### Phase 4: Document Service
+
+#### Step 12: Document Service
+
+**Status**: Not started
 
 **Changes:**
 - Implement `document-service.ts` as main entry point
 - Wire together the previous components
 - Add integration tests
 
-**Tests:**
-- End-to-end document loading
-- Collection handling
-- Error propagation
+#### Step 13: React Hooks
 
-**Files:**
-- `src/lib/content/document-service.ts`
-- `src/lib/content/tests/document-service.test.ts`
-
-**Current Dependencies:**
-- All previous components
-- Existing document loading functions:
-  - `getDoc` in `docs.ts` (lines 95-274)
-  - `getPostBySlug` in `mdx.ts` (lines 193)
-  - Similar function in `policy-utils.ts`
-
-**Expected Usage:**
-```typescript
-import { createDocumentService } from '@/lib/content/document-service';
-
-const documentService = createDocumentService();
-const document = await documentService.getDocument('/docs/mirascope/getting-started', 'doc');
-```
-
-#### Step 9: React Hooks
+**Status**: Not started
 
 **Changes:**
 - Implement React hooks for document loading
 - Add component tests
 
-**Tests:**
-- Loading states
-- Error states
-- Data states
-- Re-fetching behavior
+### Phase 5: Migration
 
-**Files:**
-- `src/lib/content/hooks/useDocument.ts`
-- `src/lib/content/hooks/useMDXContent.ts`
-- `src/lib/content/tests/hooks/useDocument.test.ts`
-- `src/lib/content/tests/hooks/useMDXContent.test.ts`
+#### Step 14: Migrate Components
 
-**Current Dependencies:**
-- `useMDXProcessor` in `src/lib/hooks/useMDXProcessor.ts`
-- Document service from previous step
-
-**Expected Usage:**
-```tsx
-import { useDocument } from '@/lib/content/hooks/useDocument';
-import { useMDXContent } from '@/lib/content/hooks/useMDXContent';
-
-function DocumentComponent({ path }) {
-  const { document, loading, error } = useDocument(path, 'doc');
-  const { compiledMDX, processing } = useMDXContent(document);
-  
-  if (loading) return <LoadingSpinner />;
-  if (error) return <ErrorMessage error={error} />;
-  
-  return <MDXRenderer code={compiledMDX.code} />;
-}
-```
-
-### Phase 4: Migration
-
-#### Step 10: Migrate Docs
+**Status**: Not started
 
 **Changes:**
-- Update `DocsPage.tsx` to use new hooks and services
+- Update components to use new hooks instead of direct imports
 - Fix the "Untitled Document" issue through proper error handling
-- Add tests for docs behavior
+- Add tests for component behavior
 
-**Tests:**
-- Loading docs
-- Handling invalid paths
-- Error states
+#### Step 15: Remove Legacy Code
 
-**Files to modify:**
-- `src/components/DocsPage.tsx`
-- `src/components/DocsLayout.tsx`
-
-**Current Dependencies:**
-- Current implementation in `DocsPage.tsx` (lines 36-66)
-
-**Current Issues:**
-- "Untitled Document" appears instead of proper error
-- `getDoc` returns placeholder content for invalid paths
-
-**Migration Strategy:**
-1. Replace `getDoc` call with `useDocument` hook
-2. Update error handling to check for `DocumentNotFoundError`
-3. Remove local error state in favor of hook's error state
-4. Keep the same rendering logic for loading/error/content states
-
-#### Step 11: Migrate Blog
-
-**Changes:**
-- Update blog components to use new hooks and services
-- Add tests for blog behavior
-
-**Tests:**
-- Loading blog posts
-- Blog listings
-- Error handling
-
-**Files to modify:**
-- `src/routes/blog.$slug.tsx`
-- `src/routes/blog.index.tsx`
-
-**Current Dependencies:**
-- Current implementation in `blog.$slug.tsx` (lines 62-81)
-- `getPostBySlug` and `getAllPosts` from `mdx.ts`
-
-**Migration Strategy:**
-1. Replace `getPostBySlug` call with `useDocument` hook
-2. Replace `getAllPosts` with `useDocumentCollection` hook
-3. Keep similar loading/error/content states
-
-#### Step 12: Migrate Policy Pages
-
-**Changes:**
-- Update policy components to use new hooks and services
-- Add tests for policy behavior
-
-**Tests:**
-- Loading policy pages
-- Error handling
-
-**Files to modify:**
-- `src/routes/privacy.tsx`
-- `src/routes/terms/use.tsx`
-- `src/routes/terms/service.tsx`
-- `src/components/PolicyPage.tsx`
-
-**Current Dependencies:**
-- Current implementation in `usePolicy` hook and `PolicyPage` component
-
-**Migration Strategy:**
-1. Replace `usePolicy` hook with `useDocument` hook
-2. Adjust component to work with the new data structure
-3. Keep similar loading/error/content states
-
-### Phase 5: Cleanup
-
-#### Step 13: Remove Legacy Code
+**Status**: Not started
 
 **Changes:**
 - Remove old content handling code
 - Create utility modules for shared logic
 - Final tests to ensure everything works
 
-**Files to remove/refactor:**
-- `src/lib/docs.ts`
-- `src/lib/mdx.ts`
-- `src/lib/policy-utils.ts`
+## Progress Summary
 
-**Migration Strategy:**
-1. Ensure all components are using the new system
-2. One file at a time, redirect any remaining imports
-3. Remove the file once all dependencies are resolved
-
-## Testing Strategy
-
-### Unit Tests
-- Each module will have its own test file
-- Focus on testing public interfaces
-- Use mock data for isolated testing
-
-### Integration Tests
-- Test interactions between modules
-- Test full document loading pipeline
-- Test error propagation
-
-### Component Tests
-- Test React hooks with React Testing Library
-- Test loading, error, and success states
-- Test user interactions
-
-## Detailed Schedule
-
-| Step | Task | Estimated Time | Dependencies |
-|------|------|----------------|--------------|
-| 1    | Content Types | 1 hr | None |
-| 2    | Error Types | 1 hr | Content Types |
-| 3    | Frontmatter Parser | 2 hrs | None |
-| 4    | Path Resolver | 3 hrs | Content Types |
-| 5    | Content Cache | 2 hrs | None |
-| 6    | Metadata Service | 4 hrs | Content Types, Error Types |
-| 7    | Content Loader | 3 hrs | Path Resolver, Content Cache |
-| 8    | Document Service | 4 hrs | All previous components |
-| 9    | React Hooks | 3 hrs | Document Service |
-| 10   | Migrate Docs | 4 hrs | React Hooks |
-| 11   | Migrate Blog | 3 hrs | React Hooks |
-| 12   | Migrate Policy | 2 hrs | React Hooks |
-| 13   | Cleanup | 2 hrs | All migrations |
-
-**Total estimated time:** ~34 hours
-
-## Success Criteria
-
-1. All content types use the unified system
-2. No duplicate code for content handling
-3. Improved error handling (no more "Untitled Document" issues)
-4. Comprehensive test coverage
-5. No regression in functionality
-6. Clean, maintainable codebase
+- ✅ Phases 1 and 2 are complete (Foundation and Core Services)
+- ✅ Started Phase 3 with the Content Type Handler interface and Doc Content Handler
+- 🔜 Next up are Blog Content Handler and Policy Content Handler
+- 🔜 Then Document Service and React Hooks
+- 🔜 Finally, component migration and cleanup

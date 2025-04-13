@@ -10,10 +10,22 @@ The content system provides a unified approach to loading, processing, and rende
 graph TD
     Component[React Component] --> useDocument[useDocument Hook]
     useDocument --> DocumentService[Document Service]
-    DocumentService --> PathResolver[Path Resolver]
-    DocumentService --> MetadataService[Metadata Service]
-    DocumentService --> ContentLoader[Content Loader]
-    DocumentService --> FrontmatterParser[Frontmatter Parser]
+    DocumentService --> ContentHandlers[Content Type Handlers]
+    ContentHandlers --> DocHandler[Doc Handler]
+    ContentHandlers --> BlogHandler[Blog Handler]
+    ContentHandlers --> PolicyHandler[Policy Handler]
+    DocHandler --> PathResolver[Path Resolver]
+    DocHandler --> MetadataService[Metadata Service]
+    DocHandler --> ContentLoader[Content Loader]
+    DocHandler --> FrontmatterParser[Frontmatter Parser]
+    BlogHandler --> PathResolver
+    BlogHandler --> MetadataService
+    BlogHandler --> ContentLoader
+    BlogHandler --> FrontmatterParser
+    PolicyHandler --> PathResolver
+    PolicyHandler --> MetadataService
+    PolicyHandler --> ContentLoader
+    PolicyHandler --> FrontmatterParser
     ContentLoader --> ContentCache[Content Cache]
     MetadataService --> ContentTypes[Content Types]
     FrontmatterParser --> ContentTypes
@@ -73,6 +85,11 @@ export interface BlogMeta extends ContentMeta {
 export interface PolicyMeta extends ContentMeta {
   lastUpdated?: string;
 }
+
+// Type-specific document types
+export type DocWithContent = ContentWithMeta & { meta: DocMeta };
+export type BlogWithContent = ContentWithMeta & { meta: BlogMeta };
+export type PolicyWithContent = ContentWithMeta & { meta: PolicyMeta };
 ```
 
 ### `errors.ts`
@@ -206,11 +223,11 @@ export interface CacheOptions {
 export class ContentCache {
   constructor(options?: CacheOptions);
 
-  get(key: string): CacheEntry | null;
+  get(contentType: ContentType, key: string): string | null;
   
-  set(key: string, content: string, expiration?: number): void;
+  set(contentType: ContentType, key: string, content: string, expiration?: number): void;
   
-  invalidate(pattern?: string): void;
+  invalidate(contentType?: ContentType, pattern?: string): void;
   
   getStats(): {
     size: number;
@@ -244,10 +261,10 @@ export function extractMetadataFromFrontmatter(
   // Convert frontmatter to typed metadata
 }
 
-export function mergeMetadata(
-  structureMeta: ContentMeta,
-  frontmatterMeta: Partial<ContentMeta>
-): ContentMeta {
+export function mergeMetadata<T extends ContentMeta>(
+  structureMeta: T,
+  frontmatterMeta: Partial<T>
+): T {
   // Merge metadata from multiple sources with proper precedence
 }
 
@@ -276,20 +293,160 @@ export class ContentLoader {
     path: string,
     contentType: ContentType
   ): Promise<string>;
-  
-  async loadContentDev(
-    path: string,
-    contentType: ContentType
-  ): Promise<string>;
-  
-  async loadContentProd(
-    path: string,
-    contentType: ContentType
-  ): Promise<string>;
 }
 
 // Factory function
 export function createContentLoader(options?: ContentLoaderOptions): ContentLoader;
+```
+
+### `handlers/content-type-handler.ts`
+
+Defines the interface that each content type handler must implement, ensuring type safety and consistency.
+
+```typescript
+/**
+ * Interface for type-specific content handlers
+ */
+export interface ContentTypeHandler<T extends ContentMeta> {
+  /**
+   * Retrieves a document by path
+   */
+  getDocument(path: string): Promise<ContentWithMeta & { meta: T }>;
+  
+  /**
+   * Gets all documents of this content type
+   */
+  getAllDocuments(filter?: (meta: T) => boolean): Promise<T[]>;
+  
+  /**
+   * Gets documents for a specific collection
+   */
+  getDocumentsForCollection(collection: string): Promise<T[]>;
+}
+
+/**
+ * Type mapping from content types to their corresponding metadata types
+ */
+export type ContentTypeToMeta<T extends ContentType> = 
+  T extends 'doc' ? DocMeta :
+  T extends 'blog' ? BlogMeta :
+  T extends 'policy' ? PolicyMeta :
+  never;
+
+/**
+ * Map of content types to their handlers, ensuring all content types are covered
+ */
+export type ContentTypeHandlerMap = {
+  [K in ContentType]: ContentTypeHandler<ContentTypeToMeta<K>>;
+};
+```
+
+### `handlers/doc-content-handler.ts`
+
+Implements the ContentTypeHandler interface for documentation.
+
+```typescript
+export class DocContentHandler implements ContentTypeHandler<DocMeta> {
+  private loader: ContentLoader;
+  private cache: ContentCache;
+
+  constructor(loader: ContentLoader, cache?: ContentCache) {
+    this.loader = loader;
+    this.cache = cache || createContentCache();
+  }
+
+  async getDocument(path: string): Promise<ContentWithMeta & { meta: DocMeta }> {
+    // Implementation that loads doc content with proper caching
+  }
+
+  async getAllDocuments(filter?: (meta: DocMeta) => boolean): Promise<DocMeta[]> {
+    // Implementation that returns all docs
+  }
+
+  async getDocumentsForCollection(product: string): Promise<DocMeta[]> {
+    // Implementation that returns docs for a specific product
+  }
+
+  // Doc-specific helper methods
+  async getDocsForSection(product: string, section: string): Promise<DocMeta[]> { /*...*/ }
+  async getDocsForGroup(product: string, group: string): Promise<DocMeta[]> { /*...*/ }
+  getSectionsForProduct(product: string): { slug: string; title: string }[] { /*...*/ }
+  getDocsForProduct(product: string): DocMeta[] { /*...*/ }
+}
+
+// Factory function
+export function createDocContentHandler(): DocContentHandler { /*...*/ }
+
+// Singleton instance
+export const docContentHandler = createDocContentHandler();
+```
+
+### `handlers/blog-content-handler.ts`
+
+Implements the ContentTypeHandler interface for blog posts.
+
+```typescript
+export class BlogContentHandler implements ContentTypeHandler<BlogMeta> {
+  private loader: ContentLoader;
+  private cache: ContentCache;
+
+  constructor(loader: ContentLoader, cache?: ContentCache) {
+    this.loader = loader;
+    this.cache = cache || createContentCache();
+  }
+
+  async getDocument(path: string): Promise<ContentWithMeta & { meta: BlogMeta }> {
+    // Implementation that loads blog content with proper caching
+  }
+
+  async getAllDocuments(filter?: (meta: BlogMeta) => boolean): Promise<BlogMeta[]> {
+    // Implementation that returns all blog posts, sorted by date
+  }
+
+  async getDocumentsForCollection(collection: string): Promise<BlogMeta[]> {
+    // Implementation that returns blog posts for a specific collection (tag, category, etc)
+  }
+}
+
+// Factory function
+export function createBlogContentHandler(): BlogContentHandler { /*...*/ }
+
+// Singleton instance
+export const blogContentHandler = createBlogContentHandler();
+```
+
+### `handlers/policy-content-handler.ts`
+
+Implements the ContentTypeHandler interface for policy pages.
+
+```typescript
+export class PolicyContentHandler implements ContentTypeHandler<PolicyMeta> {
+  private loader: ContentLoader;
+  private cache: ContentCache;
+
+  constructor(loader: ContentLoader, cache?: ContentCache) {
+    this.loader = loader;
+    this.cache = cache || createContentCache();
+  }
+
+  async getDocument(path: string): Promise<ContentWithMeta & { meta: PolicyMeta }> {
+    // Implementation that loads policy content with proper caching
+  }
+
+  async getAllDocuments(filter?: (meta: PolicyMeta) => boolean): Promise<PolicyMeta[]> {
+    // Implementation that returns all policy pages
+  }
+
+  async getDocumentsForCollection(collection: string): Promise<PolicyMeta[]> {
+    // Implementation that returns policy pages for a specific collection (e.g., terms)
+  }
+}
+
+// Factory function
+export function createPolicyContentHandler(): PolicyContentHandler { /*...*/ }
+
+// Singleton instance
+export const policyContentHandler = createPolicyContentHandler();
 ```
 
 ### `document-service.ts`
@@ -304,22 +461,36 @@ export interface DocumentServiceOptions {
 }
 
 export class DocumentService {
-  constructor(options?: DocumentServiceOptions);
+  private handlers: ContentTypeHandlerMap;
 
-  async getDocument(
+  constructor(options?: DocumentServiceOptions) {
+    this.handlers = {
+      'doc': createDocContentHandler(),
+      'blog': createBlogContentHandler(),
+      'policy': createPolicyContentHandler()
+    };
+  }
+
+  async getDocument<T extends ContentType>(
     path: string, 
-    contentType: ContentType
-  ): Promise<ContentWithMeta>;
-  
-  async getAllDocuments(
-    contentType: ContentType,
-    filter?: (meta: ContentMeta) => boolean
-  ): Promise<ContentMeta[]>;
-  
-  async getDocumentsForCollection(
-    contentType: ContentType,
+    contentType: T
+  ): Promise<ContentWithMeta & { meta: ContentTypeToMeta<T> }> {
+    return this.handlers[contentType].getDocument(path) as any;
+  }
+
+  async getAllDocuments<T extends ContentType>(
+    contentType: T,
+    filter?: (meta: ContentTypeToMeta<T>) => boolean
+  ): Promise<ContentTypeToMeta<T>[]> {
+    return this.handlers[contentType].getAllDocuments(filter as any) as any;
+  }
+
+  async getDocumentsForCollection<T extends ContentType>(
+    contentType: T,
     collection: string
-  ): Promise<ContentMeta[]>;
+  ): Promise<ContentTypeToMeta<T>[]> {
+    return this.handlers[contentType].getDocumentsForCollection(collection) as any;
+  }
 }
 
 // Factory function
@@ -336,22 +507,22 @@ export interface UseDocumentOptions {
   suspense?: boolean;
 }
 
-export function useDocument(
+export function useDocument<T extends ContentType>(
   path: string,
-  contentType: ContentType,
+  contentType: T,
   options?: UseDocumentOptions
 ): {
-  document: ContentWithMeta | null;
+  document: (ContentWithMeta & { meta: ContentTypeToMeta<T> }) | null;
   loading: boolean;
   error: Error | null;
 };
 
-export function useDocumentCollection(
-  contentType: ContentType,
+export function useDocumentCollection<T extends ContentType>(
+  contentType: T,
   collection?: string,
   options?: UseDocumentOptions
 ): {
-  documents: ContentMeta[];
+  documents: ContentTypeToMeta<T>[];
   loading: boolean;
   error: Error | null;
 };
@@ -381,21 +552,21 @@ export function useMDXContent(
 
 1. Component calls `useDocument(path, contentType)`
 2. Hook calls `documentService.getDocument(path, contentType)`
-3. Document service:
-   - Normalizes the path using `pathResolver`
-   - Checks cache for content using `contentCache`
+3. Document service delegates to the appropriate content type handler
+4. The handler:
+   - Checks cache for content 
    - If not cached, loads content using `contentLoader`
    - Extracts frontmatter using `frontmatterParser`
    - Gets structure metadata using `metadataService`
    - Merges frontmatter and structure metadata
    - Returns complete document with metadata
-4. Component renders the document using `useMDXContent` for processing
+5. Component renders the document using `useMDXContent` for processing
 
 ## Caching Strategy
 
 The content cache is designed for optimal performance:
 
-- **Cache Key**: `${contentType}:${normalizedPath}`
+- **Cache Key**: `${contentType}:${specificKey}`
 - **Cache Entry**: `{ content: string, timestamp: number, expires?: number }`
 - **Expiration Policy**:
   - Development: 5 minutes by default (configurable)
