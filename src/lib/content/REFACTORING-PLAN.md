@@ -146,27 +146,27 @@ This document outlines a step-by-step plan for implementing the unified content 
 - ✅ Updated `docs.ts` to use the new handler
 - ✅ Maintained backward compatibility with existing components
 
-#### Step 10: Blog Content Handler (IN PROGRESS)
+#### ✅ Step 10: Blog Content Handler (COMPLETED)
 
-**Status**: Not started
-
-**Changes:**
-- Create `blog-content-handler.ts` for blog-specific handling
-- Migrate blog post retrieval logic from `mdx.ts`
-- Add proper caching, error handling, and type safety
-- Update `mdx.ts` to use the new handler
-- Maintain backward compatibility with existing components
-
-#### Step 11: Policy Content Handler
-
-**Status**: Not started
+**Status**: Completed
 
 **Changes:**
-- Create `policy-content-handler.ts` for policy-specific handling
-- Migrate policy page retrieval logic from `policy-utils.ts`
-- Add proper caching, error handling, and type safety
-- Update `policy-utils.ts` to use the new handler
-- Maintain backward compatibility with existing components
+- ✅ Created `blog-content-handler.ts` for blog-specific handling
+- ✅ Migrated blog post retrieval logic from `mdx.ts`
+- ✅ Added proper caching, error handling, and type safety
+- ✅ Updated `mdx.ts` to use the new handler
+- ✅ Maintained backward compatibility with existing components
+
+#### ✅ Step 11: Policy Content Handler (COMPLETED)
+
+**Status**: Completed
+
+**Changes:**
+- ✅ Created `policy-content-handler.ts` for policy-specific handling
+- ✅ Migrated policy page retrieval logic from `policy-utils.ts`
+- ✅ Added proper caching, error handling, and type safety
+- ✅ Updated `policy-utils.ts` to use the new handler
+- ✅ Maintained backward compatibility with existing components
 
 ### Phase 4: Document Service
 
@@ -210,7 +210,7 @@ This document outlines a step-by-step plan for implementing the unified content 
 ## Progress Summary
 
 - ✅ Phases 1 and 2 are complete (Foundation and Core Services)
-- ✅ Started Phase 3 with the Content Type Handler interface and Doc Content Handler
-- 🔜 Next up are Blog Content Handler and Policy Content Handler
-- 🔜 Then Document Service and React Hooks
+- ✅ Phase 3 is complete (Content Type Handlers)
+- 🔜 Next up is Phase 4 with Document Service
+- 🔜 Then React Hooks
 - 🔜 Finally, component migration and cleanup

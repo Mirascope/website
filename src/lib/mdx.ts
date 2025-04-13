@@ -1,6 +1,11 @@
-import { parseFrontmatter } from "./content/frontmatter";
+// Import types but use them internally via the handler
+import "@/lib/content/content-types";
+import { DocumentNotFoundError } from "@/lib/content/errors";
 
-// Define the PostMeta type for frontmatter
+// Import the BlogContentHandler
+import { blogContentHandler } from "@/lib/content/handlers/blog-content-handler";
+
+// Re-export BlogMeta as PostMeta for backward compatibility
 export type PostMeta = {
   title: string;
   description: string;
@@ -11,171 +16,39 @@ export type PostMeta = {
   lastUpdated?: string;
 };
 
-// Type definition for post content
+// Type definition for post content (for backward compatibility)
 type PostContent = { meta: PostMeta; content: string };
 
-// Import the ContentLoader and other utilities
-import { createContentCache } from "./content/content-cache";
-import { createContentLoader } from "./content/content-loader";
-import { DocumentNotFoundError } from "./content/errors";
-
-// Check if we're in production environment
-const isProduction = import.meta.env.PROD;
-
-// Create a shared cache and content loader
-const blogCache = createContentCache();
-const contentLoader = createContentLoader({ cache: blogCache });
-
-/**
- * Get list of blog posts - development implementation
- * Uses the virtual middleware endpoint from the Vite plugin
- */
-const getPostsListDev = async (): Promise<string[]> => {
-  try {
-    const response = await fetch("/api/posts-list");
-    if (!response.ok) {
-      throw new Error(`Error fetching posts list: ${response.statusText}`);
-    }
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching posts list in dev:", error);
-    throw error;
-  }
-};
-
-/**
- * Get list of blog posts - production implementation
- * Uses a pre-generated static JSON file
- */
-const getPostsListProd = async (): Promise<string[]> => {
-  try {
-    const response = await fetch("/static/posts-list-files.json");
-    if (!response.ok) {
-      throw new Error(`Error fetching posts list: ${response.statusText}`);
-    }
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching posts list in prod:", error);
-    throw error;
-  }
-};
-
-/**
- * Get a list of all blog post files (abstracting over dev/prod differences)
- */
-const getPostsList = async (): Promise<string[]> => {
-  // Check the cache first
-  const postsListFilesKey = "posts-list-files";
-  const cachedPostsFiles = blogCache.get("blog", postsListFilesKey);
-
-  if (cachedPostsFiles) {
-    return JSON.parse(cachedPostsFiles);
-  }
-
-  // Choose implementation based on environment
-  const postFiles = isProduction ? await getPostsListProd() : await getPostsListDev();
-
-  // Cache the list
-  blogCache.set("blog", postsListFilesKey, JSON.stringify(postFiles));
-  return postFiles;
-};
-
-/**
- * Load all posts with their content and metadata
- */
-const loadAllPosts = async (): Promise<Record<string, PostContent>> => {
-  // Create a key for the entire posts collection
-  const allPostsCacheKey = "all-posts";
-  const cachedPosts = blogCache.get("blog", allPostsCacheKey);
-
-  if (cachedPosts) {
-    return JSON.parse(cachedPosts);
-  }
-
-  try {
-    // Get a list of all MDX files
-    const postFiles = await getPostsList();
-
-    const posts: Record<string, PostContent> = {};
-
-    for (const filename of postFiles) {
-      // Extract slug from filename (remove extension)
-      const slug = filename.replace(/\.mdx$/, "");
-
-      try {
-        // Use the content loader to get content
-        const fileContent = await contentLoader.loadContent(`/blog/${slug}`, "blog");
-
-        // Parse frontmatter and content
-        const { frontmatter, content } = parseFrontmatter(fileContent);
-
-        posts[slug] = {
-          content,
-          meta: {
-            title: frontmatter.title || "",
-            description: frontmatter.description || "",
-            date: frontmatter.date || "",
-            readTime: frontmatter.readTime || "",
-            author: frontmatter.author || "Mirascope Team",
-            slug,
-            ...(frontmatter.lastUpdated && { lastUpdated: frontmatter.lastUpdated }),
-          },
-        };
-      } catch (error) {
-        console.error(`Error loading post ${slug}:`, error);
-        // Skip this post and continue with others
-      }
-    }
-
-    // Store all posts in the cache
-    blogCache.set("blog", allPostsCacheKey, JSON.stringify(posts));
-    return posts;
-  } catch (error) {
-    console.error("Error loading posts:", error);
-    throw error;
-  }
-};
-
-// Get post by slug - unified implementation
+// Get post by slug - proxies to the BlogContentHandler
 export const getPostBySlug = async (slug: string): Promise<PostContent> => {
   console.log(`[MDX] getPostBySlug called with slug: ${slug}`);
 
-  // Check if the post is cached individually
-  const postCacheKey = `post:${slug}`;
-  const cachedPost = blogCache.get("blog", postCacheKey);
-
-  if (cachedPost) {
-    console.log(`[MDX] Using cached post for slug: ${slug}`);
-    return JSON.parse(cachedPost);
-  }
-
   try {
-    // Try to load the post using ContentLoader
-    const blogPath = `/blog/${slug}`;
-    const fileContent = await contentLoader.loadContent(blogPath, "blog");
+    const blogPost = await blogContentHandler.getDocument(slug);
 
-    // Parse frontmatter and content
-    const { frontmatter, content } = parseFrontmatter(fileContent);
-
-    // Create the post object
-    const post = {
-      content,
+    // Convert BlogWithContent to PostContent for backward compatibility
+    // This ensures existing components can continue to work without changes
+    return {
+      content: blogPost.content,
       meta: {
-        title: frontmatter.title || "",
-        description: frontmatter.description || "",
-        date: frontmatter.date || "",
-        readTime: frontmatter.readTime || "",
-        author: frontmatter.author || "Mirascope Team",
-        slug,
-        ...(frontmatter.lastUpdated && { lastUpdated: frontmatter.lastUpdated }),
+        title: blogPost.meta.title,
+        description: blogPost.meta.description || "",
+        date: blogPost.meta.date,
+        readTime: blogPost.meta.readTime,
+        author: blogPost.meta.author,
+        slug: blogPost.meta.slug,
+        ...(blogPost.meta.lastUpdated && { lastUpdated: blogPost.meta.lastUpdated }),
       },
     };
-
-    // Cache the individual post
-    blogCache.set("blog", postCacheKey, JSON.stringify(post));
-    return post;
   } catch (error) {
     console.error(`[MDX] Post not found for slug: ${slug}`);
+
+    // If it's already a DocumentNotFoundError, just throw it
+    if (error instanceof DocumentNotFoundError) {
+      throw error;
+    }
+
+    // Otherwise, convert to a DocumentNotFoundError
     throw new DocumentNotFoundError("blog", `/blog/${slug}`);
   }
 };
@@ -184,27 +57,19 @@ export const getPostBySlug = async (slug: string): Promise<PostContent> => {
 export const getAllPosts = async (): Promise<PostMeta[]> => {
   console.log("[MDX] Getting all posts");
 
-  // Create a key for the posts list
-  const postsListKey = "posts-list";
-  const cachedPostsList = blogCache.get("blog", postsListKey);
-
-  if (cachedPostsList) {
-    return JSON.parse(cachedPostsList);
-  }
-
   try {
-    // Try to load all posts - ContentLoader handles dev/prod differences
-    const posts = await loadAllPosts();
-    const postList = Object.values(posts).map((post) => post.meta);
+    const blogPosts = await blogContentHandler.getAllDocuments();
 
-    // Sort posts by date in descending order
-    const sortedPosts = postList.sort((a, b) => {
-      return new Date(b.date).getTime() - new Date(a.date).getTime();
-    });
-
-    // Store sorted posts in the cache
-    blogCache.set("blog", postsListKey, JSON.stringify(sortedPosts));
-    return sortedPosts;
+    // Convert BlogMeta[] to PostMeta[] for backward compatibility
+    return blogPosts.map((post) => ({
+      title: post.title,
+      description: post.description || "",
+      date: post.date,
+      readTime: post.readTime,
+      author: post.author,
+      slug: post.slug,
+      ...(post.lastUpdated && { lastUpdated: post.lastUpdated }),
+    }));
   } catch (error) {
     console.error("[MDX] Error loading posts list:", error);
     throw error;

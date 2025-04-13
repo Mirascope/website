@@ -1,27 +1,17 @@
 import { processMDX } from "./mdx-utils";
-import { parseFrontmatter } from "./content/frontmatter";
 import { DocumentNotFoundError } from "./content/errors";
-import { createContentCache } from "./content/content-cache";
-import { createContentLoader } from "./content/content-loader";
+// Import but use ContentPolicyMeta internally via the handler
+import "@/lib/content/content-types";
+import { policyContentHandler } from "@/lib/content/handlers/policy-content-handler";
 
 /**
  * PolicyMeta - Type for policy/terms metadata from frontmatter
+ * (For backward compatibility with existing components)
  */
 export interface PolicyMeta {
   title: string;
   lastUpdated?: string;
 }
-
-/**
- * Cleans up content after frontmatter parsing by removing source map URLs
- */
-const cleanContent = (content: string): string => {
-  return content.replace(/\/\/# sourceMappingURL=.*$/gm, "");
-};
-
-// Create a shared cache and content loader for policies
-const policyCache = createContentCache();
-const contentLoader = createContentLoader({ cache: policyCache });
 
 /**
  * Fetch and process a policy or terms MDX file
@@ -34,23 +24,26 @@ export const fetchPolicyContent = async (
   compiledMDX: { code: string; frontmatter: Record<string, any> };
 }> => {
   try {
-    // Use the content loader to get the content
-    const mdxContent = await contentLoader.loadContent(path, "policy");
+    console.log(`[policy-utils] Fetching policy content for: ${path}`);
 
-    // Parse frontmatter and content
-    const { frontmatter, content: rawContent } = parseFrontmatter(mdxContent);
-    const content = cleanContent(rawContent);
+    // Use the PolicyContentHandler to get the document
+    const policyDocument = await policyContentHandler.getDocument(path);
 
-    // Create meta object from frontmatter
+    // Create meta object from the returned metadata
+    // Convert from ContentPolicyMeta to PolicyMeta for backward compatibility
     const meta: PolicyMeta = {
-      title: frontmatter.title,
-      lastUpdated: frontmatter.lastUpdated,
+      title: policyDocument.meta.title,
+      lastUpdated: policyDocument.meta.lastUpdated,
     };
 
     // Process the MDX content
-    const compiledMDX = await processMDX(content);
+    const compiledMDX = await processMDX(policyDocument.content);
 
-    return { meta, content, compiledMDX };
+    return {
+      meta,
+      content: policyDocument.content,
+      compiledMDX,
+    };
   } catch (error) {
     console.error(`Error loading policy content from ${path}:`, error);
 
@@ -61,6 +54,42 @@ export const fetchPolicyContent = async (
 
     // Otherwise, throw a generic error
     throw new Error(`Failed to load policy content from ${path}`);
+  }
+};
+
+/**
+ * Get all policy documents
+ */
+export const getAllPolicies = async (): Promise<PolicyMeta[]> => {
+  try {
+    const allPolicies = await policyContentHandler.getAllDocuments();
+
+    // Convert to PolicyMeta for backward compatibility
+    return allPolicies.map((policy) => ({
+      title: policy.title,
+      lastUpdated: policy.lastUpdated,
+    }));
+  } catch (error) {
+    console.error("Error loading all policies:", error);
+    throw error;
+  }
+};
+
+/**
+ * Get policy documents in a specific collection (e.g., "terms")
+ */
+export const getPoliciesInCollection = async (collection: string): Promise<PolicyMeta[]> => {
+  try {
+    const policies = await policyContentHandler.getDocumentsForCollection(collection);
+
+    // Convert to PolicyMeta for backward compatibility
+    return policies.map((policy) => ({
+      title: policy.title,
+      lastUpdated: policy.lastUpdated,
+    }));
+  } catch (error) {
+    console.error(`Error loading policies in collection ${collection}:`, error);
+    throw error;
   }
 };
 
