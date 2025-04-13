@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { fetchPolicyContent, type PolicyMeta } from "@/lib/policy-utils";
+import type { PolicyMeta } from "@/lib/content/content-types";
+import { policyContentHandler } from "@/lib/content/handlers/policy-content-handler";
 import { processMDX } from "@/lib/mdx-utils";
 
-interface UsePolicyResult {
+export interface UsePolicyResult {
   policyMeta: PolicyMeta;
   compiledMDX: {
     code: string;
@@ -13,7 +14,18 @@ interface UsePolicyResult {
 }
 
 /**
- * Custom hook to fetch and process policy content
+ * Converts a source file path to a policy path that can be used with the content handler
+ * Example: "/src/policies/terms/use.mdx" -> "terms/use"
+ */
+function filePathToPolicyPath(filePath: string): string {
+  // Remove "/src/policies/" prefix and ".mdx" suffix
+  const withoutPrefix = filePath.replace(/^\/src\/policies\//, "");
+  const withoutExtension = withoutPrefix.replace(/\.mdx$/, "");
+  return withoutExtension;
+}
+
+/**
+ * Custom hook to fetch and process policy content using the PolicyContentHandler
  *
  * @param policyPath - Path to the policy MDX file
  * @param defaultTitle - Default title to use if metadata is missing
@@ -31,44 +43,21 @@ export function usePolicy(policyPath: string, defaultTitle: string): UsePolicyRe
   useEffect(() => {
     const loadPolicy = async () => {
       try {
-        // In development, fetch directly from the source file
-        if (import.meta.env.DEV) {
-          const { meta, compiledMDX } = await fetchPolicyContent(policyPath);
-          setPolicyMeta(meta);
-          setCompiledMDX(compiledMDX);
-          setLoading(false);
-          return;
-        }
+        // Convert source path to policy path for the content handler
+        const policyId = filePathToPolicyPath(policyPath);
+        console.log(`[usePolicy] Loading policy with ID: ${policyId}`);
 
-        // In production, use pre-processed static files
-        // Example: "/src/policies/terms/use.mdx" -> "/static/policies/terms/use.mdx.json"
-        const pathParts = policyPath.split("/");
-        const fileName = pathParts[pathParts.length - 1];
-        let staticPath = `/static/policies/privacy.json`;
-        if (fileName !== "privacy.mdx") {
-          const dirPath = pathParts.slice(3, pathParts.length - 1).join("/");
-          staticPath = `/static/policies/${dirPath}/${fileName}.json`;
-        }
-
-        const response = await fetch(staticPath);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch static policy: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        const { content, frontmatter } = data;
+        // Use the policy content handler to get the document
+        const policyDoc = await policyContentHandler.getDocument(policyId);
 
         // Process the MDX content
-        const processed = await processMDX(content);
+        const processed = await processMDX(policyDoc.content);
 
-        setPolicyMeta({
-          title: frontmatter.title,
-          lastUpdated: frontmatter.lastUpdated,
-        });
+        setPolicyMeta(policyDoc.meta);
         setCompiledMDX(processed);
         setLoading(false);
       } catch (err) {
-        console.error(`Error loading policy from ${policyPath}:`, err);
+        console.error(`[usePolicy] Error loading policy from ${policyPath}:`, err);
         setError(
           `Failed to load policy content: ${err instanceof Error ? err.message : String(err)}`
         );
@@ -80,7 +69,12 @@ export function usePolicy(policyPath: string, defaultTitle: string): UsePolicyRe
   }, [policyPath]);
 
   return {
-    policyMeta: policyMeta ?? { title: defaultTitle },
+    policyMeta: policyMeta ?? {
+      title: defaultTitle,
+      path: filePathToPolicyPath(policyPath),
+      slug: filePathToPolicyPath(policyPath).split("/").pop() || "",
+      type: "policy",
+    },
     compiledMDX,
     loading,
     error,

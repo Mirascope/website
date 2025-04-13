@@ -140,8 +140,8 @@ export function getContentPath(path: string, contentType: ContentType): string {
   // Different content types may have different APIs/endpoints
   switch (contentType) {
     case "policy":
-      // Policy files are directly fetched in dev mode
-      return path;
+      // Policy files need the /src/policies/ prefix in dev mode
+      return `/src/policies/${normalizePath(path, contentType)}`;
     case "doc":
       // Docs need the src prefix in dev mode
       return `/src/docs/${normalizePath(path, contentType)}`;
