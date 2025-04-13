@@ -50,8 +50,27 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
 
         // For index pages, append /index, ensuring no double slashes
         const docPathNoTrailingSlash = docPath.endsWith("/") ? docPath.slice(0, -1) : docPath;
-        const finalPath =
-          splat === "" || splat === "/" ? `${docPathNoTrailingSlash}/index` : docPath;
+
+        // Handle empty splat cases correctly:
+        // 1. Empty splat in regular path - points to product root index
+        // 2. Empty splat in section path - points to section index
+        let finalPath;
+        if (splat === "" || splat === "/") {
+          // For both section and regular paths, append /index for empty splats
+          finalPath = `${docPathNoTrailingSlash}/index`;
+        } else {
+          finalPath = docPath;
+        }
+
+        // Debug path construction for troubleshooting
+        console.log(`[DocsPage] Path resolution:
+          product: ${product}
+          section: ${section}
+          splat: "${splat}"
+          docPath: ${docPath}
+          docPathNoTrailingSlash: ${docPathNoTrailingSlash}
+          finalPath: ${finalPath}
+        `);
 
         // Fetch the document
         const doc = await getDoc(finalPath);

@@ -129,15 +129,22 @@ function getDocMetadataFromStructure(path: string): DocMeta {
         description = "";
       }
     }
-  } else if (pathParts.length === 2) {
-    // Could be a group or section: /docs/mirascope/getting-started/ or /docs/mirascope/api/
-    // OR a direct top-level item: /docs/mirascope/migration
-    slug = getSlug(pathParts);
-    const potentialGroupOrSection = pathParts[1];
+  } else if (pathParts.length === 2 || pathParts.length === 3) {
+    // Handle both /docs/mirascope/api and /docs/mirascope/api/index similarly
 
-    // First check for index pages or direct top-level items
-    // This needs to handle both /docs/mirascope/index and regular items
+    // Detect if this is an index path pattern
+    const isIndexPath = pathParts.length === 3 && pathParts[2] === "index";
+
+    // For index paths, use the part before index as section/group name
+    const potentialGroupOrSection = isIndexPath ? pathParts[1] : pathParts[1];
+
+    // For index paths, slug is "index", otherwise use the last part
+    slug = isIndexPath ? "index" : getSlug(pathParts);
+
+    // First check for non-index cases that match direct top-level items
+    // Don't do this check for paths ending with index
     if (
+      !isIndexPath &&
       productDocs.items &&
       ((slug === "index" && productDocs.items.index) ||
         (slug !== "index" && productDocs.items[slug]))
@@ -162,7 +169,7 @@ function getDocMetadataFromStructure(path: string): DocMeta {
       groupTitle = productDocs.groups[group].title;
 
       if (slug === "index" || slug === "" || slug === "overview") {
-        // Group index: /docs/mirascope/getting-started/
+        // Group index: /docs/mirascope/getting-started/ or /docs/mirascope/getting-started/index
         title = groupTitle;
         description = ""; // Empty description, will be populated from frontmatter
       } else {
@@ -183,9 +190,15 @@ function getDocMetadataFromStructure(path: string): DocMeta {
       sectionTitle = productDocs.sections[section].title;
 
       if (slug === "index" || slug === "" || slug === "overview") {
-        // Section index: /docs/mirascope/api/
+        // Section index: /docs/mirascope/api/ or /docs/mirascope/api/index
         title = sectionTitle;
         description = ""; // Empty description, will be populated from frontmatter
+
+        // Specifically handle section indices correctly
+        // Look for an index item in the section's items
+        if (productDocs.sections[section].items && productDocs.sections[section].items.index) {
+          title = productDocs.sections[section].items.index.title;
+        }
       } else {
         // Section item: /docs/mirascope/api/quickstart
         const item = productDocs.sections[section].items?.[slug];

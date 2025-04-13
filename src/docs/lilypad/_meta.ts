@@ -85,7 +85,7 @@ const lilypadMeta: ProductDocs = {
       // Top-level API pages
       items: {
         index: {
-          title: "Under construction...",
+          title: "Lilypad API Reference",
         },
       },
     },
