@@ -41,3 +41,8 @@ export interface BlogMeta extends ContentMeta {
 export interface PolicyMeta extends ContentMeta {
   lastUpdated?: string;
 }
+
+// Type-specific document types
+export type DocWithContent = ContentWithMeta & { meta: DocMeta };
+export type BlogWithContent = ContentWithMeta & { meta: BlogMeta };
+export type PolicyWithContent = ContentWithMeta & { meta: PolicyMeta };
