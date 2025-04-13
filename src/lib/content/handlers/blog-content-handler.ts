@@ -1,113 +1,53 @@
 import type { ContentWithMeta, BlogMeta } from "@/lib/content/content-types";
-import type { ContentTypeHandler } from "@/lib/content/handlers/content-type-handler";
-import { parseFrontmatter } from "@/lib/content/frontmatter";
-import { isValidPath } from "@/lib/content/path-resolver";
-import { extractMetadataFromFrontmatter, validateMetadata } from "@/lib/content/metadata-service";
-import {
-  ContentError,
-  DocumentNotFoundError,
-  InvalidPathError,
-  MetadataError,
-} from "@/lib/content/errors";
-import { ContentLoader, createContentLoader } from "@/lib/content/content-loader";
-import { ContentCache, createContentCache } from "@/lib/content/content-cache";
+import { ContentError } from "@/lib/content/errors";
+import { ContentLoader } from "@/lib/content/content-loader";
+import { ContentCache } from "@/lib/content/content-cache";
+import { BaseContentHandler } from "./base-content-handler";
 
 /**
  * Handler for blog content
  */
-export class BlogContentHandler implements ContentTypeHandler<BlogMeta> {
-  private loader: ContentLoader;
-  private cache: ContentCache;
-  private isProduction = import.meta.env.PROD;
-
+export class BlogContentHandler extends BaseContentHandler<BlogMeta> {
   /**
    * Creates a new BlogContentHandler
    *
    * @param loader - Content loader instance
    * @param cache - Optional cache instance
    */
-  constructor(loader: ContentLoader, cache?: ContentCache) {
-    this.loader = loader;
-    this.cache = cache || createContentCache();
+  constructor(loader?: ContentLoader, cache?: ContentCache) {
+    super("blog", loader, cache);
   }
 
   /**
-   * Retrieves a blog post by slug
+   * Creates metadata from frontmatter
    */
-  async getDocument(slug: string): Promise<ContentWithMeta & { meta: BlogMeta }> {
-    try {
-      // Check cache first if available
-      const cacheKey = `post:${slug}`;
-      if (this.cache) {
-        const cached = this.cache.get("blog", cacheKey);
-        if (cached) {
-          return JSON.parse(cached);
-        }
-      }
+  protected createMetaFromFrontmatter(frontmatter: Record<string, any>, path: string): BlogMeta {
+    return {
+      title: frontmatter.title || "",
+      description: frontmatter.description || "",
+      date: frontmatter.date || "",
+      readTime: frontmatter.readTime || "",
+      author: frontmatter.author || "Mirascope Team",
+      slug: path,
+      path: path,
+      type: "blog",
+      ...(frontmatter.lastUpdated && { lastUpdated: frontmatter.lastUpdated }),
+    };
+  }
 
-      // Construct the path for the blog post
-      const blogPath = `/blog/${slug}`;
+  /**
+   * Normalizes the path for blog posts
+   */
+  protected normalizePath(slug: string): string {
+    // Add the /blog/ prefix if it's not already there
+    return slug.startsWith("/blog/") ? slug : `/blog/${slug}`;
+  }
 
-      // Validate the path (using the full path)
-      if (!isValidPath(blogPath, "blog")) {
-        throw new InvalidPathError("blog", blogPath);
-      }
-
-      // Load the document content
-      const rawContent = await this.loader.loadContent(blogPath, "blog");
-
-      // Parse frontmatter
-      const { frontmatter, content } = parseFrontmatter(rawContent);
-
-      // Extract metadata from frontmatter
-      // Not using extractMetadataFromFrontmatter since we construct the meta object manually
-      extractMetadataFromFrontmatter(frontmatter, "blog", slug);
-
-      // Create the meta object
-      const meta: BlogMeta = {
-        title: frontmatter.title || "",
-        description: frontmatter.description || "",
-        date: frontmatter.date || "",
-        readTime: frontmatter.readTime || "",
-        author: frontmatter.author || "Mirascope Team",
-        slug,
-        path: slug,
-        type: "blog",
-        ...(frontmatter.lastUpdated && { lastUpdated: frontmatter.lastUpdated }),
-      };
-
-      // Validate the final metadata
-      const validation = validateMetadata(meta, "blog");
-      if (!validation.isValid) {
-        throw new MetadataError(
-          "blog",
-          slug,
-          new Error(`Invalid metadata: ${validation.errors?.join(", ")}`)
-        );
-      }
-
-      const result = { meta, content };
-
-      // Cache the result
-      if (this.cache) {
-        this.cache.set("blog", cacheKey, JSON.stringify(result));
-      }
-
-      return result;
-    } catch (error) {
-      // Re-throw known errors
-      if (
-        error instanceof DocumentNotFoundError ||
-        error instanceof InvalidPathError ||
-        error instanceof MetadataError ||
-        error instanceof ContentError
-      ) {
-        throw error;
-      }
-
-      // Wrap other errors
-      throw new ContentError(`Failed to get blog post: ${slug}`, "blog", slug);
-    }
+  /**
+   * Gets a cache key for blog posts
+   */
+  protected getCacheKey(slug: string): string {
+    return `post:${slug}`;
   }
 
   /**
@@ -118,7 +58,7 @@ export class BlogContentHandler implements ContentTypeHandler<BlogMeta> {
       // Check cache first
       const cacheKey = "posts-list";
       if (this.cache) {
-        const cached = this.cache.get("blog", cacheKey);
+        const cached = this.cache.get(this.contentType, cacheKey);
         if (cached) {
           const posts = JSON.parse(cached) as BlogMeta[];
           return filter ? posts.filter(filter) : posts;
@@ -136,7 +76,7 @@ export class BlogContentHandler implements ContentTypeHandler<BlogMeta> {
 
       // Cache the sorted posts
       if (this.cache) {
-        this.cache.set("blog", cacheKey, JSON.stringify(sortedPosts));
+        this.cache.set(this.contentType, cacheKey, JSON.stringify(sortedPosts));
       }
 
       // Apply filter if provided
@@ -144,7 +84,7 @@ export class BlogContentHandler implements ContentTypeHandler<BlogMeta> {
     } catch (error) {
       throw new ContentError(
         `Failed to get all blog posts: ${error instanceof Error ? error.message : String(error)}`,
-        "blog",
+        this.contentType,
         undefined
       );
     }
@@ -171,7 +111,7 @@ export class BlogContentHandler implements ContentTypeHandler<BlogMeta> {
   private async getPostsList(): Promise<string[]> {
     // Check the cache first
     const postsListFilesKey = "posts-list-files";
-    const cachedPostsFiles = this.cache.get("blog", postsListFilesKey);
+    const cachedPostsFiles = this.cache.get(this.contentType, postsListFilesKey);
 
     if (cachedPostsFiles) {
       return JSON.parse(cachedPostsFiles);
@@ -198,13 +138,13 @@ export class BlogContentHandler implements ContentTypeHandler<BlogMeta> {
       }
 
       // Cache the list
-      this.cache.set("blog", postsListFilesKey, JSON.stringify(postFiles));
+      this.cache.set(this.contentType, postsListFilesKey, JSON.stringify(postFiles));
       return postFiles;
     } catch (error) {
       console.error("Error fetching posts list:", error);
       throw new ContentError(
         `Failed to fetch posts list: ${error instanceof Error ? error.message : String(error)}`,
-        "blog",
+        this.contentType,
         undefined
       );
     }
@@ -216,7 +156,7 @@ export class BlogContentHandler implements ContentTypeHandler<BlogMeta> {
   private async loadAllPosts(): Promise<Record<string, ContentWithMeta & { meta: BlogMeta }>> {
     // Create a key for the entire posts collection
     const allPostsCacheKey = "all-posts";
-    const cachedPosts = this.cache.get("blog", allPostsCacheKey);
+    const cachedPosts = this.cache.get(this.contentType, allPostsCacheKey);
 
     if (cachedPosts) {
       return JSON.parse(cachedPosts);
@@ -243,13 +183,13 @@ export class BlogContentHandler implements ContentTypeHandler<BlogMeta> {
       }
 
       // Store all posts in the cache
-      this.cache.set("blog", allPostsCacheKey, JSON.stringify(posts));
+      this.cache.set(this.contentType, allPostsCacheKey, JSON.stringify(posts));
       return posts;
     } catch (error) {
       console.error("Error loading all posts:", error);
       throw new ContentError(
         `Failed to load all posts: ${error instanceof Error ? error.message : String(error)}`,
-        "blog",
+        this.contentType,
         undefined
       );
     }
@@ -263,10 +203,7 @@ export function createBlogContentHandler(
   loader?: ContentLoader,
   cache?: ContentCache
 ): BlogContentHandler {
-  return new BlogContentHandler(
-    loader || createContentLoader({ cache }),
-    cache || createContentCache()
-  );
+  return new BlogContentHandler(loader, cache);
 }
 
 // Create a default singleton instance that can be used throughout the application
