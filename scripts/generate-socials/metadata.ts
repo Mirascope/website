@@ -32,17 +32,13 @@ export interface MetadataOptions {
 async function extractPageMetadata(
   browser: Browser,
   route: string,
-  baseUrl: string,
-  verbose = true
+  baseUrl: string
 ): Promise<SEOMetadata> {
   // Create a new page for this extraction
   const page = await browser.newPage();
 
   try {
     const url = new URL(route, baseUrl).toString();
-    if (verbose) {
-      console.log(`${colorize("Visiting", "blue")} ${url}`);
-    }
 
     // Navigate to the page and wait for it to load
     await page.goto(url, { waitUntil: "networkidle0" });
@@ -136,7 +132,7 @@ export async function extractMetadataForRoutes(
       }
 
       try {
-        const pageMetadata = await extractPageMetadata(browser, route, baseUrl, verbose);
+        const pageMetadata = await extractPageMetadata(browser, route, baseUrl);
         metadata.push(pageMetadata);
 
         if (verbose) {
