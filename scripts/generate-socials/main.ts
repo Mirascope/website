@@ -37,6 +37,7 @@ interface CommandOptions {
   regenerateImages: boolean;
   buildHtml: boolean;
   check: boolean;
+  missing: boolean;
   only?: string;
 }
 
@@ -56,6 +57,7 @@ const options: CommandOptions = {
   regenerateImages: args.includes("--regenerate-images"),
   buildHtml: args.includes("--build-html"),
   check: args.includes("--check"),
+  missing: args.includes("--missing"),
   only: args.includes("--only") ? args[args.indexOf("--only") + 1] : undefined,
 };
 
@@ -417,6 +419,57 @@ async function checkMissingRoutes(metadata: SEOMetadata[]): Promise<string[]> {
 }
 
 /**
+ * Process all routes that are missing from SEO metadata
+ */
+async function processMissingRoutes() {
+  printHeader("Processing Missing Routes", "blue");
+
+  try {
+    // Load existing metadata
+    const record = loadMetadataFromFile();
+    const items = Object.values(record);
+
+    // Get missing routes
+    const missingRoutes = await checkMissingRoutes(items);
+
+    if (missingRoutes.length === 0) {
+      coloredLog("No missing routes to process!", "green");
+      return;
+    }
+
+    coloredLog(`Found ${missingRoutes.length} missing routes to process`, "blue");
+
+    // Process each missing route
+    await withDevEnvironment(async (port, browser) => {
+      // Extract metadata for missing routes
+      const newItems = await extractMetadataForRoutes(browser, missingRoutes, port);
+
+      if (newItems.length === 0) {
+        coloredLog("No metadata could be extracted for missing routes", "yellow");
+        return;
+      }
+
+      // Generate images for the new routes
+      await generateImages(browser, newItems);
+
+      // Update the metadata record
+      for (const item of newItems) {
+        record[item.route] = item;
+      }
+
+      // Save updated metadata
+      saveMetadataToFile(record);
+
+      coloredLog(`Successfully processed ${newItems.length} missing routes`, "green");
+    });
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error(`${colorize("Failed to process missing routes:", "red")} ${errorMessage}`);
+    process.exit(1);
+  }
+}
+
+/**
  * Show help information
  */
 function showHelp() {
@@ -430,6 +483,7 @@ function showHelp() {
   console.log("  --regenerate-images    Regenerate all images using existing metadata");
   console.log("  --only <path>          Update specific route only");
   console.log("  --check                Check for missing metadata or images");
+  console.log("  --missing              Process all routes missing from SEO metadata");
   console.log("  --build-html           Generate OG HTML files only (for build process)");
   console.log("  --help                 Show this help message");
   console.log("");
@@ -438,6 +492,7 @@ function showHelp() {
   console.log("  bun run generate-social --update");
   console.log("  bun run generate-social --only /blog/new-post");
   console.log("  bun run generate-social --check");
+  console.log("  bun run generate-social --missing");
 }
 
 /**
@@ -479,6 +534,8 @@ async function main() {
       if (!passed) {
         process.exit(1);
       }
+    } else if (options.missing) {
+      await processMissingRoutes();
     } else {
       coloredLog("No valid option specified. Use --help for usage information.", "yellow");
       process.exit(1);

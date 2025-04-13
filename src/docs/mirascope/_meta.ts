@@ -2,6 +2,7 @@
  * Documentation structure for Mirascope
  */
 import type { ProductDocs } from "../_meta";
+import guidesMeta from "./guides/_meta";
 
 const mirascopeMeta: ProductDocs = {
   // Top level pages
@@ -168,6 +169,7 @@ const mirascopeMeta: ProductDocs = {
         },
       },
     },
+    guides: guidesMeta,
   },
 };
 
