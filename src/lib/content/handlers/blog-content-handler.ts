@@ -122,12 +122,14 @@ export class BlogContentHandler extends BaseContentHandler<BlogMeta> {
       let postFiles: string[];
 
       if (this.isProduction) {
-        // Production: Use pre-generated static JSON file
-        const response = await fetch("/static/posts-list-files.json");
+        // Production: Use pre-generated static JSON file matching what preprocess-content.ts generates
+        const response = await fetch("/static/posts-list.json");
         if (!response.ok) {
           throw new Error(`Error fetching posts list: ${response.statusText}`);
         }
-        postFiles = await response.json();
+        // Get the list of posts metadata and extract the slugs to get filenames
+        const posts = (await response.json()) as BlogMeta[];
+        postFiles = posts.map((post) => `${post.slug}.mdx`);
       } else {
         // Development: Use the virtual middleware endpoint
         const response = await fetch("/api/posts-list");

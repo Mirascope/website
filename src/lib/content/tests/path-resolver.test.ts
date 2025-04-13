@@ -119,13 +119,11 @@ describe("Path Resolver", () => {
     });
 
     it("generates blog paths in production mode", () => {
-      expect(getContentPath("/blog/new-release", "blog")).toBe(
-        "/static/posts/new-release.mdx.json"
-      );
+      expect(getContentPath("/blog/new-release", "blog")).toBe("/static/posts/new-release.json");
     });
 
     it("generates policy paths in production mode", () => {
-      expect(getContentPath("/privacy", "policy")).toBe("/static/policies/privacy.mdx.json");
+      expect(getContentPath("/privacy", "policy")).toBe("/static/policies/privacy.json");
     });
 
     it("normalizes backslashes to forward slashes in production mode", () => {

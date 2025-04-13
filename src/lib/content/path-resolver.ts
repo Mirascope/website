@@ -128,9 +128,13 @@ export function getContentPath(path: string, contentType: ContentType): string {
       case "doc":
         return `/static/docs/${normalizedPath.replace(/\\/g, "/")}.json`;
       case "blog":
-        return `/static/posts/${normalizedPath.replace(/\\/g, "/")}.json`;
+        // For blog posts, remove the .mdx extension if present before adding .json
+        // This matches what preprocess-content.ts produces
+        return `/static/posts/${normalizedPath.replace(/\.mdx$/, "").replace(/\\/g, "/")}.json`;
       case "policy":
-        return `/static/policies/${normalizedPath.replace(/\\/g, "/")}.json`;
+        // For policy files, remove the .mdx extension if present before adding .json
+        // This matches what preprocess-content.ts produces
+        return `/static/policies/${normalizedPath.replace(/\.mdx$/, "").replace(/\\/g, "/")}.json`;
       default:
         throw new Error(`Unsupported content type: ${contentType}`);
     }
