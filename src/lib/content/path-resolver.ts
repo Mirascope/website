@@ -143,9 +143,11 @@ export function getContentPath(path: string, contentType: ContentType): string {
       // Policy files are directly fetched in dev mode
       return path;
     case "doc":
+      // Docs need the src prefix in dev mode
+      return `/src/docs/${normalizePath(path, contentType)}`;
     case "blog":
-      // These use their APIs, so return the normalized path
-      return normalizePath(path, contentType);
+      // Blog posts need the /posts/ prefix in dev mode
+      return `/posts/${normalizePath(path, contentType)}`;
     default:
       throw new Error(`Unsupported content type: ${contentType}`);
   }

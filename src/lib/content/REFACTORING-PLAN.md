@@ -251,42 +251,48 @@ const frontmatterMeta = { title: 'Custom Title', description: 'Custom Descriptio
 const finalMeta = mergeMetadata(structureMeta, frontmatterMeta);
 ```
 
-#### Step 7: Content Loader
+#### ✅ Step 7: Content Loader (COMPLETED)
 
 **Changes:**
-- Implement `content-loader.ts` for loading content
-- Extract content loading from existing code
-- Add tests for various content sources
+- ✅ Implemented `content-loader.ts` with unified content loading
+- ✅ Extracted content loading from existing code in docs.ts, mdx.ts, policy-utils.ts
+- ✅ Added comprehensive tests for dev/prod environments and error handling
+- ✅ Integrated with existing code in docs.ts, mdx.ts, mdx-static.ts, and policy-utils.ts
+- ✅ Updated path handling in path-resolver.ts for different content types
 
 **Tests:**
-- Load content in development
-- Load content in production
-- Handle errors
-- Use cache
+- ✅ Load content in development mode for all content types
+- ✅ Load content in production mode from static files 
+- ✅ Handle error cases like 404 responses
+- ✅ Integrate with content cache
 
 **Files:**
-- `src/lib/content/content-loader.ts`
-- `src/lib/content/tests/content-loader.test.ts`
+- ✅ `src/lib/content/content-loader.ts`
+- ✅ `src/lib/content/tests/content-loader.test.ts`
+- ✅ Updated `src/lib/docs.ts`
+- ✅ Updated `src/lib/mdx.ts`
+- ✅ Updated `src/lib/mdx-static.ts`
+- ✅ Updated `src/lib/policy-utils.ts`
+- ✅ Updated `src/lib/content/path-resolver.ts`
 
-**Current Dependencies:**
-- Content loading in `docs.ts` (lines 147-237)
-- Content loading in `mdx.ts` (lines 147-180)
-- APIs: `docsAPI.getDocContent` and `mockAPI.getPostContent`
+**Integration:**
+- ✅ Removed `docsAPI` and `mockAPI` from utils.ts
+- ✅ Unified path handling for all content types
+- ✅ Created a single point of entry for content loading
+- ✅ Fixed blog post loading to properly handle paths in development mode
+- ✅ Improved error handling with specific error types
 
-**Existing Logic:**
-- Environment-specific loading (dev vs. prod)
-- Different APIs for different content types
-- Error handling with fallback content
-- Cache usage
-
-**Expected Usage:**
+**Actual Usage:**
 ```typescript
-import { createContentLoader } from '@/lib/content/content-loader';
-import { createContentCache } from '@/lib/content/content-cache';
+import { createContentLoader } from './content/content-loader';
+import { createContentCache } from './content/content-cache';
 
-const cache = createContentCache();
-const loader = createContentLoader({ cache, devMode: true });
-const content = await loader.loadContent('mirascope/getting-started.mdx', 'doc');
+// Create a shared content loader with cache
+const docsCache = createContentCache();
+const contentLoader = createContentLoader({ cache: docsCache });
+
+// Load content with unified API
+const content = await contentLoader.loadContent('/docs/mirascope/getting-started', 'doc');
 ```
 
 ### Phase 3: Integration
