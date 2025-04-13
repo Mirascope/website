@@ -141,6 +141,11 @@ async function validateMDX(basePath?: string): Promise<void> {
         const itemPath = path.join(dirPath, item);
         const itemRelativePath = path.join(relativePath, item).replace(/\\/g, "/"); // Normalize Windows paths
 
+        // Skip the disabled-guides-wip directory
+        if (item === "disabled-guides-wip" || itemRelativePath.includes("disabled-guides-wip")) {
+          continue;
+        }
+
         if (fs.statSync(itemPath).isDirectory()) {
           await validateDirectory(itemPath, itemRelativePath);
         } else if (item.endsWith(".mdx")) {
