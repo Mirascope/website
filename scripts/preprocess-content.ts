@@ -131,6 +131,11 @@ async function processDocsFiles(verbose = true): Promise<void> {
       const itemPath = path.join(dirPath, item);
       const relPath = path.join(baseDir, item);
 
+      // Skip the disabled-guides-wip directory
+      if (item === "disabled-guides-wip" || relPath.includes("disabled-guides-wip")) {
+        continue;
+      }
+
       if (fs.statSync(itemPath).isDirectory()) {
         await processDirectory(itemPath, relPath);
       } else if (item.endsWith(".mdx")) {
