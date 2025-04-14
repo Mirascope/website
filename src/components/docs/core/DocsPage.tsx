@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import DocsLayout from "./DocsLayout";
 import useSEO from "@/lib/hooks/useSEO";
-import { getDoc, getDocsForProduct, type DocMeta } from "@/lib/docs";
+import { getDoc, getDocsForProduct, type DocMeta, type DocContent } from "@/lib/content/docs";
+import { processMDX } from "@/lib/content/mdx-processor";
 import { type ProductName } from "@/lib/route-types";
 
 type DocsPageProps = {
@@ -16,10 +17,7 @@ type DocsPageProps = {
  * Handles loading documents, error states, and passes data to DocsLayout
  */
 const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
-  const [document, setDocument] = useState<{
-    meta: DocMeta;
-    content: string;
-  } | null>(null);
+  const [document, setDocument] = useState<DocContent | null>(null);
   const [productDocs, setProductDocs] = useState<DocMeta[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -74,7 +72,17 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
 
         // Fetch the document
         const doc = await getDoc(finalPath);
-        setDocument(doc);
+
+        // Process MDX content
+        const mdx = doc.content ? await processMDX(doc.content) : null;
+
+        // Convert to new DocContent format
+        setDocument({
+          meta: doc.meta,
+          rawContent: doc.content,
+          mdx,
+        });
+
         setLoading(false);
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : String(err);

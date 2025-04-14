@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import type { ContentMeta } from "@/lib/content/content-types";
 import type { ContentTypeHandler } from "@/lib/content/handlers/content-type-handler";
-import { processMDX } from "@/lib/mdx-utils";
+import { processMDX } from "@/lib/content/mdx-processor";
 
 export interface Content<T extends ContentMeta = ContentMeta> {
   meta: T;
