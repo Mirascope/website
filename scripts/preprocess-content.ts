@@ -196,7 +196,7 @@ async function processPolicyFiles(verbose = true): Promise<void> {
       const { frontmatter } = extractFrontmatter(fileContent);
       await processMDX(fileContent); // Validate the MDX
       fs.writeFileSync(
-        path.join(POLICIES_DIR, "privacy.json"),
+        path.join(POLICIES_DIR, "privacy.mdx.json"),
         JSON.stringify({
           content: fileContent,
           frontmatter,
