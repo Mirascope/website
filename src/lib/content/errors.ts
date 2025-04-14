@@ -1,4 +1,4 @@
-import type { ContentType } from "./content-types";
+import type { ContentType } from "./types";
 
 export class ContentError extends Error {
   constructor(

@@ -1,13 +1,8 @@
 import { describe, it, expect } from "vitest";
-import type {
-  ContentType,
-  ContentMeta,
-  ContentWithMeta,
-  ValidationResult,
-  DocMeta,
-  BlogMeta,
-  PolicyMeta,
-} from "../content-types";
+import type { ContentType, ContentMeta, ValidationResult } from "../types";
+import type { DocMeta } from "../docs";
+import type { BlogMeta } from "../blog";
+import type { PolicyMeta } from "../policy";
 
 describe("ContentTypes", () => {
   describe("ContentType", () => {
@@ -130,20 +125,25 @@ describe("ContentTypes", () => {
     });
   });
 
-  describe("ContentWithMeta", () => {
-    it("combines metadata with content", () => {
-      const document: ContentWithMeta = {
+  describe("Content", () => {
+    it("combines metadata with content and mdx", () => {
+      const document = {
         meta: {
           title: "Test Title",
           path: "test/path",
           slug: "test-path",
-          type: "doc",
+          type: "doc" as ContentType,
         },
         content: "# Test Content",
+        mdx: {
+          code: "compiled code",
+          frontmatter: { title: "Test Title" },
+        },
       };
 
       expect(document.meta.title).toBe("Test Title");
       expect(document.content).toBe("# Test Content");
+      expect(document.mdx.code).toBe("compiled code");
     });
   });
 

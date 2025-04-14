@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import DocsLayout from "./DocsLayout";
 import useSEO from "@/lib/hooks/useSEO";
 import { getDoc, getDocsForProduct, type DocMeta, type DocContent } from "@/lib/content/docs";
-import { processMDX } from "@/lib/content/mdx-processor";
 import { type ProductName } from "@/lib/route-types";
 
 type DocsPageProps = {
@@ -38,7 +37,7 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
 
       try {
         // Load all docs for this product for the sidebar
-        const docsForProduct = getDocsForProduct(product);
+        const docsForProduct = await getDocsForProduct(product);
         setProductDocs(docsForProduct);
 
         // Build the path based on whether this is in a section or not
@@ -73,15 +72,8 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
         // Fetch the document
         const doc = await getDoc(finalPath);
 
-        // Process MDX content
-        const mdx = doc.content ? await processMDX(doc.content) : null;
-
-        // Convert to new DocContent format
-        setDocument({
-          meta: doc.meta,
-          rawContent: doc.content,
-          mdx,
-        });
+        // Set the document directly
+        setDocument(doc);
 
         setLoading(false);
       } catch (err) {

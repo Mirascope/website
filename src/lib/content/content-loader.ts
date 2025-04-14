@@ -1,4 +1,4 @@
-import type { ContentType } from "./content-types";
+import type { ContentType } from "./types";
 import { ContentCache } from "./content-cache";
 import { ContentLoadError, DocumentNotFoundError } from "./errors";
 import { normalizePath, getContentPath } from "./path-resolver";
