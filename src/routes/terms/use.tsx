@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import PolicyPage from "@/components/PolicyPage";
-import { usePolicy } from "@/lib/hooks/usePolicy";
+import { usePolicy } from "@/lib/content/policy";
 import useSEO from "@/lib/hooks/useSEO";
 
 export const Route = createFileRoute("/terms/use")({
@@ -8,28 +8,17 @@ export const Route = createFileRoute("/terms/use")({
 });
 
 function TermsOfUsePage() {
-  const { policyMeta, compiledMDX, loading, error } = usePolicy(
-    "/src/policies/terms/use.mdx",
-    "TERMS OF USE"
-  );
+  const { content, loading, error } = usePolicy("terms/use");
 
   // Apply SEO with frontmatter from MDX
   useSEO({
-    title: policyMeta?.title || "Terms of Use",
+    title: content?.meta?.title || "Terms of Use",
     description:
-      compiledMDX?.frontmatter?.description ||
+      content?.mdx?.frontmatter?.description ||
       "Guidelines and rules for using the Mirascope website.",
     url: "/terms/use",
     type: "article",
   });
 
-  return (
-    <PolicyPage
-      meta={policyMeta}
-      compiledMDX={compiledMDX}
-      loading={loading}
-      error={error}
-      type="terms-use"
-    />
-  );
+  return <PolicyPage content={content} loading={loading} error={error} type="terms-use" />;
 }
