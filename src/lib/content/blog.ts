@@ -1,7 +1,10 @@
 import { blogContentHandler } from "./handlers/blog-content-handler";
 import { useContent } from "./hooks/useContent";
 import type { BlogMeta } from "./content-types";
-import type { ContentResult } from "./hooks/useContent";
+import type { ContentResult, Content } from "./hooks/useContent";
+
+// Define a BlogContent type based on the Content interface
+export type BlogContent = Content<BlogMeta>;
 
 /**
  * Hook for loading and rendering a blog post

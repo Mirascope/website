@@ -1,31 +1,21 @@
 import React, { useState } from "react";
 import { MDXRenderer } from "@/components/MDXRenderer";
-import { type PolicyMeta, formatDate } from "@/lib/policy-utils";
+import { type PolicyContent } from "@/lib/content/policy";
 import { Button } from "@/components/ui/button";
 import { Sparkles } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/utils";
 
 interface PolicyPageProps {
-  meta: PolicyMeta;
-  compiledMDX: {
-    code: string;
-    frontmatter: Record<string, any>;
-  } | null;
+  content: PolicyContent | null;
   loading: boolean;
-  error: string | null;
+  error: Error | null;
   type?: "privacy" | "terms-use" | "terms-service";
 }
 
 /**
  * PolicyPage - Reusable component for rendering policy and terms pages
  */
-const PolicyPage: React.FC<PolicyPageProps> = ({
-  meta,
-  compiledMDX,
-  loading,
-  error,
-  type = "privacy",
-}) => {
+const PolicyPage: React.FC<PolicyPageProps> = ({ content, loading, error, type = "privacy" }) => {
   // Content ID for the article element
   const contentId = "policy-content";
 
@@ -36,8 +26,8 @@ const PolicyPage: React.FC<PolicyPageProps> = ({
     "terms-service": "TERMS OF SERVICE",
   }[type];
 
-  const title = meta?.title ?? defaultTitle;
-  const lastUpdated = meta?.lastUpdated ? formatDate(meta.lastUpdated) : "";
+  const title = content?.meta?.title ?? defaultTitle;
+  const lastUpdated = content?.meta?.lastUpdated ? formatDate(content.meta.lastUpdated) : "";
 
   // Initialize fun mode from localStorage if available
   const [funMode, setFunMode] = useState(() => {
@@ -69,14 +59,14 @@ const PolicyPage: React.FC<PolicyPageProps> = ({
     );
   }
 
-  if (error || !compiledMDX) {
+  if (error || !content || !content.mdx) {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold uppercase">{defaultTitle}</h1>
         </div>
         <p>This content is currently unavailable. Please check back later.</p>
-        {error && <p className="text-red-500 mt-2">Error: {error}</p>}
+        {error && <p className="text-red-500 mt-2">Error: {error.message}</p>}
       </div>
     );
   }
@@ -113,8 +103,8 @@ const PolicyPage: React.FC<PolicyPageProps> = ({
       >
         <article className="prose prose-lg max-w-none">
           <MDXRenderer
-            code={compiledMDX.code}
-            frontmatter={compiledMDX.frontmatter}
+            code={content.mdx.code}
+            frontmatter={content.mdx.frontmatter}
             useFunMode={funMode}
           />
         </article>
