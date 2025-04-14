@@ -222,37 +222,45 @@ We've re-designed the content system with a domain-driven approach:
 - ✅ Updated BlogIndex to use `getAllBlogPosts` from `blog.ts`
 - ✅ Proper error handling without "Untitled Document" placeholders
 
-#### 🔜 Step 15: Migrate Doc Components
+#### ✅ Step 15: Migrate Doc Components
 
-**Status**: In Progress
-
-**Changes:**
-- Update doc components to use `useDoc` and other functions from `docs.ts`
-- Fix the "Untitled Document" issue through proper error handling
-- Clean error states for non-existent paths
-
-#### 🔜 Step 16: Migrate Policy Components
-
-**Status**: Not Started
+**Status**: Completed
 
 **Changes:**
-- Update policy components to use `usePolicy` from `policy.ts`
-- Ensure consistent error handling
+- ✅ Updated doc components to use `useDoc` and other functions from `docs.ts`
+- ✅ Fixed the "Untitled Document" issue through proper error handling
+- ✅ Implemented clean error states for non-existent paths
 
-#### 🔜 Step 17: Remove Legacy Code
+#### ✅ Step 16: Migrate Policy Components
 
-**Status**: Not Started
+**Status**: Completed
 
 **Changes:**
-- Remove old content handling code:
+- ✅ Updated policy components to use `usePolicy` from `policy.ts`
+- ✅ Ensured consistent error handling across content types
+
+#### ✅ Step 17: Remove Legacy Code
+
+**Status**: Completed
+
+**Changes:**
+- ✅ Removed old content handling code:
   - `docs.ts` in lib/
   - `mdx.ts` in lib/
   - `policy-utils.ts` in lib/
-- Final tests to ensure everything works
+  - `mdx-static.ts` in lib/
+  - Legacy hooks (`useMDXProcessor.ts`, `usePolicy.ts`)
+- ✅ Fixed all type errors and ensured clean interfaces
+- ✅ Verified all linting checks pass
 
 ## Progress Summary
 
 - ✅ Phases 1, 2, and 3 are complete (Foundation, Core Services, Content Type Handlers)
 - ✅ Phase 4 is complete (Domain-Specific APIs)
-- ✅ Step 14 is complete (Blog Component Migration)
-- 🔜 Working on Steps 15-17: Migrating remaining components and cleanup
+- ✅ Phase 5 is complete (Migration)
+  - ✅ Step 14: Blog Component Migration
+  - ✅ Step 15: Doc Component Migration
+  - ✅ Step 16: Policy Component Migration
+  - ✅ Step 17: Legacy Code Removal
+
+🎉 **Refactoring Complete!** All components are now using the new domain-driven content system.
