@@ -4,16 +4,23 @@ This document outlines the architecture of the unified content system for handli
 
 ## System Overview
 
-The content system provides a unified approach to loading, processing, and rendering various types of content with a cohesive, maintainable architecture.
+The content system provides a unified approach to loading, processing, and rendering various types of content with a cohesive, maintainable architecture. The architecture follows domain-driven design principles with content-type specific modules.
 
 ```mermaid
 graph TD
-    Component[React Component] --> useDocument[useDocument Hook]
-    useDocument --> DocumentService[Document Service]
-    DocumentService --> ContentHandlers[Content Type Handlers]
-    ContentHandlers --> DocHandler[Doc Handler]
-    ContentHandlers --> BlogHandler[Blog Handler]
-    ContentHandlers --> PolicyHandler[Policy Handler]
+    Component[React Component] --> ContentModules[Content Type Modules]
+    ContentModules --> BlogModule[Blog Module]
+    ContentModules --> DocModule[Doc Module]
+    ContentModules --> PolicyModule[Policy Module]
+    
+    BlogModule --> useContent[useContent Hook]
+    DocModule --> useContent
+    PolicyModule --> useContent
+    
+    BlogModule --> BlogHandler[Blog Handler]
+    DocModule --> DocHandler[Doc Handler]
+    PolicyModule --> PolicyHandler[Policy Handler]
+    
     DocHandler --> PathResolver[Path Resolver]
     DocHandler --> MetadataService[Metadata Service]
     DocHandler --> ContentLoader[Content Loader]
@@ -26,16 +33,44 @@ graph TD
     PolicyHandler --> MetadataService
     PolicyHandler --> ContentLoader
     PolicyHandler --> FrontmatterParser
+    
     ContentLoader --> ContentCache[Content Cache]
     MetadataService --> ContentTypes[Content Types]
     FrontmatterParser --> ContentTypes
     PathResolver --> ContentTypes
-    DocumentService --> ErrorHandling[Error Types]
+    BlogModule --> ErrorHandling[Error Types]
+    DocModule --> ErrorHandling
+    PolicyModule --> ErrorHandling
 ```
 
 ## File Structure & Key Interfaces
 
-The system is organized into modular components, each with a specific responsibility:
+The system is organized into domain-specific modules with a shared infrastructure layer:
+
+```
+src/lib/content/
+  ├── blog.ts                  # Blog-specific hooks and API
+  ├── docs.ts                  # Docs-specific hooks and API
+  ├── policy.ts                # Policy-specific hooks and API 
+  ├── content-types.ts         # Core content type definitions
+  ├── errors.ts                # Error type definitions
+  ├── content-cache.ts         # Caching implementation
+  ├── content-loader.ts        # Content loading logic
+  ├── frontmatter.ts           # Frontmatter parsing
+  ├── metadata-service.ts      # Metadata handling
+  ├── path-resolver.ts         # Path normalization/resolution
+  ├── hooks/                   # Base hook implementations
+  │   ├── index.ts             # Re-exports
+  │   └── useContent.ts        # Core content loading hook
+  └── handlers/                # Content type handlers
+      ├── base-content-handler.ts       # Base implementation
+      ├── content-type-handler.ts       # Handler interface
+      ├── blog-content-handler.ts       # Blog implementation
+      ├── doc-content-handler.ts        # Doc implementation
+      └── policy-content-handler.ts     # Policy implementation
+```
+
+Each module is organized according to its specific responsibility:
 
 ### `content-types.ts`
 
@@ -449,110 +484,75 @@ export function createPolicyContentHandler(): PolicyContentHandler { /*...*/ }
 export const policyContentHandler = createPolicyContentHandler();
 ```
 
-### `document-service.ts`
+### `blog.ts`, `docs.ts`, `policy.ts` - Domain Modules
 
-The main service that orchestrates the entire content loading process.
+These modules provide domain-specific APIs for each content type. They expose hooks for React components and functions for accessing content.
 
 ```typescript
-export interface DocumentServiceOptions {
-  loader?: ContentLoader;
-  cache?: ContentCache;
-  devMode?: boolean;
+// blog.ts example
+import { blogContentHandler } from './handlers/blog-content-handler';
+import { useContent } from './hooks/useContent';
+import type { BlogMeta } from './content-types';
+import type { ContentResult } from './hooks/useContent';
+
+/**
+ * Hook for loading and rendering a blog post
+ */
+export function useBlogPost(slug: string): ContentResult<BlogMeta> {
+  return useContent<BlogMeta>(slug, blogContentHandler);
 }
 
-export class DocumentService {
-  private handlers: ContentTypeHandlerMap;
-
-  constructor(options?: DocumentServiceOptions) {
-    this.handlers = {
-      'doc': createDocContentHandler(),
-      'blog': createBlogContentHandler(),
-      'policy': createPolicyContentHandler()
-    };
-  }
-
-  async getDocument<T extends ContentType>(
-    path: string, 
-    contentType: T
-  ): Promise<ContentWithMeta & { meta: ContentTypeToMeta<T> }> {
-    return this.handlers[contentType].getDocument(path) as any;
-  }
-
-  async getAllDocuments<T extends ContentType>(
-    contentType: T,
-    filter?: (meta: ContentTypeToMeta<T>) => boolean
-  ): Promise<ContentTypeToMeta<T>[]> {
-    return this.handlers[contentType].getAllDocuments(filter as any) as any;
-  }
-
-  async getDocumentsForCollection<T extends ContentType>(
-    contentType: T,
-    collection: string
-  ): Promise<ContentTypeToMeta<T>[]> {
-    return this.handlers[contentType].getDocumentsForCollection(collection) as any;
-  }
+/**
+ * Get a blog post by slug
+ */
+export function getBlogPost(slug: string) {
+  return blogContentHandler.getDocument(slug);
 }
 
-// Factory function
-export function createDocumentService(options?: DocumentServiceOptions): DocumentService;
+/**
+ * Get all blog posts
+ */
+export function getAllBlogPosts() {
+  return blogContentHandler.getAllDocuments();
+}
 ```
 
-### `hooks/useDocument.ts`
+### `hooks/useContent.ts`
 
-React hook for loading documents in components.
-
-```typescript
-export interface UseDocumentOptions {
-  initialData?: ContentWithMeta;
-  suspense?: boolean;
-}
-
-export function useDocument<T extends ContentType>(
-  path: string,
-  contentType: T,
-  options?: UseDocumentOptions
-): {
-  document: (ContentWithMeta & { meta: ContentTypeToMeta<T> }) | null;
-  loading: boolean;
-  error: Error | null;
-};
-
-export function useDocumentCollection<T extends ContentType>(
-  contentType: T,
-  collection?: string,
-  options?: UseDocumentOptions
-): {
-  documents: ContentTypeToMeta<T>[];
-  loading: boolean;
-  error: Error | null;
-};
-```
-
-### `hooks/useMDXContent.ts`
-
-React hook for processing MDX content.
+The base React hook for loading and processing content. This hook is used by the domain-specific modules.
 
 ```typescript
-export function useMDXContent(
-  document: ContentWithMeta | null,
-  options?: {
-    fallback?: boolean;
-  }
-): {
-  compiledMDX: {
+export interface Content<T extends ContentMeta = ContentMeta> {
+  meta: T;
+  rawContent: string;
+  mdx: {
     code: string;
     frontmatter: Record<string, any>;
   } | null;
-  processing: boolean;
+}
+
+export interface ContentResult<T extends ContentMeta = ContentMeta> {
+  content: Content<T> | null;
+  loading: boolean;
   error: Error | null;
-};
+}
+
+export function useContent<T extends ContentMeta>(
+  path: string,
+  handler: ContentTypeHandler<T>
+): ContentResult<T> {
+  // Implementation that loads content, processes MDX, and handles errors
+}
 ```
 
 ## Data Flow
 
-1. Component calls `useDocument(path, contentType)`
-2. Hook calls `documentService.getDocument(path, contentType)`
-3. Document service delegates to the appropriate content type handler
+1. Component calls domain-specific hook (e.g. `useBlogPost(slug)`)
+2. Domain hook calls the base `useContent` hook with the appropriate handler
+3. The `useContent` hook:
+   - Uses the provided handler to fetch content
+   - Processes MDX content if available
+   - Returns content with metadata and processed MDX
 4. The handler:
    - Checks cache for content 
    - If not cached, loads content using `contentLoader`
@@ -560,7 +560,7 @@ export function useMDXContent(
    - Gets structure metadata using `metadataService`
    - Merges frontmatter and structure metadata
    - Returns complete document with metadata
-5. Component renders the document using `useMDXContent` for processing
+5. Component renders the content, using the MDX renderer for the processed MDX
 
 ## Caching Strategy
 
