@@ -47,14 +47,18 @@ function DocsPage() {
 
   // Fetch product docs for the sidebar
   useEffect(() => {
-    try {
-      // Load all docs for this product for the sidebar
-      const docsForProduct = getDocsForProduct(product);
-      setProductDocs(docsForProduct);
-    } catch (err) {
-      console.error(`[DocsPage] Failed to load product docs: ${err}`);
-      setProductDocs([]);
-    }
+    const fetchDocs = async () => {
+      try {
+        // Load all docs for this product for the sidebar
+        const docsForProduct = await getDocsForProduct(product);
+        setProductDocs(docsForProduct);
+      } catch (err) {
+        console.error(`[DocsPage] Failed to load product docs: ${err}`);
+        setProductDocs([]);
+      }
+    };
+
+    fetchDocs();
   }, [product]);
 
   if (loading) {

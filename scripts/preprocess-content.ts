@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import type { BlogMeta } from "../src/lib/content/content-types";
+import type { BlogMeta } from "../src/lib/content/blog";
 import { SITE_URL, getAllRoutes, getBlogPostsWithMeta } from "../src/lib/router-utils";
 import { processMDX } from "../src/lib/content/mdx-processor";
 

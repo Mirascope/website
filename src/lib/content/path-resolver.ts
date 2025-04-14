@@ -1,4 +1,4 @@
-import type { ContentType } from "./content-types";
+import type { ContentType } from "./types";
 import { InvalidPathError } from "./errors";
 
 /**

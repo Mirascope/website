@@ -1,5 +1,4 @@
-import type { ContentType } from "./content-types";
-import type { ValidationResult } from "./content-types";
+import type { ContentType, ValidationResult } from "./types";
 
 export interface FrontmatterResult {
   frontmatter: Record<string, any>;

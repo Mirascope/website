@@ -10,18 +10,6 @@ export interface ContentMeta {
   type: ContentType;
 }
 
-// Document with its metadata
-export interface ContentWithMeta {
-  meta: ContentMeta;
-  content: string;
-}
-
-// Result of document validation
-export interface ValidationResult {
-  isValid: boolean;
-  errors?: string[];
-}
-
 // Type-specific metadata extensions
 export interface DocMeta extends ContentMeta {
   product: string;
@@ -42,7 +30,48 @@ export interface PolicyMeta extends ContentMeta {
   lastUpdated?: string;
 }
 
-// Type-specific document types
-export type DocWithContent = ContentWithMeta & { meta: DocMeta };
-export type BlogWithContent = ContentWithMeta & { meta: BlogMeta };
-export type PolicyWithContent = ContentWithMeta & { meta: PolicyMeta };
+// Base content interface with metadata plus content
+export interface Content<T extends ContentMeta = ContentMeta> {
+  meta: T; // Typed, validated metadata
+  frontmatter: Record<string, any>; // Original parsed frontmatter
+  content: string; // Raw MDX with frontmatter stripped
+  compiledCode: string; // Processed/compiled MDX code
+}
+
+// Type-specific content types
+export type BlogContent = Content<BlogMeta>;
+export type DocContent = Content<DocMeta>;
+export type PolicyContent = Content<PolicyMeta>;
+
+// Result of document validation
+export interface ValidationResult {
+  isValid: boolean;
+  errors?: string[];
+}
+
+// Result type for content operations
+export interface ContentResult<T extends ContentMeta = ContentMeta> {
+  content: Content<T> | null;
+  loading: boolean;
+  error: Error | null;
+}
+
+/**
+ * Interface for content handlers
+ */
+export interface ContentHandler<T extends ContentMeta> {
+  /**
+   * Retrieves content by path
+   *
+   * @param path - The path to the content
+   * @returns The content with its metadata
+   */
+  getContent(path: string): Promise<Content<T>>;
+
+  /**
+   * Gets all metadata for this content type
+   *
+   * @returns Array of document metadata
+   */
+  getAllMeta(): Promise<T[]>;
+}

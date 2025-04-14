@@ -2,7 +2,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import type { BlogMeta } from "./content/content-types";
+import type { BlogMeta } from "./content/blog";
 import { getAllDocs } from "../docs/_meta";
 
 // Base URL for the site

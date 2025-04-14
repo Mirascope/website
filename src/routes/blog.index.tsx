@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-import { getAllBlogPosts, type BlogMeta } from "@/lib/content/blog";
+import { getAllBlogMeta, type BlogMeta } from "@/lib/content/blog";
 import useSEO from "@/lib/hooks/useSEO";
 
 // Posts per page
@@ -19,8 +19,8 @@ function BlogPage() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const allPosts = await getAllBlogPosts();
-        setPosts(allPosts);
+        const allPosts = await getAllBlogMeta();
+        setPosts(allPosts as BlogMeta[]);
         setLoading(false);
       } catch (error) {
         console.error("Error loading blog posts:", error);
