@@ -59,16 +59,6 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
           finalPath = docPath;
         }
 
-        // Debug path construction for troubleshooting
-        console.log(`[DocsPage] Path resolution:
-          product: ${product}
-          section: ${section}
-          splat: "${splat}"
-          docPath: ${docPath}
-          docPathNoTrailingSlash: ${docPathNoTrailingSlash}
-          finalPath: ${finalPath}
-        `);
-
         // Fetch the document
         const doc = await getDoc(finalPath);
 

@@ -123,7 +123,7 @@ describe("Path Resolver", () => {
     });
 
     it("generates policy paths in production mode", () => {
-      expect(getContentPath("/privacy", "policy")).toBe("/static/policies/privacy.json");
+      expect(getContentPath("/privacy", "policy")).toBe("/static/policies/privacy.mdx.json");
     });
 
     it("normalizes backslashes to forward slashes in production mode", () => {

@@ -132,9 +132,10 @@ export function getContentPath(path: string, contentType: ContentType): string {
         // This matches what preprocess-content.ts produces
         return `/static/posts/${normalizedPath.replace(/\.mdx$/, "").replace(/\\/g, "/")}.json`;
       case "policy":
-        // For policy files, remove the .mdx extension if present before adding .json
-        // This matches what preprocess-content.ts produces
-        return `/static/policies/${normalizedPath.replace(/\.mdx$/, "").replace(/\\/g, "/")}.json`;
+        // For policy files, we properly match the files created by preprocess-content.ts:
+        // - Privacy: /static/policies/privacy.json
+        // - Terms files: /static/policies/terms/service.json and /static/policies/terms/use.json
+        return `/static/policies/${normalizedPath.replace(/\\/g, "/")}.json`;
       default:
         throw new Error(`Unsupported content type: ${contentType}`);
     }
