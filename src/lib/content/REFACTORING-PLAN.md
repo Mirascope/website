@@ -1,6 +1,6 @@
 # Content System Refactoring Plan
 
-This document outlines a step-by-step plan for implementing the unified content system described in DESIGN.md and migrating the existing content handling code to use the new system.
+This document outlines the plan for implementing the unified content system described in DESIGN.md and migrating the existing content handling code to use the new system.
 
 ## Current Pain Points
 
@@ -21,6 +21,27 @@ This document outlines a step-by-step plan for implementing the unified content 
 4. **Path Handling Complexity**: Complex, hard-to-follow path handling logic with many edge cases.
 
 5. **Isolated Caching**: Each content type has its own caching mechanism without proper invalidation.
+
+## New Architecture
+
+We've re-designed the content system with a domain-driven approach:
+
+1. **Domain-Specific Modules**: Each content type has its own module:
+   - `blog.ts` - For blog-specific functionality
+   - `docs.ts` - For docs-specific functionality
+   - `policy.ts` - For policy-specific functionality
+
+2. **Clean Component APIs**: Components import directly from their domain module:
+   ```typescript
+   import { useBlogPost } from '@/lib/content/blog';
+   import { useDoc } from '@/lib/content/docs';
+   import { usePolicy } from '@/lib/content/policy';
+   ```
+
+3. **Unified Infrastructure**: Shared foundational layers for all content types:
+   - Content handlers for fetching content
+   - Unified caching, path resolution, and metadata handling
+   - Base hook implementation in `useContent`
 
 ## Key Assumptions
 
@@ -168,49 +189,70 @@ This document outlines a step-by-step plan for implementing the unified content 
 - ✅ Updated `policy-utils.ts` to use the new handler
 - ✅ Maintained backward compatibility with existing components
 
-### Phase 4: Document Service
+### Phase 4: Domain-Specific APIs
 
-#### Step 12: Document Service
+#### ✅ Step 12: Base Content Hook
 
-**Status**: Not started
-
-**Changes:**
-- Implement `document-service.ts` as main entry point
-- Wire together the previous components
-- Add integration tests
-
-#### Step 13: React Hooks
-
-**Status**: Not started
+**Status**: Completed
 
 **Changes:**
-- Implement React hooks for document loading
-- Add component tests
+- ✅ Implemented `useContent` base hook
+- ✅ Domain-driven approach instead of document service
+- ✅ Added integration with MDX processing
+
+#### ✅ Step 13: Domain Modules
+
+**Status**: Completed
+
+**Changes:**
+- ✅ Created domain-specific modules:
+  - `blog.ts` - Blog-specific hooks and functions
+  - `docs.ts` - Doc-specific hooks and functions
+  - `policy.ts` - Policy-specific hooks and functions
+- ✅ Type-safe APIs for components
 
 ### Phase 5: Migration
 
-#### Step 14: Migrate Components
+#### ✅ Step 14: Migrate Blog Components
 
-**Status**: Not started
+**Status**: Completed
 
 **Changes:**
-- Update components to use new hooks instead of direct imports
+- ✅ Updated BlogPostPage to use `useBlogPost` from `blog.ts`
+- ✅ Updated BlogIndex to use `getAllBlogPosts` from `blog.ts`
+- ✅ Proper error handling without "Untitled Document" placeholders
+
+#### 🔜 Step 15: Migrate Doc Components
+
+**Status**: In Progress
+
+**Changes:**
+- Update doc components to use `useDoc` and other functions from `docs.ts`
 - Fix the "Untitled Document" issue through proper error handling
-- Add tests for component behavior
+- Clean error states for non-existent paths
 
-#### Step 15: Remove Legacy Code
+#### 🔜 Step 16: Migrate Policy Components
 
-**Status**: Not started
+**Status**: Not Started
 
 **Changes:**
-- Remove old content handling code
-- Create utility modules for shared logic
+- Update policy components to use `usePolicy` from `policy.ts`
+- Ensure consistent error handling
+
+#### 🔜 Step 17: Remove Legacy Code
+
+**Status**: Not Started
+
+**Changes:**
+- Remove old content handling code:
+  - `docs.ts` in lib/
+  - `mdx.ts` in lib/
+  - `policy-utils.ts` in lib/
 - Final tests to ensure everything works
 
 ## Progress Summary
 
-- ✅ Phases 1 and 2 are complete (Foundation and Core Services)
-- ✅ Phase 3 is complete (Content Type Handlers)
-- 🔜 Next up is Phase 4 with Document Service
-- 🔜 Then React Hooks
-- 🔜 Finally, component migration and cleanup
+- ✅ Phases 1, 2, and 3 are complete (Foundation, Core Services, Content Type Handlers)
+- ✅ Phase 4 is complete (Domain-Specific APIs)
+- ✅ Step 14 is complete (Blog Component Migration)
+- 🔜 Working on Steps 15-17: Migrating remaining components and cleanup
