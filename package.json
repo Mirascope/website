@@ -62,6 +62,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@happy-dom/global-registrator": "^17.4.4",
     "@shikijs/transformers": "^3.2.1",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.2.0",
