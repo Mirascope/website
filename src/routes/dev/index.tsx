@@ -36,6 +36,16 @@ function DevIndexPage() {
               rules.
             </p>
           </div>
+
+          <div className="border rounded-lg p-6 shadow-sm">
+            <a href="/dev/style-test" className="hover:underline">
+              <h2 className="text-xl font-semibold mb-2 text-blue-600">Style Test Page</h2>
+            </a>
+            <p className="text-gray-600 mb-4">
+              Comprehensive showcase of all UI components and styles for visual consistency testing
+              across themes. Includes typography, MDX components, and UI elements.
+            </p>
+          </div>
         </div>
       </div>
     </DevLayout>
