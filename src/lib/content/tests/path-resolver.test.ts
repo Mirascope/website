@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, test, expect, beforeEach, afterEach } from "bun:test";
 import { normalizePath, buildFilePath, isValidPath, getContentPath } from "../path-resolver";
 import { InvalidPathError } from "../errors";
 import type { ContentType } from "../content-types";
@@ -6,7 +6,7 @@ import type { ContentType } from "../content-types";
 describe("Path Resolver", () => {
   describe("normalizePath", () => {
     const runTest = (input: string, expected: string, contentType: ContentType = "doc") => {
-      it(`normalizes ${input} to ${expected} for ${contentType}`, () => {
+      test(`normalizes ${input} to ${expected} for ${contentType}`, () => {
         expect(normalizePath(input, contentType)).toBe(expected);
       });
     };
@@ -34,7 +34,7 @@ describe("Path Resolver", () => {
   });
 
   describe("buildFilePath", () => {
-    it("builds doc file paths", () => {
+    test("builds doc file paths", () => {
       expect(buildFilePath("mirascope/getting-started.mdx", "doc")).toBe(
         "/src/docs/mirascope/getting-started.mdx"
       );
@@ -42,19 +42,19 @@ describe("Path Resolver", () => {
       expect(buildFilePath("index.mdx", "doc")).toBe("/src/docs/index.mdx");
     });
 
-    it("builds blog file paths", () => {
+    test("builds blog file paths", () => {
       expect(buildFilePath("new-release.mdx", "blog")).toBe("/src/posts/new-release.mdx");
 
       expect(buildFilePath("2023/year-review.mdx", "blog")).toBe("/src/posts/2023/year-review.mdx");
     });
 
-    it("builds policy file paths", () => {
+    test("builds policy file paths", () => {
       expect(buildFilePath("privacy.mdx", "policy")).toBe("/src/policies/privacy.mdx");
 
       expect(buildFilePath("terms/service.mdx", "policy")).toBe("/src/policies/terms/service.mdx");
     });
 
-    it("throws for invalid content types", () => {
+    test("throws for invalid content types", () => {
       // @ts-expect-error Testing with invalid type
       expect(() => buildFilePath("test.mdx", "invalid")).toThrow(
         "Unsupported content type: invalid"
@@ -63,7 +63,7 @@ describe("Path Resolver", () => {
   });
 
   describe("isValidPath", () => {
-    it("validates doc paths", () => {
+    test("validates doc paths", () => {
       expect(isValidPath("/docs", "doc")).toBe(true);
       expect(isValidPath("/docs/", "doc")).toBe(true);
       expect(isValidPath("/docs/mirascope", "doc")).toBe(true);
@@ -74,7 +74,7 @@ describe("Path Resolver", () => {
       expect(isValidPath("/blog/post", "doc")).toBe(false);
     });
 
-    it("validates blog paths", () => {
+    test("validates blog paths", () => {
       expect(isValidPath("/blog", "blog")).toBe(true);
       expect(isValidPath("/blog/", "blog")).toBe(true);
       expect(isValidPath("/blog/new-release", "blog")).toBe(true);
@@ -83,7 +83,7 @@ describe("Path Resolver", () => {
       expect(isValidPath("/docs/guide", "blog")).toBe(false);
     });
 
-    it("validates policy paths", () => {
+    test("validates policy paths", () => {
       expect(isValidPath("/privacy", "policy")).toBe(true);
       expect(isValidPath("/terms/service", "policy")).toBe(true);
 
@@ -112,34 +112,34 @@ describe("Path Resolver", () => {
       });
     });
 
-    it("generates doc paths in production mode", () => {
+    test("generates doc paths in production mode", () => {
       expect(getContentPath("/docs/mirascope/getting-started", "doc")).toBe(
         "/static/docs/mirascope/getting-started.mdx.json"
       );
     });
 
-    it("generates blog paths in production mode", () => {
+    test("generates blog paths in production mode", () => {
       expect(getContentPath("/blog/new-release", "blog")).toBe("/static/posts/new-release.json");
     });
 
-    it("generates policy paths in production mode", () => {
+    test("generates policy paths in production mode", () => {
       expect(getContentPath("/privacy", "policy")).toBe("/static/policies/privacy.mdx.json");
     });
 
-    it("normalizes backslashes to forward slashes in production mode", () => {
+    test("normalizes backslashes to forward slashes in production mode", () => {
       // Test path with backslashes
       expect(getContentPath("/docs/windows\\style\\path", "doc")).toContain(
         "/static/docs/windows/style"
       );
     });
 
-    it("throws for invalid content types", () => {
+    test("throws for invalid content types", () => {
       // @ts-expect-error Testing with invalid type
       expect(() => getContentPath("/test", "invalid")).toThrow("Unsupported content type: invalid");
     });
 
     // Test for development environment
-    it("handles development environment paths", () => {
+    test("handles development environment paths", () => {
       Object.defineProperty(import.meta.env, "PROD", {
         value: false,
         writable: true,

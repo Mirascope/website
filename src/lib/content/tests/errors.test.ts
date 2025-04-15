@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, test, expect } from "bun:test";
 import {
   ContentError,
   DocumentNotFoundError,
@@ -9,7 +9,7 @@ import {
 
 describe("Error Types", () => {
   describe("ContentError", () => {
-    it("creates a basic content error", () => {
+    test("creates a basic content error", () => {
       const error = new ContentError("Test error", "doc", "test/path");
 
       expect(error.message).toBe("Test error");
@@ -19,7 +19,7 @@ describe("Error Types", () => {
       expect(error instanceof Error).toBe(true);
     });
 
-    it("works without path", () => {
+    test("works without path", () => {
       const error = new ContentError("Generic error", "blog");
 
       expect(error.message).toBe("Generic error");
@@ -29,7 +29,7 @@ describe("Error Types", () => {
   });
 
   describe("DocumentNotFoundError", () => {
-    it("creates a not found error", () => {
+    test("creates a not found error", () => {
       const error = new DocumentNotFoundError("doc", "test/path");
 
       expect(error.message).toBe("doc document not found: test/path");
@@ -42,7 +42,7 @@ describe("Error Types", () => {
   });
 
   describe("InvalidPathError", () => {
-    it("creates an invalid path error", () => {
+    test("creates an invalid path error", () => {
       const error = new InvalidPathError("blog", "invalid/path");
 
       expect(error.message).toBe("Invalid blog path: invalid/path");
@@ -54,7 +54,7 @@ describe("Error Types", () => {
   });
 
   describe("ContentLoadError", () => {
-    it("creates a content load error", () => {
+    test("creates a content load error", () => {
       const error = new ContentLoadError("policy", "terms/service");
 
       expect(error.message).toBe("Failed to load policy content: terms/service");
@@ -64,7 +64,7 @@ describe("Error Types", () => {
       expect(error instanceof ContentError).toBe(true);
     });
 
-    it("includes cause in message", () => {
+    test("includes cause in message", () => {
       const cause = new Error("Network error");
       const error = new ContentLoadError("doc", "mirascope/intro", cause);
 
@@ -74,7 +74,7 @@ describe("Error Types", () => {
   });
 
   describe("MetadataError", () => {
-    it("creates a metadata processing error", () => {
+    test("creates a metadata processing error", () => {
       const error = new MetadataError("blog", "post-slug");
 
       expect(error.message).toBe("Failed to process blog metadata: post-slug");
@@ -84,7 +84,7 @@ describe("Error Types", () => {
       expect(error instanceof ContentError).toBe(true);
     });
 
-    it("includes cause in message", () => {
+    test("includes cause in message", () => {
       const cause = new Error("Invalid frontmatter");
       const error = new MetadataError("policy", "privacy", cause);
 
@@ -96,7 +96,7 @@ describe("Error Types", () => {
   });
 
   describe("Error inheritance", () => {
-    it("allows catching specific error types", () => {
+    test("allows catching specific error types", () => {
       const docNotFoundError = new DocumentNotFoundError("doc", "path");
       const invalidPathError = new InvalidPathError("blog", "path");
       const contentLoadError = new ContentLoadError("policy", "path");
