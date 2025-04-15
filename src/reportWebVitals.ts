@@ -1,26 +1,15 @@
-import { isBrowser, hasAnalyticsConsent } from "./lib/services/analytics";
+import { isBrowser } from "./lib/services/analytics";
+import analyticsManager from "./lib/services/analytics";
 
 const reportWebVitals = () => {
-  // Early returns if not in browser or no consent given
+  // Skip if not in browser
   if (!isBrowser) return;
-  if (!hasAnalyticsConsent()) return;
 
-  // Only import and setup web-vitals if we have consent
+  // Always import and set up listeners, but report conditionally
   import("web-vitals").then(({ onCLS, onINP, onFCP, onLCP, onTTFB }) => {
+    // Analytics manager handles consent check internally
     const sendToAnalytics = (metric: any) => {
-      // Log to console for now
-      console.log(`Web vital: ${metric.name} - ${Math.round(metric.value * 100) / 100}`);
-
-      // Send metrics to Google Analytics
-      if (window.gtag) {
-        // @ts-ignore - Using arguments in the expected way for GA4
-        window.gtag("event", "web-vitals", {
-          event_category: "Web Vitals",
-          event_label: metric.id,
-          value: Math.round(metric.value * 100) / 100,
-          non_interaction: true,
-        });
-      }
+      analyticsManager.reportWebVital(metric);
     };
 
     onCLS(sendToAnalytics);
