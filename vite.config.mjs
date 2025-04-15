@@ -161,10 +161,6 @@ export default defineConfig({
     tailwindcss(),
     mdxVirtualModulePlugin(),
   ],
-  test: {
-    globals: true,
-    environment: "jsdom",
-  },
   resolve: {
     alias: {
       "@": resolve(process.cwd(), "./src"),
