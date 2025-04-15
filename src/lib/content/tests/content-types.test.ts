@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, test, expect } from "bun:test";
 import type { ContentType, ContentMeta, ValidationResult } from "../types";
 import type { DocMeta } from "../docs";
 import type { BlogMeta } from "../blog";
@@ -6,7 +6,7 @@ import type { PolicyMeta } from "../policy";
 
 describe("ContentTypes", () => {
   describe("ContentType", () => {
-    it("defines valid content types", () => {
+    test("defines valid content types", () => {
       const docType: ContentType = "doc";
       const blogType: ContentType = "blog";
       const policyType: ContentType = "policy";
@@ -18,7 +18,7 @@ describe("ContentTypes", () => {
   });
 
   describe("ContentMeta", () => {
-    it("works with minimal properties", () => {
+    test("works with minimal properties", () => {
       const meta: ContentMeta = {
         title: "Test Title",
         path: "test/path",
@@ -32,7 +32,7 @@ describe("ContentTypes", () => {
       expect(meta.type).toBe("doc");
     });
 
-    it("accepts optional description", () => {
+    test("accepts optional description", () => {
       const meta: ContentMeta = {
         title: "Test Title",
         description: "Test Description",
@@ -46,7 +46,7 @@ describe("ContentTypes", () => {
   });
 
   describe("DocMeta", () => {
-    it("works with required properties", () => {
+    test("works with required properties", () => {
       const meta: DocMeta = {
         title: "Test Doc",
         path: "mirascope/getting-started",
@@ -59,7 +59,7 @@ describe("ContentTypes", () => {
       expect(meta.product).toBe("mirascope");
     });
 
-    it("accepts optional properties", () => {
+    test("accepts optional properties", () => {
       const meta: DocMeta = {
         title: "Test Doc",
         path: "mirascope/getting-started",
@@ -80,7 +80,7 @@ describe("ContentTypes", () => {
   });
 
   describe("BlogMeta", () => {
-    it("works with all properties", () => {
+    test("works with all properties", () => {
       const meta: BlogMeta = {
         title: "Test Blog Post",
         path: "test-blog-post",
@@ -101,7 +101,7 @@ describe("ContentTypes", () => {
   });
 
   describe("PolicyMeta", () => {
-    it("works with minimal properties", () => {
+    test("works with minimal properties", () => {
       const meta: PolicyMeta = {
         title: "Privacy Policy",
         path: "privacy",
@@ -112,7 +112,7 @@ describe("ContentTypes", () => {
       expect(meta.title).toBe("Privacy Policy");
     });
 
-    it("accepts lastUpdated property", () => {
+    test("accepts lastUpdated property", () => {
       const meta: PolicyMeta = {
         title: "Privacy Policy",
         path: "privacy",
@@ -126,7 +126,7 @@ describe("ContentTypes", () => {
   });
 
   describe("Content", () => {
-    it("combines metadata with content and mdx", () => {
+    test("combines metadata with content and mdx", () => {
       const document = {
         meta: {
           title: "Test Title",
@@ -148,7 +148,7 @@ describe("ContentTypes", () => {
   });
 
   describe("ValidationResult", () => {
-    it("represents valid result", () => {
+    test("represents valid result", () => {
       const result: ValidationResult = {
         isValid: true,
       };
@@ -157,7 +157,7 @@ describe("ContentTypes", () => {
       expect(result.errors).toBeUndefined();
     });
 
-    it("represents invalid result with errors", () => {
+    test("represents invalid result with errors", () => {
       const result: ValidationResult = {
         isValid: false,
         errors: ["Missing title", "Invalid type"],

@@ -179,8 +179,6 @@ function cleanSnippets(doc: ExtractableDoc): void {
   const snippetDir = path.join(SNIPPETS_ROOT, doc.product, relativePath);
 
   if (fs.existsSync(snippetDir)) {
-    console.log(`Cleaning snippets for ${doc.filePath}...`);
-
     // Remove the directory recursively
     fs.rmSync(snippetDir, { recursive: true, force: true });
   }

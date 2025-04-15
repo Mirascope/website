@@ -22,7 +22,7 @@ bun run start
 - `bun run start` - Start development server
 - `bun run build` - Build for production
 - `bun run serve` - Preview production build
-- `bun test` - Run tests
+- `bun test` - Run tests with Bun's built-in Jest-compatible test runner
 
 #### Validation and Fixing
 - `bun run lint` - Run all checks (TypeScript, MDX, Python snippets, formatting)
@@ -47,6 +47,22 @@ This project uses [husky](https://github.com/typicode/husky) and [lint-staged](h
 4. Run TypeScript type checking
 
 These checks run automatically when you attempt to commit changes, helping maintain code quality and consistency.
+
+### Testing
+
+This project uses Bun's built-in test runner, which offers Jest-compatible APIs and fast performance. Tests are located in files with `.test.ts` extensions throughout the codebase.
+
+To run tests:
+```bash
+# Run all tests
+bun test
+
+# Run tests for specific files
+bun test ./src/lib/redirects.test.ts
+
+# Run tests with watch mode
+bun test --watch
+```
 
 ### Code Snippet Extraction
 
