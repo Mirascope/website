@@ -1,13 +1,9 @@
 import React from "react";
 import { MDXRenderer } from "@/components/MDXRenderer";
-import { type DocMeta } from "@/lib/docs";
+import { type DocContent } from "@/lib/content/docs";
 
 interface MainContentProps {
-  document: { meta: DocMeta; content: string };
-  compiledMDX: {
-    code: string;
-    frontmatter: Record<string, any>;
-  } | null;
+  document: DocContent;
   funMode: boolean;
 }
 
@@ -16,7 +12,7 @@ interface MainContentProps {
  *
  * Displays the document title, description, and rendered MDX content
  */
-const MainContent: React.FC<MainContentProps> = ({ document, compiledMDX, funMode }) => {
+const MainContent: React.FC<MainContentProps> = ({ document, funMode }) => {
   return (
     <div className="flex-1 min-w-0 px-4 lg:px-8">
       <div className="w-full max-w-5xl mx-auto">
@@ -28,18 +24,14 @@ const MainContent: React.FC<MainContentProps> = ({ document, compiledMDX, funMod
           id="doc-content"
           className="prose prose-sm lg:prose-base prose-slate max-w-none overflow-x-auto mdx-container"
         >
-          {document.content ? (
-            compiledMDX ? (
-              <MDXRenderer
-                code={compiledMDX.code}
-                frontmatter={compiledMDX.frontmatter}
-                useFunMode={funMode}
-              />
-            ) : (
-              <div className="animate-pulse bg-gray-100 h-40 rounded-md"></div>
-            )
+          {document.mdx ? (
+            <MDXRenderer
+              code={document.mdx.code}
+              frontmatter={document.mdx.frontmatter}
+              useFunMode={funMode}
+            />
           ) : (
-            <div></div> /* Empty div for no content */
+            <div className="animate-pulse bg-gray-100 h-40 rounded-md"></div>
           )}
         </div>
       </div>

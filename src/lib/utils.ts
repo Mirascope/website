@@ -5,70 +5,30 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// API for accessing MDX posts
-export const mockAPI = {
-  /**
-   * Get a list of all MDX post files
-   */
-  async getPostsList(): Promise<string[]> {
-    // Fetch the list of MDX files from the virtual API endpoint
-    try {
-      const response = await fetch("/api/posts-list");
-      if (!response.ok) {
-        throw new Error(`Error fetching posts list: ${response.statusText}`);
-      }
-      return await response.json();
-    } catch (error) {
-      console.error("Error fetching posts list:", error);
-      throw error;
-    }
-  },
-
-  /**
-   * Get the content of a specific MDX file
-   */
-  async getPostContent(filename: string): Promise<string> {
-    try {
-      // Fetch the MDX content from the virtual API endpoint
-      const response = await fetch(`/posts/${filename}`);
-      if (!response.ok) {
-        throw new Error(`Error fetching post content: ${response.statusText}`);
-      }
-      return await response.text();
-    } catch (error) {
-      console.error(`Error fetching post content for ${filename}:`, error);
-      throw error;
-    }
-  },
-};
-
-// API for accessing documentation files
-export const docsAPI = {
-  /**
-   * Get the content of a specific MDX documentation file
-   */
-  async getDocContent(filePath: string): Promise<string> {
-    try {
-      // Log the file path we're trying to fetch for debugging
-      console.log(`Fetching doc content for: /src/docs/${filePath}`);
-
-      // Fetch the MDX content from the docs directory
-      const response = await fetch(`/src/docs/${filePath}`);
-      if (!response.ok) {
-        throw new Error(`Error fetching doc content: ${response.statusText}`);
-      }
-      return await response.text();
-    } catch (error) {
-      console.error(`Error fetching doc content for ${filePath}:`, error);
-      throw error;
-    }
-  },
-};
-
 /**
  * Converts a route path to a filename-safe string
  * Example: "/blog/my-post" -> "blog-my-post"
  */
 export const routeToFilename = (route: string): string => {
   return route === "/" ? "index" : route.replace(/^\//, "").replace(/\//g, "-");
+};
+
+/**
+ * Format a date string to "Month Day, Year" format
+ */
+export const formatDate = (dateString: string): string => {
+  if (!dateString) return "";
+  try {
+    const [year, month, day] = dateString.split("-").map(Number);
+    const date = new Date(year, month - 1, day);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      timeZone: "America/Los_Angeles",
+    });
+  } catch (e) {
+    console.error("Error formatting date:", e);
+    return dateString;
+  }
 };

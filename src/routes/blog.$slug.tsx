@@ -2,14 +2,13 @@ import { createFileRoute, useParams, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, Sparkles } from "lucide-react";
-import { getPostBySlug } from "@/lib/mdx";
 import { MDXRenderer } from "@/components/MDXRenderer";
 import { LoadingContent } from "@/components/docs";
 import ErrorContent from "@/components/ErrorContent";
 import useFunMode from "@/lib/hooks/useFunMode";
-import useMDXProcessor from "@/lib/hooks/useMDXProcessor";
 import useSEO from "@/lib/hooks/useSEO";
 import { cn } from "@/lib/utils";
+import { useBlogPost } from "@/lib/content/blog";
 
 export const Route = createFileRoute("/blog/$slug")({
   component: BlogPostPage,
@@ -21,15 +20,12 @@ export const Route = createFileRoute("/blog/$slug")({
 
 function BlogPostPage() {
   const { slug } = useParams({ from: "/blog/$slug" });
-  const [post, setPost] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { content: post, loading, error } = useBlogPost(slug);
   const [tocOpen, setTocOpen] = useState(false);
   const [ogImage, setOgImage] = useState<string | undefined>(undefined);
 
-  // Use custom hooks
+  // Use fun mode
   const [funMode, toggleFunMode] = useFunMode();
-  const { compiledMDX } = useMDXProcessor(post?.content, post);
 
   // Find the first available image in the blog post directory
   useEffect(() => {
@@ -58,43 +54,20 @@ function BlogPostPage() {
     }
   }, [post, slug]);
 
-  useEffect(() => {
-    const fetchPost = async () => {
-      try {
-        const result = await getPostBySlug(slug);
-        if (!result) {
-          setError("Post not found");
-          setLoading(false);
-          return;
-        }
-
-        setPost({ ...result.meta, content: result.content });
-      } catch (err) {
-        console.error("Error fetching post:", err);
-        setError(`Failed to load post: ${err instanceof Error ? err.message : String(err)}`);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPost();
-  }, [slug]);
-
   // Apply SEO
   useSEO({
-    title: loading ? "Loading..." : error ? "Post Not Found" : post?.title,
+    title: error ? "Post Not Found" : post?.meta.title,
     description: error
       ? "The requested blog post could not be found."
-      : post?.description || post?.excerpt,
+      : post?.meta.description || post?.mdx?.frontmatter?.excerpt,
     image: ogImage,
     url: `/blog/${slug}`,
     type: "article",
-    article: post
+    article: post?.meta
       ? {
-          publishedTime: post.date,
-          modifiedTime: post.lastUpdated,
-          author: post.author,
-          tags: post.tags,
+          publishedTime: post.meta.date,
+          modifiedTime: post.meta.lastUpdated,
+          author: post.meta.author,
         }
       : undefined,
   });
@@ -119,7 +92,7 @@ function BlogPostPage() {
             <div className="w-56 flex-shrink-0 hidden lg:block"></div>
             <ErrorContent
               title="Post Not Found"
-              message={error}
+              message={error instanceof Error ? error.message : String(error)}
               showBackButton={true}
               backTo="/blog"
               backLabel="Back to Blog"
@@ -130,6 +103,9 @@ function BlogPostPage() {
       </div>
     );
   }
+
+  // Extract metadata for easier access
+  const { title, date, readTime, author, lastUpdated } = post.meta;
 
   return (
     <div className="relative">
@@ -154,15 +130,13 @@ function BlogPostPage() {
                 </Link>
               </div>
               <div className="mb-6">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold mb-4">
-                  {post.title}
-                </h1>
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold mb-4">{title}</h1>
                 <p className="text-muted-foreground text-sm sm:text-base">
-                  {post.date} · {post.readTime} · By {post.author}
+                  {date} · {readTime} · By {author}
                 </p>
-                {post.lastUpdated && (
+                {lastUpdated && (
                   <p className="text-muted-foreground text-sm sm:text-base mt-1 italic">
-                    Last updated: {post.lastUpdated}
+                    Last updated: {lastUpdated}
                   </p>
                 )}
               </div>
@@ -170,10 +144,10 @@ function BlogPostPage() {
                 id="blog-content"
                 className="bg-white dark:bg-gray-900 rounded-xl shadow-sm p-4 sm:p-6 border border-gray-200 dark:border-gray-700 blog-content"
               >
-                {compiledMDX ? (
+                {post.mdx ? (
                   <MDXRenderer
-                    code={compiledMDX.code}
-                    frontmatter={compiledMDX.frontmatter}
+                    code={post.mdx.code}
+                    frontmatter={post.mdx.frontmatter}
                     useFunMode={funMode}
                   />
                 ) : (

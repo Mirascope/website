@@ -2,22 +2,23 @@ import React from "react";
 import BaseLayout from "@/components/BaseLayout";
 import SidebarContainer from "@/components/SidebarContainer";
 import ErrorContent from "@/components/ErrorContent";
-import { type DocMeta } from "@/lib/docs";
+import { type DocMeta } from "@/lib/content/docs";
 import { type ProductName } from "@/lib/route-types";
 import useFunMode from "@/lib/hooks/useFunMode";
 import useProviderSelection from "@/lib/hooks/useProviderSelection";
-import useMDXProcessor from "@/lib/hooks/useMDXProcessor";
 import { ProviderContextProvider } from "@/components/docs";
 import TocSidebar from "./TocSidebar";
 import MainContent from "./MainContent";
 import LoadingContent from "./LoadingContent";
+
+import type { DocContent } from "@/lib/content/docs";
 
 type DocsLayoutProps = {
   product: ProductName;
   section: string | null;
   slug: string;
   group?: string | null;
-  document: { meta: DocMeta; content: string } | null;
+  document: DocContent | null;
   docs: DocMeta[];
   loading: boolean;
   error: string | null;
@@ -42,9 +43,6 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
   // Use custom hooks for state management
   const [funMode, toggleFunMode] = useFunMode();
   const [selectedProvider, handleProviderChange] = useProviderSelection();
-
-  // Process MDX content using the custom hook
-  const { compiledMDX } = useMDXProcessor(document?.content, document?.meta);
 
   // Left sidebar content
   const leftSidebar = (
@@ -83,7 +81,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
       />
     );
   } else {
-    mainContent = <MainContent document={document} compiledMDX={compiledMDX} funMode={funMode} />;
+    mainContent = <MainContent document={document} funMode={funMode} />;
   }
 
   return (

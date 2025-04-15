@@ -2,7 +2,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import type { PostMeta } from "./mdx";
+import type { BlogMeta } from "./content/blog";
 import { getAllDocs } from "../docs/_meta";
 
 // Base URL for the site
@@ -113,7 +113,7 @@ export async function getBlogRoutes(): Promise<string[]> {
   }
 
   try {
-    const postsList: PostMeta[] = JSON.parse(fs.readFileSync(postsListPath, "utf8"));
+    const postsList: BlogMeta[] = JSON.parse(fs.readFileSync(postsListPath, "utf8"));
     return postsList.map((post) => `/blog/${post.slug}`).sort();
   } catch (error) {
     throw new Error(`Failed to load blog posts list: ${error}`);
@@ -152,7 +152,7 @@ export async function getAllRoutes(includeHidden = false): Promise<string[]> {
 /**
  * Get posts with metadata
  */
-export async function getBlogPostsWithMeta(): Promise<PostMeta[]> {
+export async function getBlogPostsWithMeta(): Promise<BlogMeta[]> {
   const postsListPath = getPostsListPath();
   if (!fs.existsSync(postsListPath)) {
     throw new Error(`Blog posts list not found at: ${postsListPath}`);

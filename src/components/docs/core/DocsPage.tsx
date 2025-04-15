@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import DocsLayout from "./DocsLayout";
 import useSEO from "@/lib/hooks/useSEO";
-import { getDoc, getDocsForProduct, type DocMeta } from "@/lib/docs";
+import { getDoc, getDocsForProduct, type DocMeta, type DocContent } from "@/lib/content/docs";
 import { type ProductName } from "@/lib/route-types";
 
 type DocsPageProps = {
@@ -16,10 +16,7 @@ type DocsPageProps = {
  * Handles loading documents, error states, and passes data to DocsLayout
  */
 const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
-  const [document, setDocument] = useState<{
-    meta: DocMeta;
-    content: string;
-  } | null>(null);
+  const [document, setDocument] = useState<DocContent | null>(null);
   const [productDocs, setProductDocs] = useState<DocMeta[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -40,7 +37,7 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
 
       try {
         // Load all docs for this product for the sidebar
-        const docsForProduct = getDocsForProduct(product);
+        const docsForProduct = await getDocsForProduct(product);
         setProductDocs(docsForProduct);
 
         // Build the path based on whether this is in a section or not
@@ -48,12 +45,26 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
           ? `/docs/${product}/${section}/${splat}`
           : `/docs/${product}/${splat}`;
 
-        // For index pages, append /index
-        const finalPath = splat === "" || splat === "/" ? `${docPath}/index` : docPath;
+        // For index pages, append /index, ensuring no double slashes
+        const docPathNoTrailingSlash = docPath.endsWith("/") ? docPath.slice(0, -1) : docPath;
+
+        // Handle empty splat cases correctly:
+        // 1. Empty splat in regular path - points to product root index
+        // 2. Empty splat in section path - points to section index
+        let finalPath;
+        if (splat === "" || splat === "/") {
+          // For both section and regular paths, append /index for empty splats
+          finalPath = `${docPathNoTrailingSlash}/index`;
+        } else {
+          finalPath = docPath;
+        }
 
         // Fetch the document
         const doc = await getDoc(finalPath);
+
+        // Set the document directly
         setDocument(doc);
+
         setLoading(false);
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : String(err);
