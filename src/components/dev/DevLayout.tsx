@@ -1,5 +1,4 @@
 import React from "react";
-import BaseLayout from "@/components/BaseLayout";
 import DevSidebar from "./DevSidebar";
 
 interface DevLayoutProps {
@@ -9,7 +8,8 @@ interface DevLayoutProps {
 /**
  * DevLayout - Layout component for developer tools section
  *
- * Provides a consistent layout for all dev tool pages
+ * Provides a consistent layout for all dev tool pages without the 60px top padding
+ * that's present in the main BaseLayout component
  */
 const DevLayout: React.FC<DevLayoutProps> = ({ children }) => {
   // Sidebar content
@@ -22,7 +22,18 @@ const DevLayout: React.FC<DevLayoutProps> = ({ children }) => {
   const rightSidebar = <div className="w-56 flex-shrink-0 hidden lg:block"></div>;
 
   return (
-    <BaseLayout leftSidebar={leftSidebar} mainContent={mainContent} rightSidebar={rightSidebar} />
+    <div className="flex justify-center pt-0">
+      <div className="flex mx-auto w-full max-w-7xl">
+        {/* Left sidebar */}
+        {leftSidebar}
+
+        {/* Main content area */}
+        {mainContent}
+
+        {/* Right sidebar */}
+        {rightSidebar}
+      </div>
+    </div>
   );
 };
 

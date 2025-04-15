@@ -149,6 +149,28 @@ const mdxVirtualModulePlugin = () => {
           res.end(JSON.stringify({ error: "Failed to serve documentation content" }));
         }
       });
+      
+      // Serve style test MDX file from src/components/dev
+      server.middlewares.use("/src/components/dev/style-test.mdx", (req, res) => {
+        try {
+          const filePath = resolve(process.cwd(), "src/components/dev/style-test.mdx");
+          
+          if (!fs.existsSync(filePath)) {
+            console.error(`Style test file not found: ${filePath}`);
+            res.statusCode = 404;
+            return res.end(JSON.stringify({ error: "Style test file not found" }));
+          }
+          
+          const content = fs.readFileSync(filePath, "utf-8");
+          
+          res.setHeader("Content-Type", "text/plain");
+          res.end(content);
+        } catch (error) {
+          console.error(`Error serving style test file:`, error);
+          res.statusCode = 500;
+          res.end(JSON.stringify({ error: "Failed to serve style test content" }));
+        }
+      });
     },
   };
 };
