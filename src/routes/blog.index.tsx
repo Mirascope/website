@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-import { getAllPosts } from "@/lib/mdx";
-import type { PostMeta } from "@/lib/mdx";
+import { getAllBlogMeta, type BlogMeta } from "@/lib/content/blog";
 import useSEO from "@/lib/hooks/useSEO";
 
 // Posts per page
@@ -13,15 +12,15 @@ export const Route = createFileRoute("/blog/")({
 
 function BlogPage() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [posts, setPosts] = useState<PostMeta[]>([]);
+  const [posts, setPosts] = useState<BlogMeta[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Load posts from the MDX files
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const allPosts = await getAllPosts();
-        setPosts(allPosts);
+        const allPosts = await getAllBlogMeta();
+        setPosts(allPosts as BlogMeta[]);
         setLoading(false);
       } catch (error) {
         console.error("Error loading blog posts:", error);

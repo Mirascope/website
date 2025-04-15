@@ -1,42 +1,8 @@
+import { parseFrontmatter } from "./frontmatter";
+
 export interface ProcessedMDX {
   code: string;
   frontmatter: Record<string, any>;
-}
-
-/* This content has been moved to code-highlight.ts */
-
-/**
- * Extracts and parses frontmatter from MDX content
- */
-function extractFrontmatter(source: string): { content: string; frontmatter: Record<string, any> } {
-  const frontmatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/;
-  const match = source.match(frontmatterRegex);
-
-  if (!match) {
-    return { content: source, frontmatter: {} };
-  }
-
-  const frontmatterStr = match[1];
-  const content = match[2];
-
-  // Parse frontmatter into key-value pairs
-  const frontmatter: Record<string, any> = {};
-  const lines = frontmatterStr.split("\n");
-
-  for (const line of lines) {
-    const colonIndex = line.indexOf(":");
-    if (colonIndex !== -1) {
-      const key = line.slice(0, colonIndex).trim();
-      // Remove quotes from value if present
-      const value = line
-        .slice(colonIndex + 1)
-        .trim()
-        .replace(/^"(.*)"$/, "$1");
-      frontmatter[key] = value;
-    }
-  }
-
-  return { content, frontmatter };
 }
 
 /**
@@ -50,7 +16,7 @@ export async function processMDX(source: string): Promise<ProcessedMDX> {
   try {
     // Extract frontmatter - note that serialize handles this automatically,
     // but we need to extract it ourselves to return it separately
-    const { content, frontmatter } = extractFrontmatter(source);
+    const { frontmatter, content } = parseFrontmatter(source);
 
     // Dynamically import next-mdx-remote/serialize since it's an ESM module
     const { serialize } = await import("next-mdx-remote/serialize");

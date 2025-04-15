@@ -165,7 +165,7 @@ const mirascopeMeta: ProductDocs = {
       // Top-level API pages
       items: {
         index: {
-          title: "Under construction...",
+          title: "Mirascope API Reference",
         },
       },
     },

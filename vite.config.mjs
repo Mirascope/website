@@ -10,14 +10,71 @@ const mdxVirtualModulePlugin = () => {
   return {
     name: "mdx-virtual-module-plugin",
     configureServer(server) {
-      // Create a virtual endpoint to list all posts
+      // Create a virtual endpoint to list all posts with their metadata
       server.middlewares.use("/api/posts-list", (req, res) => {
         try {
           const postsDir = resolve(process.cwd(), "src/posts");
           const files = fs.readdirSync(postsDir).filter((file) => file.endsWith(".mdx"));
+          
+          // Convert files to BlogMeta objects
+          const postsList = files.map(filename => {
+            const slug = filename.replace(/\.mdx$/, "");
+            const filePath = resolve(postsDir, filename);
+            let meta = {
+              title: slug.replace(/-/g, " "),  // Basic title from slug
+              description: "",
+              date: new Date().toISOString().split('T')[0],
+              readTime: "3 min",
+              author: "Mirascope Team",
+              slug,
+              path: `blog/${slug}`,
+              type: "blog",
+            };
+            
+            // Try to extract frontmatter for better metadata
+            try {
+              const content = fs.readFileSync(filePath, 'utf-8');
+              const match = content.match(/^---\n([\s\S]*?)\n---\n/);
+              
+              if (match) {
+                const frontmatterStr = match[1];
+                const lines = frontmatterStr.split("\n");
+                const frontmatter = {};
+                
+                for (const line of lines) {
+                  const colonIndex = line.indexOf(":");
+                  if (colonIndex !== -1) {
+                    const key = line.slice(0, colonIndex).trim();
+                    const value = line
+                      .slice(colonIndex + 1)
+                      .trim()
+                      .replace(/^"(.*)"$/, "$1");
+                    frontmatter[key] = value;
+                  }
+                }
+                
+                // Update meta with frontmatter values
+                if (frontmatter.title) meta.title = frontmatter.title;
+                if (frontmatter.description) meta.description = frontmatter.description;
+                if (frontmatter.date) meta.date = frontmatter.date;
+                if (frontmatter.readTime) meta.readTime = frontmatter.readTime;
+                if (frontmatter.author) meta.author = frontmatter.author;
+                if (frontmatter.lastUpdated) meta.lastUpdated = frontmatter.lastUpdated;
+              }
+            } catch (e) {
+              console.warn(`Could not extract frontmatter for ${filename}:`, e);
+            }
+            
+            return meta;
+          });
+          
+          // Sort posts by date in descending order
+          postsList.sort((a, b) => {
+            return new Date(b.date).getTime() - new Date(a.date).getTime();
+          });
 
           res.setHeader("Content-Type", "application/json");
-          res.end(JSON.stringify(files));
+          res.end(JSON.stringify(postsList));
         } catch (error) {
           console.error("Error listing posts:", error);
           res.statusCode = 500;

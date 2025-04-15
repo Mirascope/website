@@ -1,8 +1,8 @@
 import fs from "fs";
 import path from "path";
-import { processMDX } from "../src/lib/mdx-utils";
-import type { PostMeta } from "../src/lib/mdx";
+import type { BlogMeta } from "../src/lib/content/blog";
 import { SITE_URL, getAllRoutes, getBlogPostsWithMeta } from "../src/lib/router-utils";
+import { processMDX } from "../src/lib/content/mdx-processor";
 
 // Create static directories directly in public folder
 // This ensures they get copied to the right place in the final build
@@ -63,7 +63,7 @@ async function processBlogPosts(verbose = true): Promise<void> {
   const postsDir = path.join(process.cwd(), "src", "posts");
   const files = fs.readdirSync(postsDir).filter((file) => file.endsWith(".mdx"));
 
-  const postsList: PostMeta[] = [];
+  const postsList: BlogMeta[] = [];
 
   for (const filename of files) {
     const slug = filename.replace(/\.mdx$/, "");
@@ -82,13 +82,15 @@ async function processBlogPosts(verbose = true): Promise<void> {
       continue;
     }
 
-    const postMeta: PostMeta = {
+    const postMeta: BlogMeta = {
       title: frontmatter.title || "",
       description: frontmatter.description || "",
       date: frontmatter.date || "",
       readTime: frontmatter.readTime || "",
       author: frontmatter.author || "Mirascope Team",
       slug,
+      path: `blog/${slug}`,
+      type: "blog",
       lastUpdated: frontmatter.lastUpdated || frontmatter.date || "",
     };
 
@@ -194,7 +196,7 @@ async function processPolicyFiles(verbose = true): Promise<void> {
       const { frontmatter } = extractFrontmatter(fileContent);
       await processMDX(fileContent); // Validate the MDX
       fs.writeFileSync(
-        path.join(POLICIES_DIR, "privacy.json"),
+        path.join(POLICIES_DIR, "privacy.mdx.json"),
         JSON.stringify({
           content: fileContent,
           frontmatter,
