@@ -6,9 +6,7 @@ import { useEffect } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import CookieBanner from "../components/CookieBanner";
-import useAnalyticsConsent from "../lib/hooks/useAnalyticsConsent";
-import { trackPageView } from "../lib/services/analytics";
-import { SITE_VERSION } from "../lib/constants/site";
+import analyticsManager from "../lib/services/analytics";
 
 export const Route = createRootRoute({
   beforeLoad: ({ location }) => {
@@ -29,17 +27,18 @@ export const Route = createRootRoute({
   component: () => {
     const router = useRouterState();
     const isLandingPage = router.location.pathname === "/";
-    const { updateConsent, hasConsent } = useAnalyticsConsent();
+
+    // Initialize analytics during component mount
+    useEffect(() => {
+      analyticsManager.enableAnalytics();
+    }, []);
 
     // Track page views when route changes
     useEffect(() => {
-      // Only track if user has given consent
-      if (hasConsent) {
-        const path = router.location.pathname;
-        trackPageView(path);
-        console.log(`Page view: ${path} (Site Version: ${SITE_VERSION})`);
-      }
-    }, [router.location.pathname, hasConsent]);
+      const path = router.location.pathname;
+      // Will only track if analytics are enabled (respects consent / GDPR)
+      analyticsManager.trackPageView(path);
+    }, [router.location.pathname]);
 
     return (
       <>
@@ -61,14 +60,7 @@ export const Route = createRootRoute({
         </div>
 
         {/* Cookie consent banner - positioned in lower left corner */}
-        <CookieBanner
-          onAccept={() => {
-            updateConsent(true);
-          }}
-          onReject={() => {
-            updateConsent(false);
-          }}
-        />
+        <CookieBanner />
 
         <TanStackRouterDevtools />
       </>

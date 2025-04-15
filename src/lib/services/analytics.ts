@@ -7,166 +7,106 @@ import { GA_MEASUREMENT_ID, SITE_VERSION } from "../constants/site";
 // Centralized check for browser environment
 export const isBrowser = typeof window !== "undefined";
 
-// Check if analytics consent has been given
-export const hasAnalyticsConsent = (): boolean => {
-  if (!isBrowser) return false;
+export type AnalyticsConsent = "accepted" | "rejected" | "unknown";
 
-  // Disable analytics in development environment
-  if (process.env.NODE_ENV === "development") {
-    return false;
-  }
-
-  // Get the stored consent value
-  const storedConsent = localStorage.getItem("cookie-consent");
-
-  // If user has explicitly set a preference, respect it
-  if (storedConsent === "accepted") return true;
-  if (storedConsent === "rejected") return false;
-
-  // If no preference set, check if user is in EU
-  const isEUUser = checkIfUserInEU();
-
-  // Default to opt-out for non-EU users, opt-in for EU users
-  return !isEUUser;
+type EventParams = {
+  event_category?: string;
+  event_label?: string;
+  value?: number;
+  non_interaction?: boolean;
+  site_version?: string;
+  page_path?: string;
+  [key: string]: any; // Allow additional custom parameters
 };
 
-// Check if the user is in the EU based on Cloudflare country header
-export const checkIfUserInEU = (): boolean => {
-  if (!isBrowser) return true; // Default to true for SSR
+/**
+ * AnalyticsManager class to centralize all analytics functionality
+ * including consent management, initialization, and tracking.
+ */
+export class AnalyticsManager {
+  private initialized = false;
+  private measurmentId: string;
+  private siteVersion: string;
 
-  // EU country codes (including UK for GDPR compliance)
-  const euCountryCodes = [
-    "AT",
-    "BE",
-    "BG",
-    "HR",
-    "CY",
-    "CZ",
-    "DK",
-    "EE",
-    "FI",
-    "FR",
-    "DE",
-    "GR",
-    "HU",
-    "IE",
-    "IT",
-    "LV",
-    "LT",
-    "LU",
-    "MT",
-    "NL",
-    "PL",
-    "PT",
-    "RO",
-    "SK",
-    "SI",
-    "ES",
-    "SE",
-    "GB",
-    "UK",
-  ];
+  constructor(measurmentId: string = GA_MEASUREMENT_ID, siteVersion: string = SITE_VERSION) {
+    this.measurmentId = measurmentId;
+    this.siteVersion = siteVersion;
+  }
 
-  // Get country from meta tag that should be injected server-side
-  const countryMetaTag = document.querySelector('meta[name="cf-ipcountry"]');
-  const countryCode = countryMetaTag?.getAttribute("content") || "";
+  /**
+   * Get the current analytics consent state
+   */
+  getConsent(): AnalyticsConsent {
+    if (!isBrowser) return "unknown";
 
-  // If no country code is found, assume EU to be conservative
-  if (!countryCode) {
-    console.log("No country code found from Cloudflare, defaulting to EU user");
+    const storedConsent = localStorage.getItem("cookie-consent");
+    if (storedConsent === "accepted") return "accepted";
+    if (storedConsent === "rejected") return "rejected";
+    return "unknown";
+  }
+
+  /**
+   * Update the user's consent preference
+   */
+  updateConsent(consent: AnalyticsConsent): void {
+    if (!isBrowser) return;
+
+    // Store consent in localStorage
+    localStorage.setItem("cookie-consent", consent);
+    console.log(`Analytics consent updated: ${consent}`);
+
+    if (consent === "accepted") {
+      // Initialize analytics if consent is granted
+      this.enableAnalytics();
+    } else if (consent === "rejected") {
+      // Handle revoking consent
+      this.disableAnalytics();
+    }
+    // "unknown" state doesn't change current analytics state
+  }
+
+  /**
+   * Check if analytics should be enabled based on consent and location
+   */
+  isEnabled(): boolean {
+    if (!isBrowser) return false;
+
+    // Disable analytics in development environment
+    if (process.env.NODE_ENV === "development") {
+      return false;
+    }
+
+    const consent = this.getConsent();
+
+    // If user has explicitly set a preference, respect it
+    if (consent === "accepted") return true;
+    if (consent === "rejected") return false;
+
+    // For unknown consent, check location
+    if (this.isUserInEU()) {
+      // Default to false for EU users to respect GDPR
+      return false;
+    } else {
+      // Use analytics by default where permissible
+      return true;
+    }
+  }
+
+  /**
+   * Enable analytics - initializes if needed
+   */
+  enableAnalytics(): boolean {
+    if (!this.isEnabled()) return false;
+
+    this.initialize();
     return true;
   }
 
-  return euCountryCodes.includes(countryCode);
-};
-
-// Analytics script status tracking
-let analyticsInitialized = false;
-
-// Initialize analytics with proper consent settings
-export const initializeAnalytics = (): void => {
-  if (!isBrowser) return;
-
-  const hasConsent = hasAnalyticsConsent();
-
-  // Skip initialization if no consent
-  if (!hasConsent) {
-    console.log("Analytics not initialized: user consent not given");
-    return;
-  }
-
-  // Prevent duplicate initialization
-  if (analyticsInitialized) {
-    console.log("Analytics already initialized");
-    return;
-  }
-
-  analyticsInitialized = true;
-  console.log(`Analytics initialized with consent: ${hasConsent}`);
-
-  // Add the Google Analytics script dynamically
-  if (!document.getElementById("ga-script")) {
-    const script = document.createElement("script");
-    script.id = "ga-script";
-    script.async = true;
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-
-    // Add error handling for script loading
-    script.onerror = () => {
-      console.error("Failed to load Google Analytics script");
-      analyticsInitialized = false;
-    };
-
-    document.head.appendChild(script);
-
-    window.dataLayer = window.dataLayer || [];
-    // Define the gtag function as it is in the official GA4 snippet
-    // @ts-ignore - We need to use arguments here which TS doesn't like
-    function gtag() {
-      if (!window.dataLayer) {
-        console.error("Analytics error: dataLayer is not defined");
-        return;
-      }
-      window.dataLayer.push(arguments);
-    }
-    window.gtag = gtag;
-
-    // Initialize gtag with proper arguments
-    // @ts-ignore - Using arguments in the expected way for GA4
-    gtag("js", new Date());
-
-    // Set default consent settings
-    // @ts-ignore - Using arguments in the expected way for GA4
-    gtag("consent", "default", {
-      analytics_storage: "granted", // We only initialize if consent is given
-      ad_storage: "denied", // Always deny ad storage by default
-    });
-
-    // Initialize with the measurement ID
-    // @ts-ignore - Using arguments in the expected way for GA4
-    gtag("config", GA_MEASUREMENT_ID, {
-      anonymize_ip: true,
-      send_page_view: true,
-      site_version: SITE_VERSION, // Track site version as a custom dimension
-    });
-  }
-};
-
-// Update consent settings in analytics platforms
-export const updateAnalyticsConsent = (consent: boolean): void => {
-  if (!isBrowser) return;
-
-  // Store consent in localStorage
-  localStorage.setItem("cookie-consent", consent ? "accepted" : "rejected");
-
-  console.log(`Analytics consent updated: ${consent}`);
-
-  if (consent) {
-    // Initialize analytics if consent is granted
-    initializeAnalytics();
-  } else {
-    // Handle revoking consent
-    analyticsInitialized = false;
+  /**
+   * Disable analytics and update consent settings if already loaded
+   */
+  disableAnalytics(): void {
+    this.initialized = false;
 
     // Update Google Analytics consent settings if already loaded
     if (window.gtag) {
@@ -176,61 +116,177 @@ export const updateAnalyticsConsent = (consent: boolean): void => {
       });
     }
   }
-};
 
-// Track a page view
-export const trackPageView = (path: string): void => {
-  if (!isBrowser || !hasAnalyticsConsent() || !analyticsInitialized) return;
+  /**
+   * Check if the user is in the EU based on Cloudflare country header
+   */
+  isUserInEU(): boolean {
+    if (!isBrowser) return true; // Default to true for SSR
 
-  console.log(`Page view tracked: ${path}`);
+    // EU country codes (including UK for GDPR compliance)
+    const euCountryCodes = [
+      "AT",
+      "BE",
+      "BG",
+      "HR",
+      "CY",
+      "CZ",
+      "DK",
+      "EE",
+      "FI",
+      "FR",
+      "DE",
+      "GR",
+      "HU",
+      "IE",
+      "IT",
+      "LV",
+      "LT",
+      "LU",
+      "MT",
+      "NL",
+      "PL",
+      "PT",
+      "RO",
+      "SK",
+      "SI",
+      "ES",
+      "SE",
+      "GB",
+      "UK",
+    ];
 
-  // Send pageview to Google Analytics
-  if (window.gtag) {
-    // @ts-ignore - Using arguments in the expected way for GA4
-    window.gtag("config", GA_MEASUREMENT_ID, {
-      page_path: path,
-    });
+    // Get country from meta tag that should be injected server-side
+    const countryMetaTag = document.querySelector('meta[name="cf-ipcountry"]');
+    const countryCode = countryMetaTag?.getAttribute("content") || "";
+
+    // If no country code is found, assume EU to be conservative
+    if (!countryCode) {
+      console.log("No country code found from Cloudflare, defaulting to EU user");
+      return true;
+    }
+
+    return euCountryCodes.includes(countryCode);
   }
-};
 
-// Track a custom event
-export const trackEvent = (
-  category: string,
-  action: string,
-  label?: string,
-  value?: number
-): void => {
-  if (!isBrowser || !hasAnalyticsConsent() || !analyticsInitialized) return;
+  /**
+   * Initialize Google Analytics
+   */
+  private initialize(): void {
+    // Prevent duplicate initialization
+    if (this.initialized) {
+      console.log("Analytics already initialized");
+      return;
+    }
 
-  console.log(`Event tracked: ${category} - ${action} - ${label} - ${value}`);
+    console.log(`Analytics initializing`);
 
-  // Send event to Google Analytics
-  if (window.gtag) {
-    // @ts-ignore - Using arguments in the expected way for GA4
-    window.gtag("event", action, {
-      event_category: category,
-      event_label: label,
-      value: value,
-      site_version: SITE_VERSION, // Include site version in all events
-    });
+    // Add the Google Analytics script dynamically
+    if (!document.getElementById("ga-script")) {
+      const script = document.createElement("script");
+      script.id = "ga-script";
+      script.async = true;
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${this.measurmentId}`;
+
+      // Add error handling for script loading
+      script.onerror = () => {
+        console.error("Failed to load Google Analytics script");
+        this.initialized = false;
+      };
+
+      document.head.appendChild(script);
+
+      window.dataLayer = window.dataLayer || [];
+      // Define the gtag function as it is in the official GA4 snippet
+      // @ts-ignore - We need to use arguments here which TS doesn't like
+      function gtag() {
+        if (!window.dataLayer) {
+          console.error("Analytics error: dataLayer is not defined");
+          return;
+        }
+        window.dataLayer.push(arguments);
+      }
+      window.gtag = gtag;
+
+      // Initialize gtag with proper arguments
+      // @ts-ignore - Using arguments in the expected way for GA4
+      gtag("js", new Date());
+
+      // Set default consent settings
+      // @ts-ignore - Using arguments in the expected way for GA4
+      gtag("consent", "default", {
+        analytics_storage: "granted", // We only initialize if consent is given
+        ad_storage: "denied", // Always deny ad storage by default
+      });
+
+      // Initialize with the measurement ID
+      // @ts-ignore - Using arguments in the expected way for GA4
+      gtag("config", this.measurmentId, {
+        anonymize_ip: true,
+        send_page_view: true,
+        site_version: this.siteVersion,
+      });
+
+      this.initialized = true;
+      console.log(`Analytics initialized`);
+    }
   }
-};
 
-// Web vitals reporting function that respects consent
-export const reportWebVitalsToAnalytics = (metric: any): void => {
-  if (!isBrowser || !hasAnalyticsConsent() || !analyticsInitialized) return;
+  /**
+   * Track a page view
+   */
+  trackPageView(path: string): void {
+    if (!this.enableAnalytics()) return;
 
-  console.log(`Web vital reported: ${metric.name} - ${Math.round(metric.value * 100) / 100}`);
+    // Send pageview to Google Analytics
+    if (window.gtag) {
+      // @ts-ignore - Using arguments in the expected way for GA4
+      window.gtag("config", this.measurmentId, {
+        page_path: path,
+      });
+    }
+  }
 
-  // Send web vitals to Google Analytics
-  if (window.gtag) {
-    // @ts-ignore - Using arguments in the expected way for GA4
-    window.gtag("event", "web-vitals", {
+  /**
+   * Track a custom event
+   */
+  trackEvent(action: string, params: EventParams = {}): void {
+    if (!this.enableAnalytics()) return;
+
+    // Add site version to all events
+    const eventParams = {
+      ...params,
+      site_version: this.siteVersion,
+    };
+
+    console.log(`Event tracked: ${action}`, eventParams);
+
+    // Send event to Google Analytics
+    if (window.gtag) {
+      // @ts-ignore - Using arguments in the expected way for GA4
+      window.gtag("event", action, eventParams);
+    }
+  }
+
+  /**
+   * Report web vitals metrics
+   */
+  reportWebVital(metric: any): void {
+    if (!this.enableAnalytics()) return;
+
+    console.log(`Web vital reported: ${metric.name} - ${Math.round(metric.value * 100) / 100}`);
+
+    this.trackEvent("web-vitals", {
       event_category: "Web Vitals",
       event_label: metric.id,
       value: Math.round(metric.value * 100) / 100,
       non_interaction: true,
-      site_version: SITE_VERSION,
     });
   }
-};
+}
+
+// Create a singleton instance for the application to use
+export const analyticsManager = new AnalyticsManager();
+
+// Export just the manager instance
+export default analyticsManager;
