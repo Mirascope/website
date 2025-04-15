@@ -11,12 +11,14 @@ const POSTS_DIR = path.join(STATIC_DIR, "posts");
 const DOCS_DIR = path.join(STATIC_DIR, "docs");
 const POLICIES_DIR = path.join(STATIC_DIR, "policies");
 const TERMS_DIR = path.join(POLICIES_DIR, "terms");
+const DEV_DIR = path.join(STATIC_DIR, "dev");
 
 fs.mkdirSync(STATIC_DIR, { recursive: true });
 fs.mkdirSync(POSTS_DIR, { recursive: true });
 fs.mkdirSync(DOCS_DIR, { recursive: true });
 fs.mkdirSync(POLICIES_DIR, { recursive: true });
 fs.mkdirSync(TERMS_DIR, { recursive: true });
+fs.mkdirSync(DEV_DIR, { recursive: true });
 
 /**
  * Extract frontmatter from MDX content
@@ -291,6 +293,35 @@ async function generateSitemap(verbose = true): Promise<void> {
 }
 
 /**
+ * Process developer tool content files
+ */
+async function processDevFiles(verbose = true): Promise<void> {
+  if (verbose) console.log("Processing dev tools content...");
+
+  // Process the style test MDX file
+  const styleTestPath = path.join(process.cwd(), "src", "components", "dev", "style-test.mdx");
+  if (fs.existsSync(styleTestPath)) {
+    const fileContent = fs.readFileSync(styleTestPath, "utf-8");
+    try {
+      const { frontmatter } = extractFrontmatter(fileContent);
+      await processMDX(fileContent); // Validate the MDX
+      fs.writeFileSync(
+        path.join(DEV_DIR, "style-test.mdx.json"),
+        JSON.stringify({
+          content: fileContent,
+          frontmatter,
+        })
+      );
+      if (verbose) console.log("Processed style test MDX file");
+    } catch (error) {
+      console.error(`Error processing style test MDX:`, error);
+    }
+  } else if (verbose) {
+    console.log("Style test MDX file not found at", styleTestPath);
+  }
+}
+
+/**
  * Main processing function that generates static JSON files for all MDX content
  * and creates a sitemap.xml file
  */
@@ -299,6 +330,7 @@ export async function preprocessContent(verbose = true): Promise<void> {
     await processBlogPosts(verbose);
     await processDocsFiles(verbose);
     await processPolicyFiles(verbose);
+    await processDevFiles(verbose);
     await generateSitemap(verbose);
     if (verbose) {
       console.log("Content preprocessing complete!");

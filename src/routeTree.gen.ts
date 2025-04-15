@@ -21,6 +21,7 @@ import { Route as BlogIndexImport } from './routes/blog.index'
 import { Route as TermsUseImport } from './routes/terms/use'
 import { Route as TermsServiceImport } from './routes/terms/service'
 import { Route as DocsSplatImport } from './routes/docs.$'
+import { Route as DevStyleTestImport } from './routes/dev/style-test'
 import { Route as DevSocialCardImport } from './routes/dev/social-card'
 import { Route as DevAuditMetadataImport } from './routes/dev/audit-metadata'
 import { Route as BlogSlugImport } from './routes/blog.$slug'
@@ -87,6 +88,12 @@ const TermsServiceRoute = TermsServiceImport.update({
 const DocsSplatRoute = DocsSplatImport.update({
   id: '/docs/$',
   path: '/docs/$',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DevStyleTestRoute = DevStyleTestImport.update({
+  id: '/dev/style-test',
+  path: '/dev/style-test',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -172,6 +179,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DevSocialCardImport
       parentRoute: typeof rootRoute
     }
+    '/dev/style-test': {
+      id: '/dev/style-test'
+      path: '/dev/style-test'
+      fullPath: '/dev/style-test'
+      preLoaderRoute: typeof DevStyleTestImport
+      parentRoute: typeof rootRoute
+    }
     '/docs/$': {
       id: '/docs/$'
       path: '/docs/$'
@@ -254,6 +268,7 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/dev/audit-metadata': typeof DevAuditMetadataRoute
   '/dev/social-card': typeof DevSocialCardRoute
+  '/dev/style-test': typeof DevStyleTestRoute
   '/docs/$': typeof DocsSplatRoute
   '/terms/service': typeof TermsServiceRoute
   '/terms/use': typeof TermsUseRoute
@@ -273,6 +288,7 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/dev/audit-metadata': typeof DevAuditMetadataRoute
   '/dev/social-card': typeof DevSocialCardRoute
+  '/dev/style-test': typeof DevStyleTestRoute
   '/docs/$': typeof DocsSplatRoute
   '/terms/service': typeof TermsServiceRoute
   '/terms/use': typeof TermsUseRoute
@@ -293,6 +309,7 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/dev/audit-metadata': typeof DevAuditMetadataRoute
   '/dev/social-card': typeof DevSocialCardRoute
+  '/dev/style-test': typeof DevStyleTestRoute
   '/docs/$': typeof DocsSplatRoute
   '/terms/service': typeof TermsServiceRoute
   '/terms/use': typeof TermsUseRoute
@@ -314,6 +331,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/dev/audit-metadata'
     | '/dev/social-card'
+    | '/dev/style-test'
     | '/docs/$'
     | '/terms/service'
     | '/terms/use'
@@ -332,6 +350,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/dev/audit-metadata'
     | '/dev/social-card'
+    | '/dev/style-test'
     | '/docs/$'
     | '/terms/service'
     | '/terms/use'
@@ -350,6 +369,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/dev/audit-metadata'
     | '/dev/social-card'
+    | '/dev/style-test'
     | '/docs/$'
     | '/terms/service'
     | '/terms/use'
@@ -370,6 +390,7 @@ export interface RootRouteChildren {
   BlogSlugRoute: typeof BlogSlugRoute
   DevAuditMetadataRoute: typeof DevAuditMetadataRoute
   DevSocialCardRoute: typeof DevSocialCardRoute
+  DevStyleTestRoute: typeof DevStyleTestRoute
   DocsSplatRoute: typeof DocsSplatRoute
   TermsServiceRoute: typeof TermsServiceRoute
   TermsUseRoute: typeof TermsUseRoute
@@ -389,6 +410,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogSlugRoute: BlogSlugRoute,
   DevAuditMetadataRoute: DevAuditMetadataRoute,
   DevSocialCardRoute: DevSocialCardRoute,
+  DevStyleTestRoute: DevStyleTestRoute,
   DocsSplatRoute: DocsSplatRoute,
   TermsServiceRoute: TermsServiceRoute,
   TermsUseRoute: TermsUseRoute,
@@ -417,6 +439,7 @@ export const routeTree = rootRoute
         "/blog/$slug",
         "/dev/audit-metadata",
         "/dev/social-card",
+        "/dev/style-test",
         "/docs/$",
         "/terms/service",
         "/terms/use",
@@ -446,6 +469,9 @@ export const routeTree = rootRoute
     },
     "/dev/social-card": {
       "filePath": "dev/social-card.tsx"
+    },
+    "/dev/style-test": {
+      "filePath": "dev/style-test.tsx"
     },
     "/docs/$": {
       "filePath": "docs.$.tsx"
