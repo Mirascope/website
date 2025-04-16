@@ -7,68 +7,147 @@ description: A comprehensive showcase of all UI components for visual consistenc
 
 > This page displays all UI components and styles for visual consistency testing. It helps ensure that components look good across all color themes and work well together.
 
+{/* Theme Colors - Comprehensive Color Testing Grid */}
+{/* This component displays primary, secondary, accent, and muted color combinations */}
+{/* Organized in a 3x3 grid for easy comparison */}
+
 ## Theme Colors
-<div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
-  <div className="p-6 border rounded-lg shadow-sm">
-    <h3 className="text-lg font-medium mb-4">Background & Foreground</h3>
-    <div className="w-full h-24 bg-background text-foreground flex items-center justify-center font-medium border">
-      background with foreground text
+<div className="grid grid-cols-1 md:grid-cols-3 gap-3 my-6">
+  {/* Row 1: Base Colors */}
+  <div className="p-4 border rounded-lg shadow-sm">
+    <h3 className="text-md font-medium mb-3">Background & Foreground</h3>
+    <div className="w-full h-16 bg-background text-foreground flex items-center justify-center font-medium border">
+      background text
     </div>
-    <code className="text-xs mt-4 block">bg-background text-foreground</code>
+    <code className="text-xs mt-2 block">bg-background text-foreground</code>
   </div>
 
-  <div className="p-6 border rounded-lg shadow-sm">
-    <h3 className="text-lg font-medium mb-4">Card & Card Foreground</h3>
-    <div className="w-full h-24 bg-card text-card-foreground flex items-center justify-center font-medium border">
-      card with card-foreground text
+  <div className="p-4 border rounded-lg shadow-sm">
+    <h3 className="text-md font-medium mb-3">Card & Card Foreground</h3>
+    <div className="w-full h-16 bg-card text-card-foreground flex items-center justify-center font-medium border">
+      card text
     </div>
-    <code className="text-xs mt-4 block">bg-card text-card-foreground</code>
+    <code className="text-xs mt-2 block">bg-card text-card-foreground</code>
   </div>
 
-  <div className="p-6 border rounded-lg shadow-sm">
-    <h3 className="text-lg font-medium mb-4">Primary & Primary Foreground</h3>
-    <div className="w-full h-24 bg-primary text-primary-foreground flex items-center justify-center font-medium">
-      primary with primary-foreground text
+  <div className="p-4 border rounded-lg shadow-sm">
+    <h3 className="text-md font-medium mb-3">Muted & Muted Foreground</h3>
+    <div className="w-full h-16 bg-muted text-muted-foreground flex items-center justify-center font-medium">
+      muted text
     </div>
-    <code className="text-xs mt-4 block">bg-primary text-primary-foreground</code>
+    <code className="text-xs mt-2 block">bg-muted text-muted-foreground</code>
   </div>
 
-  <div className="p-6 border rounded-lg shadow-sm">
-    <h3 className="text-lg font-medium mb-4">Muted & Muted Foreground</h3>
-    <div className="w-full h-24 bg-muted text-muted-foreground flex items-center justify-center font-medium">
-      muted with muted-foreground text
+  {/* Row 2: Primary Colors */}
+  <div className="p-4 border rounded-lg shadow-sm">
+    <h3 className="text-md font-medium mb-3">Primary & Primary Foreground</h3>
+    <div className="w-full h-16 bg-primary text-primary-foreground flex items-center justify-center font-medium">
+      primary text
     </div>
-    <code className="text-xs mt-4 block">bg-muted text-muted-foreground</code>
+    <code className="text-xs mt-2 block">bg-primary text-primary-foreground</code>
   </div>
 
-  <div className="p-6 border rounded-lg shadow-sm">
-    <h3 className="text-lg font-medium mb-4">Accent & Accent Foreground</h3>
-    <div className="w-full h-24 bg-accent text-accent-foreground flex items-center justify-center font-medium">
-      accent with accent-foreground text
+  <div className="p-4 border rounded-lg shadow-sm">
+    <h3 className="text-md font-medium mb-3">Secondary & Secondary Foreground</h3>
+    <div className="w-full h-16 bg-secondary text-secondary-foreground flex items-center justify-center font-medium">
+      secondary text
     </div>
-    <code className="text-xs mt-4 block">bg-accent text-accent-foreground</code>
+    <code className="text-xs mt-2 block">bg-secondary text-secondary-foreground</code>
+  </div>
+
+  <div className="p-4 border rounded-lg shadow-sm">
+    <h3 className="text-md font-medium mb-3">Accent & Accent Foreground</h3>
+    <div className="w-full h-16 bg-accent text-accent-foreground flex items-center justify-center font-medium">
+      accent text
+    </div>
+    <code className="text-xs mt-2 block">bg-accent text-accent-foreground</code>
+  </div>
+
+  {/* Row 3: Common UI Combinations */}
+  <div className="p-4 border rounded-lg shadow-sm">
+    <h3 className="text-md font-medium mb-3">Common UI Combinations</h3>
+    <div className="space-y-2">
+      <div className="p-2 bg-card border rounded-md text-primary text-sm text-center">
+        card + primary text
+      </div>
+      <div className="p-2 bg-muted rounded-md text-accent text-sm text-center">
+        muted + accent text
+      </div>
+    </div>
+    <code className="text-xs mt-2 block">UI element examples</code>
+  </div>
+
+  <div className="p-4 border rounded-lg shadow-sm">
+    <h3 className="text-md font-medium mb-3">Button Examples</h3>
+    <div className="space-y-2">
+      <div className="p-2 bg-primary text-primary-foreground rounded-md text-sm text-center">
+        Primary Button
+      </div>
+      <div className="p-2 bg-secondary text-secondary-foreground rounded-md text-sm text-center">
+        Secondary Button
+      </div>
+      <div className="p-2 bg-accent text-accent-foreground rounded-md text-sm text-center">
+        Accent Button
+      </div>
+    </div>
+    <code className="text-xs mt-2 block">Button variations</code>
+  </div>
+
+  <div className="p-4 border rounded-lg shadow-sm">
+    <h3 className="text-md font-medium mb-3">Text Links & Highlights</h3>
+    <div className="space-y-2">
+      <div className="p-2 bg-background rounded-md text-sm">
+        Text with <span className="text-primary">primary</span> and 
+        <span className="text-secondary"> secondary</span> links
+      </div>
+      <div className="p-2 bg-card text-card-foreground rounded-md text-sm">
+        Card with <span className="text-accent">accent</span> highlight
+      </div>
+    </div>
+    <code className="text-xs mt-2 block">Link & text highlighting</code>
   </div>
 </div>
 
-<h3 className="text-lg font-medium my-4">Additional Color Combinations</h3>
-<div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
-  <div className="p-4 bg-muted text-primary flex items-center justify-center h-16 rounded-lg">
-    bg-muted text-primary
+{/* Additional realistic combinations section */}
+<h3 className="text-lg font-medium my-4">Realistic UI Patterns</h3>
+<div className="grid grid-cols-1 md:grid-cols-3 gap-3 my-6">
+  {/* Navigation example */}
+  <div className="p-4 border rounded-lg shadow-sm">
+    <h3 className="text-md font-medium mb-3">Navigation</h3>
+    <div className="p-2 bg-background border-b">
+      <div className="flex space-x-4 text-sm">
+        <span className="text-primary font-medium">Home</span>
+        <span className="text-muted-foreground">Docs</span>
+        <span className="text-muted-foreground">Blog</span>
+      </div>
+    </div>
+    <code className="text-xs mt-2 block">Navigation example</code>
   </div>
-  <div className="p-4 bg-card text-primary flex items-center justify-center h-16 rounded-lg">
-    bg-card text-primary
+
+  {/* Alert example */}
+  <div className="p-4 border rounded-lg shadow-sm">
+    <h3 className="text-md font-medium mb-3">Alerts</h3>
+    <div className="p-2 bg-accent bg-opacity-20 border border-accent rounded-md text-sm">
+      <span className="text-accent-foreground">Information alert example</span>
+    </div>
+    <div className="p-2 mt-2 bg-primary bg-opacity-20 border border-primary rounded-md text-sm">
+      <span className="text-primary">Primary alert example</span>
+    </div>
+    <code className="text-xs mt-2 block">Alert components</code>
   </div>
-  <div className="p-4 bg-accent text-primary flex items-center justify-center h-16 rounded-lg">
-    bg-accent text-primary
-  </div>
-  <div className="p-4 bg-primary text-accent flex items-center justify-center h-16 rounded-lg">
-    bg-primary text-accent
-  </div>
-  <div className="p-4 bg-background text-primary flex items-center justify-center h-16 rounded-lg">
-    bg-background text-primary
-  </div>
-  <div className="p-4 bg-primary text-background flex items-center justify-center h-16 rounded-lg">
-    bg-primary text-background
+
+  {/* Card with mixed content */}
+  <div className="p-4 border rounded-lg shadow-sm">
+    <h3 className="text-md font-medium mb-3">Content Card</h3>
+    <div className="p-3 bg-card rounded-md text-sm border">
+      <h4 className="font-medium text-primary mb-1">Card Title</h4>
+      <p className="text-card-foreground text-xs">Main content text</p>
+      <p className="text-muted-foreground text-xs mt-1">Additional info</p>
+      <div className="mt-2">
+        <span className="text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded-full">Tag</span>
+      </div>
+    </div>
+    <code className="text-xs mt-2 block">Complex card example</code>
   </div>
 </div>
 
