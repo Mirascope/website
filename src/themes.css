@@ -28,7 +28,6 @@
   --color-border: oklch(0.92 0.004 286.32);
   --color-input: oklch(0.92 0.004 286.32);
   --color-ring: oklch(0.5854 0.2041 277.12);
-  --color-radius: 0.625rem;
 }
 
 /* Dark theme variant */
@@ -58,7 +57,6 @@
   --color-border: oklch(0.16 0.006 286.033); /* Border color */
   --color-input: oklch(0.16 0.006 286.033); /* Input border color */
   --color-ring: oklch(0.35 0.017 285.786); /* Focus ring color */
-  --color-radius: 0.625rem; /* Border radius */
 }
 
 /* Sunset theme variant */
@@ -89,5 +87,4 @@
   --color-border: oklch(0.92 0.02 90); /* Slightly warmer border */
   --color-input: oklch(0.92 0.02 90); /* Matching input border */
   --color-ring: oklch(0.871 0.03 80); /* Warmer focus ring */
-  --color-radius: 0.625rem; /* Border radius */
 }

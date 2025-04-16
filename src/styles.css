@@ -232,7 +232,7 @@ h6 code {
 }
 
 :root {
-  /* Background and foreground now defined in themes.css */
+  --radius: 0.625rem;
 
   /* Paper texture variables for light mode */
   --text-offset: 2px;
