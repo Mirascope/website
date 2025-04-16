@@ -25,7 +25,7 @@ export function ProviderDropdown({ className }: ProviderDropdownProps) {
             size="sm"
             className={cn(
               "w-full justify-between",
-              provider && "border-blue-300 dark:border-blue-700 text-blue-600 dark:text-blue-400"
+              provider && "text-primary border-primary text-lg"
             )}
           >
             {providerDefaults[provider].displayName}
@@ -37,11 +37,7 @@ export function ProviderDropdown({ className }: ProviderDropdownProps) {
             <DropdownMenuItem
               key={p}
               onClick={() => setProvider(p)}
-              className={cn(
-                "cursor-pointer",
-                provider === p &&
-                  "bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 font-medium"
-              )}
+              className={cn("cursor-pointer", provider === p && "text-primary font-medium")}
             >
               {providerDefaults[p].displayName}
             </DropdownMenuItem>
