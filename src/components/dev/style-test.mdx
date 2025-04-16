@@ -7,13 +7,69 @@ description: A comprehensive showcase of all UI components for visual consistenc
 
 > This page displays all UI components and styles for visual consistency testing. It helps ensure that components look good across all color themes and work well together.
 
-## Theme Sentinel Test
-<div className="p-6 my-6 border rounded-lg shadow-sm">
-  <h3 className="text-lg font-medium mb-4">Theme Sentinel Color</h3>
-  <div className="w-full h-24 bg-sentinel flex items-center justify-center text-white font-bold">
-    This color changes with theme: Green (light) / Purple (dark) / Orange (sunset)
+## Theme Colors
+<div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+  <div className="p-6 border rounded-lg shadow-sm">
+    <h3 className="text-lg font-medium mb-4">Background & Foreground</h3>
+    <div className="w-full h-24 bg-background text-foreground flex items-center justify-center font-medium border">
+      background with foreground text
+    </div>
+    <code className="text-xs mt-4 block">bg-background text-foreground</code>
   </div>
-  <code className="text-xs mt-4 block">bg-sentinel - Use theme selector in header to test different themes</code>
+
+  <div className="p-6 border rounded-lg shadow-sm">
+    <h3 className="text-lg font-medium mb-4">Card & Card Foreground</h3>
+    <div className="w-full h-24 bg-card text-card-foreground flex items-center justify-center font-medium border">
+      card with card-foreground text
+    </div>
+    <code className="text-xs mt-4 block">bg-card text-card-foreground</code>
+  </div>
+
+  <div className="p-6 border rounded-lg shadow-sm">
+    <h3 className="text-lg font-medium mb-4">Primary & Primary Foreground</h3>
+    <div className="w-full h-24 bg-primary text-primary-foreground flex items-center justify-center font-medium">
+      primary with primary-foreground text
+    </div>
+    <code className="text-xs mt-4 block">bg-primary text-primary-foreground</code>
+  </div>
+
+  <div className="p-6 border rounded-lg shadow-sm">
+    <h3 className="text-lg font-medium mb-4">Muted & Muted Foreground</h3>
+    <div className="w-full h-24 bg-muted text-muted-foreground flex items-center justify-center font-medium">
+      muted with muted-foreground text
+    </div>
+    <code className="text-xs mt-4 block">bg-muted text-muted-foreground</code>
+  </div>
+
+  <div className="p-6 border rounded-lg shadow-sm">
+    <h3 className="text-lg font-medium mb-4">Accent & Accent Foreground</h3>
+    <div className="w-full h-24 bg-accent text-accent-foreground flex items-center justify-center font-medium">
+      accent with accent-foreground text
+    </div>
+    <code className="text-xs mt-4 block">bg-accent text-accent-foreground</code>
+  </div>
+</div>
+
+<h3 className="text-lg font-medium my-4">Additional Color Combinations</h3>
+<div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
+  <div className="p-4 bg-muted text-primary flex items-center justify-center h-16 rounded-lg">
+    bg-muted text-primary
+  </div>
+  <div className="p-4 bg-card text-primary flex items-center justify-center h-16 rounded-lg">
+    bg-card text-primary
+  </div>
+  <div className="p-4 bg-accent text-primary flex items-center justify-center h-16 rounded-lg">
+    bg-accent text-primary
+  </div>
+  <div className="p-4 bg-primary text-accent flex items-center justify-center h-16 rounded-lg">
+    bg-primary text-accent
+  </div>
+  <div className="p-4 bg-background text-primary flex items-center justify-center h-16 rounded-lg">
+    bg-background text-primary
+  </div>
+  <div className="p-4 bg-primary text-background flex items-center justify-center h-16 rounded-lg">
+    bg-primary text-background
+  </div>
 </div>
 
 
