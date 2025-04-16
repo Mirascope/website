@@ -55,7 +55,7 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
       <div
         className={`code-block-wrapper relative rounded-lg overflow-hidden m-0 p-0 border border-gray-100 dark:border-gray-800 text-sm ${className}`}
       >
-        <pre className="p-4 bg-gray-100 dark:bg-[#191c20] m-0 opacity-40">
+        <pre className="p-4 bg-button-primary m-0 opacity-40">
           <code>{code}</code>
         </pre>
       </div>
