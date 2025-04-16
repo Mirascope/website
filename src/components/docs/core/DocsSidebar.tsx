@@ -86,7 +86,7 @@ const DocsSidebar = ({ product, currentGroup }: DocsSidebarProps) => {
             ) : (
               <Link
                 to={getProductRoute("mirascope")}
-                className="text-xl font-medium text-gray-400 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                className="text-xl font-medium text-muted hover:text-gray-700 dark:hover:text-gray-300"
               >
                 Mirascope
               </Link>
@@ -97,7 +97,7 @@ const DocsSidebar = ({ product, currentGroup }: DocsSidebarProps) => {
             ) : (
               <Link
                 to={getProductRoute("lilypad")}
-                className="text-xl font-medium text-gray-400 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                className="text-xl font-medium text-muted hover:text-gray-700 dark:hover:text-gray-300"
               >
                 Lilypad
               </Link>
@@ -209,7 +209,7 @@ const DocsSidebar = ({ product, currentGroup }: DocsSidebarProps) => {
                   ? product === "mirascope"
                     ? "bg-gray-100 text-mirascope-purple font-medium"
                     : "bg-gray-100 text-lilypad-green font-medium"
-                  : "text-gray-600 hover:bg-gray-100"
+                  : "text-muted-foreground hover:bg-gray-100"
               )}
             >
               {s.title}
