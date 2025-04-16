@@ -11,7 +11,7 @@
   --color-card: var(--color-slate-300); /* Warmer peach-tinted card background */
   --color-card-foreground: oklch(0.141 0.005 285.823); /* Keep as is */
 
-  --color-button-primary: oklch(0.4854 0.2041 277.12);
+  --color-button-primary: oklch(0.5254 0.2041 277.12);
   --color-primary: oklch(0.5854 0.2041 277.12); /* Keep your brand purple */
   --color-primary-foreground: oklch(0.985 0 0); /* Keep as is */
 
