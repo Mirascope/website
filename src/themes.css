@@ -10,12 +10,6 @@
   --color-foreground: oklch(0.141 0.005 285.823); /* Dark text for light mode */
 }
 
-/* Legacy variable mapping - this is needed during migration */
-:root {
-  --background: var(--color-background);
-  --foreground: var(--color-foreground);
-}
-
 /* Dark theme variant */
 :is(.dark) {
   /* Theme colors */
