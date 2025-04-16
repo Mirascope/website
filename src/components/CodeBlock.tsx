@@ -53,10 +53,10 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
   if (isLoading) {
     return (
       <div
-        className={`code-block-wrapper relative rounded-lg overflow-hidden m-0 p-0 border border-gray-100 dark:border-gray-800 text-sm ${className}`}
+        className={`code-block-wrapper relative overflow-hidden m-0 p-0 border border-gray-100 dark:border-gray-800 text-sm ${className}`}
       >
-        <pre className="p-4 bg-button-primary m-0 opacity-40">
-          <code>{code}</code>
+        <pre className="p-4 bg-button-primary m-0">
+          <code className="opacity-0">{code}</code>
         </pre>
       </div>
     );
@@ -65,7 +65,7 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
   return (
     <div
       ref={codeRef}
-      className={`code-block-wrapper relative group rounded-lg overflow-hidden m-0 p-0 border border-gray-100 dark:border-gray-800 text-sm ${className}`}
+      className={`code-block-wrapper relative group overflow-hidden m-0 p-0 border border-gray-100 dark:border-gray-800 text-sm ${className}`}
     >
       <button
         className="copy-button absolute border right-3 top-3 opacity-0 group-hover:opacity-100 transition-opacity p-1.5 rounded-md bg-white dark:bg-[#282c34] hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"

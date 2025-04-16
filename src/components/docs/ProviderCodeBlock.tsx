@@ -103,14 +103,11 @@ export function ProviderCodeBlock({
   // Display the code
   return (
     <div
-      className={cn(
-        "rounded-md border-2 border-blue-600/50 bg-[#191c20] shadow-md overflow-hidden",
-        className
-      )}
+      className={cn("rounded-md border-2 bg-button-primary shadow-md overflow-hidden", className)}
     >
       {collapsible && (
         <div
-          className="px-4 py-2.5 flex items-center justify-between bg-blue-800/20 cursor-pointer"
+          className="px-4 py-2.5 flex items-center justify-between cursor-pointer"
           onClick={toggleExpand}
         >
           <div className="flex items-center">
