@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import TableOfContents from "@/components/TableOfContents";
 import { Button } from "@/components/ui/button";
-import { Sparkles, Server } from "lucide-react";
+import { Sparkles, Server, Clipboard, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ProviderDropdown } from "@/components/docs";
 import { type ProductName } from "@/lib/route-types";
+import { type DocContent } from "@/lib/content/docs";
 
 interface TocSidebarProps {
   product: ProductName;
@@ -12,6 +13,7 @@ interface TocSidebarProps {
   slug: string;
   funMode: boolean;
   toggleFunMode: () => void;
+  document?: DocContent | null;
 }
 
 /**
@@ -25,7 +27,26 @@ const TocSidebar: React.FC<TocSidebarProps> = ({
   slug,
   funMode,
   toggleFunMode,
+  document,
 }) => {
+  const [isCopied, setIsCopied] = useState(false);
+
+  const copyContentAsMarkdown = () => {
+    if (document?.content) {
+      navigator.clipboard
+        .writeText(document.content)
+        .then(() => {
+          setIsCopied(true);
+          setTimeout(() => {
+            setIsCopied(false);
+          }, 2000);
+        })
+        .catch((err) => {
+          console.error("Failed to copy content: ", err);
+        });
+    }
+  };
+
   return (
     <div className="w-56 flex-shrink-0 hidden lg:block">
       <div className="fixed w-56 top-[60px] max-h-[calc(100vh-60px)] overflow-y-auto">
@@ -43,6 +64,28 @@ const TocSidebar: React.FC<TocSidebarProps> = ({
               <Sparkles className="w-4 h-4 mr-1" />
               Fun Mode
             </Button>
+
+            {document && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={copyContentAsMarkdown}
+                disabled={isCopied}
+                className="w-full"
+              >
+                {isCopied ? (
+                  <>
+                    <Check className="w-4 h-4 mr-1" />
+                    Copied!
+                  </>
+                ) : (
+                  <>
+                    <Clipboard className="w-4 h-4 mr-1" />
+                    Copy as Markdown
+                  </>
+                )}
+              </Button>
+            )}
 
             {/* Provider dropdown */}
             <div className="mt-3">
