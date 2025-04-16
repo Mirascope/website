@@ -8,44 +8,50 @@
   --color-foreground: oklch(0.141 0.005 285.823); /* Dark text */
 
   /* Components */
-  --color-card: oklch(0.985 0.004 95); /* Light gray with subtle warmth */
-  --color-card-foreground: oklch(0.141 0.005 285.823); /* Same as main foreground */
+  --color-card: oklch(0.985 0.004 95); /* Very light gray with hint of warmth */
+  --color-card-foreground: oklch(0.141 0.005 285.823);
 
-  --color-primary: oklch(0.5854 0.2041 277.12); /* Brand color (fixed percentage format) */
-  --color-primary-foreground: oklch(0.985 0 0); /* Light text on primary */
+  --color-primary: oklch(0.5854 0.2041 277.12); /* Keep your brand purple */
+  --color-primary-foreground: oklch(0.985 0 0);
 
-  --color-muted: oklch(0.94 0.02 286.375); /* Adjusted for better distinction */
-  --color-muted-foreground: oklch(0.52 0.016 285.938); /* Adjusted for better readability */
+  --color-secondary: oklch(0.6 0.15 320); /* New purple-pink secondary */
+  --color-secondary-foreground: oklch(0.985 0 0);
 
-  --color-accent: oklch(0.95 0.04 277.12); /* New distinct accent that coordinates with primary */
-  --color-accent-foreground: oklch(0.21 0.006 285.885); /* Dark text on accent */
+  --color-muted: oklch(0.94 0.02 286.375); /* More distinct muted background */
+  --color-muted-foreground: oklch(0.48 0.018 285.938);
+
+  --color-accent: oklch(0.9 0.08 220); /* Light blue accent that complements primary */
+  --color-accent-foreground: oklch(0.141 0.005 285.823);
 
   /* Utility */
-  --color-border: oklch(0.92 0.004 286.32); /* Border color */
-  --color-input: oklch(0.92 0.004 286.32); /* Input border color */
-  --color-ring: oklch(0.871 0.006 286.286); /* Focus ring color */
-  --color-radius: 0.625rem; /* Border radius */
+  --color-border: oklch(0.92 0.004 286.32);
+  --color-input: oklch(0.92 0.004 286.32);
+  --color-ring: oklch(0.5854 0.2041 277.12); /* Match primary for focused elements */
+  --color-radius: 0.625rem;
 }
 
 /* Dark theme variant */
 :is(.dark) {
   /* Theme colors */
-  /* Core UI colors */
-  --color-background: oklch(0.105 0.004 285.823); /* Darker background */
-  --color-foreground: oklch(0.95 0 0); /* Slightly off-white for better contrast */
+  /* Base */
+  --color-background: oklch(0.11 0.005 285.823); /* Dark background */
+  --color-foreground: oklch(0.95 0 0); /* Light text */
 
   /* Components */
-  --color-card: oklch(0.13 0.005 285.823); /* Slightly lighter than background */
-  --color-card-foreground: oklch(0.95 0 0); /* Light text on card */
+  --color-card: oklch(0.16 0.008 285.823); /* More distinct card */
+  --color-card-foreground: oklch(0.95 0 0);
 
-  --color-primary: oklch(0.5854 0.2041 277.12); /* Brand color (maintained consistently) */
-  --color-primary-foreground: oklch(0.95 0 0); /* Light text on primary */
+  --color-primary: oklch(0.5854 0.2041 277.12); /* Keep your brand purple */
+  --color-primary-foreground: oklch(0.95 0 0);
 
-  --color-muted: oklch(0.18 0.006 286.033); /* Muted background */
-  --color-muted-foreground: oklch(0.75 0.015 286.067); /* Lighter muted text */
+  --color-secondary: oklch(0.6 0.18 320); /* New secondary color */
+  --color-secondary-foreground: oklch(0.95 0 0);
 
-  --color-accent: oklch(0.22 0.04 277.12); /* New distinct accent that coordinates with primary */
-  --color-accent-foreground: oklch(0.95 0 0); /* Light text on accent */
+  --color-muted: oklch(0.18 0.006 286.033);
+  --color-muted-foreground: oklch(0.75 0.015 286.067);
+
+  --color-accent: oklch(0.65 0.18 220); /* Distinct blue accent */
+  --color-accent-foreground: oklch(0.2 0.006 285.885);
 
   /* Utility */
   --color-border: oklch(0.16 0.006 286.033); /* Border color */
