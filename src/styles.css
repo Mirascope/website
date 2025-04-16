@@ -14,10 +14,15 @@
 
 @import "tailwindcss";
 
+/* Configure plugins */
 @plugin "tailwindcss-animate";
 
+/* Dark mode configuration */
 @custom-variant dark (&:is(.dark *));
 @custom-variant sunset (&:is(.sunset *));
+
+/* Import theme file */
+@import "./themes.css";
 
 body {
   @apply m-0;
