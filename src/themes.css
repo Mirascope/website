@@ -1,0 +1,17 @@
+/* Minimal Tailwind V4 Theme Test */
+
+/* Base theme definition */
+@theme {
+  /* Test sentinel color */
+  --color-sentinel: oklch(0.4 0.3 142); /* Green in light mode */
+}
+
+/* Dark theme variant - using the :is(.dark) selector to match how classes are applied */
+:is(.dark) {
+  --color-sentinel: oklch(0.5 0.2 270); /* Purple in dark mode */
+}
+
+/* Sunset theme variant - using the :is(.sunset) selector to match how classes are applied */
+:is(.sunset) {
+  --color-sentinel: oklch(0.7 0.2 50); /* Orange in sunset mode */
+}
