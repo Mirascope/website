@@ -8,7 +8,7 @@
   --color-foreground: oklch(0.141 0.005 285.823); /* Dark text - keep as is */
 
   /* Components */
-  --color-card: oklch(0.985 0.03 65); /* Warmer peach-tinted card background */
+  --color-card: var(--color-rose-100); /* Warmer peach-tinted card background */
   --color-card-foreground: oklch(0.141 0.005 285.823); /* Keep as is */
 
   --color-primary: oklch(0.5854 0.2041 277.12); /* Keep your brand purple */
@@ -20,8 +20,8 @@
   --color-muted: oklch(0.94 0.02 286.375); /* Keep as is */
   --color-muted-foreground: oklch(0.48 0.018 285.938); /* Keep as is */
 
-  --color-accent: oklch(0.8 0.15 205); /* Deeper, more vibrant blue for better contrast */
-  --color-accent-foreground: oklch(0.141 0.005 285.823); /* Keep as is */
+  --color-accent: var(--color-indigo-200);
+  --color-accent-foreground: var(--color-indigo-900);
 
   /* Utility - keep as is */
   --color-border: oklch(0.92 0.004 286.32);
