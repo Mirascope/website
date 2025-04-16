@@ -18,6 +18,103 @@ interface DocsSidebarProps {
   onProviderChange?: (provider: Provider) => void;
 }
 
+// Components for common UI patterns
+const ProductTitle = ({ product }: { product: ProductName }) => {
+  const titleClass = `text-xl font-medium ${product === "mirascope" ? "text-mirascope-purple" : "text-lilypad-green"}`;
+  return <span className={titleClass}>{product === "mirascope" ? "Mirascope" : "Lilypad"}</span>;
+};
+
+const ProductLink = ({ product }: { product: ProductName }) => {
+  return (
+    <Link
+      to={getProductRoute(product)}
+      className={`text-xl font-medium text-muted-foreground hover:text-accent-foreground`}
+    >
+      {product === "mirascope" ? "Mirascope" : "Lilypad"}
+    </Link>
+  );
+};
+
+interface SidebarLinkProps {
+  to: string;
+  isActive: boolean;
+  product: ProductName;
+  className?: string;
+  params?: Record<string, any>;
+  children: React.ReactNode;
+}
+
+const SidebarLink = ({
+  to,
+  isActive,
+  product,
+  className = "",
+  params,
+  children,
+}: SidebarLinkProps) => {
+  const activeClass =
+    product === "mirascope"
+      ? "bg-button-primary text-white font-medium"
+      : "bg-lilypad-green text-white font-medium";
+
+  const inactiveClass = "text-muted-foreground hover:bg-accent hover:text-accent-foreground";
+
+  return (
+    <Link
+      to={to}
+      params={params}
+      className={cn(
+        "block text-base rounded-md",
+        className,
+        isActive ? activeClass : inactiveClass
+      )}
+    >
+      {children}
+    </Link>
+  );
+};
+
+const SectionTab = ({
+  to,
+  isActive,
+  product,
+  className = "",
+  params,
+  children,
+}: SidebarLinkProps) => {
+  const activeClass =
+    product === "mirascope"
+      ? "bg-button-primary text-white font-medium"
+      : "bg-lilypad-green text-white font-medium";
+
+  const inactiveClass = "text-muted-foreground hover:bg-accent hover:text-accent-foreground";
+
+  return (
+    <Link
+      to={to}
+      params={params}
+      className={cn(
+        "px-3 py-1 text-base rounded-md w-full",
+        className,
+        isActive ? activeClass : inactiveClass
+      )}
+    >
+      {children}
+    </Link>
+  );
+};
+
+const GroupTitle = ({ title, product }: { title: string; product: ProductName }) => {
+  const titleClass = product === "mirascope" ? "text-mirascope-purple" : "text-lilypad-green";
+  return (
+    <div
+      className={cn("font-semibold px-3 py-1 block text-button-primary cursor-default", titleClass)}
+    >
+      {title}
+    </div>
+  );
+};
+
 const DocsSidebar = ({ product, currentGroup }: DocsSidebarProps) => {
   // Get current route from TanStack Router
   const matches = useMatches();
@@ -82,40 +179,21 @@ const DocsSidebar = ({ product, currentGroup }: DocsSidebarProps) => {
           {/* Product selector only */}
           <div className="flex mb-5 space-x-4">
             {product === "mirascope" ? (
-              <span className="text-xl font-medium text-mirascope-purple">Mirascope</span>
+              <ProductTitle product="mirascope" />
             ) : (
-              <Link
-                to={getProductRoute("mirascope")}
-                className="text-xl font-medium text-muted hover:text-gray-700 dark:hover:text-gray-300"
-              >
-                Mirascope
-              </Link>
+              <ProductLink product="mirascope" />
             )}
 
             {product === "lilypad" ? (
-              <span className="text-xl font-medium text-lilypad-green">Lilypad</span>
+              <ProductTitle product="lilypad" />
             ) : (
-              <Link
-                to={getProductRoute("lilypad")}
-                className="text-xl font-medium text-muted hover:text-gray-700 dark:hover:text-gray-300"
-              >
-                Lilypad
-              </Link>
+              <ProductLink product="lilypad" />
             )}
           </div>
         </div>
       </aside>
     );
   }
-
-  // Is the main "Docs" tab active?
-  // The Docs tab is active when:
-  // 1. We're not in a specific section, OR
-  // 2. We're looking at a top-level item, OR
-  // 3. We're in a path that includes a top-level group
-
-  // Simple rule: If we're in any URL with a section from _meta.ts,
-  // then we're not in "Docs" tab. Otherwise, we're in "Docs" tab.
 
   // Get all sections from _meta.ts
   const allSections = Object.keys(productData?.sections || {});
@@ -157,70 +235,48 @@ const DocsSidebar = ({ product, currentGroup }: DocsSidebarProps) => {
         {/* Product selector */}
         <div className="flex mb-5 space-x-4">
           {product === "mirascope" ? (
-            <span className="text-xl font-medium text-mirascope-purple">Mirascope</span>
+            <ProductTitle product="mirascope" />
           ) : (
-            <Link
-              to={getProductRoute("mirascope")}
-              className="text-xl font-medium text-gray-400 hover:text-gray-700"
-            >
-              Mirascope
-            </Link>
+            <ProductLink product="mirascope" />
           )}
 
           {product === "lilypad" ? (
-            <span className="text-xl font-medium text-lilypad-green">Lilypad</span>
+            <ProductTitle product="lilypad" />
           ) : (
-            <Link
-              to={getProductRoute("lilypad")}
-              className="text-xl font-medium text-gray-400 hover:text-gray-700"
-            >
-              Lilypad
-            </Link>
+            <ProductLink product="lilypad" />
           )}
         </div>
 
         {/* Section tabs (Docs, API, Guides, etc.) - Displayed vertically */}
         <div className="flex flex-col space-y-0.5">
           {/* Main docs tab */}
-          <Link
-            to={getProductRoute(product)}
-            className={cn(
-              "px-3 py-1 text-base rounded-md w-full",
-              isDocsTabActive
-                ? product === "mirascope"
-                  ? "bg-gray-100 dark:bg-gray-800 text-mirascope-purple font-medium"
-                  : "bg-gray-100 dark:bg-gray-800 text-lilypad-green font-medium"
-                : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-            )}
-          >
+          <SectionTab to={getProductRoute(product)} isActive={isDocsTabActive} product={product}>
             Docs
-          </Link>
+          </SectionTab>
 
           {/* Other section tabs - using orderedSections for proper sorting */}
           {orderedSections.map((s) => (
-            <Link
+            <SectionTab
               key={s.slug}
               to={getSectionRoute(product, s.slug)}
               params={getSectionParams(product, s.slug)}
-              className={cn(
-                "px-3 py-1 text-base rounded-md w-full",
-                // Section tab is active if we're in this section's URL path
-                currentPath.startsWith(`/docs/${product}/${s.slug}/`)
-                  ? product === "mirascope"
-                    ? "bg-gray-100 text-mirascope-purple font-medium"
-                    : "bg-gray-100 text-lilypad-green font-medium"
-                  : "text-muted-foreground hover:bg-gray-100"
-              )}
+              isActive={currentPath.startsWith(`/docs/${product}/${s.slug}/`)}
+              product={product}
             >
               {s.title}
-            </Link>
+            </SectionTab>
           ))}
         </div>
       </div>
 
       {/* Border line below section buttons */}
       <div className="pb-4">
-        <div className="border-b border-gray-300"></div>
+        <div
+          className={cn(
+            "border-b",
+            product == "mirascope" ? "border-primary" : "border-emerald-500"
+          )}
+        ></div>
       </div>
 
       {/* Scrollable content area with fixed height */}
@@ -254,7 +310,7 @@ const DocsSidebar = ({ product, currentGroup }: DocsSidebarProps) => {
 };
 
 interface SectionContentProps {
-  product: string;
+  product: ProductName;
   section: string;
   isActivePath: (path: string) => boolean;
 }
@@ -272,20 +328,15 @@ const SectionContent = ({ product, section, isActivePath }: SectionContentProps)
           slug === "index" ? `/docs/${product}/${section}/` : `/docs/${product}/${section}/${slug}`;
 
         return (
-          <Link
+          <SidebarLink
             key={slug}
             to={url}
-            className={cn(
-              "block px-3 py-1 text-base rounded-md",
-              isActivePath(url)
-                ? product === "mirascope"
-                  ? "bg-mirascope-purple text-white font-medium"
-                  : "bg-lilypad-green text-white font-medium"
-                : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800"
-            )}
+            isActive={isActivePath(url)}
+            product={product as ProductName}
+            className="px-3 py-1"
           >
             {item.title}
-          </Link>
+          </SidebarLink>
         );
       })}
 
@@ -294,9 +345,7 @@ const SectionContent = ({ product, section, isActivePath }: SectionContentProps)
         return (
           <div key={groupSlug} className="pt-2">
             {/* Group title - not selectable/highlightable */}
-            <div className="font-semibold px-3 py-1 block text-gray-900 dark:text-gray-200 cursor-default">
-              {group.title}
-            </div>
+            <GroupTitle title={group.title} product={product} />
 
             {/* Group items */}
             <div className="space-y-0.5 mt-1">
@@ -304,20 +353,15 @@ const SectionContent = ({ product, section, isActivePath }: SectionContentProps)
                 const itemUrl = `/docs/${product}/${section}/${groupSlug}/${itemSlug}`;
 
                 return (
-                  <Link
+                  <SidebarLink
                     key={itemSlug}
                     to={itemUrl}
-                    className={cn(
-                      "block pl-6 pr-3 py-1 text-base rounded-md",
-                      isActivePath(itemUrl)
-                        ? product === "mirascope"
-                          ? "bg-mirascope-purple text-white font-medium"
-                          : "bg-lilypad-green text-white font-medium"
-                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800"
-                    )}
+                    isActive={isActivePath(itemUrl)}
+                    product={product as ProductName}
+                    className="pl-6 pr-3 py-1"
                   >
                     {item.title}
-                  </Link>
+                  </SidebarLink>
                 );
               })}
             </div>
@@ -329,7 +373,7 @@ const SectionContent = ({ product, section, isActivePath }: SectionContentProps)
 };
 
 interface MainDocsContentProps {
-  product: string;
+  product: ProductName;
   isActivePath: (path: string) => boolean;
 }
 
@@ -345,20 +389,15 @@ const MainDocsContent = ({ product, isActivePath }: MainDocsContentProps) => {
         const url = slug === "index" ? `/docs/${product}` : `/docs/${product}/${slug}`;
 
         return (
-          <Link
+          <SidebarLink
             key={slug}
             to={url}
-            className={cn(
-              "block px-3 py-1 text-base rounded-md",
-              isActivePath(url)
-                ? product === "mirascope"
-                  ? "bg-mirascope-purple text-white font-medium"
-                  : "bg-lilypad-green text-white font-medium"
-                : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800"
-            )}
+            isActive={isActivePath(url)}
+            product={product as ProductName}
+            className="px-3 py-1"
           >
             {item.title}
-          </Link>
+          </SidebarLink>
         );
       })}
 
@@ -367,9 +406,7 @@ const MainDocsContent = ({ product, isActivePath }: MainDocsContentProps) => {
         return (
           <div key={groupSlug} className="pt-2">
             {/* Group title - not selectable/highlightable */}
-            <div className="font-semibold px-3 py-1 block text-gray-900 dark:text-gray-200 cursor-default">
-              {group.title}
-            </div>
+            <GroupTitle title={group.title} product={product} />
 
             {/* Group items */}
             <div className="space-y-0.5 mt-1">
@@ -377,20 +414,15 @@ const MainDocsContent = ({ product, isActivePath }: MainDocsContentProps) => {
                 const itemUrl = `/docs/${product}/${groupSlug}/${itemSlug}`;
 
                 return (
-                  <Link
+                  <SidebarLink
                     key={itemSlug}
                     to={itemUrl}
-                    className={cn(
-                      "block pl-6 pr-3 py-1 text-base rounded-md",
-                      isActivePath(itemUrl)
-                        ? product === "mirascope"
-                          ? "bg-mirascope-purple text-white font-medium"
-                          : "bg-lilypad-green text-white font-medium"
-                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800"
-                    )}
+                    isActive={isActivePath(itemUrl)}
+                    product={product as ProductName}
+                    className="pl-6 pr-3 py-1"
                   >
                     {item.title}
-                  </Link>
+                  </SidebarLink>
                 );
               })}
             </div>

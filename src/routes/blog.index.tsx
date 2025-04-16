@@ -62,7 +62,7 @@ function BlogPage() {
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-8">
               <h1 className="text-4xl font-bold mb-4 text-center">Blog</h1>
-              <p className="text-xl text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
                 The latest news, updates, and insights about
                 <br />
                 Mirascope and LLM application development.
@@ -76,7 +76,7 @@ function BlogPage() {
                 </div>
               ) : posts.length === 0 ? (
                 <div className="text-center py-12">
-                  <h2 className="text-xl font-medium text-gray-600">No posts found</h2>
+                  <h2 className="text-xl font-medium text-foreground">No posts found</h2>
                   <p className="text-muted-foreground mt-2">Check back soon for new content!</p>
                 </div>
               ) : (
@@ -88,7 +88,7 @@ function BlogPage() {
                       params={{ slug: post.slug }}
                       className="block h-full cursor-pointer group"
                     >
-                      <div className="h-[320px] flex flex-col hover:shadow-lg transition-all duration-200 shadow-sm bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+                      <div className="h-[320px] flex flex-col hover:shadow-lg transition-all duration-200 shadow-sm bg-muted rounded-lg border-1 border-primary overflow-hidden">
                         <div className="p-6 flex flex-col h-full">
                           <div>
                             <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">

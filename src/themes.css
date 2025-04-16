@@ -5,22 +5,22 @@
   /* Theme colors */
   /* Base */
   --color-background: oklch(0.995 0 0); /* Pure white background - keep as is */
-  --color-foreground: oklch(0.141 0.005 285.823); /* Dark text - keep as is */
+  --color-foreground: oklch(0.1 0.2041 282.8); /* Dark text - keep as is */
 
   /* Components */
-  --color-card: var(--color-rose-100); /* Warmer peach-tinted card background */
+  --color-card: var(--color-slate-300); /* Warmer peach-tinted card background */
   --color-card-foreground: oklch(0.141 0.005 285.823); /* Keep as is */
 
   --color-button-primary: oklch(0.4854 0.2041 277.12);
   --color-primary: oklch(0.5854 0.2041 277.12); /* Keep your brand purple */
   --color-primary-foreground: oklch(0.985 0 0); /* Keep as is */
 
-  --color-secondary: oklch(0.6 0.19 300); /* More vibrant, slightly warmer purple */
+  --color-secondary: var(--color-emerald-500);
   --color-secondary-foreground: oklch(0.985 0 0); /* Keep as is */
 
   --color-code-background: var(--color-indigo-50);
 
-  --color-muted: oklch(0.94 0.02 286.375); /* Keep as is */
+  --color-muted: var(--color-slate-100);
   --color-muted-foreground: oklch(0.48 0.018 285.938); /* Keep as is */
 
   --color-accent: var(--color-indigo-200);
@@ -40,7 +40,7 @@
   --color-foreground: oklch(0.95 0 0); /* Light text */
 
   /* Components */
-  --color-card: oklch(0.16 0.008 285.823); /* More distinct card */
+  --color-card: var(--color-indigo-950);
   --color-card-foreground: oklch(0.95 0 0);
 
   --color-primary: oklch(0.5854 0.2041 277.12); /* Keep your brand purple */
@@ -48,7 +48,7 @@
 
   --color-primary-foreground: oklch(0.95 0 0);
 
-  --color-secondary: oklch(0.6 0.18 320); /* New secondary color */
+  --color-secondary: var(--color-violet-600);
   --color-secondary-foreground: oklch(0.95 0 0);
 
   --color-code-background: var(--color-slate-950);
@@ -56,8 +56,8 @@
   --color-muted: oklch(0.18 0.006 286.033);
   --color-muted-foreground: oklch(0.75 0.015 286.067);
 
-  --color-accent: oklch(0.65 0.18 220); /* Distinct blue accent */
-  --color-accent-foreground: oklch(0.2 0.006 285.885);
+  --color-accent: var(--color-slate-900);
+  --color-accent-foreground: var(--color-violet-300);
 
   /* Utility */
   --color-border: oklch(0.16 0.006 286.033); /* Border color */
