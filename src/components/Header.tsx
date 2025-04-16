@@ -24,15 +24,11 @@ interface NavLinkProps {
 }
 
 const NavLink = ({ href, children, className, onClick }: NavLinkProps) => {
-  const router = useRouterState();
-  const isLandingPage = router.location.pathname === "/";
-
   return (
     <Link
       to={href}
       className={cn(
-        "font-medium px-2 py-2 text-xl flex items-center relative cursor-pointer transition-colors duration-200",
-        isLandingPage ? "hover:text-gray-300" : "hover:text-gray-600",
+        "font-medium px-2 py-2 text-xl flex items-center relative cursor-pointer transition-colors duration-200 hover:text-accent-foreground",
         className
       )}
       onClick={onClick}
@@ -70,9 +66,7 @@ export default function Header() {
     <header
       className={cn(
         "py-6 px-4 sm:px-6 flex justify-center items-center fixed top-0 left-0 right-0 w-full z-50",
-        isLandingPage
-          ? "bg-transparent text-white"
-          : "bg-background text-slate-800 dark:text-white sunset:text-slate-800",
+        isLandingPage ? "bg-transparent text-white" : "bg-background text-foreground",
         scrolled && !isLandingPage ? "border-b border-gray-200 shadow-sm" : "",
         scrolled && isLandingPage
           ? "bg-black/90 dark:bg-black/90 sunset:bg-black/60 backdrop-blur-sm"
@@ -101,8 +95,8 @@ export default function Header() {
                   className={cn(
                     "!bg-transparent hover:!bg-transparent data-[state=open]:!bg-transparent data-[state=open]:hover:!bg-transparent focus:!bg-transparent font-medium text-xl flex items-center p-0 cursor-pointer transition-colors duration-200",
                     isLandingPage
-                      ? "hover:text-gray-300 data-[state=open]:text-gray-300"
-                      : "hover:text-gray-600 data-[state=open]:text-gray-600"
+                      ? "hover:text-accent-foreground data-[state=open]:text-accent-foreground"
+                      : "hover:text-accent-foreground data-[state=open]:text-accent-foreground"
                   )}
                   onClick={(e) => {
                     // Prevent the default behavior which would toggle the dropdown
@@ -113,16 +107,16 @@ export default function Header() {
                 >
                   Docs
                 </NavigationMenuTrigger>
-                <NavigationMenuContent className="bg-background dark:bg-popover p-4">
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 w-[300px] sm:w-[480px] gap-4">
+                <NavigationMenuContent className="bg-muted p-2">
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 w-[300px] sm:w-[480px] gap-2">
                     <li>
                       <NavigationMenuLink asChild>
                         <Link
                           to={getProductRoute("mirascope")}
-                          className="block p-4 space-y-1.5 rounded-md bg-background dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                          className="block p-4 space-y-1.5 rounded-md bg-background hover:bg-accent transition-colors"
                         >
-                          <div className="font-medium text-xl text-[#6366f1]">Mirascope</div>
-                          <p className="text-base text-gray-600 dark:text-gray-300">
+                          <div className="font-medium text-xl text-primary">Mirascope</div>
+                          <p className="text-base text-foreground">
                             LLM abstractions that aren't obstructions.
                           </p>
                         </Link>
@@ -132,10 +126,10 @@ export default function Header() {
                       <NavigationMenuLink asChild>
                         <Link
                           to={getProductRoute("lilypad")}
-                          className="block p-4 space-y-1.5 rounded-md bg-background dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                          className="block p-4 space-y-1.5 rounded-md bg-background hover:bg-accent transition-colors"
                         >
-                          <div className="font-medium text-xl text-[#2d8031]">Lilypad</div>
-                          <p className="text-base text-gray-600 dark:text-gray-300">
+                          <div className="font-medium text-xl text-lilypad-green">Lilypad</div>
+                          <p className="text-base text-foreground">
                             Start building your data flywheel in one line of code.
                           </p>
                         </Link>

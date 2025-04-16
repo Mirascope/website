@@ -11,6 +11,42 @@ export const Route = createFileRoute("/dev/style-test")({
 // Flag to determine if we're in development mode
 const isDev = import.meta.env.DEV;
 
+type ColorThemeDisplayProps = {
+  bgColors?: string[];
+  textColors?: string[];
+};
+
+export const ColorThemeDisplay: React.FC<ColorThemeDisplayProps> = ({
+  bgColors = ["bg-background", "bg-card", "bg-muted", "bg-primary", "bg-secondary", "bg-accent"],
+  textColors = [
+    "text-foreground",
+    "text-primary",
+    "text-secondary",
+    "text-accent-foreground",
+    "text-muted-foreground",
+  ],
+}) => {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 my-6">
+      {bgColors.map((bgColor) => (
+        <div key={bgColor} className={`border rounded-lg shadow-sm ${bgColor}`}>
+          <h3 className="px-3 pt-3 text-md font-medium block">{bgColor}</h3>
+          <div className="p-3 space-y-2">
+            {textColors.map((textColor) => (
+              <div
+                key={`${bgColor}-${textColor}`}
+                className={`w-full h-8 ${textColor} flex items-center justify-center font-sm`}
+              >
+                {textColor}
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
 function StyleTestPage() {
   const [mdxContent, setMdxContent] = useState<{
     code: string;
@@ -72,6 +108,34 @@ function StyleTestPage() {
 
   return (
     <DevLayout>
+      <div className="">
+        <h2 className="text-2xl font-bold mb-4">Theme Color Combinations</h2>
+        <p className="mb-4">
+          Comprehensive view of text colors against different background colors
+        </p>
+
+        <h3 className="text-xl font-semibold mb-3">Background + Text Colors</h3>
+        <ColorThemeDisplay
+          bgColors={["bg-background", "bg-card", "bg-muted", "bg-accent"]}
+          textColors={[
+            "text-foreground",
+            "text-primary",
+            "text-secondary",
+            "text-accent-foreground",
+            "text-muted-foreground",
+          ]}
+        />
+
+        <h3 className="text-xl font-semibold mb-3">Semantic Background + Text Colors</h3>
+        <ColorThemeDisplay
+          bgColors={["bg-button-primary", "bg-primary", "bg-secondary", "bg-lilypad-green"]}
+          textColors={[
+            "text-primary-foreground",
+            "text-secondary-foreground",
+            "text-accent-foreground",
+          ]}
+        />
+      </div>
       <div className="container py-8">
         {isLoading && (
           <div className="animate-pulse bg-gray-100 dark:bg-gray-800 h-40 rounded-md"></div>
@@ -83,7 +147,6 @@ function StyleTestPage() {
             <p>{error.message}</p>
           </div>
         )}
-
         {mdxContent && (
           <div className="prose dark:prose-invert max-w-none">
             <MDXRenderer code={mdxContent.code} frontmatter={mdxContent.frontmatter} />

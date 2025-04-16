@@ -48,8 +48,8 @@ const DevSidebar: React.FC = () => {
                   className={cn(
                     "block px-3 py-1 text-base rounded-md",
                     isActivePath(route.path)
-                      ? "bg-primary text-white font-medium"
-                      : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800"
+                      ? "bg-button-primary text-white font-medium"
+                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                   )}
                 >
                   {route.title}

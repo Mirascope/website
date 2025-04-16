@@ -565,7 +565,7 @@ header button:not(.font-toggle-button),
 }
 
 .text-lilypad-green {
-  color: #2d8031;
+  color: var(--color-emerald-600);
 }
 
 .bg-mirascope-purple {
@@ -573,7 +573,7 @@ header button:not(.font-toggle-button),
 }
 
 .bg-lilypad-green {
-  background-color: #2d8031;
+  background-color: var(--color-emerald-700);
 }
 
 /* Badge container for docs and usage info */
