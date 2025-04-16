@@ -64,6 +64,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
         slug={slug}
         funMode={funMode}
         toggleFunMode={toggleFunMode}
+        document={document}
       />
     ) : (
       <div className="w-56 flex-shrink-0 hidden lg:block"></div>
