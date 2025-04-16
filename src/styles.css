@@ -232,8 +232,7 @@ h6 code {
 }
 
 :root {
-  --background: oklch(0.995 0 0); /* Pure white for background like the frog logo background */
-  --foreground: oklch(0.141 0.005 285.823);
+  /* Background and foreground now defined in themes.css */
   --card: oklch(0.985 0.004 95); /* Very light gray with a subtle hint of warmth for cards */
   --card-foreground: oklch(0.141 0.005 285.823);
   --popover: oklch(0.98 0.005 95);
@@ -274,8 +273,7 @@ h6 code {
 }
 
 .dark {
-  --background: oklch(0.105 0.004 285.823); /* Darker background */
-  --foreground: oklch(0.95 0 0); /* Slightly off-white for better contrast */
+  /* Background and foreground now defined in themes.css */
   --card: oklch(0.13 0.005 285.823); /* Slightly lighter than background */
   --card-foreground: oklch(0.95 0 0);
   --popover: oklch(0.13 0.005 285.823);
@@ -315,10 +313,7 @@ h6 code {
 }
 
 .sunset {
-  /* Keep text colors the same as light mode */
-  --background: oklch(0.998 0.001 90); /* Very slightly warmer white */
-  /* Removed gradient background */
-  --foreground: oklch(0.141 0.005 285.823); /* Same as light mode */
+  /* Background and foreground now defined in themes.css */
   --card: oklch(0.985 0.004 95); /* Same as light mode */
   --card-foreground: oklch(0.141 0.005 285.823); /* Same as light mode */
   --popover: oklch(0.98 0.005 95); /* Same as light mode */

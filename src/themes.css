@@ -1,17 +1,37 @@
-/* Minimal Tailwind V4 Theme Test */
+/* Mirascope Theme System */
 
 /* Base theme definition */
 @theme {
-  /* Test sentinel color */
-  --color-sentinel: oklch(0.4 0.3 142); /* Green in light mode */
+  /* Theme colors */
+  --color-sentinel: var(--color-emerald-500); /* Test color - Green in light mode */
+
+  /* Core UI colors */
+  --color-background: oklch(0.995 0 0); /* Pure white background */
+  --color-foreground: oklch(0.141 0.005 285.823); /* Dark text for light mode */
 }
 
-/* Dark theme variant - using the :is(.dark) selector to match how classes are applied */
+/* Legacy variable mapping - this is needed during migration */
+:root {
+  --background: var(--color-background);
+  --foreground: var(--color-foreground);
+}
+
+/* Dark theme variant */
 :is(.dark) {
-  --color-sentinel: oklch(0.5 0.2 270); /* Purple in dark mode */
+  /* Theme colors */
+  --color-sentinel: var(--color-violet-500); /* Test color - Purple in dark mode */
+
+  /* Core UI colors */
+  --color-background: oklch(0.105 0.004 285.823); /* Darker background */
+  --color-foreground: oklch(0.95 0 0); /* Slightly off-white for better contrast */
 }
 
-/* Sunset theme variant - using the :is(.sunset) selector to match how classes are applied */
+/* Sunset theme variant */
 :is(.sunset) {
-  --color-sentinel: oklch(0.7 0.2 50); /* Orange in sunset mode */
+  /* Theme colors */
+  --color-sentinel: var(--color-orange-500); /* Test color - Orange in sunset mode */
+
+  /* Core UI colors */
+  --color-background: oklch(1 0.0183 106.73); /* Very slightly warmer white */
+  --color-foreground: oklch(0.141 0.005 285.823); /* Same text color as light mode */
 }
