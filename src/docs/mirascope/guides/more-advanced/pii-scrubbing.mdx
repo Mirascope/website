@@ -6,14 +6,13 @@ title: PII Scrubbing
 
 In this recipe, we go over how to detect Personal Identifiable Information, or PII and redact it from your source. Whether your source is from a database, a document, or spreadsheet, it is important prevent PII from leaving your system. We will be using Ollama for data privacy.
 
-<div class="admonition tip">
-<p class="admonition-title">Mirascope Concepts Used</p>
+<Info title="Mirascope Concepts Used">
 <ul>
 <li><a href="../../../learn/prompts/">Prompts</a></li>
 <li><a href="../../../learn/calls/">Calls</a></li>
 <li><a href="../../../learn/response_models/">Response Model</a></li>
 </ul>
-</div>
+</Info>
 
 <div class="admonition note">
 <p class="admonition-title">Background</p>
@@ -152,15 +151,14 @@ print(run())
     [NAME], born on [BIRTH_DATE], resides at [ADDRESS] in [CITY], [STATE]. His [IDENTIFICATION_NUMBER] is [SOCIAL_SECURITY_NUMBER] and he can be reached at [PHONE_NUMBER].
 
 
-<div class="admonition tip">
-<p class="admonition-title">Additional Real-World Applications</p>
+<Info title="Additional Real-World Applications">
 <ul>
 <li><b>Medical Records</b>: Iterate on the above recipe and scrub any PII when sharing patient data for research.</li>
 <li><b>Legal Documents</b>: Court documents and legal filings frequently contain sensitive information that needs to be scrubbed before public release.</li>
 <li><b>Corporate Financial Reports</b>: Companies may need to scrub proprietary financial data or trade secrets when sharing reports with external auditors or regulators.</li>
 <li><b>Social Media Content Moderation</b>: Automatically scrub or blur out personal information like phone numbers or addresses posted in public comments.</li>
 </ul>
-</div>
+</Info>
 
 When adapting this recipe to your specific use-case, consider the following:
 

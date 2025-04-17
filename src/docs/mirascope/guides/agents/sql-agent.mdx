@@ -6,8 +6,7 @@ title: Generate SQL with LLM
 
 In this recipe, we will be using OpenAI GPT-4o-mini to act as a co-pilot for a Database Admin. While LLMs are powerful and do pretty well at transforming laymen queries into SQL queries, it is still dangerous to do so without supervision. This recipe will have no guardrails for mutable operations and is purely for getting started.
 
-<div class="admonition tip">
-<p class="admonition-title">Mirascope Concepts Used</p>
+<Info title="Mirascope Concepts Used">
 <ul>
 <li><a href="../../../learn/prompts/">Prompts</a></li>
 <li><a href="../../../learn/calls/">Calls</a></li>
@@ -15,7 +14,7 @@ In this recipe, we will be using OpenAI GPT-4o-mini to act as a co-pilot for a D
 <li><a href="../../../learn/async/">Async</a></li>
 <li><a href="../../../learn/agents/">Agents</a></li>
 </ul>
-</div>
+</Info>
 
 ## Setup
 
@@ -253,14 +252,13 @@ Note that the SQL statements in the dialogue are there for development purposes.
 
 Having established that we can have a quality conversation with our `Librarian`, we can now enhance our prompt. However, we must ensure that these improvements don't compromise the Librarian's core functionality. Check out [Evaluating SQL Agent](../../evals/evaluating_sql_agent) for an in-depth guide on how we evaluate the quality of our prompt.
 
-<div class="admonition tip">
-<p class="admonition-title">Additional Real-World Examples</p>
+<Info title="Additional Real-World Examples">
 <ul>
 <li><b>Operations Assistant</b>: A read-only agent that retrieves data from databases, requiring no technical expertise.</li>
 <li><b>SQL Query Optimization</b>: Provide the agent with your data retrieval goals, and have it generate an efficient SQL query to meet your needs.</li>
 <li><b>Data Generation for Testing</b>: Request the agent to create and populate your database with realistic sample data to support development and testing processes.</li>
 </ul>
-</div>
+</Info>
 
 When adapting this recipe to your specific use-case, consider the following:
 

@@ -6,14 +6,13 @@ title: Prompt Paraphrasing: Generating Diverse Prompts for LLM Testing and Evalu
 
 [Prompt Paraphrasing](https://direct.mit.edu/tacl/article/doi/10.1162/tacl_a_00324/96460/How-Can-We-Know-What-Language-Models-Know) is not a prompt engineering technique, but rather a prompt generation technique used to create ensembles of prompts for testing or other prompt engineering techniques. In this example, we cover a specific method of generating prompts mentioned in the paper whereby a prompt is translated into $B$ versions in another language, then backtranslated into $B^2$ versions to English.
 
-<div class="admonition tip">
-<p class="admonition-title">Mirascope Concepts Used</p>
+<Info title="Mirascope Concepts Used">
 <ul>
 <li><a href="../../../../learn/prompts/">Prompts</a></li>
 <li><a href="../../../../learn/calls/">Calls</a></li>
 <li><a href="../../../../learn/response_models/">Response Models</a></li>
 </ul>
-</div>
+</Info>
 
 ## Implementation
 
@@ -92,8 +91,7 @@ When implementing this technique, consider:
 - Selecting appropriate languages for translation based on your specific use case or target audience.
 - Implementing a filtering mechanism to remove nonsensical or overly divergent paraphrases.
 
-<div class="admonition tip">
-<p class="admonition-title">Additional Real-World Applications</p>
+<Info title="Additional Real-World Applications">
 <ul>
 <li><b>Robustness Testing</b>: Use prompt paraphrasing to test LLM performance across various phrasings of the same query.</li>
 <li><b>Data Augmentation</b>: Generate additional training data by paraphrasing existing prompts or questions.</li>
@@ -101,7 +99,7 @@ When implementing this technique, consider:
 <li><b>Cross-lingual Information Retrieval</b>: Improve search results by querying with multiple paraphrased versions of the search term.</li>
 <li><b>Writing Assistance</b>: Offer users alternative phrasings for their writing to improve clarity or style.</li>
 </ul>
-</div>
+</Info>
 
 When adapting this recipe to your specific use-case, consider:
 
