@@ -683,5 +683,55 @@
     "route": "/docs/mirascope/guides/prompt-engineering/thread-of-thought",
     "title": "Thread of Thought | Mirascope",
     "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/least-to-most": {
+    "route": "/docs/mirascope/guides/prompt-engineering/least-to-most",
+    "title": "Least to Most: Enhancing LLM Reasoning with Subproblem Decomposition | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/reverse-chain-of-thought": {
+    "route": "/docs/mirascope/guides/prompt-engineering/reverse-chain-of-thought",
+    "title": "Reverse Chain of Thought: Enhancing LLM Reasoning with Self-Reflection | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/role-prompting": {
+    "route": "/docs/mirascope/guides/prompt-engineering/role-prompting",
+    "title": "Role Prompting | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/tabular-chain-of-thought": {
+    "route": "/docs/mirascope/guides/prompt-engineering/tabular-chain-of-thought",
+    "title": "Tabular Chain of Thought | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/getting-started/dynamic-configuration-and-chaining": {
+    "route": "/docs/mirascope/guides/getting-started/dynamic-configuration-and-chaining",
+    "title": "Dynamic Configuration & Chaining | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/getting-started/structured-outputs": {
+    "route": "/docs/mirascope/guides/getting-started/structured-outputs",
+    "title": "Structured Outputs | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/getting-started/tools-and-agents": {
+    "route": "/docs/mirascope/guides/getting-started/tools-and-agents",
+    "title": "Tools & Agents | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/agents/web-search-agent": {
+    "route": "/docs/mirascope/guides/agents/web-search-agent",
+    "title": "Web Search Agent | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/evals/evaluating-sql-agent": {
+    "route": "/docs/mirascope/guides/evals/evaluating-sql-agent",
+    "title": "Evaluating Generating SQL with LLM | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/more-advanced/knowledge-graph": {
+    "route": "/docs/mirascope/guides/more-advanced/knowledge-graph",
+    "title": "Knowledge Graph | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
   }
 }

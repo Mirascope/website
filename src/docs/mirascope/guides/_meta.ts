@@ -15,9 +15,26 @@ const guidesMeta: DocSection = {
 
   // Grouped guides by category
   groups: {
+    "getting-started": {
+      title: "Getting Started",
+      items: {
+        "structured-outputs": {
+          title: "Structured Outputs",
+        },
+        "dynamic-configuration-and-chaining": {
+          title: "Dynamic Configuration & Chaining",
+        },
+        "tools-and-agents": {
+          title: "Tools & Agents",
+        },
+      },
+    },
     agents: {
       title: "Agents",
       items: {
+        "web-search-agent": {
+          title: "Web Search Agent",
+        },
         "blog-writing-agent": {
           title: "Agent Executor: Blog Writing",
         },
@@ -46,6 +63,9 @@ const guidesMeta: DocSection = {
         },
         "evaluating-web-search-agent": {
           title: "Evaluating Web Search Agent with LLM",
+        },
+        "evaluating-sql-agent": {
+          title: "Evaluating Generating SQL with LLM",
         },
       },
     },
@@ -114,6 +134,9 @@ const guidesMeta: DocSection = {
         "text-translation": {
           title: "Text Translation",
         },
+        "knowledge-graph": {
+          title: "Knowledge Graph",
+        },
       },
     },
     "prompt-engineering": {
@@ -181,6 +204,18 @@ const guidesMeta: DocSection = {
         },
         "thread-of-thought": {
           title: "Thread of Thought",
+        },
+        "least-to-most": {
+          title: "Least to Most",
+        },
+        "reverse-chain-of-thought": {
+          title: "Reverse Chain of Thought",
+        },
+        "role-prompting": {
+          title: "Role Prompting",
+        },
+        "tabular-chain-of-thought": {
+          title: "Tabular Chain of Thought",
         },
       },
     },

@@ -50,9 +50,10 @@ response = recommend_book("mystery", 0.8)
 print("High creativity:", response.content)
 ```
 
-    Low creativity: I recommend "The Guest List" by Lucy Foley. This gripping mystery unfolds during a glamorous wedding on a remote Irish island, where tensions among the guests rise and secrets are revealed. When a murder occurs, everyone becomes a suspect, and the story alternates between different perspectives, keeping you guessing until the very end. It's a compelling read with well-developed characters and a twisty plot that will keep you on the edge of your seat!
-    High creativity: I recommend "The Girl with the Dragon Tattoo" by Stieg Larsson. This gripping mystery combines elements of crime, family saga, and social commentary. It follows journalist Mikael Blomkvist and hacker Lisbeth Salander as they investigate a decades-old disappearance amidst a backdrop of dark family secrets and corporate corruption. The complex characters and intricate plot make it a compelling read for mystery enthusiasts. Enjoy!
-
+```
+Low creativity: I recommend "The Guest List" by Lucy Foley. This gripping mystery unfolds during a glamorous wedding on a remote Irish island, where tensions among the guests rise and secrets are revealed. When a murder occurs, everyone becomes a suspect, and the story alternates between different perspectives, keeping you guessing until the very end. It's a compelling read with well-developed characters and a twisty plot that will keep you on the edge of your seat!
+High creativity: I recommend "The Girl with the Dragon Tattoo" by Stieg Larsson. This gripping mystery combines elements of crime, family saga, and social commentary. It follows journalist Mikael Blomkvist and hacker Lisbeth Salander as they investigate a decades-old disappearance amidst a backdrop of dark family secrets and corporate corruption. The complex characters and intricate plot make it a compelling read for mystery enthusiasts. Enjoy!
+```
 
 ### Computed Fields
 
@@ -74,8 +75,9 @@ response = recommend_book_by_age("fantasy", 15)
 print(response.content)
 ```
 
-    I recommend **"An Ember in the Ashes"** by Sabaa Tahir. This young adult fantasy novel is set in a brutal, ancient Rome-inspired world where the oppressed must fight against a tyrannical regime. The story follows Laia, a young woman who becomes a spy for the resistance to save her brother, and Elias, a soldier who wants to escape the oppressive society. The book is rich in world-building, features complex characters, and explores themes of freedom, loyalty, and sacrifice. It's an engaging read for young adults looking for an exciting fantasy adventure!
-
+```
+I recommend **"An Ember in the Ashes"** by Sabaa Tahir. This young adult fantasy novel is set in a brutal, ancient Rome-inspired world where the oppressed must fight against a tyrannical regime. The story follows Laia, a young woman who becomes a spy for the resistance to save her brother, and Elias, a soldier who wants to escape the oppressive society. The book is rich in world-building, features complex characters, and explores themes of freedom, loyalty, and sacrifice. It's an engaging read for young adults looking for an exciting fantasy adventure!
+```
 
 When using string templates, you can use computed fields to dynamically generate or modify template variables used in your prompt. For more information on prompt templates, see the [Prompts documentation](../../../learn/prompts).
 
@@ -99,8 +101,9 @@ response = recommend_book_by_age("fantasy", 15)
 print(response.content)
 ```
 
-    I recommend "An Ember in the Ashes" by Sabaa Tahir. This gripping fantasy novel is set in a world inspired by ancient Rome, where a fierce soldier and a rebellious scholar find their destinies intertwined. With themes of bravery, sacrifice, and love, it's an engaging read suitable for young adult audiences. The rich world-building and complex characters make it a standout in the young adult fantasy genre. Enjoy your reading!
-
+```
+I recommend "An Ember in the Ashes" by Sabaa Tahir. This gripping fantasy novel is set in a world inspired by ancient Rome, where a fierce soldier and a rebellious scholar find their destinies intertwined. With themes of bravery, sacrifice, and love, it's an engaging read suitable for young adult audiences. The rich world-building and complex characters make it a standout in the young adult fantasy genre. Enjoy your reading!
+```
 
 ### Dynamic Tools
 
@@ -128,8 +131,9 @@ else:
     print(response.content)
 ```
 
-    The Girl with the Dragon Tattoo by Stieg Larsson (Mystery)
-
+```
+The Girl with the Dragon Tattoo by Stieg Larsson (Mystery)
+```
 
 For more advanced usage of tools, including the `BaseToolKit` class, please refer to the [Tools documentation](../../../learn/tools) and the [Tools and Agents Tutorial](../tools_and_agents).
 
@@ -159,8 +163,9 @@ translation = translate(summary.content, "french")
 print(translation.content)
 ```
 
-    Bien sûr ! Veuillez fournir le long texte en anglais que vous souhaitez que je résume.
-
+```
+Bien sûr ! Veuillez fournir le long texte en anglais que vous souhaitez que je résume.
+```
 
 ### Nested Chaining
 
@@ -184,8 +189,9 @@ translation = summarize_and_translate(original_text, "french")
 print(translation.content)
 ```
 
-    Bien sûr ! Veuillez fournir le texte que vous souhaitez que je résume, et je ferai de mon mieux pour vous aider.
-
+```
+Bien sûr ! Veuillez fournir le texte que vous souhaitez que je résume, et je ferai de mon mieux pour vous aider.
+```
 
 ### Chaining with Computed Fields
 
@@ -211,10 +217,11 @@ print(
 )
 ```
 
-    Translation: Bien sûr ! Veuillez fournir le texte que vous aimeriez que je résume, et je serai heureux de vous aider.
-    
-    Computed fields (including summary): {'summary': OpenAICallResponse(metadata={}, response=ChatCompletion(id='chatcmpl-ABSRkdlz6phtmOBWqwVigidqET2tr', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=ChatCompletionMessage(content="Of course! Please provide the text you'd like me to summarize, and I'll be happy to help.", refusal=None, role='assistant', function_call=None, tool_calls=None))], created=1727294320, model='gpt-4o-mini-2024-07-18', object='chat.completion', service_tier=None, system_fingerprint='fp_1bb46167f9', usage=CompletionUsage(completion_tokens=20, prompt_tokens=18, total_tokens=38, completion_tokens_details={'reasoning_tokens': 0})), tool_types=None, prompt_template=None, fn_args={'text': 'Long English text here...'}, dynamic_config={'messages': [BaseMessageParam(role='user', content='Summarize this text: Long English text here...')]}, messages=[{'role': 'user', 'content': 'Summarize this text: Long English text here...'}], call_params={}, call_kwargs={'model': 'gpt-4o-mini', 'messages': [{'role': 'user', 'content': 'Summarize this text: Long English text here...'}]}, user_message_param={'content': 'Summarize this text: Long English text here...', 'role': 'user'}, start_time=1727294320238.506, end_time=1727294320929.094, message_param={'content': "Of course! Please provide the text you'd like me to summarize, and I'll be happy to help.", 'refusal': None, 'role': 'assistant', 'tool_calls': None}, tools=None, tool=None)}
+```
+Translation: Bien sûr ! Veuillez fournir le texte que vous aimeriez que je résume, et je serai heureux de vous aider.
 
+Computed fields (including summary): {'summary': OpenAICallResponse(metadata={}, response=ChatCompletion(id='chatcmpl-ABSRkdlz6phtmOBWqwVigidqET2tr', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=ChatCompletionMessage(content="Of course! Please provide the text you'd like me to summarize, and I'll be happy to help.", refusal=None, role='assistant', function_call=None, tool_calls=None))], created=1727294320, model='gpt-4o-mini-2024-07-18', object='chat.completion', service_tier=None, system_fingerprint='fp_1bb46167f9', usage=CompletionUsage(completion_tokens=20, prompt_tokens=18, total_tokens=38, completion_tokens_details={'reasoning_tokens': 0})), tool_types=None, prompt_template=None, fn_args={'text': 'Long English text here...'}, dynamic_config={'messages': [BaseMessageParam(role='user', content='Summarize this text: Long English text here...')]}, messages=[{'role': 'user', 'content': 'Summarize this text: Long English text here...'}], call_params={}, call_kwargs={'model': 'gpt-4o-mini', 'messages': [{'role': 'user', 'content': 'Summarize this text: Long English text here...'}]}, user_message_param={'content': 'Summarize this text: Long English text here...', 'role': 'user'}, start_time=1727294320238.506, end_time=1727294320929.094, message_param={'content': "Of course! Please provide the text you'd like me to summarize, and I'll be happy to help.", 'refusal': None, 'role': 'assistant', 'tool_calls': None}, tools=None, tool=None)}
+```
 
 As you can see, with computed fields, you get access to both the final translation and the intermediate summary in a single response. This approach provides better traceability and can be particularly useful for debugging and understanding the entire chain of operations without the need to manage multiple separate function calls.
 
@@ -245,10 +252,11 @@ print(
 )
 ```
 
-    Translation: Bien sûr ! Veuillez fournir le texte que vous aimeriez que je résume.
-    
-    Computed fields (including summary): {'summary': OpenAICallResponse(metadata={}, response=ChatCompletion(id='chatcmpl-ABSRz6D82ecWKlAU7VUmWU4wbqiaY', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=ChatCompletionMessage(content="Sure! Please provide the text you'd like me to summarize.", refusal=None, role='assistant', function_call=None, tool_calls=None))], created=1727294335, model='gpt-4o-mini-2024-07-18', object='chat.completion', service_tier=None, system_fingerprint='fp_1bb46167f9', usage=CompletionUsage(completion_tokens=12, prompt_tokens=18, total_tokens=30, completion_tokens_details={'reasoning_tokens': 0})), tool_types=None, prompt_template=None, fn_args={'text': 'Long English text here...'}, dynamic_config={'messages': [BaseMessageParam(role='user', content='Summarize this text: Long English text here...')]}, messages=[{'role': 'user', 'content': 'Summarize this text: Long English text here...'}], call_params={}, call_kwargs={'model': 'gpt-4o-mini', 'messages': [{'role': 'user', 'content': 'Summarize this text: Long English text here...'}]}, user_message_param={'content': 'Summarize this text: Long English text here...', 'role': 'user'}, start_time=1727294335206.361, end_time=1727294335879.617, message_param={'content': "Sure! Please provide the text you'd like me to summarize.", 'refusal': None, 'role': 'assistant', 'tool_calls': None}, tools=None, tool=None)}
+```
+Translation: Bien sûr ! Veuillez fournir le texte que vous aimeriez que je résume.
 
+Computed fields (including summary): {'summary': OpenAICallResponse(metadata={}, response=ChatCompletion(id='chatcmpl-ABSRz6D82ecWKlAU7VUmWU4wbqiaY', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=ChatCompletionMessage(content="Sure! Please provide the text you'd like me to summarize.", refusal=None, role='assistant', function_call=None, tool_calls=None))], created=1727294335, model='gpt-4o-mini-2024-07-18', object='chat.completion', service_tier=None, system_fingerprint='fp_1bb46167f9', usage=CompletionUsage(completion_tokens=12, prompt_tokens=18, total_tokens=30, completion_tokens_details={'reasoning_tokens': 0})), tool_types=None, prompt_template=None, fn_args={'text': 'Long English text here...'}, dynamic_config={'messages': [BaseMessageParam(role='user', content='Summarize this text: Long English text here...')]}, messages=[{'role': 'user', 'content': 'Summarize this text: Long English text here...'}], call_params={}, call_kwargs={'model': 'gpt-4o-mini', 'messages': [{'role': 'user', 'content': 'Summarize this text: Long English text here...'}]}, user_message_param={'content': 'Summarize this text: Long English text here...', 'role': 'user'}, start_time=1727294335206.361, end_time=1727294335879.617, message_param={'content': "Sure! Please provide the text you'd like me to summarize.", 'refusal': None, 'role': 'assistant', 'tool_calls': None}, tools=None, tool=None)}
+```
 
 ## Error Handling in Chains
 
@@ -288,8 +296,9 @@ result = process_text_with_error_handling("Long text here...", "French")
 print("Processed Result:", result)
 ```
 
-    Processed Result: Bien sûr ! Veuillez fournir le texte que vous souhaiteriez que je résume.
-
+```
+Processed Result: Bien sûr ! Veuillez fournir le texte que vous souhaiteriez que je résume.
+```
 
 ## Conclusion
 

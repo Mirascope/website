@@ -91,7 +91,6 @@ The command below will download the article to your local machine by using the `
 !curl https://en.wikipedia.org/wiki/Large_language_model -o wikipedia.html
 ```
 
-{% raw %}
 
 
 ```python
@@ -137,10 +136,9 @@ kg = generate_knowledge_graph(question, "wikipedia.html")
 print(kg)
 ```
 
-    nodes=[Node(id='Large Language Models', type='Large Language Model', properties=None), Node(id='Data Cleaning Issues', type='Pitfall', properties=None), Node(id='Bias Inheritance', type='Pitfall', properties=None), Node(id='Hallucinations', type='Pitfall', properties=None), Node(id='Limited Understanding', type='Pitfall', properties=None), Node(id='Dependence on Training Data', type='Pitfall', properties=None), Node(id='Security Risks', type='Pitfall', properties=None), Node(id='Stereotyping', type='Pitfall', properties=None), Node(id='Political Bias', type='Pitfall', properties=None)] edges=[Edge(source='Large Language Models', target='Data Cleaning Issues', relationship='has pitfall'), Edge(source='Large Language Models', target='Bias Inheritance', relationship='has pitfall'), Edge(source='Large Language Models', target='Hallucinations', relationship='has pitfall'), Edge(source='Large Language Models', target='Limited Understanding', relationship='has pitfall'), Edge(source='Large Language Models', target='Dependence on Training Data', relationship='has pitfall'), Edge(source='Large Language Models', target='Security Risks', relationship='has pitfall'), Edge(source='Large Language Models', target='Stereotyping', relationship='has pitfall'), Edge(source='Large Language Models', target='Political Bias', relationship='has pitfall')]
-
-
-{% endraw %}
+```
+nodes=[Node(id='Large Language Models', type='Large Language Model', properties=None), Node(id='Data Cleaning Issues', type='Pitfall', properties=None), Node(id='Bias Inheritance', type='Pitfall', properties=None), Node(id='Hallucinations', type='Pitfall', properties=None), Node(id='Limited Understanding', type='Pitfall', properties=None), Node(id='Dependence on Training Data', type='Pitfall', properties=None), Node(id='Security Risks', type='Pitfall', properties=None), Node(id='Stereotyping', type='Pitfall', properties=None), Node(id='Political Bias', type='Pitfall', properties=None)] edges=[Edge(source='Large Language Models', target='Data Cleaning Issues', relationship='has pitfall'), Edge(source='Large Language Models', target='Bias Inheritance', relationship='has pitfall'), Edge(source='Large Language Models', target='Hallucinations', relationship='has pitfall'), Edge(source='Large Language Models', target='Limited Understanding', relationship='has pitfall'), Edge(source='Large Language Models', target='Dependence on Training Data', relationship='has pitfall'), Edge(source='Large Language Models', target='Security Risks', relationship='has pitfall'), Edge(source='Large Language Models', target='Stereotyping', relationship='has pitfall'), Edge(source='Large Language Models', target='Political Bias', relationship='has pitfall')]
+```
 
 We engineer our prompt by giving examples of how the properties should be filled out and use Mirascope's `DynamicConfig` to pass in the article. While it seems silly in this context, there may be multiple documents that you may want to conditionally pass in depending on the query. This can include text chunks from a Vector Store or data from a Database.
 
@@ -224,8 +222,9 @@ question = "What are the pitfalls of using LLMs?"
 render_graph(kg)
 ```
 
-    Matplotlib is building the font cache; this may take a moment.
-
+```
+Matplotlib is building the font cache; this may take a moment.
+```
 
 
     
@@ -235,26 +234,18 @@ render_graph(kg)
 
 <div class="admonition tip">
 <p class="admonition-title">Additional Real-World Applications</p>
-<ul>
-<li><b>Enhance your Q&A</b>
-  <ul>
-    <li>Customer support system uses knowledge graph containing information about products to answer questions.</li>
-    <li>Example: "Does the Mirascope phone support fast charging?" The knowledge graph has a node "Mirascope smartphone" and searches "support" edge to find fast charging and returns results for the LLM to use.</li>
-  </ul>
-</li>
-<li><b>Supply Chain Optimization</b>
-  <ul>
-    <li>A knowledge graph could represent complex relationships between suppliers, manufacturing plants, distribution centers, products, and transportation routes.</li>
-    <li>Example: How would a 20% increase in demand for a mirascope affect our inventory needs and shipping costs? Use knowledge graph to trace the mirascope toy, calculate inventory, and then estimate shipping costs and return results for the LLM to give a report.</li>
-  </ul>
-</li>
-<li><b>Healthcare Assistant</b>
-  <ul>
-    <li>Assuming no PII or HIPPA violation, build a knowledge graph from patient remarks.</li>
-    <li>Example: "Mary said help, I've fallen". Build up a knowledge graph from comments and use an LLM to scan the node "Mary" for any worrying activity. Have the LLM alert Healthcare employees that there may be an emergency.</li>
-  </ul>
-</li>
-</ul>
+
+<p><b>Enhance your Q&A:</b></p>
+<p>Customer support system uses knowledge graph containing information about products to answer questions.</p>
+<p>Example: "Does the Mirascope phone support fast charging?" The knowledge graph has a node "Mirascope smartphone" and searches "support" edge to find fast charging and returns results for the LLM to use.</p>
+
+<p><b>Supply Chain Optimization:</b></p>
+<p>A knowledge graph could represent complex relationships between suppliers, manufacturing plants, distribution centers, products, and transportation routes.</p>
+<p>Example: How would a 20% increase in demand for a mirascope affect our inventory needs and shipping costs? Use knowledge graph to trace the mirascope toy, calculate inventory, and then estimate shipping costs.</p>
+
+<p><b>Healthcare Assistant:</b></p>
+<p>Assuming no PII or HIPPA violation, build a knowledge graph from patient remarks.</p>
+<p>Example: "Mary said help, I've fallen". Build up a knowledge graph from comments and use an LLM to scan the node "Mary" for any worrying activity. Have the LLM alert Healthcare employees that there may be an emergency.</p>
 </div>
 
 When adapting this recipe, consider:
