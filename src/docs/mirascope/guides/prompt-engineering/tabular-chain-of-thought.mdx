@@ -6,13 +6,12 @@ title: Tabular Chain of Thought
 
 [Tabular Chain of Thought](https://arxiv.org/pdf/2305.17812) (Tab-CoT) is an extension of zero-shot [Chain of Thought](https://arxiv.org/abs/2201.1190), with the caveat that the LLM is given a Markdown heading to structure each step of its response in an individual row of a Markdown table. The added structure can help the LLM's reasoning process and improves accuracy in arithmetic and reasoning tasks.
 
-<div class="admonition tip">
-<p class="admonition-title">Mirascope Concepts Used</p>
+<Info title="Mirascope Concepts Used" collapsible={true} defaultCollapsed={true}>
 <ul>
-<li><a href="../../../../learn/prompts/">Prompts</a></li>
-<li><a href="../../../../learn/calls/">Calls</a></li>
+<li><a href="/docs/mirascope/learn/prompts/">Prompts</a></li>
+<li><a href="/docs/mirascope/learn/calls/">Calls</a></li>
 </ul>
-</div>
+</Info>
 
 
 ```python
@@ -119,8 +118,7 @@ Therefore, the area of the equilateral triangle is sqrt(3)/3 units squared.
 
 For reference, `engineered_response` answer is correct.
 
-<div class="admonition tip">
-<p class="admonition-title">Effective Tabular Chain of Thought Usage</p>
+<Info title="Effective Tabular Chain of Thought Usage">
 <ul>
 <li><strong>Structured Reasoning</strong>: Use Tab-CoT to encourage the LLM to break down complex problems into clear, discrete steps.</li>
 <li><strong>Improved Accuracy</strong>: The tabular format can lead to improved accuracy, especially in arithmetic and multi-step reasoning tasks.</li>
@@ -128,6 +126,6 @@ For reference, `engineered_response` answer is correct.
 <li><strong>Consistency</strong>: Tab-CoT can help maintain consistency in the problem-solving approach across different queries.</li>
 <li><strong>Visual Clarity</strong>: The table format provides a clear visual representation of the problem-solving process, which can be beneficial for understanding and presentation.</li>
 </ul>
-</div>
+</Info>
 
 Tabular Chain of Thought provides a structured approach to problem-solving that can enhance the LLM's reasoning capabilities. By organizing thoughts into a table format, it allows for clearer step-by-step analysis, which can lead to more accurate results, especially in complex arithmetic or logical reasoning tasks.

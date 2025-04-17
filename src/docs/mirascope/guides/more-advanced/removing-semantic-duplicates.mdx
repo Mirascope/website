@@ -6,21 +6,19 @@ title: Removing Semantic Duplicates
 
  In this recipe, we show how to use LLMs — in this case, OpenAI's `gpt-4o-mini` — to answer remove semantic duplicates from lists and objects.
 
-<div class="admonition tip">
-<p class="admonition-title">Mirascope Concepts Used</p>
+<Info title="Mirascope Concepts Used" collapsible={true} defaultCollapsed={true}>
 <ul>
-<li><a href="../../../learn/prompts/">Prompts</a></li>
-<li><a href="../../../learn/calls/">Calls</a></li>
-<li><a href="../../../learn/response_models/">Response Model</a></li>
+<li><a href="/docs/mirascope/learn/prompts/">Prompts</a></li>
+<li><a href="/docs/mirascope/learn/calls/">Calls</a></li>
+<li><a href="/docs/mirascope/learn/response_models/">Response Model</a></li>
 </ul>
-</div>
+</Info>
 
-<div class="admonition note">
-<p class="admonition-title">Background</p>
+<Note title="Background">
 <p>
 Semantic deduplication, or the removal of duplicates which are equivalent in meaning but not in data, has been a longstanding problem in NLP. LLMs which have the ability to comprehend context, semantics, and implications within that text trivializes this problem.
 </p>
-</div>
+</Note>
 
 ## Setup
 
@@ -164,14 +162,13 @@ for book in books:
     title='War of the Worlds' author='H.G. Wells' genre='science fiction'
 
 
-<div class="admonition tip">
-<p class="admonition-title">Additional Real-World Examples</p>
+<Info title="Additional Real-World Examples">
 <ul>
 <li><b>Customer Relationship Management (CRM)</b>: Maintaining a single, accurate view of each customer.</li>
 <li><b>Database Management</b>: Removing duplicate records to maintain data integrity and improve query performance</li>
 <li><b>Email</b>: Clean up digital assets by removing duplicate attachments, emails.</li>
 </ul>
-</div>
+</Info>
 
 When adapting this recipe to your specific use-case, consider the following:
 

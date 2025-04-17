@@ -6,21 +6,19 @@ title: Least to Most: Enhancing LLM Reasoning with Subproblem Decomposition
 
 This recipe demonstrates how to implement the Least to Most technique using Large Language Models (LLMs) with Mirascope. Least to Most is a prompt engineering method that enhances an LLM's reasoning capabilities by breaking down complex problems into smaller, more manageable subproblems.
 
-<div class="admonition tip">
-<p class="admonition-title">Mirascope Concepts Used</p>
+<Info title="Mirascope Concepts Used" collapsible={true} defaultCollapsed={true}>
 <ul>
-<li><a href="../../../../learn/prompts/">Prompts</a></li>
-<li><a href="../../../../learn/calls/">Calls</a></li>
-<li><a href="../../../../learn/response_models/">Response Models</a></li>
+<li><a href="/docs/mirascope/learn/prompts/">Prompts</a></li>
+<li><a href="/docs/mirascope/learn/calls/">Calls</a></li>
+<li><a href="/docs/mirascope/learn/response_models/">Response Models</a></li>
 </ul>
-</div>
+</Info>
 
-<div class="admonition note">
-<p class="admonition-title">Background</p>
+<Note title="Background">
 <p>
 <a href="https://arxiv.org/pdf/2205.10625">Least to Most</a> is a more extensive version of <a href="https://arxiv.org/abs/2201.11903">Chain of Thought</a>, where separate calls are used to break down the original problem into subproblems as well as solve each individual step/subproblem. After solving each subproblem, the result is appended to the chat's history until the original problem is solved. Least to Most is an effective technique for symbolic and arithmetic reasoning tasks.
 </p>
-</div>
+</Note>
 
 ## Implementing Least to Most
 
@@ -144,8 +142,7 @@ When implementing this technique, consider:
 - Balancing the number of subproblems to avoid oversimplification or overcomplexity.
 - Ensuring that the query context and question are clear and contain all necessary information.
 
-<div class="admonition tip">
-<p class="admonition-title">Additional Real-World Applications</p>
+<Info title="Additional Real-World Applications">
 <ul>
 <li><b>Complex Mathematical Problem Solving</b>: Use Least to Most for multi-step mathematical proofs or calculations.</li>
 <li><b>Project Planning</b>: Break down large projects into smaller, manageable tasks.</li>
@@ -153,7 +150,7 @@ When implementing this technique, consider:
 <li><b>Legal Case Analysis</b>: Break down complex legal cases into individual points of law to be addressed.</li>
 <li><b>Medical Diagnosis</b>: Analyze symptoms and test results step-by-step to reach a diagnosis.</li>
 </ul>
-</div>
+</Info>
 
 When adapting this recipe to your specific use-case, consider:
 

@@ -6,21 +6,19 @@ title: Transcribing Speech
 
 In this recipe, we go over how to transcribe the speech from an audio file using Gemini 1.5 Flash’s audio capabilities.
 
-<div class="admonition tip">
-<p class="admonition-title">Mirascope Concepts Used</p>
+<Info title="Mirascope Concepts Used" collapsible={true} defaultCollapsed={true}>
 <ul>
-<li><a href="../../../learn/prompts/">Prompts</a></li>
-<li><a href="../../../learn/calls/">Calls</a></li>
-<li><a href="../../../learn/response_models/">Response Model</a></li>
+<li><a href="/docs/mirascope/learn/prompts/">Prompts</a></li>
+<li><a href="/docs/mirascope/learn/calls/">Calls</a></li>
+<li><a href="/docs/mirascope/learn/response_models/">Response Model</a></li>
 </ul>
-</div>
+</Info>
 
-<div class="admonition note">
-<p class="admonition-title">Background</p>
+<Note title="Background">
 <p>
 LLMs have significantly advanced speech transcription beyond traditional machine learning techniques, by improved handling of diverse accents and languages, and the ability to incorporate context for more precise transcriptions. Additionally, LLMs can leverage feedback loops to continuously improve their performance and correct errors through simple prompting.
 </p>
-</div>
+</Note>
 
 ## Setup
 
@@ -168,14 +166,13 @@ with open("YOUR_MP3_HERE", "rb") as file:
 ```
 
 
-<div class="admonition tip">
-<p class="admonition-title">Additional Real-World Examples</p>
+<Info title="Additional Real-World Examples">
 <ul>
 <li><b>Subtitles and Closed Captions</b>: Automatically generate subtitles for same and different languages for accessibility.</li>
 <li><b>Meetings</b>: Transcribe meetings for future reference or summarization.</li>
 <li><b>Voice Assistant</b>: Transcription is the first step to answering voice requests.</li>
 </ul>
-</div>
+</Info>
 
 When adapting this recipe to your specific use-case, consider the following:
 

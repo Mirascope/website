@@ -6,23 +6,21 @@ title: Support Ticket Routing
 
 This recipe shows how to take an incoming support ticket/call transcript then use an LLM to summarize the issue and route it to the correct person.
 
-<div class="admonition tip">
-<p class="admonition-title">Mirascope Concepts Used</p>
+<Info title="Mirascope Concepts Used" collapsible={true} defaultCollapsed={true}>
 <ul>
-<li><a href="../../../learn/prompts/">Prompts</a></li>
-<li><a href="../../../learn/calls/">Calls</a></li>
-<li><a href="../../../learn/tools/">Tools</a></li>
-<li><a href="../../../learn/chaining/">Chaining</a></li>
-<li><a href="../../../learn/response_models/">Response Models</a></li>
+<li><a href="/docs/mirascope/learn/prompts/">Prompts</a></li>
+<li><a href="/docs/mirascope/learn/calls/">Calls</a></li>
+<li><a href="/docs/mirascope/learn/tools/">Tools</a></li>
+<li><a href="/docs/mirascope/learn/chaining/">Chaining</a></li>
+<li><a href="/docs/mirascope/learn/response_models/">Response Models</a></li>
 </ul>
-</div>
+</Info>
 
-<div class="admonition note">
-<p class="admonition-title">Background</p>
+<Note title="Background">
 <p>
 Traditional machine learning techniques like text classification were previously used to solve routing. LLMs have enhanced routing by being able to better interpret nuances of inquiries as well as using client history and knowledge of the product to make more informed decisions.
 </p>
-</div>
+</Note>
 
 ## Setup
 
@@ -43,12 +41,11 @@ os.environ["OPENAI_API_KEY"] = "YOUR_API_KEY"
 
 ## Imitating a Company's Database/Functionality
 
-<div class="admonition note">
-<p class="admonition-title">Fake Data</p>
+<Note title="Fake Data">
 <p>
 For both privacy and functionality purposes, these data types and functions in <em>no way</em> represent how a company's API should actually look like. However, extrapolate on these gross oversimplifications to see how the LLM would interact with the company's API.
 </p>
-</div>
+</Note>
 
 ### User
 
@@ -276,13 +273,12 @@ for transcript in [billing_transcript, sale_transcript, support_transcript]:
 
 
 
-<div class="admonition tip">
-<p class="admonition-title">Additional Real-World Examples</p>
+<Info title="Additional Real-World Examples">
 <ul>
 <li><b>IT Help Desk</b>: Have LLM determine whether the user request is level 1, 2, or 3 support and route accordingly</li>
 <li><b>Software-as-a-Service (SaaS) Companies</b>: A question about how to use a specific feature might be routed to the product support team, while an issue with account access could be sent to the account management team.</li>
 </ul>
-</div>
+</Info>
 
 When adapting this recipe to your specific use-case, consider the following:
 

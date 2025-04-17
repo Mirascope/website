@@ -6,25 +6,23 @@ title: Agent Executor: Blog Writing
 
 This recipe demonstrates how to build an Agent Executor using Mirascope to automate the process of researching and writing a blog post. We'll create a system that combines a researcher agent and a writer tool, orchestrated by an executor agent.
 
-<div class="admonition tip">
-<p class="admonition-title">Mirascope Concepts Used</p>
+<Info title="Mirascope Concepts Used" collapsible={true} defaultCollapsed={true}>
 <ul>
-<li><a href="../../../learn/prompts/">Prompts</a></li>
-<li><a href="../../../learn/calls/">Calls</a></li>
-<li><a href="../../../learn/streams/">Streams</a></li>
-<li><a href="../../../learn/tools/">Tools</a></li>
-<li><a href="../../../learn/response_models/">Response Model</a></li>
-<li><a href="../../../learn/output_parsers/">Output Parser</a></li>
-<li><a href="../../../learn/retries/">Retries</a></li>
+<li><a href="/docs/mirascope/learn/prompts/">Prompts</a></li>
+<li><a href="/docs/mirascope/learn/calls/">Calls</a></li>
+<li><a href="/docs/mirascope/learn/streams/">Streams</a></li>
+<li><a href="/docs/mirascope/learn/tools/">Tools</a></li>
+<li><a href="/docs/mirascope/learn/response_models/">Response Model</a></li>
+<li><a href="/docs/mirascope/learn/output_parsers/">Output Parser</a></li>
+<li><a href="/docs/mirascope/learn/retries/">Retries</a></li>
 </ul>
-</div>
+</Info>
 
-<div class="admonition note">
-<p class="admonition-title">Background</p>
+<Note title="Background">
 <p>
 Agent-based systems in AI involve creating autonomous agents that can perform tasks or make decisions. In this recipe, we're using multiple agents (researcher and writer) coordinated by an executor to create a blog post. This approach allows for a more modular and potentially more effective content creation process.
 </p>
-</div>
+</Note>
 
 ## System Architecture
 
@@ -391,8 +389,7 @@ agent.run("Help me write a blog post about LLMs and structured outputs.")
 ```
 
 
-<div class="admonition tip">
-<p class="admonition-title">Additional Real-World Applications</p>
+<Info title="Additional Real-World Applications">
 <ol>
 <li>
 <p><b>Automated Content Marketing:</b></p>
@@ -451,7 +448,7 @@ agent.run("Help me write a blog post about LLMs and structured outputs.")
 </ul>
 </li>
 </ol>
-</div>
+</Info>
 
 When adapting this recipe, consider:
 
