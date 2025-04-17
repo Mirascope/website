@@ -1,4 +1,5 @@
-import type { ContentType, ContentMeta, Content } from "./types";
+import type { ContentType, ContentMeta, GetContentFn } from "./types";
+import type { ContentLoaderOptions } from "./content-loader";
 
 // Define the route parameters interface
 interface RouteParams {
@@ -9,12 +10,13 @@ interface RouteParams {
  * Creates a content loader function compatible with TanStack Router
  */
 export function createContentLoader<T extends ContentMeta>(
-  getContentFn: (path: string) => Promise<Content<T>>,
-  contentType: ContentType
+  getContentFn: GetContentFn<T>,
+  contentType: ContentType,
+  options?: ContentLoaderOptions
 ) {
   return ({ params }: RouteParams) => {
     const path = getPathFromParams(params, contentType);
-    return getContentFn(path);
+    return getContentFn(path, options);
   };
 }
 

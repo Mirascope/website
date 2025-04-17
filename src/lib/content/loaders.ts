@@ -8,14 +8,20 @@ import { type ProductName } from "@/lib/route-types";
  * Loaders for TanStack Router - these can be imported directly into route files
  */
 
-// Policy loaders
-export const policyLoader = createContentLoader(getPolicy, "policy");
+// Policy loaders - use options from environment for dev mode
+export const policyLoader = createContentLoader(getPolicy, "policy", {
+  devMode: import.meta.env.DEV,
+});
 
-// Doc loaders
-export const docLoader = createContentLoader(getDocContent, "doc");
+// Doc loaders - use options from environment for dev mode
+export const docLoader = createContentLoader(getDocContent, "doc", {
+  devMode: import.meta.env.DEV,
+});
 
-// Blog loaders
-export const blogLoader = createContentLoader(getBlogContent, "blog");
+// Blog loaders - use options from environment for dev mode
+export const blogLoader = createContentLoader(getBlogContent, "blog", {
+  devMode: import.meta.env.DEV,
+});
 
 // Blog list loader
 export const blogListLoader = () => {

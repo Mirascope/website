@@ -1,45 +1,30 @@
-import { ContentCache } from "./content-cache";
-import { ContentLoader } from "./content-loader";
 import type { ContentType, ContentMeta, Content } from "./types";
 import { parseFrontmatter } from "./frontmatter";
 import { isValidPath } from "./path-resolver";
 import { ContentError, DocumentNotFoundError, InvalidPathError, MetadataError } from "./errors";
 import { validateMetadata } from "./metadata-service";
 import { processMDX } from "./mdx-processor";
+import { loadContent as loadRawContent } from "./content-loader";
+import type { ContentLoaderOptions } from "./content-loader";
 
 /**
- * Creates a cache key for content
- */
-export function createCacheKey(contentType: ContentType, path: string): string {
-  return `${contentType}:${path}`;
-}
-
-/**
- * Load content by path with caching
+ * Load content by path
  */
 export async function loadContent<T extends ContentMeta>(
   path: string,
   contentType: ContentType,
-  loader: ContentLoader,
-  cache: ContentCache,
   createMeta: (frontmatter: Record<string, any>, path: string) => T,
+  options?: ContentLoaderOptions,
   postprocessContent?: (content: string) => string
 ): Promise<Content<T>> {
   try {
-    // Check cache first if available
-    const cacheKey = createCacheKey(contentType, path);
-    const cached = cache.get(contentType, cacheKey);
-    if (cached) {
-      return JSON.parse(cached);
-    }
-
     // Validate the path
     if (!isValidPath(path, contentType)) {
       throw new InvalidPathError(contentType, path);
     }
 
     // Load the raw content
-    const rawContent = await loader.loadContent(path, contentType);
+    const rawContent = await loadRawContent(path, contentType, options);
 
     // Parse frontmatter
     const { frontmatter, content } = parseFrontmatter(rawContent);
@@ -73,9 +58,6 @@ export async function loadContent<T extends ContentMeta>(
         frontmatter,
       },
     };
-
-    // Cache the result
-    cache.set(contentType, cacheKey, JSON.stringify(result));
 
     return result;
   } catch (error) {

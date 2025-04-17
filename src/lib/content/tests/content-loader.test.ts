@@ -1,23 +1,14 @@
 import { test, expect, describe, beforeEach, afterEach, mock } from "bun:test";
-import { ContentLoader, createContentLoader } from "../content-loader";
-import { ContentCache, createContentCache } from "../content-cache";
+import { loadContent, createContentLoader } from "../content-loader";
 import { DocumentNotFoundError, ContentLoadError } from "../errors";
 
 // Store original fetch
 const originalFetch = global.fetch;
 
 describe("ContentLoader", () => {
-  let cache: ContentCache;
-  let loader: ContentLoader;
   let mockFetch: any;
 
   beforeEach(() => {
-    // Create a new cache for each test
-    cache = createContentCache();
-
-    // Create a loader with the cache - explicitly set devMode
-    loader = createContentLoader({ cache, devMode: true });
-
     // Mock the fetch function
     mockFetch = mock(() => {
       return Promise.resolve({
@@ -39,7 +30,7 @@ describe("ContentLoader", () => {
 
   test("should create a loader with factory function", () => {
     const loader = createContentLoader();
-    expect(loader).toBeInstanceOf(ContentLoader);
+    expect(typeof loader.loadContent).toBe("function");
   });
 
   describe("Dev mode", () => {
@@ -53,7 +44,9 @@ describe("ContentLoader", () => {
         });
       });
 
-      const content = await loader.loadContent("/docs/mirascope/getting-started", "doc");
+      const content = await loadContent("/docs/mirascope/getting-started", "doc", {
+        devMode: true,
+      });
 
       expect(mockFetch).toHaveBeenCalled();
       expect(content).toBe("doc content");
@@ -69,7 +62,7 @@ describe("ContentLoader", () => {
         });
       });
 
-      const content = await loader.loadContent("/blog/my-post", "blog");
+      const content = await loadContent("/blog/my-post", "blog", { devMode: true });
 
       expect(mockFetch).toHaveBeenCalled();
       expect(content).toBe("blog content");
@@ -85,7 +78,7 @@ describe("ContentLoader", () => {
         });
       });
 
-      const content = await loader.loadContent("/privacy", "policy");
+      const content = await loadContent("/privacy", "policy", { devMode: true });
 
       expect(mockFetch).toHaveBeenCalled();
       expect(content).toBe("policy content");
@@ -101,7 +94,7 @@ describe("ContentLoader", () => {
       });
 
       try {
-        await loader.loadContent("/docs/not-found", "doc");
+        await loadContent("/docs/not-found", "doc", { devMode: true });
         expect("should have thrown").toBe("but did not");
       } catch (error) {
         expect(error).toBeInstanceOf(DocumentNotFoundError);
@@ -118,7 +111,7 @@ describe("ContentLoader", () => {
       });
 
       try {
-        await loader.loadContent("/docs/error", "doc");
+        await loadContent("/docs/error", "doc", { devMode: true });
         expect("should have thrown").toBe("but did not");
       } catch (error) {
         expect(error).toBeInstanceOf(ContentLoadError);
@@ -127,11 +120,6 @@ describe("ContentLoader", () => {
   });
 
   describe("Production mode", () => {
-    beforeEach(() => {
-      // Set dev mode to false for production tests
-      loader = createContentLoader({ cache, devMode: false });
-    });
-
     test("should load content from static files in production", async () => {
       mockFetch.mockImplementation(() => {
         return Promise.resolve({
@@ -142,7 +130,9 @@ describe("ContentLoader", () => {
         });
       });
 
-      const content = await loader.loadContent("/docs/mirascope/getting-started", "doc");
+      const content = await loadContent("/docs/mirascope/getting-started", "doc", {
+        devMode: false,
+      });
 
       expect(mockFetch).toHaveBeenCalled();
       expect(content).toBe("static content");
@@ -158,7 +148,7 @@ describe("ContentLoader", () => {
       );
 
       try {
-        await loader.loadContent("/docs/not-found", "doc");
+        await loadContent("/docs/not-found", "doc", { devMode: false });
         expect("should have thrown").toBe("but did not");
       } catch (error) {
         expect(error).toBeInstanceOf(DocumentNotFoundError);
@@ -175,7 +165,7 @@ describe("ContentLoader", () => {
       );
 
       try {
-        await loader.loadContent("/docs/error", "doc");
+        await loadContent("/docs/error", "doc", { devMode: false });
         expect("should have thrown").toBe("but did not");
       } catch (error) {
         expect(error).toBeInstanceOf(ContentLoadError);
@@ -183,49 +173,53 @@ describe("ContentLoader", () => {
     });
   });
 
-  describe("Caching", () => {
-    test("should use cache when available", async () => {
-      // Set something in the cache
-      cache.set("doc", "mirascope/getting-started.mdx", "cached content");
-
-      // Mock fetch to verify it's not called
-      let fetchCallCount = 0;
-      mockFetch.mockImplementation(() => {
-        fetchCallCount++;
+  describe("Direct API", () => {
+    test("should use provided custom fetch function", async () => {
+      // Create a custom fetch function
+      const customFetchFunction = mock(() => {
         return Promise.resolve({
           ok: true,
-          text: () => Promise.resolve("fresh content"),
+          text: () => Promise.resolve("custom fetched content"),
           status: 200,
+          statusText: "OK",
         });
       });
 
-      // Load content - should come from cache
-      const content = await loader.loadContent("/docs/mirascope/getting-started", "doc");
+      // Use the mock function directly as customFetch with any type
+      const customFetch = customFetchFunction as any;
 
-      // Fetch should not be called when using cache
-      expect(fetchCallCount).toBe(0);
-      expect(content).toBe("cached content");
+      // Load content with the custom fetch function
+      const content = await loadContent("/docs/mirascope/getting-started", "doc", {
+        devMode: true,
+        customFetch,
+      });
+
+      // The custom fetch should be called, not the global one
+      expect(customFetch).toHaveBeenCalled();
+      expect(mockFetch).not.toHaveBeenCalled();
+      expect(content).toBe("custom fetched content");
     });
 
-    test("should update cache after fetching", async () => {
-      // Mock fetch to track calls
-      let fetchCallCount = 0;
+    test("factory function should pass options to loadContent", async () => {
+      // Mock the fetch for this test
       mockFetch.mockImplementation(() => {
-        fetchCallCount++;
         return Promise.resolve({
           ok: true,
-          text: () => Promise.resolve("fresh content"),
+          text: () => Promise.resolve("content via factory"),
           status: 200,
+          statusText: "OK",
         });
       });
 
-      // First call - should fetch
-      await loader.loadContent("/docs/mirascope/getting-started", "doc");
-      expect(fetchCallCount).toBe(1);
+      // Create loader with options
+      const loader = createContentLoader({ devMode: true });
 
-      // Second call - should use cache
-      await loader.loadContent("/docs/mirascope/getting-started", "doc");
-      expect(fetchCallCount).toBe(1); // Still 1, not incremented
+      // Use the loader
+      const content = await loader.loadContent("/docs/mirascope/getting-started", "doc");
+
+      // Validate that options were passed correctly
+      expect(mockFetch).toHaveBeenCalled();
+      expect(content).toBe("content via factory");
     });
   });
 });

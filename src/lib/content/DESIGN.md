@@ -4,7 +4,7 @@ This document outlines the architecture of the unified content system for handli
 
 ## System Overview
 
-The content system provides a unified approach to loading, processing, and rendering various types of content with a cohesive, maintainable architecture. The architecture follows domain-driven design principles with content-type specific modules and a composition-based approach.
+The content system provides a unified approach to loading, processing, and rendering various types of content with a cohesive, maintainable architecture. The architecture follows functional programming principles with content-type specific modules.
 
 ```mermaid
 graph TD
@@ -17,21 +17,16 @@ graph TD
     DocModule --> useContent
     PolicyModule --> useContent
     
-    BlogModule --> BlogHandler[Blog Handler]
-    DocModule --> DocHandler[Doc Handler]
-    PolicyModule --> PolicyHandler[Policy Handler]
-    
-    BlogHandler --> ContentUtils[Content Utils]
-    DocHandler --> ContentUtils
-    PolicyHandler --> ContentUtils
+    BlogModule --> ContentUtils[Content Utils]
+    DocModule --> ContentUtils
+    PolicyModule --> ContentUtils
     
     ContentUtils --> PathResolver[Path Resolver]
     ContentUtils --> MetadataService[Metadata Service]
-    ContentUtils --> ContentLoader[Content Loader]
+    ContentUtils --> LoadContent[loadContent Function]
     ContentUtils --> FrontmatterParser[Frontmatter Parser]
     ContentUtils --> MDXProcessor[MDX Processor]
     
-    ContentLoader --> ContentCache[Content Cache]
     MetadataService --> ContentTypes[Content Types]
     FrontmatterParser --> ContentTypes
     PathResolver --> ContentTypes
@@ -50,7 +45,6 @@ src/lib/content/
   ├── types.ts                 # Core shared type definitions
   ├── errors.ts                # Error type definitions
   ├── utils.ts                 # Shared utility functions
-  ├── content-cache.ts         # Caching implementation
   ├── content-loader.ts        # Content loading logic
   ├── frontmatter.ts           # Frontmatter parsing
   ├── mdx-processor.ts         # MDX processing
@@ -66,12 +60,12 @@ Each module is focused on its specific responsibility:
 The domain modules (blog.ts, docs.ts, policy.ts) contain:
 
 1. Domain-specific metadata type definitions
-2. Domain-specific content handler implementations
+2. Domain-specific content loading functions
 3. Public API hooks and functions for accessing content
 
 Key characteristics:
 - Each domain maintains its own metadata types that extend the base ContentMeta
-- Each implements the ContentHandler interface using composition of utility functions
+- Each provides a set of utility functions for content loading and processing
 - Each provides typed hooks and functions for components to use
 
 ### Core Types (types.ts)
@@ -116,17 +110,32 @@ export interface ContentResult<T extends ContentMeta = ContentMeta> {
   error: Error | null;
 }
 
-// Interface for content handlers
-export interface ContentHandler<T extends ContentMeta> {
-  getContent(path: string): Promise<Content<T>>;
-  getAllMeta(): Promise<T[]>;
-}
-
 // Type for content retrieval function
-export type GetContentFn<T extends ContentMeta> = (path: string) => Promise<Content<T>>;
+export type GetContentFn<T extends ContentMeta> = (
+  path: string, 
+  options?: { customFetch?: typeof fetch, devMode?: boolean }
+) => Promise<Content<T>>;
 
 // Type for metadata retrieval function
 export type GetMetaFn<T extends ContentMeta> = () => Promise<T[]>;
+```
+
+### Content Loading (content-loader.ts)
+
+The core function for loading content:
+
+```typescript
+/**
+ * Loads content for the given path and content type
+ */
+export async function loadContent(
+  path: string, 
+  contentType: ContentType, 
+  options?: {
+    customFetch?: typeof fetch,
+    devMode?: boolean
+  }
+): Promise<string>;
 ```
 
 ### Utilities (utils.ts)
@@ -135,19 +144,16 @@ Provides shared utility functions for all domain modules.
 
 ```typescript
 /**
- * Creates a cache key for content
- */
-export function createCacheKey(contentType: ContentType, path: string): string;
-
-/**
- * Load content by path with caching
+ * Load content by path
  */
 export async function loadContent<T extends ContentMeta>(
   path: string,
   contentType: ContentType,
-  loader: ContentLoader,
-  cache: ContentCache,
   createMeta: (frontmatter: Record<string, any>, path: string) => T,
+  options?: {
+    customFetch?: typeof fetch,
+    devMode?: boolean
+  },
   postprocessContent?: (content: string) => string
 ): Promise<Content<T>>;
 ```
@@ -168,59 +174,53 @@ export function useContent<T extends ContentMeta>(
 
 ### Domain Implementations
 
-Each domain implements its handler using composition:
+Each domain provides a set of functions:
 
 ```typescript
-// Example from blog.ts
-export interface BlogMeta extends ContentMeta {
-  date: string;
-  author: string;
-  readTime: string;
+// Example from policy.ts
+export interface PolicyMeta extends ContentMeta {
   lastUpdated?: string;
 }
 
-export type BlogContent = Content<BlogMeta>;
+export type PolicyContent = Content<PolicyMeta>;
 
-class BlogHandler implements ContentHandler<BlogMeta> {
-  private loader: ContentLoader;
-  private cache: ContentCache;
-  private contentType: "blog" = "blog";
+/**
+ * Create metadata from frontmatter for policies
+ */
+function createPolicyMeta(frontmatter: Record<string, any>, path: string): PolicyMeta;
 
-  constructor(loader?: ContentLoader, cache?: ContentCache) {
-    this.loader = loader || createContentLoader({ cache });
-    this.cache = cache || createContentCache();
-  }
+/**
+ * Clean up source mappings in policy content
+ */
+function cleanupPolicyContent(content: string): string;
 
-  async getContent(slug: string): Promise<BlogContent> {
-    const normalizedSlug = this.normalizePath(slug);
-    return loadContent<BlogMeta>(
-      normalizedSlug,
-      this.contentType,
-      this.loader,
-      this.cache,
-      this.createMeta
-    );
-  }
+/**
+ * Get policy content by path
+ */
+export function getPolicyContent(
+  path: string, 
+  options?: ContentLoaderOptions
+): Promise<PolicyContent>;
 
-  async getAllMeta(): Promise<BlogMeta[]> {
-    // Implementation that returns all blog posts metadata
-  }
+/**
+ * Hook for loading and rendering a policy page
+ */
+export function usePolicy(path: string): ContentResult<PolicyMeta>;
 
-  // Private helper methods
-  private normalizePath(slug: string): string;
-  private createMeta(frontmatter: Record<string, any>, path: string): BlogMeta;
-  private getPostsList(): Promise<BlogMeta[]>;
-}
+/**
+ * Get a policy by path
+ */
+export function getPolicy(path: string, options?: ContentLoaderOptions): Promise<PolicyContent>;
 
-// Public API
-export const getBlogContent: GetContentFn<BlogMeta> = (slug: string): Promise<BlogContent>;
-export function useBlogPost(slug: string): ContentResult<BlogMeta>;
-export function getAllBlogMeta(): Promise<BlogMeta[]>;
+/**
+ * Get all policy metadata
+ */
+export function getAllPolicyMeta(options?: ContentLoaderOptions): Promise<PolicyMeta[]>;
 ```
 
 ## Data Flow
 
-1. Component calls domain-specific hook (e.g. `useBlogPost(slug)`)
+1. Component calls domain-specific hook (e.g. `usePolicy(path)`)
 2. Hook calls `useContent` with the domain's `getContent` function
 3. The `useContent` hook:
    - Manages loading state and error handling
@@ -230,8 +230,7 @@ export function getAllBlogMeta(): Promise<BlogMeta[]>;
    - Calls the shared `loadContent` utility
    - Passes domain-specific methods for metadata creation and content processing
 5. The `loadContent` utility:
-   - Checks the cache
-   - Loads raw content via the ContentLoader
+   - Loads raw content via the fetch implementation (browser fetch or customFetch)
    - Extracts frontmatter
    - Creates metadata using the domain-specific function
    - Processes MDX content
@@ -240,13 +239,12 @@ export function getAllBlogMeta(): Promise<BlogMeta[]>;
 
 ## Caching Strategy
 
-The content cache is designed for optimal performance:
+TanStack Router provides built-in caching that makes our custom caching unnecessary:
 
-- Each handler maintains its own cache instance
-- Cache keys are domain-specific for better isolation
-- Both metadata and content are cached
-- Development mode uses shorter cache times
-- Production uses pre-generated content with longer cache times
+- Router automatically caches loader results
+- Revalidation and cache invalidation are handled by TanStack Router
+- Cache time can be configured at the route level
+- Concurrent requests are de-duplicated automatically
 
 ## MDX Processing
 
@@ -267,11 +265,12 @@ Content goes through a multi-step processing pipeline:
 
 ## Design Principles
 
-1. **Domain-Driven Design**: Each content type has its own module with specific logic
-2. **Composition over Inheritance**: Handlers use shared utilities rather than inheritance
+1. **Functional Programming**: Pure functions with clear inputs and outputs
+2. **Composition**: Small, focused functions that can be composed together
 3. **Separation of Concerns**: Clear responsibilities for each module
 4. **Type Safety**: Full TypeScript type coverage for improved reliability
-5. **Performance Focus**: Efficient caching and processing
+5. **Performance Focus**: Leverage TanStack Router's caching for efficient processing
+6. **Dependency Injection**: Environment-specific concerns handled via options
 
 ## Future Extensions
 
