@@ -32,6 +32,9 @@ const guidesMeta: DocSection = {
     agents: {
       title: "Agents",
       items: {
+        "web-search-agent": {
+          title: "Web Search Agent",
+        },
         "blog-writing-agent": {
           title: "Agent Executor: Blog Writing",
         },
@@ -60,6 +63,9 @@ const guidesMeta: DocSection = {
         },
         "evaluating-web-search-agent": {
           title: "Evaluating Web Search Agent with LLM",
+        },
+        "evaluating-sql-agent": {
+          title: "Evaluating Generating SQL with LLM",
         },
       },
     },
@@ -127,6 +133,9 @@ const guidesMeta: DocSection = {
         },
         "text-translation": {
           title: "Text Translation",
+        },
+        "knowledge-graph": {
+          title: "Knowledge Graph",
         },
       },
     },

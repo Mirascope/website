@@ -718,5 +718,20 @@
     "route": "/docs/mirascope/guides/getting-started/tools-and-agents",
     "title": "Tools & Agents | Mirascope",
     "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/agents/web-search-agent": {
+    "route": "/docs/mirascope/guides/agents/web-search-agent",
+    "title": "Web Search Agent | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/evals/evaluating-sql-agent": {
+    "route": "/docs/mirascope/guides/evals/evaluating-sql-agent",
+    "title": "Evaluating Generating SQL with LLM | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/more-advanced/knowledge-graph": {
+    "route": "/docs/mirascope/guides/more-advanced/knowledge-graph",
+    "title": "Knowledge Graph | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
   }
 }
