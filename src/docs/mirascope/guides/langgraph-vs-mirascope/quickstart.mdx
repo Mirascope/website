@@ -496,12 +496,11 @@ Chatbot().run()
 ```
 
 
-<div class="admonition note">
-<p class="admonition-title">Real-World Difference</p>
+<Note title="Real-World Difference">
 <p>
 In the above example, we are getting the "Human" input in the console for demonstration purposes. In a real-world use-case, this would be hidden from the user and simply mention that the AI is requesting assistance while actually requesting assistance in the background (where the user would not see this interaction).
 </p>
-</div>
+</Note>
 
 ## Part 4: Time Travel also known as list splicing
 
@@ -530,12 +529,11 @@ chatbot.history = chatbot.history[:-4]
 
 While in this example, we are calling the run function multiple times, there is nothing stopping you from updating the history inside the Chatbot. Note that in real-world applications, conversation history is typically stored in a cache, database, or other persistent storage systems, so add `computed_fields` as necessary to retrieve from storage.
 
-<div class="admonition note">
-<p class="admonition-title">Dynamic, Relevant History</p>
+<Note title="Dynamic, Relevant History">
 <p>
 We have seen cases where the history is retrieved dynamically from e.g. a vector store. This enables injecting only relevant history along with each call, which can help reduce token usage and keep the assistant's responses more relevant.
 </p>
-</div>
+</Note>
 
 Congratulations! You've now learned how to create a sophisticated chatbot using Mirascope and simple Python code. This approach demonstrates that powerful AI applications can be built with minimal reliance on complex abstractions or pre-built tools, giving you greater flexibility and control over your project's architecture.
 
