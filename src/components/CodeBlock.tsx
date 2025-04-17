@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { highlightCode } from "@/lib/code-highlight";
+import analyticsManager from "@/lib/services/analytics";
 
 interface CodeBlockProps {
   code: string;
@@ -47,6 +48,36 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
     navigator.clipboard.writeText(code);
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2000);
+
+    // Track code copy event
+    const pagePath = window.location.pathname;
+
+    // Find position of this code block on the page
+    let blockPosition = 0;
+    if (codeRef.current) {
+      const allCodeBlocks = document.querySelectorAll(".code-block-wrapper");
+      for (let i = 0; i < allCodeBlocks.length; i++) {
+        if (allCodeBlocks[i] === codeRef.current) {
+          blockPosition = i + 1; // Make it 1-based for readability
+          break;
+        }
+      }
+    }
+
+    // Extract product from URL path if in docs section
+    let product = "unknown";
+    const docsMatch = pagePath.match(/^\/docs\/([^/]+)/);
+    if (docsMatch && docsMatch[1]) {
+      product = docsMatch[1];
+    }
+
+    analyticsManager.trackEvent("select_content", {
+      content_type: "code_snippet",
+      item_id: `${pagePath}#code-${blockPosition}`,
+      language: language || "text",
+      product: product,
+      page_path: pagePath,
+    });
   };
 
   // If loading, just show the code without syntax highlighting to maintain size
