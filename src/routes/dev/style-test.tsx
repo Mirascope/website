@@ -141,7 +141,7 @@ function StyleTestPage() {
         {isLoading && <LoadingContent spinnerClassName="h-12 w-12" fullHeight={false} />}
 
         {error && (
-          <div className="p-4 border border-red-500 rounded-md bg-red-50 text-red-800">
+          <div className="p-4 border border-border rounded-md bg-muted text-foreground">
             <h3 className="font-bold mb-2">Error loading content</h3>
             <p>{error.message}</p>
           </div>
