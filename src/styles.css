@@ -88,12 +88,6 @@ pre,
   /* Font size for code blocks is defined in .shiki */
 }
 
-.mdx-content:not(.fun-mode) h1,
-.mdx-content:not(.fun-mode) h2,
-.mdx-content:not(.fun-mode) h3,
-.mdx-content:not(.fun-mode) h4,
-.mdx-content:not(.fun-mode) h5,
-.mdx-content:not(.fun-mode) h6,
 .mdx-content:not(.fun-mode) p,
 .mdx-content:not(.fun-mode) strong,
 .mdx-content:not(.fun-mode) em,
@@ -796,6 +790,12 @@ header button:not(.font-toggle-button),
 .mdx-content.fun-mode * {
   font-family: "Williams Handwriting", cursive !important;
   font-size: 1.2rem !important;
+}
+
+.mdx-content h1,
+.mdx-content h2,
+.mdx-content h3 {
+  font-family: "Williams Handwriting", cursive !important;
 }
 
 /* Fun mode - make sure code elements also use handwriting with highest specificity */
