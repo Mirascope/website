@@ -68,7 +68,13 @@ const Logo: React.FC<LogoProps> = ({
       </div>
 
       {withText && (
-        <h1 className={cn(selectedSize.text, "text-primary mb-0 font-handwriting", textClassName)}>
+        <h1
+          className={cn(
+            selectedSize.text,
+            "text-mirascope-purple mb-0 font-handwriting",
+            textClassName
+          )}
+        >
           Mirascope
         </h1>
       )}
