@@ -1,4 +1,4 @@
-import { getBlogContent } from "./blog";
+import { getBlogContent, getAllBlogMeta } from "./blog";
 import { getDocContent } from "./docs";
 import { getPolicy } from "./policy";
 import { createContentLoader } from "./loader-utils";
@@ -15,3 +15,8 @@ export const docLoader = createContentLoader(getDocContent, "doc");
 
 // Blog loaders
 export const blogLoader = createContentLoader(getBlogContent, "blog");
+
+// Blog list loader
+export const blogListLoader = () => {
+  return getAllBlogMeta();
+};

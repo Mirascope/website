@@ -1,5 +1,5 @@
-import { createFileRoute, useParams, Link } from "@tanstack/react-router";
-import { useState, useEffect, Suspense } from "react";
+import { createFileRoute, useParams, Link, useLoaderData } from "@tanstack/react-router";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, Sparkles, Clipboard, Check } from "lucide-react";
 import { MDXRenderer } from "@/components/MDXRenderer";
@@ -9,49 +9,41 @@ import TableOfContents from "@/components/TableOfContents";
 import useFunMode from "@/lib/hooks/useFunMode";
 import useSEO from "@/lib/hooks/useSEO";
 import { cn } from "@/lib/utils";
-import { getBlogContent } from "@/lib/content/blog";
+import { blogLoader } from "@/lib/content/loaders";
 import analyticsManager from "@/lib/services/analytics";
+import type { BlogContent } from "@/lib/content/blog";
 
-// Create a resource cache to store suspense data
-const cache = new Map();
+export const Route = createFileRoute("/blog/$slug")({
+  component: BlogPostPage,
 
-// Helper to create suspense resources
-function createResource<T>(key: string, fetcher: () => Promise<T>) {
-  if (!cache.has(key)) {
-    let data: T | null = null;
-    let error: Error | null = null;
-    let promise: Promise<void> | null = null;
+  // Use the blog loader to fetch post content
+  loader: ({ params }) => blogLoader({ params }),
 
-    const resource = {
-      read() {
-        if (error) throw error;
-        if (data) return data;
-        if (!promise) {
-          promise = fetcher()
-            .then((result) => {
-              data = result;
-            })
-            .catch((e) => {
-              error = e instanceof Error ? e : new Error(String(e));
-            });
-        }
-        throw promise;
-      },
-    };
+  // Configure loading state
+  pendingComponent: () => (
+    <div className="flex justify-center">
+      <div className="flex mx-auto w-full max-w-7xl px-4">
+        <div className="w-56 flex-shrink-0 hidden lg:block"></div>
+        <LoadingContent className="flex-1 min-w-0" fullHeight={true} />
+        <div className="w-56 flex-shrink-0 hidden lg:block"></div>
+      </div>
+    </div>
+  ),
 
-    cache.set(key, resource);
-  }
+  // Configure error handling
+  errorComponent: ({ error }) => {
+    const { slug } = useParams({ from: "/blog/$slug" });
+    return (
+      <BlogPostError slug={slug} error={error instanceof Error ? error.message : String(error)} />
+    );
+  },
+});
 
-  return cache.get(key);
-}
+function BlogPostPage() {
+  const { slug } = useParams({ from: "/blog/$slug" });
 
-// Blog post content component that uses Suspense
-function BlogPostContent({ slug }: { slug: string }) {
-  // Create resource for the blog post
-  const postResource = createResource(`blog:${slug}`, () => getBlogContent(slug));
-
-  // Read the post (this will throw and suspend if data isn't ready)
-  const post = postResource.read();
+  // Access the loaded content directly
+  const post = useLoaderData({ from: "/blog/$slug", structuralSharing: false }) as BlogContent;
 
   const [tocOpen, setTocOpen] = useState(false);
   const [ogImage, setOgImage] = useState<string | undefined>(undefined);
@@ -377,39 +369,4 @@ function BlogPostError({ slug, error }: { slug: string; error: string }) {
       </div>
     </div>
   );
-}
-
-export const Route = createFileRoute("/blog/$slug")({
-  component: BlogPostPage,
-  loader: ({ params }) => {
-    const { slug } = params;
-    return { slug };
-  },
-});
-
-function BlogPostPage() {
-  const { slug } = useParams({ from: "/blog/$slug" });
-
-  // Custom error boundary pattern using React.Suspense and try/catch
-  try {
-    return (
-      <Suspense
-        fallback={
-          <div className="flex justify-center">
-            <div className="flex mx-auto w-full max-w-7xl px-4">
-              <div className="w-56 flex-shrink-0 hidden lg:block"></div>
-              <LoadingContent className="flex-1 min-w-0" fullHeight={true} />
-              <div className="w-56 flex-shrink-0 hidden lg:block"></div>
-            </div>
-          </div>
-        }
-      >
-        <BlogPostContent slug={slug} />
-      </Suspense>
-    );
-  } catch (error) {
-    return (
-      <BlogPostError slug={slug} error={error instanceof Error ? error.message : String(error)} />
-    );
-  }
 }
