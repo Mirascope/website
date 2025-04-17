@@ -1,4 +1,5 @@
 import React from "react";
+import LoadingContent from "./LoadingContent";
 import { MDXRenderer } from "@/components/MDXRenderer";
 import { type DocContent } from "@/lib/content/docs";
 
@@ -27,7 +28,7 @@ const MainContent: React.FC<MainContentProps> = ({ document, funMode }) => {
               useFunMode={funMode}
             />
           ) : (
-            <div className="animate-pulse bg-gray-100 h-40 rounded-md"></div>
+            <LoadingContent spinnerClassName="h-8 w-8" fullHeight={false} />
           )}
         </div>
       </div>

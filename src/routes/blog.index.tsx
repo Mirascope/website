@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { getAllBlogMeta, type BlogMeta } from "@/lib/content/blog";
 import useSEO from "@/lib/hooks/useSEO";
+import { LoadingContent } from "@/components/docs";
 
 // Posts per page
 const POSTS_PER_PAGE = 4;
@@ -72,7 +73,7 @@ function BlogPage() {
             <div className="mb-10 min-h-[700px]">
               {loading ? (
                 <div className="flex justify-center items-center h-64">
-                  <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+                  <LoadingContent spinnerClassName="h-12 w-12" fullHeight={false} />
                 </div>
               ) : posts.length === 0 ? (
                 <div className="text-center py-12">

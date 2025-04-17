@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { LoadingContent } from "@/components/docs";
 import mermaid, { type MermaidConfig } from "mermaid";
 
 interface MermaidDiagramProps {
@@ -173,11 +174,7 @@ export function MermaidDiagram({ chart, className = "" }: MermaidDiagramProps) {
       {svgContent ? (
         <div dangerouslySetInnerHTML={{ __html: svgContent }} />
       ) : (
-        <div className="animate-pulse flex space-x-4">
-          <div className="flex-1 space-y-4 py-1">
-            <div className="h-40 bg-gray-200 dark:bg-gray-700 sunset:bg-orange-200 rounded"></div>
-          </div>
-        </div>
+        <LoadingContent spinnerClassName="h-12 w-12" fullHeight={false} />
       )}
     </div>
   );

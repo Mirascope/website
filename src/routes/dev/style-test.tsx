@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { LoadingContent } from "@/components/docs";
 import DevLayout from "@/components/dev/DevLayout";
 import { MDXRenderer } from "@/components/MDXRenderer";
 import { useState, useEffect } from "react";
@@ -137,9 +138,7 @@ function StyleTestPage() {
         />
       </div>
       <div className="container py-8">
-        {isLoading && (
-          <div className="animate-pulse bg-gray-100 dark:bg-gray-800 h-40 rounded-md"></div>
-        )}
+        {isLoading && <LoadingContent spinnerClassName="h-12 w-12" fullHeight={false} />}
 
         {error && (
           <div className="p-4 border border-red-500 rounded-md bg-red-50 text-red-800">
