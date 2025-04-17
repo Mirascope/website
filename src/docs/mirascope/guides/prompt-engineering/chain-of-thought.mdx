@@ -6,13 +6,12 @@ title: Chain of Thought
 
 [Chain of Thought](https://arxiv.org/pdf/2201.11903) (CoT) is a common prompt engineering technique which asks the LLM to step through its reasoning and thinking process to answer a question. In its simplest form, it can be implemented by asking asking the LLM to step through a problem step by step, but is more effective when you leverage examples and patterns of reasoning similar to your query in a few shot prompt. Chain of Thought is most effective for mathematical and reasoning tasks.
 
-<div class="admonition tip">
-<p class="admonition-title">Mirascope Concepts Used</p>
+<Info title="Mirascope Concepts Used">
 <ul>
 <li><a href="../../../../learn/prompts/">Prompts</a></li>
 <li><a href="../../../../learn/calls/">Calls</a></li>
 </ul>
-</div>
+</Info>
 
 ## Zero Shot CoT
 
@@ -135,8 +134,7 @@ print(call(query=prompt, num_examples=len(few_shot_examples)))
     The answer is $8.
 
 
-<div class="admonition tip">
-<p class="admonition-title">Effective Chain of Thought Usage</p>
+<Info title="Effective Chain of Thought Usage">
 <ul>
 <li><strong>Encourage Step-by-Step Thinking</strong>: Explicitly instruct the LLM to break down the problem into small steps.</li>
 <li><strong>Provide Relevant Examples</strong>: In few-shot learning, use examples that are similar to the problem you want to solve.</li>
@@ -144,6 +142,6 @@ print(call(query=prompt, num_examples=len(few_shot_examples)))
 <li><strong>Apply to Complex Problems</strong>: Chain of Thought is particularly effective for problems that require multiple steps or complex reasoning.</li>
 <li><strong>Validate Results</strong>: Review the LLM's reasoning process and verify that each step is logical.</li>
 </ul>
-</div>
+</Info>
 
 By leveraging the Chain of Thought technique, you can make the LLM's reasoning process more transparent and obtain more accurate and explainable answers to complex problems. This technique is particularly useful for mathematical problems and tasks that require multi-step reasoning.

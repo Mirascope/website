@@ -6,13 +6,12 @@ title: Plan and Solve
 
 [Plan and Solve](https://arxiv.org/pdf/2305.04091) is another variation of zero-shot [Chain of Thought](https://arxiv.org/abs/2201.11903) whereby the LLM is asked to reason with the improved prompt "Q: {prompt} A: Let's first understand the problem and devise a plan to solve it. Then, let's carry out the plan and solve the problem step by step". Plan-and-solve has shown improvements compared to standard CoT in reasoning and mathematical tasks.
 
-<div class="admonition tip">
-<p class="admonition-title">Mirascope Concepts Used</p>
+<Info title="Mirascope Concepts Used">
 <ul>
 <li><a href="../../../../learn/prompts/">Prompts</a></li>
 <li><a href="../../../../learn/calls/">Calls</a></li>
 </ul>
-</div>
+</Info>
 
 
 ```python
@@ -56,8 +55,7 @@ print(call(query=prompt, pas_prompt=True))
     Therefore, the cafeteria ended up with **40 extra apples** after the students took their fruit.
 
 
-<div class="admonition tip">
-<p class="admonition-title">Effective Plan and Solve Usage</p>
+<Info title="Effective Plan and Solve Usage">
 <ul>
 <li><strong>Encourage Structured Thinking</strong>: The Plan and Solve approach promotes a more organized problem-solving process, starting with understanding and planning before execution.</li>
 <li><strong>Break Down Complex Problems</strong>: Use this technique for problems that benefit from being broken down into smaller, manageable steps.</li>
@@ -65,7 +63,7 @@ print(call(query=prompt, pas_prompt=True))
 <li><strong>Enhance Step-by-Step Reasoning</strong>: The explicit instruction to solve the problem step by step can result in clearer, more detailed explanations.</li>
 <li><strong>Apply to Various Domains</strong>: While particularly effective for mathematical and reasoning tasks, Plan and Solve can be adapted for a wide range of problem types.</li>
 </ul>
-</div>
+</Info>
 
 Plan and Solve enhances the standard Chain of Thought approach by explicitly structuring the problem-solving process into distinct phases: understanding, planning, and execution. This structured approach can lead to more comprehensive and accurate solutions, especially for complex problems that benefit from careful planning before execution. By encouraging the LLM to first grasp the problem and outline a strategy, Plan and Solve can result in more thoughtful and well-organized responses across various types of reasoning and mathematical tasks.
 

@@ -6,13 +6,12 @@ title: Thread of Thought
 
 [Thread of Thought](https://arxiv.org/pdf/2311.08734) (THoT) is an extension of zero-shot [Chain of Thought](../chain_of_thought) where the request to walk through the reasoning steps is improved. The paper tests the results of various phrases, but finds the best to be "Walk me through this context in manageable parts step by step, summarizing and analyzing as we go." It is applicable to reasoning and mathematical tasks just like CoT, but is most useful for tasks with retrieval / large amounts of context and Q and A on this context.
 
-<div class="admonition tip">
-<p class="admonition-title">Mirascope Concepts Used</p>
+<Info title="Mirascope Concepts Used">
 <ul>
 <li><a href="../../../../learn/prompts/">Prompts</a></li>
 <li><a href="../../../../learn/calls/">Calls</a></li>
 </ul>
-</div>
+</Info>
 
 
 
@@ -114,8 +113,7 @@ Thus, the answer to the question "Where was Apple founded?" is **Los Altos, Cali
 ```
 
 
-<div class="admonition tip">
-<p class="admonition-title">Effective Thread of Thought Usage</p>
+<Info title="Effective Thread of Thought Usage">
 <ul>
 <li><strong>Use with Large Context</strong>: THoT is particularly effective when dealing with large amounts of retrieved information or context.</li>
 <li><strong>Encourage Step-by-Step Analysis</strong>: The key phrase "Walk me through this context in manageable parts step by step, summarizing and analyzing as we go" prompts the LLM to break down and analyze information incrementally.</li>
@@ -123,6 +121,6 @@ Thus, the answer to the question "Where was Apple founded?" is **Los Altos, Cali
 <li><strong>Combine with Retrieval</strong>: THoT works well in combination with retrieval augmented generation (RAG) techniques.</li>
 <li><strong>Review Intermediate Steps</strong>: Examine the LLM's step-by-step analysis to ensure it's properly interpreting and synthesizing the context.</li>
 </ul>
-</div>
+</Info>
 
 Thread of Thought enhances the zero-shot Chain of Thought approach by providing a more structured way for the LLM to process and analyze large amounts of context. This technique is particularly valuable for tasks that involve information retrieval and synthesis, allowing for more thorough and transparent reasoning in complex question-answering scenarios.
