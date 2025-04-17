@@ -6,13 +6,12 @@ title: Sim to M: Enhancing LLM Reasoning with Perspective-Taking
 
 This recipe demonstrates how to implement the Sim to M (Simulation Theory of Mind) technique using Large Language Models (LLMs) with Mirascope. Sim to M is a prompt engineering method that enhances an LLM's ability to reason about complex situations involving multiple perspectives.
 
-<details class="tip">
-<summary>Mirascope Concepts Used</summary>
+<Info title="Mirascope Concepts Used" collapsible={true} defaultCollapsed={true}>
 <ul>
 <li><a href="../../../../learn/prompts/">Prompts</a></li>
 <li><a href="../../../../learn/calls/">Calls</a></li>
 </ul>
-</details>
+</Info>
 
 <Note title="Background">
 <p><a href="https://arxiv.org/pdf/2311.10227">Sim to M</a> is a prompt engineering technique for dealing with complex situations which involve multiple perspectives. First ask the LLM to establish the facts from one person's perspective, then answer the question based only on that perspective. This approach can significantly improve the LLM's ability to reason about situations involving different viewpoints or limited information.</p>

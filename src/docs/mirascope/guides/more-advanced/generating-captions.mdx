@@ -39,12 +39,11 @@ os.environ["OPENAI_API_KEY"] = "YOUR_API_KEY"
 
 ## Generate Captions
 
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
+<Warning title="Warning">
 <p>
 This recipe will only work for those which support images (OpenAI, Gemini, Anthropic) as of 8/13/2024. Be sure to check if your provider has multimodal support.
 </p>
-</div>
+</Warning>
 
 
 With OpenAI’s multimodal capabilities, image inputs are treated just like text inputs, which means we can use it as context to ask questions or make requests. For the sake of reproducibility, we will get our image from a URL to save you the hassle of having to find and download an image. The image is [a public image from BBC Science of a wolf](https://c02.purpledshub.com/uploads/sites/41/2023/01/How-to-see-the-Wolf-Moon-in-2023--4bb6bb7.jpg?w=1880&webp=1) in front of the moon.

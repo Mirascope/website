@@ -8,14 +8,13 @@ This recipe demonstrates how to implement Skeleton of Thought, a speed-oriented 
 
 This recipe demonstrates how to implement the Skeleton of Thought technique using Large Language Models (LLMs) with Mirascope.
 
-<details class="tip">
-<summary>Mirascope Concepts Used</summary>
+<Info title="Mirascope Concepts Used" collapsible={true} defaultCollapsed={true}>
 <ul>
 <li><a href="../../../../learn/prompts/">Prompts</a></li>
 <li><a href="../../../../learn/calls/">Calls</a></li>
 <li><a href="../../../../learn/response_models/">Response Models</a></li>
 </ul>
-</details>
+</Info>
 
 <Note title="Background">
 <p><a href="https://arxiv.org/pdf/2307.15337">Skeleton of Thought</a> is a prompt-engineering technique that is speed-oriented as opposed to the quality of the response. To expedite the response from a model, make an initial call to create a "skeleton" of the problem that outlines its solution in bulletpoints (without further explanations), then make an individual call with each of the subpoints in parallel before reconstructing the answer at the end.</p>

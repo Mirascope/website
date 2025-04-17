@@ -14,19 +14,17 @@ This guide demonstrates techniques to perform Named Entity Recognition (NER) usi
 </ul>
 </Info>
 
-<div class="admonition info">
-<p class="admonition-title">Background</p>
+<Info title="Background">
 <p>
 Named Entity Recognition is a subtask of information extraction that seeks to locate and classify named entities in text into predefined categories such as person names, organizations, locations, etc. LLMs have revolutionized NER by enabling more context-aware and hierarchical entity recognition, going beyond traditional rule-based or statistical methods.
 </p>
-</div>
+</Info>
 
-<div class="admonition warning">
-<p class="admonition-title">LLMs are not trained specifically for NER</p>
+<Warning title="LLMs are not trained specifically for NER">
 <p>
 It's worth noting that there are models that are trained specifically for NER (such as GLiNER). These models are often much smaller and cheapr and can often get better results for the right tasks. LLMs should generally be reserved for quick and dirty prototyping for NER or for tasks that may require a more nuanced, open-ended language-based approach. For example, an NER system that accepts user input to guide the system by be easier to build using LLMs than a traditionally trained NER-specific model.
 </p>
-</div>
+</Warning>
 
 ## Setup
 
