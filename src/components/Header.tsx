@@ -81,7 +81,7 @@ export default function Header() {
           <Logo
             size="small"
             withText={true}
-            textClassName={cn(isLandingPage ? "text-white" : "text-primary")}
+            textClassName={cn(isLandingPage ? "text-white" : "text-mirascope-purple")}
           />
         </Link>
 

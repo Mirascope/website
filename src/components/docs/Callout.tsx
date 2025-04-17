@@ -23,8 +23,8 @@ const calloutStyles: Record<
     Icon: InfoIcon,
   },
   warning: {
-    containerClass: "border-secondary",
-    iconClass: "bg-secondary text-foreground",
+    containerClass: "border-button-primary",
+    iconClass: "bg-orange-500 text-foreground",
     Icon: AlertTriangle,
   },
   info: {
@@ -81,7 +81,7 @@ export function Callout({
       {showHeader && (
         <div
           className={cn(
-            "flex items-center gap-3 py-2 px-3 border-b border-accent bg-muted rounded-t-lg",
+            "flex items-center gap-3 py-2 px-3 border-b border-accent bg-primary rounded-t-lg",
             collapsible && "cursor-pointer"
           )}
           onClick={collapsible ? () => setIsCollapsed(!isCollapsed) : undefined}
@@ -89,7 +89,9 @@ export function Callout({
           <div className={cn("rounded-full flex items-center justify-center w-6 h-6", iconClass)}>
             <Icon className="w-3.5 h-3.5" />
           </div>
-          <div className="font-semibold text-muted-foreground text-base flex-1">{displayTitle}</div>
+          <div className="font-semibold text-primary-foreground text-base flex-1">
+            {displayTitle}
+          </div>
           {collapsible && (
             <div className="text-accent-foreground">
               <svg

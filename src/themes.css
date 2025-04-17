@@ -2,6 +2,10 @@
 
 /* Base theme definition */
 @theme {
+  /* Shared brand colors */
+  --color-mirascope-purple: oklch(0.5854 0.2041 277.12); /* Mirascope purple */
+  --color-lilypad-green: var(--color-emerald-500); /* I think this worked well */
+
   /* Theme colors */
 
   /* Base */
@@ -9,19 +13,19 @@
   --color-foreground: oklch(0.1 0.2041 282.8); /* Dark text - keep as is */
 
   /* Components */
-  --color-button-primary: oklch(0.5254 0.2041 277.12);
-  --color-primary: oklch(0.5854 0.2041 277.12);
-  --color-primary-foreground: oklch(0.985 0 0); /* Keep as is */
+  --color-button-primary: oklch(0.5254 0.2041 277.12); /* Darker purple */
+  --color-primary: var(--color-mirascope-purple);
+  --color-primary-foreground: oklch(0.985 0 0);
 
   --color-secondary: var(--color-emerald-500);
-  --color-secondary-foreground: oklch(0.985 0 0); /* Keep as is */
+  --color-secondary-foreground: oklch(0.985 0 0);
 
   --color-code-background: var(--color-indigo-50);
 
-  --color-muted: var(--color-slate-300);
+  --color-muted: var(--color-gray-200);
   --color-muted-foreground: var(--color-slate-700);
 
-  --color-accent: var(--color-indigo-50);
+  --color-accent: var(--color-indigo-200);
   --color-accent-foreground: var(--color-indigo-900);
 
   /* Utility - keep as is */
@@ -41,9 +45,9 @@
   --color-primary: oklch(0.5854 0.2041 277.12); /* Keep your brand purple */
   --color-button-primary: var(--color-indigo-900);
 
-  --color-primary-foreground: oklch(0.95 0 0);
+  --color-primary-foreground: var(--color-slate-900);
 
-  --color-secondary: var(--color-emerald-500);
+  --color-secondary: var(--color-emerald-800);
   --color-secondary-foreground: oklch(0.95 0 0);
 
   --color-code-background: var(--color-slate-950);
