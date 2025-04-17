@@ -98,11 +98,11 @@ function BlogPage() {
                             <p className="text-sm text-muted-foreground mb-4 select-none">
                               {post.date} · {post.readTime} · By {post.author}
                             </p>
-                            <p className="text-accent-foreground mb-4 select-none line-clamp-3">
+                            <p className="text-foreground mb-4 select-none line-clamp-3">
                               {post.description}
                             </p>
                           </div>
-                          <span className="text-foreground group-hover:text-primary transition-colors font-medium mt-auto">
+                          <span className="text-accent-foreground group-hover:text-primary transition-colors font-medium mt-auto">
                             Read more
                           </span>
                         </div>
