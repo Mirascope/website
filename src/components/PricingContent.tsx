@@ -37,8 +37,8 @@ const FeatureRow = ({
                     <Check size={12} className="text-[#2d8031]" />
                   </div>
                 ) : (
-                  <div className="rounded-full p-1 bg-gray-100 dark:bg-gray-800">
-                    <X size={12} className="text-gray-400" />
+                  <div className="rounded-full p-1 bg-muted">
+                    <X size={12} className="text-muted-foreground" />
                   </div>
                 )}
               </div>
@@ -57,8 +57,8 @@ const FeatureRow = ({
                     <Check size={12} className="text-[#2d8031]" />
                   </div>
                 ) : (
-                  <div className="rounded-full p-1 bg-gray-100 dark:bg-gray-800">
-                    <X size={12} className="text-gray-400" />
+                  <div className="rounded-full p-1 bg-muted">
+                    <X size={12} className="text-muted-foreground" />
                   </div>
                 )}
               </div>
@@ -100,18 +100,15 @@ const PricingTier = ({
       )}
     >
       <h3
-        className={cn(
-          "text-xl font-semibold mb-2",
-          isGreen ? "text-[#2d8031]" : "text-gray-900 dark:text-white"
-        )}
+        className={cn("text-xl font-semibold mb-2", isGreen ? "text-[#2d8031]" : "text-foreground")}
       >
         {name}
       </h3>
-      <p className="text-gray-600 dark:text-gray-300 mb-5">{description}</p>
+      <p className="text-muted-foreground mb-5">{description}</p>
       <div className="mb-6">
-        <span className="text-3xl font-bold dark:text-white">{price}</span>
+        <span className="text-3xl font-bold text-foreground">{price}</span>
         {price !== "TBD" && price !== "N/A" && (
-          <span className="text-sm text-gray-500 dark:text-gray-400 ml-1">/ month</span>
+          <span className="text-sm text-muted-foreground ml-1">/ month</span>
         )}
       </div>
       <a
@@ -120,7 +117,7 @@ const PricingTier = ({
           "block w-full py-2 px-4 rounded-md text-center transition-colors",
           isGreen
             ? "bg-[#2d8031] text-white hover:bg-[#246a29]"
-            : "bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+            : "bg-muted text-foreground hover:bg-muted/80"
         )}
       >
         {buttonText}
@@ -192,12 +189,12 @@ const PricingContent: React.FC<PricingContentProps> = ({ className, hideTitle = 
     <div className={cn("py-6 sm:py-8 px-2 sm:px-4", className)}>
       <div className="w-full max-w-[100%] mx-auto">
         {!hideTitle && (
-          <h1 className="text-3xl sm:text-4xl font-bold mb-4 dark:text-white">Lilypad Pricing</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold mb-4 text-foreground">Lilypad Pricing</h1>
         )}
-        <p className="text-lg sm:text-xl text-gray-700 dark:text-gray-300 w-full mb-2">
+        <p className="text-lg sm:text-xl text-foreground w-full mb-2">
           Get started with the Free plan today.
         </p>
-        <p className="text-sm sm:text-md text-gray-600 dark:text-gray-400 w-full mb-6 sm:mb-8 italic">
+        <p className="text-sm sm:text-md text-muted-foreground w-full mb-6 sm:mb-8 italic">
           No credit card required.
         </p>
 
@@ -224,7 +221,7 @@ const PricingContent: React.FC<PricingContentProps> = ({ className, hideTitle = 
               <div className="bg-background border border-border rounded-lg shadow-sm overflow-hidden">
                 <div className="px-6 py-8 bg-background">
                   <div className="flex items-center gap-2 mb-2">
-                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Pro</h3>
+                    <h3 className="text-xl font-semibold text-foreground">Pro</h3>
                     <Tooltip>
                       <TooltipTrigger>
                         <Info size={16} className="text-[#2d8031] cursor-pointer" />
@@ -237,15 +234,13 @@ const PricingContent: React.FC<PricingContentProps> = ({ className, hideTitle = 
                       </TooltipContent>
                     </Tooltip>
                   </div>
-                  <p className="text-gray-600 dark:text-gray-300 mb-5">
-                    For teams with more advanced needs
-                  </p>
+                  <p className="text-muted-foreground mb-5">For teams with more advanced needs</p>
                   <div className="mb-6">
-                    <span className="text-3xl font-bold dark:text-white">TBD</span>
+                    <span className="text-3xl font-bold text-foreground">TBD</span>
                   </div>
                   <a
                     href="/docs/lilypad/getting-started/quickstart"
-                    className="block w-full py-2 px-4 rounded-md text-center transition-colors bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                    className="block w-full py-2 px-4 rounded-md text-center transition-colors bg-muted text-foreground hover:bg-muted/80"
                   >
                     *Get Started
                   </a>

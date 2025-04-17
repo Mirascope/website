@@ -105,13 +105,13 @@ export default function Header() {
                 >
                   Docs
                 </NavigationMenuTrigger>
-                <NavigationMenuContent className="bg-accent p-2">
+                <NavigationMenuContent className="bg-background p-2">
                   <ul className="grid grid-cols-1 sm:grid-cols-2 w-[300px] sm:w-[480px] gap-2">
                     <li>
                       <NavigationMenuLink asChild>
                         <Link
                           to={getProductRoute("mirascope")}
-                          className="block p-4 space-y-1.5 rounded-md bg-background hover:bg-accent transition-colors"
+                          className="block p-4 space-y-1.5 rounded-md bg-muted/40 hover:bg-accent transition-colors"
                         >
                           <div className="font-medium text-xl text-primary">Mirascope</div>
                           <p className="text-base text-foreground">
@@ -124,7 +124,7 @@ export default function Header() {
                       <NavigationMenuLink asChild>
                         <Link
                           to={getProductRoute("lilypad")}
-                          className="block p-4 space-y-1.5 rounded-md bg-background hover:bg-accent transition-colors"
+                          className="block p-4 space-y-1.5 rounded-md bg-muted/40 hover:bg-accent transition-colors"
                         >
                           <div className="font-medium text-xl text-lilypad-green">Lilypad</div>
                           <p className="text-base text-foreground">
