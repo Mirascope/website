@@ -46,11 +46,11 @@ export default function CookieBanner() {
       role="alertdialog"
       aria-labelledby="cookie-title"
       aria-describedby="cookie-description"
-      className="fixed 2xl:bottom-4 xl:bottom-12 sm:bottom-12 xs:bottom-18 bottom-18 lg:left-4 md:left-4 sm:left-4 left-4 w-[180px] p-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-primary shadow-lg rounded-lg z-50"
+      className="fixed 2xl:bottom-4 xl:bottom-12 sm:bottom-12 xs:bottom-18 bottom-18 lg:left-4 md:left-4 sm:left-4 left-4 w-[180px] p-3 bg-background/80 backdrop-blur-sm border border-primary shadow-lg rounded-lg z-50"
       tabIndex={-1}
     >
       <div className="flex flex-col gap-2">
-        <div className="text-base text-gray-700 dark:text-gray-300 font-handwriting text-center">
+        <div className="text-base text-muted-foreground font-handwriting text-center">
           <h2 id="cookie-title" className="sr-only">
             Cookie Consent
           </h2>
@@ -60,14 +60,14 @@ export default function CookieBanner() {
           <button
             onClick={handleReject}
             aria-label="Reject cookies"
-            className="px-2 py-1 text-sm font-medium font-handwriting text-gray-700 bg-gray-100 hover:bg-gray-200 dark:text-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500"
+            className="px-2 py-1 text-sm font-medium font-handwriting text-muted-foreground bg-muted hover:bg-accent rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-ring"
           >
             Reject
           </button>
           <button
             onClick={handleAccept}
             aria-label="Accept cookies"
-            className="px-2 py-1 text-sm font-medium font-handwriting text-white bg-primary hover:bg-primary/90 dark:bg-primary dark:hover:bg-primary/90 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="px-2 py-1 text-sm font-medium font-handwriting text-primary-foreground bg-primary hover:bg-primary/90 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-ring"
           >
             Accept
           </button>

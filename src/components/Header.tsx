@@ -151,7 +151,7 @@ export default function Header() {
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden p-2 text-black dark:text-white"
+          className="md:hidden p-2 text-foreground"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-label="Toggle menu"
         >
@@ -163,7 +163,7 @@ export default function Header() {
       {isMenuOpen && (
         <div
           className={cn(
-            "absolute top-full right-4 mt-2 p-6 md:hidden z-50 shadow-lg text-slate-800 dark:text-white rounded-lg max-w-xs",
+            "absolute top-full right-4 mt-2 p-6 md:hidden z-50 shadow-lg text-foreground rounded-lg max-w-xs",
             isLandingPage ? "bg-background/90 backdrop-blur-sm" : "bg-background"
           )}
         >
@@ -171,14 +171,14 @@ export default function Header() {
             <div className="font-medium text-xl my-2">Docs</div>
             <Link
               to={getProductRoute("mirascope")}
-              className="p-3 rounded-md bg-white dark:bg-gray-800 text-[#6366f1] font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              className="p-3 rounded-md bg-background text-primary font-medium hover:bg-muted transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               Mirascope
             </Link>
             <Link
               to={getProductRoute("lilypad")}
-              className="p-3 rounded-md bg-white dark:bg-gray-800 text-[#2d8031] font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              className="p-3 rounded-md bg-background text-lilypad-green font-medium hover:bg-muted transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               Lilypad
