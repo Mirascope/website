@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { LoadingContent } from "@/components/docs";
 import { MDXRenderer } from "@/components/MDXRenderer";
 import { type PolicyContent } from "@/lib/content/policy";
 import { Button } from "@/components/ui/button";
@@ -54,7 +55,7 @@ const PolicyPage: React.FC<PolicyPageProps> = ({ content, loading, error, type =
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold uppercase">{defaultTitle}</h1>
         </div>
-        <div className="animate-pulse bg-gray-100 h-40 rounded-md"></div>
+        <LoadingContent spinnerClassName="h-12 w-12" fullHeight={false} />
       </div>
     );
   }
