@@ -116,7 +116,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ contentId, product, s
   }, [headings, contentId]);
 
   if (headings.length === 0) {
-    return <p className="text-sm text-gray-400 italic pl-5">No headings found</p>;
+    return <p className="text-sm text-muted-foreground italic pl-5">No headings found</p>;
   }
 
   return (

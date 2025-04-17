@@ -103,7 +103,7 @@ function BlogPostContent({ slug }: { slug: string }) {
     <div className="relative">
       {tocOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
+          className="fixed inset-0 bg-foreground/50 z-30 lg:hidden"
           onClick={() => setTocOpen(false)}
         ></div>
       )}
@@ -134,7 +134,7 @@ function BlogPostContent({ slug }: { slug: string }) {
               </div>
               <div
                 id="blog-content"
-                className="bg-white dark:bg-gray-900 rounded-xl shadow-sm p-4 sm:p-6 border border-gray-200 dark:border-gray-700 blog-content"
+                className="bg-background rounded-xl shadow-sm p-4 sm:p-6 border border-border blog-content"
               >
                 {post.mdx ? (
                   <MDXRenderer
@@ -156,7 +156,7 @@ function BlogPostContent({ slug }: { slug: string }) {
                 onClick={toggleFunMode}
                 className={cn(
                   "rounded-full w-12 h-12 p-0 shadow-md",
-                  funMode ? "bg-primary text-white" : "bg-white hover:bg-purple-50"
+                  funMode ? "bg-primary text-primary-foreground" : "bg-background hover:bg-muted"
                 )}
               >
                 <Sparkles className="w-5 h-5" />

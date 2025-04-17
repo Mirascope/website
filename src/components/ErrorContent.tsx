@@ -42,7 +42,7 @@ const ErrorContent: React.FC<ErrorContentProps> = ({
 
         <h1 className="text-2xl font-medium mb-4">{title}</h1>
 
-        {message && <p className="text-gray-500 dark:text-gray-400 mb-4">{message}</p>}
+        {message && <p className="text-muted-foreground mb-4">{message}</p>}
 
         {children}
       </div>
