@@ -107,7 +107,7 @@ export default function Header() {
                 >
                   Docs
                 </NavigationMenuTrigger>
-                <NavigationMenuContent className="bg-muted p-2">
+                <NavigationMenuContent className="bg-accent p-2">
                   <ul className="grid grid-cols-1 sm:grid-cols-2 w-[300px] sm:w-[480px] gap-2">
                     <li>
                       <NavigationMenuLink asChild>

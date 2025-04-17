@@ -25,7 +25,7 @@ export function ProviderDropdown({ className }: ProviderDropdownProps) {
             size="sm"
             className={cn(
               "w-full justify-between",
-              provider && "text-primary border-primary text-lg"
+              provider && "text-primary border-primary text-medium"
             )}
           >
             {providerDefaults[provider].displayName}

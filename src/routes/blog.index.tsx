@@ -57,13 +57,13 @@ function BlogPage() {
   });
 
   return (
-    <div className="flex justify-center pt-12">
+    <div className="flex justify-center pt-6">
       <div className="flex mx-auto w-full max-w-[1800px] px-4">
         <div className="flex-1 min-w-0 py-6">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-8">
               <h1 className="text-4xl font-bold mb-4 text-center">Blog</h1>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              <p className="text-xl text-foreground max-w-2xl mx-auto">
                 The latest news, updates, and insights about
                 <br />
                 Mirascope and LLM application development.
@@ -78,7 +78,7 @@ function BlogPage() {
               ) : posts.length === 0 ? (
                 <div className="text-center py-12">
                   <h2 className="text-xl font-medium text-foreground">No posts found</h2>
-                  <p className="text-muted-foreground mt-2">Check back soon for new content!</p>
+                  <p className="text-foreground mt-2">Check back soon for new content!</p>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 min-h-[650px]">
@@ -89,20 +89,22 @@ function BlogPage() {
                       params={{ slug: post.slug }}
                       className="block h-full cursor-pointer group"
                     >
-                      <div className="h-[320px] flex flex-col hover:shadow-lg transition-all duration-200 shadow-sm bg-muted rounded-lg border-1 border-primary overflow-hidden">
+                      <div className="h-[320px] flex flex-col hover:shadow-lg transition-all duration-200 shadow-sm bg-accent rounded-lg border-1 border-primary overflow-hidden">
                         <div className="p-6 flex flex-col h-full">
                           <div>
                             <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
                               {post.title}
                             </h3>
-                            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 select-none">
+                            <p className="text-sm text-muted-foreground mb-4 select-none">
                               {post.date} · {post.readTime} · By {post.author}
                             </p>
-                            <p className="text-gray-600 dark:text-gray-300 mb-4 select-none line-clamp-3">
+                            <p className="text-accent-foreground mb-4 select-none line-clamp-3">
                               {post.description}
                             </p>
                           </div>
-                          <span className="text-primary font-medium mt-auto">Read more</span>
+                          <span className="text-foreground group-hover:text-primary transition-colors font-medium mt-auto">
+                            Read more
+                          </span>
                         </div>
                       </div>
                     </Link>
