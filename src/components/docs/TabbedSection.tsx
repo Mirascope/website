@@ -68,27 +68,18 @@ export function TabbedSection({
   }
 
   return (
-    <div
-      className={cn(
-        "rounded-md border-2 border-blue-600/50 bg-[#191c20] shadow-md overflow-hidden",
-        className
-      )}
-    >
+    <div className={cn("rounded-md bg-muted shadow-md overflow-hidden", className)}>
       {showLogo && (
-        <div className="px-4 py-2.5 flex items-center bg-blue-800/20">
-          <Logo size="micro" withText={true} textClassName="text-white opacity-90 font-medium" />
+        <div className="px-4 py-2.5 flex items-center">
+          <Logo size="micro" withText={true} textClassName="text-mirascope-purple font-medium" />
         </div>
       )}
 
       <Tabs defaultValue={defaultTab} className="w-full">
-        <div className="flex border-b border-gray-700 px-3">
+        <div className="flex px-1">
           <TabsList className="bg-transparent p-0 h-auto">
             {tabs.map((tab) => (
-              <TabsTrigger
-                key={tab.value}
-                value={tab.value}
-                className="px-4 py-1.5 text-sm text-gray-400 hover:text-gray-200 rounded-none border-b-2 border-transparent data-[state=active]:border-white data-[state=active]:text-white data-[state=active]:bg-transparent"
-              >
+              <TabsTrigger key={tab.value} value={tab.value}>
                 {tab.value}
               </TabsTrigger>
             ))}

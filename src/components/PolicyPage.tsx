@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { LoadingContent } from "@/components/docs";
 import { MDXRenderer } from "@/components/MDXRenderer";
 import { type PolicyContent } from "@/lib/content/policy";
 import { Button } from "@/components/ui/button";
@@ -6,16 +7,14 @@ import { Sparkles } from "lucide-react";
 import { cn, formatDate } from "@/lib/utils";
 
 interface PolicyPageProps {
-  content: PolicyContent | null;
-  loading: boolean;
-  error: Error | null;
+  content: PolicyContent;
   type?: "privacy" | "terms-use" | "terms-service";
 }
 
 /**
  * PolicyPage - Reusable component for rendering policy and terms pages
  */
-const PolicyPage: React.FC<PolicyPageProps> = ({ content, loading, error, type = "privacy" }) => {
+const PolicyPage: React.FC<PolicyPageProps> = ({ content, type = "privacy" }) => {
   // Content ID for the article element
   const contentId = "policy-content";
 
@@ -48,29 +47,6 @@ const PolicyPage: React.FC<PolicyPageProps> = ({ content, loading, error, type =
     }
   };
 
-  if (loading) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold uppercase">{defaultTitle}</h1>
-        </div>
-        <div className="animate-pulse bg-gray-100 h-40 rounded-md"></div>
-      </div>
-    );
-  }
-
-  if (error || !content || !content.mdx) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold uppercase">{defaultTitle}</h1>
-        </div>
-        <p>This content is currently unavailable. Please check back later.</p>
-        {error && <p className="text-red-500 mt-2">Error: {error.message}</p>}
-      </div>
-    );
-  }
-
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       {/* Header with title and fun mode button aligned horizontally */}
@@ -78,9 +54,7 @@ const PolicyPage: React.FC<PolicyPageProps> = ({ content, loading, error, type =
         <div>
           <h1 className="text-3xl font-bold uppercase">{title}</h1>
           {lastUpdated && (
-            <p className="font-medium text-gray-500 dark:text-gray-400 mt-1">
-              Last Updated: {lastUpdated}
-            </p>
+            <p className="font-medium text-muted-foreground mt-1">Last Updated: {lastUpdated}</p>
           )}
         </div>
         <Button
@@ -88,7 +62,7 @@ const PolicyPage: React.FC<PolicyPageProps> = ({ content, loading, error, type =
           size="sm"
           onClick={toggleFunMode}
           className={cn(
-            funMode ? "bg-primary text-white" : "hover:bg-purple-50",
+            funMode ? "bg-primary text-primary-foreground" : "hover:bg-muted",
             "transition-colors"
           )}
         >
@@ -99,7 +73,7 @@ const PolicyPage: React.FC<PolicyPageProps> = ({ content, loading, error, type =
 
       <div
         id={contentId}
-        className="bg-white dark:bg-gray-900 rounded-xl shadow-sm p-4 sm:p-6 border border-gray-200 dark:border-gray-700"
+        className="bg-background rounded-xl shadow-sm p-4 sm:p-6 border border-border"
       >
         <article className="prose prose-lg max-w-none">
           <MDXRenderer
@@ -109,6 +83,52 @@ const PolicyPage: React.FC<PolicyPageProps> = ({ content, loading, error, type =
           />
         </article>
       </div>
+    </div>
+  );
+};
+
+/**
+ * PolicyPageError - Error state for policy pages
+ */
+export const PolicyPageError: React.FC<{
+  type: "privacy" | "terms-use" | "terms-service";
+  error: string;
+}> = ({ type, error }) => {
+  const defaultTitle = {
+    privacy: "PRIVACY POLICY",
+    "terms-use": "TERMS OF USE",
+    "terms-service": "TERMS OF SERVICE",
+  }[type];
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <div className="text-center mb-8">
+        <h1 className="text-3xl font-bold uppercase">{defaultTitle}</h1>
+      </div>
+      <p>This content is currently unavailable. Please check back later.</p>
+      {error && <p className="text-destructive mt-2">Error: {error}</p>}
+    </div>
+  );
+};
+
+/**
+ * PolicyPageLoading - Loading state for policy pages
+ */
+export const PolicyPageLoading: React.FC<{ type: "privacy" | "terms-use" | "terms-service" }> = ({
+  type,
+}) => {
+  const defaultTitle = {
+    privacy: "PRIVACY POLICY",
+    "terms-use": "TERMS OF USE",
+    "terms-service": "TERMS OF SERVICE",
+  }[type];
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <div className="text-center mb-8">
+        <h1 className="text-3xl font-bold uppercase">{defaultTitle}</h1>
+      </div>
+      <LoadingContent spinnerClassName="h-12 w-12" fullHeight={false} />
     </div>
   );
 };

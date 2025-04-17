@@ -1,10 +1,60 @@
 import { createFileRoute, useParams } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
-import { useDoc, getDocsForProduct } from "@/lib/content/docs";
+import { Suspense, useState } from "react";
+import { getDoc, getDocsForProduct } from "@/lib/content/docs";
 import { MDXRenderer } from "@/components/MDXRenderer";
-import { DocsSidebar } from "@/components/docs";
+import { DocsSidebar, LoadingContent } from "@/components/docs";
 import TableOfContents from "@/components/TableOfContents";
 import { type ProductName } from "@/lib/route-types";
+import { createSuspenseResource } from "@/lib/hooks/useSuspense";
+
+// Suspense-enabled data fetching components
+function DocContent({ docPath }: { docPath: string }) {
+  const docResource = createSuspenseResource(`doc:${docPath}`, () => getDoc(docPath));
+  const document = docResource.read();
+
+  return (
+    <>
+      <h1 className="text-2xl lg:text-3xl font-medium mb-4">
+        {document?.meta?.title || "Document Not Found"}
+      </h1>
+      {document?.meta?.description && document.meta.description.trim() !== "" && (
+        <p className="text-gray-600 mb-6">{document.meta.description}</p>
+      )}
+      <div id="doc-content" className="prose prose-sm lg:prose-base prose-slate max-w-none">
+        {document?.mdx ? (
+          <MDXRenderer code={document.mdx.code} frontmatter={document.mdx.frontmatter} />
+        ) : (
+          <LoadingContent spinnerClassName="h-8 w-8" fullHeight={false} />
+        )}
+      </div>
+    </>
+  );
+}
+
+function SidebarContent({
+  product,
+  section,
+  currentSlug,
+  currentGroup,
+}: {
+  product: ProductName;
+  section: string | null;
+  currentSlug: string;
+  currentGroup: string | null;
+}) {
+  const docsResource = createSuspenseResource(`docs:${product}`, () => getDocsForProduct(product));
+  const productDocs = docsResource.read();
+
+  return (
+    <DocsSidebar
+      product={product}
+      section={section}
+      currentSlug={currentSlug}
+      currentGroup={currentGroup}
+      docs={productDocs}
+    />
+  );
+}
 
 export const Route = createFileRoute("/docs/$")({
   component: DocsPage,
@@ -38,57 +88,8 @@ function DocsPage() {
     group = pathParts[1];
   }
 
-  // Build full path for useDoc
+  // Build full path for the doc
   const docPath = _splat || product;
-
-  // Use the useDoc hook to fetch and process document
-  const { content: document, loading } = useDoc(docPath);
-  const [productDocs, setProductDocs] = useState<any[]>([]);
-
-  // Fetch product docs for the sidebar
-  useEffect(() => {
-    const fetchDocs = async () => {
-      try {
-        // Load all docs for this product for the sidebar
-        const docsForProduct = await getDocsForProduct(product);
-        setProductDocs(docsForProduct);
-      } catch (err) {
-        console.error(`[DocsPage] Failed to load product docs: ${err}`);
-        setProductDocs([]);
-      }
-    };
-
-    fetchDocs();
-  }, [product]);
-
-  if (loading) {
-    return (
-      <div className="flex justify-center" style={{ paddingTop: "60px" }}>
-        <div className="flex mx-auto w-[1400px]">
-          {/* Left sidebar */}
-          <div className="w-72 flex-shrink-0">
-            <div className="fixed w-72 top-[60px] pt-6 max-h-[calc(100vh-60px)] overflow-y-auto">
-              <DocsSidebar
-                product={product}
-                section={section}
-                currentSlug={currentSlug}
-                currentGroup={group}
-                docs={[]}
-              />
-            </div>
-          </div>
-
-          {/* Main content area with loading spinner */}
-          <div className="w-[1000px] flex-shrink-0 flex justify-center items-center py-20 pl-8">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-          </div>
-
-          {/* Right TOC sidebar - empty during loading */}
-          <div className="w-64 flex-shrink-0 hidden lg:block"></div>
-        </div>
-      </div>
-    );
-  }
 
   // Set up mobile sidebar state
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -98,36 +99,6 @@ function DocsPage() {
     setSidebarOpen(!sidebarOpen);
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center" style={{ paddingTop: "60px" }}>
-        <div className="flex mx-auto w-[1400px]">
-          {/* Left sidebar */}
-          <div className="w-72 flex-shrink-0">
-            <div className="fixed w-72 top-[60px] pt-6 max-h-[calc(100vh-60px)] overflow-y-auto">
-              <DocsSidebar
-                product={product}
-                section={section}
-                currentSlug=""
-                currentGroup={group}
-                docs={productDocs}
-              />
-            </div>
-          </div>
-
-          {/* Main content area with loading spinner */}
-          <div className="w-[1000px] flex-shrink-0 flex justify-center items-center py-20 pl-8">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-          </div>
-
-          {/* Right TOC sidebar - empty during loading */}
-          <div className="w-64 flex-shrink-0 hidden lg:block"></div>
-        </div>
-      </div>
-    );
-  }
-
-  // Handle normal document rendering
   return (
     <div className="relative" style={{ paddingTop: "60px" }}>
       {/* Mobile sidebar overlay */}
@@ -174,32 +145,32 @@ function DocsPage() {
           `}
           >
             <div className="h-full pt-6 overflow-y-auto">
-              <DocsSidebar
-                product={product}
-                section={section}
-                currentSlug={currentSlug}
-                currentGroup={group}
-                docs={productDocs}
-              />
+              <Suspense
+                fallback={
+                  <DocsSidebar
+                    product={product}
+                    section={section}
+                    currentSlug={currentSlug}
+                    currentGroup={group}
+                    docs={[]}
+                  />
+                }
+              >
+                <SidebarContent
+                  product={product}
+                  section={section}
+                  currentSlug={currentSlug}
+                  currentGroup={group}
+                />
+              </Suspense>
             </div>
           </div>
 
           {/* Main content area - full width on mobile */}
           <div className="flex-1 min-w-0 pt-6 lg:pl-8">
-            {/* Title and content */}
-            <h1 className="text-2xl lg:text-3xl font-medium mb-4">
-              {document?.meta?.title || "Document Not Found"}
-            </h1>
-            {document?.meta?.description && document.meta.description.trim() !== "" && (
-              <p className="text-gray-600 mb-6">{document.meta.description}</p>
-            )}
-            <div id="doc-content" className="prose prose-sm lg:prose-base prose-slate max-w-none">
-              {document?.mdx ? (
-                <MDXRenderer code={document.mdx.code} frontmatter={document.mdx.frontmatter} />
-              ) : (
-                <div className="animate-pulse bg-gray-100 h-40 rounded-md"></div>
-              )}
-            </div>
+            <Suspense fallback={<LoadingContent fullHeight={true} />}>
+              <DocContent docPath={docPath} />
+            </Suspense>
           </div>
 
           {/* Right TOC sidebar - hidden on all screens below lg */}

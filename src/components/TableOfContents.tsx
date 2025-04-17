@@ -116,7 +116,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ contentId, product, s
   }, [headings, contentId]);
 
   if (headings.length === 0) {
-    return <p className="text-sm text-gray-400 italic pl-5">No headings found</p>;
+    return <p className="text-sm text-muted-foreground italic pl-5">No headings found</p>;
   }
 
   return (
@@ -139,7 +139,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ contentId, product, s
                   ? product === "mirascope"
                     ? "border-mirascope-purple text-mirascope-purple font-medium"
                     : "border-lilypad-green text-lilypad-green font-medium"
-                  : "border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300"
+                  : "border-transparent text-muted-foreground hover:text-accent-foreground hover:border-accent-foreground"
               )}
             >
               {heading.text}

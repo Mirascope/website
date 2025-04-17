@@ -16,7 +16,7 @@ export default function Footer() {
         <div
           className={cn(
             "text-sm sm:text-base mt-4 md:mt-0 text-center md:text-left",
-            isLandingPage ? "text-white" : "text-slate-800 dark:text-white"
+            isLandingPage ? "text-white" : "text-foreground"
           )}
         >
           <p>© 2025 Mirascope. All rights reserved.</p>
@@ -27,9 +27,7 @@ export default function Footer() {
             to="/privacy"
             className={cn(
               "text-sm sm:text-base transition-colors",
-              isLandingPage
-                ? "text-white hover:text-gray-300"
-                : "text-slate-800 dark:text-white hover:text-primary dark:hover:text-primary-foreground"
+              isLandingPage ? "text-white hover:text-accent" : "text-foreground hover:text-primary"
             )}
           >
             Privacy Policy
@@ -38,9 +36,7 @@ export default function Footer() {
             to="/terms/use"
             className={cn(
               "text-sm sm:text-base transition-colors",
-              isLandingPage
-                ? "text-white hover:text-gray-300"
-                : "text-slate-800 dark:text-white hover:text-primary dark:hover:text-primary-foreground"
+              isLandingPage ? "text-white hover:accent" : "text-foreground hover:text-primary"
             )}
           >
             Terms of Use

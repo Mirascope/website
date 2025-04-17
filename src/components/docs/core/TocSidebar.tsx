@@ -57,7 +57,7 @@ const TocSidebar: React.FC<TocSidebarProps> = ({
               size="sm"
               onClick={toggleFunMode}
               className={cn(
-                funMode ? "bg-primary text-white" : "hover:bg-purple-50",
+                funMode ? "bg-primary text-primary-foreground" : "hover:bg-muted",
                 "transition-colors w-full"
               )}
             >
@@ -89,7 +89,7 @@ const TocSidebar: React.FC<TocSidebarProps> = ({
 
             {/* Provider dropdown */}
             <div className="mt-3">
-              <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
+              <h4 className="text-sm font-medium text-muted-foreground mb-2">
                 <div className="flex items-center">
                   <Server className="w-3 h-3 mr-1" />
                   Provider
@@ -98,9 +98,7 @@ const TocSidebar: React.FC<TocSidebarProps> = ({
               <ProviderDropdown />
             </div>
 
-            <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mt-4">
-              On this page
-            </h4>
+            <h4 className="text-sm font-medium text-muted-foreground mt-4">On this page</h4>
           </div>
           <TableOfContents
             contentId="doc-content"

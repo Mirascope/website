@@ -18,23 +18,23 @@ const calloutStyles: Record<
   { containerClass: string; iconClass: string; Icon: React.ElementType }
 > = {
   note: {
-    containerClass: "border-blue-500",
-    iconClass: "bg-blue-500 text-white",
+    containerClass: "border-primary",
+    iconClass: "bg-primary text-muted-foreground",
     Icon: InfoIcon,
   },
   warning: {
-    containerClass: "border-amber-500",
-    iconClass: "bg-amber-500 text-white",
+    containerClass: "border-button-primary",
+    iconClass: "bg-orange-500 text-foreground",
     Icon: AlertTriangle,
   },
   info: {
-    containerClass: "border-mirascope-purple",
-    iconClass: "bg-mirascope-purple text-white",
+    containerClass: "border-primary",
+    iconClass: "bg-primary text-accent-foreground",
     Icon: AlertCircle,
   },
   success: {
-    containerClass: "border-green-500",
-    iconClass: "bg-green-500 text-white",
+    containerClass: "border-secondary",
+    iconClass: "bg-secondary text-white",
     Icon: CheckCircle,
   },
 };
@@ -69,7 +69,7 @@ export function Callout({
 
   // Content styling changes based on whether we have a header
   const contentClassName = cn(
-    "bg-gray-50/95 dark:bg-transparent sunset:bg-amber-50/90 text-gray-800 dark:text-gray-200 sunset:text-gray-800",
+    "bg-accent",
     showHeader ? "px-3 py-1 rounded-b-lg" : "px-3 py-1 rounded-lg"
   );
 
@@ -81,7 +81,7 @@ export function Callout({
       {showHeader && (
         <div
           className={cn(
-            "flex items-center gap-3 py-2 px-3 border-b border-gray-700/20 bg-gray-100 dark:bg-[#20253a] sunset:bg-amber-100 rounded-t-lg",
+            "flex items-center gap-3 py-2 px-3 border-b border-accent bg-primary rounded-t-lg",
             collapsible && "cursor-pointer"
           )}
           onClick={collapsible ? () => setIsCollapsed(!isCollapsed) : undefined}
@@ -89,11 +89,11 @@ export function Callout({
           <div className={cn("rounded-full flex items-center justify-center w-6 h-6", iconClass)}>
             <Icon className="w-3.5 h-3.5" />
           </div>
-          <div className="font-semibold text-gray-800 dark:text-white sunset:text-gray-800 text-base flex-1">
+          <div className="font-semibold text-primary-foreground text-base flex-1">
             {displayTitle}
           </div>
           {collapsible && (
-            <div className="text-gray-500 dark:text-gray-400">
+            <div className="text-accent-foreground">
               <svg
                 width="16"
                 height="16"

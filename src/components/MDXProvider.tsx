@@ -110,7 +110,7 @@ export const components = {
   },
   p: (props: React.ComponentPropsWithoutRef<"p">) => <p className="my-3" {...props} />,
   a: (props: React.ComponentPropsWithoutRef<"a">) => (
-    <a className="text-blue-600 dark:text-blue-400 hover:underline no-underline" {...props} />
+    <a className="text-primary hover:underline no-underline" {...props} />
   ),
   ul: (props: React.ComponentPropsWithoutRef<"ul">) => (
     <ul className="list-disc pl-5 my-4" {...props} />
@@ -140,7 +140,7 @@ export const components = {
 
     return (
       <code
-        className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-1 py-0.5 rounded text-[0.9em] font-mono"
+        className="bg-muted text-muted-foreground px-1 py-0.5 rounded text-[0.9em] font-mono"
         {...props}
       />
     );
@@ -246,7 +246,7 @@ export const components = {
     // Fallback to standard pre if not a code block or couldn't extract content
     return (
       <pre
-        className="rounded-lg p-4 my-6 bg-gray-100 dark:bg-gray-800 overflow-x-auto border border-gray-200 dark:border-gray-700"
+        className="rounded-lg p-4 my-6 bg-muted overflow-x-auto border border-border"
         {...props}
       />
     );
@@ -254,25 +254,19 @@ export const components = {
   strong: (props: React.ComponentPropsWithoutRef<"strong">) => <strong {...props} />,
   em: (props: React.ComponentPropsWithoutRef<"em">) => <em {...props} />,
   blockquote: (props: React.ComponentPropsWithoutRef<"blockquote">) => (
-    <blockquote
-      className="border-l-4 border-gray-200 dark:border-gray-700 pl-4 my-4 italic"
-      {...props}
-    />
+    <blockquote className="border-l-4 border-border pl-4 my-4 italic" {...props} />
   ),
   table: (props: React.ComponentPropsWithoutRef<"table">) => (
-    <table className="min-w-full divide-y divide-gray-200 my-6" {...props} />
+    <table className="min-w-full divide-y divide-border my-6" {...props} />
   ),
   th: (props: React.ComponentPropsWithoutRef<"th">) => (
-    <th
-      className="px-4 py-2 bg-gray-50 dark:bg-gray-800 text-left text-sm font-medium"
-      {...props}
-    />
+    <th className="px-4 py-2 bg-muted text-left text-sm font-medium" {...props} />
   ),
   td: (props: React.ComponentPropsWithoutRef<"td">) => (
-    <td className="px-4 py-2 border-t border-gray-200 dark:border-gray-700" {...props} />
+    <td className="px-4 py-2 border-t border-border" {...props} />
   ),
   hr: (props: React.ComponentPropsWithoutRef<"hr">) => (
-    <hr className="my-6 border-gray-200 dark:border-gray-700" {...props} />
+    <hr className="my-6 border-border" {...props} />
   ),
 };
 

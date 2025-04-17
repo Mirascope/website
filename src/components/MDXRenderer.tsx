@@ -1,5 +1,6 @@
 import { MDXProviderWrapper, components } from "./MDXProvider";
 import { MDXRemote } from "next-mdx-remote";
+import { LoadingContent } from "@/components/docs";
 
 interface MDXRendererProps {
   code: string;
@@ -22,7 +23,7 @@ interface MDXRemoteProps {
 export function MDXRenderer({ code, frontmatter, useFunMode = false }: MDXRendererProps) {
   // Handle case when no code is provided
   if (!code) {
-    return <div className="animate-pulse bg-gray-100 h-40 rounded-md"></div>;
+    return <LoadingContent spinnerClassName="h-8 w-8" fullHeight={false} />;
   }
 
   // Use next-mdx-remote for rendering

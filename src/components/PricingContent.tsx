@@ -18,13 +18,13 @@ const FeatureRow = ({
   const sameNonBoolean = free === pro && typeof free === "string" && free !== "";
 
   return (
-    <div className="grid grid-cols-3 gap-1 sm:gap-2 py-3 border-b border-gray-100 dark:border-gray-800 items-center min-h-[48px]">
-      <div className="text-xs sm:text-sm md:text-base font-medium dark:text-white break-words pr-1">
+    <div className="grid grid-cols-3 gap-1 sm:gap-2 py-3 border-b border-border items-center min-h-[48px]">
+      <div className="text-xs sm:text-sm md:text-base font-medium text-foreground break-words pr-1">
         {feature}
       </div>
 
       {sameNonBoolean ? (
-        <div className="col-span-2 text-center text-xs sm:text-sm md:text-base break-words dark:text-white">
+        <div className="col-span-2 text-center text-xs sm:text-sm md:text-base break-words text-foreground">
           {free}
         </div>
       ) : (
@@ -37,13 +37,13 @@ const FeatureRow = ({
                     <Check size={12} className="text-[#2d8031]" />
                   </div>
                 ) : (
-                  <div className="rounded-full p-1 bg-gray-100 dark:bg-gray-800">
-                    <X size={12} className="text-gray-400" />
+                  <div className="rounded-full p-1 bg-muted">
+                    <X size={12} className="text-muted-foreground" />
                   </div>
                 )}
               </div>
             ) : (
-              <span className="text-xs sm:text-sm md:text-base break-words dark:text-white">
+              <span className="text-xs sm:text-sm md:text-base break-words text-foreground">
                 {free}
               </span>
             )}
@@ -57,13 +57,13 @@ const FeatureRow = ({
                     <Check size={12} className="text-[#2d8031]" />
                   </div>
                 ) : (
-                  <div className="rounded-full p-1 bg-gray-100 dark:bg-gray-800">
-                    <X size={12} className="text-gray-400" />
+                  <div className="rounded-full p-1 bg-muted">
+                    <X size={12} className="text-muted-foreground" />
                   </div>
                 )}
               </div>
             ) : (
-              <span className="text-xs sm:text-sm md:text-base break-words dark:text-white">
+              <span className="text-xs sm:text-sm md:text-base break-words text-foreground">
                 {pro}
               </span>
             )}
@@ -90,7 +90,7 @@ const PricingTier = ({
   buttonLink: string;
   isGreen?: boolean;
 }) => (
-  <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden">
+  <div className="bg-background border border-border rounded-lg shadow-sm overflow-hidden">
     <div
       className={cn(
         "px-6 py-8",
@@ -100,18 +100,15 @@ const PricingTier = ({
       )}
     >
       <h3
-        className={cn(
-          "text-xl font-semibold mb-2",
-          isGreen ? "text-[#2d8031]" : "text-gray-900 dark:text-white"
-        )}
+        className={cn("text-xl font-semibold mb-2", isGreen ? "text-[#2d8031]" : "text-foreground")}
       >
         {name}
       </h3>
-      <p className="text-gray-600 dark:text-gray-300 mb-5">{description}</p>
+      <p className="text-muted-foreground mb-5">{description}</p>
       <div className="mb-6">
-        <span className="text-3xl font-bold dark:text-white">{price}</span>
+        <span className="text-3xl font-bold text-foreground">{price}</span>
         {price !== "TBD" && price !== "N/A" && (
-          <span className="text-sm text-gray-500 dark:text-gray-400 ml-1">/ month</span>
+          <span className="text-sm text-muted-foreground ml-1">/ month</span>
         )}
       </div>
       <a
@@ -120,7 +117,7 @@ const PricingTier = ({
           "block w-full py-2 px-4 rounded-md text-center transition-colors",
           isGreen
             ? "bg-[#2d8031] text-white hover:bg-[#246a29]"
-            : "bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+            : "bg-muted text-foreground hover:bg-muted/80"
         )}
       >
         {buttonText}
@@ -192,12 +189,12 @@ const PricingContent: React.FC<PricingContentProps> = ({ className, hideTitle = 
     <div className={cn("py-6 sm:py-8 px-2 sm:px-4", className)}>
       <div className="w-full max-w-[100%] mx-auto">
         {!hideTitle && (
-          <h1 className="text-3xl sm:text-4xl font-bold mb-4 dark:text-white">Lilypad Pricing</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold mb-4 text-foreground">Lilypad Pricing</h1>
         )}
-        <p className="text-lg sm:text-xl text-gray-700 dark:text-gray-300 w-full mb-2">
+        <p className="text-lg sm:text-xl text-foreground w-full mb-2">
           Get started with the Free plan today.
         </p>
-        <p className="text-sm sm:text-md text-gray-600 dark:text-gray-400 w-full mb-6 sm:mb-8 italic">
+        <p className="text-sm sm:text-md text-muted-foreground w-full mb-6 sm:mb-8 italic">
           No credit card required.
         </p>
 
@@ -221,10 +218,10 @@ const PricingContent: React.FC<PricingContentProps> = ({ className, hideTitle = 
                 buttonLink="/docs/lilypad/getting-started/quickstart"
                 isGreen={true}
               />
-              <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden">
-                <div className="px-6 py-8 dark:bg-gray-900">
+              <div className="bg-background border border-border rounded-lg shadow-sm overflow-hidden">
+                <div className="px-6 py-8 bg-background">
                   <div className="flex items-center gap-2 mb-2">
-                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Pro</h3>
+                    <h3 className="text-xl font-semibold text-foreground">Pro</h3>
                     <Tooltip>
                       <TooltipTrigger>
                         <Info size={16} className="text-[#2d8031] cursor-pointer" />
@@ -237,15 +234,13 @@ const PricingContent: React.FC<PricingContentProps> = ({ className, hideTitle = 
                       </TooltipContent>
                     </Tooltip>
                   </div>
-                  <p className="text-gray-600 dark:text-gray-300 mb-5">
-                    For teams with more advanced needs
-                  </p>
+                  <p className="text-muted-foreground mb-5">For teams with more advanced needs</p>
                   <div className="mb-6">
-                    <span className="text-3xl font-bold dark:text-white">TBD</span>
+                    <span className="text-3xl font-bold text-foreground">TBD</span>
                   </div>
                   <a
                     href="/docs/lilypad/getting-started/quickstart"
-                    className="block w-full py-2 px-4 rounded-md text-center transition-colors bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                    className="block w-full py-2 px-4 rounded-md text-center transition-colors bg-muted text-foreground hover:bg-muted/80"
                   >
                     *Get Started
                   </a>
@@ -254,22 +249,22 @@ const PricingContent: React.FC<PricingContentProps> = ({ className, hideTitle = 
             </div>
 
             {/* Feature comparison table */}
-            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden">
-              <div className="px-3 py-4 sm:px-6 sm:py-5 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-                <h3 className="text-base sm:text-lg font-medium text-gray-900 dark:text-white">
+            <div className="bg-background border border-border rounded-lg shadow-sm overflow-hidden">
+              <div className="px-3 py-4 sm:px-6 sm:py-5 bg-muted border-b border-border">
+                <h3 className="text-base sm:text-lg font-medium text-foreground">
                   Feature Comparison
                 </h3>
               </div>
-              <div className="px-2 py-3 sm:px-4 sm:py-5 md:p-6 bg-white dark:bg-gray-900">
+              <div className="px-2 py-3 sm:px-4 sm:py-5 md:p-6 bg-background">
                 {/* Table header */}
-                <div className="grid grid-cols-3 gap-1 sm:gap-2 pb-3 sm:pb-4 border-b border-gray-200 dark:border-gray-700">
-                  <div className="text-xs sm:text-sm md:text-base font-medium text-gray-500 dark:text-gray-400">
+                <div className="grid grid-cols-3 gap-1 sm:gap-2 pb-3 sm:pb-4 border-b border-border">
+                  <div className="text-xs sm:text-sm md:text-base font-medium text-muted-foreground">
                     Feature
                   </div>
-                  <div className="text-xs sm:text-sm md:text-base font-medium text-gray-500 dark:text-gray-400 text-center">
+                  <div className="text-xs sm:text-sm md:text-base font-medium text-muted-foreground text-center">
                     Free
                   </div>
-                  <div className="text-xs sm:text-sm md:text-base font-medium text-gray-500 dark:text-gray-400 text-center">
+                  <div className="text-xs sm:text-sm md:text-base font-medium text-muted-foreground text-center">
                     Pro
                   </div>
                 </div>
@@ -295,7 +290,7 @@ const PricingContent: React.FC<PricingContentProps> = ({ className, hideTitle = 
                 buttonLink="/docs/lilypad/getting-started/self-hosting"
                 isGreen={true}
               />
-              <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden">
+              <div className="bg-background border border-border rounded-lg shadow-sm overflow-hidden">
                 <div className="px-6 py-8">
                   <div className="flex items-center gap-2 mb-2">
                     <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Pro</h3>
@@ -328,22 +323,22 @@ const PricingContent: React.FC<PricingContentProps> = ({ className, hideTitle = 
             </div>
 
             {/* Feature comparison table */}
-            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden">
-              <div className="px-3 py-4 sm:px-6 sm:py-5 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-                <h3 className="text-base sm:text-lg font-medium text-gray-900 dark:text-white">
+            <div className="bg-background border border-border rounded-lg shadow-sm overflow-hidden">
+              <div className="px-3 py-4 sm:px-6 sm:py-5 bg-muted border-b border-border">
+                <h3 className="text-base sm:text-lg font-medium text-foreground">
                   Feature Comparison
                 </h3>
               </div>
-              <div className="px-2 py-3 sm:px-4 sm:py-5 md:p-6 bg-white dark:bg-gray-900">
+              <div className="px-2 py-3 sm:px-4 sm:py-5 md:p-6 bg-background">
                 {/* Table header */}
-                <div className="grid grid-cols-3 gap-1 sm:gap-2 pb-3 sm:pb-4 border-b border-gray-200 dark:border-gray-700">
-                  <div className="text-xs sm:text-sm md:text-base font-medium text-gray-500 dark:text-gray-400">
+                <div className="grid grid-cols-3 gap-1 sm:gap-2 pb-3 sm:pb-4 border-b border-border">
+                  <div className="text-xs sm:text-sm md:text-base font-medium text-muted-foreground">
                     Feature
                   </div>
-                  <div className="text-xs sm:text-sm md:text-base font-medium text-gray-500 dark:text-gray-400 text-center">
+                  <div className="text-xs sm:text-sm md:text-base font-medium text-muted-foreground text-center">
                     Free
                   </div>
-                  <div className="text-xs sm:text-sm md:text-base font-medium text-gray-500 dark:text-gray-400 text-center">
+                  <div className="text-xs sm:text-sm md:text-base font-medium text-muted-foreground text-center">
                     Pro
                   </div>
                 </div>
@@ -360,25 +355,25 @@ const PricingContent: React.FC<PricingContentProps> = ({ className, hideTitle = 
         </Tabs>
 
         {/* FAQ Section */}
-        <div className="mt-16 bg-gray-50 dark:bg-gray-800 p-8 rounded-lg border border-gray-200 dark:border-gray-700">
-          <h2 className="text-2xl font-semibold mb-4 dark:text-white">
+        <div className="mt-16 bg-muted p-8 rounded-lg border border-border">
+          <h2 className="text-2xl font-semibold mb-4 text-foreground">
             Frequently Asked Questions
           </h2>
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-medium mb-2 dark:text-white">
+              <h3 className="text-lg font-medium mb-2 text-foreground">
                 How long will the open beta last?
               </h3>
-              <p className="text-gray-600 dark:text-gray-300">
+              <p className="text-muted-foreground">
                 The open beta period is ongoing, and we'll provide advance notice before moving to
                 paid plans.
               </p>
             </div>
             <div>
-              <h3 className="text-lg font-medium mb-2 dark:text-white">
+              <h3 className="text-lg font-medium mb-2 text-foreground">
                 What happens when the beta ends?
               </h3>
-              <p className="text-gray-600 dark:text-gray-300">
+              <p className="text-muted-foreground">
                 All existing users will receive a grace period to evaluate which plan is right for
                 them before making any changes.
               </p>
@@ -387,7 +382,7 @@ const PricingContent: React.FC<PricingContentProps> = ({ className, hideTitle = 
         </div>
 
         <div className="mt-16 text-center">
-          <h2 className="text-2xl font-semibold mb-4 dark:text-white">
+          <h2 className="text-2xl font-semibold mb-4 text-foreground">
             Have questions about our pricing?
           </h2>
           <p className="text-gray-600 dark:text-gray-300">
