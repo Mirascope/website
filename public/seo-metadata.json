@@ -703,5 +703,20 @@
     "route": "/docs/mirascope/guides/prompt-engineering/tabular-chain-of-thought",
     "title": "Tabular Chain of Thought | Mirascope",
     "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/getting-started/dynamic-configuration-and-chaining": {
+    "route": "/docs/mirascope/guides/getting-started/dynamic-configuration-and-chaining",
+    "title": "Dynamic Configuration & Chaining | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/getting-started/structured-outputs": {
+    "route": "/docs/mirascope/guides/getting-started/structured-outputs",
+    "title": "Structured Outputs | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/getting-started/tools-and-agents": {
+    "route": "/docs/mirascope/guides/getting-started/tools-and-agents",
+    "title": "Tools & Agents | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
   }
 }

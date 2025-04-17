@@ -15,6 +15,20 @@ const guidesMeta: DocSection = {
 
   // Grouped guides by category
   groups: {
+    "getting-started": {
+      title: "Getting Started",
+      items: {
+        "structured-outputs": {
+          title: "Structured Outputs",
+        },
+        "dynamic-configuration-and-chaining": {
+          title: "Dynamic Configuration & Chaining",
+        },
+        "tools-and-agents": {
+          title: "Tools & Agents",
+        },
+      },
+    },
     agents: {
       title: "Agents",
       items: {
