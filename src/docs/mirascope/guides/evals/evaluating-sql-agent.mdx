@@ -6,23 +6,21 @@ title: Evaluating Generating SQL with LLM
 
 In this recipe, we will be using taking our [SQL Agent](../../agents/sql_agent) example and running evaluations on LLM call. We will be exploring various different evaluations we can run to ensure quality and expected behavior.
 
-<div class="admonition tip">
-<p class="admonition-title">Mirascope Concepts Used</p>
+<Info title="Mirascope Concepts Used" collapsible={true} defaultCollapsed={true}>
 <ul>
-<li><a href="../../../learn/prompts/">Prompts</a></li>
-<li><a href="../../../learn/calls/">Calls</a></li>
-<li><a href="../../../learn/tools/">Tools</a></li>
-<li><a href="../../../learn/async/">Async</a></li>
-<li><a href="../../../learn/evals/">Evals</a></li>
+<li><a href="/docs/mirascope/learn/prompts/">Prompts</a></li>
+<li><a href="/docs/mirascope/learn/calls/">Calls</a></li>
+<li><a href="/docs/mirascope/learn/tools/">Tools</a></li>
+<li><a href="/docs/mirascope/learn/async/">Async</a></li>
+<li><a href="/docs/mirascope/learn/evals/">Evals</a></li>
 </ul>
-</div>
+</Info>
 
-<div class="admonition note">
-<p class="admonition-title">Check out the SQL Agent Tutorial</p>
+<Note title="Check out the SQL Agent Tutorial">
 <p>
 We will be using our <code>LibrarianAgent</code> for our evaluations. For a detailed explanation regarding this code snippet, refer to the <a href="../../agents/sql_agent/">SQL Agent Tutorial</a>.
 </p>
-</div>
+</Note>
 
 ## Setup
 
@@ -266,12 +264,11 @@ The golden dataset serves as our test fixtures, allowing us to verify basic text
 
 As we expand our tools or enhance our prompt, we should consistently implement additional prompt regression tests to maintain quality and functionality.
 
-<div class="admonition note">
-<p class="admonition-title">Tip</p>
+<Note title="Tip">
 <p>
 SQL queries can get complex so be sure to add very specific tests, especially for mutable operations like INSERTS, UPDATES, and DELETES.
 </p>
-</div>
+</Note>
 
 
 ## Evaluating conversations

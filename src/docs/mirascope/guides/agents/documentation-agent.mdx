@@ -6,17 +6,16 @@ title: Documentation Agent
 
 In this recipe, we will be building a `DocumentationAgent` that has access to some documentation. We will be using Mirascope documentation in this example, but this should work on all types of documents. This is implemented using `OpenAI`, see [Local Chat with Codebase](../../agents/local_chat_with_codebase) for the Llama3.1 implementation.
 
-<div class="admonition tip">
-<p class="admonition-title">Mirascope Concepts Used</p>
+<Info title="Mirascope Concepts Used" collapsible={true} defaultCollapsed={true}>
 <ul>
-<li><a href="../../../learn/prompts/">Prompts</a></li>
-<li><a href="../../../learn/calls/">Calls</a></li>
-<li><a href="../../../learn/chaining/">Chaining</a></li>
-<li><a href="../../../learn/response_models/">Response Model</a></li>
-<li><a href="../../../learn/json_mode/">JSON Mode</a></li>
-<li><a href="../../../learn/agents/">Agents</a></li>
+<li><a href="/docs/mirascope/learn/prompts/">Prompts</a></li>
+<li><a href="/docs/mirascope/learn/calls/">Calls</a></li>
+<li><a href="/docs/mirascope/learn/chaining/">Chaining</a></li>
+<li><a href="/docs/mirascope/learn/response_models/">Response Model</a></li>
+<li><a href="/docs/mirascope/learn/json_mode/">JSON Mode</a></li>
+<li><a href="/docs/mirascope/learn/agents/">Agents</a></li>
 </ul>
-</div>
+</Info>
 
 ## Setup
 
@@ -303,14 +302,13 @@ if __name__ == "__main__":
 ```
 
 
-<div class="admonition tip">
-<p class="admonition-title">Additional Real-World Applications</p>
+<Info title="Additional Real-World Applications">
 <ul>
 <li><b>Improved Chat Application</b>: Maintain the most current documentation by storing it in a vector database or using a tool to retrieve up-to-date information in your chat application</li>
 <li><b>GitHub Issues Bot</b>: Add a GitHub bot that scans through issues and answers questions for users.</li>
 <li><b>Interactive Internal Knowledge Base</b>: Index company handbooks and internal documentation to enable instant, AI-powered Q&A access.</li>
 </ul>
-</div>
+</Info>
 
 
 When adapting this recipe, consider:

@@ -6,22 +6,20 @@ title: Decomposed Prompting: Enhancing LLM Problem-Solving with Tool-Based Subpr
 
 This recipe demonstrates how to implement the Decomposed Prompting (DECOMP) technique using Large Language Models (LLMs) with Mirascope. DECOMP is a prompt engineering method that enhances an LLM's problem-solving capabilities by breaking down complex problems into subproblems and utilizing tools to solve each step.
 
-<div class="admonition tip">
-<p class="admonition-title">Mirascope Concepts Used</p>
+<Info title="Mirascope Concepts Used" collapsible={true} defaultCollapsed={true}>
 <ul>
-<li><a href="../../../../learn/prompts/">Prompts</a></li>
-<li><a href="../../../../learn/calls/">Calls</a></li>
-<li><a href="../../../../learn/tools/">Tools</a></li>
-<li><a href="../../../../learn/response_models/">Response Models</a></li>
+<li><a href="/docs/mirascope/learn/prompts/">Prompts</a></li>
+<li><a href="/docs/mirascope/learn/calls/">Calls</a></li>
+<li><a href="/docs/mirascope/learn/tools/">Tools</a></li>
+<li><a href="/docs/mirascope/learn/response_models/">Response Models</a></li>
 </ul>
-</div>
+</Info>
 
-<div class="admonition note">
-<p class="admonition-title">Background</p>
+<Note title="Background">
 <p>
 <a href="https://arxiv.org/pdf/2210.02406">Decomposed Prompting</a> (DECOMP) is an extension of <a href="https://arxiv.org/abs/2205.10625">least-to-most</a> whereby tools are used to execute each subproblem in the problem solving process. A pre-trained call (in our case, a one shot prompt) demonstrates how to break a problem down into subproblems within the context of its given tool calls, and the output of each tool call is added to the chat's history until the problem is solved. Just like least-to-most, DECOMP shows improvements on mathematical reasoning and symbolic manipulation tasks, with better results than least-to-most.
 </p>
-</div>
+</Note>
 
 ## Implementation
 
@@ -147,8 +145,7 @@ When implementing this technique, consider:
 - Implementing error handling and recovery mechanisms for cases where a subproblem solution fails.
 - Optimizing the prompt for breaking down problems to ensure effective decomposition.
 
-<div class="admonition tip">
-<p class="admonition-title">Additional Real-World Applications</p>
+<Info title="Additional Real-World Applications">
 <ul>
 <li><b>Code Generation</b>: Break down complex programming tasks into smaller, manageable steps.</li>
 <li><b>Data Analysis</b>: Decompose complex data analysis queries into a series of data manipulation and calculation steps.</li>
@@ -156,7 +153,7 @@ When implementing this technique, consider:
 <li><b>Automated Reasoning</b>: Solve complex logical or mathematical problems by breaking them into simpler, solvable steps.</li>
 <li><b>Task Planning</b>: Create detailed, step-by-step plans for complex projects or processes.</li>
 </ul>
-</div>
+</Info>
 
 When adapting this recipe to your specific use-case, consider:
 

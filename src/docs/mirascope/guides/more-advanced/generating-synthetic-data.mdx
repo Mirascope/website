@@ -14,21 +14,19 @@ However, for:
 
 and more, LLMs are far easier to use and yield better (or the only feasible) results.
 
-<div class="admonition tip">
-<p class="admonition-title">Mirascope Concepts Used</p>
+<Info title="Mirascope Concepts Used" collapsible={true} defaultCollapsed={true}>
 <ul>
-<li><a href="../../../learn/prompts/">Prompts</a></li>
-<li><a href="../../../learn/calls/">Calls</a></li>
-<li><a href="../../../learn/response_models/">Response Models</a></li>
+<li><a href="/docs/mirascope/learn/prompts/">Prompts</a></li>
+<li><a href="/docs/mirascope/learn/calls/">Calls</a></li>
+<li><a href="/docs/mirascope/learn/response_models/">Response Models</a></li>
 </ul>
-</div>
+</Info>
 
-<div class="admonition note">
-<p class="admonition-title">Background</p>
+<Note title="Background">
 <p>
 Large Language Models (LLMs) have emerged as powerful tools for generating synthetic data, particularly for text-based applications. Compared to traditional synthetic data generation methods, LLMs can produce more diverse, contextually rich, and human-like textual data, often with less need for domain-specific rules or statistical modeling.
 </p>
-</div>
+</Note>
 
 
 ## Setup
@@ -270,14 +268,13 @@ To demonstrate the constraints’ being followed, you can graph the data using m
 
 <img src="../../../assets/generating-synthetic-data-chart.png" alt="generating-synthetic-data-chart" />
 
-<div class="admonition tip">
-<p class="admonition-title">Additional Real-World Examples</p>
+<Info title="Additional Real-World Examples">
 <ul>
 <li><b>Healthcare and Medical Research</b>: Generating synthetic patient records for training machine learning models without compromising patient privacy</li>
 <li><b>Environmental Science</b>: Generating synthetic climate data for modeling long-term environmental changes</li>
 <li><b>Fraud Detection Systems</b>: Generating synthetic data of fraudulent and legitimate transactions for training fraud detection models.</li>
 </ul>
-</div>
+</Info>
 
 When adapting this recipe to your specific use-case, consider the following:
     - Add Pydantic `AfterValidators` to constrain your synthetic data generation

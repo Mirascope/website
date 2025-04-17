@@ -6,24 +6,22 @@ title: Self-Consistency: Enhancing LLM Reasoning with Multiple Outputs
 
 This recipe demonstrates how to implement the Self-Consistency technique using Large Language Models (LLMs) with Mirascope. Self-Consistency is a prompt engineering method that enhances an LLM's reasoning capabilities by generating multiple Chain of Thought (CoT) responses and selecting the most common answer. We'll explore both a basic implementation and an enhanced version with automated answer extraction.
 
-<div class="admonition tip">
-<p class="admonition-title">Mirascope Concepts Used</p>
+<Info title="Mirascope Concepts Used" collapsible={true} defaultCollapsed={true}>
 <ul>
-<li><a href="../../../../learn/prompts/">Prompts</a></li>
-<li><a href="../../../../learn/calls/">Calls</a></li>
-<li><a href="../../../../learn/response_models/">Response Models</a></li>
+<li><a href="/docs/mirascope/learn/prompts/">Prompts</a></li>
+<li><a href="/docs/mirascope/learn/calls/">Calls</a></li>
+<li><a href="/docs/mirascope/learn/response_models/">Response Models</a></li>
 </ul>
-</div>
+</Info>
 
-<div class="admonition note">
-<p class="admonition-title">Background</p>
+<Note title="Background">
 <p>
 Self-consistency is a prompt engineering technique where multiple calls are made with Chain of Thought prompting, resulting in various answers, and the most common answer is selected. Self-consistency has shown to be highly effective on mathematical and symbolic reasoning, and has also been shown to help in niche scenarios where CoT actually reduces the quality of LLM output.
 </p>
 <p>
 In the <a href="https://arxiv.org/pdf/2203.11171">original paper</a>, users manually pick the most frequent response, but we have integrated response models to automate that process once all responses have been generated.
 </p>
-</div>
+</Note>
 
 ## Basic Self-Consistency Implementation
 
@@ -192,8 +190,7 @@ When implementing this technique, consider:
 - Adjusting the temperature parameter to control the diversity of generated responses.
 - Fine-tuning the answer extraction process for different types of problems (e.g., numerical vs. categorical answers).
 
-<div class="admonition tip">
-<p class="admonition-title">Additional Real-World Applications</p>
+<Info title="Additional Real-World Applications">
 <ul>
 <li><b>Complex Problem Solving</b>: Use Self-Consistency for multi-step problems in fields like physics or engineering.</li>
 <li><b>Medical Diagnosis</b>: Apply Self-Consistency to improve the accuracy of symptom analysis and potential diagnoses.</li>
@@ -201,7 +198,7 @@ When implementing this technique, consider:
 <li><b>Natural Language Understanding</b>: Enhance text classification or sentiment analysis tasks with Self-Consistency.</li>
 <li><b>Educational Assessment</b>: Use Self-Consistency to generate and validate multiple-choice questions and answers.</li>
 </ul>
-</div>
+</Info>
 
 When adapting this recipe to your specific use-case, consider:
 
