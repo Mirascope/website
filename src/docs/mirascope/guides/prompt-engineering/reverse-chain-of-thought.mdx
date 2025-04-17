@@ -33,9 +33,6 @@ Reverse chain of thought is a technique that works for any prompt which has show
 Let's implement the Reverse Chain of Thought technique using Mirascope:
 
 
-
-
-
 ```python
 import asyncio
 
@@ -271,44 +268,43 @@ how many seashells did they bring?"""
 print(await reverse_cot(query=query))
 ```
 
-    Thank you for your feedback! Based on your clarifications, here’s a revised problem prompt that corresponds to your original question while considering all the necessary conditions:
-    
-    ---
-    
-    **Problem Prompt:**
-    
-    At the trip to the county-level scavenger hunt competition, there are 90 participants who need to be divided into groups for the event to start. Each group consists of 9 people. If \( \frac{3}{5} \) of the total number of groups formed contributed by bringing back seashells, and each member of those groups brought back 2 seashells each, how many seashells were brought back in total?
-    
-    ---
-    
-    This prompt encapsulates all essential components of the problem. It clarifies the number of participants, how they are grouped, the fraction of groups contributing, and the number of seashells collected by each member, leading to the final calculation. Let's go through the reasoning for clarity:
-    
-    1. **Total Participants**: 90 people.
-    2. **Groups Formed**: Each group has 9 members, so:
-       \[
-       \text{Number of groups} = \frac{90}{9} = 10
-       \]
-    3. **Groups Contributing Shells**: \( \frac{3}{5} \) of the total groups contributed:
-       \[
-       \text{Groups contributing} = 10 \times \frac{3}{5} = 6
-       \]
-    4. **Total Members in Contributing Groups**: Each contributing group has 9 members:
-       \[
-       \text{Total members contributing} = 6 \times 9 = 54
-       \]
-    5. **Total Seashells Collected**: Each member brought back 2 seashells:
-       \[
-       \text{Total seashells} = 54 \times 2 = 108
-       \]
-    
-    Thus, the total number of seashells brought back is:
-    
-    \[
-    \boxed{108}
-    \] 
-    
-    This approach correctly follows the sequence of logical deductions based on the problem's premise. Thank you for your guidance!
+```
+Thank you for your feedback! Based on your clarifications, here’s a revised problem prompt that corresponds to your original question while considering all the necessary conditions:
 
+
+**Problem Prompt:**
+
+At the trip to the county-level scavenger hunt competition, there are 90 participants who need to be divided into groups for the event to start. Each group consists of 9 people. If \( \frac{3}{5} \) of the total number of groups formed contributed by bringing back seashells, and each member of those groups brought back 2 seashells each, how many seashells were brought back in total?
+
+
+This prompt encapsulates all essential components of the problem. It clarifies the number of participants, how they are grouped, the fraction of groups contributing, and the number of seashells collected by each member, leading to the final calculation. Let's go through the reasoning for clarity:
+
+1. **Total Participants**: 90 people.
+2. **Groups Formed**: Each group has 9 members, so:
+    \[
+    \text{Number of groups} = \frac{90}{9} = 10
+    \]
+3. **Groups Contributing Shells**: \( \frac{3}{5} \) of the total groups contributed:
+    \[
+    \text{Groups contributing} = 10 \times \frac{3}{5} = 6
+    \]
+4. **Total Members in Contributing Groups**: Each contributing group has 9 members:
+    \[
+    \text{Total members contributing} = 6 \times 9 = 54
+    \]
+5. **Total Seashells Collected**: Each member brought back 2 seashells:
+    \[
+    \text{Total seashells} = 54 \times 2 = 108
+    \]
+
+Thus, the total number of seashells brought back is:
+
+\[
+\boxed{108}
+\] 
+
+This approach correctly follows the sequence of logical deductions based on the problem's premise. Thank you for your guidance!
+```
 
 This implementation consists of several key functions:
 

@@ -182,6 +182,18 @@ const guidesMeta: DocSection = {
         "thread-of-thought": {
           title: "Thread of Thought",
         },
+        "least-to-most": {
+          title: "Least to Most",
+        },
+        "reverse-chain-of-thought": {
+          title: "Reverse Chain of Thought",
+        },
+        "role-prompting": {
+          title: "Role Prompting",
+        },
+        "tabular-chain-of-thought": {
+          title: "Tabular Chain of Thought",
+        },
       },
     },
   },
