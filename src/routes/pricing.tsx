@@ -23,30 +23,28 @@ const FeatureRow = ({
   const sameNonBoolean = free === pro && typeof free === "string" && free !== "";
 
   return (
-    <div className="grid grid-cols-3 gap-4 py-3 border-b border-gray-100 dark:border-gray-800 items-center min-h-[48px]">
-      <div className="text-lg font-medium dark:text-white">{feature}</div>
+    <div className="grid grid-cols-3 gap-4 py-3 border-b border-border items-center min-h-[48px]">
+      <div className="text-lg font-medium text-foreground">{feature}</div>
 
       {sameNonBoolean ? (
-        <div className="col-span-2 text-center text-lg whitespace-pre-line dark:text-white">
-          {free}
-        </div>
+        <div className="col-span-2 text-center text-lg whitespace-pre-line">{free}</div>
       ) : (
         <>
           <div className="text-center">
             {typeof free === "boolean" ? (
               <div className="flex justify-center">
                 {free ? (
-                  <div className="rounded-full p-1 bg-[#e8f5e9] dark:bg-[#193619]">
-                    <Check size={16} className="text-[#2d8031]" />
+                  <div className="rounded-full p-1 bg-secondary/30">
+                    <Check size={16} className="text-secondary" />
                   </div>
                 ) : (
-                  <div className="rounded-full p-1 bg-gray-100 dark:bg-gray-800">
-                    <X size={16} className="text-gray-400" />
+                  <div className="rounded-full p-1 bg-muted">
+                    <X size={16} className="text-muted-foreground" />
                   </div>
                 )}
               </div>
             ) : (
-              <span className="text-lg whitespace-pre-line dark:text-white">{free}</span>
+              <span className="text-lg whitespace-pre-line text-foreground">{free}</span>
             )}
           </div>
 
@@ -54,17 +52,17 @@ const FeatureRow = ({
             {typeof pro === "boolean" ? (
               <div className="flex justify-center">
                 {pro ? (
-                  <div className="rounded-full p-1 bg-[#e8f5e9] dark:bg-[#193619]">
-                    <Check size={16} className="text-[#2d8031]" />
+                  <div className="rounded-full p-1 bg-secondary/30">
+                    <Check size={16} className="text-secondary" />
                   </div>
                 ) : (
-                  <div className="rounded-full p-1 bg-gray-100 dark:bg-gray-800">
-                    <X size={16} className="text-gray-400" />
+                  <div className="rounded-full p-1 bg-muted">
+                    <X size={16} className="text-muted-foreground" />
                   </div>
                 )}
               </div>
             ) : (
-              <span className="text-lg whitespace-pre-line dark:text-white">{pro}</span>
+              <span className="text-lg whitespace-pre-line text-foreground">{pro}</span>
             )}
           </div>
         </>
@@ -89,25 +87,23 @@ const PricingTier = ({
   buttonLink: string;
   isGreen?: boolean;
 }) => (
-  <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden">
+  <div className="bg-background border border-border rounded-lg shadow-sm overflow-hidden">
     <div
       className={cn(
         "px-6 py-8",
-        isGreen
-          ? "bg-gradient-to-br from-[#f0f9f0] to-white dark:from-[#193619] dark:to-gray-900"
-          : "bg-white dark:bg-gray-900"
+        isGreen ? "bg-gradient-to-br from-secondary/10 to-background" : "bg-background"
       )}
     >
       <h3
-        className={cn("text-xl font-semibold mb-2", isGreen ? "text-[#2d8031]" : "text-gray-900")}
+        className={cn("text-xl font-semibold mb-2", isGreen ? "text-secondary" : "text-foreground")}
       >
         {name}
       </h3>
-      <p className="text-gray-600 dark:text-gray-300 mb-5">{description}</p>
+      <p className="text-muted-foreground mb-5">{description}</p>
       <div className="mb-6">
-        <span className="text-3xl font-bold">{price}</span>
+        <span className="text-3xl font-bold text-foreground">{price}</span>
         {price !== "TBD" && price !== "N/A" && (
-          <span className="text-sm text-gray-500 dark:text-gray-400 ml-1">/ month</span>
+          <span className="text-sm text-muted-foreground ml-1">/ month</span>
         )}
       </div>
       <a
@@ -115,8 +111,8 @@ const PricingTier = ({
         className={cn(
           "block w-full py-2 px-4 rounded-md text-center transition-colors",
           isGreen
-            ? "bg-[#2d8031] text-white hover:bg-[#246a29]"
-            : "bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+            ? "bg-secondary text-secondary-foreground hover:bg-secondary/90"
+            : "bg-muted text-muted-foreground hover:bg-accent"
         )}
       >
         {buttonText}
@@ -171,9 +167,7 @@ function PricingPage() {
   // Beta notice content for tooltips
   const betaNoticeContent = (
     <div className="font-handwriting">
-      <h3 className="text-lg font-semibold text-[#2d8031] dark:text-[#4ca251] mb-2">
-        Open Beta Notice
-      </h3>
+      <h3 className="text-lg font-semibold text-secondary mb-2">Open Beta Notice</h3>
       <p className="text-lg mb-2">
         Lilypad is currently in an open beta, during which we will not be charging for the platform.
         All users during this period will have free access to Pro features.
@@ -193,11 +187,11 @@ function PricingPage() {
     <div className="py-12 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-16">
-          <h1 className="text-4xl font-bold mb-4 text-center dark:text-white">Lilypad Pricing</h1>
-          <p className="text-xl text-gray-700 dark:text-gray-300 max-w-2xl mx-auto mb-2">
+          <h1 className="text-4xl font-bold mb-4 text-center text-foreground">Lilypad Pricing</h1>
+          <p className="text-xl text-foreground max-w-2xl mx-auto mb-2">
             Get started with the Free plan today.
           </p>
-          <p className="text-md text-gray-600 dark:text-gray-400 max-w-2xl mx-auto italic">
+          <p className="text-md text-muted-foreground max-w-2xl mx-auto italic">
             No credit card required.
           </p>
         </div>
@@ -222,29 +216,29 @@ function PricingPage() {
                 buttonLink="/docs/lilypad/quickstart"
                 isGreen={true}
               />
-              <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden">
-                <div className="px-6 py-8 dark:bg-gray-900">
+              <div className="bg-background border border-border rounded-lg shadow-sm overflow-hidden">
+                <div className="px-6 py-8 bg-background">
                   <div className="flex items-center gap-2 mb-2">
-                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Pro</h3>
+                    <h3 className="text-xl font-semibold text-foreground">Pro</h3>
                     <Tooltip>
                       <TooltipTrigger>
-                        <Info size={16} className="text-[#2d8031] cursor-pointer" />
+                        <Info size={16} className="text-secondary cursor-pointer" />
                       </TooltipTrigger>
                       <TooltipContent
                         side="right"
-                        className="w-md p-4 bg-[#f0f9f0] dark:bg-[#193619] text-[#2d8031] dark:text-[#4ca251] border border-[#c5e7c5] dark:border-[#2d8031]"
+                        className="w-md p-4 bg-secondary/10 text-secondary border border-secondary/20"
                       >
                         {betaNoticeContent}
                       </TooltipContent>
                     </Tooltip>
                   </div>
-                  <p className="text-gray-600 mb-5">For teams with more advanced needs</p>
+                  <p className="text-muted-foreground mb-5">For teams with more advanced needs</p>
                   <div className="mb-6">
                     <span className="text-3xl font-bold">TBD</span>
                   </div>
                   <a
                     href="/docs/lilypad/quickstart"
-                    className="block w-full py-2 px-4 rounded-md text-center transition-colors bg-gray-100 text-gray-800 hover:bg-gray-200"
+                    className="block w-full py-2 px-4 rounded-md text-center transition-colors bg-muted text-muted-foreground hover:bg-accent"
                   >
                     *Get Started
                   </a>
@@ -253,24 +247,16 @@ function PricingPage() {
             </div>
 
             {/* Feature comparison table */}
-            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden">
-              <div className="px-4 py-5 sm:px-6 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-                  Feature Comparison
-                </h3>
+            <div className="bg-background border border-border rounded-lg shadow-sm overflow-hidden">
+              <div className="px-4 py-5 sm:px-6 bg-accent border-b border-border">
+                <h3 className="text-lg font-medium text-foreground">Feature Comparison</h3>
               </div>
-              <div className="px-4 py-5 sm:p-6 overflow-x-auto bg-white dark:bg-gray-900">
+              <div className="px-4 py-5 sm:p-6 overflow-x-auto bg-background">
                 {/* Table header */}
-                <div className="grid grid-cols-3 gap-4 pb-4 border-b border-gray-200 dark:border-gray-700">
-                  <div className="text-lg font-medium text-gray-500 dark:text-gray-400">
-                    Feature
-                  </div>
-                  <div className="text-lg font-medium text-gray-500 dark:text-gray-400 text-center">
-                    Free
-                  </div>
-                  <div className="text-lg font-medium text-gray-500 dark:text-gray-400 text-center">
-                    Pro
-                  </div>
+                <div className="grid grid-cols-3 gap-4 pb-4 border-b border-border">
+                  <div className="text-lg font-medium text-muted-foreground">Feature</div>
+                  <div className="text-lg font-medium text-muted-foreground text-center">Free</div>
+                  <div className="text-lg font-medium text-muted-foreground text-center">Pro</div>
                 </div>
 
                 {/* Table rows */}
@@ -292,29 +278,29 @@ function PricingPage() {
                 buttonLink="/docs/lilypad/self-hosting"
                 isGreen={true}
               />
-              <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden">
+              <div className="bg-background border border-border rounded-lg shadow-sm overflow-hidden">
                 <div className="px-6 py-8">
                   <div className="flex items-center gap-2 mb-2">
-                    <h3 className="text-xl font-semibold text-gray-900">Pro</h3>
+                    <h3 className="text-xl font-semibold text-foreground">Pro</h3>
                     <Tooltip>
                       <TooltipTrigger>
-                        <Info size={16} className="text-[#2d8031] cursor-pointer" />
+                        <Info size={16} className="text-secondary cursor-pointer" />
                       </TooltipTrigger>
                       <TooltipContent
                         side="right"
-                        className="w-96 p-4 bg-[#f0f9f0] dark:bg-[#193619] text-[#2d8031] dark:text-[#4ca251] border border-[#c5e7c5] dark:border-[#2d8031]"
+                        className="w-96 p-4 bg-secondary/10 text-secondary border border-secondary/20"
                       >
                         {betaNoticeContent}
                       </TooltipContent>
                     </Tooltip>
                   </div>
-                  <p className="text-gray-600 mb-5">For teams with more advanced needs</p>
+                  <p className="text-muted-foreground mb-5">For teams with more advanced needs</p>
                   <div className="mb-6">
                     <span className="text-3xl font-bold">TBD</span>
                   </div>
                   <a
                     href="mailto:sales@mirascope.com"
-                    className="block w-full py-2 px-4 rounded-md text-center transition-colors bg-gray-100 text-gray-800 hover:bg-gray-200"
+                    className="block w-full py-2 px-4 rounded-md text-center transition-colors bg-muted text-muted-foreground hover:bg-accent"
                   >
                     Request License
                   </a>
@@ -323,24 +309,16 @@ function PricingPage() {
             </div>
 
             {/* Feature comparison table */}
-            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden">
-              <div className="px-4 py-5 sm:px-6 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-                  Feature Comparison
-                </h3>
+            <div className="bg-background border border-border rounded-lg shadow-sm overflow-hidden">
+              <div className="px-4 py-5 sm:px-6 bg-muted border-b border-border">
+                <h3 className="text-lg font-medium text-foreground">Feature Comparison</h3>
               </div>
-              <div className="px-4 py-5 sm:p-6 overflow-x-auto bg-white dark:bg-gray-900">
+              <div className="px-4 py-5 sm:p-6 overflow-x-auto bg-background">
                 {/* Table header */}
-                <div className="grid grid-cols-3 gap-4 pb-4 border-b border-gray-200 dark:border-gray-700">
-                  <div className="text-lg font-medium text-gray-500 dark:text-gray-400">
-                    Feature
-                  </div>
-                  <div className="text-lg font-medium text-gray-500 dark:text-gray-400 text-center">
-                    Free
-                  </div>
-                  <div className="text-lg font-medium text-gray-500 dark:text-gray-400 text-center">
-                    Pro
-                  </div>
+                <div className="grid grid-cols-3 gap-4 pb-4 border-b border-border">
+                  <div className="text-lg font-medium text-muted-foreground">Feature</div>
+                  <div className="text-lg font-medium text-muted-foreground text-center">Free</div>
+                  <div className="text-lg font-medium text-muted-foreground text-center">Pro</div>
                 </div>
 
                 {/* Table rows */}
@@ -353,25 +331,25 @@ function PricingPage() {
         </Tabs>
 
         {/* FAQ Section */}
-        <div className="mt-16 bg-gray-50 dark:bg-gray-800 p-8 rounded-lg border border-gray-200 dark:border-gray-700">
-          <h2 className="text-2xl font-semibold mb-4 dark:text-white">
+        <div className="mt-16 bg-accent p-8 rounded-lg border border-border">
+          <h2 className="text-2xl font-semibold mb-4 text-foreground">
             Frequently Asked Questions
           </h2>
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-medium mb-2 dark:text-white">
+              <h3 className="text-lg font-medium mb-2 text-foreground">
                 How long will the open beta last?
               </h3>
-              <p className="text-gray-600 dark:text-gray-300">
+              <p className="text-muted-foreground">
                 The open beta period is ongoing, and we'll provide advance notice before moving to
                 paid plans.
               </p>
             </div>
             <div>
-              <h3 className="text-lg font-medium mb-2 dark:text-white">
+              <h3 className="text-lg font-medium mb-2 text-foreground">
                 What happens when the beta ends?
               </h3>
-              <p className="text-gray-600 dark:text-gray-300">
+              <p className="text-muted-foreground">
                 All existing users will receive a grace period to evaluate which plan is right for
                 them before making any changes.
               </p>
@@ -380,10 +358,10 @@ function PricingPage() {
         </div>
 
         <div className="mt-16 text-center">
-          <h2 className="text-2xl font-semibold mb-4 dark:text-white">
+          <h2 className="text-2xl font-semibold mb-4 text-foreground">
             Have questions about our pricing?
           </h2>
-          <p className="text-gray-600 dark:text-gray-300">
+          <p className="text-muted-foreground">
             Join our{" "}
             <a
               href="https://join.slack.com/t/mirascope-community/shared_invite/zt-2ilqhvmki-FB6LWluInUCkkjYD3oSjNA"
