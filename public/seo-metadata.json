@@ -683,5 +683,25 @@
     "route": "/docs/mirascope/guides/prompt-engineering/thread-of-thought",
     "title": "Thread of Thought | Mirascope",
     "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/least-to-most": {
+    "route": "/docs/mirascope/guides/prompt-engineering/least-to-most",
+    "title": "Least to Most: Enhancing LLM Reasoning with Subproblem Decomposition | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/reverse-chain-of-thought": {
+    "route": "/docs/mirascope/guides/prompt-engineering/reverse-chain-of-thought",
+    "title": "Reverse Chain of Thought: Enhancing LLM Reasoning with Self-Reflection | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/role-prompting": {
+    "route": "/docs/mirascope/guides/prompt-engineering/role-prompting",
+    "title": "Role Prompting | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/tabular-chain-of-thought": {
+    "route": "/docs/mirascope/guides/prompt-engineering/tabular-chain-of-thought",
+    "title": "Tabular Chain of Thought | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
   }
 }

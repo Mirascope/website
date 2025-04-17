@@ -30,18 +30,6 @@ const disabledGuidesMeta: DocSection = {
     "more-advanced-knowledge-graph": {
       title: "Knowledge Graph",
     },
-    "prompt-engineering-least-to-most": {
-      title: "Least to Most",
-    },
-    "prompt-engineering-reverse-chain-of-thought": {
-      title: "Reverse Chain of Thought",
-    },
-    "prompt-engineering-role-prompting": {
-      title: "Role Prompting",
-    },
-    "prompt-engineering-tabular-chain-of-thought": {
-      title: "Tabular Chain of Thought",
-    },
   },
 };
 
