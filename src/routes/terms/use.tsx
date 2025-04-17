@@ -1,14 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
-import PolicyPage from "@/components/PolicyPage";
-import { usePolicy } from "@/lib/content/policy";
+import PolicyPage, { PolicyPageLoading, PolicyPageError } from "@/components/PolicyPage";
+import { getPolicy } from "@/lib/content/policy";
 import useSEO from "@/lib/hooks/useSEO";
+import { Suspense } from "react";
+import { createSuspenseResource } from "@/lib/hooks/useSuspense";
 
-export const Route = createFileRoute("/terms/use")({
-  component: TermsOfUsePage,
-});
-
-function TermsOfUsePage() {
-  const { content, loading, error } = usePolicy("terms/use");
+// Suspense-enabled content component
+function TermsOfUseContent() {
+  const policyResource = createSuspenseResource(`policy:terms/use`, () => getPolicy("terms/use"));
+  const content = policyResource.read();
 
   // Apply SEO with frontmatter from MDX
   useSEO({
@@ -20,5 +20,26 @@ function TermsOfUsePage() {
     type: "article",
   });
 
-  return <PolicyPage content={content} loading={loading} error={error} type="terms-use" />;
+  return <PolicyPage content={content} type="terms-use" />;
+}
+
+export const Route = createFileRoute("/terms/use")({
+  component: TermsOfUsePage,
+});
+
+function TermsOfUsePage() {
+  try {
+    return (
+      <Suspense fallback={<PolicyPageLoading type="terms-use" />}>
+        <TermsOfUseContent />
+      </Suspense>
+    );
+  } catch (error) {
+    return (
+      <PolicyPageError
+        type="terms-use"
+        error={error instanceof Error ? error.message : String(error)}
+      />
+    );
+  }
 }
