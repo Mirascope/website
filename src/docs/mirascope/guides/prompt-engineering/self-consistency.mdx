@@ -14,15 +14,14 @@ This recipe demonstrates how to implement the Self-Consistency technique using L
 </ul>
 </Info>
 
-<div class="admonition note">
-<p class="admonition-title">Background</p>
+<Note title="Background">
 <p>
 Self-consistency is a prompt engineering technique where multiple calls are made with Chain of Thought prompting, resulting in various answers, and the most common answer is selected. Self-consistency has shown to be highly effective on mathematical and symbolic reasoning, and has also been shown to help in niche scenarios where CoT actually reduces the quality of LLM output.
 </p>
 <p>
 In the <a href="https://arxiv.org/pdf/2203.11171">original paper</a>, users manually pick the most frequent response, but we have integrated response models to automate that process once all responses have been generated.
 </p>
-</div>
+</Note>
 
 ## Basic Self-Consistency Implementation
 
