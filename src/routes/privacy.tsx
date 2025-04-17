@@ -1,14 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
-import PolicyPage from "@/components/PolicyPage";
-import { usePolicy } from "@/lib/content/policy";
+import PolicyPage, { PolicyPageLoading, PolicyPageError } from "@/components/PolicyPage";
+import { getPolicy } from "@/lib/content/policy";
 import useSEO from "@/lib/hooks/useSEO";
+import { Suspense } from "react";
+import { createSuspenseResource } from "@/lib/hooks/useSuspense";
 
-export const Route = createFileRoute("/privacy")({
-  component: PrivacyPage,
-});
-
-function PrivacyPage() {
-  const { content, loading, error } = usePolicy("privacy");
+// Suspense-enabled content component
+function PrivacyContent() {
+  const policyResource = createSuspenseResource(`policy:privacy`, () => getPolicy("privacy"));
+  const content = policyResource.read();
 
   // Apply SEO with frontmatter from MDX
   useSEO({
@@ -20,5 +20,26 @@ function PrivacyPage() {
     type: "article",
   });
 
-  return <PolicyPage content={content} loading={loading} error={error} type="privacy" />;
+  return <PolicyPage content={content} type="privacy" />;
+}
+
+export const Route = createFileRoute("/privacy")({
+  component: PrivacyPage,
+});
+
+function PrivacyPage() {
+  try {
+    return (
+      <Suspense fallback={<PolicyPageLoading type="privacy" />}>
+        <PrivacyContent />
+      </Suspense>
+    );
+  } catch (error) {
+    return (
+      <PolicyPageError
+        type="privacy"
+        error={error instanceof Error ? error.message : String(error)}
+      />
+    );
+  }
 }

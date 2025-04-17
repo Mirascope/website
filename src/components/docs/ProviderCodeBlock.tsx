@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { LoadingContent } from "@/components/docs";
 import { useProvider } from "./ProviderContext";
 import { CodeBlock } from "../CodeBlock";
 import { cn } from "@/lib/utils";
@@ -79,12 +80,7 @@ export function ProviderCodeBlock({
   if (isLoading) {
     return (
       <div className={`my-4 ${className}`}>
-        <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse">
-          <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded mb-2 w-3/4"></div>
-          <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
-          <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded mb-2 w-5/6"></div>
-          <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded mb-2 w-2/3"></div>
-        </div>
+        <LoadingContent spinnerClassName="h-8 w-8" fullHeight={false} />
       </div>
     );
   }
@@ -103,14 +99,11 @@ export function ProviderCodeBlock({
   // Display the code
   return (
     <div
-      className={cn(
-        "rounded-md border-2 border-blue-600/50 bg-[#191c20] shadow-md overflow-hidden",
-        className
-      )}
+      className={cn("rounded-md border-2 bg-button-primary shadow-md overflow-hidden", className)}
     >
       {collapsible && (
         <div
-          className="px-4 py-2.5 flex items-center justify-between bg-blue-800/20 cursor-pointer"
+          className="px-4 py-2.5 flex items-center justify-between cursor-pointer"
           onClick={toggleExpand}
         >
           <div className="flex items-center">

@@ -69,8 +69,8 @@ const GitHubRepoButton: React.FC<GitHubRepoButtonProps> = ({ className }) => {
       className={cn(
         "flex flex-col py-1 px-2 transition-colors duration-200",
         isLandingPage
-          ? "text-white hover:text-gray-300"
-          : "text-slate-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300",
+          ? "text-white hover:text-primary"
+          : "text-foreground hover:text-muted-foreground",
         className
       )}
     >

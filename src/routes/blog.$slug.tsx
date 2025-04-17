@@ -1,5 +1,5 @@
 import { createFileRoute, useParams, Link } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, Sparkles } from "lucide-react";
 import { MDXRenderer } from "@/components/MDXRenderer";
@@ -8,19 +8,49 @@ import ErrorContent from "@/components/ErrorContent";
 import useFunMode from "@/lib/hooks/useFunMode";
 import useSEO from "@/lib/hooks/useSEO";
 import { cn } from "@/lib/utils";
-import { useBlogPost } from "@/lib/content/blog";
+import { getBlogContent } from "@/lib/content/blog";
 
-export const Route = createFileRoute("/blog/$slug")({
-  component: BlogPostPage,
-  loader: ({ params }) => {
-    const { slug } = params;
-    return { slug };
-  },
-});
+// Create a resource cache to store suspense data
+const cache = new Map();
 
-function BlogPostPage() {
-  const { slug } = useParams({ from: "/blog/$slug" });
-  const { content: post, loading, error } = useBlogPost(slug);
+// Helper to create suspense resources
+function createResource<T>(key: string, fetcher: () => Promise<T>) {
+  if (!cache.has(key)) {
+    let data: T | null = null;
+    let error: Error | null = null;
+    let promise: Promise<void> | null = null;
+
+    const resource = {
+      read() {
+        if (error) throw error;
+        if (data) return data;
+        if (!promise) {
+          promise = fetcher()
+            .then((result) => {
+              data = result;
+            })
+            .catch((e) => {
+              error = e instanceof Error ? e : new Error(String(e));
+            });
+        }
+        throw promise;
+      },
+    };
+
+    cache.set(key, resource);
+  }
+
+  return cache.get(key);
+}
+
+// Blog post content component that uses Suspense
+function BlogPostContent({ slug }: { slug: string }) {
+  // Create resource for the blog post
+  const postResource = createResource(`blog:${slug}`, () => getBlogContent(slug));
+
+  // Read the post (this will throw and suspend if data isn't ready)
+  const post = postResource.read();
+
   const [tocOpen, setTocOpen] = useState(false);
   const [ogImage, setOgImage] = useState<string | undefined>(undefined);
 
@@ -49,60 +79,22 @@ function BlogPostPage() {
       }
     };
 
-    if (post) {
-      findOgImage();
-    }
-  }, [post, slug]);
+    findOgImage();
+  }, [slug]);
 
   // Apply SEO
   useSEO({
-    title: error ? "Post Not Found" : post?.meta.title,
-    description: error
-      ? "The requested blog post could not be found."
-      : post?.meta.description || post?.mdx?.frontmatter?.excerpt,
+    title: post.meta.title,
+    description: post.meta.description || post.mdx?.frontmatter?.excerpt,
     image: ogImage,
     url: `/blog/${slug}`,
     type: "article",
-    article: post?.meta
-      ? {
-          publishedTime: post.meta.date,
-          modifiedTime: post.meta.lastUpdated,
-          author: post.meta.author,
-        }
-      : undefined,
+    article: {
+      publishedTime: post.meta.date,
+      modifiedTime: post.meta.lastUpdated,
+      author: post.meta.author,
+    },
   });
-
-  if (loading) {
-    return (
-      <div className="flex justify-center">
-        <div className="flex mx-auto w-full max-w-7xl px-4">
-          <div className="w-56 flex-shrink-0 hidden lg:block"></div>
-          <LoadingContent className="flex-1 min-w-0" fullHeight={true} />
-          <div className="w-56 flex-shrink-0 hidden lg:block"></div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error || !post) {
-    return (
-      <div className="relative">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex flex-col lg:flex-row">
-            <div className="w-56 flex-shrink-0 hidden lg:block"></div>
-            <ErrorContent
-              title="Post Not Found"
-              message={error instanceof Error ? error.message : String(error)}
-              showBackButton={true}
-              backTo="/blog"
-              backLabel="Back to Blog"
-            />
-            <div className="w-56 flex-shrink-0 hidden lg:block"></div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   // Extract metadata for easier access
   const { title, date, readTime, author, lastUpdated } = post.meta;
@@ -111,7 +103,7 @@ function BlogPostPage() {
     <div className="relative">
       {tocOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
+          className="fixed inset-0 bg-foreground/50 z-30 lg:hidden"
           onClick={() => setTocOpen(false)}
         ></div>
       )}
@@ -142,7 +134,7 @@ function BlogPostPage() {
               </div>
               <div
                 id="blog-content"
-                className="bg-white dark:bg-gray-900 rounded-xl shadow-sm p-4 sm:p-6 border border-gray-200 dark:border-gray-700 blog-content"
+                className="bg-background rounded-xl shadow-sm p-4 sm:p-6 border border-border blog-content"
               >
                 {post.mdx ? (
                   <MDXRenderer
@@ -151,7 +143,7 @@ function BlogPostPage() {
                     useFunMode={funMode}
                   />
                 ) : (
-                  <div className="animate-pulse bg-gray-100 h-40 rounded-md"></div>
+                  <LoadingContent spinnerClassName="h-8 w-8" fullHeight={false} />
                 )}
               </div>
             </div>
@@ -164,7 +156,7 @@ function BlogPostPage() {
                 onClick={toggleFunMode}
                 className={cn(
                   "rounded-full w-12 h-12 p-0 shadow-md",
-                  funMode ? "bg-primary text-white" : "bg-white hover:bg-purple-50"
+                  funMode ? "bg-primary text-primary-foreground" : "bg-background hover:bg-muted"
                 )}
               >
                 <Sparkles className="w-5 h-5" />
@@ -175,4 +167,67 @@ function BlogPostPage() {
       </div>
     </div>
   );
+}
+
+// Error fallback component for when blog post loading fails
+function BlogPostError({ slug, error }: { slug: string; error: string }) {
+  // Apply SEO for error state
+  useSEO({
+    title: "Post Not Found",
+    description: "The requested blog post could not be found.",
+    url: `/blog/${slug}`,
+  });
+
+  return (
+    <div className="relative">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="flex flex-col lg:flex-row">
+          <div className="w-56 flex-shrink-0 hidden lg:block"></div>
+          <ErrorContent
+            title="Post Not Found"
+            message={error}
+            showBackButton={true}
+            backTo="/blog"
+            backLabel="Back to Blog"
+          />
+          <div className="w-56 flex-shrink-0 hidden lg:block"></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export const Route = createFileRoute("/blog/$slug")({
+  component: BlogPostPage,
+  loader: ({ params }) => {
+    const { slug } = params;
+    return { slug };
+  },
+});
+
+function BlogPostPage() {
+  const { slug } = useParams({ from: "/blog/$slug" });
+
+  // Custom error boundary pattern using React.Suspense and try/catch
+  try {
+    return (
+      <Suspense
+        fallback={
+          <div className="flex justify-center">
+            <div className="flex mx-auto w-full max-w-7xl px-4">
+              <div className="w-56 flex-shrink-0 hidden lg:block"></div>
+              <LoadingContent className="flex-1 min-w-0" fullHeight={true} />
+              <div className="w-56 flex-shrink-0 hidden lg:block"></div>
+            </div>
+          </div>
+        }
+      >
+        <BlogPostContent slug={slug} />
+      </Suspense>
+    );
+  } catch (error) {
+    return (
+      <BlogPostError slug={slug} error={error instanceof Error ? error.message : String(error)} />
+    );
+  }
 }

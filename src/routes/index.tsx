@@ -26,7 +26,7 @@ function LandingPage() {
           />
         </div>
 
-        <div className="text-black dark:text-white sunset:text-white mt-0 flex flex-col font-medium tracking-tight dark:drop-shadow-lg sunset:drop-shadow-lg">
+        <div className="text-foreground mt-0 flex flex-col font-medium tracking-tight drop-shadow-lg">
           <span
             style={{ fontSize: "clamp(2.5rem, 8vw, 6rem)", lineHeight: "0.9" }}
             className="whitespace-normal sm:whitespace-nowrap font-handwriting mb-8"
@@ -44,7 +44,7 @@ function LandingPage() {
         <div className="mt-10 sm:mt-12 md:mt-14 flex flex-col sm:flex-row gap-4 justify-center items-center w-full">
           <a
             href="/docs"
-            className="bg-primary text-white px-6 py-3 rounded-md text-lg font-medium hover:bg-primary/90 transition-colors w-full sm:w-auto max-w-[200px] text-center shadow-sm"
+            className="bg-primary text-primary-foreground px-6 py-3 rounded-md text-lg font-medium hover:bg-primary/90 transition-colors w-full sm:w-auto max-w-[200px] text-center shadow-sm"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -52,7 +52,7 @@ function LandingPage() {
           </a>
           <a
             href="https://join.slack.com/t/mirascope-community/shared_invite/zt-2ilqhvmki-FB6LWluInUCkkjYD3oSjNA"
-            className="bg-background border border-gray-300 text-gray-800 dark:text-white dark:border-gray-600 px-6 py-3 rounded-md text-lg font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors w-fit sm:w-auto text-center shadow-sm"
+            className="bg-background border border-border text-foreground px-6 py-3 rounded-md text-lg font-medium hover:bg-accent hover:border-primary transition-colors w-fit sm:w-auto text-center shadow-sm"
           >
             Join the community
           </a>

@@ -3,10 +3,6 @@ title: Style Test Page
 description: A comprehensive showcase of all UI components for visual consistency testing
 ---
 
-# Style Test Page
-
-> This page displays all UI components and styles for visual consistency testing. It helps ensure that components look good across all color themes and work well together.
-
 
 ## Headings
 
@@ -17,20 +13,6 @@ description: A comprehensive showcase of all UI components for visual consistenc
 ##### Heading 5
 ###### Heading 6
 
-<div className="badge-container">
-    <a href="https://github.com/Mirascope/mirascope/actions/workflows/tests.yml" target="_blank"><img src="https://github.com/Mirascope/mirascope/actions/workflows/tests.yml/badge.svg?branch=main" alt="Tests"/></a>
-    <a href="https://codecov.io/github/Mirascope/mirascope" target="_blank"><img src="https://codecov.io/github/Mirascope/mirascope/graph/badge.svg?token=HAEAWT3KC9" alt="Coverage"/></a>
-    <a href="https://mirascope.com/WELCOME" target="_blank"><img src="https://img.shields.io/badge/docs-available-brightgreen" alt="Docs"/></a>
-    <a href="https://pypi.python.org/pypi/mirascope" target="_blank"><img src="https://img.shields.io/pypi/v/mirascope.svg" alt="PyPI Version"/></a>
-    <a href="https://pypi.python.org/pypi/mirascope" target="_blank"><img src="https://img.shields.io/pypi/pyversions/mirascope.svg" alt="Stars"/></a>
-    <a href="https://github.com/Mirascope/mirascope/blob/dev/LICENSE"><img src="https://img.shields.io/github/license/Mirascope/mirascope.svg" alt="License"/></a>
-</div>
-
-<div className="flex flex-wrap gap-4 my-6">
-    <a href="./mirascope/getting-started/why" className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-white hover:bg-primary/90 transition-colors"><span className="material-icon">💡</span> Why Use Mirascope</a>
-    <a href="https://join.slack.com/t/mirascope-community/shared_invite/zt-2ilqhvmki-FB6LWluInUCkkjYD3oSjNA" className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-white hover:bg-primary/90 transition-colors"><span className="material-icon">👥</span> Join Our Community</a>
-    <a href="https://github.com/Mirascope/mirascope" className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-white hover:bg-primary/90 transition-colors"><span className="material-icon">⭐</span> Star the Repo</a>
-</div>
 
 ```python
 @llm.call(provider="$PROVIDER", model="$MODEL")
@@ -120,39 +102,39 @@ greeting("World")
 ## Tables
 
 <div className="overflow-x-auto">
-  <table className="min-w-full divide-y divide-gray-200 my-6">
+  <table className="min-w-full divide-y divide-border my-6">
     <thead>
       <tr>
-        <th className="px-4 py-2 bg-gray-50 dark:bg-gray-800 text-left text-sm font-medium">Name</th>
-        <th className="px-4 py-2 bg-gray-50 dark:bg-gray-800 text-left text-sm font-medium">Type</th>
-        <th className="px-4 py-2 bg-gray-50 dark:bg-gray-800 text-left text-sm font-medium">Default</th>
-        <th className="px-4 py-2 bg-gray-50 dark:bg-gray-800 text-left text-sm font-medium">Description</th>
+        <th className="px-4 py-2 bg-muted text-left text-sm font-medium">Name</th>
+        <th className="px-4 py-2 bg-muted text-left text-sm font-medium">Type</th>
+        <th className="px-4 py-2 bg-muted text-left text-sm font-medium">Default</th>
+        <th className="px-4 py-2 bg-muted text-left text-sm font-medium">Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">id</td>
-        <td className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">string</td>
-        <td className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">-</td>
-        <td className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">Unique identifier</td>
+        <td className="px-4 py-2 border-t border-border">id</td>
+        <td className="px-4 py-2 border-t border-border">string</td>
+        <td className="px-4 py-2 border-t border-border">-</td>
+        <td className="px-4 py-2 border-t border-border">Unique identifier</td>
       </tr>
       <tr>
-        <td className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">name</td>
-        <td className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">string</td>
-        <td className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">-</td>
-        <td className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">Display name</td>
+        <td className="px-4 py-2 border-t border-border">name</td>
+        <td className="px-4 py-2 border-t border-border">string</td>
+        <td className="px-4 py-2 border-t border-border">-</td>
+        <td className="px-4 py-2 border-t border-border">Display name</td>
       </tr>
       <tr>
-        <td className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">enabled</td>
-        <td className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">boolean</td>
-        <td className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">false</td>
-        <td className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">Whether it's enabled</td>
+        <td className="px-4 py-2 border-t border-border">enabled</td>
+        <td className="px-4 py-2 border-t border-border">boolean</td>
+        <td className="px-4 py-2 border-t border-border">false</td>
+        <td className="px-4 py-2 border-t border-border">Whether it's enabled</td>
       </tr>
       <tr>
-        <td className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">count</td>
-        <td className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">number</td>
-        <td className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">0</td>
-        <td className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">Item count</td>
+        <td className="px-4 py-2 border-t border-border">count</td>
+        <td className="px-4 py-2 border-t border-border">number</td>
+        <td className="px-4 py-2 border-t border-border">0</td>
+        <td className="px-4 py-2 border-t border-border">Item count</td>
       </tr>
     </tbody>
   </table>
@@ -162,24 +144,37 @@ greeting("World")
 
 ## Callouts
 
-<Callout type="note">
-  This is a default callout component.
-</Callout>
 
 <Note>
   This is a note callout for informational content.
+</Note>
+
+<Note title="Take note">
+  This note has a title.
 </Note>
 
 <Warning>
   This is a warning callout for important warnings.
 </Warning>
 
+<Warning title="Take Warning">
+  This Warning has a title.
+</Warning>
+
 <Info>
   This is an info callout for additional information.
 </Info>
 
+<Info title="Take Info">
+  This Info has a title.
+</Info>
+
 <Success>
   This is a success callout for positive outcomes.
+</Success>
+
+<Success title="Take Success">
+  This Success has a title.
 </Success>
 
 

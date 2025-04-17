@@ -9,7 +9,6 @@ import useProviderSelection from "@/lib/hooks/useProviderSelection";
 import { ProviderContextProvider } from "@/components/docs";
 import TocSidebar from "./TocSidebar";
 import MainContent from "./MainContent";
-import LoadingContent from "./LoadingContent";
 
 import type { DocContent } from "@/lib/content/docs";
 
@@ -17,18 +16,17 @@ type DocsLayoutProps = {
   product: ProductName;
   section: string | null;
   slug: string;
-  group?: string | null;
-  document: DocContent | null;
+  group: string | null;
+  document: DocContent;
   docs: DocMeta[];
-  loading: boolean;
-  error: string | null;
+  error?: string | null;
 };
 
 /**
  * DocsLayout - Shared layout for all documentation pages
  *
- * Handles loading states, error states, and the common layout
- * between all doc page types (product index, regular docs, API docs)
+ * Handles the common layout between all doc page types
+ * (product index, regular docs, API docs)
  */
 const DocsLayout: React.FC<DocsLayoutProps> = ({
   product,
@@ -37,8 +35,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
   group = null,
   document,
   docs,
-  loading,
-  error,
+  error = null,
 }) => {
   // Use custom hooks for state management
   const [funMode, toggleFunMode] = useFunMode();
@@ -46,44 +43,67 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
 
   // Left sidebar content
   const leftSidebar = (
-    <SidebarContainer
-      product={product}
-      section={section}
-      slug={slug}
-      group={group}
-      docs={loading ? [] : docs}
-    />
+    <SidebarContainer product={product} section={section} slug={slug} group={group} docs={docs} />
   );
 
   // Right sidebar content (TOC)
-  const rightSidebar =
-    !loading && !error && document ? (
-      <TocSidebar
-        product={product}
-        section={section}
-        slug={slug}
-        funMode={funMode}
-        toggleFunMode={toggleFunMode}
-        document={document}
-      />
-    ) : (
-      <div className="w-56 flex-shrink-0 hidden lg:block"></div>
-    );
+  const rightSidebar = error ? (
+    <div className="w-56 flex-shrink-0 hidden lg:block"></div>
+  ) : (
+    <TocSidebar
+      product={product}
+      section={section}
+      slug={slug}
+      funMode={funMode}
+      toggleFunMode={toggleFunMode}
+      document={document}
+    />
+  );
 
   // Main content
-  let mainContent;
-  if (loading) {
-    mainContent = <LoadingContent className="flex-1 min-w-0 px-8" />;
-  } else if (error || !document) {
-    mainContent = (
-      <ErrorContent
-        title="Document Not Found"
-        message={error || "The document you're looking for doesn't exist or is invalid."}
-      />
-    );
-  } else {
-    mainContent = <MainContent document={document} funMode={funMode} />;
-  }
+  const mainContent = error ? (
+    <ErrorContent
+      title="Document Not Found"
+      message={error || "The document you're looking for doesn't exist or is invalid."}
+    />
+  ) : (
+    <MainContent document={document} funMode={funMode} />
+  );
+
+  return (
+    <ProviderContextProvider
+      defaultProvider={selectedProvider}
+      onProviderChange={handleProviderChange}
+    >
+      <BaseLayout leftSidebar={leftSidebar} mainContent={mainContent} rightSidebar={rightSidebar} />
+    </ProviderContextProvider>
+  );
+};
+
+/**
+ * Error boundary version of DocsLayout for when document loading fails
+ */
+export const ErrorDocsLayout: React.FC<Omit<DocsLayoutProps, "document"> & { error: string }> = ({
+  product,
+  section,
+  slug,
+  group,
+  docs,
+  error,
+}) => {
+  // Use custom hooks for state management
+  const [selectedProvider, handleProviderChange] = useProviderSelection();
+
+  // Left sidebar content
+  const leftSidebar = (
+    <SidebarContainer product={product} section={section} slug={slug} group={group} docs={docs} />
+  );
+
+  // Empty right sidebar for error state
+  const rightSidebar = <div className="w-56 flex-shrink-0 hidden lg:block"></div>;
+
+  // Error content
+  const mainContent = <ErrorContent title="Document Not Found" message={error} />;
 
   return (
     <ProviderContextProvider

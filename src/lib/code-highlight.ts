@@ -96,13 +96,13 @@ export async function highlightCode(code: string, language: string = "text", met
     // Using direct codeToHtml call from shiki
     const lightThemeHtml = await codeToHtml(processedCode, {
       lang: language || "text",
-      theme: "one-light", // Use original theme
+      theme: "github-light", // Use original theme
       transformers: [transformerNotationHighlight()],
     });
 
     const darkThemeHtml = await codeToHtml(processedCode, {
       lang: language || "text",
-      theme: "dark-plus", // Use original theme
+      theme: "github-dark-default", // Use original theme
       transformers: [transformerNotationHighlight()],
     });
 
