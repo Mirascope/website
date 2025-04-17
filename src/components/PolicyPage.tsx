@@ -54,9 +54,7 @@ const PolicyPage: React.FC<PolicyPageProps> = ({ content, type = "privacy" }) =>
         <div>
           <h1 className="text-3xl font-bold uppercase">{title}</h1>
           {lastUpdated && (
-            <p className="font-medium text-gray-500 dark:text-gray-400 mt-1">
-              Last Updated: {lastUpdated}
-            </p>
+            <p className="font-medium text-muted-foreground mt-1">Last Updated: {lastUpdated}</p>
           )}
         </div>
         <Button
@@ -64,7 +62,7 @@ const PolicyPage: React.FC<PolicyPageProps> = ({ content, type = "privacy" }) =>
           size="sm"
           onClick={toggleFunMode}
           className={cn(
-            funMode ? "bg-primary text-white" : "hover:bg-purple-50",
+            funMode ? "bg-primary text-primary-foreground" : "hover:bg-muted",
             "transition-colors"
           )}
         >
@@ -75,7 +73,7 @@ const PolicyPage: React.FC<PolicyPageProps> = ({ content, type = "privacy" }) =>
 
       <div
         id={contentId}
-        className="bg-white dark:bg-gray-900 rounded-xl shadow-sm p-4 sm:p-6 border border-gray-200 dark:border-gray-700"
+        className="bg-background rounded-xl shadow-sm p-4 sm:p-6 border border-border"
       >
         <article className="prose prose-lg max-w-none">
           <MDXRenderer
@@ -108,7 +106,7 @@ export const PolicyPageError: React.FC<{
         <h1 className="text-3xl font-bold uppercase">{defaultTitle}</h1>
       </div>
       <p>This content is currently unavailable. Please check back later.</p>
-      {error && <p className="text-red-500 mt-2">Error: {error}</p>}
+      {error && <p className="text-destructive mt-2">Error: {error}</p>}
     </div>
   );
 };

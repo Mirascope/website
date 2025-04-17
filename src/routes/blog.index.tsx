@@ -125,7 +125,7 @@ function BlogPage() {
                     <button
                       onClick={() => handlePageChange(currentPage - 1)}
                       disabled={currentPage === 1}
-                      className={`px-3 py-1 rounded border font-medium ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800"}`}
+                      className={`px-3 py-1 rounded border border-border font-medium ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:bg-muted"}`}
                     >
                       Previous
                     </button>
@@ -136,8 +136,8 @@ function BlogPage() {
                         onClick={() => handlePageChange(i + 1)}
                         className={`w-8 h-8 flex items-center justify-center rounded font-medium ${
                           currentPage === i + 1
-                            ? "bg-primary text-white"
-                            : "border hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800"
+                            ? "bg-primary text-primary-foreground"
+                            : "border border-border hover:bg-muted"
                         }`}
                       >
                         {i + 1}
@@ -147,7 +147,7 @@ function BlogPage() {
                     <button
                       onClick={() => handlePageChange(currentPage + 1)}
                       disabled={currentPage === totalPages}
-                      className={`px-3 py-1 rounded border font-medium ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800"}`}
+                      className={`px-3 py-1 rounded border border-border font-medium ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:bg-muted"}`}
                     >
                       Next
                     </button>
