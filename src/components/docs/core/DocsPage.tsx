@@ -1,111 +1,40 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import DocsLayout from "./DocsLayout";
 import useSEO from "@/lib/hooks/useSEO";
-import { getDoc, getDocsForProduct, type DocMeta, type DocContent } from "@/lib/content/docs";
+import { getDoc, getDocsForProduct, type DocMeta } from "@/lib/content/docs";
 import { type ProductName } from "@/lib/route-types";
+import { createSuspenseResource } from "@/lib/hooks/useSuspense";
 
-type DocsPageProps = {
+// Document content resource component
+function DocumentContent({
+  product,
+  section,
+  splat,
+  currentSlug,
+  group,
+}: {
   product: ProductName;
   section: string | null;
   splat: string;
-};
+  currentSlug: string;
+  group: string | null;
+}) {
+  // Build the document path
+  const docPath = section ? `/docs/${product}/${section}/${splat}` : `/docs/${product}/${splat}`;
 
-/**
- * DocsPage component - Handles data fetching and state management for all doc pages
- *
- * Handles loading documents, error states, and passes data to DocsLayout
- */
-const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
-  const [document, setDocument] = useState<DocContent | null>(null);
-  const [productDocs, setProductDocs] = useState<DocMeta[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  // For index pages, append /index, ensuring no double slashes
+  const docPathNoTrailingSlash = docPath.endsWith("/") ? docPath.slice(0, -1) : docPath;
 
-  // Parse the path into group/slug components
-  const pathParts = splat.split("/").filter(Boolean);
+  // Handle empty splat cases correctly
+  const finalPath = splat === "" || splat === "/" ? `${docPathNoTrailingSlash}/index` : docPath;
 
-  // Extract group if it exists (first part of the splat)
-  const group = pathParts.length > 0 ? pathParts[0] : null;
+  // Create resources for both content needed
+  const docResource = createSuspenseResource(`doc:${finalPath}`, () => getDoc(finalPath));
+  const docsResource = createSuspenseResource(`docs:${product}`, () => getDocsForProduct(product));
 
-  // Extract current slug (last part) for sidebar highlighting
-  const currentSlug = pathParts.length > 0 ? pathParts[pathParts.length - 1] : "index";
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        // Load all docs for this product for the sidebar
-        const docsForProduct = await getDocsForProduct(product);
-        setProductDocs(docsForProduct);
-
-        // Build the path based on whether this is in a section or not
-        const docPath = section
-          ? `/docs/${product}/${section}/${splat}`
-          : `/docs/${product}/${splat}`;
-
-        // For index pages, append /index, ensuring no double slashes
-        const docPathNoTrailingSlash = docPath.endsWith("/") ? docPath.slice(0, -1) : docPath;
-
-        // Handle empty splat cases correctly:
-        // 1. Empty splat in regular path - points to product root index
-        // 2. Empty splat in section path - points to section index
-        let finalPath;
-        if (splat === "" || splat === "/") {
-          // For both section and regular paths, append /index for empty splats
-          finalPath = `${docPathNoTrailingSlash}/index`;
-        } else {
-          finalPath = docPath;
-        }
-
-        // Fetch the document
-        const doc = await getDoc(finalPath);
-
-        // Set the document directly
-        setDocument(doc);
-
-        setLoading(false);
-      } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : String(err);
-        console.error(`[DocsPage] Failed to load document: ${errorMessage}`);
-        setError(`Failed to load document: ${errorMessage}`);
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [splat, product, section]);
-
-  // Generate debug error details if needed
-  let errorDetails:
-    | {
-        expectedPath: string;
-        path: string;
-        product: ProductName;
-        section: string | null;
-        group: string | null;
-        slug: string;
-      }
-    | undefined = undefined;
-  if (error) {
-    const expectedPath = section
-      ? `/src/docs/${product}/${section}/${splat}.mdx`
-      : `/src/docs/${product}/${splat}.mdx`;
-
-    // Prepare debug info as a simple object
-    errorDetails = {
-      expectedPath,
-      path: splat,
-      product,
-      section,
-      group,
-      slug: currentSlug,
-    };
-
-    // Log detailed error information to console
-    console.error("[DocsPage] Document not found or invalid:", errorDetails);
-  }
+  // Read the resources (this will throw and suspend if data isn't ready)
+  const document = docResource.read();
+  const productDocs = docsResource.read();
 
   // Define SEO properties based on document meta and product
   const title = document?.meta.title || "";
@@ -120,7 +49,7 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
     }
   }
 
-  // Construct the URL path
+  // Construct the URL path for SEO
   const urlPath = section ? `/docs/${product}/${section}/${splat}` : `/docs/${product}/${splat}`;
 
   // Apply SEO for docs page
@@ -131,7 +60,7 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
     product,
   });
 
-  // Use the shared layout component
+  // Render the layout with the loaded content
   return (
     <DocsLayout
       product={product}
@@ -140,9 +69,68 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
       group={group}
       document={document}
       docs={productDocs}
-      loading={loading}
-      error={error}
     />
+  );
+}
+
+type DocsPageProps = {
+  product: ProductName;
+  section: string | null;
+  splat: string;
+};
+
+/**
+ * DocsPage component - Uses Suspense for data loading
+ *
+ * Handles path parsing and uses Suspense for loading document and docs
+ */
+const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat }) => {
+  // Parse the path into group/slug components
+  const pathParts = splat.split("/").filter(Boolean);
+
+  // Extract group if it exists (first part of the splat)
+  const group = pathParts.length > 0 ? pathParts[0] : null;
+
+  // Extract current slug (last part) for sidebar highlighting
+  const currentSlug = pathParts.length > 0 ? pathParts[pathParts.length - 1] : "index";
+
+  // Create a fallback for empty docs
+  const emptyDocs: DocMeta[] = [];
+
+  // Use error boundary pattern with Suspense
+  return (
+    <React.Suspense
+      fallback={
+        <DocsLayout
+          product={product}
+          section={section}
+          slug={currentSlug}
+          group={group}
+          // Provide a minimal empty document for the loading state
+          document={{
+            meta: {
+              title: "Loading...",
+              description: "",
+              slug: currentSlug,
+              type: "doc",
+              product,
+              path: "",
+            },
+            mdx: { code: "", frontmatter: {} },
+            content: "",
+          }}
+          docs={emptyDocs}
+        />
+      }
+    >
+      <DocumentContent
+        product={product}
+        section={section}
+        splat={splat}
+        currentSlug={currentSlug}
+        group={group}
+      />
+    </React.Suspense>
   );
 };
 
