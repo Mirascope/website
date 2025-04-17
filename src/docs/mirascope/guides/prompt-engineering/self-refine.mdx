@@ -83,7 +83,7 @@ query = """Olivia has $23. She bought five bagels for $3 each.
 How much money does she have left?"""
 print(self_refine(query, 1))
 ```
-
+```
     To determine how much money Olivia has left after her purchase, let's break it down step by step:
     
     1. **Starting Amount**: Olivia has $23 initially.
@@ -97,7 +97,7 @@ print(self_refine(query, 1))
        \]
     
     Therefore, after buying the bagels, Olivia has **$8 remaining**.
-
+```
 
 ## Enhanced Self-Refine with Response Model
 
@@ -148,8 +148,9 @@ result = enhanced_self_refine(query, 1)
 print(result)
 ```
 
+```
     steps=['Olivia has $23.', 'She bought five bagels for $3 each.', 'Calculate the total cost for the bagels: 5 bagels * $3/bagel = $15.', 'Subtract the total cost of the bagels from the amount of money she had: $23 - $15 = $8.'] final_answer=8.0
-
+```
 
 This enhanced version introduces a MathSolution response model to structure the output, providing a clearer separation between solution steps and the final answer.
 

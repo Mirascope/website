@@ -80,11 +80,12 @@ await chatbot.run()
 # asyncio.run(chatbot.run())
 ```
 
-    User: Hi!
-    Chatbot: Hello! How can I assist you today?
-    User: What can you help me with?
-    Chatbot: I can help with a variety of things! Whether you have questions about general knowledge, need information on a specific topic, want advice, or even just want to chat, I’m here for you. What’s on your mind?
-
+```
+User: Hi!
+Chatbot: Hello! How can I assist you today?
+User: What can you help me with?
+Chatbot: I can help with a variety of things! Whether you have questions about general knowledge, need information on a specific topic, want advice, or even just want to chat, I’m here for you. What’s on your mind?
+```
 
 In this basic chatbot implementation, we've created a `BasicChatbot` class that
 1. Maintains a conversation history (`messages`)
@@ -160,8 +161,9 @@ tool_type = OpenAITool.type_from_fn(extract_content)
 print(tool_type.tool_schema())
 ```
 
-    {'function': {'name': 'extract_content', 'description': 'Extract the main content from a webpage.\n\nArgs:\n    url: The URL of the webpage to extract the content from.\n\nReturns:\n    The extracted content as a string.', 'parameters': {'properties': {'url': {'description': 'The URL of the webpage to extract the content from.', 'type': 'string'}}, 'required': ['url'], 'type': 'object'}}, 'type': 'function'}
-
+```
+{'function': {'name': 'extract_content', 'description': 'Extract the main content from a webpage.\n\nArgs:\n    url: The URL of the webpage to extract the content from.\n\nReturns:\n    The extracted content as a string.', 'parameters': {'properties': {'url': {'description': 'The URL of the webpage to extract the content from.', 'type': 'string'}}, 'required': ['url'], 'type': 'object'}}, 'type': 'function'}
+```
 
 This schema provides the LLM with information about the tool's name, description, and expected input parameters. The LLM uses this information to determine when and how to use the tool during its reasoning process.
 
@@ -319,54 +321,55 @@ await main()
 # asyncio.run(main())
 ```
 
-    (User): large language models
-    (Assistant): using web_search tool with args: {'queries': ['large language models overview', 'applications of large language models', 'latest advancements in large language models', 'large language models ethical concerns', 'large language models future developments']}
-    using extract_content tool with args: {'url': 'https://en.wikipedia.org/wiki/Large_language_model'}
-    using extract_content tool with args: {'url': 'https://pixelplex.io/blog/llm-applications/'}
-    using extract_content tool with args: {'url': 'https://www.ox.ac.uk/news/2023-05-05-tackling-ethical-dilemma-responsibility-large-language-models'}
-    using extract_content tool with args: {'url': 'https://research.aimultiple.com/future-of-large-language-models/'}
-    Large Language Models (LLMs) like OpenAI's GPT and Google's Gemini represent a significant advancement in artificial intelligence, particularly in natural language processing (NLP). These models excel at generating human-like text, understanding context, and performing various tasks across different domains. Below is an overview of LLMs, their applications, advancements, ethical considerations, and future developments.
-    
-    ### Overview of Large Language Models (LLMs)
-    An LLM is a type of AI model designed to understand and generate text. They are built using deep learning techniques, particularly neural networks with a vast number of parameters. These models learn from extensive datasets, capturing complex patterns of human language. Notable examples include:
-    - **GPT-4 (OpenAI)**: A multimodal model capable of processing both text and images, with up to 1.8 trillion parameters.
-    - **Claude (Anthropic)**: Known for its impressive context handling, Claude 3 can process up to 100,000 tokens.
-    - **BLOOM (BigScience)**: An open-access multilingual model with 176 billion parameters.
-    
-    ### Applications
-    LLMs are used in a variety of fields, including:
-    1. **Content Generation**: Automating the creation of written material for blogs, marketing, and social media.
-    2. **Translation and Localization**: Providing accurate translations while maintaining cultural context and nuances.
-    3. **Search and Recommendation**: Enhancing user search experiences and personalizing recommendations based on individual preferences.
-    4. **Virtual Assistants**: Powering functionalities in services like Google Assistant and Amazon Alexa for real-time user interactions.
-    5. **Code Development**: Assisting programmers by generating and debugging code, leading to more efficient workflows.
-    6. **Sentiment Analysis**: Analyzing customer feedback to gauge public sentiment towards products or services.
-    7. **Question Answering**: Responding accurately to user queries across various domains.
-    8. **Market Research**: Gathering insights from consumer data and trends for strategic business decisions.
-    9. **Education and Tutoring**: Personalizing learning experiences and providing real-time educational support.
-    10. **Classification**: Categorizing text for various applications including moderation and customer service.
-    
-    ### Latest Advancements
-    The field is rapidly evolving, with trends including:
-    - **Multimodal Learning**: Combining text with images and audio to enhance model capability (as seen in tools like GPT-4 and Gemini).
-    - **Self-improving Models**: Some LLMs can generate their own training data, improving their performance without external input.
-    - **Sparse Expert Models**: New models are being designed to activate only relevant parts for specific tasks, increasing efficiency.
-    
-    ### Ethical Concerns
-    Despite their efficacy, LLMs face significant ethical challenges:
-    - **Bias and Fairness**: These models can reflect and amplify biases present in their training data, which raises concerns about fairness and equality in their outputs.
-    - **Misinformation and Hallucination**: LLMs can generate convincing but false information, leading to a phenomenon known as "hallucination."
-    - **Data Privacy**: The data used can sometimes include sensitive information, making privacy a critical aspect to address.
-    
-    ### Future Developments
-    Looking forward, several promising directions include:
-    - Enhanced **fact-checking** capabilities, integrating real-time data to ensure accuracy.
-    - Development of **domain-specific models** tailored to particular industries like healthcare and finance for more relevant outputs.
-    - Greater focus on **ethical AI**, with ongoing research into bias mitigation and the development of responsible AI frameworks.
-    
-    ### Conclusion
-    LLMs are at the forefront of AI innovation, driving significant changes across multiple sectors. Their ability to interact in a human-like manner provides vast opportunities for automation and personalization, transforming industries from education to entertainment. However, addressing ethical concerns and ensuring their responsible use will be pivotal as these technologies continue to advance.
+```
+(User): large language models
+(Assistant): using web_search tool with args: {'queries': ['large language models overview', 'applications of large language models', 'latest advancements in large language models', 'large language models ethical concerns', 'large language models future developments']}
+using extract_content tool with args: {'url': 'https://en.wikipedia.org/wiki/Large_language_model'}
+using extract_content tool with args: {'url': 'https://pixelplex.io/blog/llm-applications/'}
+using extract_content tool with args: {'url': 'https://www.ox.ac.uk/news/2023-05-05-tackling-ethical-dilemma-responsibility-large-language-models'}
+using extract_content tool with args: {'url': 'https://research.aimultiple.com/future-of-large-language-models/'}
+Large Language Models (LLMs) like OpenAI's GPT and Google's Gemini represent a significant advancement in artificial intelligence, particularly in natural language processing (NLP). These models excel at generating human-like text, understanding context, and performing various tasks across different domains. Below is an overview of LLMs, their applications, advancements, ethical considerations, and future developments.
 
+### Overview of Large Language Models (LLMs)
+An LLM is a type of AI model designed to understand and generate text. They are built using deep learning techniques, particularly neural networks with a vast number of parameters. These models learn from extensive datasets, capturing complex patterns of human language. Notable examples include:
+- **GPT-4 (OpenAI)**: A multimodal model capable of processing both text and images, with up to 1.8 trillion parameters.
+- **Claude (Anthropic)**: Known for its impressive context handling, Claude 3 can process up to 100,000 tokens.
+- **BLOOM (BigScience)**: An open-access multilingual model with 176 billion parameters.
+
+### Applications
+LLMs are used in a variety of fields, including:
+1. **Content Generation**: Automating the creation of written material for blogs, marketing, and social media.
+2. **Translation and Localization**: Providing accurate translations while maintaining cultural context and nuances.
+3. **Search and Recommendation**: Enhancing user search experiences and personalizing recommendations based on individual preferences.
+4. **Virtual Assistants**: Powering functionalities in services like Google Assistant and Amazon Alexa for real-time user interactions.
+5. **Code Development**: Assisting programmers by generating and debugging code, leading to more efficient workflows.
+6. **Sentiment Analysis**: Analyzing customer feedback to gauge public sentiment towards products or services.
+7. **Question Answering**: Responding accurately to user queries across various domains.
+8. **Market Research**: Gathering insights from consumer data and trends for strategic business decisions.
+9. **Education and Tutoring**: Personalizing learning experiences and providing real-time educational support.
+10. **Classification**: Categorizing text for various applications including moderation and customer service.
+
+### Latest Advancements
+The field is rapidly evolving, with trends including:
+- **Multimodal Learning**: Combining text with images and audio to enhance model capability (as seen in tools like GPT-4 and Gemini).
+- **Self-improving Models**: Some LLMs can generate their own training data, improving their performance without external input.
+- **Sparse Expert Models**: New models are being designed to activate only relevant parts for specific tasks, increasing efficiency.
+
+### Ethical Concerns
+Despite their efficacy, LLMs face significant ethical challenges:
+- **Bias and Fairness**: These models can reflect and amplify biases present in their training data, which raises concerns about fairness and equality in their outputs.
+- **Misinformation and Hallucination**: LLMs can generate convincing but false information, leading to a phenomenon known as "hallucination."
+- **Data Privacy**: The data used can sometimes include sensitive information, making privacy a critical aspect to address.
+
+### Future Developments
+Looking forward, several promising directions include:
+- Enhanced **fact-checking** capabilities, integrating real-time data to ensure accuracy.
+- Development of **domain-specific models** tailored to particular industries like healthcare and finance for more relevant outputs.
+- Greater focus on **ethical AI**, with ongoing research into bias mitigation and the development of responsible AI frameworks.
+
+### Conclusion
+LLMs are at the forefront of AI innovation, driving significant changes across multiple sectors. Their ability to interact in a human-like manner provides vast opportunities for automation and personalization, transforming industries from education to entertainment. However, addressing ethical concerns and ensuring their responsible use will be pivotal as these technologies continue to advance.
+```
 
 To use the WebSearchAgent, run the code above and start interacting with it by typing your questions. The agent will use web searches and content extraction to provide answers. Type 'exit' to end the interaction.
 
