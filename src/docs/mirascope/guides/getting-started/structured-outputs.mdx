@@ -50,7 +50,9 @@ assert isinstance(book, Book)
 print(book)
 ```
 
-    title='The Name of the Wind' author='Patrick Rothfuss'
+```
+title='The Name of the Wind' author='Patrick Rothfuss'
+```
 
 
 In this example we are:
@@ -74,10 +76,11 @@ for book in books:
     print(book)
 ```
 
-    title='The Name of the Wind' author='Patrick Rothfuss'
-    title='Mistborn: The Final Empire' author='Brandon Sanderson'
-    title='A Darker Shade of Magic' author='V.E. Schwab'
-
+```
+title='The Name of the Wind' author='Patrick Rothfuss'
+title='Mistborn: The Final Empire' author='Brandon Sanderson'
+title='A Darker Shade of Magic' author='V.E. Schwab'
+```
 
 In this example we:
 1. Updated our prompt to instruct to model to "recommend" (i.e. generate) books.
@@ -102,8 +105,9 @@ response = extract_book("The Name of the Wind by Patrick Rothfuss")
 print(json.loads(response.content))
 ```
 
-    {'title': 'The Name of the Wind', 'author': 'Patrick Rothfuss'}
-
+```
+{'title': 'The Name of the Wind', 'author': 'Patrick Rothfuss'}
+```
 
 In this example we:
 1. Set `json_mode=True` to signal we want to use JSON Mode
@@ -126,8 +130,9 @@ assert isinstance(book, Book)
 print(book)
 ```
 
-    title='The Name of the Wind' author='Patrick Rothfuss'
-
+```
+title='The Name of the Wind' author='Patrick Rothfuss'
+```
 
 ## Few-Shot Examples
 
@@ -161,10 +166,11 @@ for book in books:
     print(book)
 ```
 
-    title='THE HOBBIT' author='Tolkien, J.R.R.'
-    title='A WIZARD OF EARTHSEA' author='Le Guin, Ursula K.'
-    title='A GAME OF THRONES' author='Martin, George R.R.'
-
+```
+title='THE HOBBIT' author='Tolkien, J.R.R.'
+title='A WIZARD OF EARTHSEA' author='Le Guin, Ursula K.'
+title='A GAME OF THRONES' author='Martin, George R.R.'
+```
 
 In this example we:
 1. Added a few-shot example to each field in our response model.
@@ -202,56 +208,55 @@ print(book)
 ```
 
 
-    ---------------------------------------------------------------------------
+```
+ValidationError                           Traceback (most recent call last)
 
-    ValidationError                           Traceback (most recent call last)
-
-    Cell In[7], line 20
-         15 @openai.call("gpt-4o-mini", response_model=ValidatedBook)
-         16 def extract_all_caps_book(text: str) -> str:
-         17     return f"Extract the book from this text: {text}"
-    ---> 20 book = extract_all_caps_book("The Name of the Wind by Patrick Rothfuss")
-         21 print(book)
-
-
-    File ~/Mirascope/GitHub/mirascope/mirascope/core/base/_extract.py:132, in extract_factory.<locals>.decorator.<locals>.inner(*args, **kwargs)
-        130 except ValidationError as e:
-        131     e._response = call_response  # pyright: ignore [reportAttributeAccessIssue]
-    --> 132     raise e
-        133 if isinstance(output, BaseModel):
-        134     output._response = call_response  # pyright: ignore [reportAttributeAccessIssue]
+Cell In[7], line 20
+        15 @openai.call("gpt-4o-mini", response_model=ValidatedBook)
+        16 def extract_all_caps_book(text: str) -> str:
+        17     return f"Extract the book from this text: {text}"
+    > 20 book = extract_all_caps_book("The Name of the Wind by Patrick Rothfuss")
+        21 print(book)
 
 
-    File ~/Mirascope/GitHub/mirascope/mirascope/core/base/_extract.py:129, in extract_factory.<locals>.decorator.<locals>.inner(*args, **kwargs)
-        127 json_output = get_json_output(call_response, json_mode)
-        128 try:
-    --> 129     output = extract_tool_return(response_model, json_output, False)
-        130 except ValidationError as e:
-        131     e._response = call_response  # pyright: ignore [reportAttributeAccessIssue]
+File ~/Mirascope/GitHub/mirascope/mirascope/core/base/_extract.py:132, in extract_factory.<locals>.decorator.<locals>.inner(*args, **kwargs)
+    130 except ValidationError as e:
+    131     e._response = call_response  # pyright: ignore [reportAttributeAccessIssue]
+  > 132     raise e
+    133 if isinstance(output, BaseModel):
+    134     output._response = call_response  # pyright: ignore [reportAttributeAccessIssue]
 
 
-    File ~/Mirascope/GitHub/mirascope/mirascope/core/base/_utils/_extract_tool_return.py:38, in extract_tool_return(response_model, json_output, allow_partial)
-         36 elif allow_partial:
-         37     return partial(response_model).model_validate(json_obj)
-    ---> 38 return response_model.model_validate(json_obj)
+File ~/Mirascope/GitHub/mirascope/mirascope/core/base/_extract.py:129, in extract_factory.<locals>.decorator.<locals>.inner(*args, **kwargs)
+    127 json_output = get_json_output(call_response, json_mode)
+    128 try:
+  > 129     output = extract_tool_return(response_model, json_output, False)
+    130 except ValidationError as e:
+    131     e._response = call_response  # pyright: ignore [reportAttributeAccessIssue]
 
 
-    File ~/Mirascope/GitHub/mirascope/.venv/lib/python3.10/site-packages/pydantic/main.py:551, in BaseModel.model_validate(cls, obj, strict, from_attributes, context)
-        549 # `__tracebackhide__` tells pytest and some other tools to omit this function from tracebacks
-        550 __tracebackhide__ = True
-    --> 551 return cls.__pydantic_validator__.validate_python(
-        552     obj, strict=strict, from_attributes=from_attributes, context=context
-        553 )
+File ~/Mirascope/GitHub/mirascope/mirascope/core/base/_utils/_extract_tool_return.py:38, in extract_tool_return(response_model, json_output, allow_partial)
+        36 elif allow_partial:
+        37     return partial(response_model).model_validate(json_obj)
+    > 38 return response_model.model_validate(json_obj)
 
 
-    ValidationError: 2 validation errors for ValidatedBook
-    title
-      Assertion failed, All fields must be uppercase [type=assertion_error, input_value='The Name of the Wind', input_type=str]
-        For further information visit https://errors.pydantic.dev/2.7/v/assertion_error
-    author
-      Assertion failed, All fields must be uppercase [type=assertion_error, input_value='Patrick Rothfuss', input_type=str]
-        For further information visit https://errors.pydantic.dev/2.7/v/assertion_error
+File ~/Mirascope/GitHub/mirascope/.venv/lib/python3.10/site-packages/pydantic/main.py:551, in BaseModel.model_validate(cls, obj, strict, from_attributes, context)
+    549 # `__tracebackhide__` tells pytest and some other tools to omit this function from tracebacks
+    550 __tracebackhide__ = True
+  > 551 return cls.__pydantic_validator__.validate_python(
+    552     obj, strict=strict, from_attributes=from_attributes, context=context
+    553 )
 
+
+ValidationError: 2 validation errors for ValidatedBook
+title
+    Assertion failed, All fields must be uppercase [type=assertion_error, input_value='The Name of the Wind', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.7/v/assertion_error
+author
+    Assertion failed, All fields must be uppercase [type=assertion_error, input_value='Patrick Rothfuss', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.7/v/assertion_error
+```
 
 We can see in this example that the model threw a `ValidationError` on construction because the extracted `title` and `author` fields were not all caps.
 
@@ -297,14 +302,15 @@ print(f"Thinking: {output[0]}")
 print(f"Output: {output[1]}")
 ```
 
-    Thinking: To find out how many tennis balls Roger has, we first need to know how many balls are in a tube. A standard tube of tennis balls typically contains 3 balls. Given that Roger bought 3 tubes, we can calculate the total number of balls from the tubes by multiplying the number of tubes by the number of balls per tube. After that, we can add the 2 tennis balls he started with to find the total. So, the steps are:
-    
-    1. Calculate the total number of balls from the tubes: 3 tubes x 3 balls/tube = 9 balls.
-    2. Add the 2 balls he started with to the total from the tubes: 2 + 9 = 11 balls.
-    
-    Thus, I will output the final answer that Roger has a total of 11 tennis balls.
-    Output: Roger has 11 tennis balls.
+```
+Thinking: To find out how many tennis balls Roger has, we first need to know how many balls are in a tube. A standard tube of tennis balls typically contains 3 balls. Given that Roger bought 3 tubes, we can calculate the total number of balls from the tubes by multiplying the number of tubes by the number of balls per tube. After that, we can add the 2 tennis balls he started with to find the total. So, the steps are:
 
+1. Calculate the total number of balls from the tubes: 3 tubes x 3 balls/tube = 9 balls.
+2. Add the 2 balls he started with to the total from the tubes: 2 + 9 = 11 balls.
+
+Thus, I will output the final answer that Roger has a total of 11 tennis balls.
+Output: Roger has 11 tennis balls.
+```
 
 ## Conclusion
 

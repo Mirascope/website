@@ -15,18 +15,6 @@ const disabledGuidesMeta: DocSection = {
     "evals-evaluating-sql-agent": {
       title: "Evaluating Generating SQL with LLM",
     },
-    "getting-started-dynamic-configuration-and-chaining": {
-      title: "Dynamic Configuration & Chaining",
-    },
-    "getting-started-quickstart": {
-      title: "Quickstart",
-    },
-    "getting-started-structured-outputs": {
-      title: "Structured Outputs",
-    },
-    "getting-started-tools-and-agents": {
-      title: "Tools & Agents",
-    },
     "more-advanced-knowledge-graph": {
       title: "Knowledge Graph",
     },
