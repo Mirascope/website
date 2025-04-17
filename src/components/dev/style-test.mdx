@@ -3,203 +3,6 @@ title: Style Test Page
 description: A comprehensive showcase of all UI components for visual consistency testing
 ---
 
-# Style Test Page
-{/* Theme Colors - Comprehensive Color Testing Grid */}
-{/* This component displays primary, secondary, accent, and muted color combinations */}
-{/* Organized in a 3x3 grid for easy comparison */}
-
-## Theme Colors
-<div className="grid grid-cols-1 md:grid-cols-3 gap-3 my-6">
-  {/* Row 1: Base Colors */}
-  <div className="p-4 border rounded-lg shadow-sm">
-    <code className="text-md font-medium mb-3">bg-background</code>
-    <div className="w-full h-16 bg-background text-foreground flex items-center justify-center font-medium border">
-      text-foreground
-    </div>
-    <div className="w-full h-16 bg-background text-primary flex items-center justify-center font-medium border">
-      text-primary
-    </div>
-    <div className="w-full h-16 bg-background text-secondary flex items-center justify-center font-medium border">
-      text-secondary
-    </div>
-    <div className="w-full h-16 bg-background text-accent flex items-center justify-center font-medium border">
-      text-accent
-    </div>
-    <div className="w-full h-16 bg-background text-muted-foreground flex items-center justify-center font-medium border">
-      text-muted-foreground
-    </div>
-  </div>
-
-  <div className="p-4 border rounded-lg shadow-sm bg-card">
-    <code className="text-md font-medium mb-3">bg-card</code>
-    <div className="w-full h-16 text-foreground flex items-center justify-center font-medium border">
-      text-foreground
-    </div>
-    <div className="w-full h-16 text-primary flex items-center justify-center font-medium border">
-      text-primary
-    </div>
-    <div className="w-full h-16 text-secondary flex items-center justify-center font-medium border">
-      text-secondary
-    </div>
-    <div className="w-full h-16 text-accent flex items-center justify-center font-medium border">
-      text-accent
-    </div>
-    <div className="w-full h-16 text-muted-foreground flex items-center justify-center font-medium border">
-      text-muted-foreground
-    </div>
-  </div>
-
-  <div className="p-4 border rounded-lg shadow-sm bg-muted">
-    <code className="text-md font-medium mb-3">bg-muted</code>
-    <div className="w-full h-16 text-foreground flex items-center justify-center font-medium border">
-      text-foreground
-    </div>
-    <div className="w-full h-16 text-primary flex items-center justify-center font-medium border">
-      text-primary
-    </div>
-    <div className="w-full h-16 text-secondary flex items-center justify-center font-medium border">
-      text-secondary
-    </div>
-    <div className="w-full h-16 text-accent-foreground flex items-center justify-center font-medium border">
-      text-accent-foreground
-    </div>
-    <div className="w-full h-16 text-muted-foreground flex items-center justify-center font-medium border">
-      text-muted-foreground
-    </div>
-  </div>
-
-  <div className="p-4 border rounded-lg shadow-sm">
-    <h3 className="text-md font-medium mb-3">Card</h3>
-    <div className="w-full h-16 bg-card text-card-foreground flex items-center justify-center font-medium border">
-      card text
-    </div>
-    <code className="text-xs mt-2 block">bg-card text-card-foreground</code>
-  </div>
-
-  <div className="p-4 border rounded-lg shadow-sm">
-    <h3 className="text-md font-medium mb-3">Muted</h3>
-    <div className="w-full h-16 bg-muted text-muted-foreground flex items-center justify-center font-medium">
-      muted text
-    </div>
-    <code className="text-xs mt-2 block">bg-muted text-muted-foreground</code>
-  </div>
-
-  {/* Row 2: Primary Colors */}
-  <div className="p-4 border rounded-lg shadow-sm">
-    <h3 className="text-md font-medium mb-3">Primary</h3>
-    <div className="w-full h-16 bg-primary text-primary-foreground flex items-center justify-center font-medium">
-      primary text
-    </div>
-    <code className="text-xs mt-2 block">bg-primary text-primary-foreground</code>
-  </div>
-
-  <div className="p-4 border rounded-lg shadow-sm">
-    <h3 className="text-md font-medium mb-3">Secondary</h3>
-    <div className="w-full h-16 bg-secondary text-secondary-foreground flex items-center justify-center font-medium">
-      secondary text
-    </div>
-    <code className="text-xs mt-2 block">bg-secondary text-secondary-foreground</code>
-  </div>
-
-  <div className="p-4 border rounded-lg shadow-sm">
-    <h3 className="text-md font-medium mb-3">Accent</h3>
-    <div className="w-full h-16 bg-accent text-accent-foreground flex items-center justify-center font-medium">
-      accent text
-    </div>
-    <code className="text-xs mt-2 block">bg-accent text-accent-foreground</code>
-  </div>
-
-  {/* Row 3: Common UI Combinations */}
-  <div className="p-4 border rounded-lg shadow-sm">
-    <h3 className="text-md font-medium mb-3">Common UI Combinations</h3>
-    <div className="space-y-2">
-      <div className="p-2 bg-card border rounded-md text-primary text-sm text-center">
-        card + primary text
-      </div>
-      <div className="p-2 bg-muted rounded-md text-primary text-sm text-center">
-        muted + primary text
-      </div>
-      <div className="p-2 bg-muted rounded-md text-accent text-sm text-center">
-        muted + accent text
-      </div>
-    </div>
-    <code className="text-xs mt-2 block">UI element examples</code>
-  </div>
-
-  <div className="p-4 border rounded-lg shadow-sm">
-    <h3 className="text-md font-medium mb-3">Button Examples</h3>
-    <div className="space-y-2">
-      <div className="p-2 bg-primary text-primary-foreground rounded-md text-sm text-center">
-        Primary Button
-      </div>
-      <div className="p-2 bg-secondary text-secondary-foreground rounded-md text-sm text-center">
-        Secondary Button
-      </div>
-      <div className="p-2 bg-accent text-accent-foreground rounded-md text-sm text-center">
-        Accent Button
-      </div>
-    </div>
-    <code className="text-xs mt-2 block">Button variations</code>
-  </div>
-
-  <div className="p-4 border rounded-lg shadow-sm">
-    <h3 className="text-md font-medium mb-3">Text Links & Highlights</h3>
-    <div className="space-y-2">
-      <div className="p-2 bg-background rounded-md text-sm">
-        Text with <span className="text-primary">primary</span> and 
-        <span className="text-secondary"> secondary</span> links
-      </div>
-      <div className="p-2 bg-card text-card-foreground rounded-md text-sm">
-        Card with <span className="text-accent">accent</span> highlight
-      </div>
-    </div>
-    <code className="text-xs mt-2 block">Link & text highlighting</code>
-  </div>
-</div>
-
-{/* Additional realistic combinations section */}
-<h3 className="text-lg font-medium my-4">Realistic UI Patterns</h3>
-<div className="grid grid-cols-1 md:grid-cols-3 gap-3 my-6">
-  {/* Navigation example */}
-  <div className="p-4 border rounded-lg shadow-sm">
-    <h3 className="text-md font-medium mb-3">Navigation</h3>
-    <div className="p-2 bg-background border-b">
-      <div className="flex space-x-4 text-sm">
-        <span className="text-primary font-medium">Home</span>
-        <span className="text-muted-foreground">Docs</span>
-        <span className="text-muted-foreground">Blog</span>
-      </div>
-    </div>
-    <code className="text-xs mt-2 block">Navigation example</code>
-  </div>
-
-  {/* Alert example */}
-  <div className="p-4 border rounded-lg shadow-sm">
-    <h3 className="text-md font-medium mb-3">Alerts</h3>
-    <div className="p-2 bg-accent bg-opacity-20 border border-accent rounded-md text-sm">
-      <span className="text-accent-foreground">Information alert example</span>
-    </div>
-    <div className="p-2 mt-2 bg-primary bg-opacity-20 border border-primary rounded-md text-sm">
-      <span className="text-primary">Primary alert example</span>
-    </div>
-    <code className="text-xs mt-2 block">Alert components</code>
-  </div>
-
-  {/* Card with mixed content */}
-  <div className="p-4 border rounded-lg shadow-sm">
-    <h3 className="text-md font-medium mb-3">Content Card</h3>
-    <div className="p-3 bg-card rounded-md text-sm border">
-      <h4 className="font-medium text-primary mb-1">Card Title</h4>
-      <p className="text-card-foreground text-xs">Main content text</p>
-      <p className="text-muted-foreground text-xs mt-1">Additional info</p>
-      <div className="mt-2">
-        <span className="text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded-full">Tag</span>
-      </div>
-    </div>
-    <code className="text-xs mt-2 block">Complex card example</code>
-  </div>
-</div>
-
 
 ## Headings
 
@@ -210,20 +13,6 @@ description: A comprehensive showcase of all UI components for visual consistenc
 ##### Heading 5
 ###### Heading 6
 
-<div className="badge-container">
-    <a href="https://github.com/Mirascope/mirascope/actions/workflows/tests.yml" target="_blank"><img src="https://github.com/Mirascope/mirascope/actions/workflows/tests.yml/badge.svg?branch=main" alt="Tests"/></a>
-    <a href="https://codecov.io/github/Mirascope/mirascope" target="_blank"><img src="https://codecov.io/github/Mirascope/mirascope/graph/badge.svg?token=HAEAWT3KC9" alt="Coverage"/></a>
-    <a href="https://mirascope.com/WELCOME" target="_blank"><img src="https://img.shields.io/badge/docs-available-brightgreen" alt="Docs"/></a>
-    <a href="https://pypi.python.org/pypi/mirascope" target="_blank"><img src="https://img.shields.io/pypi/v/mirascope.svg" alt="PyPI Version"/></a>
-    <a href="https://pypi.python.org/pypi/mirascope" target="_blank"><img src="https://img.shields.io/pypi/pyversions/mirascope.svg" alt="Stars"/></a>
-    <a href="https://github.com/Mirascope/mirascope/blob/dev/LICENSE"><img src="https://img.shields.io/github/license/Mirascope/mirascope.svg" alt="License"/></a>
-</div>
-
-<div className="flex flex-wrap gap-4 my-6">
-    <a href="./mirascope/getting-started/why" className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-white hover:bg-primary/90 transition-colors"><span className="material-icon">💡</span> Why Use Mirascope</a>
-    <a href="https://join.slack.com/t/mirascope-community/shared_invite/zt-2ilqhvmki-FB6LWluInUCkkjYD3oSjNA" className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-white hover:bg-primary/90 transition-colors"><span className="material-icon">👥</span> Join Our Community</a>
-    <a href="https://github.com/Mirascope/mirascope" className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-white hover:bg-primary/90 transition-colors"><span className="material-icon">⭐</span> Star the Repo</a>
-</div>
 
 ```python
 @llm.call(provider="$PROVIDER", model="$MODEL")
@@ -355,24 +144,37 @@ greeting("World")
 
 ## Callouts
 
-<Callout type="note">
-  This is a default callout component.
-</Callout>
 
 <Note>
   This is a note callout for informational content.
+</Note>
+
+<Note title="Take note">
+  This note has a title.
 </Note>
 
 <Warning>
   This is a warning callout for important warnings.
 </Warning>
 
+<Warning title="Take Warning">
+  This Warning has a title.
+</Warning>
+
 <Info>
   This is an info callout for additional information.
 </Info>
 
+<Info title="Take Info">
+  This Info has a title.
+</Info>
+
 <Success>
   This is a success callout for positive outcomes.
+</Success>
+
+<Success title="Take Success">
+  This Success has a title.
 </Success>
 
 

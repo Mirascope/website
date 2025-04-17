@@ -18,7 +18,7 @@ type ColorThemeDisplayProps = {
 };
 
 export const ColorThemeDisplay: React.FC<ColorThemeDisplayProps> = ({
-  bgColors = ["bg-background", "bg-card", "bg-muted", "bg-primary", "bg-secondary", "bg-accent"],
+  bgColors = ["bg-background", "bg-muted", "bg-primary", "bg-secondary", "bg-accent"],
   textColors = [
     "text-foreground",
     "text-primary",
@@ -117,7 +117,7 @@ function StyleTestPage() {
 
         <h3 className="text-xl font-semibold mb-3">Background + Text Colors</h3>
         <ColorThemeDisplay
-          bgColors={["bg-background", "bg-card", "bg-muted", "bg-accent"]}
+          bgColors={["bg-background", "bg-muted", "bg-accent"]}
           textColors={[
             "text-foreground",
             "text-primary",
