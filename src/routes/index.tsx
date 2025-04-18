@@ -41,10 +41,8 @@ function LandingPage() {
 
           <div className="mt-10 sm:mt-12 md:mt-14 flex flex-col sm:flex-row gap-4 justify-center items-center w-full">
             <a
-              href="/docs"
+              href="/docs/mirascope"
               className="bg-primary text-primary-foreground px-6 py-3 rounded-md text-lg font-medium hover:bg-primary/90 transition-colors w-full sm:w-auto max-w-[200px] text-center shadow-sm"
-              target="_blank"
-              rel="noopener noreferrer"
             >
               Learn more
             </a>
