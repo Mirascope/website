@@ -10,4 +10,4 @@ export * from "./policy";
 export { useContent } from "./useContent";
 
 // Utilities
-export { loadContent } from "./utils";
+export { loadContent } from "./content-loader";

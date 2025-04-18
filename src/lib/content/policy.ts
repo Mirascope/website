@@ -1,6 +1,5 @@
-import type { ContentLoaderOptions } from "./content-loader";
 import { useContent } from "./useContent";
-import { loadContent } from "./utils";
+import { loadContent } from "./content-loader";
 import type { ContentMeta, Content, ContentResult } from "./types";
 import { ContentError } from "./errors";
 
@@ -46,13 +45,9 @@ function normalizePolicyPath(path: string): string {
 /**
  * Get policy content by path
  */
-export async function getPolicyContent(
-  path: string,
-  options?: ContentLoaderOptions
-): Promise<PolicyContent> {
+export async function getPolicy(path: string): Promise<PolicyContent> {
   const normalizedPath = normalizePolicyPath(path);
   return loadContent<PolicyMeta>(normalizedPath, "policy", createPolicyMeta, {
-    ...options,
     preprocessContent: cleanupPolicyContent,
   });
 }
@@ -61,27 +56,20 @@ export async function getPolicyContent(
  * Hook for loading and rendering a policy page
  */
 export function usePolicy(path: string): ContentResult<PolicyMeta> {
-  return useContent<PolicyMeta>(path, getPolicyContent);
-}
-
-/**
- * Get a policy by path
- */
-export function getPolicy(path: string, options?: ContentLoaderOptions): Promise<PolicyContent> {
-  return getPolicyContent(path, options);
+  return useContent<PolicyMeta>(path, getPolicy);
 }
 
 /**
  * Get all policy metadata
  */
-export async function getAllPolicyMeta(options?: ContentLoaderOptions): Promise<PolicyMeta[]> {
+export async function getAllPolicyMeta(): Promise<PolicyMeta[]> {
   try {
     // For policies, we have a known set of paths
     const policies: PolicyMeta[] = [];
 
     for (const path of KNOWN_POLICY_PATHS) {
       try {
-        const policy = await getPolicy(path, options);
+        const policy = await getPolicy(path);
         policies.push(policy.meta);
       } catch (error) {
         console.error(`Error loading policy at path ${path}:`, error);
@@ -102,13 +90,10 @@ export async function getAllPolicyMeta(options?: ContentLoaderOptions): Promise<
 /**
  * Get policies in a specific collection
  */
-export async function getPoliciesInCollection(
-  collection: string,
-  options?: ContentLoaderOptions
-): Promise<PolicyMeta[]> {
+export async function getPoliciesInCollection(collection: string): Promise<PolicyMeta[]> {
   try {
     // Get all policies
-    const allPolicies = await getAllPolicyMeta(options);
+    const allPolicies = await getAllPolicyMeta();
 
     // Filter by collection (e.g., "terms")
     return allPolicies.filter((policy) => {

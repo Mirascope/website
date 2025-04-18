@@ -1,6 +1,5 @@
-import type { ContentLoaderOptions } from "./content-loader";
 import { useContent } from "./useContent";
-import { loadContent } from "./utils";
+import { loadContent } from "./content-loader";
 import type { ContentMeta, Content, ContentResult } from "./types";
 import { getMetadataFromStructure, mergeMetadata } from "./metadata-service";
 
@@ -41,11 +40,8 @@ function createDocMeta(frontmatter: Record<string, any>, path: string): DocMeta 
 /**
  * Get doc content by path
  */
-export async function getDocContent(
-  path: string,
-  options?: ContentLoaderOptions
-): Promise<DocContent> {
-  return loadContent<DocMeta>(path, "doc", createDocMeta, options);
+export async function getDocContent(path: string): Promise<DocContent> {
+  return loadContent<DocMeta>(path, "doc", createDocMeta);
 }
 
 /**
@@ -58,8 +54,8 @@ export function useDoc(path: string): ContentResult<DocMeta> {
 /**
  * Get a documentation page by path
  */
-export function getDoc(path: string, options?: ContentLoaderOptions): Promise<DocContent> {
-  return getDocContent(path, options);
+export function getDoc(path: string): Promise<DocContent> {
+  return getDocContent(path);
 }
 
 /**

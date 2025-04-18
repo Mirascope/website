@@ -1,6 +1,5 @@
-import type { ContentLoaderOptions } from "./content-loader";
 import { useContent } from "./useContent";
-import { loadContent } from "./utils";
+import { loadContent } from "./content-loader";
 import type { ContentMeta, Content, ContentResult } from "./types";
 import { ContentError } from "./errors";
 import { environment } from "./environment";
@@ -43,12 +42,9 @@ function normalizeBlogPath(slug: string): string {
 /**
  * Get blog content by path
  */
-export async function getBlogContent(
-  slug: string,
-  options?: ContentLoaderOptions
-): Promise<BlogContent> {
+export async function getBlogContent(slug: string): Promise<BlogContent> {
   const normalizedSlug = normalizeBlogPath(slug);
-  return loadContent<BlogMeta>(normalizedSlug, "blog", createBlogMeta, options);
+  return loadContent<BlogMeta>(normalizedSlug, "blog", createBlogMeta);
 }
 
 /**

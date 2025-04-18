@@ -1,11 +1,9 @@
-import type { ContentType } from "./types";
-import { handleContentError } from "./errors";
-import { resolveContentPath } from "./path-resolver";
 import { environment } from "./environment";
-
-export interface ContentLoaderOptions {
-  devMode?: boolean;
-}
+import type { ContentType, ContentMeta, Content, ValidationResult } from "./types";
+import { validateMetadata as validateMetadataService } from "./metadata-service";
+import { processMDXContent } from "./mdx-processor";
+import { resolveContentPath, isValidPath } from "./path-resolver";
+import { handleContentError, InvalidPathError } from "./errors";
 
 /**
  * Fetches raw content from a given path
@@ -41,29 +39,70 @@ export async function fetchRawContent(
 }
 
 /**
- * Loads content for the given path and content type
- *
- * @param path - The path to the content (e.g., "/docs/mirascope/getting-started")
- * @param contentType - The type of content ("doc", "blog", "policy")
- * @param options - Options for loading content
- * @returns Promise that resolves to the content string
+ * Unified content loading pipeline that handles the entire process
+ * from path resolution to MDX processing and metadata creation
  */
-export async function loadContent(
+export async function loadContent<T extends ContentMeta>(
   path: string,
   contentType: ContentType,
-  options?: ContentLoaderOptions
-): Promise<string> {
+  createMeta: (frontmatter: Record<string, any>, path: string) => T,
+  options?: {
+    preprocessContent?: (content: string) => string;
+  }
+): Promise<Content<T>> {
   try {
-    // Determine if we're in dev mode
-    const devMode = options?.devMode ?? environment.isDev();
+    // Validate the path
+    if (!isValidPath(path, contentType)) {
+      throw new InvalidPathError(contentType, path);
+    }
 
-    // Get the appropriate content path
+    // Get environment info - always read from environment directly
+    const devMode = environment.isDev();
+
+    // Get content path
     const contentPath = resolveContentPath(path, contentType, { devMode });
 
-    // Fetch the content
-    return await fetchRawContent(contentPath, devMode);
+    // Use fetch to get raw content
+    const rawContent = await fetchRawContent(contentPath, devMode);
+
+    // Process MDX with preprocessing if needed
+    const processed = await processMDXContent(rawContent, {
+      preprocessContent: options?.preprocessContent,
+    });
+
+    // Create metadata
+    const meta = createMeta(processed.frontmatter, path);
+
+    // Validate metadata
+    try {
+      validateContentMetadata(meta, contentType);
+    } catch (error) {
+      handleContentError(error, contentType, path);
+    }
+
+    // Return complete content
+    return {
+      meta,
+      content: processed.content,
+      mdx: {
+        code: processed.code,
+        frontmatter: processed.frontmatter,
+      },
+    };
   } catch (error) {
-    // Use the unified error handler
-    handleContentError(error, contentType, path);
+    return handleContentError(error, contentType, path);
+  }
+}
+
+/**
+ * Enhanced validation that uses the metadata service but provides a simpler interface
+ */
+function validateContentMetadata<T extends ContentMeta>(meta: T, contentType: ContentType): void {
+  // Use the metadata service for validation
+  const validation: ValidationResult = validateMetadataService(meta, contentType);
+
+  // Handle validation failures
+  if (!validation.isValid) {
+    throw new Error(`Invalid metadata: ${validation.errors?.join(", ")}`);
   }
 }
