@@ -107,9 +107,11 @@ export function replaceProviderVariables(content: string, primaryProvider: Provi
   const { provider: secondaryProvider, model: secondaryModel } =
     getAlternativeProvider(primaryProvider);
 
-  return content
+  const after = content
     .replace(/\$PROVIDER/g, primaryProvider)
     .replace(/\$MODEL/g, primaryInfo.defaultModel)
     .replace(/\$OTHER_PROVIDER/g, secondaryProvider)
     .replace(/\$OTHER_MODEL/g, secondaryModel);
+  console.log(content, after);
+  return after;
 }
