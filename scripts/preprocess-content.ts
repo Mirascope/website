@@ -322,17 +322,21 @@ async function processDevFiles(verbose = true): Promise<void> {
 }
 
 /**
- * Main processing function that generates static JSON files for all MDX content,
- * creates a sitemap.xml file, and prerenders all routes to static HTML
+ * Main processing function that generates static JSON files for all MDX content
+ * and creates a sitemap.xml file
  */
 export async function preprocessContent(verbose = true): Promise<void> {
   try {
-    // First process all content to make sure it's available for prerendering
     await processBlogPosts(verbose);
     await processDocsFiles(verbose);
     await processPolicyFiles(verbose);
     await processDevFiles(verbose);
     await generateSitemap(verbose);
+    if (verbose) {
+      console.log("Content preprocessing complete!");
+      console.log("Static files are available in the public/static directory");
+    }
+    return;
   } catch (error) {
     console.error("Error during preprocessing:", error);
     throw error; // Let the caller handle the error
