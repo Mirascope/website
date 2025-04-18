@@ -59,28 +59,23 @@ if (!rootElement) {
   // Check if we have prerendered content
   const hasPrerenderedContent = rootElement.innerHTML.trim() !== "";
 
-  // Function to actually mount the app
+  // Create a new React root regardless of whether we have prerendered content
+  const root = ReactDOM.createRoot(rootElement);
+
+  // Function to mount the app
   const mountApp = async () => {
     if (hasPrerenderedContent) {
-      // Ensure router is fully ready before hydrating
+      // If we have prerendered content, wait for router to load before replacing it
+      // This ensures we have all data ready before switching from SSG content
       await router.load();
-
-      // Non-empty DOM - hydrate the existing content (SSG/prerendered HTML)
-      ReactDOM.hydrateRoot(
-        rootElement,
-        <StrictMode>
-          <RouterProvider router={router} defaultPreload="intent" />
-        </StrictMode>
-      );
-    } else {
-      // Empty DOM - create a new React root (development mode)
-      const root = ReactDOM.createRoot(rootElement);
-      root.render(
-        <StrictMode>
-          <RouterProvider router={router} defaultPreload="intent" />
-        </StrictMode>
-      );
     }
+
+    // Always use createRoot/render instead of hydrateRoot to avoid hydration mismatches
+    root.render(
+      <StrictMode>
+        <RouterProvider router={router} />
+      </StrictMode>
+    );
   };
 
   // Start mounting the app
