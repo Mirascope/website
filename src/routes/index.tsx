@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import Logo from "@/components/Logo";
 import useSEO from "@/lib/hooks/useSEO";
+import { environment } from "@/lib/content/environment";
 
 export const Route = createFileRoute("/")({
   component: LandingPage,
+  onError: (error: Error) => environment.onError(error),
 });
 
 function LandingPage() {

@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect, useRef, useCallback } from "react";
 import DevLayout from "@/components/dev/DevLayout";
+import { environment } from "@/lib/content/environment";
 
 export const Route = createFileRoute("/dev/social-card")({
   component: SocialCardPreview,
+  onError: (error: Error) => environment.onError(error),
 });
 
 // Helper interface for iframe communication

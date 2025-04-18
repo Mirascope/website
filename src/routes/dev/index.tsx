@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import DevLayout from "@/components/dev/DevLayout";
+import { environment } from "@/lib/content/environment";
 
 export const Route = createFileRoute("/dev/")({
   component: DevIndexPage,
+  onError: (error: Error) => environment.onError(error),
 });
 
 function DevIndexPage() {

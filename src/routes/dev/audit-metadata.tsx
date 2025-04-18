@@ -2,9 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { routeToFilename } from "../../lib/utils";
 import DevLayout from "@/components/dev/DevLayout";
+import { environment } from "@/lib/content/environment";
 
 export const Route = createFileRoute("/dev/audit-metadata")({
   component: AuditMetadata,
+  onError: (error: Error) => environment.onError(error),
 });
 
 interface SEOMetadataItem {
