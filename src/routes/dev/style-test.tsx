@@ -4,9 +4,11 @@ import DevLayout from "@/components/dev/DevLayout";
 import { MDXRenderer } from "@/components/MDXRenderer";
 import { useState, useEffect } from "react";
 import { processMDXContent } from "@/lib/content/mdx-processor";
+import { environment } from "@/lib/content/environment";
 
 export const Route = createFileRoute("/dev/style-test")({
   component: StyleTestPage,
+  onError: (error: Error) => environment.onError(error),
 });
 
 // Flag to determine if we're in development mode

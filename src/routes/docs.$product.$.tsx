@@ -4,6 +4,7 @@ import { type ProductName } from "@/lib/route-types";
 import { docsPageLoader } from "@/lib/content/loaders";
 import type { DocContent, DocMeta } from "@/lib/content/docs";
 import DocsLayout from "@/components/docs/core/DocsLayout";
+import { environment } from "@/lib/content/environment";
 
 export const Route = createFileRoute("/docs/$product/$")({
   component: DocsProductPage,
@@ -50,6 +51,7 @@ export const Route = createFileRoute("/docs/$product/$")({
       />
     );
   },
+  onError: (error: Error) => environment.onError(error),
 });
 
 function DocsProductPage() {

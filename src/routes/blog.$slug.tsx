@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { blogLoader } from "@/lib/content/loaders";
 import analyticsManager from "@/lib/services/analytics";
 import type { BlogContent } from "@/lib/content/blog";
+import { environment } from "@/lib/content/environment";
 
 export const Route = createFileRoute("/blog/$slug")({
   component: BlogPostPage,
@@ -37,6 +38,7 @@ export const Route = createFileRoute("/blog/$slug")({
       <BlogPostError slug={slug} error={error instanceof Error ? error.message : String(error)} />
     );
   },
+  onError: (error: Error) => environment.onError(error),
 });
 
 function BlogPostPage() {

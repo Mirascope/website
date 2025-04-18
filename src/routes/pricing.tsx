@@ -4,9 +4,11 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import useSEO from "@/lib/hooks/useSEO";
+import { environment } from "@/lib/content/environment";
 
 export const Route = createFileRoute("/pricing")({
   component: PricingPage,
+  onError: (error: Error) => environment.onError(error),
 });
 
 // Feature row component for displaying features with the same value across tiers

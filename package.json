@@ -1,5 +1,5 @@
 {
-  "name": "my-app",
+  "name": "mirascope-website",
   "private": true,
   "scripts": {
     "start": "node scripts/start.js",
@@ -8,9 +8,11 @@
     "fetch-github-stats": "bun run --bun scripts/fetch-github-stats.ts",
     "enumerate-routes": "bun run scripts/enumerate-routes.ts",
     "generate-social": "bun scripts/generate-socials/main.ts",
+    "test-prerender-route": "bun run scripts/test-prerender.ts",
+    "prerender": "bun run scripts/vite-prerender.ts",
     "prebuild": "bun run preprocess-content && bun run generate-social --build-html",
-    "build": "bun run --bun vite build && bun run tsc",
-    "serve": "bun --bun vite preview",
+    "build": "bun run --bun vite build && bun run prerender",
+    "serve": "bun scripts/serve-static.js",
     "test": "bun test",
     "lint": "bun run typecheck && bun run lint:mdx && bun run lint:snippets && bun run lint:format && bun run lint:social",
     "lint:social": "bun run generate-social --check",
