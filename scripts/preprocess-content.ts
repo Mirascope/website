@@ -240,7 +240,7 @@ async function generateSitemap(verbose = true): Promise<void> {
   if (verbose) console.log("Generating sitemap.xml...");
 
   // Get all routes using our centralized utility
-  const uniqueRoutes = await getAllRoutes();
+  const uniqueRoutes = getAllRoutes();
 
   // Get blog posts metadata for setting lastmod dates
   const postsList = await getBlogPostsWithMeta();
