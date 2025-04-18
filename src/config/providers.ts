@@ -112,6 +112,5 @@ export function replaceProviderVariables(content: string, primaryProvider: Provi
     .replace(/\$MODEL/g, primaryInfo.defaultModel)
     .replace(/\$OTHER_PROVIDER/g, secondaryProvider)
     .replace(/\$OTHER_MODEL/g, secondaryModel);
-  console.log(content, after);
   return after;
 }
