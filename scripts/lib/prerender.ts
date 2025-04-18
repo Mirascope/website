@@ -7,7 +7,6 @@ import { renderToString } from "react-dom/server";
 import { environment } from "@/lib/content/environment";
 
 async function staticFetch(url: string) {
-  console.log(`Fetching URL: ${url}`);
   // Handle content paths based on the URL
   let contentPath = url;
 
