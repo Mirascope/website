@@ -64,7 +64,5 @@ export const docsPageLoader = ({
     // are passed through to the content handler without appending /index
   }
 
-  console.log(`Loading docs path: ${finalPath}`);
-
   return Promise.all([getDoc(finalPath), getDocsForProduct(product as ProductName)]);
 };
