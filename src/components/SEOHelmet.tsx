@@ -11,6 +11,7 @@ interface SEOProps {
   url?: string;
   type?: "website" | "article";
   product?: keyof typeof PRODUCT_CONFIGS;
+  robots?: string;
   article?: {
     publishedTime?: string;
     modifiedTime?: string;
@@ -32,7 +33,7 @@ export function SEOHelmet(props: SEOProps) {
   const router = useRouterState();
   const currentPath = router.location.pathname;
 
-  const { title, description, image, url, type = "website", product, article } = props;
+  const { title, description, image, url, type = "website", product, article, robots } = props;
 
   // Calculate metadata values
   const siteTitle = product ? `${PRODUCT_CONFIGS[product].title}` : "Mirascope";
@@ -66,6 +67,7 @@ export function SEOHelmet(props: SEOProps) {
     <Helmet>
       <title>{pageTitle}</title>
       <meta name="description" content={metaDescription} />
+      {robots && <meta name="robots" content={robots} />}
 
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />

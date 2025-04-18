@@ -5,6 +5,7 @@ import { blogListLoader } from "@/lib/content/loaders";
 import SEOHelmet from "@/components/SEOHelmet";
 import { LoadingContent } from "@/components/docs";
 import { environment } from "@/lib/content/environment";
+import ContentErrorHandler from "@/components/ContentErrorHandler";
 
 // Posts per page
 const POSTS_PER_PAGE = 4;
@@ -37,6 +38,15 @@ export const Route = createFileRoute("/blog/")({
       </div>
     </div>
   ),
+  errorComponent: ({ error }) => {
+    environment.onError(error);
+    return (
+      <ContentErrorHandler
+        error={error instanceof Error ? error : new Error(String(error))}
+        contentType="blog"
+      />
+    );
+  },
   onError: (error: Error) => environment.onError(error),
 });
 
