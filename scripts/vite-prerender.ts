@@ -5,6 +5,7 @@
  */
 import path from "path";
 import fs from "fs";
+import os from "os";
 import { prerenderPage } from "./lib/prerender";
 import { getAllRoutes } from "../src/lib/router-utils";
 
@@ -33,9 +34,13 @@ async function main() {
     ? fs.readFileSync(rootTemplatePath, "utf-8")
     : null;
 
+  // Create a unique temp file path for backup in the OS temp directory
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "ssg-prerender-"));
+  const backupPath = path.join(tempDir, "index.html.backup");
+
   // Back up the original template if it exists
   if (originalTemplate) {
-    fs.writeFileSync(path.join(process.cwd(), "index.html.bak"), originalTemplate);
+    fs.writeFileSync(backupPath, originalTemplate);
   }
 
   try {
@@ -72,10 +77,16 @@ async function main() {
     // Restore the original template if it existed
     if (originalTemplate) {
       fs.writeFileSync(rootTemplatePath, originalTemplate);
-      fs.unlinkSync(path.join(process.cwd(), "index.html.bak"));
     } else {
       // Remove the temporary template
       fs.unlinkSync(rootTemplatePath);
+    }
+
+    // Clean up temp directory
+    try {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    } catch (e) {
+      console.warn("Could not clean up temporary directory:", tempDir);
     }
   }
 }

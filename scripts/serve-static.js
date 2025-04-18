@@ -49,8 +49,17 @@ const server = createServer((req, res) => {
   // Get URL path
   let url = req.url || "/";
 
-  // Basic security check
-  if (url.includes("..")) {
+  // Enhanced security check for path traversal attempts
+  // Normalize the path and check for traversal attempts
+  const normalizedUrl = path.normalize(url);
+
+  // Check for path traversal attempts
+  if (
+    normalizedUrl.includes("..") ||
+    normalizedUrl.includes("\0") ||
+    url !== decodeURIComponent(encodeURIComponent(url)) ||
+    url.includes("//")
+  ) {
     res.statusCode = 403;
     res.end("Forbidden");
     return;
