@@ -1,5 +1,5 @@
 import { getBlogContent, getAllBlogMeta } from "./blog";
-import { getDocContent, getDocsForProduct, getDoc } from "./docs";
+import { getDocsForProduct, getDoc } from "./docs";
 import { getPolicy } from "./policy";
 import { type ProductName } from "@/lib/route-types";
 import type { ContentType, ContentMeta, GetContentFn } from "./types";
@@ -15,9 +15,6 @@ interface RouteParams {
 
 // Policy loaders - use options from environment for dev mode
 export const policyLoader = createContentLoader(getPolicy, "policy");
-
-// Doc loaders - use options from environment for dev mode
-export const docLoader = createContentLoader(getDocContent, "doc");
 
 // Blog loaders - use options from environment for dev mode
 export const blogLoader = createContentLoader(getBlogContent, "blog");

@@ -1,6 +1,5 @@
-import { useContent } from "./useContent";
 import { loadContent } from "./content-loader";
-import type { ContentMeta, Content, ContentResult } from "./types";
+import type { ContentMeta, Content } from "./types";
 import { getMetadataFromStructure, mergeMetadata } from "./metadata-service";
 
 // Import product docs metadata
@@ -40,22 +39,8 @@ function createDocMeta(frontmatter: Record<string, any>, path: string): DocMeta 
 /**
  * Get doc content by path
  */
-export async function getDocContent(path: string): Promise<DocContent> {
+export async function getDoc(path: string): Promise<DocContent> {
   return loadContent<DocMeta>(path, "doc", createDocMeta);
-}
-
-/**
- * Hook for loading and rendering a documentation page
- */
-export function useDoc(path: string): ContentResult<DocMeta> {
-  return useContent<DocMeta>(path, getDocContent);
-}
-
-/**
- * Get a documentation page by path
- */
-export function getDoc(path: string): Promise<DocContent> {
-  return getDocContent(path);
 }
 
 /**
