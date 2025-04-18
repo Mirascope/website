@@ -10,6 +10,7 @@ import useFunMode from "@/lib/hooks/useFunMode";
 import useSEO from "@/lib/hooks/useSEO";
 import { cn } from "@/lib/utils";
 import { getBlogContent } from "@/lib/content/blog";
+import analyticsManager from "@/lib/services/analytics";
 
 // Create a resource cache to store suspense data
 const cache = new Map();
@@ -69,6 +70,16 @@ function BlogPostContent({ slug }: { slug: string }) {
           setTimeout(() => {
             setIsCopied(false);
           }, 2000);
+
+          const pagePath = window.location.pathname;
+
+          // Using GA4 standard "select_content" event with recommended parameters
+          analyticsManager.trackEvent("select_content", {
+            content_type: "blog_markdown",
+            item_id: slug,
+            product: "blog",
+            page_path: pagePath,
+          });
         })
         .catch((err) => {
           console.error("Failed to copy content: ", err);
