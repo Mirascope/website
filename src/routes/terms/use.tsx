@@ -1,6 +1,6 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import PolicyPage, { PolicyPageLoading, PolicyPageError } from "@/components/PolicyPage";
-import useSEO from "@/lib/hooks/useSEO";
+import SEOHelmet from "@/components/SEOHelmet";
 import { policyLoader } from "@/lib/content/loaders";
 import type { PolicyContent } from "@/lib/content/policy";
 import { environment } from "@/lib/content/environment";
@@ -29,15 +29,18 @@ function TermsOfUsePage() {
   // Access the loaded content directly
   const content = useLoaderData({ from: "/terms/use", structuralSharing: false }) as PolicyContent;
 
-  // Apply SEO with frontmatter from MDX
-  useSEO({
-    title: content?.meta?.title || "Terms of Use",
-    description:
-      content?.mdx?.frontmatter?.description ||
-      "Guidelines and rules for using the Mirascope website.",
-    url: "/terms/use",
-    type: "article",
-  });
-
-  return <PolicyPage content={content} type="terms-use" />;
+  return (
+    <>
+      <SEOHelmet
+        title={content?.meta?.title || "Terms of Use"}
+        description={
+          content?.mdx?.frontmatter?.description ||
+          "Guidelines and rules for using the Mirascope website."
+        }
+        url="/terms/use"
+        type="article"
+      />
+      <PolicyPage content={content} type="terms-use" />
+    </>
+  );
 }

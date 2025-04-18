@@ -3,7 +3,7 @@ import { Check, Info, X } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import useSEO from "@/lib/hooks/useSEO";
+import SEOHelmet from "@/components/SEOHelmet";
 import { environment } from "@/lib/content/environment";
 
 export const Route = createFileRoute("/pricing")({
@@ -124,14 +124,6 @@ const PricingTier = ({
 );
 
 function PricingPage() {
-  // Set SEO metadata
-  useSEO({
-    title: "Lilypad Pricing",
-    description: "Lilypad's pricing plans and features",
-    product: "lilypad",
-    url: "/pricing",
-  });
-
   // Cloud hosted features
   const cloudHostedFeatures = [
     { feature: "Projects", free: "Unlimited", pro: "Unlimited" },
@@ -186,195 +178,207 @@ function PricingPage() {
   );
 
   return (
-    <div className="py-12 px-4">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-16">
-          <h1 className="text-4xl font-bold mb-4 text-center text-foreground">Lilypad Pricing</h1>
-          <p className="text-xl text-foreground max-w-2xl mx-auto mb-2">
-            Get started with the Free plan today.
-          </p>
-          <p className="text-md text-muted-foreground max-w-2xl mx-auto italic">
-            No credit card required.
-          </p>
-        </div>
-
-        {/* Shadcn Tabs */}
-        <Tabs defaultValue="hosted" className="w-full mb-10">
-          <div className="flex justify-center mb-8">
-            <TabsList>
-              <TabsTrigger value="hosted">Hosted By Us</TabsTrigger>
-              <TabsTrigger value="selfhosted">Self Hosting</TabsTrigger>
-            </TabsList>
+    <>
+      <SEOHelmet
+        title="Lilypad Pricing"
+        description="Lilypad's pricing plans and features"
+        product="lilypad"
+        url="/pricing"
+      />
+      <div className="py-12 px-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-16">
+            <h1 className="text-4xl font-bold mb-4 text-center text-foreground">Lilypad Pricing</h1>
+            <p className="text-xl text-foreground max-w-2xl mx-auto mb-2">
+              Get started with the Free plan today.
+            </p>
+            <p className="text-md text-muted-foreground max-w-2xl mx-auto italic">
+              No credit card required.
+            </p>
           </div>
 
-          {/* Hosted By Us Tab Content */}
-          <TabsContent value="hosted">
-            <div className="grid md:grid-cols-2 gap-8 mb-10">
-              <PricingTier
-                name="Free"
-                price="$0"
-                description="For individuals just getting started"
-                buttonText="Get Started"
-                buttonLink="/docs/lilypad/quickstart"
-                isGreen={true}
-              />
+          {/* Shadcn Tabs */}
+          <Tabs defaultValue="hosted" className="w-full mb-10">
+            <div className="flex justify-center mb-8">
+              <TabsList>
+                <TabsTrigger value="hosted">Hosted By Us</TabsTrigger>
+                <TabsTrigger value="selfhosted">Self Hosting</TabsTrigger>
+              </TabsList>
+            </div>
+
+            {/* Hosted By Us Tab Content */}
+            <TabsContent value="hosted">
+              <div className="grid md:grid-cols-2 gap-8 mb-10">
+                <PricingTier
+                  name="Free"
+                  price="$0"
+                  description="For individuals just getting started"
+                  buttonText="Get Started"
+                  buttonLink="/docs/lilypad/quickstart"
+                  isGreen={true}
+                />
+                <div className="bg-background border border-border rounded-lg shadow-sm overflow-hidden">
+                  <div className="px-6 py-8 bg-background">
+                    <div className="flex items-center gap-2 mb-2">
+                      <h3 className="text-xl font-semibold text-foreground">Pro</h3>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <Info size={16} className="text-secondary cursor-pointer" />
+                        </TooltipTrigger>
+                        <TooltipContent
+                          side="right"
+                          className="w-md p-4 bg-secondary/10 text-secondary border border-secondary/20"
+                        >
+                          {betaNoticeContent}
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                    <p className="text-muted-foreground mb-5">For teams with more advanced needs</p>
+                    <div className="mb-6">
+                      <span className="text-3xl font-bold">TBD</span>
+                    </div>
+                    <a
+                      href="/docs/lilypad/quickstart"
+                      className="block w-full py-2 px-4 rounded-md text-center transition-colors bg-muted text-muted-foreground hover:bg-accent"
+                    >
+                      *Get Started
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* Feature comparison table */}
               <div className="bg-background border border-border rounded-lg shadow-sm overflow-hidden">
-                <div className="px-6 py-8 bg-background">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h3 className="text-xl font-semibold text-foreground">Pro</h3>
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <Info size={16} className="text-secondary cursor-pointer" />
-                      </TooltipTrigger>
-                      <TooltipContent
-                        side="right"
-                        className="w-md p-4 bg-secondary/10 text-secondary border border-secondary/20"
-                      >
-                        {betaNoticeContent}
-                      </TooltipContent>
-                    </Tooltip>
+                <div className="px-4 py-5 sm:px-6 bg-accent border-b border-border">
+                  <h3 className="text-lg font-medium text-foreground">Feature Comparison</h3>
+                </div>
+                <div className="px-4 py-5 sm:p-6 overflow-x-auto bg-background">
+                  {/* Table header */}
+                  <div className="grid grid-cols-3 gap-4 pb-4 border-b border-border">
+                    <div className="text-lg font-medium text-muted-foreground">Feature</div>
+                    <div className="text-lg font-medium text-muted-foreground text-center">
+                      Free
+                    </div>
+                    <div className="text-lg font-medium text-muted-foreground text-center">Pro</div>
                   </div>
-                  <p className="text-muted-foreground mb-5">For teams with more advanced needs</p>
-                  <div className="mb-6">
-                    <span className="text-3xl font-bold">TBD</span>
-                  </div>
-                  <a
-                    href="/docs/lilypad/quickstart"
-                    className="block w-full py-2 px-4 rounded-md text-center transition-colors bg-muted text-muted-foreground hover:bg-accent"
-                  >
-                    *Get Started
-                  </a>
+
+                  {/* Table rows */}
+                  {cloudHostedFeatures.map((feat, i) => (
+                    <FeatureRow key={i} feature={feat.feature} free={feat.free} pro={feat.pro} />
+                  ))}
                 </div>
               </div>
-            </div>
+            </TabsContent>
 
-            {/* Feature comparison table */}
-            <div className="bg-background border border-border rounded-lg shadow-sm overflow-hidden">
-              <div className="px-4 py-5 sm:px-6 bg-accent border-b border-border">
-                <h3 className="text-lg font-medium text-foreground">Feature Comparison</h3>
-              </div>
-              <div className="px-4 py-5 sm:p-6 overflow-x-auto bg-background">
-                {/* Table header */}
-                <div className="grid grid-cols-3 gap-4 pb-4 border-b border-border">
-                  <div className="text-lg font-medium text-muted-foreground">Feature</div>
-                  <div className="text-lg font-medium text-muted-foreground text-center">Free</div>
-                  <div className="text-lg font-medium text-muted-foreground text-center">Pro</div>
+            {/* Self Hosting Tab Content */}
+            <TabsContent value="selfhosted">
+              <div className="grid md:grid-cols-2 gap-8 mb-10">
+                <PricingTier
+                  name="Free"
+                  price="$0"
+                  description="For individuals just getting started"
+                  buttonText="Get Started"
+                  buttonLink="/docs/lilypad/self-hosting"
+                  isGreen={true}
+                />
+                <div className="bg-background border border-border rounded-lg shadow-sm overflow-hidden">
+                  <div className="px-6 py-8">
+                    <div className="flex items-center gap-2 mb-2">
+                      <h3 className="text-xl font-semibold text-foreground">Pro</h3>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <Info size={16} className="text-secondary cursor-pointer" />
+                        </TooltipTrigger>
+                        <TooltipContent
+                          side="right"
+                          className="w-96 p-4 bg-secondary/10 text-secondary border border-secondary/20"
+                        >
+                          {betaNoticeContent}
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                    <p className="text-muted-foreground mb-5">For teams with more advanced needs</p>
+                    <div className="mb-6">
+                      <span className="text-3xl font-bold">TBD</span>
+                    </div>
+                    <a
+                      href="mailto:sales@mirascope.com"
+                      className="block w-full py-2 px-4 rounded-md text-center transition-colors bg-muted text-muted-foreground hover:bg-accent"
+                    >
+                      Request License
+                    </a>
+                  </div>
                 </div>
-
-                {/* Table rows */}
-                {cloudHostedFeatures.map((feat, i) => (
-                  <FeatureRow key={i} feature={feat.feature} free={feat.free} pro={feat.pro} />
-                ))}
               </div>
-            </div>
-          </TabsContent>
 
-          {/* Self Hosting Tab Content */}
-          <TabsContent value="selfhosted">
-            <div className="grid md:grid-cols-2 gap-8 mb-10">
-              <PricingTier
-                name="Free"
-                price="$0"
-                description="For individuals just getting started"
-                buttonText="Get Started"
-                buttonLink="/docs/lilypad/self-hosting"
-                isGreen={true}
-              />
+              {/* Feature comparison table */}
               <div className="bg-background border border-border rounded-lg shadow-sm overflow-hidden">
-                <div className="px-6 py-8">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h3 className="text-xl font-semibold text-foreground">Pro</h3>
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <Info size={16} className="text-secondary cursor-pointer" />
-                      </TooltipTrigger>
-                      <TooltipContent
-                        side="right"
-                        className="w-96 p-4 bg-secondary/10 text-secondary border border-secondary/20"
-                      >
-                        {betaNoticeContent}
-                      </TooltipContent>
-                    </Tooltip>
+                <div className="px-4 py-5 sm:px-6 bg-muted border-b border-border">
+                  <h3 className="text-lg font-medium text-foreground">Feature Comparison</h3>
+                </div>
+                <div className="px-4 py-5 sm:p-6 overflow-x-auto bg-background">
+                  {/* Table header */}
+                  <div className="grid grid-cols-3 gap-4 pb-4 border-b border-border">
+                    <div className="text-lg font-medium text-muted-foreground">Feature</div>
+                    <div className="text-lg font-medium text-muted-foreground text-center">
+                      Free
+                    </div>
+                    <div className="text-lg font-medium text-muted-foreground text-center">Pro</div>
                   </div>
-                  <p className="text-muted-foreground mb-5">For teams with more advanced needs</p>
-                  <div className="mb-6">
-                    <span className="text-3xl font-bold">TBD</span>
-                  </div>
-                  <a
-                    href="mailto:sales@mirascope.com"
-                    className="block w-full py-2 px-4 rounded-md text-center transition-colors bg-muted text-muted-foreground hover:bg-accent"
-                  >
-                    Request License
-                  </a>
+
+                  {/* Table rows */}
+                  {selfHostedFeatures.map((feat, i) => (
+                    <FeatureRow key={i} feature={feat.feature} free={feat.free} pro={feat.pro} />
+                  ))}
                 </div>
               </div>
-            </div>
+            </TabsContent>
+          </Tabs>
 
-            {/* Feature comparison table */}
-            <div className="bg-background border border-border rounded-lg shadow-sm overflow-hidden">
-              <div className="px-4 py-5 sm:px-6 bg-muted border-b border-border">
-                <h3 className="text-lg font-medium text-foreground">Feature Comparison</h3>
+          {/* FAQ Section */}
+          <div className="mt-16 bg-accent p-8 rounded-lg border border-border">
+            <h2 className="text-2xl font-semibold mb-4 text-foreground">
+              Frequently Asked Questions
+            </h2>
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-lg font-medium mb-2 text-foreground">
+                  How long will the open beta last?
+                </h3>
+                <p className="text-muted-foreground">
+                  The open beta period is ongoing, and we'll provide advance notice before moving to
+                  paid plans.
+                </p>
               </div>
-              <div className="px-4 py-5 sm:p-6 overflow-x-auto bg-background">
-                {/* Table header */}
-                <div className="grid grid-cols-3 gap-4 pb-4 border-b border-border">
-                  <div className="text-lg font-medium text-muted-foreground">Feature</div>
-                  <div className="text-lg font-medium text-muted-foreground text-center">Free</div>
-                  <div className="text-lg font-medium text-muted-foreground text-center">Pro</div>
-                </div>
-
-                {/* Table rows */}
-                {selfHostedFeatures.map((feat, i) => (
-                  <FeatureRow key={i} feature={feat.feature} free={feat.free} pro={feat.pro} />
-                ))}
+              <div>
+                <h3 className="text-lg font-medium mb-2 text-foreground">
+                  What happens when the beta ends?
+                </h3>
+                <p className="text-muted-foreground">
+                  All existing users will receive a grace period to evaluate which plan is right for
+                  them before making any changes.
+                </p>
               </div>
-            </div>
-          </TabsContent>
-        </Tabs>
-
-        {/* FAQ Section */}
-        <div className="mt-16 bg-accent p-8 rounded-lg border border-border">
-          <h2 className="text-2xl font-semibold mb-4 text-foreground">
-            Frequently Asked Questions
-          </h2>
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-lg font-medium mb-2 text-foreground">
-                How long will the open beta last?
-              </h3>
-              <p className="text-muted-foreground">
-                The open beta period is ongoing, and we'll provide advance notice before moving to
-                paid plans.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-lg font-medium mb-2 text-foreground">
-                What happens when the beta ends?
-              </h3>
-              <p className="text-muted-foreground">
-                All existing users will receive a grace period to evaluate which plan is right for
-                them before making any changes.
-              </p>
             </div>
           </div>
-        </div>
 
-        <div className="mt-16 text-center">
-          <h2 className="text-2xl font-semibold mb-4 text-foreground">
-            Have questions about our pricing?
-          </h2>
-          <p className="text-muted-foreground">
-            Join our{" "}
-            <a
-              href="https://join.slack.com/t/mirascope-community/shared_invite/zt-2ilqhvmki-FB6LWluInUCkkjYD3oSjNA"
-              className="text-primary font-medium hover:underline"
-            >
-              community
-            </a>{" "}
-            and ask the team directly!
-          </p>
+          <div className="mt-16 text-center">
+            <h2 className="text-2xl font-semibold mb-4 text-foreground">
+              Have questions about our pricing?
+            </h2>
+            <p className="text-muted-foreground">
+              Join our{" "}
+              <a
+                href="https://join.slack.com/t/mirascope-community/shared_invite/zt-2ilqhvmki-FB6LWluInUCkkjYD3oSjNA"
+                className="text-primary font-medium hover:underline"
+              >
+                community
+              </a>{" "}
+              and ask the team directly!
+            </p>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
