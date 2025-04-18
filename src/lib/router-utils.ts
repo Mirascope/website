@@ -104,19 +104,35 @@ export function getStaticRoutes(): string[] {
 }
 
 /**
- * Get blog post routes from the posts list
+ * Get blog post routes by scanning the src/posts directory
  */
-export async function getBlogRoutes(): Promise<string[]> {
-  const postsListPath = getPostsListPath();
-  if (!fs.existsSync(postsListPath)) {
-    throw new Error(`Blog posts list not found at: ${postsListPath}`);
-  }
-
+export function getBlogRoutes(): string[] {
   try {
-    const postsList: BlogMeta[] = JSON.parse(fs.readFileSync(postsListPath, "utf8"));
-    return postsList.map((post) => `/blog/${post.slug}`).sort();
+    // First try using the posts list if it exists (for production)
+    const postsListPath = getPostsListPath();
+    if (fs.existsSync(postsListPath)) {
+      try {
+        const postsList: BlogMeta[] = JSON.parse(fs.readFileSync(postsListPath, "utf8"));
+        return postsList.map((post) => `/blog/${post.slug}`).sort();
+      } catch (error) {
+        // Fall through to the file system method if this fails
+        console.warn(`Failed to load posts list, falling back to file system: ${error}`);
+      }
+    }
+
+    // Fall back to scanning the directory (for development/tests)
+    const postsDir = path.join(getProjectRoot(), "src", "posts");
+    if (!fs.existsSync(postsDir)) {
+      throw new Error(`Blog posts directory not found at: ${postsDir}`);
+    }
+
+    // Get all .mdx files in the posts directory
+    const postFiles = fs.readdirSync(postsDir).filter((file) => file.endsWith(".mdx"));
+
+    // Convert filenames to routes by stripping the .mdx extension
+    return postFiles.map((file) => `/blog/${file.replace(".mdx", "")}`).sort();
   } catch (error) {
-    throw new Error(`Failed to load blog posts list: ${error}`);
+    throw new Error(`Failed to get blog routes: ${error}`);
   }
 }
 
@@ -139,9 +155,9 @@ export function getDocsRoutes(): string[] {
 /**
  * Get all routes (static + blogs + docs)
  */
-export async function getAllRoutes(includeHidden = false): Promise<string[]> {
+export function getAllRoutes(includeHidden = false): string[] {
   const staticRoutes = getStaticRoutes();
-  const blogRoutes = await getBlogRoutes();
+  const blogRoutes = getBlogRoutes();
   const docRoutes = getDocsRoutes();
 
   // Combine all routes and remove duplicates
