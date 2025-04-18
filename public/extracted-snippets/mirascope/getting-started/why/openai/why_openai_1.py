@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 1: Mirascope API
 # Generated for provider: openai
-# Source: src/docs/mirascope/getting-started/why.mdx:60
+# Source: src/docs/mirascope/getting-started/why.mdx:62
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm

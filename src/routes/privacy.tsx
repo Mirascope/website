@@ -1,14 +1,30 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import PolicyPage, { PolicyPageLoading, PolicyPageError } from "@/components/PolicyPage";
-import { getPolicy } from "@/lib/content/policy";
 import useSEO from "@/lib/hooks/useSEO";
-import { Suspense } from "react";
-import { createSuspenseResource } from "@/lib/hooks/useSuspense";
+import { policyLoader } from "@/lib/content/loaders";
+import type { PolicyContent } from "@/lib/content/policy";
 
-// Suspense-enabled content component
-function PrivacyContent() {
-  const policyResource = createSuspenseResource(`policy:privacy`, () => getPolicy("privacy"));
-  const content = policyResource.read();
+export const Route = createFileRoute("/privacy")({
+  component: PrivacyPage,
+
+  // Use the policy loader
+  loader: () => policyLoader({ params: { slug: "privacy" } }),
+
+  // Configure loading state
+  pendingComponent: () => <PolicyPageLoading type="privacy" />,
+
+  // Configure error handling
+  errorComponent: ({ error }) => (
+    <PolicyPageError
+      type="privacy"
+      error={error instanceof Error ? error.message : String(error)}
+    />
+  ),
+});
+
+function PrivacyPage() {
+  // Access the loaded content directly
+  const content = useLoaderData({ from: "/privacy", structuralSharing: false }) as PolicyContent;
 
   // Apply SEO with frontmatter from MDX
   useSEO({
@@ -21,25 +37,4 @@ function PrivacyContent() {
   });
 
   return <PolicyPage content={content} type="privacy" />;
-}
-
-export const Route = createFileRoute("/privacy")({
-  component: PrivacyPage,
-});
-
-function PrivacyPage() {
-  try {
-    return (
-      <Suspense fallback={<PolicyPageLoading type="privacy" />}>
-        <PrivacyContent />
-      </Suspense>
-    );
-  } catch (error) {
-    return (
-      <PolicyPageError
-        type="privacy"
-        error={error instanceof Error ? error.message : String(error)}
-      />
-    );
-  }
 }

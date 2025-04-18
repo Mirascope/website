@@ -36,28 +36,17 @@ export interface ContentResult<T extends ContentMeta = ContentMeta> {
 }
 
 /**
- * Interface for content handlers
- * - Provides cached access to content by path
- * - Provides access to all metadata of a specific type
- */
-export interface ContentHandler<T extends ContentMeta> {
-  /**
-   * Get content by path
-   */
-  getContent(path: string): Promise<Content<T>>;
-
-  /**
-   * Get all metadata for this content type
-   */
-  getAllMeta(): Promise<T[]>;
-}
-
-/**
  * Type for content retrieval function
  */
-export type GetContentFn<T extends ContentMeta> = (path: string) => Promise<Content<T>>;
+export type GetContentFn<T extends ContentMeta> = (
+  path: string,
+  options?: { customFetch?: typeof fetch; devMode?: boolean }
+) => Promise<Content<T>>;
 
 /**
  * Type for metadata retrieval function
  */
-export type GetMetaFn<T extends ContentMeta> = () => Promise<T[]>;
+export type GetMetaFn<T extends ContentMeta> = (options?: {
+  customFetch?: typeof fetch;
+  devMode?: boolean;
+}) => Promise<T[]>;
