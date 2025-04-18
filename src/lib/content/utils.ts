@@ -1,21 +1,36 @@
-import type { ContentType, ContentMeta, Content } from "./types";
-import { parseFrontmatter } from "./frontmatter";
-import { isValidPath } from "./path-resolver";
-import { ContentError, DocumentNotFoundError, InvalidPathError, MetadataError } from "./errors";
-import { validateMetadata } from "./metadata-service";
-import { processMDX } from "./mdx-processor";
-import { loadContent as loadRawContent } from "./content-loader";
+import type { ContentType, ContentMeta, Content, ValidationResult } from "./types";
+import { validateMetadata as validateMetadataService } from "./metadata-service";
+import { processMDXContent } from "./mdx-processor";
+import { fetchRawContent } from "./content-loader";
 import type { ContentLoaderOptions } from "./content-loader";
+import { resolveContentPath, isValidPath } from "./path-resolver";
+import { handleContentError, InvalidPathError } from "./errors";
+import { environment } from "./environment";
 
 /**
- * Load content by path
+ * Enhanced validation that uses the metadata service but provides a simpler interface
+ */
+function validateContentMetadata<T extends ContentMeta>(meta: T, contentType: ContentType): void {
+  // Use the metadata service for validation
+  const validation: ValidationResult = validateMetadataService(meta, contentType);
+
+  // Handle validation failures
+  if (!validation.isValid) {
+    throw new Error(`Invalid metadata: ${validation.errors?.join(", ")}`);
+  }
+}
+
+/**
+ * Unified content loading pipeline that handles the entire process
+ * from path resolution to MDX processing and metadata creation
  */
 export async function loadContent<T extends ContentMeta>(
   path: string,
   contentType: ContentType,
   createMeta: (frontmatter: Record<string, any>, path: string) => T,
-  options?: ContentLoaderOptions,
-  postprocessContent?: (content: string) => string
+  options?: ContentLoaderOptions & {
+    preprocessContent?: (content: string) => string;
+  }
 ): Promise<Content<T>> {
   try {
     // Validate the path
@@ -23,55 +38,41 @@ export async function loadContent<T extends ContentMeta>(
       throw new InvalidPathError(contentType, path);
     }
 
-    // Load the raw content
-    const rawContent = await loadRawContent(path, contentType, options);
+    // Get environment info
+    const devMode = options?.devMode ?? environment.isDev();
 
-    // Parse frontmatter
-    const { frontmatter, content } = parseFrontmatter(rawContent);
+    // Get content path
+    const contentPath = resolveContentPath(path, contentType, { devMode });
 
-    // Create the meta object (using domain-specific function)
-    const meta = createMeta(frontmatter, path);
+    // Use fetch to get raw content
+    const fetchFn = options?.customFetch ?? fetch;
+    const rawContent = await fetchRawContent(contentPath, fetchFn, devMode);
 
-    // Validate the metadata
-    const validation = validateMetadata(meta, contentType);
-    if (!validation.isValid) {
-      throw new MetadataError(
-        contentType,
-        path,
-        new Error(`Invalid metadata: ${validation.errors?.join(", ")}`)
-      );
+    // Process MDX with preprocessing if needed
+    const processed = await processMDXContent(rawContent, {
+      preprocessContent: options?.preprocessContent,
+    });
+
+    // Create metadata
+    const meta = createMeta(processed.frontmatter, path);
+
+    // Validate metadata
+    try {
+      validateContentMetadata(meta, contentType);
+    } catch (error) {
+      handleContentError(error, contentType, path);
     }
 
-    // Apply any pre-processing to the content before MDX processing
-    // This is especially important for the policy handler that needs to remove source map URLs
-    const preprocessedContent = postprocessContent ? postprocessContent(content) : content;
-
-    // Process the MDX content (with preprocessed content)
-    const processedMDX = await processMDX(preprocessedContent);
-
-    // Create the result
-    const result: Content<T> = {
+    // Return complete content
+    return {
       meta,
-      content,
+      content: processed.content,
       mdx: {
-        code: processedMDX.code,
-        frontmatter,
+        code: processed.code,
+        frontmatter: processed.frontmatter,
       },
     };
-
-    return result;
   } catch (error) {
-    // Re-throw known errors
-    if (
-      error instanceof DocumentNotFoundError ||
-      error instanceof InvalidPathError ||
-      error instanceof MetadataError ||
-      error instanceof ContentError
-    ) {
-      throw error;
-    }
-
-    // Wrap other errors
-    throw new ContentError(`Failed to get ${contentType} content: ${path}`, contentType, path);
+    return handleContentError(error, contentType, path);
   }
 }

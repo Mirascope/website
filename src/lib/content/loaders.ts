@@ -3,6 +3,7 @@ import { getDocContent, getDocsForProduct, getDoc } from "./docs";
 import { getPolicy } from "./policy";
 import { createContentLoader } from "./loader-utils";
 import { type ProductName } from "@/lib/route-types";
+import { environment } from "./environment";
 
 /**
  * Loaders for TanStack Router - these can be imported directly into route files
@@ -10,17 +11,17 @@ import { type ProductName } from "@/lib/route-types";
 
 // Policy loaders - use options from environment for dev mode
 export const policyLoader = createContentLoader(getPolicy, "policy", {
-  devMode: import.meta.env.DEV,
+  devMode: environment.isDev(),
 });
 
 // Doc loaders - use options from environment for dev mode
 export const docLoader = createContentLoader(getDocContent, "doc", {
-  devMode: import.meta.env.DEV,
+  devMode: environment.isDev(),
 });
 
 // Blog loaders - use options from environment for dev mode
 export const blogLoader = createContentLoader(getBlogContent, "blog", {
-  devMode: import.meta.env.DEV,
+  devMode: environment.isDev(),
 });
 
 // Blog list loader

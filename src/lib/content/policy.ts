@@ -51,13 +51,10 @@ export async function getPolicyContent(
   options?: ContentLoaderOptions
 ): Promise<PolicyContent> {
   const normalizedPath = normalizePolicyPath(path);
-  return loadContent<PolicyMeta>(
-    normalizedPath,
-    "policy",
-    createPolicyMeta,
-    options,
-    cleanupPolicyContent
-  );
+  return loadContent<PolicyMeta>(normalizedPath, "policy", createPolicyMeta, {
+    ...options,
+    preprocessContent: cleanupPolicyContent,
+  });
 }
 
 /**

@@ -1,10 +1,46 @@
 import type { ContentType } from "./types";
-import { ContentLoadError, DocumentNotFoundError } from "./errors";
-import { normalizePath, getContentPath } from "./path-resolver";
+import { handleContentError } from "./errors";
+import { resolveContentPath } from "./path-resolver";
+import { environment } from "./environment";
 
 export interface ContentLoaderOptions {
   devMode?: boolean;
   customFetch?: any;
+}
+
+/**
+ * Fetches raw content from a given path
+ *
+ * @param contentPath - The path to fetch content from
+ * @param fetchFn - The fetch function to use
+ * @param devMode - Whether to process as development mode
+ * @returns The raw content string
+ */
+export async function fetchRawContent(
+  contentPath: string,
+  fetchFn: any = fetch,
+  devMode: boolean = environment.isDev()
+): Promise<string> {
+  try {
+    // Fetch the content using the provided or default fetch function
+    const response = await fetchFn(contentPath);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch content: ${response.status} ${response.statusText}`);
+    }
+
+    // Process response based on environment
+    if (devMode) {
+      // In development, we get the raw content
+      return await response.text();
+    } else {
+      // In production, all content types are stored as JSON with a content field
+      const data = await response.json();
+      return data.content;
+    }
+  } catch (error) {
+    throw error; // Let the caller handle the error with proper context
+  }
 }
 
 /**
@@ -20,53 +56,21 @@ export async function loadContent(
   contentType: ContentType,
   options?: ContentLoaderOptions
 ): Promise<string> {
-  // Normalize the path based on content type
-  const normalizedPath = normalizePath(path, contentType);
-
-  // Determine if we're in dev mode
-  const devMode = options?.devMode ?? import.meta.env?.DEV ?? false;
-
-  // Use provided fetch function or default
-  const fetchFn = options?.customFetch ?? fetch;
-
   try {
+    // Determine if we're in dev mode
+    const devMode = options?.devMode ?? environment.isDev();
+
     // Get the appropriate content path
-    const contentPath = getContentPath(path, contentType);
+    const contentPath = resolveContentPath(path, contentType, { devMode });
 
-    // Fetch the content using the provided or default fetch function
-    const response = await fetchFn(contentPath);
+    // Use provided fetch function or default
+    const fetchFn = options?.customFetch ?? fetch;
 
-    if (!response.ok) {
-      if (response.status === 404) {
-        throw new DocumentNotFoundError(contentType, normalizedPath);
-      }
-      throw new Error(`Failed to fetch content: ${response.statusText}`);
-    }
-
-    // Process response based on environment
-    if (devMode) {
-      // In development, we get the raw content
-      return await response.text();
-    } else {
-      // In production, all content types are stored as JSON with a content field
-      const data = await response.json();
-      return data.content;
-    }
+    // Fetch the content
+    return await fetchRawContent(contentPath, fetchFn, devMode);
   } catch (error) {
-    // Check for 404 errors in the message
-    if (
-      error instanceof Error &&
-      (error.message.includes("404") || error.message.includes("not found"))
-    ) {
-      throw new DocumentNotFoundError(contentType, normalizedPath);
-    }
-
-    // Wrap other errors in ContentLoadError
-    throw new ContentLoadError(
-      contentType,
-      normalizedPath,
-      error instanceof Error ? error : undefined
-    );
+    // Use the unified error handler
+    handleContentError(error, contentType, path);
   }
 }
 

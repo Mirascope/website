@@ -23,7 +23,10 @@ export function createContentLoader<T extends ContentMeta>(
 /**
  * Derives the content path from route parameters based on content type
  */
-function getPathFromParams(params: Record<string, string>, contentType: ContentType): string {
+export function getPathFromParams(
+  params: Record<string, string>,
+  contentType: ContentType
+): string {
   switch (contentType) {
     case "blog":
       return params.slug ? `/blog/${params.slug}` : "";

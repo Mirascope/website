@@ -1,7 +1,8 @@
-import { describe, test, expect, beforeEach, afterEach } from "bun:test";
-import { normalizePath, buildFilePath, isValidPath, getContentPath } from "../path-resolver";
+import { describe, test, expect, beforeEach, afterEach, mock, spyOn } from "bun:test";
+import { normalizePath, isValidPath, getContentPath, resolveContentPath } from "../path-resolver";
 import { InvalidPathError } from "../errors";
 import type { ContentType } from "../content-types";
+import { environment } from "../environment";
 
 describe("Path Resolver", () => {
   describe("normalizePath", () => {
@@ -33,31 +34,23 @@ describe("Path Resolver", () => {
     runTest("/terms/use", "terms/use.mdx", "policy");
   });
 
-  describe("buildFilePath", () => {
-    test("builds doc file paths", () => {
-      expect(buildFilePath("mirascope/getting-started.mdx", "doc")).toBe(
+  describe("resolveContentPath", () => {
+    // Test the new function
+    test("resolves doc paths in development mode", () => {
+      expect(resolveContentPath("/docs/mirascope/getting-started", "doc", { devMode: true })).toBe(
         "/src/docs/mirascope/getting-started.mdx"
       );
-
-      expect(buildFilePath("index.mdx", "doc")).toBe("/src/docs/index.mdx");
     });
 
-    test("builds blog file paths", () => {
-      expect(buildFilePath("new-release.mdx", "blog")).toBe("/src/posts/new-release.mdx");
-
-      expect(buildFilePath("2023/year-review.mdx", "blog")).toBe("/src/posts/2023/year-review.mdx");
+    test("resolves doc paths in production mode", () => {
+      expect(resolveContentPath("/docs/mirascope/getting-started", "doc", { devMode: false })).toBe(
+        "/static/docs/mirascope/getting-started.mdx.json"
+      );
     });
 
-    test("builds policy file paths", () => {
-      expect(buildFilePath("privacy.mdx", "policy")).toBe("/src/policies/privacy.mdx");
-
-      expect(buildFilePath("terms/service.mdx", "policy")).toBe("/src/policies/terms/service.mdx");
-    });
-
-    test("throws for invalid content types", () => {
-      // @ts-expect-error Testing with invalid type
-      expect(() => buildFilePath("test.mdx", "invalid")).toThrow(
-        "Unsupported content type: invalid"
+    test("resolves URL paths when requested", () => {
+      expect(resolveContentPath("/docs/mirascope/getting-started", "doc", { urlPath: true })).toBe(
+        "/docs/mirascope/getting-started"
       );
     });
   });
@@ -134,16 +127,16 @@ describe("Path Resolver", () => {
     });
 
     test("throws for invalid content types", () => {
-      // @ts-expect-error Testing with invalid type
+      // Testing with invalid type - this ts-expect-error is needed and used
+      // @ts-expect-error
       expect(() => getContentPath("/test", "invalid")).toThrow("Unsupported content type: invalid");
     });
 
     // Test for development environment
     test("handles development environment paths", () => {
-      Object.defineProperty(import.meta.env, "PROD", {
-        value: false,
-        writable: true,
-      });
+      // Mock the environment.isDev function to return true
+      const isDevSpy = spyOn(environment, "isDev");
+      isDevSpy.mockImplementation(() => true);
 
       // In dev mode, policy paths should be prefixed with /src/policies/
       expect(getContentPath("/privacy", "policy")).toBe("/src/policies/privacy.mdx");
@@ -152,6 +145,12 @@ describe("Path Resolver", () => {
       expect(getContentPath("/docs/mirascope/getting-started", "doc")).toBe(
         "/src/docs/mirascope/getting-started.mdx"
       );
+
+      // Verify the mock was called
+      expect(isDevSpy).toHaveBeenCalled();
+
+      // Restore all mocks
+      mock.restore();
     });
   });
 });

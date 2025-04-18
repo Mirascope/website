@@ -3,6 +3,7 @@ import { useContent } from "./useContent";
 import { loadContent } from "./utils";
 import type { ContentMeta, Content, ContentResult } from "./types";
 import { ContentError } from "./errors";
+import { environment } from "./environment";
 
 // Define blog-specific metadata
 export interface BlogMeta extends ContentMeta {
@@ -14,9 +15,6 @@ export interface BlogMeta extends ContentMeta {
 
 // Define blog-specific content type
 export type BlogContent = Content<BlogMeta>;
-
-// Flag to detect production environment
-const isProduction = import.meta.env.PROD;
 
 /**
  * Create metadata from frontmatter for blog posts
@@ -66,7 +64,7 @@ export function useBlogPost(slug: string): ContentResult<BlogMeta> {
 export async function getAllBlogMeta(): Promise<BlogMeta[]> {
   try {
     // Choose implementation based on environment
-    if (isProduction) {
+    if (environment.isProd()) {
       // Production: Use pre-generated static JSON file
       const response = await fetch("/static/posts-list.json");
       if (!response.ok) {

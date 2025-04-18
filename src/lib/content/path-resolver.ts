@@ -1,5 +1,6 @@
 import type { ContentType } from "./types";
 import { InvalidPathError } from "./errors";
+import { environment } from "./environment";
 
 /**
  * Normalizes a URL path to a file system path based on content type
@@ -61,23 +62,52 @@ export function normalizePath(path: string, contentType: ContentType): string {
 }
 
 /**
- * Builds a file system path from a normalized path
- *
- * @param normalizedPath - The normalized path (e.g. mirascope/getting-started.mdx)
- * @param contentType - The type of content (doc, blog, policy)
- * @returns File system path (e.g. /src/docs/mirascope/getting-started.mdx)
+ * Builds a file system path for development mode
  */
-export function buildFilePath(normalizedPath: string, contentType: ContentType): string {
+function buildDevPath(normalizedPath: string, contentType: ContentType): string {
   switch (contentType) {
     case "doc":
       return `/src/docs/${normalizedPath}`;
     case "blog":
-      return `/src/posts/${normalizedPath}`;
+      // Important: Use the middleware path for blog posts in dev mode
+      // This goes to the custom middleware at /posts/ instead of directly accessing the file
+      return `/posts/${normalizedPath}`;
     case "policy":
       return `/src/policies/${normalizedPath}`;
     default:
       throw new Error(`Unsupported content type: ${contentType}`);
   }
+}
+
+/**
+ * Builds a file system path for production mode
+ */
+function buildProdPath(normalizedPath: string, contentType: ContentType): string {
+  switch (contentType) {
+    case "doc":
+      return `/static/docs/${normalizedPath.replace(/\\/g, "/")}.json`;
+    case "blog":
+      // For blog posts, remove the .mdx extension if present before adding .json
+      return `/static/posts/${normalizedPath.replace(/\.mdx$/, "").replace(/\\/g, "/")}.json`;
+    case "policy":
+      return `/static/policies/${normalizedPath.replace(/\\/g, "/")}.json`;
+    default:
+      throw new Error(`Unsupported content type: ${contentType}`);
+  }
+}
+
+/**
+ * Builds a URL path for the content
+ */
+function buildUrlPath(normalizedPath: string, contentType: ContentType): string {
+  const basePath = contentType === "doc" ? "/docs/" : contentType === "blog" ? "/blog/" : "/";
+
+  // Convert normalized path back to URL format
+  const urlPath = normalizedPath
+    .replace(/\.mdx$/, "") // Remove .mdx extension
+    .replace(/\/index$/, "/"); // Replace /index with trailing slash
+
+  return urlPath === "index" ? basePath : `${basePath}${urlPath}`;
 }
 
 /**
@@ -110,50 +140,36 @@ export function isValidPath(path: string, contentType: ContentType): boolean {
 }
 
 /**
- * Generates a file path based on environment and content type
+ * Resolves a content path based on type, environment, and options
  *
- * @param path - The URL or normalized path
+ * @param path - The URL path to resolve
  * @param contentType - The type of content
- * @returns Appropriate file path for the current environment
+ * @param options - Resolution options
+ * @returns Resolved path string
+ */
+export function resolveContentPath(
+  path: string,
+  contentType: ContentType,
+  options: { devMode?: boolean; urlPath?: boolean } = {}
+): string {
+  const devMode = options.devMode ?? environment.isDev();
+  const normalizedPath = normalizePath(path, contentType);
+
+  // Return URL path if requested
+  if (options.urlPath) {
+    return buildUrlPath(normalizedPath, contentType);
+  }
+
+  // Otherwise return file system path based on environment
+  return devMode
+    ? buildDevPath(normalizedPath, contentType)
+    : buildProdPath(normalizedPath, contentType);
+}
+
+// Keep the old function for backward compatibility but mark as deprecated
+/**
+ * @deprecated Use resolveContentPath instead
  */
 export function getContentPath(path: string, contentType: ContentType): string {
-  // Check if we're in production environment
-  const isProduction = import.meta.env.PROD;
-
-  // For production, use static JSON files
-  if (isProduction) {
-    const normalizedPath = normalizePath(path, contentType);
-
-    switch (contentType) {
-      case "doc":
-        return `/static/docs/${normalizedPath.replace(/\\/g, "/")}.json`;
-      case "blog":
-        // For blog posts, remove the .mdx extension if present before adding .json
-        // This matches what preprocess-content.ts produces
-        return `/static/posts/${normalizedPath.replace(/\.mdx$/, "").replace(/\\/g, "/")}.json`;
-      case "policy":
-        // For policy files, we properly match the files created by preprocess-content.ts:
-        // - Privacy: /static/policies/privacy.json
-        // - Terms files: /static/policies/terms/service.json and /static/policies/terms/use.json
-        return `/static/policies/${normalizedPath.replace(/\\/g, "/")}.json`;
-      default:
-        throw new Error(`Unsupported content type: ${contentType}`);
-    }
-  }
-
-  // For development environment, use the provided path
-  // Different content types may have different APIs/endpoints
-  switch (contentType) {
-    case "policy":
-      // Policy files need the /src/policies/ prefix in dev mode
-      return `/src/policies/${normalizePath(path, contentType)}`;
-    case "doc":
-      // Docs need the src prefix in dev mode
-      return `/src/docs/${normalizePath(path, contentType)}`;
-    case "blog":
-      // Blog posts need the /posts/ prefix in dev mode
-      return `/posts/${normalizePath(path, contentType)}`;
-    default:
-      throw new Error(`Unsupported content type: ${contentType}`);
-  }
+  return resolveContentPath(path, contentType);
 }
