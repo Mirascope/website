@@ -1,6 +1,6 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import PolicyPage, { PolicyPageLoading, PolicyPageError } from "@/components/PolicyPage";
-import useSEO from "@/lib/hooks/useSEO";
+import SEOHelmet from "@/components/SEOHelmet";
 import { policyLoader } from "@/lib/content/loaders";
 import type { PolicyContent } from "@/lib/content/policy";
 import { environment } from "@/lib/content/environment";
@@ -28,15 +28,18 @@ function PrivacyPage() {
   // Access the loaded content directly
   const content = useLoaderData({ from: "/privacy", structuralSharing: false }) as PolicyContent;
 
-  // Apply SEO with frontmatter from MDX
-  useSEO({
-    title: content?.meta?.title || "Privacy Policy",
-    description:
-      content?.mdx?.frontmatter?.description ||
-      "How Mirascope collects, uses, and protects your personal information.",
-    url: "/privacy",
-    type: "article",
-  });
-
-  return <PolicyPage content={content} type="privacy" />;
+  return (
+    <>
+      <SEOHelmet
+        title={content?.meta?.title || "Privacy Policy"}
+        description={
+          content?.mdx?.frontmatter?.description ||
+          "How Mirascope collects, uses, and protects your personal information."
+        }
+        url="/privacy"
+        type="article"
+      />
+      <PolicyPage content={content} type="privacy" />
+    </>
+  );
 }
