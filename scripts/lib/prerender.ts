@@ -5,6 +5,7 @@ import { routeTree } from "../../src/routeTree.gen";
 import React from "react";
 import { renderToString } from "react-dom/server";
 import { environment } from "@/lib/content/environment";
+import { Helmet } from "react-helmet";
 
 async function staticFetch(url: string) {
   // Handle content paths based on the URL
@@ -89,12 +90,43 @@ export async function prerenderPage(
     // Render the app to a string
     const appHtml = renderToString(React.createElement(RouterProvider, { router }));
 
-    // Load the base HTML template
+    // Extract Helmet data after rendering
+    const helmet = Helmet.renderStatic();
+
+    // Start with the original template but inject Helmet data
     const templatePath = path.join(process.cwd(), "index.html");
     const indexHtml = fs.readFileSync(templatePath, "utf-8");
 
-    // Update the HTML with our pre-rendered content
-    const html = indexHtml.replace('<div id="app"></div>', `<div id="app">${appHtml}</div>`);
+    // First cleanup any placeholder comments in head
+    let html = indexHtml.replace(
+      "<!-- Minimal head - React Helmet will manage all metadata -->",
+      ""
+    );
+
+    // Update HTML attributes (if any)
+    const htmlAttrs = helmet.htmlAttributes.toString();
+    if (htmlAttrs) {
+      html = html.replace('<html lang="en">', `<html ${htmlAttrs}>`);
+    }
+
+    // Update body attributes (if any)
+    const bodyAttrs = helmet.bodyAttributes.toString();
+    if (bodyAttrs) {
+      html = html.replace("<body>", `<body ${bodyAttrs}>`);
+    }
+
+    // Inject all Helmet metadata before </head>
+    html = html.replace(
+      "</head>",
+      `${helmet.title.toString()}
+    ${helmet.meta.toString()}
+    ${helmet.link.toString()}
+    ${helmet.script.toString()}
+  </head>`
+    );
+
+    // Replace app div content with pre-rendered HTML
+    html = html.replace('<div id="app"></div>', `<div id="app">${appHtml}</div>`);
 
     // Determine the output path
     let outputPath;

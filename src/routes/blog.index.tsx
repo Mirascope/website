@@ -2,7 +2,7 @@ import { createFileRoute, Link, useLoaderData } from "@tanstack/react-router";
 import { useState } from "react";
 import { type BlogMeta } from "@/lib/content/blog";
 import { blogListLoader } from "@/lib/content/loaders";
-import useSEO from "@/lib/hooks/useSEO";
+import SEOHelmet from "@/components/SEOHelmet";
 import { LoadingContent } from "@/components/docs";
 import { environment } from "@/lib/content/environment";
 
@@ -59,17 +59,14 @@ function BlogPage() {
     }
   };
 
-  // Apply SEO for blog page
-  useSEO({
-    title: "Blog",
-    description:
-      "The latest news, updates, and insights about Mirascope and LLM application development.",
-    url: "/blog",
-    type: "website",
-  });
-
   return (
     <div className="flex justify-center pt-6">
+      <SEOHelmet
+        title="Blog"
+        description="The latest news, updates, and insights about Mirascope and LLM application development."
+        url="/blog"
+        type="website"
+      />
       <div className="flex mx-auto w-full max-w-[1800px] px-4">
         <div className="flex-1 min-w-0 py-6">
           <div className="max-w-5xl mx-auto">
