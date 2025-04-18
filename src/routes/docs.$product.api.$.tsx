@@ -5,6 +5,7 @@ import { docsPageLoader } from "@/lib/content/loaders";
 import type { DocContent, DocMeta } from "@/lib/content/docs";
 import DocsLayout from "@/components/docs/core/DocsLayout";
 import { environment } from "@/lib/content/environment";
+import ContentErrorHandler from "@/components/ContentErrorHandler";
 
 export const Route = createFileRoute("/docs/$product/api/$")({
   component: DocsApiPage,
@@ -51,7 +52,15 @@ export const Route = createFileRoute("/docs/$product/api/$")({
       />
     );
   },
-  onError: (error: Error) => environment.onError(error),
+  errorComponent: ({ error }) => {
+    environment.onError(error);
+    return (
+      <ContentErrorHandler
+        error={error instanceof Error ? error : new Error(String(error))}
+        contentType="docs"
+      />
+    );
+  },
 });
 
 function DocsApiPage() {
