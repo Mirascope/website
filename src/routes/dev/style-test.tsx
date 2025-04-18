@@ -3,7 +3,7 @@ import { LoadingContent } from "@/components/docs";
 import DevLayout from "@/components/dev/DevLayout";
 import { MDXRenderer } from "@/components/MDXRenderer";
 import { useState, useEffect } from "react";
-import { processMDX } from "@/lib/content/mdx-processor";
+import { processMDXContent } from "@/lib/content/mdx-processor";
 
 export const Route = createFileRoute("/dev/style-test")({
   component: StyleTestPage,
@@ -75,8 +75,8 @@ function StyleTestPage() {
 
           const rawContent = await response.text();
 
-          // Process MDX content (using existing processor)
-          const processed = await processMDX(rawContent);
+          // Process MDX content
+          const processed = await processMDXContent(rawContent);
           code = processed.code;
           frontmatter = processed.frontmatter;
         } else {
@@ -90,7 +90,7 @@ function StyleTestPage() {
           const data = await response.json();
 
           // Process MDX content from the JSON
-          const processed = await processMDX(data.content);
+          const processed = await processMDXContent(data.content);
           code = processed.code;
           frontmatter = processed.frontmatter;
         }

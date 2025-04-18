@@ -4,7 +4,7 @@ This document outlines the architecture of the unified content system for handli
 
 ## System Overview
 
-The content system provides a unified approach to loading, processing, and rendering various types of content with a cohesive, maintainable architecture. The architecture follows domain-driven design principles with content-type specific modules and a composition-based approach.
+The content system provides a unified approach to loading, processing, and rendering various types of content with a cohesive, maintainable architecture. The system is centered around content-type specific modules, the TanStack Router integration via loaders, and a shared infrastructure layer for processing content.
 
 ```mermaid
 graph TD
@@ -17,25 +17,20 @@ graph TD
     DocModule --> useContent
     PolicyModule --> useContent
     
-    BlogModule --> BlogHandler[Blog Handler]
-    DocModule --> DocHandler[Doc Handler]
-    PolicyModule --> PolicyHandler[Policy Handler]
+    BlogModule --> ContentLoaders[Content Loaders]
+    DocModule --> ContentLoaders
+    PolicyModule --> ContentLoaders
     
-    BlogHandler --> ContentUtils[Content Utils]
-    DocHandler --> ContentUtils
-    PolicyHandler --> ContentUtils
+    ContentLoaders --> PathResolver[Path Resolver]
+    ContentLoaders --> MetadataService[Metadata Service]
+    ContentLoaders --> ContentLoader[loadContent Function]
+    ContentLoaders --> MDXProcessor[MDX Processor]
     
-    ContentUtils --> PathResolver[Path Resolver]
-    ContentUtils --> MetadataService[Metadata Service]
-    ContentUtils --> ContentLoader[Content Loader]
-    ContentUtils --> FrontmatterParser[Frontmatter Parser]
-    ContentUtils --> MDXProcessor[MDX Processor]
-    
-    ContentLoader --> ContentCache[Content Cache]
     MetadataService --> ContentTypes[Content Types]
-    FrontmatterParser --> ContentTypes
     PathResolver --> ContentTypes
     ContentModules --> ErrorHandling[Error Types]
+    
+    Router[TanStack Router] --> ContentLoaders
 ```
 
 ## File Structure & Key Components
@@ -44,19 +39,21 @@ The system is organized into domain-specific modules with a shared infrastructur
 
 ```
 src/lib/content/
-  ├── blog.ts                  # Blog-specific hooks, types, and API
-  ├── docs.ts                  # Docs-specific hooks, types, and API
-  ├── policy.ts                # Policy-specific hooks, types, and API 
-  ├── types.ts                 # Core shared type definitions
-  ├── errors.ts                # Error type definitions
-  ├── utils.ts                 # Shared utility functions
-  ├── content-cache.ts         # Caching implementation
-  ├── content-loader.ts        # Content loading logic
-  ├── frontmatter.ts           # Frontmatter parsing
-  ├── mdx-processor.ts         # MDX processing
-  ├── metadata-service.ts      # Metadata handling
-  ├── path-resolver.ts         # Path normalization/resolution
-  └── useContent.ts            # Core content loading hook
+  ├── blog.ts                 # Blog-specific hooks, types, and API
+  ├── content-loader.ts       # Core content loading logic
+  ├── content-types.ts        # Shared type definitions
+  ├── docs.ts                 # Docs-specific hooks, types, and API
+  ├── environment.ts          # Environment detection utilities
+  ├── errors.ts               # Error type definitions
+  ├── frontmatter.ts          # Frontmatter parsing
+  ├── index.ts                # Public API exports
+  ├── loaders.ts              # TanStack Router loader integration
+  ├── mdx-processor.ts        # MDX processing
+  ├── metadata-service.ts     # Metadata handling
+  ├── path-resolver.ts        # Path normalization/resolution
+  ├── policy.ts               # Policy-specific hooks, types, and API
+  ├── types.ts                # Core shared type definitions (legacy)
+  └── useContent.ts           # Core content loading hook
 ```
 
 Each module is focused on its specific responsibility:
@@ -65,18 +62,18 @@ Each module is focused on its specific responsibility:
 
 The domain modules (blog.ts, docs.ts, policy.ts) contain:
 
-1. Domain-specific metadata type definitions
-2. Domain-specific content handler implementations
-3. Public API hooks and functions for accessing content
+1. Domain-specific content loading functions
+2. Public API hooks and functions for accessing content
+3. Metadata creation and validation
 
 Key characteristics:
-- Each domain maintains its own metadata types that extend the base ContentMeta
-- Each implements the ContentHandler interface using composition of utility functions
+- Each provides utility functions for content loading and processing
 - Each provides typed hooks and functions for components to use
+- Each converts raw frontmatter into structured metadata
 
-### Core Types (types.ts)
+### Core Types (content-types.ts)
 
-Defines the foundational types used throughout the content system.
+Defines the foundational types used throughout the content system:
 
 ```typescript
 // Core content type enum
@@ -91,10 +88,30 @@ export interface ContentMeta {
   type: ContentType;
 }
 
+// Type-specific metadata extensions
+export interface DocMeta extends ContentMeta {
+  product: string;
+  section?: string;
+  group?: string;
+  sectionTitle?: string;
+  groupTitle?: string;
+}
+
+export interface BlogMeta extends ContentMeta {
+  date: string;
+  author: string;
+  readTime: string;
+  lastUpdated?: string;
+}
+
+export interface PolicyMeta extends ContentMeta {
+  lastUpdated?: string;
+}
+
 // Base content interface with metadata plus content
 export interface Content<T extends ContentMeta = ContentMeta> {
-  meta: T;                         // Typed, validated metadata
-  content: string;                 // Raw MDX with frontmatter stripped
+  meta: T; // Typed, validated metadata
+  content: string; // Raw MDX with frontmatter stripped
   
   // MDX structure expected by components
   mdx: {
@@ -103,58 +120,52 @@ export interface Content<T extends ContentMeta = ContentMeta> {
   };
 }
 
-// Result of validation
-export interface ValidationResult {
-  isValid: boolean;
-  errors?: string[];
-}
-
 // Result type for content operations
 export interface ContentResult<T extends ContentMeta = ContentMeta> {
   content: Content<T> | null;
   loading: boolean;
   error: Error | null;
 }
-
-// Interface for content handlers
-export interface ContentHandler<T extends ContentMeta> {
-  getContent(path: string): Promise<Content<T>>;
-  getAllMeta(): Promise<T[]>;
-}
-
-// Type for content retrieval function
-export type GetContentFn<T extends ContentMeta> = (path: string) => Promise<Content<T>>;
-
-// Type for metadata retrieval function
-export type GetMetaFn<T extends ContentMeta> = () => Promise<T[]>;
 ```
 
-### Utilities (utils.ts)
+### Content Loading (content-loader.ts)
 
-Provides shared utility functions for all domain modules.
+The core function for loading and processing content:
 
 ```typescript
 /**
- * Creates a cache key for content
- */
-export function createCacheKey(contentType: ContentType, path: string): string;
-
-/**
- * Load content by path with caching
+ * Unified content loading pipeline that handles the entire process
+ * from path resolution to MDX processing and metadata creation
  */
 export async function loadContent<T extends ContentMeta>(
   path: string,
   contentType: ContentType,
-  loader: ContentLoader,
-  cache: ContentCache,
   createMeta: (frontmatter: Record<string, any>, path: string) => T,
-  postprocessContent?: (content: string) => string
+  options?: {
+    preprocessContent?: (content: string) => string;
+  }
 ): Promise<Content<T>>;
+```
+
+### Environment (environment.ts)
+
+Provides environment detection and fetch utilities:
+
+```typescript
+/**
+ * Environment utilities for content loading system
+ */
+export const environment = {
+  isDev: () => import.meta.env?.DEV ?? false,
+  isProd: () => import.meta.env?.PROD ?? false,
+  getMode: () => (import.meta.env?.DEV ? "development" : "production"),
+  fetch: (...args: Parameters<typeof fetch>) => fetch(...args),
+};
 ```
 
 ### Content Hook (useContent.ts)
 
-The base React hook for loading and processing content.
+The base React hook for loading and processing content:
 
 ```typescript
 /**
@@ -166,9 +177,37 @@ export function useContent<T extends ContentMeta>(
 ): ContentResult<T>;
 ```
 
+### TanStack Router Integration (loaders.ts)
+
+Integrates with TanStack Router by providing loader functions:
+
+```typescript
+/**
+ * Creates a content loader function compatible with TanStack Router
+ */
+function createContentLoader<T extends ContentMeta>(
+  getContentFn: GetContentFn<T>,
+  contentType: ContentType
+) {
+  return ({ params }: RouteParams) => {
+    const path = getPathFromParams(params, contentType);
+    return getContentFn(path);
+  };
+}
+
+// Policy loaders
+export const policyLoader = createContentLoader(getPolicy, "policy");
+
+// Doc loaders
+export const docLoader = createContentLoader(getDocContent, "doc");
+
+// Blog loaders
+export const blogLoader = createContentLoader(getBlogContent, "blog");
+```
+
 ### Domain Implementations
 
-Each domain implements its handler using composition:
+Each domain provides specific implementations:
 
 ```typescript
 // Example from blog.ts
@@ -181,97 +220,89 @@ export interface BlogMeta extends ContentMeta {
 
 export type BlogContent = Content<BlogMeta>;
 
-class BlogHandler implements ContentHandler<BlogMeta> {
-  private loader: ContentLoader;
-  private cache: ContentCache;
-  private contentType: "blog" = "blog";
+/**
+ * Create metadata from frontmatter for blog posts
+ */
+function createBlogMeta(frontmatter: Record<string, any>, path: string): BlogMeta;
 
-  constructor(loader?: ContentLoader, cache?: ContentCache) {
-    this.loader = loader || createContentLoader({ cache });
-    this.cache = cache || createContentCache();
-  }
+/**
+ * Get blog content by path
+ */
+export async function getBlogContent(slug: string): Promise<BlogContent>;
 
-  async getContent(slug: string): Promise<BlogContent> {
-    const normalizedSlug = this.normalizePath(slug);
-    return loadContent<BlogMeta>(
-      normalizedSlug,
-      this.contentType,
-      this.loader,
-      this.cache,
-      this.createMeta
-    );
-  }
-
-  async getAllMeta(): Promise<BlogMeta[]> {
-    // Implementation that returns all blog posts metadata
-  }
-
-  // Private helper methods
-  private normalizePath(slug: string): string;
-  private createMeta(frontmatter: Record<string, any>, path: string): BlogMeta;
-  private getPostsList(): Promise<BlogMeta[]>;
-}
-
-// Public API
-export const getBlogContent: GetContentFn<BlogMeta> = (slug: string): Promise<BlogContent>;
-export function useBlogPost(slug: string): ContentResult<BlogMeta>;
-export function getAllBlogMeta(): Promise<BlogMeta[]>;
+/**
+ * Get all blog metadata
+ */
+export async function getAllBlogMeta(): Promise<BlogMeta[]>;
 ```
 
 ## Data Flow
 
-1. Component calls domain-specific hook (e.g. `useBlogPost(slug)`)
+### Route-based Content Loading
+1. TanStack Router calls the route loader (e.g., `blogLoader`)
+2. The loader:
+   - Extracts path parameters from the route
+   - Resolves the path using `getPathFromParams`
+   - Calls the domain's content function (e.g., `getBlogContent`) 
+3. The domain content function:
+   - Normalizes the content path if needed
+   - Calls the unified `loadContent` function
+   - Passes domain-specific metadata creation function
+4. The `loadContent` function:
+   - Validates the path
+   - Determines the environment (dev/prod)
+   - Resolves the full content path
+   - Fetches raw content using environment.fetch
+   - Processes the MDX content
+   - Creates typed metadata using the domain-specific function
+   - Validates the metadata
+   - Returns the complete Content object
+5. Component receives the loader data through `useLoaderData`
+6. Component renders the content using the MDX renderer
+
+### Hook-based Content Loading
+1. Component calls domain-specific hook (e.g., `usePolicy(path)`)
 2. Hook calls `useContent` with the domain's `getContent` function
 3. The `useContent` hook:
    - Manages loading state and error handling
    - Calls the provided `getContent` function
    - Returns the result with appropriate loading/error states
-4. The domain's `getContent` function:
-   - Calls the shared `loadContent` utility
-   - Passes domain-specific methods for metadata creation and content processing
-5. The `loadContent` utility:
-   - Checks the cache
-   - Loads raw content via the ContentLoader
-   - Extracts frontmatter
-   - Creates metadata using the domain-specific function
-   - Processes MDX content
-   - Returns the complete Content object
-6. Component renders the content, using the MDX renderer with the processed code
+4. The rest of the flow follows the same pattern as route-based loading
 
 ## Caching Strategy
 
-The content cache is designed for optimal performance:
+TanStack Router provides built-in caching:
 
-- Each handler maintains its own cache instance
-- Cache keys are domain-specific for better isolation
-- Both metadata and content are cached
-- Development mode uses shorter cache times
-- Production uses pre-generated content with longer cache times
+- Router automatically caches loader results
+- Revalidation and cache invalidation are handled by TanStack Router
+- Cache time can be configured at the route level
+- Concurrent requests are de-duplicated automatically
 
 ## MDX Processing
 
-Content goes through a multi-step processing pipeline:
+The content processing pipeline:
 
-1. Raw content is loaded from the source
-2. Frontmatter is extracted and parsed
-3. Domain-specific pre-processing is applied if needed
-4. MDX content is processed using next-mdx-remote/serialize
-5. Processed content is stored with metadata for rendering
+1. Raw content is loaded using `environment.fetch`
+2. For development, content is fetched directly
+3. For production, content is loaded from pre-compiled JSON
+4. MDX is processed using the `processMDXContent` function
+5. Processed content is returned with metadata for rendering
 
 ## Error Handling Philosophy
 
-1. **Specific Errors**: Custom error types for different scenarios
-2. **Graceful Recovery**: Components handle error states appropriately
-3. **Detailed Information**: Errors include path, content type, and context
-4. **Proper State Management**: Loading and error states are clearly represented
+1. **Specific Error Types**: Custom error classes in errors.ts
+2. **Graceful Recovery**: Components and hooks handle error states
+3. **Detailed Error Context**: Errors include path, content type, and specific error details
+4. **Consistent State Management**: Loading and error states follow a standard pattern
 
 ## Design Principles
 
-1. **Domain-Driven Design**: Each content type has its own module with specific logic
-2. **Composition over Inheritance**: Handlers use shared utilities rather than inheritance
-3. **Separation of Concerns**: Clear responsibilities for each module
-4. **Type Safety**: Full TypeScript type coverage for improved reliability
-5. **Performance Focus**: Efficient caching and processing
+1. **Environment Abstraction**: The environment.ts module abstracts environment details
+2. **Functional Architecture**: Pure functions with clear inputs and outputs
+3. **Type Safety**: Comprehensive TypeScript types throughout the system
+4. **Router Integration**: Seamless integration with TanStack Router
+5. **Domain Separation**: Clear boundaries between different content domains
+6. **Performance**: Optimized loading and caching strategies
 
 ## Future Extensions
 
@@ -280,5 +311,5 @@ The system is designed to accommodate future enhancements:
 1. **Content Search**: Foundation for implementing search functionality
 2. **Static Site Generation**: Compatible with build-time data loading
 3. **Internationalization**: Extensible for multi-language content
-4. **Enhanced MDX Processing**: Support for more advanced MDX features
-5. **Server Components**: Support for React Server Components
+4. **Advanced MDX Features**: Support for more complex MDX processing
+5. **Server Components**: Ready for React Server Components integration

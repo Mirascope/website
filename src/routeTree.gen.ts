@@ -20,7 +20,6 @@ import { Route as DevIndexImport } from './routes/dev/index'
 import { Route as BlogIndexImport } from './routes/blog.index'
 import { Route as TermsUseImport } from './routes/terms/use'
 import { Route as TermsServiceImport } from './routes/terms/service'
-import { Route as DocsSplatImport } from './routes/docs.$'
 import { Route as DevStyleTestImport } from './routes/dev/style-test'
 import { Route as DevSocialCardImport } from './routes/dev/social-card'
 import { Route as DevAuditMetadataImport } from './routes/dev/audit-metadata'
@@ -82,12 +81,6 @@ const TermsUseRoute = TermsUseImport.update({
 const TermsServiceRoute = TermsServiceImport.update({
   id: '/terms/service',
   path: '/terms/service',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const DocsSplatRoute = DocsSplatImport.update({
-  id: '/docs/$',
-  path: '/docs/$',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -186,13 +179,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DevStyleTestImport
       parentRoute: typeof rootRoute
     }
-    '/docs/$': {
-      id: '/docs/$'
-      path: '/docs/$'
-      fullPath: '/docs/$'
-      preLoaderRoute: typeof DocsSplatImport
-      parentRoute: typeof rootRoute
-    }
     '/terms/service': {
       id: '/terms/service'
       path: '/terms/service'
@@ -269,7 +255,6 @@ export interface FileRoutesByFullPath {
   '/dev/audit-metadata': typeof DevAuditMetadataRoute
   '/dev/social-card': typeof DevSocialCardRoute
   '/dev/style-test': typeof DevStyleTestRoute
-  '/docs/$': typeof DocsSplatRoute
   '/terms/service': typeof TermsServiceRoute
   '/terms/use': typeof TermsUseRoute
   '/blog': typeof BlogIndexRoute
@@ -289,7 +274,6 @@ export interface FileRoutesByTo {
   '/dev/audit-metadata': typeof DevAuditMetadataRoute
   '/dev/social-card': typeof DevSocialCardRoute
   '/dev/style-test': typeof DevStyleTestRoute
-  '/docs/$': typeof DocsSplatRoute
   '/terms/service': typeof TermsServiceRoute
   '/terms/use': typeof TermsUseRoute
   '/blog': typeof BlogIndexRoute
@@ -310,7 +294,6 @@ export interface FileRoutesById {
   '/dev/audit-metadata': typeof DevAuditMetadataRoute
   '/dev/social-card': typeof DevSocialCardRoute
   '/dev/style-test': typeof DevStyleTestRoute
-  '/docs/$': typeof DocsSplatRoute
   '/terms/service': typeof TermsServiceRoute
   '/terms/use': typeof TermsUseRoute
   '/blog/': typeof BlogIndexRoute
@@ -332,7 +315,6 @@ export interface FileRouteTypes {
     | '/dev/audit-metadata'
     | '/dev/social-card'
     | '/dev/style-test'
-    | '/docs/$'
     | '/terms/service'
     | '/terms/use'
     | '/blog'
@@ -351,7 +333,6 @@ export interface FileRouteTypes {
     | '/dev/audit-metadata'
     | '/dev/social-card'
     | '/dev/style-test'
-    | '/docs/$'
     | '/terms/service'
     | '/terms/use'
     | '/blog'
@@ -370,7 +351,6 @@ export interface FileRouteTypes {
     | '/dev/audit-metadata'
     | '/dev/social-card'
     | '/dev/style-test'
-    | '/docs/$'
     | '/terms/service'
     | '/terms/use'
     | '/blog/'
@@ -391,7 +371,6 @@ export interface RootRouteChildren {
   DevAuditMetadataRoute: typeof DevAuditMetadataRoute
   DevSocialCardRoute: typeof DevSocialCardRoute
   DevStyleTestRoute: typeof DevStyleTestRoute
-  DocsSplatRoute: typeof DocsSplatRoute
   TermsServiceRoute: typeof TermsServiceRoute
   TermsUseRoute: typeof TermsUseRoute
   BlogIndexRoute: typeof BlogIndexRoute
@@ -411,7 +390,6 @@ const rootRouteChildren: RootRouteChildren = {
   DevAuditMetadataRoute: DevAuditMetadataRoute,
   DevSocialCardRoute: DevSocialCardRoute,
   DevStyleTestRoute: DevStyleTestRoute,
-  DocsSplatRoute: DocsSplatRoute,
   TermsServiceRoute: TermsServiceRoute,
   TermsUseRoute: TermsUseRoute,
   BlogIndexRoute: BlogIndexRoute,
@@ -440,7 +418,6 @@ export const routeTree = rootRoute
         "/dev/audit-metadata",
         "/dev/social-card",
         "/dev/style-test",
-        "/docs/$",
         "/terms/service",
         "/terms/use",
         "/blog/",
@@ -472,9 +449,6 @@ export const routeTree = rootRoute
     },
     "/dev/style-test": {
       "filePath": "dev/style-test.tsx"
-    },
-    "/docs/$": {
-      "filePath": "docs.$.tsx"
     },
     "/terms/service": {
       "filePath": "terms/service.tsx"

@@ -1,117 +1,108 @@
-import type { ContentType } from "./types";
-import { ContentCache } from "./content-cache";
-import { ContentLoadError, DocumentNotFoundError } from "./errors";
-import { normalizePath, getContentPath } from "./path-resolver";
-
-export interface ContentLoaderOptions {
-  cache?: ContentCache;
-  devMode?: boolean;
-}
+import { environment } from "./environment";
+import type { ContentType, ContentMeta, Content, ValidationResult } from "./types";
+import { validateMetadata as validateMetadataService } from "./metadata-service";
+import { processMDXContent } from "./mdx-processor";
+import { resolveContentPath, isValidPath } from "./path-resolver";
+import { handleContentError, InvalidPathError } from "./errors";
 
 /**
- * Unified content loader that handles loading content from different sources
- * based on environment for all content types (docs, blog posts, policies).
+ * Fetches raw content from a given path
+ *
+ * @param contentPath - The path to fetch content from
+ * @param devMode - Whether to process as development mode
+ * @returns The raw content string
  */
-export class ContentLoader {
-  private cache: ContentCache | null;
-  private devMode: boolean;
+export async function fetchRawContent(
+  contentPath: string,
+  devMode: boolean = environment.isDev()
+): Promise<string> {
+  try {
+    // Fetch the content using the environment's fetch function
+    const response = await environment.fetch(contentPath);
 
-  constructor(options?: ContentLoaderOptions) {
-    this.cache = options?.cache || null;
-    this.devMode = options?.devMode ?? import.meta.env.DEV;
-  }
-
-  /**
-   * Loads content for the given path and content type
-   *
-   * @param path - The path to the content (e.g., "/docs/mirascope/getting-started")
-   * @param contentType - The type of content ("doc", "blog", "policy")
-   * @returns Promise that resolves to the content string
-   */
-  async loadContent(path: string, contentType: ContentType): Promise<string> {
-    // Normalize the path based on content type
-    const normalizedPath = normalizePath(path, contentType);
-
-    // Check if we have a cached version
-    if (this.cache) {
-      const cached = this.cache.get(contentType, normalizedPath);
-      if (cached) {
-        return cached;
-      }
+    if (!response.ok) {
+      throw new Error(`Failed to fetch content: ${response.status} ${response.statusText}`);
     }
 
-    try {
-      // Load content based on environment
-      const content = await this.fetchContent(path, normalizedPath, contentType);
-
-      // Cache the content if we have a cache
-      if (this.cache) {
-        this.cache.set(contentType, normalizedPath, content);
-      }
-
-      return content;
-    } catch (error) {
-      if (error instanceof DocumentNotFoundError) {
-        throw error;
-      }
-
-      // Wrap other errors in ContentLoadError
-      throw new ContentLoadError(
-        contentType,
-        normalizedPath,
-        error instanceof Error ? error : undefined
-      );
+    // Process response based on environment
+    if (devMode) {
+      // In development, we get the raw content
+      return await response.text();
+    } else {
+      // In production, all content types are stored as JSON with a content field
+      const data = await response.json();
+      return data.content;
     }
-  }
-
-  /**
-   * Fetches content from the appropriate source based on environment
-   */
-  private async fetchContent(
-    originalPath: string,
-    normalizedPath: string,
-    contentType: ContentType
-  ): Promise<string> {
-    // Get the appropriate path based on environment and content type
-    const contentPath = getContentPath(originalPath, contentType);
-
-    try {
-      // Fetch the content
-      const response = await fetch(contentPath);
-
-      if (!response.ok) {
-        if (response.status === 404) {
-          throw new DocumentNotFoundError(contentType, normalizedPath);
-        }
-        throw new Error(`Failed to fetch content: ${response.statusText}`);
-      }
-
-      // In production, content is stored as JSON with a content field
-      if (this.devMode) {
-        // In development, we get the raw content
-        return await response.text();
-      } else {
-        // In production, all content types are stored as JSON with a content field
-        const data = await response.json();
-        return data.content;
-      }
-    } catch (error) {
-      // Check for 404 errors in the message
-      if (
-        error instanceof Error &&
-        (error.message.includes("404") || error.message.includes("not found"))
-      ) {
-        throw new DocumentNotFoundError(contentType, normalizedPath);
-      }
-
-      throw error;
-    }
+  } catch (error) {
+    throw error; // Let the caller handle the error with proper context
   }
 }
 
 /**
- * Factory function to create a ContentLoader
+ * Unified content loading pipeline that handles the entire process
+ * from path resolution to MDX processing and metadata creation
  */
-export function createContentLoader(options?: ContentLoaderOptions): ContentLoader {
-  return new ContentLoader(options);
+export async function loadContent<T extends ContentMeta>(
+  path: string,
+  contentType: ContentType,
+  createMeta: (frontmatter: Record<string, any>, path: string) => T,
+  options?: {
+    preprocessContent?: (content: string) => string;
+  }
+): Promise<Content<T>> {
+  try {
+    // Validate the path
+    if (!isValidPath(path, contentType)) {
+      throw new InvalidPathError(contentType, path);
+    }
+
+    // Get environment info - always read from environment directly
+    const devMode = environment.isDev();
+
+    // Get content path
+    const contentPath = resolveContentPath(path, contentType, { devMode });
+
+    // Use fetch to get raw content
+    const rawContent = await fetchRawContent(contentPath, devMode);
+
+    // Process MDX with preprocessing if needed
+    const processed = await processMDXContent(rawContent, {
+      preprocessContent: options?.preprocessContent,
+    });
+
+    // Create metadata
+    const meta = createMeta(processed.frontmatter, path);
+
+    // Validate metadata
+    try {
+      validateContentMetadata(meta, contentType);
+    } catch (error) {
+      handleContentError(error, contentType, path);
+    }
+
+    // Return complete content
+    return {
+      meta,
+      content: processed.content,
+      mdx: {
+        code: processed.code,
+        frontmatter: processed.frontmatter,
+      },
+    };
+  } catch (error) {
+    return handleContentError(error, contentType, path);
+  }
+}
+
+/**
+ * Enhanced validation that uses the metadata service but provides a simpler interface
+ */
+function validateContentMetadata<T extends ContentMeta>(meta: T, contentType: ContentType): void {
+  // Use the metadata service for validation
+  const validation: ValidationResult = validateMetadataService(meta, contentType);
+
+  // Handle validation failures
+  if (!validation.isValid) {
+    throw new Error(`Invalid metadata: ${validation.errors?.join(", ")}`);
+  }
 }
