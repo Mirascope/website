@@ -1,5 +1,5 @@
 import { test, expect, describe, beforeEach, afterEach, mock } from "bun:test";
-import { loadContent, createContentLoader } from "../content-loader";
+import { loadContent } from "../content-loader";
 import { DocumentNotFoundError, ContentLoadError } from "../errors";
 
 // Store original fetch
@@ -26,11 +26,6 @@ describe("ContentLoader", () => {
   afterEach(() => {
     // Restore the original fetch
     global.fetch = originalFetch;
-  });
-
-  test("should create a loader with factory function", () => {
-    const loader = createContentLoader();
-    expect(typeof loader.loadContent).toBe("function");
   });
 
   describe("Dev mode", () => {
@@ -170,56 +165,6 @@ describe("ContentLoader", () => {
       } catch (error) {
         expect(error).toBeInstanceOf(ContentLoadError);
       }
-    });
-  });
-
-  describe("Direct API", () => {
-    test("should use provided custom fetch function", async () => {
-      // Create a custom fetch function
-      const customFetchFunction = mock(() => {
-        return Promise.resolve({
-          ok: true,
-          text: () => Promise.resolve("custom fetched content"),
-          status: 200,
-          statusText: "OK",
-        });
-      });
-
-      // Use the mock function directly as customFetch with any type
-      const customFetch = customFetchFunction as any;
-
-      // Load content with the custom fetch function
-      const content = await loadContent("/docs/mirascope/getting-started", "doc", {
-        devMode: true,
-        customFetch,
-      });
-
-      // The custom fetch should be called, not the global one
-      expect(customFetch).toHaveBeenCalled();
-      expect(mockFetch).not.toHaveBeenCalled();
-      expect(content).toBe("custom fetched content");
-    });
-
-    test("factory function should pass options to loadContent", async () => {
-      // Mock the fetch for this test
-      mockFetch.mockImplementation(() => {
-        return Promise.resolve({
-          ok: true,
-          text: () => Promise.resolve("content via factory"),
-          status: 200,
-          statusText: "OK",
-        });
-      });
-
-      // Create loader with options
-      const loader = createContentLoader({ devMode: true });
-
-      // Use the loader
-      const content = await loader.loadContent("/docs/mirascope/getting-started", "doc");
-
-      // Validate that options were passed correctly
-      expect(mockFetch).toHaveBeenCalled();
-      expect(content).toBe("content via factory");
     });
   });
 });

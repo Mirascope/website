@@ -1,8 +1,7 @@
-import { describe, test, expect, beforeEach, afterEach, mock, spyOn } from "bun:test";
-import { normalizePath, isValidPath, getContentPath, resolveContentPath } from "../path-resolver";
+import { describe, test, expect } from "bun:test";
+import { normalizePath, isValidPath, resolveContentPath } from "../path-resolver";
 import { InvalidPathError } from "../errors";
 import type { ContentType } from "../content-types";
-import { environment } from "../environment";
 
 describe("Path Resolver", () => {
   describe("normalizePath", () => {
@@ -82,75 +81,6 @@ describe("Path Resolver", () => {
 
       expect(() => isValidPath("", "policy")).toThrow(InvalidPathError);
       expect(isValidPath("no-leading-slash", "policy")).toBe(false);
-    });
-  });
-
-  describe("getContentPath", () => {
-    // Store the original import.meta.env.PROD value
-    const originalProd = import.meta.env.PROD;
-
-    // Mock for production environment
-    beforeEach(() => {
-      Object.defineProperty(import.meta.env, "PROD", {
-        value: true,
-        writable: true,
-      });
-    });
-
-    // Reset the mock after each test
-    afterEach(() => {
-      Object.defineProperty(import.meta.env, "PROD", {
-        value: originalProd,
-        writable: true,
-      });
-    });
-
-    test("generates doc paths in production mode", () => {
-      expect(getContentPath("/docs/mirascope/getting-started", "doc")).toBe(
-        "/static/docs/mirascope/getting-started.mdx.json"
-      );
-    });
-
-    test("generates blog paths in production mode", () => {
-      expect(getContentPath("/blog/new-release", "blog")).toBe("/static/posts/new-release.json");
-    });
-
-    test("generates policy paths in production mode", () => {
-      expect(getContentPath("/privacy", "policy")).toBe("/static/policies/privacy.mdx.json");
-    });
-
-    test("normalizes backslashes to forward slashes in production mode", () => {
-      // Test path with backslashes
-      expect(getContentPath("/docs/windows\\style\\path", "doc")).toContain(
-        "/static/docs/windows/style"
-      );
-    });
-
-    test("throws for invalid content types", () => {
-      // Testing with invalid type - this ts-expect-error is needed and used
-      // @ts-expect-error
-      expect(() => getContentPath("/test", "invalid")).toThrow("Unsupported content type: invalid");
-    });
-
-    // Test for development environment
-    test("handles development environment paths", () => {
-      // Mock the environment.isDev function to return true
-      const isDevSpy = spyOn(environment, "isDev");
-      isDevSpy.mockImplementation(() => true);
-
-      // In dev mode, policy paths should be prefixed with /src/policies/
-      expect(getContentPath("/privacy", "policy")).toBe("/src/policies/privacy.mdx");
-
-      // In dev mode, doc paths should be prefixed with /src/docs/
-      expect(getContentPath("/docs/mirascope/getting-started", "doc")).toBe(
-        "/src/docs/mirascope/getting-started.mdx"
-      );
-
-      // Verify the mock was called
-      expect(isDevSpy).toHaveBeenCalled();
-
-      // Restore all mocks
-      mock.restore();
     });
   });
 });

@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import type { BlogMeta } from "../src/lib/content/blog";
 import { SITE_URL, getAllRoutes, getBlogPostsWithMeta } from "../src/lib/router-utils";
-import { processMDX } from "../src/lib/content/mdx-processor";
+import { processMDXContent } from "../src/lib/content/mdx-processor";
 
 // Create static directories directly in public folder
 // This ensures they get copied to the right place in the final build
@@ -77,7 +77,7 @@ async function processBlogPosts(verbose = true): Promise<void> {
 
     // Check if MDX can be processed - we don't use the result but this ensures it's valid MDX
     try {
-      await processMDX(fileContent);
+      await processMDXContent(fileContent);
     } catch (error) {
       // Always log errors regardless of verbosity
       console.error(`Error processing ${filename}:`, error);
@@ -151,7 +151,7 @@ async function processDocsFiles(verbose = true): Promise<void> {
           const { frontmatter } = extractFrontmatter(fileContent);
 
           // Just check if the MDX is valid by attempting to process it
-          await processMDX(fileContent);
+          await processMDXContent(fileContent);
 
           // Create directory path if it doesn't exist
           const dirName = path.dirname(path.join(DOCS_DIR, filePath));
@@ -196,7 +196,7 @@ async function processPolicyFiles(verbose = true): Promise<void> {
     const fileContent = fs.readFileSync(privacyPath, "utf-8");
     try {
       const { frontmatter } = extractFrontmatter(fileContent);
-      await processMDX(fileContent); // Validate the MDX
+      await processMDXContent(fileContent); // Validate the MDX
       fs.writeFileSync(
         path.join(POLICIES_DIR, "privacy.mdx.json"),
         JSON.stringify({
@@ -218,7 +218,7 @@ async function processPolicyFiles(verbose = true): Promise<void> {
       const fileContent = fs.readFileSync(filepath, "utf-8");
       try {
         const { frontmatter } = extractFrontmatter(fileContent);
-        await processMDX(fileContent); // Validate the MDX
+        await processMDXContent(fileContent); // Validate the MDX
         fs.writeFileSync(
           path.join(TERMS_DIR, `${filename}.json`),
           JSON.stringify({
@@ -304,7 +304,7 @@ async function processDevFiles(verbose = true): Promise<void> {
     const fileContent = fs.readFileSync(styleTestPath, "utf-8");
     try {
       const { frontmatter } = extractFrontmatter(fileContent);
-      await processMDX(fileContent); // Validate the MDX
+      await processMDXContent(fileContent); // Validate the MDX
       fs.writeFileSync(
         path.join(DEV_DIR, "style-test.mdx.json"),
         JSON.stringify({

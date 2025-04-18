@@ -5,25 +5,22 @@ import { environment } from "./environment";
 
 export interface ContentLoaderOptions {
   devMode?: boolean;
-  customFetch?: any;
 }
 
 /**
  * Fetches raw content from a given path
  *
  * @param contentPath - The path to fetch content from
- * @param fetchFn - The fetch function to use
  * @param devMode - Whether to process as development mode
  * @returns The raw content string
  */
 export async function fetchRawContent(
   contentPath: string,
-  fetchFn: any = fetch,
   devMode: boolean = environment.isDev()
 ): Promise<string> {
   try {
-    // Fetch the content using the provided or default fetch function
-    const response = await fetchFn(contentPath);
+    // Fetch the content using the environment's fetch function
+    const response = await environment.fetch(contentPath);
 
     if (!response.ok) {
       throw new Error(`Failed to fetch content: ${response.status} ${response.statusText}`);
@@ -63,26 +60,10 @@ export async function loadContent(
     // Get the appropriate content path
     const contentPath = resolveContentPath(path, contentType, { devMode });
 
-    // Use provided fetch function or default
-    const fetchFn = options?.customFetch ?? fetch;
-
     // Fetch the content
-    return await fetchRawContent(contentPath, fetchFn, devMode);
+    return await fetchRawContent(contentPath, devMode);
   } catch (error) {
     // Use the unified error handler
     handleContentError(error, contentType, path);
   }
-}
-
-/**
- * Factory function for backward compatibility
- * @deprecated Use the loadContent function directly instead
- */
-export function createContentLoader(options?: ContentLoaderOptions): {
-  loadContent: (path: string, contentType: ContentType) => Promise<string>;
-} {
-  return {
-    loadContent: (path: string, contentType: ContentType) =>
-      loadContent(path, contentType, options),
-  };
 }

@@ -165,11 +165,3 @@ export function resolveContentPath(
     ? buildDevPath(normalizedPath, contentType)
     : buildProdPath(normalizedPath, contentType);
 }
-
-// Keep the old function for backward compatibility but mark as deprecated
-/**
- * @deprecated Use resolveContentPath instead
- */
-export function getContentPath(path: string, contentType: ContentType): string {
-  return resolveContentPath(path, contentType);
-}

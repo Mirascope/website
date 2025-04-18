@@ -45,8 +45,7 @@ export async function loadContent<T extends ContentMeta>(
     const contentPath = resolveContentPath(path, contentType, { devMode });
 
     // Use fetch to get raw content
-    const fetchFn = options?.customFetch ?? fetch;
-    const rawContent = await fetchRawContent(contentPath, fetchFn, devMode);
+    const rawContent = await fetchRawContent(contentPath, devMode);
 
     // Process MDX with preprocessing if needed
     const processed = await processMDXContent(rawContent, {
