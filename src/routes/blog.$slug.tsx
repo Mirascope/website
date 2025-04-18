@@ -6,8 +6,8 @@ import { MDXRenderer } from "@/components/MDXRenderer";
 import { LoadingContent } from "@/components/docs";
 import ErrorContent from "@/components/ErrorContent";
 import TableOfContents from "@/components/TableOfContents";
+import SEOHelmet from "@/components/SEOHelmet";
 import useFunMode from "@/lib/hooks/useFunMode";
-import useSEO from "@/lib/hooks/useSEO";
 import { cn } from "@/lib/utils";
 import { blogLoader } from "@/lib/content/loaders";
 import analyticsManager from "@/lib/services/analytics";
@@ -106,25 +106,23 @@ function BlogPostPage() {
     findOgImage();
   }, [slug]);
 
-  // Apply SEO
-  useSEO({
-    title: post.meta.title,
-    description: post.meta.description || post.mdx?.frontmatter?.excerpt,
-    image: ogImage,
-    url: `/blog/${slug}`,
-    type: "article",
-    article: {
-      publishedTime: post.meta.date,
-      modifiedTime: post.meta.lastUpdated,
-      author: post.meta.author,
-    },
-  });
-
   // Extract metadata for easier access
   const { title, date, readTime, author, lastUpdated } = post.meta;
 
   return (
     <div className="relative">
+      <SEOHelmet
+        title={post.meta.title}
+        description={post.meta.description || post.mdx?.frontmatter?.excerpt}
+        image={ogImage}
+        url={`/blog/${slug}`}
+        type="article"
+        article={{
+          publishedTime: post.meta.date,
+          modifiedTime: post.meta.lastUpdated,
+          author: post.meta.author,
+        }}
+      />
       {tocOpen && (
         <div
           className="fixed inset-0 bg-foreground/50 z-30 lg:hidden"
@@ -347,15 +345,13 @@ function BlogPostPage() {
 
 // Error fallback component for when blog post loading fails
 function BlogPostError({ slug, error }: { slug: string; error: string }) {
-  // Apply SEO for error state
-  useSEO({
-    title: "Post Not Found",
-    description: "The requested blog post could not be found.",
-    url: `/blog/${slug}`,
-  });
-
   return (
     <div className="relative">
+      <SEOHelmet
+        title="Post Not Found"
+        description="The requested blog post could not be found."
+        url={`/blog/${slug}`}
+      />
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex flex-col lg:flex-row">
           <div className="w-56 flex-shrink-0 hidden lg:block"></div>

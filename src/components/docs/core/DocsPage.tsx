@@ -1,6 +1,6 @@
 import React from "react";
 import DocsLayout from "./DocsLayout";
-import useSEO from "@/lib/hooks/useSEO";
+import SEOHelmet from "@/components/SEOHelmet";
 import { type DocMeta, type DocContent } from "@/lib/content/docs";
 import { type ProductName } from "@/lib/route-types";
 
@@ -41,24 +41,19 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat, document, 
   // Construct the URL path for SEO
   const urlPath = section ? `/docs/${product}/${section}/${splat}` : `/docs/${product}/${splat}`;
 
-  // Apply SEO for docs page
-  useSEO({
-    title,
-    description,
-    url: urlPath,
-    product,
-  });
-
   // Render the layout with the loaded content
   return (
-    <DocsLayout
-      product={product}
-      section={section}
-      slug={currentSlug}
-      group={group}
-      document={document}
-      docs={docs}
-    />
+    <>
+      <SEOHelmet title={title} description={description} url={urlPath} product={product} />
+      <DocsLayout
+        product={product}
+        section={section}
+        slug={currentSlug}
+        group={group}
+        document={document}
+        docs={docs}
+      />
+    </>
   );
 };
 
