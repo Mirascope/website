@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as PrivacyImport } from './routes/privacy'
 import { Route as PricingImport } from './routes/pricing'
+import { Route as CatchallImport } from './routes/$catchall'
 import { Route as IndexImport } from './routes/index'
 import { Route as TermsIndexImport } from './routes/terms/index'
 import { Route as DocsIndexImport } from './routes/docs.index'
@@ -39,6 +40,12 @@ const PrivacyRoute = PrivacyImport.update({
 const PricingRoute = PricingImport.update({
   id: '/pricing',
   path: '/pricing',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CatchallRoute = CatchallImport.update({
+  id: '/$catchall',
+  path: '/$catchall',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -135,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/$catchall': {
+      id: '/$catchall'
+      path: '/$catchall'
+      fullPath: '/$catchall'
+      preLoaderRoute: typeof CatchallImport
       parentRoute: typeof rootRoute
     }
     '/pricing': {
@@ -249,6 +263,7 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/$catchall': typeof CatchallRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -268,6 +283,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$catchall': typeof CatchallRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -288,6 +304,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/$catchall': typeof CatchallRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -309,6 +326,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/$catchall'
     | '/pricing'
     | '/privacy'
     | '/blog/$slug'
@@ -327,6 +345,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/$catchall'
     | '/pricing'
     | '/privacy'
     | '/blog/$slug'
@@ -345,6 +364,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/$catchall'
     | '/pricing'
     | '/privacy'
     | '/blog/$slug'
@@ -365,6 +385,7 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CatchallRoute: typeof CatchallRoute
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   BlogSlugRoute: typeof BlogSlugRoute
@@ -384,6 +405,7 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CatchallRoute: CatchallRoute,
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   BlogSlugRoute: BlogSlugRoute,
@@ -412,6 +434,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/$catchall",
         "/pricing",
         "/privacy",
         "/blog/$slug",
@@ -431,6 +454,9 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/$catchall": {
+      "filePath": "$catchall.tsx"
     },
     "/pricing": {
       "filePath": "pricing.tsx"

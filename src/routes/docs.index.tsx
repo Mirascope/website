@@ -1,10 +1,19 @@
 import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { getProductRoute } from "@/lib/routes";
 import { environment } from "@/lib/content/environment";
+import ContentErrorHandler from "@/components/ContentErrorHandler";
 
 export const Route = createFileRoute("/docs/")({
   component: DocsIndexPage,
-  onError: (error: Error) => environment.onError(error),
+  errorComponent: ({ error }) => {
+    environment.onError(error);
+    return (
+      <ContentErrorHandler
+        error={error instanceof Error ? error : new Error(String(error))}
+        contentType="docs"
+      />
+    );
+  },
 });
 
 /**
