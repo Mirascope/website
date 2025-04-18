@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, Sparkles, Clipboard, Check } from "lucide-react";
 import { MDXRenderer } from "@/components/MDXRenderer";
 import { LoadingContent } from "@/components/docs";
-import ErrorContent from "@/components/ErrorContent";
+import ContentErrorHandler from "@/components/ContentErrorHandler";
 import TableOfContents from "@/components/TableOfContents";
 import SEOHelmet from "@/components/SEOHelmet";
 import useFunMode from "@/lib/hooks/useFunMode";
@@ -33,9 +33,12 @@ export const Route = createFileRoute("/blog/$slug")({
 
   // Configure error handling
   errorComponent: ({ error }) => {
-    const { slug } = useParams({ from: "/blog/$slug" });
+    environment.onError(error);
     return (
-      <BlogPostError slug={slug} error={error instanceof Error ? error.message : String(error)} />
+      <ContentErrorHandler
+        error={error instanceof Error ? error : new Error(String(error))}
+        contentType="blog"
+      />
     );
   },
   onError: (error: Error) => environment.onError(error),
@@ -337,32 +340,6 @@ function BlogPostPage() {
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Error fallback component for when blog post loading fails
-function BlogPostError({ slug, error }: { slug: string; error: string }) {
-  return (
-    <div className="relative">
-      <SEOHelmet
-        title="Post Not Found"
-        description="The requested blog post could not be found."
-        url={`/blog/${slug}`}
-      />
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex flex-col lg:flex-row">
-          <div className="w-56 flex-shrink-0 hidden lg:block"></div>
-          <ErrorContent
-            title="Post Not Found"
-            message={error}
-            showBackButton={true}
-            backTo="/blog"
-            backLabel="Back to Blog"
-          />
-          <div className="w-56 flex-shrink-0 hidden lg:block"></div>
         </div>
       </div>
     </div>
