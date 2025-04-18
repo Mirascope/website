@@ -8,6 +8,7 @@
     "fetch-github-stats": "bun run --bun scripts/fetch-github-stats.ts",
     "enumerate-routes": "bun run scripts/enumerate-routes.ts",
     "generate-social": "bun scripts/generate-socials/main.ts",
+    "prerender": "bun run scripts/test-prerender.ts",
     "prebuild": "bun run preprocess-content && bun run generate-social --build-html",
     "build": "bun run --bun vite build && bun run tsc",
     "serve": "bun --bun vite preview",
