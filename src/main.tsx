@@ -53,9 +53,20 @@ declare module "@tanstack/react-router" {
 
 // Render the app
 const rootElement = document.getElementById("app");
-if (rootElement && !rootElement.innerHTML) {
+if (!rootElement) {
+  console.error("Root element #app not found");
+} else if (rootElement.innerHTML.trim() === "") {
+  // Empty DOM - create a new React root (development mode)
   const root = ReactDOM.createRoot(rootElement);
   root.render(
+    <StrictMode>
+      <RouterProvider router={router} />
+    </StrictMode>
+  );
+} else {
+  // Non-empty DOM - hydrate the existing content (SSG/prerendered HTML)
+  ReactDOM.hydrateRoot(
+    rootElement,
     <StrictMode>
       <RouterProvider router={router} />
     </StrictMode>

@@ -3,7 +3,6 @@ import path from "path";
 import type { BlogMeta } from "../src/lib/content/blog";
 import { SITE_URL, getAllRoutes, getBlogPostsWithMeta } from "../src/lib/router-utils";
 import { processMDXContent } from "../src/lib/content/mdx-processor";
-import { prerenderPage } from "./lib/prerender";
 
 // Create static directories directly in public folder
 // This ensures they get copied to the right place in the final build
@@ -323,44 +322,6 @@ async function processDevFiles(verbose = true): Promise<void> {
 }
 
 /**
- * Prerender all routes to static HTML
- */
-async function prerenderAllRoutes(verbose = true): Promise<void> {
-  if (verbose) console.log("Prerendering all routes to static HTML...");
-
-  // Define the output directory for prerenders
-  const outputDir = path.join(process.cwd(), "public", "ssg");
-
-  // Create the directory if it doesn't exist
-  fs.mkdirSync(outputDir, { recursive: true });
-
-  // Get all routes
-  const routes = await getAllRoutes();
-  let successCount = 0;
-  let failureCount = 0;
-
-  // Process each route
-  for (const route of routes) {
-    try {
-      if (verbose) console.log(`Prerendering ${route}...`);
-      await prerenderPage(route, outputDir, false);
-      successCount++;
-    } catch (error) {
-      console.error(`Error prerendering ${route}:`, error);
-      failureCount++;
-    }
-  }
-
-  if (verbose) {
-    console.log(`Prerendering complete.`);
-    console.log(`Successfully prerendered ${successCount} routes.`);
-    if (failureCount > 0) {
-      console.log(`Failed to prerender ${failureCount} routes.`);
-    }
-  }
-}
-
-/**
  * Main processing function that generates static JSON files for all MDX content,
  * creates a sitemap.xml file, and prerenders all routes to static HTML
  */
@@ -372,16 +333,6 @@ export async function preprocessContent(verbose = true): Promise<void> {
     await processPolicyFiles(verbose);
     await processDevFiles(verbose);
     await generateSitemap(verbose);
-
-    // Then prerender all routes to static HTML
-    await prerenderAllRoutes(verbose);
-
-    if (verbose) {
-      console.log("Content preprocessing complete!");
-      console.log("Static JSON files are available in the public/static directory");
-      console.log("Prerendered HTML files are available in the public/ssg directory");
-    }
-    return;
   } catch (error) {
     console.error("Error during preprocessing:", error);
     throw error; // Let the caller handle the error

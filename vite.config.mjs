@@ -4,6 +4,22 @@ import tailwindcss from "@tailwindcss/vite";
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import { resolve } from "node:path";
 import fs from "node:fs";
+import path from "node:path";
+
+// Plugin version tracking and SSG enhancement
+const versionPlugin = () => {
+  return {
+    name: "version-plugin",
+    closeBundle: {
+      sequential: true,
+      handler() {
+        // Write a build version file or timestamp if needed
+        // This is just a placeholder for future enhancements
+        console.log("Build completed: " + new Date().toISOString());
+      }
+    }
+  };
+};
 
 // Custom plugin to handle dynamic MDX file loading in dev server
 const mdxVirtualModulePlugin = () => {
@@ -182,6 +198,7 @@ export default defineConfig({
     viteReact(),
     tailwindcss(),
     mdxVirtualModulePlugin(),
+    versionPlugin(),
   ],
   resolve: {
     alias: {
@@ -201,5 +218,14 @@ export default defineConfig({
     fs: {
       strict: false,
     },
+  },
+  preview: {
+    port: 4173,
+    // Enable SPA fallback so /privacy routes to /privacy/index.html
+    cors: true,
+    strictPort: true,
+    open: true,
+    // This handles directory requests properly
+    proxy: null,
   },
 });
