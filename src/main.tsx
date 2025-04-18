@@ -53,13 +53,35 @@ declare module "@tanstack/react-router" {
 
 // Render the app
 const rootElement = document.getElementById("app");
-if (rootElement && !rootElement.innerHTML) {
+if (!rootElement) {
+  console.error("Root element #app not found");
+} else {
+  // Check if we have prerendered content
+  const hasPrerenderedContent = rootElement.innerHTML.trim() !== "";
+
+  // Create a new React root regardless of whether we have prerendered content
   const root = ReactDOM.createRoot(rootElement);
-  root.render(
-    <StrictMode>
-      <RouterProvider router={router} />
-    </StrictMode>
-  );
+
+  // Function to mount the app
+  const mountApp = async () => {
+    if (hasPrerenderedContent) {
+      // If we have prerendered content, wait for router to load before replacing it
+      // This ensures we have all data ready before switching from SSG content
+      await router.load();
+    }
+
+    // Always use createRoot/render instead of hydrateRoot to avoid hydration mismatches
+    root.render(
+      <StrictMode>
+        <RouterProvider router={router} />
+      </StrictMode>
+    );
+  };
+
+  // Start mounting the app
+  mountApp().catch((error) => {
+    console.error("Error mounting app:", error);
+  });
 }
 
 // Initialize web vitals reporting (it will check for consent internally)

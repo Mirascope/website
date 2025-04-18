@@ -3,6 +3,7 @@ import PolicyPage, { PolicyPageLoading, PolicyPageError } from "@/components/Pol
 import useSEO from "@/lib/hooks/useSEO";
 import { policyLoader } from "@/lib/content/loaders";
 import type { PolicyContent } from "@/lib/content/policy";
+import { environment } from "@/lib/content/environment";
 
 export const Route = createFileRoute("/terms/use")({
   component: TermsOfUsePage,
@@ -20,6 +21,8 @@ export const Route = createFileRoute("/terms/use")({
       error={error instanceof Error ? error.message : String(error)}
     />
   ),
+
+  onError: (error: Error) => environment.onError(error),
 });
 
 function TermsOfUsePage() {

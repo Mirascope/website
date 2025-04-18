@@ -4,6 +4,7 @@ import { type BlogMeta } from "@/lib/content/blog";
 import { blogListLoader } from "@/lib/content/loaders";
 import useSEO from "@/lib/hooks/useSEO";
 import { LoadingContent } from "@/components/docs";
+import { environment } from "@/lib/content/environment";
 
 // Posts per page
 const POSTS_PER_PAGE = 4;
@@ -36,6 +37,7 @@ export const Route = createFileRoute("/blog/")({
       </div>
     </div>
   ),
+  onError: (error: Error) => environment.onError(error),
 });
 
 function BlogPage() {
