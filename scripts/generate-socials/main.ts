@@ -8,7 +8,6 @@
  * --regenerate-images    : Regenerate all images using existing metadata
  * --only <path>          : Update specific route only
  * --check                : Check for missing metadata or images
- * --build-html           : Generate OG HTML files only (for build process)
  * --help                 : Show help
  */
 
@@ -23,7 +22,6 @@ import {
 } from "./metadata";
 import { withDevEnvironment } from "./server";
 import { generateOgImages as generateImages } from "./images";
-import { generateOgHtml } from "./html";
 import { getAllRoutes, getProjectRoot } from "../../src/lib/router-utils";
 import { routeToFilename } from "../../src/lib/utils";
 import { preprocessContent } from "../preprocess-content";
@@ -70,62 +68,6 @@ if (enabledOptions > 1) {
   console.error(`${colorize("Error:", "red")} Only one action option can be provided at a time.`);
   showHelp();
   process.exit(1);
-}
-
-/**
- * Generate OG HTML files for routes
- */
-async function generateOgHtmlFiles(metadata: SEOMetadata[]): Promise<void> {
-  printHeader("OG HTML Generation", "cyan");
-
-  if (metadata.length === 0) {
-    coloredLog("No routes to process for OG HTML generation", "yellow");
-    return;
-  }
-
-  coloredLog(`Found metadata for ${metadata.length} routes`, "green");
-
-  const projectRoot = getProjectRoot();
-  const outputDir = path.join(projectRoot, "public", "og-html");
-
-  // Ensure output directory exists
-  if (!fs.existsSync(outputDir)) {
-    fs.mkdirSync(outputDir, { recursive: true });
-  }
-
-  let generatedCount = 0;
-
-  // Process each route
-  for (const item of metadata) {
-    const { route, title, description } = item;
-    const image = null; // We're not using custom images
-
-    if (!title) {
-      console.log(`${icons.warning} Skipping route with missing title: ${route}`);
-      continue;
-    }
-
-    try {
-      // Create filename for the HTML file
-      const filename = routeToFilename(route) + ".og.html";
-
-      // Generate HTML content
-      const htmlContent = generateOgHtml(route, title, description, image);
-      const outputPath = path.join(outputDir, filename);
-
-      // Write HTML file (placeholder for actual implementation)
-      fs.writeFileSync(outputPath, htmlContent);
-
-      console.log(`${icons.success} Generated: ${path.relative(projectRoot, outputPath)}`);
-
-      generatedCount++;
-    } catch (error) {
-      console.error(`${icons.error} Failed to generate OG HTML for ${route}: ${error}`);
-    }
-  }
-
-  printHeader("OG HTML Generation Complete", "green");
-  coloredLog(`Successfully generated ${generatedCount} OG HTML files`, "green");
 }
 
 /**
@@ -313,15 +255,6 @@ async function handleSpecificRoute(route: string, verbose = true) {
     console.error(`${colorize("Error processing route:", "red")} ${errorMessage}`);
     process.exit(1);
   }
-}
-
-/**
- * Generate HTML files for build process
- */
-async function buildHtml() {
-  const record = loadMetadataFromFile();
-  const items = Object.values(record);
-  await generateOgHtmlFiles(items);
 }
 
 /**
@@ -513,8 +446,6 @@ async function main() {
     } else if (options.only) {
       // For the --only option, use minimal verbosity
       await handleSpecificRoute(options.only, true);
-    } else if (options.buildHtml) {
-      await buildHtml();
     } else if (options.check) {
       const passed = await performCheck();
       if (!passed) {
