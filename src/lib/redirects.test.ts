@@ -4,16 +4,8 @@ import { processRedirects } from "./redirects";
 describe("redirects", () => {
   describe("processRedirects", () => {
     test("should handle exact redirects", () => {
-      expect(processRedirects("/WELCOME")).toBe("/docs/mirascope");
-      expect(processRedirects("/WHY")).toBe("/docs/mirascope/getting-started/why");
-      expect(processRedirects("/learn")).toBe("/docs/mirascope/learn");
-    });
-
-    test("should handle pattern redirects", () => {
-      expect(processRedirects("/learn/prompts")).toBe("/docs/mirascope/learn/prompts");
-      expect(processRedirects("/learn/tools")).toBe("/docs/mirascope/learn/tools");
-      expect(processRedirects("/learn/mcp/client")).toBe("/docs/mirascope/learn/mcp/client");
-      expect(processRedirects("/post/some-blog-post")).toBe("/blog/some-blog-post");
+      expect(processRedirects("/docs")).toBe("/docs/mirascope");
+      expect(processRedirects("/docs/")).toBe("/docs/mirascope");
     });
 
     test("should redirect /docs/{invalid-product} to /docs/mirascope", () => {
@@ -29,11 +21,11 @@ describe("redirects", () => {
       expect(processRedirects("/privacy")).toBeNull();
       expect(processRedirects("/")).toBeNull();
       expect(processRedirects("/some-random-path")).toBeNull();
-    });
-
-    test("should handle paths with or without trailing slashes", () => {
-      expect(processRedirects("/WELCOME/")).toBe("/docs/mirascope");
-      expect(processRedirects("/learn/")).toBe("/docs/mirascope/learn");
+      // These paths are now handled by Cloudflare redirects
+      expect(processRedirects("/WELCOME")).toBeNull();
+      expect(processRedirects("/WHY")).toBeNull();
+      expect(processRedirects("/learn")).toBeNull();
+      expect(processRedirects("/learn/prompts")).toBeNull();
     });
   });
 });

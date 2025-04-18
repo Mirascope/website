@@ -1,0 +1,16 @@
+# Cloudflare Pages redirects file
+# Format: [old-path] [new-path] [status-code]
+
+# Documentation redirects
+/WELCOME              /docs/mirascope                     301
+/WHY                  /docs/mirascope/getting-started/why 301
+/HELP                 /docs/mirascope/getting-started/help 301
+/MIGRATE              /docs/mirascope/getting-started/migration 301
+/CONTRIBUTING         /docs/mirascope/getting-started/contributing 301
+/learn                /docs/mirascope/learn              301
+
+# Learn section redirects - these use splats to handle variable paths
+/learn/*              /docs/mirascope/learn/:splat       301
+
+# Old blog paths
+/post/*               /blog/:splat                       301
