@@ -66,14 +66,14 @@ export async function getAllBlogMeta(): Promise<BlogMeta[]> {
     // Choose implementation based on environment
     if (environment.isProd()) {
       // Production: Use pre-generated static JSON file
-      const response = await fetch("/static/posts-list.json");
+      const response = await environment.fetch("/static/posts-list.json");
       if (!response.ok) {
         throw new Error(`Error fetching posts list: ${response.statusText}`);
       }
       return await response.json();
     } else {
       // Development: Use the virtual middleware endpoint
-      const response = await fetch("/api/posts-list");
+      const response = await environment.fetch("/api/posts-list");
       if (!response.ok) {
         throw new Error(`Error fetching posts list: ${response.statusText}`);
       }
