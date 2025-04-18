@@ -1,16 +1,4 @@
 // Cloudflare worker - Manually deployed at present
-// Constants for the application
-const SOCIAL_BOTS = [
-  "Slackbot",
-  "Twitterbot",
-  "facebookexternalhit",
-  "LinkedInBot",
-  "TelegramBot",
-  "Discordbot",
-  "WhatsApp",
-  "Pinterest",
-  "Googlebot", // Google's crawler for rich results
-];
 
 const ASSET_FILE_REGEX = /\.(png|jpg|jpeg|gif|svg|ico|css|js|woff|woff2|ttf|pdf|webp)$/i;
 
@@ -38,16 +26,7 @@ async function handleRequest(request) {
     return await handleStaticRequest(request);
   }
 
-  // Check if the request is from a social media bot
-  const userAgent = request.headers.get("User-Agent") || "";
-  if (isSocialBot(userAgent)) {
-    const botResponse = await handleBotRequest(request, url);
-    if (botResponse) {
-      return botResponse;
-    }
-  }
-
-  // For non-bot requests or if there's an error with bot handling
+  // Handle regular request
   return await handleRegularRequest(request);
 }
 
@@ -61,50 +40,7 @@ function isAssetFile(path) {
 }
 
 /**
- * Checks if the request is from a known social media bot
- * @param {string} userAgent - The User-Agent header
- * @return {boolean} True if it's a social media bot
- */
-function isSocialBot(userAgent) {
-  return SOCIAL_BOTS.some((bot) => userAgent.toLowerCase().includes(bot.toLowerCase()));
-}
-
-/**
- * Handles requests from social media bots
- * @param {Request} request - The original request
- * @param {URL} url - The parsed URL
- * @return {Response|null} Response for the bot or null to fallback to regular handling
- */
-async function handleBotRequest(request, url) {
-  const userAgent = request.headers.get("User-Agent") || "";
-  const host = url.hostname;
-  const path = url.pathname;
-
-  console.log(`Bot detected: ${userAgent}`);
-
-  try {
-    // Generate the OG HTML path
-    const ogHtmlPath = getOgHtmlPath(path);
-
-    // Try to fetch the OG HTML file
-    const ogResponse = await fetch(`https://${host}${ogHtmlPath}`);
-
-    // If the OG HTML file exists, serve it
-    if (ogResponse.ok) {
-      console.log(`Serving ${ogHtmlPath} for ${path}`);
-      return ogResponse;
-    } else {
-      console.log(`OG HTML file not found: ${ogHtmlPath}, not rerouting`);
-      return null;
-    }
-  } catch (error) {
-    console.error(`Error handling bot request: ${error.message}`);
-    return null;
-  }
-}
-
-/**
- * Handles regular (non-bot) requests by adding country code
+ * Handles regular requests by adding country code
  * @param {Request} request - The original request
  * @return {Response} The modified response
  */
@@ -186,20 +122,4 @@ async function handleStaticRequest(request) {
       },
     });
   }
-}
-
-/**
- * Converts a URL path to the corresponding OG HTML path
- * @param {string} path - The URL path
- * @return {string} The path to the OG HTML file
- */
-function getOgHtmlPath(path) {
-  if (path === "/" || path === "") {
-    return "/og-html/index.og.html";
-  }
-
-  // Strip leading slash and replace remaining slashes with hyphens
-  // Also handle trailing slashes by trimming them off
-  const normalizedPath = path.replace(/^\/|\/$/g, "").replace(/\//g, "-");
-  return `/og-html/${normalizedPath}.og.html`;
 }
