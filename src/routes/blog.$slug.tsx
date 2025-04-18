@@ -1,10 +1,11 @@
 import { createFileRoute, useParams, Link } from "@tanstack/react-router";
 import { useState, useEffect, Suspense } from "react";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, Sparkles } from "lucide-react";
+import { ChevronLeft, Sparkles, Clipboard, Check } from "lucide-react";
 import { MDXRenderer } from "@/components/MDXRenderer";
 import { LoadingContent } from "@/components/docs";
 import ErrorContent from "@/components/ErrorContent";
+import TableOfContents from "@/components/TableOfContents";
 import useFunMode from "@/lib/hooks/useFunMode";
 import useSEO from "@/lib/hooks/useSEO";
 import { cn } from "@/lib/utils";
@@ -53,9 +54,27 @@ function BlogPostContent({ slug }: { slug: string }) {
 
   const [tocOpen, setTocOpen] = useState(false);
   const [ogImage, setOgImage] = useState<string | undefined>(undefined);
+  const [isCopied, setIsCopied] = useState(false);
 
   // Use fun mode
   const [funMode, toggleFunMode] = useFunMode();
+
+  // Copy post content as Markdown
+  const copyContentAsMarkdown = () => {
+    if (post.content) {
+      navigator.clipboard
+        .writeText(post.content)
+        .then(() => {
+          setIsCopied(true);
+          setTimeout(() => {
+            setIsCopied(false);
+          }, 2000);
+        })
+        .catch((err) => {
+          console.error("Failed to copy content: ", err);
+        });
+    }
+  };
 
   // Find the first available image in the blog post directory
   useEffect(() => {
@@ -149,7 +168,62 @@ function BlogPostContent({ slug }: { slug: string }) {
             </div>
           </div>
           <div className="w-56 flex-shrink-0 hidden lg:block">
+            {/* Desktop fixed ToC */}
+            <div className="fixed w-56 top-[96px] h-[calc(100vh-96px)] overflow-hidden">
+              <div className="flex flex-col h-full">
+                {/* Fixed header section with Fun Mode button */}
+                <div className="flex flex-col gap-3 mb-4 pt-6 px-4 bg-background">
+                  <Button
+                    variant={funMode ? "default" : "outline"}
+                    size="sm"
+                    onClick={toggleFunMode}
+                    className={cn(
+                      funMode ? "bg-primary text-primary-foreground" : "hover:bg-muted",
+                      "transition-colors w-full"
+                    )}
+                  >
+                    <Sparkles className="w-4 h-4 mr-1" />
+                    Fun Mode
+                  </Button>
+
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={copyContentAsMarkdown}
+                    disabled={isCopied}
+                    className="w-full"
+                  >
+                    {isCopied ? (
+                      <>
+                        <Check className="w-4 h-4 mr-1" />
+                        Copied!
+                      </>
+                    ) : (
+                      <>
+                        <Clipboard className="w-4 h-4 mr-1" />
+                        Copy as Markdown
+                      </>
+                    )}
+                  </Button>
+
+                  <h4 className="text-sm font-medium text-muted-foreground mt-3">On this page</h4>
+                </div>
+
+                {/* Scrollable table of contents */}
+                <div className="overflow-y-auto pr-4 pl-4 pb-6 flex-grow">
+                  <TableOfContents
+                    contentId="blog-content"
+                    product="mirascope"
+                    section="blog"
+                    slug={slug}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile buttons (Fun Mode & ToC) */}
             <div className="fixed bottom-6 right-6 flex flex-col gap-2 z-40 lg:hidden">
+              {/* Fun Mode mobile button */}
               <Button
                 variant={funMode ? "default" : "outline"}
                 size="sm"
@@ -161,6 +235,103 @@ function BlogPostContent({ slug }: { slug: string }) {
               >
                 <Sparkles className="w-5 h-5" />
               </Button>
+
+              {/* ToC toggle button */}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setTocOpen(!tocOpen)}
+                className={cn(
+                  "rounded-full w-12 h-12 p-0 shadow-md",
+                  tocOpen ? "bg-muted" : "bg-background"
+                )}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <line x1="3" y1="12" x2="21" y2="12"></line>
+                  <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+              </Button>
+            </div>
+
+            {/* Mobile slide-in TOC panel */}
+            <div
+              className={`
+              fixed top-0 right-0 w-72 h-full z-40 bg-background shadow-lg border-l border-border
+              ${tocOpen ? "translate-x-0" : "translate-x-full"}
+              transition-transform duration-300 ease-in-out
+              lg:hidden
+            `}
+            >
+              {/* Mobile TOC content */}
+              <div className="flex flex-col h-full">
+                {/* Mobile close button */}
+                <div className="flex justify-between items-center p-4 border-b border-border">
+                  <h3 className="font-medium">Table of Contents</h3>
+                  <button
+                    onClick={() => setTocOpen(false)}
+                    className="p-1 rounded-md hover:bg-muted"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+
+                {/* Copy as Markdown button */}
+                <div className="px-4 pt-4">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={copyContentAsMarkdown}
+                    disabled={isCopied}
+                    className="w-full"
+                  >
+                    {isCopied ? (
+                      <>
+                        <Check className="w-4 h-4 mr-1" />
+                        Copied!
+                      </>
+                    ) : (
+                      <>
+                        <Clipboard className="w-4 h-4 mr-1" />
+                        Copy as Markdown
+                      </>
+                    )}
+                  </Button>
+                </div>
+
+                {/* Mobile scrollable table of contents */}
+                <div className="overflow-y-auto flex-grow px-4 py-4">
+                  <TableOfContents
+                    contentId="blog-content"
+                    product="mirascope"
+                    section="blog"
+                    slug={slug}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
