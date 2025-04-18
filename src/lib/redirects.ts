@@ -3,19 +3,14 @@
  *
  * This file defines redirects from old paths to new paths
  * and can be imported by the router to handle redirect routes.
+ *
+ * Note: Static redirects have been moved to public/_redirects for Cloudflare Pages.
+ * Only include redirects here that need dynamic processing or aren't covered by Cloudflare.
  */
 import { isValidProduct } from "./route-types";
 
 // Define exact redirects - maps old paths to new paths
 export const exactRedirects: Record<string, string> = {
-  // Documentation redirects
-  "/WELCOME": "/docs/mirascope",
-  "/WHY": "/docs/mirascope/getting-started/why",
-  "/HELP": "/docs/mirascope/getting-started/help",
-  "/MIGRATE": "/docs/mirascope/getting-started/migration",
-  "/CONTRIBUTING": "/docs/mirascope/getting-started/contributing",
-  "/learn": "/docs/mirascope/learn",
-
   // Legacy docs paths
   "/docs": "/docs/mirascope",
   "/docs/": "/docs/mirascope",
@@ -25,13 +20,7 @@ export const exactRedirects: Record<string, string> = {
 export const patternRedirects: Array<{
   pattern: RegExp;
   replacement: string;
-}> = [
-  // Learn section with any depth of subpaths - handles learn/x, learn/x/y, etc.
-  { pattern: /^\/learn\/(.+)$/, replacement: "/docs/mirascope/learn/$1" },
-
-  // Old blog paths
-  { pattern: /^\/post\/(.+)$/, replacement: "/blog/$1" },
-];
+}> = [];
 
 /**
  * Process a URL path through redirect rules
