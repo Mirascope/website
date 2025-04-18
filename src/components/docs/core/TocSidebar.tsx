@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { ProviderDropdown } from "@/components/docs";
 import { type ProductName } from "@/lib/route-types";
 import { type DocContent } from "@/lib/content/docs";
+import analyticsManager from "@/lib/services/analytics";
 
 interface TocSidebarProps {
   product: ProductName;
@@ -40,6 +41,17 @@ const TocSidebar: React.FC<TocSidebarProps> = ({
           setTimeout(() => {
             setIsCopied(false);
           }, 2000);
+
+          const pagePath = window.location.pathname;
+          const docPath = section ? `${product}/${section}/${slug}` : `${product}/${slug}`;
+
+          // Using GA4 standard "select_content" event with recommended parameters
+          analyticsManager.trackEvent("select_content", {
+            content_type: "document_markdown",
+            item_id: docPath,
+            product: product,
+            page_path: pagePath,
+          });
         })
         .catch((err) => {
           console.error("Failed to copy content: ", err);
