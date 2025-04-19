@@ -8,6 +8,7 @@
  * Only include redirects here that need dynamic processing or aren't covered by Cloudflare.
  */
 import { isValidProduct } from "./route-types";
+import { getAllDocs } from "../docs/_meta";
 
 // Define exact redirects - maps old paths to new paths
 export const exactRedirects: Record<string, string> = {
@@ -16,6 +17,54 @@ export const exactRedirects: Record<string, string> = {
   "/docs/": "/docs/mirascope",
 };
 
+// Group redirects map - this will be populated dynamically
+const groupRedirects: Record<string, string> = {};
+
+// Build the group redirects map from docs metadata
+function buildGroupRedirects() {
+  const allDocs = getAllDocs();
+
+  // Track valid doc paths
+  const validDocPaths = new Set<string>();
+
+  // First pass: collect all valid doc paths
+  allDocs.forEach((doc) => {
+    const docPath = doc.product + "/" + doc.path;
+    validDocPaths.add(docPath);
+  });
+
+  // Second pass: find potential group paths and their first document
+  const groupToFirstDoc: Record<string, string> = {};
+
+  // Use docs in their original order (from _meta.ts files)
+  // Process each doc to find group paths
+  allDocs.forEach((doc) => {
+    const pathParts = doc.path.split("/");
+
+    // Skip processing if this is a top-level doc
+    if (pathParts.length <= 1) return;
+
+    // Build potential group paths
+    for (let i = 1; i < pathParts.length; i++) {
+      const groupPath = pathParts.slice(0, i).join("/");
+      const fullGroupPath = doc.product + "/" + groupPath;
+
+      // If this group path doesn't exist as a valid doc itself and
+      // we haven't assigned a redirect target yet, use this doc
+      if (!validDocPaths.has(fullGroupPath) && !groupToFirstDoc[fullGroupPath]) {
+        groupToFirstDoc[fullGroupPath] = doc.product + "/" + doc.path;
+      }
+    }
+  });
+
+  // Convert to URL paths for our redirects
+  Object.entries(groupToFirstDoc).forEach(([groupPath, docPath]) => {
+    groupRedirects["/docs/" + groupPath] = "/docs/" + docPath;
+  });
+}
+
+// Initialize group redirects when module is loaded
+buildGroupRedirects();
 // Define pattern redirects - for patterns that need regex-like handling
 export const patternRedirects: Array<{
   pattern: RegExp;
@@ -37,7 +86,12 @@ export function processRedirects(path: string): string | null {
     return exactRedirects[path];
   }
 
-  // 2. Check pattern redirects
+  // 2. Check group redirects for docs paths
+  if (groupRedirects[path]) {
+    return groupRedirects[path];
+  }
+
+  // 3. Check pattern redirects
   for (const { pattern, replacement } of patternRedirects) {
     const match = path.match(pattern);
     if (match) {
@@ -45,7 +99,7 @@ export function processRedirects(path: string): string | null {
     }
   }
 
-  // 3. Special case: redirect /docs/{invalid-product} to /docs/mirascope
+  // 4. Special case: redirect /docs/{invalid-product} to /docs/mirascope
   const docsProductMatch = path.match(/^\/docs\/([^\/]+)(?:\/.*)?$/);
   if (docsProductMatch && !isValidProduct(docsProductMatch[1])) {
     return "/docs/mirascope";
