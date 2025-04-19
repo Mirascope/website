@@ -87,7 +87,7 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({
         <div className="fixed top-[110px] z-20">
           <button
             onClick={toggleSidebar}
-            className="flex items-center rounded bg-white border border-gray-300 justify-center w-6 h-6 rounded hover:bg-gray-100"
+            className="flex items-center rounded bg-background border border-border justify-center w-6 h-6 rounded hover:bg-muted"
             aria-label="Expand sidebar"
           >
             <svg
@@ -96,7 +96,7 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({
               height="20"
               viewBox="0 0 24 24"
               fill="none"
-              className="stroke-gray-300"
+              className="stroke-muted-foreground"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -122,7 +122,7 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({
           <div className="absolute top-12 right-2 z-20">
             <button
               onClick={toggleSidebar}
-              className="flex items-center justify-center rounded border border-gray-300 w-6 h-6 hover:bg-gray-100"
+              className="flex items-center justify-center rounded border border-border w-6 h-6 hover:bg-muted"
               aria-label="Collapse sidebar"
             >
               <svg
@@ -131,7 +131,7 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({
                 height="18"
                 viewBox="0 0 24 24"
                 fill="none"
-                className="stroke-gray-300"
+                className="stroke-muted-foreground"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"

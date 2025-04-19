@@ -254,11 +254,6 @@
     "title": "Versioning | Lilypad",
     "description": "Track versions of your LLM functions"
   },
-  "/docs/lilypad/pricing": {
-    "route": "/docs/lilypad/pricing",
-    "title": "Pricing | Lilypad",
-    "description": "Lilypad pricing plans and features"
-  },
   "/docs/lilypad/under-development/experiments": {
     "route": "/docs/lilypad/under-development/experiments",
     "title": "Experiments | Lilypad",
