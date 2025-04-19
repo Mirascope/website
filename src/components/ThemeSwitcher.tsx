@@ -93,8 +93,8 @@ export default function ThemeSwitcher() {
           className={cn(
             "p-2 mr-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary transition-colors",
             isLandingPage
-              ? "text-white hover:text-gray-200"
-              : "text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
+              ? "text-white hover:text-muted-foreground"
+              : "text-foreground hover:text-foreground dark:text-foreground dark:hover:text-foreground"
           )}
           aria-label="Select theme"
         >
