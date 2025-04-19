@@ -9,9 +9,6 @@ const lilypadMeta: ProductDocs = {
     index: {
       title: "Welcome",
     },
-    pricing: {
-      title: "Pricing",
-    },
   },
 
   // Grouped pages in main area

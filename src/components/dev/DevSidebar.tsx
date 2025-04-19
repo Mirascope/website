@@ -34,7 +34,7 @@ const DevSidebar: React.FC = () => {
 
         {/* Border line below title */}
         <div className="pb-4">
-          <div className="border-b border-gray-300"></div>
+          <div className="border-b border-border"></div>
         </div>
 
         {/* Scrollable content area with fixed height */}

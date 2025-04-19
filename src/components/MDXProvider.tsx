@@ -18,7 +18,6 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
 import Logo from "./Logo";
 import { Underline } from "./Underline";
 import { ProviderCodeWrapper } from "./ProviderCodeWrapper";
-import PricingContent from "./PricingContent";
 
 // Helper function to generate heading ID from text
 const slugify = (text: string): string => {
@@ -52,7 +51,6 @@ export const components = {
   Warning,
   Info,
   Success,
-  PricingContent,
   MermaidDiagram,
 
   // UI Components

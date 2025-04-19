@@ -59,13 +59,13 @@ export function InstallSnippet({ className = "" }: InstallSnippetProps) {
 
   return (
     <div className={cn("rounded-md bg-button-primary shadow-md overflow-hidden", className)}>
-      <div className="flex border-b border-gray-700 px-3">
+      <div className="flex border-b border-border px-3">
         {operatingSystems.map((currentOS) => (
           <button
             key={currentOS}
             onClick={() => setOS(currentOS)}
             className={cn(
-              "px-4 py-1.5 text-sm text-muted hover:text-gray-200 relative",
+              "px-4 py-1.5 text-sm text-muted hover:text-muted-foreground relative",
               os === currentOS && "text-white border-b-2 border-white"
             )}
           >
