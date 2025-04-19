@@ -33,8 +33,8 @@ const FeatureRow = ({
             {typeof free === "boolean" ? (
               <div className="flex justify-center">
                 {free ? (
-                  <div className="rounded-full p-1 bg-[#e8f5e9] dark:bg-[#193619]">
-                    <Check size={12} className="text-[#2d8031]" />
+                  <div className="rounded-full p-1 bg-accent">
+                    <Check size={12} className="text-primary" />
                   </div>
                 ) : (
                   <div className="rounded-full p-1 bg-muted">
@@ -53,8 +53,8 @@ const FeatureRow = ({
             {typeof pro === "boolean" ? (
               <div className="flex justify-center">
                 {pro ? (
-                  <div className="rounded-full p-1 bg-[#e8f5e9] dark:bg-[#193619]">
-                    <Check size={12} className="text-[#2d8031]" />
+                  <div className="rounded-full p-1 bg-accent">
+                    <Check size={12} className="text-primary" />
                   </div>
                 ) : (
                   <div className="rounded-full p-1 bg-muted">
@@ -94,13 +94,11 @@ const PricingTier = ({
     <div
       className={cn(
         "px-6 py-8",
-        isGreen
-          ? "bg-gradient-to-br from-[#f0f9f0] to-white dark:from-[#193619] dark:to-gray-900"
-          : "bg-white dark:bg-gray-900"
+        isGreen ? "bg-gradient-to-br from-accent to-background" : "bg-background"
       )}
     >
       <h3
-        className={cn("text-xl font-semibold mb-2", isGreen ? "text-[#2d8031]" : "text-foreground")}
+        className={cn("text-xl font-semibold mb-2", isGreen ? "text-primary" : "text-foreground")}
       >
         {name}
       </h3>
@@ -116,7 +114,7 @@ const PricingTier = ({
         className={cn(
           "block w-full py-2 px-4 rounded-md text-center transition-colors",
           isGreen
-            ? "bg-[#2d8031] text-white hover:bg-[#246a29]"
+            ? "bg-primary text-primary-foreground hover:bg-primary/90"
             : "bg-muted text-foreground hover:bg-muted/80"
         )}
       >
@@ -129,9 +127,7 @@ const PricingTier = ({
 // Beta notice content for tooltips
 const betaNoticeContent = (
   <div className="font-handwriting">
-    <h3 className="text-lg font-semibold text-[#2d8031] dark:text-[#4ca251] mb-2">
-      Open Beta Notice
-    </h3>
+    <h3 className="text-lg font-semibold text-primary mb-2">Open Beta Notice</h3>
     <p className="text-lg mb-2">
       Lilypad is currently in an open beta, during which we will not be charging for the platform.
       All users during this period will have free access to Pro features.
@@ -224,11 +220,11 @@ const PricingContent: React.FC<PricingContentProps> = ({ className, hideTitle = 
                     <h3 className="text-xl font-semibold text-foreground">Pro</h3>
                     <Tooltip>
                       <TooltipTrigger>
-                        <Info size={16} className="text-[#2d8031] cursor-pointer" />
+                        <Info size={16} className="text-primary cursor-pointer" />
                       </TooltipTrigger>
                       <TooltipContent
                         side="right"
-                        className="w-md p-4 bg-[#f0f9f0] dark:bg-[#193619] text-[#2d8031] dark:text-[#4ca251] border border-[#c5e7c5] dark:border-[#2d8031]"
+                        className="w-md p-4 bg-background text-primary border border-border"
                       >
                         {betaNoticeContent}
                       </TooltipContent>
@@ -293,28 +289,26 @@ const PricingContent: React.FC<PricingContentProps> = ({ className, hideTitle = 
               <div className="bg-background border border-border rounded-lg shadow-sm overflow-hidden">
                 <div className="px-6 py-8">
                   <div className="flex items-center gap-2 mb-2">
-                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Pro</h3>
+                    <h3 className="text-xl font-semibold text-foreground">Pro</h3>
                     <Tooltip>
                       <TooltipTrigger>
-                        <Info size={16} className="text-[#2d8031] cursor-pointer" />
+                        <Info size={16} className="text-primary cursor-pointer" />
                       </TooltipTrigger>
                       <TooltipContent
                         side="right"
-                        className="w-96 p-4 bg-[#f0f9f0] dark:bg-[#193619] text-[#2d8031] dark:text-[#4ca251] border border-[#c5e7c5] dark:border-[#2d8031]"
+                        className="w-96 p-4 bg-background text-primary border border-border"
                       >
                         {betaNoticeContent}
                       </TooltipContent>
                     </Tooltip>
                   </div>
-                  <p className="text-gray-600 dark:text-gray-300 mb-5">
-                    For teams with more advanced needs
-                  </p>
+                  <p className="text-muted-foreground mb-5">For teams with more advanced needs</p>
                   <div className="mb-6">
-                    <span className="text-3xl font-bold dark:text-white">TBD</span>
+                    <span className="text-3xl font-bold text-foreground">TBD</span>
                   </div>
                   <a
                     href="mailto:sales@mirascope.com"
-                    className="block w-full py-2 px-4 rounded-md text-center transition-colors bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                    className="block w-full py-2 px-4 rounded-md text-center transition-colors bg-muted text-foreground hover:bg-muted/80"
                   >
                     Request License
                   </a>
@@ -385,7 +379,7 @@ const PricingContent: React.FC<PricingContentProps> = ({ className, hideTitle = 
           <h2 className="text-2xl font-semibold mb-4 text-foreground">
             Have questions about our pricing?
           </h2>
-          <p className="text-gray-600 dark:text-gray-300">
+          <p className="text-muted-foreground">
             Join our{" "}
             <a
               href="https://join.slack.com/t/mirascope-community/shared_invite/zt-2ilqhvmki-FB6LWluInUCkkjYD3oSjNA"
