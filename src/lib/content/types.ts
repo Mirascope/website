@@ -1,5 +1,5 @@
 // Core content type enum
-export type ContentType = "doc" | "blog" | "policy";
+export type ContentType = "doc" | "blog" | "policy" | "dev";
 
 // Base metadata interface
 export interface ContentMeta {
