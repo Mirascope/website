@@ -1,7 +1,7 @@
 import React from "react";
 import ErrorContent from "./ErrorContent";
 import SEOHelmet from "./SEOHelmet";
-import { DocumentNotFoundError, ContentError } from "@/lib/content/errors";
+import { DocumentNotFoundError, ContentError } from "@/src/lib/content/errors";
 
 export type ContentType = "blog" | "docs";
 

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import TableOfContents from "@/components/TableOfContents";
-import { Button } from "@/components/ui/button";
+import TableOfContents from "@/src/components/TableOfContents";
+import { Button } from "@/src/components/ui/button";
 import { Sparkles, Server, Clipboard, Check } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { ProviderDropdown } from "@/components/docs";
-import { type ProductName } from "@/lib/route-types";
-import { type DocContent } from "@/lib/content/docs";
-import analyticsManager from "@/lib/services/analytics";
+import { cn } from "@/src/lib/utils";
+import { ProviderDropdown } from "@/src/components/docs";
+import { type ProductName } from "@/src/lib/route-types";
+import { type DocContent } from "@/src/lib/content/docs";
+import analyticsManager from "@/src/lib/services/analytics";
 
 interface TocSidebarProps {
   product: ProductName;

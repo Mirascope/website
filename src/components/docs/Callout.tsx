@@ -1,5 +1,5 @@
 import React from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/src/lib/utils";
 import { AlertCircle, Info as InfoIcon, CheckCircle, AlertTriangle } from "lucide-react";
 
 type CalloutType = "note" | "warning" | "info" | "success";

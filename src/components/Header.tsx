@@ -8,12 +8,12 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
-import { cn } from "@/lib/utils";
-import { getProductRoute } from "@/lib/routes";
-import Logo from "@/components/Logo";
-import ThemeSwitcher from "@/components/ThemeSwitcher";
-import GitHubRepoButton from "@/components/GitHubRepoButton";
+} from "@/src/components/ui/navigation-menu";
+import { cn } from "@/src/lib/utils";
+import { getProductRoute } from "@/src/lib/routes";
+import Logo from "@/src/components/Logo";
+import ThemeSwitcher from "@/src/components/ThemeSwitcher";
+import GitHubRepoButton from "@/src/components/GitHubRepoButton";
 
 // Reusable navigation link component
 interface NavLinkProps {

@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { LoadingContent } from "@/components/docs";
-import DevLayout from "@/components/dev/DevLayout";
-import { MDXRenderer } from "@/components/MDXRenderer";
+import { LoadingContent } from "@/src/components/docs";
+import DevLayout from "@/src/components/dev/DevLayout";
+import { MDXRenderer } from "@/src/components/MDXRenderer";
 import { useState, useEffect } from "react";
-import { processMDXContent } from "@/lib/content/mdx-processor";
-import { environment } from "@/lib/content/environment";
+import { processMDXContent } from "@/src/lib/content/mdx-processor";
+import { environment } from "@/src/lib/content/environment";
 
 export const Route = createFileRoute("/dev/style-test")({
   component: StyleTestPage,

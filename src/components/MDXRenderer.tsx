@@ -1,6 +1,6 @@
 import { MDXProviderWrapper, components } from "./MDXProvider";
 import { MDXRemote } from "next-mdx-remote";
-import { LoadingContent } from "@/components/docs";
+import { LoadingContent } from "@/src/components/docs";
 
 interface MDXRendererProps {
   code: string;

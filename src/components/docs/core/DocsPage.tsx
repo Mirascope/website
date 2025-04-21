@@ -1,8 +1,8 @@
 import React from "react";
 import DocsLayout from "./DocsLayout";
-import SEOHelmet from "@/components/SEOHelmet";
-import { type DocMeta, type DocContent } from "@/lib/content/docs";
-import { type ProductName } from "@/lib/route-types";
+import SEOHelmet from "@/src/components/SEOHelmet";
+import { type DocMeta, type DocContent } from "@/src/lib/content/docs";
+import { type ProductName } from "@/src/lib/route-types";
 
 type DocsPageProps = {
   product: ProductName;

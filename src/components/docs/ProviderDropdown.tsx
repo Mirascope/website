@@ -1,13 +1,13 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/src/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/src/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
 import { useProvider, providers, providerDefaults } from "./ProviderContext";
-import { cn } from "@/lib/utils";
+import { cn } from "@/src/lib/utils";
 
 interface ProviderDropdownProps {
   className?: string;

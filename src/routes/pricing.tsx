@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Check, Info, X } from "lucide-react";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
-import SEOHelmet from "@/components/SEOHelmet";
-import { environment } from "@/lib/content/environment";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/src/components/ui/tabs";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/src/components/ui/tooltip";
+import { cn } from "@/src/lib/utils";
+import SEOHelmet from "@/src/components/SEOHelmet";
+import { environment } from "@/src/lib/content/environment";
 
 export const Route = createFileRoute("/pricing")({
   component: PricingPage,

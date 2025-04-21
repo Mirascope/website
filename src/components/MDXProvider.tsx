@@ -1,6 +1,6 @@
 import React from "react";
 import { MDXProvider } from "@mdx-js/react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/src/lib/utils";
 import {
   InstallSnippet,
   CodeSnippet,

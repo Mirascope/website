@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import NotFound from "@/components/NotFound";
-import { environment } from "@/lib/content/environment";
+import NotFound from "@/src/components/NotFound";
+import { environment } from "@/src/lib/content/environment";
 
 export const Route = createFileRoute("/$catchall")({
   component: () => <NotFound />,

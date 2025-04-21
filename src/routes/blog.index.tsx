@@ -1,11 +1,11 @@
 import { createFileRoute, Link, useLoaderData } from "@tanstack/react-router";
 import { useState } from "react";
-import { type BlogMeta } from "@/lib/content/blog";
-import { blogListLoader } from "@/lib/content/loaders";
-import SEOHelmet from "@/components/SEOHelmet";
-import { LoadingContent } from "@/components/docs";
-import { environment } from "@/lib/content/environment";
-import ContentErrorHandler from "@/components/ContentErrorHandler";
+import { type BlogMeta } from "@/src/lib/content/blog";
+import { blogListLoader } from "@/src/lib/content/loaders";
+import SEOHelmet from "@/src/components/SEOHelmet";
+import { LoadingContent } from "@/src/components/docs";
+import { environment } from "@/src/lib/content/environment";
+import ContentErrorHandler from "@/src/components/ContentErrorHandler";
 
 // Posts per page
 const POSTS_PER_PAGE = 4;
