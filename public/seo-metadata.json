@@ -191,13 +191,13 @@
   },
   "/docs/lilypad": {
     "route": "/docs/lilypad",
-    "title": "Index | Lilypad",
+    "title": "Welcome | Lilypad",
     "description": "An open-source prompt engineering framework."
   },
   "/docs/lilypad/api/index": {
     "route": "/docs/lilypad/api/index",
-    "title": "Under construction | Lilypad",
-    "description": "An open-source prompt engineering framework."
+    "title": "Lilypad API Reference | Lilypad",
+    "description": "API documentation for Lilypad"
   },
   "/docs/lilypad/evaluation/annotations": {
     "route": "/docs/lilypad/evaluation/annotations",
@@ -271,8 +271,8 @@
   },
   "/docs/mirascope/api/index": {
     "route": "/docs/mirascope/api/index",
-    "title": "Under construction | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
+    "title": "Mirascope API Reference | Mirascope",
+    "description": "API documentation for Mirascope"
   },
   "/docs/mirascope/getting-started/contributing": {
     "route": "/docs/mirascope/getting-started/contributing",
@@ -298,6 +298,301 @@
     "route": "/docs/mirascope/getting-started/why",
     "title": "Why Mirascope? | Mirascope",
     "description": "Why use Mirascope for your LLM applications"
+  },
+  "/docs/mirascope/guides/agents/blog-writing-agent": {
+    "route": "/docs/mirascope/guides/agents/blog-writing-agent",
+    "title": "Agent Executor: Blog Writing | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/agents/documentation-agent": {
+    "route": "/docs/mirascope/guides/agents/documentation-agent",
+    "title": "Documentation Agent | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/agents/local-chat-with-codebase": {
+    "route": "/docs/mirascope/guides/agents/local-chat-with-codebase",
+    "title": "Local Chat with Codebase | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/agents/localized-agent": {
+    "route": "/docs/mirascope/guides/agents/localized-agent",
+    "title": "Localized Agent | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/agents/qwant-search-agent-with-sources": {
+    "route": "/docs/mirascope/guides/agents/qwant-search-agent-with-sources",
+    "title": "Qwant Search Agent with Sources | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/agents/sql-agent": {
+    "route": "/docs/mirascope/guides/agents/sql-agent",
+    "title": "Generate SQL with LLM | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/agents/web-search-agent": {
+    "route": "/docs/mirascope/guides/agents/web-search-agent",
+    "title": "Web Search Agent | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/evals/evaluating-documentation-agent": {
+    "route": "/docs/mirascope/guides/evals/evaluating-documentation-agent",
+    "title": "Evaluating Documentation Agent | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/evals/evaluating-sql-agent": {
+    "route": "/docs/mirascope/guides/evals/evaluating-sql-agent",
+    "title": "Evaluating Generating SQL with LLM | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/evals/evaluating-web-search-agent": {
+    "route": "/docs/mirascope/guides/evals/evaluating-web-search-agent",
+    "title": "Evaluating Web Search Agent with LLM | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/getting-started/dynamic-configuration-and-chaining": {
+    "route": "/docs/mirascope/guides/getting-started/dynamic-configuration-and-chaining",
+    "title": "Dynamic Configuration & Chaining | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/getting-started/structured-outputs": {
+    "route": "/docs/mirascope/guides/getting-started/structured-outputs",
+    "title": "Structured Outputs | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/getting-started/tools-and-agents": {
+    "route": "/docs/mirascope/guides/getting-started/tools-and-agents",
+    "title": "Tools & Agents | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/index": {
+    "route": "/docs/mirascope/guides/index",
+    "title": "Mirascope Guides | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/langgraph-vs-mirascope/quickstart": {
+    "route": "/docs/mirascope/guides/langgraph-vs-mirascope/quickstart",
+    "title": "LangGraph Quickstart using Mirascope | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/more-advanced/code-generation-and-execution": {
+    "route": "/docs/mirascope/guides/more-advanced/code-generation-and-execution",
+    "title": "Code Generation and Execution | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/more-advanced/document-segmentation": {
+    "route": "/docs/mirascope/guides/more-advanced/document-segmentation",
+    "title": "Document Segmentation | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/more-advanced/extract-from-pdf": {
+    "route": "/docs/mirascope/guides/more-advanced/extract-from-pdf",
+    "title": "Extracting from PDF | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/more-advanced/extraction-using-vision": {
+    "route": "/docs/mirascope/guides/more-advanced/extraction-using-vision",
+    "title": "Extraction using Vision | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/more-advanced/generating-captions": {
+    "route": "/docs/mirascope/guides/more-advanced/generating-captions",
+    "title": "Generate Captions for an Image | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/more-advanced/generating-synthetic-data": {
+    "route": "/docs/mirascope/guides/more-advanced/generating-synthetic-data",
+    "title": "Generate Synthetic Data | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/more-advanced/knowledge-graph": {
+    "route": "/docs/mirascope/guides/more-advanced/knowledge-graph",
+    "title": "Knowledge Graph | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/more-advanced/llm-validation-with-retries": {
+    "route": "/docs/mirascope/guides/more-advanced/llm-validation-with-retries",
+    "title": "LLM Validation With Retries | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/more-advanced/named-entity-recognition": {
+    "route": "/docs/mirascope/guides/more-advanced/named-entity-recognition",
+    "title": "Named Entity Recognition | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/more-advanced/o1-style-thinking": {
+    "route": "/docs/mirascope/guides/more-advanced/o1-style-thinking",
+    "title": "o1 Style Thinking | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/more-advanced/pii-scrubbing": {
+    "route": "/docs/mirascope/guides/more-advanced/pii-scrubbing",
+    "title": "PII Scrubbing | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/more-advanced/query-plan": {
+    "route": "/docs/mirascope/guides/more-advanced/query-plan",
+    "title": "Query Plan | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/more-advanced/removing-semantic-duplicates": {
+    "route": "/docs/mirascope/guides/more-advanced/removing-semantic-duplicates",
+    "title": "Removing Semantic Duplicates | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/more-advanced/search-with-sources": {
+    "route": "/docs/mirascope/guides/more-advanced/search-with-sources",
+    "title": "Search with Sources | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/more-advanced/speech-transcription": {
+    "route": "/docs/mirascope/guides/more-advanced/speech-transcription",
+    "title": "Transcribing Speech | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/more-advanced/support-ticket-routing": {
+    "route": "/docs/mirascope/guides/more-advanced/support-ticket-routing",
+    "title": "Support Ticket Routing | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/more-advanced/text-classification": {
+    "route": "/docs/mirascope/guides/more-advanced/text-classification",
+    "title": "Text Classification | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/more-advanced/text-summarization": {
+    "route": "/docs/mirascope/guides/more-advanced/text-summarization",
+    "title": "Text Summarization | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/more-advanced/text-translation": {
+    "route": "/docs/mirascope/guides/more-advanced/text-translation",
+    "title": "Text Translation | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/chain-of-thought": {
+    "route": "/docs/mirascope/guides/prompt-engineering/chain-of-thought",
+    "title": "Chain of Thought | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/chain-of-verification": {
+    "route": "/docs/mirascope/guides/prompt-engineering/chain-of-verification",
+    "title": "Chain of Verification: Enhancing LLM Accuracy through Self-Verification | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/common-phrases": {
+    "route": "/docs/mirascope/guides/prompt-engineering/common-phrases",
+    "title": "Common Phrases (Prompt Mining) | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/contrastive-chain-of-thought": {
+    "route": "/docs/mirascope/guides/prompt-engineering/contrastive-chain-of-thought",
+    "title": "Contrastive Chain of Thought | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/decomposed-prompting": {
+    "route": "/docs/mirascope/guides/prompt-engineering/decomposed-prompting",
+    "title": "Decomposed Prompting: Enhancing LLM Problem-Solving with Tool-Based Subproblems | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/demonstration-ensembling": {
+    "route": "/docs/mirascope/guides/prompt-engineering/demonstration-ensembling",
+    "title": "Demonstration Ensembling: Enhancing LLM Responses with Aggregated Examples | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/diverse": {
+    "route": "/docs/mirascope/guides/prompt-engineering/diverse",
+    "title": "DiVeRSe: Enhancing LLM Reasoning with Prompt Variations | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/emotion-prompting": {
+    "route": "/docs/mirascope/guides/prompt-engineering/emotion-prompting",
+    "title": "Emotion Prompting | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/least-to-most": {
+    "route": "/docs/mirascope/guides/prompt-engineering/least-to-most",
+    "title": "Least to Most: Enhancing LLM Reasoning with Subproblem Decomposition | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/mixture-of-reasoning": {
+    "route": "/docs/mirascope/guides/prompt-engineering/mixture-of-reasoning",
+    "title": "Mixture of Reasoning: Enhancing LLM Performance with Multiple Techniques | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/plan-and-solve": {
+    "route": "/docs/mirascope/guides/prompt-engineering/plan-and-solve",
+    "title": "Plan and Solve | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/prompt-paraphrasing": {
+    "route": "/docs/mirascope/guides/prompt-engineering/prompt-paraphrasing",
+    "title": "Prompt Paraphrasing: Generating Diverse Prompts for LLM Testing and Evaluation | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/rephrase-and-respond": {
+    "route": "/docs/mirascope/guides/prompt-engineering/rephrase-and-respond",
+    "title": "Rephrase and Respond | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/rereading": {
+    "route": "/docs/mirascope/guides/prompt-engineering/rereading",
+    "title": "Rereading | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/reverse-chain-of-thought": {
+    "route": "/docs/mirascope/guides/prompt-engineering/reverse-chain-of-thought",
+    "title": "Reverse Chain of Thought: Enhancing LLM Reasoning with Self-Reflection | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/role-prompting": {
+    "route": "/docs/mirascope/guides/prompt-engineering/role-prompting",
+    "title": "Role Prompting | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/self-ask": {
+    "route": "/docs/mirascope/guides/prompt-engineering/self-ask",
+    "title": "Self-Ask | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/self-consistency": {
+    "route": "/docs/mirascope/guides/prompt-engineering/self-consistency",
+    "title": "Self-Consistency: Enhancing LLM Reasoning with Multiple Outputs | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/self-refine": {
+    "route": "/docs/mirascope/guides/prompt-engineering/self-refine",
+    "title": "Self-Refine: Enhancing LLM Outputs Through Iterative Self-Improvement | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/sim-to-m": {
+    "route": "/docs/mirascope/guides/prompt-engineering/sim-to-m",
+    "title": "Sim to M: Enhancing LLM Reasoning with Perspective-Taking | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/skeleton-of-thought": {
+    "route": "/docs/mirascope/guides/prompt-engineering/skeleton-of-thought",
+    "title": "Skeleton of Thought: Enhancing LLM Response Speed | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/step-back": {
+    "route": "/docs/mirascope/guides/prompt-engineering/step-back",
+    "title": "Step-back Prompting: Enhancing LLM Reasoning with High-Level Questions | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/system-to-attention": {
+    "route": "/docs/mirascope/guides/prompt-engineering/system-to-attention",
+    "title": "System to Attention (S2A): Enhancing LLM Focus with Query Filtering | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/tabular-chain-of-thought": {
+    "route": "/docs/mirascope/guides/prompt-engineering/tabular-chain-of-thought",
+    "title": "Tabular Chain of Thought | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/guides/prompt-engineering/thread-of-thought": {
+    "route": "/docs/mirascope/guides/prompt-engineering/thread-of-thought",
+    "title": "Thread of Thought | Mirascope",
+    "description": "LLM abstractions that aren't obstructions."
   },
   "/docs/mirascope/integrations/hyperdx": {
     "route": "/docs/mirascope/integrations/hyperdx",
@@ -426,307 +721,12 @@
   },
   "/terms/service": {
     "route": "/terms/service",
-    "title": "TERMS OF SERVICE | Mirascope",
+    "title": "Terms of Service | Mirascope",
     "description": "Legal terms governing your use of Mirascope's platform and services."
   },
   "/terms/use": {
     "route": "/terms/use",
     "title": "Terms of Use | Mirascope",
     "description": "Guidelines and rules for using the Mirascope website."
-  },
-  "/docs/mirascope/guides/agents/blog-writing-agent": {
-    "route": "/docs/mirascope/guides/agents/blog-writing-agent",
-    "title": "Agent Executor: Blog Writing | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/agents/documentation-agent": {
-    "route": "/docs/mirascope/guides/agents/documentation-agent",
-    "title": "Documentation Agent | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/agents/local-chat-with-codebase": {
-    "route": "/docs/mirascope/guides/agents/local-chat-with-codebase",
-    "title": "Local Chat with Codebase | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/agents/localized-agent": {
-    "route": "/docs/mirascope/guides/agents/localized-agent",
-    "title": "Localized Agent | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/agents/qwant-search-agent-with-sources": {
-    "route": "/docs/mirascope/guides/agents/qwant-search-agent-with-sources",
-    "title": "Qwant Search Agent with Sources | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/agents/sql-agent": {
-    "route": "/docs/mirascope/guides/agents/sql-agent",
-    "title": "Generate SQL with LLM | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/evals/evaluating-documentation-agent": {
-    "route": "/docs/mirascope/guides/evals/evaluating-documentation-agent",
-    "title": "Evaluating Documentation Agent | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/evals/evaluating-web-search-agent": {
-    "route": "/docs/mirascope/guides/evals/evaluating-web-search-agent",
-    "title": "Evaluating Web Search Agent with LLM | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/index": {
-    "route": "/docs/mirascope/guides/index",
-    "title": "Mirascope Guides | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/langgraph-vs-mirascope/quickstart": {
-    "route": "/docs/mirascope/guides/langgraph-vs-mirascope/quickstart",
-    "title": "LangGraph Quickstart using Mirascope | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/more-advanced/code-generation-and-execution": {
-    "route": "/docs/mirascope/guides/more-advanced/code-generation-and-execution",
-    "title": "Code Generation and Execution | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/more-advanced/document-segmentation": {
-    "route": "/docs/mirascope/guides/more-advanced/document-segmentation",
-    "title": "Document Segmentation | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/more-advanced/extract-from-pdf": {
-    "route": "/docs/mirascope/guides/more-advanced/extract-from-pdf",
-    "title": "Extracting from PDF | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/more-advanced/extraction-using-vision": {
-    "route": "/docs/mirascope/guides/more-advanced/extraction-using-vision",
-    "title": "Extraction using Vision | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/more-advanced/generating-captions": {
-    "route": "/docs/mirascope/guides/more-advanced/generating-captions",
-    "title": "Generate Captions for an Image | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/more-advanced/generating-synthetic-data": {
-    "route": "/docs/mirascope/guides/more-advanced/generating-synthetic-data",
-    "title": "Generate Synthetic Data | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/more-advanced/llm-validation-with-retries": {
-    "route": "/docs/mirascope/guides/more-advanced/llm-validation-with-retries",
-    "title": "LLM Validation With Retries | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/more-advanced/named-entity-recognition": {
-    "route": "/docs/mirascope/guides/more-advanced/named-entity-recognition",
-    "title": "Named Entity Recognition | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/more-advanced/o1-style-thinking": {
-    "route": "/docs/mirascope/guides/more-advanced/o1-style-thinking",
-    "title": "o1 Style Thinking | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/more-advanced/pii-scrubbing": {
-    "route": "/docs/mirascope/guides/more-advanced/pii-scrubbing",
-    "title": "PII Scrubbing | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/more-advanced/query-plan": {
-    "route": "/docs/mirascope/guides/more-advanced/query-plan",
-    "title": "Query Plan | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/more-advanced/removing-semantic-duplicates": {
-    "route": "/docs/mirascope/guides/more-advanced/removing-semantic-duplicates",
-    "title": "Removing Semantic Duplicates | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/more-advanced/search-with-sources": {
-    "route": "/docs/mirascope/guides/more-advanced/search-with-sources",
-    "title": "Search with Sources | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/more-advanced/speech-transcription": {
-    "route": "/docs/mirascope/guides/more-advanced/speech-transcription",
-    "title": "Transcribing Speech | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/more-advanced/support-ticket-routing": {
-    "route": "/docs/mirascope/guides/more-advanced/support-ticket-routing",
-    "title": "Support Ticket Routing | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/more-advanced/text-classification": {
-    "route": "/docs/mirascope/guides/more-advanced/text-classification",
-    "title": "Text Classification | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/more-advanced/text-summarization": {
-    "route": "/docs/mirascope/guides/more-advanced/text-summarization",
-    "title": "Text Summarization | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/more-advanced/text-translation": {
-    "route": "/docs/mirascope/guides/more-advanced/text-translation",
-    "title": "Text Translation | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/prompt-engineering/chain-of-thought": {
-    "route": "/docs/mirascope/guides/prompt-engineering/chain-of-thought",
-    "title": "Chain of Thought | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/prompt-engineering/chain-of-verification": {
-    "route": "/docs/mirascope/guides/prompt-engineering/chain-of-verification",
-    "title": "Chain of Verification: Enhancing LLM Accuracy through Self-Verification | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/prompt-engineering/common-phrases": {
-    "route": "/docs/mirascope/guides/prompt-engineering/common-phrases",
-    "title": "Common Phrases (Prompt Mining) | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/prompt-engineering/contrastive-chain-of-thought": {
-    "route": "/docs/mirascope/guides/prompt-engineering/contrastive-chain-of-thought",
-    "title": "Contrastive Chain of Thought | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/prompt-engineering/decomposed-prompting": {
-    "route": "/docs/mirascope/guides/prompt-engineering/decomposed-prompting",
-    "title": "Decomposed Prompting: Enhancing LLM Problem-Solving with Tool-Based Subproblems | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/prompt-engineering/demonstration-ensembling": {
-    "route": "/docs/mirascope/guides/prompt-engineering/demonstration-ensembling",
-    "title": "Demonstration Ensembling: Enhancing LLM Responses with Aggregated Examples | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/prompt-engineering/diverse": {
-    "route": "/docs/mirascope/guides/prompt-engineering/diverse",
-    "title": "DiVeRSe: Enhancing LLM Reasoning with Prompt Variations | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/prompt-engineering/emotion-prompting": {
-    "route": "/docs/mirascope/guides/prompt-engineering/emotion-prompting",
-    "title": "Emotion Prompting | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/prompt-engineering/mixture-of-reasoning": {
-    "route": "/docs/mirascope/guides/prompt-engineering/mixture-of-reasoning",
-    "title": "Mixture of Reasoning: Enhancing LLM Performance with Multiple Techniques | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/prompt-engineering/plan-and-solve": {
-    "route": "/docs/mirascope/guides/prompt-engineering/plan-and-solve",
-    "title": "Plan and Solve | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/prompt-engineering/prompt-paraphrasing": {
-    "route": "/docs/mirascope/guides/prompt-engineering/prompt-paraphrasing",
-    "title": "Prompt Paraphrasing: Generating Diverse Prompts for LLM Testing and Evaluation | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/prompt-engineering/rephrase-and-respond": {
-    "route": "/docs/mirascope/guides/prompt-engineering/rephrase-and-respond",
-    "title": "Rephrase and Respond | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/prompt-engineering/rereading": {
-    "route": "/docs/mirascope/guides/prompt-engineering/rereading",
-    "title": "Rereading | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/prompt-engineering/self-ask": {
-    "route": "/docs/mirascope/guides/prompt-engineering/self-ask",
-    "title": "Self-Ask | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/prompt-engineering/self-consistency": {
-    "route": "/docs/mirascope/guides/prompt-engineering/self-consistency",
-    "title": "Self-Consistency: Enhancing LLM Reasoning with Multiple Outputs | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/prompt-engineering/self-refine": {
-    "route": "/docs/mirascope/guides/prompt-engineering/self-refine",
-    "title": "Self-Refine: Enhancing LLM Outputs Through Iterative Self-Improvement | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/prompt-engineering/sim-to-m": {
-    "route": "/docs/mirascope/guides/prompt-engineering/sim-to-m",
-    "title": "Sim to M: Enhancing LLM Reasoning with Perspective-Taking | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/prompt-engineering/skeleton-of-thought": {
-    "route": "/docs/mirascope/guides/prompt-engineering/skeleton-of-thought",
-    "title": "Skeleton of Thought: Enhancing LLM Response Speed | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/prompt-engineering/step-back": {
-    "route": "/docs/mirascope/guides/prompt-engineering/step-back",
-    "title": "Step-back Prompting: Enhancing LLM Reasoning with High-Level Questions | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/prompt-engineering/system-to-attention": {
-    "route": "/docs/mirascope/guides/prompt-engineering/system-to-attention",
-    "title": "System to Attention (S2A): Enhancing LLM Focus with Query Filtering | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/prompt-engineering/thread-of-thought": {
-    "route": "/docs/mirascope/guides/prompt-engineering/thread-of-thought",
-    "title": "Thread of Thought | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/prompt-engineering/least-to-most": {
-    "route": "/docs/mirascope/guides/prompt-engineering/least-to-most",
-    "title": "Least to Most: Enhancing LLM Reasoning with Subproblem Decomposition | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/prompt-engineering/reverse-chain-of-thought": {
-    "route": "/docs/mirascope/guides/prompt-engineering/reverse-chain-of-thought",
-    "title": "Reverse Chain of Thought: Enhancing LLM Reasoning with Self-Reflection | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/prompt-engineering/role-prompting": {
-    "route": "/docs/mirascope/guides/prompt-engineering/role-prompting",
-    "title": "Role Prompting | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/prompt-engineering/tabular-chain-of-thought": {
-    "route": "/docs/mirascope/guides/prompt-engineering/tabular-chain-of-thought",
-    "title": "Tabular Chain of Thought | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/getting-started/dynamic-configuration-and-chaining": {
-    "route": "/docs/mirascope/guides/getting-started/dynamic-configuration-and-chaining",
-    "title": "Dynamic Configuration & Chaining | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/getting-started/structured-outputs": {
-    "route": "/docs/mirascope/guides/getting-started/structured-outputs",
-    "title": "Structured Outputs | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/getting-started/tools-and-agents": {
-    "route": "/docs/mirascope/guides/getting-started/tools-and-agents",
-    "title": "Tools & Agents | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/agents/web-search-agent": {
-    "route": "/docs/mirascope/guides/agents/web-search-agent",
-    "title": "Web Search Agent | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/evals/evaluating-sql-agent": {
-    "route": "/docs/mirascope/guides/evals/evaluating-sql-agent",
-    "title": "Evaluating Generating SQL with LLM | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
-  },
-  "/docs/mirascope/guides/more-advanced/knowledge-graph": {
-    "route": "/docs/mirascope/guides/more-advanced/knowledge-graph",
-    "title": "Knowledge Graph | Mirascope",
-    "description": "LLM abstractions that aren't obstructions."
   }
 }
