@@ -129,6 +129,18 @@ We support three color themes: light, dark, and sunset. The themes are setup usi
 
 The website makes extensive use of MDX content for docs, blog posts, and policies. There is a unified content loading system in `src/lib/content` which loads and processes the mdx, and makes it available to routes. All routes use TanStack data loaders so the content can be available at SSG prerender time.
 
+#### Content Organization
+
+All content is organized in the `content/` directory at the project root, separated by content type:
+
+- `content/doc/` - Documentation for Mirascope and Lilypad products
+- `content/blog/` - Blog posts
+- `content/policy/` - Legal documents like privacy policy and terms of service
+
+Development content for testing UI components is kept in `src/components/dev/` since it's more closely tied to the components.
+
+#### Content Types
+
 There are three content types, in order of increasing complexity: `policy`, `blog`, and `doc`. Policy content is stuff like the privacy policy and we have hardcoded routes for each policy. Blog content includes the blog homepage and the many blog posts, but it's fairly straightforward. The `doc` content splits across products (Mirascope and Lilypad), sections (like "API" and "Guides"), and groups and pages. The logic for handling these is somewhat convoluted with many special cases.
 
 The content management system has a design doc at lib/content/DESIGN.md.
