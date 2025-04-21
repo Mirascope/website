@@ -75,10 +75,10 @@ if (enabledOptions > 1) {
  */
 async function regenerate() {
   try {
-    await withDevEnvironment(async (port, browser) => {
-      const record = await extractAllMetadata(browser, port);
+    await withDevEnvironment(async (_, browser) => {
+      const record = await extractAllMetadata(true);
 
-      // Generate images for all routes
+      // Generate images for all routes (needs browser)
       await generateImages(browser, Object.values(record));
 
       // Save metadata after successful image generation
@@ -99,8 +99,9 @@ async function updateChangedMetadata() {
   try {
     const oldRecord = loadMetadataFromFile();
 
-    await withDevEnvironment(async (port, browser) => {
-      const newRecord = await extractAllMetadata(browser, port);
+    await withDevEnvironment(async (_, browser) => {
+      // Extract metadata using static rendering
+      const newRecord = await extractAllMetadata(true);
 
       // Find items that are changed or new
       const changedRoutes: string[] = [];
@@ -222,10 +223,9 @@ async function handleSpecificRoute(route: string, verbose = true) {
   }
 
   try {
-    // Use the withDevEnvironment utility for clean resource management
-    await withDevEnvironment(async (port, browser) => {
-      // Get metadata for this specific route
-      const routeItems = await extractMetadataForRoutes(browser, [route], port, verbose);
+    await withDevEnvironment(async (_, browser) => {
+      // Get metadata for this specific route using static rendering
+      const routeItems = await extractMetadataForRoutes([route], verbose);
 
       if (routeItems.length === 0) {
         console.error(`${colorize("Failed to extract metadata for route:", "red")} ${route}`);
@@ -359,16 +359,16 @@ async function processMissingRoutes() {
     coloredLog(`Found ${missingRoutes.length} missing routes to process`, "blue");
 
     // Process each missing route
-    await withDevEnvironment(async (port, browser) => {
-      // Extract metadata for missing routes
-      const newItems = await extractMetadataForRoutes(browser, missingRoutes, port);
+    await withDevEnvironment(async (_, browser) => {
+      // Extract metadata for missing routes using static rendering
+      const newItems = await extractMetadataForRoutes(missingRoutes, true);
 
       if (newItems.length === 0) {
         coloredLog("No metadata could be extracted for missing routes", "yellow");
         return;
       }
 
-      // Generate images for the new routes
+      // Generate images for the new routes (still needs browser)
       await generateImages(browser, newItems);
 
       // Update the metadata record
