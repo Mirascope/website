@@ -1,57 +1,24 @@
 import fs from "fs";
 import path from "path";
+import { parseFrontmatter } from "../src/lib/content/frontmatter";
+import { processMDXContent } from "../src/lib/content/mdx-processor";
+import type { ContentType } from "../src/lib/content/types";
 
 /**
- * Validate MDX file directly against the MDX compiler
+ * Validate MDX file directly against our MDX processor
  */
-async function validateMDXContent(content: string): Promise<boolean> {
+async function validateMDXContent(
+  content: string,
+  path: string,
+  contentType: ContentType
+): Promise<boolean> {
   try {
-    // Dynamically import next-mdx-remote/serialize since it's an ESM module
-    const { serialize } = await import("next-mdx-remote/serialize");
-
-    // Try to compile the MDX content - this will throw if invalid
-    await serialize(content);
+    // Use our shared MDX processor which will throw errors if invalid
+    await processMDXContent(content, contentType, { path });
     return true;
   } catch (error) {
     return false;
   }
-}
-
-/**
- * Extracts frontmatter from MDX content
- */
-function extractFrontmatter(source: string): {
-  content: string;
-  frontmatter: Record<string, string>;
-} {
-  const frontmatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/;
-  const match = source.match(frontmatterRegex);
-
-  if (!match) {
-    return { content: source, frontmatter: {} };
-  }
-
-  const frontmatterStr = match[1];
-  const content = match[2];
-
-  // Parse frontmatter into key-value pairs
-  const frontmatter: Record<string, string> = {};
-  const lines = frontmatterStr.split("\n");
-
-  for (const line of lines) {
-    const colonIndex = line.indexOf(":");
-    if (colonIndex !== -1) {
-      const key = line.slice(0, colonIndex).trim();
-      // Remove quotes from value if present
-      const value = line
-        .slice(colonIndex + 1)
-        .trim()
-        .replace(/^"(.*)"$/, "$1");
-      frontmatter[key] = value;
-    }
-  }
-
-  return { content, frontmatter };
 }
 
 /**
@@ -99,9 +66,9 @@ async function validateMDX(basePath?: string): Promise<void> {
       const fileContent = fs.readFileSync(filepath, "utf-8");
 
       // Extract frontmatter to validate just the content
-      const { content } = extractFrontmatter(fileContent);
+      const { content } = parseFrontmatter(fileContent);
 
-      const isValid = await validateMDXContent(content);
+      const isValid = await validateMDXContent(content, filepath, "blog");
       if (isValid) {
         process.stdout.write(".");
       } else {
@@ -163,9 +130,9 @@ async function validateMDX(basePath?: string): Promise<void> {
           const fileContent = fs.readFileSync(itemPath, "utf-8");
 
           // Extract frontmatter to validate just the content
-          const { content } = extractFrontmatter(fileContent);
+          const { content } = parseFrontmatter(fileContent);
 
-          const isValid = await validateMDXContent(content);
+          const isValid = await validateMDXContent(content, itemPath, "doc");
           if (isValid) {
             process.stdout.write(".");
           } else {
@@ -217,9 +184,18 @@ async function validateSingleFile(filepath: string): Promise<boolean> {
 
   try {
     const fileContent = fs.readFileSync(filepath, "utf-8");
-    const { content } = extractFrontmatter(fileContent);
+    const { content } = parseFrontmatter(fileContent);
 
-    const isValid = await validateMDXContent(content);
+    // Determine content type from path
+    const contentType: ContentType = filepath.includes("/posts/")
+      ? "blog"
+      : filepath.includes("/docs/")
+        ? "doc"
+        : filepath.includes("/policies/")
+          ? "policy"
+          : "dev";
+
+    const isValid = await validateMDXContent(content, filepath, contentType);
     if (isValid) {
       console.log(`✅ Valid MDX: ${filepath}`);
       return true;

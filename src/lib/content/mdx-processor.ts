@@ -1,4 +1,6 @@
 import { parseFrontmatter } from "./frontmatter";
+import { ContentError } from "./errors";
+import type { ContentType } from "./types";
 
 export interface ProcessedContent {
   content: string;
@@ -10,15 +12,21 @@ export interface ProcessedContent {
  * Enhanced MDX processing that supports preprocessing and returns full content info
  *
  * @param rawContent - Raw content string with frontmatter
- * @param options - Processing options
+ * @param contentType - The type of content being processed
+ * @param options - Additional processing options
  * @returns Processed content with frontmatter, content and compiled code
+ * @throws ContentError if MDX processing fails
  */
 export async function processMDXContent(
   rawContent: string,
-  options?: { preprocessContent?: (content: string) => string }
+  contentType: ContentType,
+  options?: {
+    preprocessContent?: (content: string) => string;
+    path?: string; // Optional path for better error reporting
+  }
 ): Promise<ProcessedContent> {
   if (!rawContent) {
-    return { content: "", frontmatter: {}, code: "" };
+    throw new ContentError("Empty content provided", contentType, options?.path);
   }
 
   try {
@@ -41,18 +49,12 @@ export async function processMDXContent(
       code: mdxSource.compiledSource,
     };
   } catch (error) {
-    console.error("Error processing MDX content:", error);
-    return {
-      content: "",
-      frontmatter: { title: "Error", description: "Error processing MDX" },
-      code: `export default function ErrorComponent() {
-        return (
-          <div style={{ color: 'red', padding: '1rem', border: '1px solid red' }}>
-            <h2>Error processing MDX</h2>
-            <p>${error instanceof Error ? error.message : String(error)}</p>
-          </div>
-        )
-      }`,
-    };
+    // Throw a ContentError instead of returning an error component
+    throw new ContentError(
+      `Error processing MDX content: ${error instanceof Error ? error.message : String(error)}`,
+      contentType,
+      options?.path,
+      error instanceof Error ? error : undefined
+    );
   }
 }

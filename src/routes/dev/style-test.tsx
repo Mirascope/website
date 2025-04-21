@@ -78,7 +78,9 @@ function StyleTestPage() {
           const rawContent = await response.text();
 
           // Process MDX content
-          const processed = await processMDXContent(rawContent);
+          const processed = await processMDXContent(rawContent, "dev", {
+            path: "/src/components/dev/style-test.mdx",
+          });
           code = processed.code;
           frontmatter = processed.frontmatter;
         } else {
@@ -92,7 +94,9 @@ function StyleTestPage() {
           const data = await response.json();
 
           // Process MDX content from the JSON
-          const processed = await processMDXContent(data.content);
+          const processed = await processMDXContent(data.content, "dev", {
+            path: "/static/dev/style-test.mdx.json",
+          });
           code = processed.code;
           frontmatter = processed.frontmatter;
         }
