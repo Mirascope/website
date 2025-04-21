@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { routeToFilename } from "../../lib/utils";
-import DevLayout from "@/components/dev/DevLayout";
-import { environment } from "@/lib/content/environment";
+import DevLayout from "@/src/components/dev/DevLayout";
+import { environment } from "@/src/lib/content/environment";
 
 export const Route = createFileRoute("/dev/audit-metadata")({
   component: AuditMetadata,

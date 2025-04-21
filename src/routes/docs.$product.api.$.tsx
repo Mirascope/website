@@ -1,11 +1,11 @@
 import { createFileRoute, useParams, useLoaderData } from "@tanstack/react-router";
-import { DocsPage } from "@/components/docs";
-import { type ProductName } from "@/lib/route-types";
-import { docsPageLoader } from "@/lib/content/loaders";
-import type { DocContent, DocMeta } from "@/lib/content/docs";
-import DocsLayout from "@/components/docs/core/DocsLayout";
-import { environment } from "@/lib/content/environment";
-import ContentErrorHandler from "@/components/ContentErrorHandler";
+import { DocsPage } from "@/src/components/docs";
+import { type ProductName } from "@/src/lib/route-types";
+import { docsPageLoader } from "@/src/lib/content/loaders";
+import type { DocContent, DocMeta } from "@/src/lib/content/docs";
+import DocsLayout from "@/src/components/docs/core/DocsLayout";
+import { environment } from "@/src/lib/content/environment";
+import ContentErrorHandler from "@/src/components/ContentErrorHandler";
 
 export const Route = createFileRoute("/docs/$product/api/$")({
   component: DocsApiPage,

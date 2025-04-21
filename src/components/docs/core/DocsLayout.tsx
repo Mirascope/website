@@ -1,16 +1,16 @@
 import React from "react";
-import BaseLayout from "@/components/BaseLayout";
-import SidebarContainer from "@/components/SidebarContainer";
-import ErrorContent from "@/components/ErrorContent";
-import { type DocMeta } from "@/lib/content/docs";
-import { type ProductName } from "@/lib/route-types";
-import useFunMode from "@/lib/hooks/useFunMode";
-import useProviderSelection from "@/lib/hooks/useProviderSelection";
-import { ProviderContextProvider } from "@/components/docs";
+import BaseLayout from "@/src/components/BaseLayout";
+import SidebarContainer from "@/src/components/SidebarContainer";
+import ErrorContent from "@/src/components/ErrorContent";
+import { type DocMeta } from "@/src/lib/content/docs";
+import { type ProductName } from "@/src/lib/route-types";
+import useFunMode from "@/src/lib/hooks/useFunMode";
+import useProviderSelection from "@/src/lib/hooks/useProviderSelection";
+import { ProviderContextProvider } from "@/src/components/docs";
 import TocSidebar from "./TocSidebar";
 import MainContent from "./MainContent";
 
-import type { DocContent } from "@/lib/content/docs";
+import type { DocContent } from "@/src/lib/content/docs";
 
 type DocsLayoutProps = {
   product: ProductName;

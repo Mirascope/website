@@ -15,7 +15,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@": resolve(process.cwd(), "./src"),
+      "@": resolve(process.cwd(), "./"),
     },
   },
   // Add node-specific configuration for fs and path

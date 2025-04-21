@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
-import { highlightCode } from "@/lib/code-highlight";
-import analyticsManager from "@/lib/services/analytics";
+import { highlightCode } from "@/src/lib/code-highlight";
+import analyticsManager from "@/src/lib/services/analytics";
 
 interface CodeBlockProps {
   code: string;

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { LoadingContent } from "@/components/docs";
+import { LoadingContent } from "@/src/components/docs";
 import mermaid, { type MermaidConfig } from "mermaid";
 
 interface MermaidDiagramProps {

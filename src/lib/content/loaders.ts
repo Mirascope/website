@@ -1,7 +1,7 @@
 import { getBlogContent, getAllBlogMeta } from "./blog";
 import { getDocsForProduct, getDoc } from "./docs";
 import { getPolicy } from "./policy";
-import { type ProductName } from "@/lib/route-types";
+import { type ProductName } from "@/src/lib/route-types";
 import type { ContentType, ContentMeta, GetContentFn } from "./types";
 
 // Define the route parameters interface
