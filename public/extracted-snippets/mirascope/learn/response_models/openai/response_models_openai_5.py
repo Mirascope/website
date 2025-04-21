@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 5: Built-In Types
 # Generated for provider: openai
-# Source: src/docs/mirascope/learn/response_models.mdx:154
+# Source: content/doc/mirascope/learn/response_models.mdx:154
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm

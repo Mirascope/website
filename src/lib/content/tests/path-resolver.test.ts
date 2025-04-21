@@ -37,7 +37,7 @@ describe("Path Resolver", () => {
     // Test the new function
     test("resolves doc paths in development mode", () => {
       expect(resolveContentPath("/docs/mirascope/getting-started", "doc", { devMode: true })).toBe(
-        "/src/docs/mirascope/getting-started.mdx"
+        "/content/doc/mirascope/getting-started.mdx"
       );
     });
 

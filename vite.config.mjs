@@ -25,7 +25,7 @@ export default defineConfig({
         global: "globalThis",
       },
     },
-    exclude: ["src/posts/*.mdx", "src/docs/*.mdx"],
+    exclude: ["content"],
   },
   server: {
     fs: {

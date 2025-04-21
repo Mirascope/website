@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 4: Panel of Judges
 # Generated for provider: anthropic
-# Source: src/docs/mirascope/learn/evals.mdx:209
+# Source: content/doc/mirascope/learn/evals.mdx:209
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm, prompt_template

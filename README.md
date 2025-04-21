@@ -77,7 +77,7 @@ The documentation contains Python code snippets that are automatically extracted
 
 #### How it works
 
-1. In `src/docs/_meta.ts`, docs with extractable snippets are marked with `hasExtractableSnippets: true`
+1. In `content/doc/_meta.ts`, docs with extractable snippets are marked with `hasExtractableSnippets: true`
 2. The extraction system pulls Python code blocks from these MDX files
 3. For each provider (OpenAI, Anthropic), it generates runnable example files with substituted variables
 4. Examples are stored in `public/extracted-snippets/` with an organized directory structure

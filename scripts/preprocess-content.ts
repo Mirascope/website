@@ -26,7 +26,7 @@ fs.mkdirSync(DEV_DIR, { recursive: true });
  */
 async function processBlogPosts(verbose = true): Promise<void> {
   if (verbose) console.log("Processing blog posts...");
-  const postsDir = path.join(process.cwd(), "src", "posts");
+  const postsDir = path.join(process.cwd(), "content", "blog");
   const files = fs.readdirSync(postsDir).filter((file) => file.endsWith(".mdx"));
 
   const postsList: BlogMeta[] = [];
@@ -90,7 +90,7 @@ async function processBlogPosts(verbose = true): Promise<void> {
  */
 async function processDocsFiles(verbose = true): Promise<void> {
   if (verbose) console.log("Processing docs files...");
-  const docsDir = path.join(process.cwd(), "src", "docs");
+  const docsDir = path.join(process.cwd(), "content", "doc");
   const docsIndex: Record<string, { path: string }> = {};
 
   // Process docs directory recursively
@@ -159,7 +159,7 @@ async function processPolicyFiles(verbose = true): Promise<void> {
   if (verbose) console.log("Processing policy files...");
 
   // Privacy policy
-  const privacyPath = path.join(process.cwd(), "src", "policies", "privacy.mdx");
+  const privacyPath = path.join(process.cwd(), "content", "policy", "privacy.mdx");
   if (fs.existsSync(privacyPath)) {
     const fileContent = fs.readFileSync(privacyPath, "utf-8");
     try {
@@ -180,7 +180,7 @@ async function processPolicyFiles(verbose = true): Promise<void> {
   }
 
   // Terms files
-  const termsDir = path.join(process.cwd(), "src", "policies", "terms");
+  const termsDir = path.join(process.cwd(), "content", "policy", "terms");
   if (fs.existsSync(termsDir)) {
     const files = fs.readdirSync(termsDir).filter((file) => file.endsWith(".mdx"));
     for (const filename of files) {

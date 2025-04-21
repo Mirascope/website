@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 3: State Management
 # Generated for provider: openai
-# Source: src/docs/mirascope/learn/agents.mdx:128
+# Source: content/doc/mirascope/learn/agents.mdx:128
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import BaseMessageParam, Messages, llm

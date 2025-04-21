@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 1: OpenTelemetry
 # Generated for provider: openai
-# Source: src/docs/mirascope/integrations/otel.mdx:20
+# Source: content/doc/mirascope/integrations/otel.mdx:20
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm

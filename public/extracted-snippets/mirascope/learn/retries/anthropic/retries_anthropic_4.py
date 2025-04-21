@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 4: Streams
 # Generated for provider: anthropic
-# Source: src/docs/mirascope/learn/retries.mdx:104
+# Source: content/doc/mirascope/learn/retries.mdx:104
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm, prompt_template

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 2: Local (Open-Source) Models
 # Generated for provider: openai
-# Source: src/docs/mirascope/learn/local_models.mdx:46
+# Source: content/doc/mirascope/learn/local_models.mdx:46
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm

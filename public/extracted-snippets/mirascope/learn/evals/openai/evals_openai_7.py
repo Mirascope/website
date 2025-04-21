@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 7: Hardcoded Evaluation Criteria
 # Generated for provider: openai
-# Source: src/docs/mirascope/learn/evals.mdx:317
+# Source: content/doc/mirascope/learn/evals.mdx:317
 # This file is auto-generated; any edits should be made in the source file
 
 import re

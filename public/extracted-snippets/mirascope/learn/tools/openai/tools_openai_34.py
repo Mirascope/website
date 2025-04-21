@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 34: ToolKit
 # Generated for provider: openai
-# Source: src/docs/mirascope/learn/tools.mdx:1628
+# Source: content/doc/mirascope/learn/tools.mdx:1628
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import (

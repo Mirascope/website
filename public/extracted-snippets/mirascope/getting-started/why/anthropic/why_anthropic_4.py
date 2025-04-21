@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 4: Provider-Agnostic
 # Generated for provider: anthropic
-# Source: src/docs/mirascope/getting-started/why.mdx:154
+# Source: content/doc/mirascope/getting-started/why.mdx:154
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope.core import anthropic, openai, prompt_template
