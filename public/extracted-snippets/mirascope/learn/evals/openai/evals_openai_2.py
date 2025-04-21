@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 2: LLM Evaluators
 # Generated for provider: openai
-# Source: src/docs/mirascope/learn/evals.mdx:80
+# Source: content/doc/mirascope/learn/evals.mdx:80
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm, prompt_template

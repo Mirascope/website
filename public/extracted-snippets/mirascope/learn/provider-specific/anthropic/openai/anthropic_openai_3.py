@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 3: Message Caching
 # Generated for provider: openai
-# Source: src/docs/mirascope/learn/provider-specific/anthropic.mdx:108
+# Source: content/doc/mirascope/learn/provider-specific/anthropic.mdx:108
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope.core import BaseTool, anthropic

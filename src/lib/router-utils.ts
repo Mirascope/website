@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import type { BlogMeta } from "./content/blog";
-import { getAllDocs } from "../docs/_meta";
+import { getAllDocs } from "@/content/doc/_meta";
 
 // Base URL for the site
 export const SITE_URL = "https://mirascope.com";
@@ -104,7 +104,7 @@ export function getStaticRoutes(): string[] {
 }
 
 /**
- * Get blog post routes by scanning the src/posts directory
+ * Get blog post routes by scanning the content/blog directory
  */
 export function getBlogRoutes(): string[] {
   try {
@@ -121,7 +121,7 @@ export function getBlogRoutes(): string[] {
     }
 
     // Fall back to scanning the directory (for development/tests)
-    const postsDir = path.join(getProjectRoot(), "src", "posts");
+    const postsDir = path.join(getProjectRoot(), "content", "blog");
     if (!fs.existsSync(postsDir)) {
       throw new Error(`Blog posts directory not found at: ${postsDir}`);
     }

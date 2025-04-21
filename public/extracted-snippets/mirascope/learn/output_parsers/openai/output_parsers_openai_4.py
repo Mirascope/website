@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 4: Additional Examples
 # Generated for provider: openai
-# Source: src/docs/mirascope/learn/output_parsers.mdx:104
+# Source: content/doc/mirascope/learn/output_parsers.mdx:104
 # This file is auto-generated; any edits should be made in the source file
 
 import xml.etree.ElementTree as ET

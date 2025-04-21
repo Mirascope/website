@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 2: Logfire
 # Generated for provider: openai
-# Source: src/docs/mirascope/integrations/logfire.mdx:45
+# Source: content/doc/mirascope/integrations/logfire.mdx:45
 # This file is auto-generated; any edits should be made in the source file
 
 import logfire

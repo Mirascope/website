@@ -18,18 +18,18 @@ export interface ContentDirectories {
 // Configuration for all content types
 export const contentConfig: Record<string, ContentDirectories> = {
   blog: {
-    sourceDir: path.join(process.cwd(), "src", "posts"),
-    urlPrefix: "/posts/",
+    sourceDir: path.join(process.cwd(), "content", "blog"),
+    urlPrefix: "/content/blog/",
     extension: ".mdx",
   },
   doc: {
-    sourceDir: path.join(process.cwd(), "src", "docs"),
-    urlPrefix: "/src/docs/",
+    sourceDir: path.join(process.cwd(), "content", "doc"),
+    urlPrefix: "/content/doc/",
     extension: ".mdx",
   },
   policy: {
-    sourceDir: path.join(process.cwd(), "src", "policies"),
-    urlPrefix: "/src/policies/",
+    sourceDir: path.join(process.cwd(), "content", "policy"),
+    urlPrefix: "/content/policy/",
     extension: ".mdx",
   },
   dev: {

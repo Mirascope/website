@@ -67,13 +67,13 @@ export function normalizePath(path: string, contentType: ContentType): string {
 function buildDevPath(normalizedPath: string, contentType: ContentType): string {
   switch (contentType) {
     case "doc":
-      return `/src/docs/${normalizedPath}`;
+      return `/content/doc/${normalizedPath}`;
     case "blog":
-      // Important: Use the middleware path for blog posts in dev mode
-      // This goes to the custom middleware at /posts/ instead of directly accessing the file
-      return `/posts/${normalizedPath}`;
+      return `/content/blog/${normalizedPath}`;
     case "policy":
-      return `/src/policies/${normalizedPath}`;
+      return `/content/policy/${normalizedPath}`;
+    case "dev":
+      return `/src/components/dev/${normalizedPath}`;
     default:
       throw new Error(`Unsupported content type: ${contentType}`);
   }

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 1: Function Chaining
 # Generated for provider: anthropic
-# Source: src/docs/mirascope/learn/chaining.mdx:27
+# Source: content/doc/mirascope/learn/chaining.mdx:27
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm

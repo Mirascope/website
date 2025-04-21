@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 1: this is lazy and would generally actually utilize async here
 # Generated for provider: openai
-# Source: src/docs/mirascope/learn/extensions/middleware.mdx:311
+# Source: content/doc/mirascope/learn/extensions/middleware.mdx:311
 # This file is auto-generated; any edits should be made in the source file
 
 from collections.abc import Callable, Generator

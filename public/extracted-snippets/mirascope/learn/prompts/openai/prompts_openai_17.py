@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 17: Chat History
 # Generated for provider: openai
-# Source: src/docs/mirascope/learn/prompts.mdx:557
+# Source: content/doc/mirascope/learn/prompts.mdx:557
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import BaseMessageParam, Messages, prompt_template

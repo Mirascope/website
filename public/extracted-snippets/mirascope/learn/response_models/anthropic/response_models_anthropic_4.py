@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 4: Accessing Original Call Response
 # Generated for provider: anthropic
-# Source: src/docs/mirascope/learn/response_models.mdx:120
+# Source: content/doc/mirascope/learn/response_models.mdx:120
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm, prompt_template

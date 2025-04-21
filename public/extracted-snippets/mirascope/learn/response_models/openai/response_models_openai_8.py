@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 8: Validation and Error Handling
 # Generated for provider: openai
-# Source: src/docs/mirascope/learn/response_models.mdx:392
+# Source: content/doc/mirascope/learn/response_models.mdx:392
 # This file is auto-generated; any edits should be made in the source file
 
 from typing import Annotated

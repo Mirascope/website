@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 6: Common Stream Properties and Methods
 # Generated for provider: openai
-# Source: src/docs/mirascope/learn/streams.mdx:190
+# Source: content/doc/mirascope/learn/streams.mdx:190
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm, prompt_template

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 12: Error Handling
 # Generated for provider: anthropic
-# Source: src/docs/mirascope/learn/calls.mdx:529
+# Source: content/doc/mirascope/learn/calls.mdx:529
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm, prompt_template
