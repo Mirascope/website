@@ -4,6 +4,40 @@ import { parseFrontmatter } from "../src/lib/content/frontmatter";
 import { processMDXContent } from "../src/lib/content/mdx-processor";
 import type { ContentType } from "../src/lib/content/types";
 
+// Define content locations
+interface ContentLocation {
+  dir: string;
+  type: ContentType;
+  emoji: string;
+  label: string;
+  recursive: boolean;
+}
+
+// Configuration for each content type
+const contentLocations: ContentLocation[] = [
+  {
+    dir: "content/blog",
+    type: "blog",
+    emoji: "📝",
+    label: "blog posts",
+    recursive: false,
+  },
+  {
+    dir: "content/doc",
+    type: "doc",
+    emoji: "📚",
+    label: "documentation files",
+    recursive: true,
+  },
+  {
+    dir: "content/policy",
+    type: "policy",
+    emoji: "📜",
+    label: "policy documents",
+    recursive: true,
+  },
+];
+
 /**
  * Validate MDX file directly against our MDX processor
  */
@@ -19,6 +53,84 @@ async function validateMDXContent(
   } catch (error) {
     return false;
   }
+}
+
+/**
+ * Validate all MDX files in a directory
+ */
+async function validateDirectory(
+  dirPath: string,
+  contentType: ContentType,
+  relativePath = "",
+  basePath?: string,
+  recursive = false
+): Promise<{ count: number; errors: { file: string; content: string }[] }> {
+  const errors: { file: string; content: string }[] = [];
+  let count = 0;
+  const validateAllFiles = !basePath;
+
+  // Skip directories that don't match the base path if one is provided
+  if (
+    !validateAllFiles &&
+    basePath &&
+    !dirPath.startsWith(basePath) &&
+    !basePath.startsWith(dirPath)
+  ) {
+    return { count, errors };
+  }
+
+  if (!fs.existsSync(dirPath)) {
+    return { count, errors };
+  }
+
+  const items = fs.readdirSync(dirPath);
+
+  for (const item of items) {
+    const itemPath = path.join(dirPath, item);
+    const itemRelativePath = path.join(relativePath, item).replace(/\\/g, "/"); // Normalize Windows paths
+
+    if (fs.statSync(itemPath).isDirectory() && recursive) {
+      // Recursively process subdirectories if recursive is true
+      const subResults = await validateDirectory(
+        itemPath,
+        contentType,
+        itemRelativePath,
+        basePath,
+        recursive
+      );
+      count += subResults.count;
+      errors.push(...subResults.errors);
+    } else if (item.endsWith(".mdx")) {
+      // Skip files that don't match the base path if one is provided
+      if (
+        !validateAllFiles &&
+        basePath &&
+        !itemPath.startsWith(basePath) &&
+        !basePath.startsWith(itemPath)
+      ) {
+        continue;
+      }
+
+      count++;
+      const fileContent = fs.readFileSync(itemPath, "utf-8");
+
+      // Extract frontmatter to validate just the content
+      const { content } = parseFrontmatter(fileContent);
+
+      const isValid = await validateMDXContent(content, itemPath, contentType);
+      if (isValid) {
+        process.stdout.write(".");
+      } else {
+        process.stdout.write("X");
+        errors.push({
+          file: `${path.relative(process.cwd(), itemPath)}`,
+          content,
+        });
+      }
+    }
+  }
+
+  return { count, errors };
 }
 
 /**
@@ -39,112 +151,28 @@ async function validateMDX(basePath?: string): Promise<void> {
   // Get the root directory
   const rootDir = process.cwd();
 
-  // Validate blog posts
-  const postsDir = path.join(rootDir, "src", "posts");
+  // Validate each content location
+  for (const location of contentLocations) {
+    const contentDir = path.join(rootDir, location.dir);
 
-  // Only validate posts if base path is not provided or it includes the posts directory
-  if (
-    validateAllFiles ||
-    (basePath && (postsDir.startsWith(basePath) || basePath.startsWith(postsDir)))
-  ) {
-    console.log("\n📝 Validating blog posts...");
+    // Only validate if base path is not provided or it includes the content directory
+    if (
+      validateAllFiles ||
+      (basePath && (contentDir.startsWith(basePath) || basePath.startsWith(contentDir)))
+    ) {
+      console.log(`\n${location.emoji} Validating ${location.label}...`);
 
-    const postFiles = fs
-      .readdirSync(postsDir)
-      .filter((file) => file.endsWith(".mdx"))
-      // If base path is provided, only include files that match the path
-      .filter((file) => {
-        const filePath = path.join(postsDir, file);
-        return (
-          validateAllFiles ||
-          (basePath && (filePath.startsWith(basePath) || basePath.startsWith(filePath)))
-        );
-      });
+      const results = await validateDirectory(
+        contentDir,
+        location.type,
+        "",
+        basePath,
+        location.recursive
+      );
 
-    for (const filename of postFiles) {
-      const filepath = path.join(postsDir, filename);
-      const fileContent = fs.readFileSync(filepath, "utf-8");
-
-      // Extract frontmatter to validate just the content
-      const { content } = parseFrontmatter(fileContent);
-
-      const isValid = await validateMDXContent(content, filepath, "blog");
-      if (isValid) {
-        process.stdout.write(".");
-      } else {
-        process.stdout.write("X");
-        errors.push({ file: filename, content });
-      }
+      errors.push(...results.errors);
+      console.log(`\n✅ Checked ${results.count} ${location.label}`);
     }
-
-    console.log(`\n✅ Checked ${postFiles.length} blog posts`);
-  }
-
-  // Validate docs files recursively
-  const docsDir = path.join(rootDir, "src", "docs");
-
-  // Only validate docs if base path is not provided or it includes the docs directory
-  if (
-    validateAllFiles ||
-    (basePath && (docsDir.startsWith(basePath) || basePath.startsWith(docsDir)))
-  ) {
-    console.log("\n📚 Validating documentation files...");
-    let docFilesCount = 0;
-
-    async function validateDirectory(dirPath: string, relativePath = ""): Promise<void> {
-      // Skip directories that don't match the base path if one is provided
-      if (
-        !validateAllFiles &&
-        basePath &&
-        !dirPath.startsWith(basePath) &&
-        !basePath.startsWith(dirPath)
-      ) {
-        return;
-      }
-
-      const items = fs.readdirSync(dirPath);
-
-      for (const item of items) {
-        const itemPath = path.join(dirPath, item);
-        const itemRelativePath = path.join(relativePath, item).replace(/\\/g, "/"); // Normalize Windows paths
-
-        // Skip the disabled-guides-wip directory
-        if (item === "disabled-guides-wip" || itemRelativePath.includes("disabled-guides-wip")) {
-          continue;
-        }
-
-        if (fs.statSync(itemPath).isDirectory()) {
-          await validateDirectory(itemPath, itemRelativePath);
-        } else if (item.endsWith(".mdx")) {
-          // Skip files that don't match the base path if one is provided
-          if (
-            !validateAllFiles &&
-            basePath &&
-            !itemPath.startsWith(basePath) &&
-            !basePath.startsWith(itemPath)
-          ) {
-            continue;
-          }
-
-          docFilesCount++;
-          const fileContent = fs.readFileSync(itemPath, "utf-8");
-
-          // Extract frontmatter to validate just the content
-          const { content } = parseFrontmatter(fileContent);
-
-          const isValid = await validateMDXContent(content, itemPath, "doc");
-          if (isValid) {
-            process.stdout.write(".");
-          } else {
-            process.stdout.write("X");
-            errors.push({ file: `docs/${itemRelativePath}`, content });
-          }
-        }
-      }
-    }
-
-    await validateDirectory(docsDir);
-    console.log(`\n✅ Checked ${docFilesCount} documentation files`);
   }
 
   // Print error report
@@ -186,14 +214,19 @@ async function validateSingleFile(filepath: string): Promise<boolean> {
     const fileContent = fs.readFileSync(filepath, "utf-8");
     const { content } = parseFrontmatter(fileContent);
 
-    // Determine content type from path
-    const contentType: ContentType = filepath.includes("/posts/")
-      ? "blog"
-      : filepath.includes("/docs/")
-        ? "doc"
-        : filepath.includes("/policies/")
-          ? "policy"
-          : "dev";
+    // Determine content type from path based on the contentLocations config
+    let contentType: ContentType = "dev"; // Default content type
+
+    const absolutePath = path.resolve(filepath);
+    const rootDir = process.cwd();
+
+    for (const location of contentLocations) {
+      const contentDir = path.join(rootDir, location.dir);
+      if (absolutePath.startsWith(contentDir)) {
+        contentType = location.type;
+        break;
+      }
+    }
 
     const isValid = await validateMDXContent(content, filepath, contentType);
     if (isValid) {
