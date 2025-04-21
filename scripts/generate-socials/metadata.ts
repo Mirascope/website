@@ -1,15 +1,15 @@
 /**
  * Social Media Metadata Management
  *
- * This module handles SEO metadata extraction and management,
- * scraping metadata and storing results.
+ * This module handles SEO metadata extraction and management using
+ * static rendering with React and Helmet, consistent with prerender.ts.
  */
 
-import { Browser } from "puppeteer";
 import fs from "fs";
 import path from "path";
 import { getAllRoutes, getProjectRoot } from "../../src/lib/router-utils";
 import { printHeader, coloredLog, colorize, icons } from "../lib/terminal";
+import { renderRouteToString } from "../../src/lib/rendering";
 
 // SEO metadata interface
 export interface SEOMetadata {
@@ -27,47 +27,32 @@ export interface MetadataOptions {
 }
 
 /**
- * Extract SEO metadata from a page using Puppeteer
+ * Extract SEO metadata using static rendering with React and Helmet
  */
-async function extractPageMetadata(
-  browser: Browser,
-  route: string,
-  baseUrl: string
-): Promise<SEOMetadata> {
-  // Create a new page for this extraction
-  const page = await browser.newPage();
-
+async function extractPageMetadata(route: string, verbose: boolean = false): Promise<SEOMetadata> {
   try {
-    const url = new URL(route, baseUrl).toString();
+    // Use the shared rendering utility to render the route and extract metadata
+    const { metadata } = await renderRouteToString(route, verbose);
 
-    // Navigate to the page and wait for it to load
-    await page.goto(url, { waitUntil: "networkidle0" });
+    // If we don't have a title, that's a critical error
+    if (!metadata.title) {
+      throw new Error(`Failed to extract title for route: ${route}`);
+    }
 
-    // Add extra delay to ensure JavaScript has fully executed and content is loaded
-    await new Promise((resolve) => setTimeout(resolve, 200));
-
-    // Extract metadata
-    const metadata = await page.evaluate(() => {
-      // Helper to get meta tag content
-      const getMetaContent = (name: string): string | null => {
-        const element = document.querySelector(`meta[name="${name}"], meta[property="${name}"]`);
-        return element ? element.getAttribute("content") : null;
-      };
-
-      return {
-        title: document.title,
-        description: getMetaContent("description"),
-      };
-    });
+    // Every page should have a description too.
+    if (!metadata.description) {
+      throw new Error(`Failed to extract description for route: ${route}`);
+    }
 
     return {
       route,
       title: metadata.title,
       description: metadata.description,
     };
-  } finally {
-    // Close the page when done
-    await page.close();
+  } catch (error) {
+    // Re-throw the error to ensure we don't silently continue with bad data
+    console.error(`Error extracting metadata for ${route}:`, error);
+    throw new Error(`Failed to extract metadata for route: ${route} - ${error}`);
   }
 }
 
@@ -101,19 +86,13 @@ export async function arrayToMetadataRecord(items: SEOMetadata[]): Promise<Metad
  * Extract metadata for specific routes only
  * Returns an array of SEOMetadata objects for the successfully processed routes
  *
- * @param browser - Puppeteer browser instance
  * @param routes - Array of routes to process
- * @param port - Port the development server is running on
  * @param verbose - Whether to output detailed logs
  */
 export async function extractMetadataForRoutes(
-  browser: Browser,
   routes: string[],
-  port: number,
   verbose = true
 ): Promise<SEOMetadata[]> {
-  const baseUrl = `http://localhost:${port}`;
-
   try {
     // Extract metadata for each route
     if (verbose) {
@@ -132,7 +111,7 @@ export async function extractMetadataForRoutes(
       }
 
       try {
-        const pageMetadata = await extractPageMetadata(browser, route, baseUrl);
+        const pageMetadata = await extractPageMetadata(route, verbose);
         metadata.push(pageMetadata);
 
         if (verbose) {
@@ -142,13 +121,14 @@ export async function extractMetadataForRoutes(
       } catch (error) {
         console.error(`  ${icons.error} Failed to extract metadata for ${route}: ${error}`);
         failedRoutes++;
-      }
-    }
 
-    if (verbose) {
-      if (failedRoutes > 0) {
-        coloredLog(`Failed to process ${failedRoutes} routes`, "yellow");
-        coloredLog("Use --check to identify missing routes", "yellow");
+        // Instead of silently continuing with bad data, throw an error if any route fails
+        // This ensures the entire process stops rather than generating partial results
+        if (failedRoutes > 0) {
+          throw new Error(
+            `Failed to extract metadata for ${failedRoutes} routes. Fix the issues before proceeding.`
+          );
+        }
       }
     }
 
@@ -163,20 +143,14 @@ export async function extractMetadataForRoutes(
  * Extract metadata for all routes and build a complete metadata record
  * Returns a metadata record for all successfully processed routes
  *
- * @param browser - Puppeteer browser instance
- * @param port - Port the development server is running on
  * @param verbose - Whether to output detailed logs
  */
-export async function extractAllMetadata(
-  browser: Browser,
-  port: number,
-  verbose = true
-): Promise<MetadataRecord> {
+export async function extractAllMetadata(verbose = true): Promise<MetadataRecord> {
   // Get all routes in the site
   const allRoutes = await getAllRoutes();
 
   // Extract metadata for all routes
-  const items = await extractMetadataForRoutes(browser, allRoutes, port, verbose);
+  const items = await extractMetadataForRoutes(allRoutes, verbose);
 
   // Convert to record
   const record: MetadataRecord = {};
@@ -184,17 +158,24 @@ export async function extractAllMetadata(
     record[item.route] = item;
   }
 
-  // Check for missing routes
+  // Double-check for missing routes (should be none since we're throwing errors)
   if (verbose) {
     const processedRoutes = new Set(items.map((item) => item.route));
     const missingRoutes = allRoutes.filter((route) => !processedRoutes.has(route));
 
     if (missingRoutes.length > 0) {
-      coloredLog(`Warning: ${missingRoutes.length} routes are missing metadata`, "yellow");
+      // This should not happen since we now throw errors when extraction fails
+      coloredLog(`Warning: ${missingRoutes.length} routes are missing metadata`, "red");
       missingRoutes.forEach((route) => {
-        console.log(`  ${icons.warning} Missing: ${route}`);
+        console.log(`  ${icons.error} Missing: ${route}`);
       });
-      coloredLog("Use --check for more details", "yellow");
+
+      // Throw an error to make this a critical failure rather than just a warning
+      throw new Error(
+        `${missingRoutes.length} routes are missing metadata. This should not happen.`
+      );
+    } else {
+      coloredLog("All routes have metadata extracted successfully", "green");
     }
   }
 
