@@ -353,12 +353,15 @@ const NestedItem = ({
   // State to track if the folder is expanded
   const [isExpanded, setIsExpanded] = React.useState(isActive);
 
-  // Auto-expand if this item or any of its children are active
+  // Auto-expand only when a folder becomes active, not on every render
   React.useEffect(() => {
+    // Only auto-expand when the item first becomes active
+    // Don't re-expand after user explicitly closes it
     if (isActive && !isExpanded) {
       setIsExpanded(true);
     }
-  }, [isActive, isExpanded]);
+    // Omitting isExpanded from dependencies to prevent re-expanding after user closes
+  }, [isActive]);
 
   return (
     <div key={itemSlug}>
