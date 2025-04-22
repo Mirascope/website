@@ -4,6 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import { resolve } from "node:path";
 import { contentMiddlewarePlugin } from "./scripts/content-middleware";
+import { optimizedImageMiddleware } from "./scripts/optimized-image-middleware";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -12,6 +13,7 @@ export default defineConfig({
     viteReact(),
     tailwindcss(),
     contentMiddlewarePlugin(),
+    optimizedImageMiddleware(),
   ],
   resolve: {
     alias: {
@@ -31,5 +33,10 @@ export default defineConfig({
     fs: {
       strict: false,
     },
+  },
+  
+  // Keeping the default build configuration
+  build: {
+    assetsInlineLimit: 4096, // Default inline limit
   },
 });

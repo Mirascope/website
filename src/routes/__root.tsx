@@ -68,7 +68,7 @@ export const Route = createRootRoute({
           <meta property="og:title" content="Mirascope" />
           <meta property="og:description" content="The AI Engineer's Developer Stack" />
           <meta property="og:image" content={`${BASE_URL}/social-cards/index.webp`} />
-          <meta property="og:logo" content={`${BASE_URL}/frog-logo.png`} />
+          <meta property="og:logo" content={`${BASE_URL}/assets/branding/logo.webp`} />
 
           {/* Default Twitter */}
           <meta name="twitter:card" content="summary_large_image" />
@@ -76,10 +76,10 @@ export const Route = createRootRoute({
           <meta name="twitter:title" content="Mirascope" />
           <meta name="twitter:description" content="The AI Engineer's Developer Stack" />
           <meta name="twitter:image" content={`${BASE_URL}/social-cards/index.webp`} />
-          <meta name="twitter:site:logo" content={`${BASE_URL}/frog-logo.png`} />
+          <meta name="twitter:site:logo" content={`${BASE_URL}/assets/branding/logo.webp`} />
 
           {/* Other important tags */}
-          <link rel="apple-touch-icon" href="/frog-logo.png" />
+          <link rel="apple-touch-icon" href="/assets/branding/logo.webp" />
           <link rel="manifest" href="/manifest.json" />
         </Helmet>
 

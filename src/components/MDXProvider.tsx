@@ -18,6 +18,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
 import Logo from "./Logo";
 import { Underline } from "./Underline";
 import { ProviderCodeWrapper } from "./ProviderCodeWrapper";
+import { ResponsiveImage } from "./ResponsiveImage";
 
 // Helper function to generate heading ID from text
 const slugify = (text: string): string => {
@@ -117,6 +118,8 @@ export const components = {
     <ol className="list-decimal pl-5 my-4" {...props} />
   ),
   li: (props: React.ComponentPropsWithoutRef<"li">) => <li className="mb-2" {...props} />,
+  // Responsive image component
+  img: (props: React.ComponentPropsWithoutRef<"img">) => <ResponsiveImage {...props} />,
   // Inline code - this is only for inline elements, not code blocks
   code: (props: React.ComponentPropsWithoutRef<"code">) => {
     // Don't apply inline code styling to code blocks (which are children of pre tags)
