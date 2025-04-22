@@ -269,11 +269,6 @@
     "title": "Mirascope | Mirascope",
     "description": "Mirascope is a Python library that streamlines working with LLMs"
   },
-  "/docs/mirascope/api/core/anthropic": {
-    "route": "/docs/mirascope/api/core/anthropic",
-    "title": "404 - Page Not Found | Mirascope",
-    "description": "The documentation page you're looking for doesn't exist or has been moved."
-  },
   "/docs/mirascope/api/core/anthropic/call": {
     "route": "/docs/mirascope/api/core/anthropic/call",
     "title": "call | Mirascope",
@@ -288,11 +283,6 @@
     "route": "/docs/mirascope/api/core/anthropic/call_response",
     "title": "call_response | Mirascope",
     "description": "Documentation for Anthropic call response"
-  },
-  "/docs/mirascope/api/core/openai": {
-    "route": "/docs/mirascope/api/core/openai",
-    "title": "404 - Page Not Found | Mirascope",
-    "description": "The documentation page you're looking for doesn't exist or has been moved."
   },
   "/docs/mirascope/api/core/openai/call": {
     "route": "/docs/mirascope/api/core/openai/call",
