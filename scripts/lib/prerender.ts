@@ -12,7 +12,7 @@ import { renderRouteToString, createHtmlDocument } from "../../src/lib/rendering
  */
 export async function prerenderPage(
   route: string,
-  outputDir: string = path.join(process.cwd(), "public", "ssg"),
+  outputDir: string,
   verbose: boolean = false
 ): Promise<string> {
   if (verbose) console.log(`Pre-rendering route: ${route}`);
