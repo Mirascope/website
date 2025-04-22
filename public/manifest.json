@@ -8,8 +8,8 @@
       "type": "image/x-icon"
     },
     {
-      "src": "frog-logo.png",
-      "type": "image/png",
+      "src": "assets/branding/logo.webp",
+      "type": "image/webp",
       "sizes": "192x192"
     }
   ],
