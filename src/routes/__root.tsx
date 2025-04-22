@@ -53,6 +53,15 @@ export const Route = createRootRoute({
           <meta name="theme-color" content="#000000" />
           <meta name="description" content="The AI Engineer's Developer Stack" />
 
+          {/* Preload Williams Handwriting font - critical for brand */}
+          <link
+            rel="preload"
+            href="/fonts/Williams-Handwriting-Regular-v1.ttf"
+            as="font"
+            type="font/ttf"
+            crossOrigin="anonymous"
+          />
+
           {/* Default Open Graph / Facebook */}
           <meta property="og:type" content="website" />
           <meta property="og:url" content={`${BASE_URL}/`} />
