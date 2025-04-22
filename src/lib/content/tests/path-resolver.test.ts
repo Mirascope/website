@@ -46,12 +46,6 @@ describe("Path Resolver", () => {
         "/static/docs/mirascope/getting-started.mdx.json"
       );
     });
-
-    test("resolves URL paths when requested", () => {
-      expect(resolveContentPath("/docs/mirascope/getting-started", "doc", { urlPath: true })).toBe(
-        "/docs/mirascope/getting-started"
-      );
-    });
   });
 
   describe("isValidPath", () => {

@@ -97,20 +97,6 @@ function buildProdPath(normalizedPath: string, contentType: ContentType): string
 }
 
 /**
- * Builds a URL path for the content
- */
-function buildUrlPath(normalizedPath: string, contentType: ContentType): string {
-  const basePath = contentType === "doc" ? "/docs/" : contentType === "blog" ? "/blog/" : "/";
-
-  // Convert normalized path back to URL format
-  const urlPath = normalizedPath
-    .replace(/\.mdx$/, "") // Remove .mdx extension
-    .replace(/\/index$/, "/"); // Replace /index with trailing slash
-
-  return urlPath === "index" ? basePath : `${basePath}${urlPath}`;
-}
-
-/**
  * Validates that a path is well-formed for a content type
  *
  * @param path - The path to validate
@@ -150,15 +136,10 @@ export function isValidPath(path: string, contentType: ContentType): boolean {
 export function resolveContentPath(
   path: string,
   contentType: ContentType,
-  options: { devMode?: boolean; urlPath?: boolean } = {}
+  options: { devMode?: boolean } = {}
 ): string {
   const devMode = options.devMode ?? environment.isDev();
   const normalizedPath = normalizePath(path, contentType);
-
-  // Return URL path if requested
-  if (options.urlPath) {
-    return buildUrlPath(normalizedPath, contentType);
-  }
 
   // Otherwise return file system path based on environment
   return devMode
