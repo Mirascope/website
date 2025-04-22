@@ -61,7 +61,7 @@ const Logo: React.FC<LogoProps> = ({
     <div className={cn("flex flex-row items-center justify-center", containerClassName)}>
       <div className={cn(selectedSize.spacing, imgClassName)}>
         <img
-          src="/assets/branding/logo.png"
+          src="/assets/branding/logo.webp"
           alt="Mirascope Frog Logo"
           className={cn(selectedSize.img, imgClassName)}
         />
