@@ -148,9 +148,6 @@ class DocSection:
         doc_dict = self.to_dict()
         json_str = json.dumps(doc_dict, indent=2)
 
-        # Replace double quotes with single quotes for TypeScript style
-        json_str = json_str.replace('"', "'")
-
         # Fix boolean values (true/false instead of True/False)
         json_str = json_str.replace("'true'", "true").replace("'false'", "false")
 
