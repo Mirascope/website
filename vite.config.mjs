@@ -5,6 +5,7 @@ import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import { resolve } from "node:path";
 import { optimizedImageMiddleware } from "./scripts/optimized-image-middleware";
 import { contentPreprocessPlugin } from "./scripts/preprocess-content";
+import { json404Middleware } from "./scripts/json-404-middleware";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -14,6 +15,7 @@ export default defineConfig({
     tailwindcss(),
     contentPreprocessPlugin(),
     optimizedImageMiddleware(),
+    json404Middleware(),
   ],
   resolve: {
     alias: {
