@@ -2,20 +2,16 @@ import { environment } from "./environment";
 import type { ContentType, ContentMeta, Content, ValidationResult } from "./types";
 import { validateMetadata as validateMetadataService } from "./metadata-service";
 import { processMDXContent } from "./mdx-processor";
-import { resolveContentPath, isValidPath } from "./path-resolver";
-import { handleContentError, InvalidPathError } from "./errors";
+import { resolveContentPath } from "./path-resolver";
+import { handleContentError } from "./errors";
 
 /**
  * Fetches raw content from a given path
  *
  * @param contentPath - The path to fetch content from
- * @param devMode - Whether to process as development mode
  * @returns The raw content string
  */
-export async function fetchRawContent(
-  contentPath: string,
-  devMode: boolean = environment.isDev()
-): Promise<string> {
+export async function fetchRawContent(contentPath: string): Promise<string> {
   try {
     // Fetch the content using the environment's fetch function
     const response = await environment.fetch(contentPath);
@@ -24,15 +20,10 @@ export async function fetchRawContent(
       throw new Error(`Failed to fetch content: ${response.status} ${response.statusText}`);
     }
 
-    // Process response based on environment
-    if (devMode) {
-      // In development, we get the raw content
-      return await response.text();
-    } else {
-      // In production, all content types are stored as JSON with a content field
-      const data = await response.json();
-      return data.content;
-    }
+    // Now all content types are stored as JSON with a content field
+    // since we preprocess content in both dev and prod
+    const data = await response.json();
+    return data.content;
   } catch (error) {
     throw error; // Let the caller handle the error with proper context
   }
@@ -51,19 +42,11 @@ export async function loadContent<T extends ContentMeta>(
   }
 ): Promise<Content<T>> {
   try {
-    // Validate the path
-    if (!isValidPath(path, contentType)) {
-      throw new InvalidPathError(contentType, path);
-    }
-
-    // Get environment info - always read from environment directly
-    const devMode = environment.isDev();
-
     // Get content path
-    const contentPath = resolveContentPath(path, contentType, { devMode });
+    const contentPath = resolveContentPath(path);
 
     // Use fetch to get raw content
-    const rawContent = await fetchRawContent(contentPath, devMode);
+    const rawContent = await fetchRawContent(contentPath);
 
     // Process MDX with preprocessing if needed
     const processed = await processMDXContent(rawContent, contentType, {

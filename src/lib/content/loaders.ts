@@ -13,10 +13,8 @@ interface RouteParams {
  * Loaders for TanStack Router - these can be imported directly into route files
  */
 
-// Policy loaders - use options from environment for dev mode
 export const policyLoader = createContentLoader(getPolicy, "policy");
 
-// Blog loaders - use options from environment for dev mode
 export const blogLoader = createContentLoader(getBlogContent, "blog");
 
 // Blog list loader
@@ -33,7 +31,7 @@ export const docsPageLoader = ({
   const { product, _splat = "", section } = params;
 
   // Build the document path based on whether we have a section
-  const docPath = section ? `/docs/${product}/${section}/${_splat}` : `/docs/${product}/${_splat}`;
+  const docPath = section ? `/doc/${product}/${section}/${_splat}` : `/doc/${product}/${_splat}`;
 
   // Clean the path (remove duplicate slashes, trailing slashes)
   const cleanPath = docPath.replace(/\/+/g, "/").replace(/\/$/g, "");
@@ -46,7 +44,7 @@ export const docsPageLoader = ({
 
   // Special case 1: Root product path (e.g., /docs/mirascope)
   if (parts.length <= 2) {
-    finalPath = `/docs/${product}/index`;
+    finalPath = `/doc/${product}/index`;
   }
   // Special case 2: Special sections (api, guides) root paths
   else if (parts.length === 3 && (parts[2] === "api" || parts[2] === "guides")) {
@@ -55,7 +53,7 @@ export const docsPageLoader = ({
   // Default case: Normal file or directory
   else if (parts.length > 0) {
     // If no extension is specified, don't modify the path
-    // This ensures that paths like /docs/mirascope/learn/provider-specific/openai
+    // This ensures that paths like /doc/mirascope/learn/provider-specific/openai
     // are passed through to the content handler without appending /index
   }
 
@@ -86,15 +84,15 @@ function getPathFromParams(params: Record<string, string>, contentType: ContentT
       // Handle nested doc paths
       const product = params.product;
       const path = params["*"] || "";
-      return `/docs/${product}/${path}`;
+      return `/doc/${product}/${path}`;
     case "policy":
       // Handle policy paths
       if (params.slug === "privacy") {
-        return "privacy";
+        return "/policy/privacy";
       }
       // Handle terms paths
       if (params.policy) {
-        return `terms/${params.policy}`;
+        return `/policy/terms/${params.policy}`;
       }
       return "";
     default:
