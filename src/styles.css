@@ -206,7 +206,7 @@ h6 code {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url("/watercolor-background.png");
+  background-image: url("/assets/backgrounds/light.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -216,12 +216,12 @@ h6 code {
 }
 
 .dark .bg-watercolor-flipped::before {
-  background-image: url("/dark-mode-watercolor-background.png");
+  background-image: url("/assets/backgrounds/dark.png");
   transition: background-image 0.3s ease;
 }
 
 .sunset .bg-watercolor-flipped::before {
-  background-image: url("/sunset-mode-watercolor-background.png");
+  background-image: url("/assets/backgrounds/sunset.png");
   transition: background-image 0.3s ease;
 }
 
