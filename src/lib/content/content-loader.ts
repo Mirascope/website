@@ -20,15 +20,10 @@ export async function fetchRawContent(contentPath: string): Promise<string> {
       throw new Error(`Failed to fetch content: ${response.status} ${response.statusText}`);
     }
 
-    // Process response based on environment
-    if (environment.isDev()) {
-      // In development, we get the raw content
-      return await response.text();
-    } else {
-      // In production, all content types are stored as JSON with a content field
-      const data = await response.json();
-      return data.content;
-    }
+    // Now all content types are stored as JSON with a content field
+    // since we preprocess content in both dev and prod
+    const data = await response.json();
+    return data.content;
   } catch (error) {
     throw error; // Let the caller handle the error with proper context
   }

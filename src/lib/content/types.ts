@@ -38,15 +38,9 @@ export interface ContentResult<T extends ContentMeta = ContentMeta> {
 /**
  * Type for content retrieval function
  */
-export type GetContentFn<T extends ContentMeta> = (
-  path: string,
-  options?: { customFetch?: typeof fetch; devMode?: boolean }
-) => Promise<Content<T>>;
+export type GetContentFn<T extends ContentMeta> = (path: string) => Promise<Content<T>>;
 
 /**
  * Type for metadata retrieval function
  */
-export type GetMetaFn<T extends ContentMeta> = (options?: {
-  customFetch?: typeof fetch;
-  devMode?: boolean;
-}) => Promise<T[]>;
+export type GetMetaFn<T extends ContentMeta> = () => Promise<T[]>;
