@@ -1,1 +1,1 @@
-"""Generate API documentation."""
+"""Generates MDX API documentation."""
