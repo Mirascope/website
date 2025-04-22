@@ -209,27 +209,33 @@ const DocsSidebar = ({ product, currentGroup }: DocsSidebarProps) => {
 
   // Helper function to check if a path matches the current path
   const isActivePath = (path: string) => {
+    // Remove "/index" from paths for comparison
+    const cleanPath = path.replace(/\/index$/, "");
+    const cleanCurrentPath = currentPath.replace(/\/index$/, "");
+
     // Normalize paths by ensuring they end with a slash
-    const normalizedPath = path.endsWith("/") ? path : `${path}/`;
-    const normalizedCurrentPath = currentPath.endsWith("/") ? currentPath : `${currentPath}/`;
+    const normalizedPath = cleanPath.endsWith("/") ? cleanPath : `${cleanPath}/`;
+    const normalizedCurrentPath = cleanCurrentPath.endsWith("/")
+      ? cleanCurrentPath
+      : `${cleanCurrentPath}/`;
 
     // Special case for product landing - both /docs/product and /docs/product/ should match
     if (
-      path === `/docs/${product}` &&
-      (currentPath === `/docs/${product}` || currentPath === `/docs/${product}/`)
+      cleanPath === `/docs/${product}` &&
+      (cleanCurrentPath === `/docs/${product}` || cleanCurrentPath === `/docs/${product}/`)
     ) {
       return true;
     }
 
     // Special case for group index pages - check if we're viewing any page in this group
-    if (path.includes(`/${currentGroup}/`) && currentGroup) {
+    if (cleanPath.includes(`/${currentGroup}/`) && currentGroup) {
       if (normalizedCurrentPath.startsWith(normalizedPath)) {
         return true;
       }
     }
 
-    // Direct path match
-    return currentPath === path || normalizedCurrentPath === normalizedPath;
+    // Direct path match (either with original or clean paths)
+    return cleanCurrentPath === cleanPath || normalizedCurrentPath === normalizedPath;
   };
 
   return (
@@ -343,7 +349,11 @@ const NestedItem = ({
   isActivePath: (path: string) => boolean;
   indentLevel: number;
 }) => {
-  const itemUrl = `${basePath}/${itemSlug}`;
+  // Remove "/index" from the path if present
+  const cleanBasePath = basePath.replace(/\/index$/, "");
+  // Don't add "index" to the URL path
+  const itemUrl = itemSlug === "index" ? cleanBasePath : `${cleanBasePath}/${itemSlug}`;
+
   // A folder is any item that has nested items
   const hasNestedItems = item.items && Object.keys(item.items).length > 0;
 

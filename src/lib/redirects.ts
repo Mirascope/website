@@ -29,7 +29,10 @@ function buildGroupRedirects() {
 
   // First pass: collect all valid doc paths
   allDocs.forEach((doc) => {
-    const docPath = doc.product + "/" + doc.path;
+    let docPath = doc.product + "/" + doc.path;
+    if (docPath.endsWith("/index")) {
+      docPath = docPath.replace(/\/index$/, "");
+    }
     validDocPaths.add(docPath);
   });
 
@@ -39,10 +42,14 @@ function buildGroupRedirects() {
   // Use docs in their original order (from _meta.ts files)
   // Process each doc to find group paths
   allDocs.forEach((doc) => {
-    const pathParts = doc.path.split("/");
+    let pathParts = doc.path.split("/");
 
     // Skip processing if this is a top-level doc
     if (pathParts.length <= 1) return;
+
+    if (pathParts[pathParts.length - 1] === "index") {
+      pathParts = pathParts.slice(0, -1);
+    }
 
     // Build potential group paths
     for (let i = 1; i < pathParts.length; i++) {
