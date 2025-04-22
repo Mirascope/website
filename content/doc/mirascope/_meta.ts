@@ -3,6 +3,7 @@
  */
 import type { ProductDocs } from "../_meta";
 import guidesMeta from "./guides/_meta";
+import mirascopeApiMeta from "./api/_meta";
 
 const mirascopeMeta: ProductDocs = {
   // Top level pages
@@ -159,50 +160,7 @@ const mirascopeMeta: ProductDocs = {
 
   // Sections (like API, Guides)
   sections: {
-    api: {
-      title: "API",
-
-      // Top-level API pages
-      items: {
-        index: {
-          title: "Mirascope API Reference",
-        },
-      },
-
-      // API Groups
-      groups: {
-        core: {
-          title: "Core",
-          items: {
-            anthropic: {
-              title: "Anthropic",
-              items: {
-                call: {
-                  title: "call",
-                },
-                call_params: {
-                  title: "call_params",
-                },
-                call_response: {
-                  title: "call_response",
-                },
-              },
-            },
-            openai: {
-              title: "OpenAI",
-              items: {
-                call: {
-                  title: "call",
-                },
-                parameters: {
-                  title: "parameters",
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+    api: mirascopeApiMeta,
     guides: guidesMeta,
   },
 };
