@@ -114,7 +114,7 @@ async function processImage(filePath: string) {
     const dirName = path.dirname(filePath);
     const responsiveSizes = getResponsiveConfig(filePath);
 
-    console.log(`🖼️  Processing: ${filePath}`);
+    console.log(`🖼️  Optimizing: ${filePath}`);
 
     // Get original file size
     const fileStats = fs.statSync(filePath);
@@ -145,8 +145,6 @@ async function processImage(filePath: string) {
 
         // Always output as WebP with quality setting
         await sharpInstance.webp({ quality: CONFIG.quality.webp }).toFile(outputPath);
-
-        console.log(`✅  Created: ${outputPath}`);
 
         // Track size of the original-sized WebP (large) for stats
         if (size.name === "large") {

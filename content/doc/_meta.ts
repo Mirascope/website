@@ -69,12 +69,14 @@ export function getAllDocs(): Array<{ product: string; path: string; meta: DocMe
     for (const [itemKey, docMeta] of Object.entries(items)) {
       const itemPath = basePath ? `${basePath}/${itemKey}` : itemKey;
 
-      // Add the current item
-      allDocs.push({
-        product,
-        path: itemPath,
-        meta: docMeta,
-      });
+      // Add the current item, unless it is a folder
+      if (!docMeta.items) {
+        allDocs.push({
+          product,
+          path: itemPath,
+          meta: docMeta,
+        });
+      }
 
       // Process nested items if this is a folder
       if (docMeta.items) {
@@ -93,12 +95,14 @@ export function getAllDocs(): Array<{ product: string; path: string; meta: DocMe
       for (const [itemKey, docMeta] of Object.entries(group.items)) {
         const itemPath = `${groupKey}/${itemKey}`;
 
-        // Add the current item
-        allDocs.push({
-          product,
-          path: itemPath,
-          meta: docMeta,
-        });
+        // Add the current item, unless it is a folder
+        if (!docMeta.items) {
+          allDocs.push({
+            product,
+            path: itemPath,
+            meta: docMeta,
+          });
+        }
 
         // Process nested items if this is a folder
         if (docMeta.items) {
@@ -113,12 +117,14 @@ export function getAllDocs(): Array<{ product: string; path: string; meta: DocMe
       for (const [itemKey, docMeta] of Object.entries(section.items)) {
         const itemPath = `${sectionKey}/${itemKey}`;
 
-        // Add the current item
-        allDocs.push({
-          product,
-          path: itemPath,
-          meta: docMeta,
-        });
+        // Add the current item, unless it is a folder
+        if (!docMeta.items) {
+          allDocs.push({
+            product,
+            path: itemPath,
+            meta: docMeta,
+          });
+        }
 
         // Process nested items if this is a folder
         if (docMeta.items) {
@@ -132,12 +138,14 @@ export function getAllDocs(): Array<{ product: string; path: string; meta: DocMe
           for (const [itemKey, docMeta] of Object.entries(group.items)) {
             const itemPath = `${sectionKey}/${groupKey}/${itemKey}`;
 
-            // Add the current item
-            allDocs.push({
-              product,
-              path: itemPath,
-              meta: docMeta,
-            });
+            // Add the current item, unless it is a folder
+            if (!docMeta.items) {
+              allDocs.push({
+                product,
+                path: itemPath,
+                meta: docMeta,
+              });
+            }
 
             // Process nested items if this is a folder
             if (docMeta.items) {
