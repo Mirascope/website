@@ -8,6 +8,7 @@ const DEV_ROUTES = [
   { path: "/dev/audit-metadata", title: "SEO Metadata Audit" },
   { path: "/dev/social-card", title: "Social Card Preview" },
   { path: "/dev/style-test", title: "Style Test Page" },
+  { path: "/dev/code-highlight-test", title: "Code Highlight Test" },
 ];
 
 const DevSidebar: React.FC = () => {
