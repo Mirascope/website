@@ -1,6 +1,6 @@
 import React from "react";
 import DocsLayout from "./DocsLayout";
-import SEOHelmet from "@/src/components/SEOHelmet";
+import SEOMeta from "@/src/components/SEOMeta";
 import { type DocMeta, type DocContent } from "@/src/lib/content/docs";
 import { type ProductName } from "@/src/lib/route-types";
 
@@ -44,7 +44,7 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat, document, 
   // Render the layout with the loaded content
   return (
     <>
-      <SEOHelmet title={title} description={description} url={urlPath} product={product} />
+      <SEOMeta title={title} description={description} url={urlPath} product={product} />
       <DocsLayout
         product={product}
         section={section}

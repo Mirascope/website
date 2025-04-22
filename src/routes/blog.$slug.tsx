@@ -6,7 +6,7 @@ import { MDXRenderer } from "@/src/components/MDXRenderer";
 import { LoadingContent } from "@/src/components/docs";
 import ContentErrorHandler from "@/src/components/ContentErrorHandler";
 import TableOfContents from "@/src/components/TableOfContents";
-import SEOHelmet from "@/src/components/SEOHelmet";
+import SEOMeta from "@/src/components/SEOMeta";
 import useFunMode from "@/src/lib/hooks/useFunMode";
 import { cn } from "@/src/lib/utils";
 import { blogLoader } from "@/src/lib/content/loaders";
@@ -114,7 +114,7 @@ function BlogPostPage() {
 
   return (
     <div className="relative">
-      <SEOHelmet
+      <SEOMeta
         title={post.meta.title}
         description={post.meta.description || post.mdx?.frontmatter?.excerpt}
         image={ogImage}

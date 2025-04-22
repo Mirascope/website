@@ -2,8 +2,6 @@ import { Outlet, createRootRoute, useRouterState, redirect } from "@tanstack/rea
 import { processRedirects } from "../lib/redirects";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { useEffect } from "react";
-import { Helmet } from "react-helmet";
-import { BASE_URL } from "../lib/constants/site";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -44,14 +42,11 @@ export const Route = createRootRoute({
 
     return (
       <>
-        <Helmet defaultTitle="Mirascope">
-          {/* Essential meta tags */}
-          <html lang="en" />
+        {/* Only essential HTML tags - SEO is handled by SEOMeta */}
+        <head>
           <meta charSet="UTF-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <link rel="icon" href="/favicon.ico" />
-          <meta name="theme-color" content="#000000" />
-          <meta name="description" content="The AI Engineer's Developer Stack" />
 
           {/* Preload Williams Handwriting font - critical for brand */}
           <link
@@ -62,26 +57,10 @@ export const Route = createRootRoute({
             crossOrigin="anonymous"
           />
 
-          {/* Default Open Graph / Facebook */}
-          <meta property="og:type" content="website" />
-          <meta property="og:url" content={`${BASE_URL}/`} />
-          <meta property="og:title" content="Mirascope" />
-          <meta property="og:description" content="The AI Engineer's Developer Stack" />
-          <meta property="og:image" content={`${BASE_URL}/social-cards/index.webp`} />
-          <meta property="og:logo" content={`${BASE_URL}/assets/branding/logo.webp`} />
-
-          {/* Default Twitter */}
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:url" content={`${BASE_URL}/`} />
-          <meta name="twitter:title" content="Mirascope" />
-          <meta name="twitter:description" content="The AI Engineer's Developer Stack" />
-          <meta name="twitter:image" content={`${BASE_URL}/social-cards/index.webp`} />
-          <meta name="twitter:site:logo" content={`${BASE_URL}/assets/branding/logo.webp`} />
-
           {/* Other important tags */}
           <link rel="apple-touch-icon" href="/assets/branding/logo.webp" />
           <link rel="manifest" href="/manifest.json" />
-        </Helmet>
+        </head>
 
         <div
           className={`px-4 sm:px-6 flex flex-col min-h-screen ${
