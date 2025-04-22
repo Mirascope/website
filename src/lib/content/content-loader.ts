@@ -9,13 +9,9 @@ import { handleContentError, InvalidPathError } from "./errors";
  * Fetches raw content from a given path
  *
  * @param contentPath - The path to fetch content from
- * @param devMode - Whether to process as development mode
  * @returns The raw content string
  */
-export async function fetchRawContent(
-  contentPath: string,
-  devMode: boolean = environment.isDev()
-): Promise<string> {
+export async function fetchRawContent(contentPath: string): Promise<string> {
   try {
     // Fetch the content using the environment's fetch function
     const response = await environment.fetch(contentPath);
@@ -25,7 +21,7 @@ export async function fetchRawContent(
     }
 
     // Process response based on environment
-    if (devMode) {
+    if (environment.isDev()) {
       // In development, we get the raw content
       return await response.text();
     } else {
@@ -56,14 +52,11 @@ export async function loadContent<T extends ContentMeta>(
       throw new InvalidPathError(contentType, path);
     }
 
-    // Get environment info - always read from environment directly
-    const devMode = environment.isDev();
-
     // Get content path
-    const contentPath = resolveContentPath(path, contentType, { devMode });
+    const contentPath = resolveContentPath(path, contentType);
 
     // Use fetch to get raw content
-    const rawContent = await fetchRawContent(contentPath, devMode);
+    const rawContent = await fetchRawContent(contentPath);
 
     // Process MDX with preprocessing if needed
     const processed = await processMDXContent(rawContent, contentType, {
