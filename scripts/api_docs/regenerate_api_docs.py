@@ -4,10 +4,7 @@
 This script:
 1. Clones/updates the Mirascope repository at the version specified in pyproject.toml
 2. Extracts the API documentation structure
-3. Generates MDX files with API documentation based on autodoc directives
-
-Currently, the generated MDX files are placeholders. In future versions, this script
-will process autodoc directives and generate complete API documentation.
+3. Generates MDX files with API documentation based on autodoc directives using Griffe
 """
 
 import argparse
@@ -20,6 +17,7 @@ from typing import TypeAlias, TypedDict
 
 import tomli
 
+from scripts.api_docs.griffe_integration import get_loader, process_directive
 from scripts.api_docs.meta import (
     generate_meta_file_content,
     generate_meta_from_organized_files,
@@ -135,22 +133,17 @@ def get_api_docs_structure(api_docs_path: Path) -> ApiStructure:
 
 
 def generate_api_docs(
-    structure: ApiStructure,
-    source_repo_path: Path,
-    target_path: Path,
-    docs_path: str,
+    structure: ApiStructure, api_docs_path: Path, target_path: Path, module: object
 ) -> None:
     """Generate API documentation MDX files based on source repository.
 
     Args:
         structure: The API documentation structure
-        source_repo_path: Path to the source repository
+        api_docs_path: Path to the API documentation within source directory
         target_path: Path to the output directory
-        docs_path: Path to API documentation within the source repository
+        module: The loaded Griffe module
 
     """
-    api_docs_path = source_repo_path / docs_path
-
     # Always create/update index.mdx
     index_path = target_path / "index.mdx"
     with open(index_path, "w") as f:
@@ -199,25 +192,30 @@ def generate_api_docs(
             f.write("---\n\n")
             f.write(f"# {title}\n\n")
 
-            # Add the original directives from the source file
+            # Extract the directives from the source file
             directives = extract_directives(content)
-            if directives:
-                # PLACEHOLDER: Currently just adding the directives as-is
-                # In the future, this will process the directives and generate
-                # actual API documentation using Griffe
-                f.write("\n".join(directives))
+            for directive in directives:
+                doc_content = process_directive(directive, module)
+                f.write(doc_content)
                 f.write("\n\n")
-
-                placeholder = (
-                    "> This is a placeholder. "
-                    "Future versions will render full API documentation."
-                )
-                f.write(f"{placeholder}\n")
-            else:
-                f.write("Documentation will be generated from API directives.\n")
 
     # Generate a single _meta.ts file for the entire API structure
     generate_single_meta_file(api_docs_path, target_path)
+
+
+def load_module(module_name: str, source_repo_path: Path) -> object:
+    try:
+        sys.path.insert(0, str(source_repo_path))
+        loader = get_loader(source_repo_path)
+        # Load the top-level mirascope module once
+        module = loader.load(module_name)
+        loader.resolve_aliases(external=True)
+    finally:
+        # Clean up sys.path
+        if str(source_repo_path) in sys.path:
+            sys.path.remove(str(source_repo_path))
+
+    return module
 
 
 def extract_directives(content: str) -> list[str]:
@@ -330,12 +328,14 @@ def process_source(
             shutil.rmtree(target_path)
         target_path.mkdir(parents=True, exist_ok=True)
 
-        generate_api_docs(structure, repo_path, target_path, docs_path)
+        module = load_module(source_config["package"], repo_path)
+        generate_api_docs(structure, repo_path / docs_path, target_path, module)
         print(f"Generated API documentation at {target_path}")
 
         return True
     except Exception as e:
         print(f"Error processing {source_name}: {e}", file=sys.stderr)
+        raise e
         return False
 
 
