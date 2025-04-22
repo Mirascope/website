@@ -15,6 +15,7 @@
 export interface DocMetaItem {
   title: string;
   hasExtractableSnippets?: boolean; // Flag to indicate the doc has code snippets that should be extracted
+  items?: Record<string, DocMetaItem>; // Nested items for folder-like structure
 }
 
 // Group of documents
@@ -59,25 +60,50 @@ const meta: DocsStructure = {
 export function getAllDocs(): Array<{ product: string; path: string; meta: DocMetaItem }> {
   const allDocs: Array<{ product: string; path: string; meta: DocMetaItem }> = [];
 
+  // Helper function to process nested items
+  function processNestedItems(
+    product: string,
+    basePath: string,
+    items: Record<string, DocMetaItem>
+  ) {
+    for (const [itemKey, docMeta] of Object.entries(items)) {
+      const itemPath = basePath ? `${basePath}/${itemKey}` : itemKey;
+
+      // Add the current item
+      allDocs.push({
+        product,
+        path: itemPath,
+        meta: docMeta,
+      });
+
+      // Process nested items if this is a folder
+      if (docMeta.items) {
+        processNestedItems(product, itemPath, docMeta.items);
+      }
+    }
+  }
+
   // Loop through all products and their docs
   for (const [product, productDocs] of Object.entries(meta)) {
     // Process top-level items
-    for (const [key, docMeta] of Object.entries(productDocs.items)) {
-      allDocs.push({
-        product,
-        path: key,
-        meta: docMeta,
-      });
-    }
+    processNestedItems(product, "", productDocs.items);
 
     // Process items in groups
     for (const [groupKey, group] of Object.entries(productDocs.groups)) {
       for (const [itemKey, docMeta] of Object.entries(group.items)) {
+        const itemPath = `${groupKey}/${itemKey}`;
+
+        // Add the current item
         allDocs.push({
           product,
-          path: `${groupKey}/${itemKey}`,
+          path: itemPath,
           meta: docMeta,
         });
+
+        // Process nested items if this is a folder
+        if (docMeta.items) {
+          processNestedItems(product, itemPath, docMeta.items);
+        }
       }
     }
 
@@ -85,22 +111,38 @@ export function getAllDocs(): Array<{ product: string; path: string; meta: DocMe
     for (const [sectionKey, section] of Object.entries(productDocs.sections)) {
       // Direct section items
       for (const [itemKey, docMeta] of Object.entries(section.items)) {
+        const itemPath = `${sectionKey}/${itemKey}`;
+
+        // Add the current item
         allDocs.push({
           product,
-          path: `${sectionKey}/${itemKey}`,
+          path: itemPath,
           meta: docMeta,
         });
+
+        // Process nested items if this is a folder
+        if (docMeta.items) {
+          processNestedItems(product, itemPath, docMeta.items);
+        }
       }
 
       // Items in section groups
       if (section.groups) {
         for (const [groupKey, group] of Object.entries(section.groups)) {
           for (const [itemKey, docMeta] of Object.entries(group.items)) {
+            const itemPath = `${sectionKey}/${groupKey}/${itemKey}`;
+
+            // Add the current item
             allDocs.push({
               product,
-              path: `${sectionKey}/${groupKey}/${itemKey}`,
+              path: itemPath,
               meta: docMeta,
             });
+
+            // Process nested items if this is a folder
+            if (docMeta.items) {
+              processNestedItems(product, itemPath, docMeta.items);
+            }
           }
         }
       }

@@ -168,6 +168,40 @@ const mirascopeMeta: ProductDocs = {
           title: "Mirascope API Reference",
         },
       },
+
+      // API Groups
+      groups: {
+        core: {
+          title: "Core",
+          items: {
+            anthropic: {
+              title: "Anthropic",
+              items: {
+                call: {
+                  title: "call",
+                },
+                call_params: {
+                  title: "call_params",
+                },
+                call_response: {
+                  title: "call_response",
+                },
+              },
+            },
+            openai: {
+              title: "OpenAI",
+              items: {
+                call: {
+                  title: "call",
+                },
+                parameters: {
+                  title: "parameters",
+                },
+              },
+            },
+          },
+        },
+      },
     },
     guides: guidesMeta,
   },

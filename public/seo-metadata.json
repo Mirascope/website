@@ -269,6 +269,41 @@
     "title": "Mirascope | Mirascope",
     "description": "Mirascope is a Python library that streamlines working with LLMs"
   },
+  "/docs/mirascope/api/core/anthropic": {
+    "route": "/docs/mirascope/api/core/anthropic",
+    "title": "404 - Page Not Found | Mirascope",
+    "description": "The documentation page you're looking for doesn't exist or has been moved."
+  },
+  "/docs/mirascope/api/core/anthropic/call": {
+    "route": "/docs/mirascope/api/core/anthropic/call",
+    "title": "call | Mirascope",
+    "description": "Documentation for Anthropic call function"
+  },
+  "/docs/mirascope/api/core/anthropic/call_params": {
+    "route": "/docs/mirascope/api/core/anthropic/call_params",
+    "title": "call_params | Mirascope",
+    "description": "Documentation for Anthropic call parameters"
+  },
+  "/docs/mirascope/api/core/anthropic/call_response": {
+    "route": "/docs/mirascope/api/core/anthropic/call_response",
+    "title": "call_response | Mirascope",
+    "description": "Documentation for Anthropic call response"
+  },
+  "/docs/mirascope/api/core/openai": {
+    "route": "/docs/mirascope/api/core/openai",
+    "title": "404 - Page Not Found | Mirascope",
+    "description": "The documentation page you're looking for doesn't exist or has been moved."
+  },
+  "/docs/mirascope/api/core/openai/call": {
+    "route": "/docs/mirascope/api/core/openai/call",
+    "title": "call | Mirascope",
+    "description": "Documentation for OpenAI call function within Anthropic namespace"
+  },
+  "/docs/mirascope/api/core/openai/parameters": {
+    "route": "/docs/mirascope/api/core/openai/parameters",
+    "title": "parameters | Mirascope",
+    "description": "Documentation for OpenAI parameters within Anthropic namespace"
+  },
   "/docs/mirascope/api/index": {
     "route": "/docs/mirascope/api/index",
     "title": "Mirascope API Reference | Mirascope",

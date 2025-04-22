@@ -73,6 +73,211 @@ function getDocMetadataFromStructure(path: string): DocMeta {
     return parts[parts.length - 1] || "index";
   };
 
+  // Helper function to find an item at a specific path in the meta structure
+  const findMetaItem = (itemPath: string[]): { item: any; meta: any } | null => {
+    // No path, no item
+    if (itemPath.length === 0) return null;
+
+    // Start with product-level lookup
+    if (itemPath.length === 1) {
+      const slug = itemPath[0];
+      if (productDocs.items && productDocs.items[slug]) {
+        return {
+          item: productDocs.items[slug],
+          meta: {},
+        };
+      }
+      return null;
+    }
+
+    // Check if this is a section path
+    if (itemPath.length >= 2) {
+      const sectionSlug = itemPath[0];
+      const section = productDocs.sections?.[sectionSlug];
+
+      if (section) {
+        // Check if it's a direct section item
+        if (itemPath.length === 2) {
+          const itemSlug = itemPath[1];
+          if (section.items && section.items[itemSlug]) {
+            return {
+              item: section.items[itemSlug],
+              meta: {
+                section: sectionSlug,
+                sectionTitle: section.title,
+              },
+            };
+          }
+
+          // Check if it's a direct section item with nested paths
+          for (const [key, value] of Object.entries(section.items || {})) {
+            if (value.items) {
+              let currentItem = value;
+              let currentPath = [key];
+              let remainingPath = [...itemPath.slice(1)];
+
+              // Try to traverse the nested structure
+              while (remainingPath.length > 0 && currentItem.items) {
+                const nextKey = remainingPath[0];
+                if (currentItem.items[nextKey]) {
+                  currentItem = currentItem.items[nextKey];
+                  currentPath.push(nextKey);
+                  remainingPath = remainingPath.slice(1);
+                } else {
+                  break;
+                }
+              }
+
+              // If we consumed all remaining parts, we found our item
+              if (remainingPath.length === 0) {
+                return {
+                  item: currentItem,
+                  meta: {
+                    section: sectionSlug,
+                    sectionTitle: section.title,
+                  },
+                };
+              }
+            }
+          }
+        }
+
+        // Check if it's a section group item
+        if (itemPath.length >= 3) {
+          const groupSlug = itemPath[1];
+          const group = section.groups?.[groupSlug];
+
+          if (group) {
+            // If we're looking for just the group
+            if (itemPath.length === 3) {
+              const itemSlug = itemPath[2];
+              if (group.items && group.items[itemSlug]) {
+                return {
+                  item: group.items[itemSlug],
+                  meta: {
+                    section: sectionSlug,
+                    sectionTitle: section.title,
+                    group: groupSlug,
+                    groupTitle: group.title,
+                  },
+                };
+              }
+            }
+
+            // Check for nested items within group items
+            for (const [key, value] of Object.entries(group.items || {})) {
+              if (value.items) {
+                let currentItem = value;
+                let currentPath = [key];
+                let remainingPath = [...itemPath.slice(2)];
+
+                // Try to traverse the nested structure
+                while (remainingPath.length > 0 && currentItem.items) {
+                  const nextKey = remainingPath[0];
+                  if (currentItem.items[nextKey]) {
+                    currentItem = currentItem.items[nextKey];
+                    currentPath.push(nextKey);
+                    remainingPath = remainingPath.slice(1);
+                  } else {
+                    break;
+                  }
+                }
+
+                // If we consumed all remaining parts, we found our item
+                if (remainingPath.length === 0) {
+                  return {
+                    item: currentItem,
+                    meta: {
+                      section: sectionSlug,
+                      sectionTitle: section.title,
+                      group: groupSlug,
+                      groupTitle: group.title,
+                    },
+                  };
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // Check product groups
+    if (itemPath.length >= 2) {
+      const groupSlug = itemPath[0];
+      const group = productDocs.groups?.[groupSlug];
+
+      if (group) {
+        // Direct group item
+        if (itemPath.length === 2) {
+          const itemSlug = itemPath[1];
+          if (group.items && group.items[itemSlug]) {
+            return {
+              item: group.items[itemSlug],
+              meta: {
+                group: groupSlug,
+                groupTitle: group.title,
+              },
+            };
+          }
+        }
+
+        // Try to find nested items
+        for (const [key, value] of Object.entries(group.items || {})) {
+          if (value.items) {
+            let currentItem = value;
+            let currentPath = [key];
+            let remainingPath = [...itemPath.slice(1)];
+
+            // Try to traverse the nested structure
+            while (remainingPath.length > 0 && currentItem.items) {
+              const nextKey = remainingPath[0];
+              if (currentItem.items[nextKey]) {
+                currentItem = currentItem.items[nextKey];
+                currentPath.push(nextKey);
+                remainingPath = remainingPath.slice(1);
+              } else {
+                break;
+              }
+            }
+
+            // If we consumed all remaining parts, we found our item
+            if (remainingPath.length === 0) {
+              return {
+                item: currentItem,
+                meta: {
+                  group: groupSlug,
+                  groupTitle: group.title,
+                },
+              };
+            }
+          }
+        }
+      }
+    }
+
+    return null;
+  };
+
+  // Try to find the item using our recursive helper
+  const result = findMetaItem(pathParts.slice(1));
+
+  if (result) {
+    // We found the item in the metadata structure
+    const { item, meta } = result;
+
+    return {
+      title: item.title,
+      description: "",
+      slug,
+      path: pathParts.join("/"),
+      product,
+      type: "doc",
+      ...meta,
+    };
+  }
+
+  // Handle special cases if we couldn't find the item
   // Handle top-level items with special case for paths like /docs/mirascope/migration/
   if (pathParts.length <= 2 && path.endsWith("/") && pathParts.length > 1) {
     // Treat this as a top-level item (not an index)
@@ -98,297 +303,10 @@ function getDocMetadataFromStructure(path: string): DocMeta {
     };
   }
 
-  // Determine the type and extract metadata based on path structure
-  if (pathParts.length === 1) {
-    // Product root: /docs/mirascope/
-    slug = getSlug(pathParts);
-
-    if (slug === "index" || slug === "" || slug === "welcome" || slug === "overview") {
-      // Use product index item
-      const indexItem = productDocs.items?.index;
-
-      if (indexItem) {
-        title = indexItem.title;
-        description = ""; // Empty description, will be populated from frontmatter
-      } else {
-        title = `${product.charAt(0).toUpperCase() + product.slice(1)} Documentation`;
-        description = "";
-      }
-    } else {
-      // Regular top-level item: /docs/mirascope/migration
-      const item = productDocs.items?.[slug];
-      if (item) {
-        title = item.title;
-        description = ""; // Empty description, will be populated from frontmatter
-      } else {
-        title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
-        description = "";
-      }
-    }
-  } else if (pathParts.length === 2 || pathParts.length === 3) {
-    // Handle both /docs/mirascope/api and /docs/mirascope/api/index similarly
-
-    // Detect if this is an index path pattern
-    const isIndexPath = pathParts.length === 3 && pathParts[2] === "index";
-
-    // For index paths, use the part before index as section/group name
-    const potentialGroupOrSection = isIndexPath ? pathParts[1] : pathParts[1];
-
-    // For index paths, slug is "index", otherwise use the last part
-    slug = isIndexPath ? "index" : getSlug(pathParts);
-
-    // First check for non-index cases that match direct top-level items
-    // Don't do this check for paths ending with index
-    if (
-      !isIndexPath &&
-      productDocs.items &&
-      ((slug === "index" && productDocs.items.index) ||
-        (slug !== "index" && productDocs.items[slug]))
-    ) {
-      // This is a direct top-level item like /docs/mirascope/migration
-      const item = productDocs.items[slug];
-      title = item.title;
-      description = ""; // Empty description, will be populated from frontmatter
-      return {
-        title,
-        description,
-        slug,
-        path: pathParts.join("/"),
-        product,
-        type: "doc",
-      };
-    }
-
-    // Check if it's a group
-    if (productDocs.groups && productDocs.groups[potentialGroupOrSection]) {
-      group = potentialGroupOrSection;
-      groupTitle = productDocs.groups[group].title;
-
-      if (slug === "index" || slug === "" || slug === "overview") {
-        // Group index: /docs/mirascope/getting-started/ or /docs/mirascope/getting-started/index
-        title = groupTitle;
-        description = ""; // Empty description, will be populated from frontmatter
-      } else {
-        // Group item: /docs/mirascope/getting-started/quickstart
-        const item = productDocs.groups[group].items?.[slug];
-        if (item) {
-          title = item.title;
-          description = ""; // Empty description, will be populated from frontmatter
-        } else {
-          title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
-          description = "";
-        }
-      }
-    }
-    // Check if it's a section
-    else if (productDocs.sections && productDocs.sections[potentialGroupOrSection]) {
-      section = potentialGroupOrSection;
-      sectionTitle = productDocs.sections[section].title;
-
-      if (slug === "index" || slug === "" || slug === "overview") {
-        // Section index: /docs/mirascope/api/ or /docs/mirascope/api/index
-        title = sectionTitle;
-        description = ""; // Empty description, will be populated from frontmatter
-
-        // Specifically handle section indices correctly
-        // Look for an index item in the section's items
-        if (productDocs.sections[section].items && productDocs.sections[section].items.index) {
-          title = productDocs.sections[section].items.index.title;
-        }
-      } else {
-        // Section item: /docs/mirascope/api/quickstart
-        const item = productDocs.sections[section].items?.[slug];
-        if (item) {
-          title = item.title;
-          description = ""; // Empty description, will be populated from frontmatter
-        } else {
-          title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
-          description = "";
-        }
-      }
-    } else {
-      // This may be a group item path where pathParts[1] is the group and pathParts[2] is the item
-      // Example: /docs/mirascope/getting-started/contributing
-      if (productDocs.groups && pathParts.length >= 3 && productDocs.groups[pathParts[1]]) {
-        const potentialGroup = pathParts[1];
-        const potentialItem = pathParts[2];
-
-        if (productDocs.groups[potentialGroup].items[potentialItem]) {
-          // We found a matching group and item
-          const itemMetadata = productDocs.groups[potentialGroup].items[potentialItem];
-
-          return {
-            title: itemMetadata.title,
-            description: "",
-            slug: potentialItem,
-            path: pathParts.join("/"),
-            product,
-            type: "doc",
-            group: potentialGroup,
-            groupTitle: productDocs.groups[potentialGroup].title,
-          };
-        }
-      }
-
-      // TODO: This function needs a comprehensive refactoring to make it more maintainable
-      // and to properly handle all path patterns. For now, we're adding special case handling
-      // to fix immediate issues, but a complete rewrite is needed.
-
-      // Unknown structure, throw error
-      throw new DocumentNotFoundError("doc", path);
-    }
-  } else if (pathParts.length === 3) {
-    // Section + group or deeper: /docs/mirascope/api/llm/
-    slug = getSlug(pathParts);
-    const potentialSection = pathParts[1];
-    const potentialGroup = pathParts[2];
-
-    // Check if it's a section+group structure
-    if (
-      productDocs.sections &&
-      productDocs.sections[potentialSection] &&
-      productDocs.sections[potentialSection].groups &&
-      productDocs.sections[potentialSection].groups![potentialGroup]
-    ) {
-      section = potentialSection;
-      group = potentialGroup;
-      sectionTitle = productDocs.sections[section].title;
-      groupTitle = productDocs.sections[section].groups![group].title;
-
-      if (slug === "index" || slug === "" || slug === "overview") {
-        // Section+group index: /docs/mirascope/api/llm/
-        title = groupTitle;
-        description = ""; // Empty description, will be populated from frontmatter
-      } else {
-        // Section+group item: /docs/mirascope/api/llm/generation
-        const item = productDocs.sections[section].groups![group].items?.[slug];
-        if (item) {
-          title = item.title;
-          description = ""; // Empty description, will be populated from frontmatter
-        } else {
-          title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
-          description = "";
-        }
-      }
-    } else {
-      // This may be a group item path where pathParts[1] is the group and pathParts[2] is the item
-      // Example: /docs/mirascope/getting-started/contributing
-      if (productDocs.groups && pathParts.length >= 3 && productDocs.groups[pathParts[1]]) {
-        const potentialGroup = pathParts[1];
-        const potentialItem = pathParts[2];
-
-        if (productDocs.groups[potentialGroup].items[potentialItem]) {
-          // We found a matching group and item
-          const itemMetadata = productDocs.groups[potentialGroup].items[potentialItem];
-
-          return {
-            title: itemMetadata.title,
-            description: "",
-            slug: potentialItem,
-            path: pathParts.join("/"),
-            product,
-            type: "doc",
-            group: potentialGroup,
-            groupTitle: productDocs.groups[potentialGroup].title,
-          };
-        }
-      }
-
-      // TODO: This function needs a comprehensive refactoring to make it more maintainable
-      // and to properly handle all path patterns. For now, we're adding special case handling
-      // to fix immediate issues, but a complete rewrite is needed.
-
-      // Unknown structure, throw error
-      throw new DocumentNotFoundError("doc", path);
-    }
-  } else if (pathParts.length >= 4) {
-    // Section + group + item: /docs/mirascope/api/llm/generation
-    section = pathParts[1];
-    group = pathParts[2];
-    slug = pathParts[3];
-
-    // Look for product groups first, as that's the most common pattern
-    // This fixes the issue with paths like /docs/mirascope/getting-started/contributing
-    if (productDocs.groups && productDocs.groups[section]) {
-      // This is likely a group + item pattern where section is actually the group
-      group = section;
-      section = "";
-      groupTitle = productDocs.groups[group].title;
-
-      // Try to find the item in this group
-      const itemSlug = group === slug ? "index" : slug;
-      const item = productDocs.groups[group].items?.[itemSlug];
-      if (item) {
-        title = item.title;
-        description = "";
-        return {
-          title,
-          description,
-          slug: itemSlug,
-          path: pathParts.join("/"),
-          product,
-          type: "doc",
-          group,
-          groupTitle,
-        };
-      }
-    }
-
-    // If not found in groups, check if the structure exists in sections as before
-    else if (
-      productDocs.sections &&
-      productDocs.sections[section] &&
-      productDocs.sections[section].groups &&
-      productDocs.sections[section].groups![group]
-    ) {
-      sectionTitle = productDocs.sections[section].title;
-      groupTitle = productDocs.sections[section].groups![group].title;
-
-      const item = productDocs.sections[section].groups![group].items?.[slug];
-      if (item) {
-        title = item.title;
-        description = ""; // Empty description, will be populated from frontmatter
-      } else {
-        title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
-        description = "";
-      }
-    } else {
-      // This may be a group item path where pathParts[1] is the group and pathParts[2] is the item
-      // Example: /docs/mirascope/getting-started/contributing
-      if (productDocs.groups && pathParts.length >= 3 && productDocs.groups[pathParts[1]]) {
-        const potentialGroup = pathParts[1];
-        const potentialItem = pathParts[2];
-
-        if (productDocs.groups[potentialGroup].items[potentialItem]) {
-          // We found a matching group and item
-          const itemMetadata = productDocs.groups[potentialGroup].items[potentialItem];
-
-          return {
-            title: itemMetadata.title,
-            description: "",
-            slug: potentialItem,
-            path: pathParts.join("/"),
-            product,
-            type: "doc",
-            group: potentialGroup,
-            groupTitle: productDocs.groups[potentialGroup].title,
-          };
-        }
-      }
-
-      // TODO: This function needs a comprehensive refactoring to make it more maintainable
-      // and to properly handle all path patterns. For now, we're adding special case handling
-      // to fix immediate issues, but a complete rewrite is needed.
-
-      // Unknown structure, throw error
-      throw new DocumentNotFoundError("doc", path);
-    }
-  }
-
-  // If title is still empty, generate one from the slug
-  if (!title) {
-    title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
-  }
+  // If we still can't find it, generate default metadata
+  // based on the slug
+  slug = getSlug(pathParts);
+  title = slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
 
   return {
     title,
