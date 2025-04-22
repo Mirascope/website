@@ -25,14 +25,14 @@ export function getMetadataFromStructure(path: string, contentType: ContentType)
  * Extract document metadata from the structure (_meta.ts)
  */
 function getDocMetadataFromStructure(path: string): DocMeta {
-  // Remove /docs/ prefix and extract path parts
+  // Remove /doc/ prefix and extract path parts
   const pathParts = path
-    .replace(/^\/docs\//, "")
+    .replace(/^\/doc\//, "")
     .split("/")
     .filter((part) => part !== "");
 
   // Root docs path - special case
-  if (path === "/docs" || path === "/docs/") {
+  if (path === "/doc" || path === "/doc/") {
     return {
       title: "Documentation",
       description: "",
@@ -278,10 +278,10 @@ function getDocMetadataFromStructure(path: string): DocMeta {
   }
 
   // Handle special cases if we couldn't find the item
-  // Handle top-level items with special case for paths like /docs/mirascope/migration/
+  // Handle top-level items with special case for paths like /doc/mirascope/migration/
   if (pathParts.length <= 2 && path.endsWith("/") && pathParts.length > 1) {
     // Treat this as a top-level item (not an index)
-    // For paths like /docs/mirascope/migration/
+    // For paths like /doc/mirascope/migration/
     slug = pathParts[1]; // Use the second part
 
     // Look for the metadata in top-level items

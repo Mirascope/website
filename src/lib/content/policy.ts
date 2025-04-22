@@ -36,18 +36,10 @@ function cleanupPolicyContent(content: string): string {
 }
 
 /**
- * Normalize a policy path to ensure it has the proper prefix
- */
-function normalizePolicyPath(path: string): string {
-  return path.startsWith("/") ? path : `/${path}`;
-}
-
-/**
  * Get policy content by path
  */
 export async function getPolicy(path: string): Promise<PolicyContent> {
-  const normalizedPath = normalizePolicyPath(path);
-  return loadContent<PolicyMeta>(normalizedPath, "policy", createPolicyMeta, {
+  return loadContent<PolicyMeta>(path, "policy", createPolicyMeta, {
     preprocessContent: cleanupPolicyContent,
   });
 }
