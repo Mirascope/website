@@ -271,33 +271,488 @@
   },
   "/docs/mirascope/api/core/anthropic/call": {
     "route": "/docs/mirascope/api/core/anthropic/call",
-    "title": "call | Mirascope",
-    "description": "Documentation for Anthropic call function"
+    "title": "mirascope.core.anthropic.call | Mirascope",
+    "description": "API documentation for mirascope.core.anthropic.call"
   },
   "/docs/mirascope/api/core/anthropic/call_params": {
     "route": "/docs/mirascope/api/core/anthropic/call_params",
-    "title": "call_params | Mirascope",
-    "description": "Documentation for Anthropic call parameters"
+    "title": "mirascope.core.anthropic.call_params | Mirascope",
+    "description": "API documentation for mirascope.core.anthropic.call_params"
   },
   "/docs/mirascope/api/core/anthropic/call_response": {
     "route": "/docs/mirascope/api/core/anthropic/call_response",
-    "title": "call_response | Mirascope",
-    "description": "Documentation for Anthropic call response"
+    "title": "mirascope.core.anthropic.call_response | Mirascope",
+    "description": "API documentation for mirascope.core.anthropic.call_response"
+  },
+  "/docs/mirascope/api/core/anthropic/call_response_chunk": {
+    "route": "/docs/mirascope/api/core/anthropic/call_response_chunk",
+    "title": "mirascope.core.anthropic.call_response_chunk | Mirascope",
+    "description": "API documentation for mirascope.core.anthropic.call_response_chunk"
+  },
+  "/docs/mirascope/api/core/anthropic/dynamic_config": {
+    "route": "/docs/mirascope/api/core/anthropic/dynamic_config",
+    "title": "mirascope.core.anthropic.dynamic_config | Mirascope",
+    "description": "API documentation for mirascope.core.anthropic.dynamic_config"
+  },
+  "/docs/mirascope/api/core/anthropic/stream": {
+    "route": "/docs/mirascope/api/core/anthropic/stream",
+    "title": "mirascope.core.anthropic.stream | Mirascope",
+    "description": "API documentation for mirascope.core.anthropic.stream"
+  },
+  "/docs/mirascope/api/core/anthropic/tool": {
+    "route": "/docs/mirascope/api/core/anthropic/tool",
+    "title": "mirascope.core.anthropic.tool | Mirascope",
+    "description": "API documentation for mirascope.core.anthropic.tool"
+  },
+  "/docs/mirascope/api/core/azure/call": {
+    "route": "/docs/mirascope/api/core/azure/call",
+    "title": "mirascope.core.azure.call | Mirascope",
+    "description": "API documentation for mirascope.core.azure.call"
+  },
+  "/docs/mirascope/api/core/azure/call_params": {
+    "route": "/docs/mirascope/api/core/azure/call_params",
+    "title": "mirascope.core.azure.call_params | Mirascope",
+    "description": "API documentation for mirascope.core.azure.call_params"
+  },
+  "/docs/mirascope/api/core/azure/call_response": {
+    "route": "/docs/mirascope/api/core/azure/call_response",
+    "title": "mirascope.core.azure.call_response | Mirascope",
+    "description": "API documentation for mirascope.core.azure.call_response"
+  },
+  "/docs/mirascope/api/core/azure/call_response_chunk": {
+    "route": "/docs/mirascope/api/core/azure/call_response_chunk",
+    "title": "mirascope.core.azure.call_response_chunk | Mirascope",
+    "description": "API documentation for mirascope.core.azure.call_response_chunk"
+  },
+  "/docs/mirascope/api/core/azure/dynamic_config": {
+    "route": "/docs/mirascope/api/core/azure/dynamic_config",
+    "title": "mirascope.core.azure.dynamic_config | Mirascope",
+    "description": "API documentation for mirascope.core.azure.dynamic_config"
+  },
+  "/docs/mirascope/api/core/azure/stream": {
+    "route": "/docs/mirascope/api/core/azure/stream",
+    "title": "mirascope.core.azure.stream | Mirascope",
+    "description": "API documentation for mirascope.core.azure.stream"
+  },
+  "/docs/mirascope/api/core/azure/tool": {
+    "route": "/docs/mirascope/api/core/azure/tool",
+    "title": "mirascope.core.azure.tool | Mirascope",
+    "description": "API documentation for mirascope.core.azure.tool"
+  },
+  "/docs/mirascope/api/core/base/call_factory": {
+    "route": "/docs/mirascope/api/core/base/call_factory",
+    "title": "mirascope.core.base.call_factory | Mirascope",
+    "description": "API documentation for mirascope.core.base.call_factory"
+  },
+  "/docs/mirascope/api/core/base/call_params": {
+    "route": "/docs/mirascope/api/core/base/call_params",
+    "title": "mirascope.core.base.call_params | Mirascope",
+    "description": "API documentation for mirascope.core.base.call_params"
+  },
+  "/docs/mirascope/api/core/base/call_response": {
+    "route": "/docs/mirascope/api/core/base/call_response",
+    "title": "mirascope.core.base.call_response | Mirascope",
+    "description": "API documentation for mirascope.core.base.call_response"
+  },
+  "/docs/mirascope/api/core/base/call_response_chunk": {
+    "route": "/docs/mirascope/api/core/base/call_response_chunk",
+    "title": "mirascope.core.base.call_response_chunk | Mirascope",
+    "description": "API documentation for mirascope.core.base.call_response_chunk"
+  },
+  "/docs/mirascope/api/core/base/dynamic_config": {
+    "route": "/docs/mirascope/api/core/base/dynamic_config",
+    "title": "mirascope.core.base.dynamic_config | Mirascope",
+    "description": "API documentation for mirascope.core.base.dynamic_config"
+  },
+  "/docs/mirascope/api/core/base/merge_decorators": {
+    "route": "/docs/mirascope/api/core/base/merge_decorators",
+    "title": "mirascope.core.base.merge_decorators | Mirascope",
+    "description": "API documentation for mirascope.core.base.merge_decorators"
+  },
+  "/docs/mirascope/api/core/base/message_param": {
+    "route": "/docs/mirascope/api/core/base/message_param",
+    "title": "mirascope.core.base.message_param | Mirascope",
+    "description": "API documentation for mirascope.core.base.message_param"
+  },
+  "/docs/mirascope/api/core/base/metadata": {
+    "route": "/docs/mirascope/api/core/base/metadata",
+    "title": "mirascope.core.base.metadata | Mirascope",
+    "description": "API documentation for mirascope.core.base.metadata"
+  },
+  "/docs/mirascope/api/core/base/prompt": {
+    "route": "/docs/mirascope/api/core/base/prompt",
+    "title": "mirascope.core.base.prompt | Mirascope",
+    "description": "API documentation for mirascope.core.base.prompt"
+  },
+  "/docs/mirascope/api/core/base/stream": {
+    "route": "/docs/mirascope/api/core/base/stream",
+    "title": "mirascope.core.base.stream | Mirascope",
+    "description": "API documentation for mirascope.core.base.stream"
+  },
+  "/docs/mirascope/api/core/base/structured_stream": {
+    "route": "/docs/mirascope/api/core/base/structured_stream",
+    "title": "mirascope.core.base.structured_stream | Mirascope",
+    "description": "API documentation for mirascope.core.base.structured_stream"
+  },
+  "/docs/mirascope/api/core/base/tool": {
+    "route": "/docs/mirascope/api/core/base/tool",
+    "title": "mirascope.core.base.tool | Mirascope",
+    "description": "API documentation for mirascope.core.base.tool"
+  },
+  "/docs/mirascope/api/core/base/toolkit": {
+    "route": "/docs/mirascope/api/core/base/toolkit",
+    "title": "mirascope.core.base.toolkit | Mirascope",
+    "description": "API documentation for mirascope.core.base.toolkit"
+  },
+  "/docs/mirascope/api/core/base/types": {
+    "route": "/docs/mirascope/api/core/base/types",
+    "title": "mirascope.core.base.types | Mirascope",
+    "description": "API documentation for mirascope.core.base.types"
+  },
+  "/docs/mirascope/api/core/bedrock/call": {
+    "route": "/docs/mirascope/api/core/bedrock/call",
+    "title": "mirascope.core.bedrock.call | Mirascope",
+    "description": "API documentation for mirascope.core.bedrock.call"
+  },
+  "/docs/mirascope/api/core/bedrock/call_params": {
+    "route": "/docs/mirascope/api/core/bedrock/call_params",
+    "title": "mirascope.core.bedrock.call_params | Mirascope",
+    "description": "API documentation for mirascope.core.bedrock.call_params"
+  },
+  "/docs/mirascope/api/core/bedrock/call_response": {
+    "route": "/docs/mirascope/api/core/bedrock/call_response",
+    "title": "mirascope.core.bedrock.call_response | Mirascope",
+    "description": "API documentation for mirascope.core.bedrock.call_response"
+  },
+  "/docs/mirascope/api/core/bedrock/call_response_chunk": {
+    "route": "/docs/mirascope/api/core/bedrock/call_response_chunk",
+    "title": "mirascope.core.bedrock.call_response_chunk | Mirascope",
+    "description": "API documentation for mirascope.core.bedrock.call_response_chunk"
+  },
+  "/docs/mirascope/api/core/bedrock/dynamic_config": {
+    "route": "/docs/mirascope/api/core/bedrock/dynamic_config",
+    "title": "mirascope.core.bedrock.dynamic_config | Mirascope",
+    "description": "API documentation for mirascope.core.bedrock.dynamic_config"
+  },
+  "/docs/mirascope/api/core/bedrock/stream": {
+    "route": "/docs/mirascope/api/core/bedrock/stream",
+    "title": "mirascope.core.bedrock.stream | Mirascope",
+    "description": "API documentation for mirascope.core.bedrock.stream"
+  },
+  "/docs/mirascope/api/core/bedrock/tool": {
+    "route": "/docs/mirascope/api/core/bedrock/tool",
+    "title": "mirascope.core.bedrock.tool | Mirascope",
+    "description": "API documentation for mirascope.core.bedrock.tool"
+  },
+  "/docs/mirascope/api/core/cohere/call": {
+    "route": "/docs/mirascope/api/core/cohere/call",
+    "title": "mirascope.core.cohere.call | Mirascope",
+    "description": "API documentation for mirascope.core.cohere.call"
+  },
+  "/docs/mirascope/api/core/cohere/call_params": {
+    "route": "/docs/mirascope/api/core/cohere/call_params",
+    "title": "mirascope.core.cohere.call_params | Mirascope",
+    "description": "API documentation for mirascope.core.cohere.call_params"
+  },
+  "/docs/mirascope/api/core/cohere/call_response": {
+    "route": "/docs/mirascope/api/core/cohere/call_response",
+    "title": "mirascope.core.cohere.call_response | Mirascope",
+    "description": "API documentation for mirascope.core.cohere.call_response"
+  },
+  "/docs/mirascope/api/core/cohere/call_response_chunk": {
+    "route": "/docs/mirascope/api/core/cohere/call_response_chunk",
+    "title": "mirascope.core.cohere.call_response_chunk | Mirascope",
+    "description": "API documentation for mirascope.core.cohere.call_response_chunk"
+  },
+  "/docs/mirascope/api/core/cohere/dynamic_config": {
+    "route": "/docs/mirascope/api/core/cohere/dynamic_config",
+    "title": "mirascope.core.cohere.dynamic_config | Mirascope",
+    "description": "API documentation for mirascope.core.cohere.dynamic_config"
+  },
+  "/docs/mirascope/api/core/cohere/stream": {
+    "route": "/docs/mirascope/api/core/cohere/stream",
+    "title": "mirascope.core.cohere.stream | Mirascope",
+    "description": "API documentation for mirascope.core.cohere.stream"
+  },
+  "/docs/mirascope/api/core/cohere/tool": {
+    "route": "/docs/mirascope/api/core/cohere/tool",
+    "title": "mirascope.core.cohere.tool | Mirascope",
+    "description": "API documentation for mirascope.core.cohere.tool"
+  },
+  "/docs/mirascope/api/core/costs/calculate_cost": {
+    "route": "/docs/mirascope/api/core/costs/calculate_cost",
+    "title": "mirascope.core.costs.calculate_cost | Mirascope",
+    "description": "API documentation for mirascope.core.costs.calculate_cost"
+  },
+  "/docs/mirascope/api/core/google/call": {
+    "route": "/docs/mirascope/api/core/google/call",
+    "title": "mirascope.core.google.call | Mirascope",
+    "description": "API documentation for mirascope.core.google.call"
+  },
+  "/docs/mirascope/api/core/google/call_params": {
+    "route": "/docs/mirascope/api/core/google/call_params",
+    "title": "mirascope.core.google.call_params | Mirascope",
+    "description": "API documentation for mirascope.core.google.call_params"
+  },
+  "/docs/mirascope/api/core/google/call_response": {
+    "route": "/docs/mirascope/api/core/google/call_response",
+    "title": "mirascope.core.google.call_response | Mirascope",
+    "description": "API documentation for mirascope.core.google.call_response"
+  },
+  "/docs/mirascope/api/core/google/call_response_chunk": {
+    "route": "/docs/mirascope/api/core/google/call_response_chunk",
+    "title": "mirascope.core.google.call_response_chunk | Mirascope",
+    "description": "API documentation for mirascope.core.google.call_response_chunk"
+  },
+  "/docs/mirascope/api/core/google/dynamic_config": {
+    "route": "/docs/mirascope/api/core/google/dynamic_config",
+    "title": "mirascope.core.google.dynamic_config | Mirascope",
+    "description": "API documentation for mirascope.core.google.dynamic_config"
+  },
+  "/docs/mirascope/api/core/google/stream": {
+    "route": "/docs/mirascope/api/core/google/stream",
+    "title": "mirascope.core.google.stream | Mirascope",
+    "description": "API documentation for mirascope.core.google.stream"
+  },
+  "/docs/mirascope/api/core/google/tool": {
+    "route": "/docs/mirascope/api/core/google/tool",
+    "title": "mirascope.core.google.tool | Mirascope",
+    "description": "API documentation for mirascope.core.google.tool"
+  },
+  "/docs/mirascope/api/core/groq/call": {
+    "route": "/docs/mirascope/api/core/groq/call",
+    "title": "mirascope.core.groq.call | Mirascope",
+    "description": "API documentation for mirascope.core.groq.call"
+  },
+  "/docs/mirascope/api/core/groq/call_params": {
+    "route": "/docs/mirascope/api/core/groq/call_params",
+    "title": "mirascope.core.groq.call_params | Mirascope",
+    "description": "API documentation for mirascope.core.groq.call_params"
+  },
+  "/docs/mirascope/api/core/groq/call_response": {
+    "route": "/docs/mirascope/api/core/groq/call_response",
+    "title": "mirascope.core.groq.call_response | Mirascope",
+    "description": "API documentation for mirascope.core.groq.call_response"
+  },
+  "/docs/mirascope/api/core/groq/call_response_chunk": {
+    "route": "/docs/mirascope/api/core/groq/call_response_chunk",
+    "title": "mirascope.core.groq.call_response_chunk | Mirascope",
+    "description": "API documentation for mirascope.core.groq.call_response_chunk"
+  },
+  "/docs/mirascope/api/core/groq/dynamic_config": {
+    "route": "/docs/mirascope/api/core/groq/dynamic_config",
+    "title": "mirascope.core.groq.dynamic_config | Mirascope",
+    "description": "API documentation for mirascope.core.groq.dynamic_config"
+  },
+  "/docs/mirascope/api/core/groq/stream": {
+    "route": "/docs/mirascope/api/core/groq/stream",
+    "title": "mirascope.core.groq.stream | Mirascope",
+    "description": "API documentation for mirascope.core.groq.stream"
+  },
+  "/docs/mirascope/api/core/groq/tool": {
+    "route": "/docs/mirascope/api/core/groq/tool",
+    "title": "mirascope.core.groq.tool | Mirascope",
+    "description": "API documentation for mirascope.core.groq.tool"
+  },
+  "/docs/mirascope/api/core/litellm/call": {
+    "route": "/docs/mirascope/api/core/litellm/call",
+    "title": "mirascope.core.litellm.call | Mirascope",
+    "description": "API documentation for mirascope.core.litellm.call"
+  },
+  "/docs/mirascope/api/core/litellm/call_params": {
+    "route": "/docs/mirascope/api/core/litellm/call_params",
+    "title": "mirascope.core.litellm.call_params | Mirascope",
+    "description": "API documentation for mirascope.core.litellm.call_params"
+  },
+  "/docs/mirascope/api/core/litellm/call_response": {
+    "route": "/docs/mirascope/api/core/litellm/call_response",
+    "title": "mirascope.core.litellm.call_response | Mirascope",
+    "description": "API documentation for mirascope.core.litellm.call_response"
+  },
+  "/docs/mirascope/api/core/litellm/call_response_chunk": {
+    "route": "/docs/mirascope/api/core/litellm/call_response_chunk",
+    "title": "mirascope.core.litellm.call_response_chunk | Mirascope",
+    "description": "API documentation for mirascope.core.litellm.call_response_chunk"
+  },
+  "/docs/mirascope/api/core/litellm/dynamic_config": {
+    "route": "/docs/mirascope/api/core/litellm/dynamic_config",
+    "title": "mirascope.core.litellm.dynamic_config | Mirascope",
+    "description": "API documentation for mirascope.core.litellm.dynamic_config"
+  },
+  "/docs/mirascope/api/core/litellm/stream": {
+    "route": "/docs/mirascope/api/core/litellm/stream",
+    "title": "mirascope.core.litellm.stream | Mirascope",
+    "description": "API documentation for mirascope.core.litellm.stream"
+  },
+  "/docs/mirascope/api/core/litellm/tool": {
+    "route": "/docs/mirascope/api/core/litellm/tool",
+    "title": "mirascope.core.litellm.tool | Mirascope",
+    "description": "API documentation for mirascope.core.litellm.tool"
+  },
+  "/docs/mirascope/api/core/mistral/call": {
+    "route": "/docs/mirascope/api/core/mistral/call",
+    "title": "mirascope.core.mistral.call | Mirascope",
+    "description": "API documentation for mirascope.core.mistral.call"
+  },
+  "/docs/mirascope/api/core/mistral/call_params": {
+    "route": "/docs/mirascope/api/core/mistral/call_params",
+    "title": "mirascope.core.mistral.call_params | Mirascope",
+    "description": "API documentation for mirascope.core.mistral.call_params"
+  },
+  "/docs/mirascope/api/core/mistral/call_response": {
+    "route": "/docs/mirascope/api/core/mistral/call_response",
+    "title": "mirascope.core.mistral.call_response | Mirascope",
+    "description": "API documentation for mirascope.core.mistral.call_response"
+  },
+  "/docs/mirascope/api/core/mistral/call_response_chunk": {
+    "route": "/docs/mirascope/api/core/mistral/call_response_chunk",
+    "title": "mirascope.core.mistral.call_response_chunk | Mirascope",
+    "description": "API documentation for mirascope.core.mistral.call_response_chunk"
+  },
+  "/docs/mirascope/api/core/mistral/dynamic_config": {
+    "route": "/docs/mirascope/api/core/mistral/dynamic_config",
+    "title": "mirascope.core.mistral.dynamic_config | Mirascope",
+    "description": "API documentation for mirascope.core.mistral.dynamic_config"
+  },
+  "/docs/mirascope/api/core/mistral/stream": {
+    "route": "/docs/mirascope/api/core/mistral/stream",
+    "title": "mirascope.core.mistral.stream | Mirascope",
+    "description": "API documentation for mirascope.core.mistral.stream"
+  },
+  "/docs/mirascope/api/core/mistral/tool": {
+    "route": "/docs/mirascope/api/core/mistral/tool",
+    "title": "mirascope.core.mistral.tool | Mirascope",
+    "description": "API documentation for mirascope.core.mistral.tool"
   },
   "/docs/mirascope/api/core/openai/call": {
     "route": "/docs/mirascope/api/core/openai/call",
-    "title": "call | Mirascope",
-    "description": "Documentation for OpenAI call function within Anthropic namespace"
+    "title": "mirascope.core.openai.call | Mirascope",
+    "description": "API documentation for mirascope.core.openai.call"
   },
-  "/docs/mirascope/api/core/openai/parameters": {
-    "route": "/docs/mirascope/api/core/openai/parameters",
-    "title": "parameters | Mirascope",
-    "description": "Documentation for OpenAI parameters within Anthropic namespace"
+  "/docs/mirascope/api/core/openai/call_params": {
+    "route": "/docs/mirascope/api/core/openai/call_params",
+    "title": "mirascope.core.openai.call_params | Mirascope",
+    "description": "API documentation for mirascope.core.openai.call_params"
   },
-  "/docs/mirascope/api/index": {
-    "route": "/docs/mirascope/api/index",
-    "title": "Mirascope API Reference | Mirascope",
-    "description": "API documentation for Mirascope"
+  "/docs/mirascope/api/core/openai/call_response": {
+    "route": "/docs/mirascope/api/core/openai/call_response",
+    "title": "mirascope.core.openai.call_response | Mirascope",
+    "description": "API documentation for mirascope.core.openai.call_response"
+  },
+  "/docs/mirascope/api/core/openai/call_response_chunk": {
+    "route": "/docs/mirascope/api/core/openai/call_response_chunk",
+    "title": "mirascope.core.openai.call_response_chunk | Mirascope",
+    "description": "API documentation for mirascope.core.openai.call_response_chunk"
+  },
+  "/docs/mirascope/api/core/openai/dynamic_config": {
+    "route": "/docs/mirascope/api/core/openai/dynamic_config",
+    "title": "mirascope.core.openai.dynamic_config | Mirascope",
+    "description": "API documentation for mirascope.core.openai.dynamic_config"
+  },
+  "/docs/mirascope/api/core/openai/stream": {
+    "route": "/docs/mirascope/api/core/openai/stream",
+    "title": "mirascope.core.openai.stream | Mirascope",
+    "description": "API documentation for mirascope.core.openai.stream"
+  },
+  "/docs/mirascope/api/core/openai/tool": {
+    "route": "/docs/mirascope/api/core/openai/tool",
+    "title": "mirascope.core.openai.tool | Mirascope",
+    "description": "API documentation for mirascope.core.openai.tool"
+  },
+  "/docs/mirascope/api/core/xai/call": {
+    "route": "/docs/mirascope/api/core/xai/call",
+    "title": "mirascope.core.xai.call | Mirascope",
+    "description": "API documentation for mirascope.core.xai.call"
+  },
+  "/docs/mirascope/api/core/xai/call_params": {
+    "route": "/docs/mirascope/api/core/xai/call_params",
+    "title": "mirascope.core.xai.call_params | Mirascope",
+    "description": "API documentation for mirascope.core.xai.call_params"
+  },
+  "/docs/mirascope/api/core/xai/call_response": {
+    "route": "/docs/mirascope/api/core/xai/call_response",
+    "title": "mirascope.core.xai.call_response | Mirascope",
+    "description": "API documentation for mirascope.core.xai.call_response"
+  },
+  "/docs/mirascope/api/core/xai/call_response_chunk": {
+    "route": "/docs/mirascope/api/core/xai/call_response_chunk",
+    "title": "mirascope.core.xai.call_response_chunk | Mirascope",
+    "description": "API documentation for mirascope.core.xai.call_response_chunk"
+  },
+  "/docs/mirascope/api/core/xai/dynamic_config": {
+    "route": "/docs/mirascope/api/core/xai/dynamic_config",
+    "title": "mirascope.core.xai.dynamic_config | Mirascope",
+    "description": "API documentation for mirascope.core.xai.dynamic_config"
+  },
+  "/docs/mirascope/api/core/xai/stream": {
+    "route": "/docs/mirascope/api/core/xai/stream",
+    "title": "mirascope.core.xai.stream | Mirascope",
+    "description": "API documentation for mirascope.core.xai.stream"
+  },
+  "/docs/mirascope/api/core/xai/tool": {
+    "route": "/docs/mirascope/api/core/xai/tool",
+    "title": "mirascope.core.xai.tool | Mirascope",
+    "description": "API documentation for mirascope.core.xai.tool"
+  },
+  "/docs/mirascope/api/integrations/langfuse": {
+    "route": "/docs/mirascope/api/integrations/langfuse",
+    "title": "mirascope.integrations.langfuse | Mirascope",
+    "description": "API documentation for mirascope.integrations.langfuse"
+  },
+  "/docs/mirascope/api/integrations/logfire": {
+    "route": "/docs/mirascope/api/integrations/logfire",
+    "title": "mirascope.integrations.logfire | Mirascope",
+    "description": "API documentation for mirascope.integrations.logfire"
+  },
+  "/docs/mirascope/api/integrations/middleware": {
+    "route": "/docs/mirascope/api/integrations/middleware",
+    "title": "mirascope.integrations.middleware | Mirascope",
+    "description": "API documentation for mirascope.integrations.middleware"
+  },
+  "/docs/mirascope/api/integrations/otel": {
+    "route": "/docs/mirascope/api/integrations/otel",
+    "title": "mirascope.integrations.otel | Mirascope",
+    "description": "API documentation for mirascope.integrations.otel"
+  },
+  "/docs/mirascope/api/integrations/tenacity": {
+    "route": "/docs/mirascope/api/integrations/tenacity",
+    "title": "mirascope.integrations.tenacity | Mirascope",
+    "description": "API documentation for mirascope.integrations.tenacity"
+  },
+  "/docs/mirascope/api/llm/call": {
+    "route": "/docs/mirascope/api/llm/call",
+    "title": "mirascope.llm.call | Mirascope",
+    "description": "API documentation for mirascope.llm.call"
+  },
+  "/docs/mirascope/api/tools/system/docker_operation": {
+    "route": "/docs/mirascope/api/tools/system/docker_operation",
+    "title": "mirascope.tools.system._docker_operation | Mirascope",
+    "description": "API documentation for mirascope.tools.system._docker_operation"
+  },
+  "/docs/mirascope/api/tools/system/file_system": {
+    "route": "/docs/mirascope/api/tools/system/file_system",
+    "title": "mirascope.tools.system._file_system | Mirascope",
+    "description": "API documentation for mirascope.tools.system._file_system"
+  },
+  "/docs/mirascope/api/tools/web/duckduckgo": {
+    "route": "/docs/mirascope/api/tools/web/duckduckgo",
+    "title": "mirascope.tools.web._duckduckgo | Mirascope",
+    "description": "API documentation for mirascope.tools.web._duckduckgo"
+  },
+  "/docs/mirascope/api/tools/web/httpx": {
+    "route": "/docs/mirascope/api/tools/web/httpx",
+    "title": "mirascope.tools.web._httpx | Mirascope",
+    "description": "API documentation for mirascope.tools.web._httpx"
+  },
+  "/docs/mirascope/api/tools/web/parse_url_content": {
+    "route": "/docs/mirascope/api/tools/web/parse_url_content",
+    "title": "mirascope.tools.web._parse_url_content | Mirascope",
+    "description": "API documentation for mirascope.tools.web._parse_url_content"
+  },
+  "/docs/mirascope/api/tools/web/requests": {
+    "route": "/docs/mirascope/api/tools/web/requests",
+    "title": "mirascope.tools.web._requests | Mirascope",
+    "description": "API documentation for mirascope.tools.web._requests"
   },
   "/docs/mirascope/getting-started/contributing": {
     "route": "/docs/mirascope/getting-started/contributing",
