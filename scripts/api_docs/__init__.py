@@ -1,0 +1,1 @@
+"""Generate API documentation."""

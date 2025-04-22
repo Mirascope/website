@@ -1,8 +1,11 @@
-# Basic Ruff configuration for checking snippets
-# This is an exploratory configuration to see what kinds of issues would be flagged
+# Ruff configuration for Python code
+# Covers both snippets/examples and API doc generation scripts
 
 # Python target version
 target-version = "py310"
+
+# Line length configuration
+line-length = 88
 
 # Exclude build artifacts and other non-code files
 exclude = [
@@ -14,19 +17,37 @@ exclude = [
 ]
 
 [lint]
-# Enable only the most important rules for example code
+# Enable a comprehensive set of rules by default
 select = [
-    "E",      # pycodestyle errors
-    "F",      # pyflakes
-    # "I",      # isort (disabled - not useful for examples)
-    "B",      # flake8-bugbear 
-    "UP",     # pyupgrade
+    "E",    # pycodestyle errors
+    "F",    # pyflakes
+    "I",    # isort
+    "B",    # flake8-bugbear
+    "C4",   # flake8-comprehensions
+    "D",    # pydocstyle
+    "UP",   # pyupgrade
+    "T",    # type-checking
+    "PL",   # pylint
+    "RUF",  # ruff-specific
 ]
 
-# Ignore rules that are too strict for example code
+# Rules to ignore for all files
 ignore = [
-    "E501",   # line too long
-    "B905",   # zip() without an explicit strict= parameter
+    "D203",  # one-blank-line-before-class: incompatible with D211
+    "D213",  # multi-line-summary-second-line: incompatible with D212
+    "T201",  # print: allowed for CLI tools
+]
+
+# Disable rules for example/snippet code
+[lint.per-file-ignores]
+"public/**/*.py" = [
+    "E501",  # ignore line too long 
+    "I",     # ignore isort for examples
+    "D",     # ignore docstring issues
+    "T",     # ignore type checking issues
+    "B905",  # ignore zip() without strict parameter
+    "PL",    # ignore pylint
+    "RUF",   # ignore ruff rules
 ]
 
 [lint.isort]

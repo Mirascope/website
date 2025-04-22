@@ -15,15 +15,16 @@
     "build": "bun run --bun vite build && bun run optimize-images && bun run prerender",
     "serve": "bun scripts/serve-static.js",
     "test": "bun test",
-    "lint": "bun run typecheck && bun run lint:mdx && bun run lint:snippets && bun run lint:format && bun run lint:social",
+    "lint": "bun run typecheck && bun run lint:mdx && bun run lint:python && bun run lint:format && bun run lint:social && bun run lint:python",
     "lint:social": "bun run generate-social --check",
     "typecheck": "bun run tsc --noEmit",
     "lint:mdx": "bun run scripts/validate-mdx.ts",
-    "lint:snippets": "bun run scripts/update-snippets.ts --check && ./scripts/lint-python.sh",
+    "lint:python": "bun run scripts/update-snippets.ts --check && ./scripts/lint-python.sh",
     "lint:format": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\"",
-    "fix": "bun run fix:format && bun run fix:snippets",
+    "fix": "bun run fix:format && bun run fix:snippets && bun run fix:python",
     "fix:format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\"",
     "fix:snippets": "bun run scripts/update-snippets.ts",
+    "fix:python": "source .venv/bin/activate && uv run ruff format scripts/api_docs/",
     "prepare": "husky",
     "pre-commit": "lint-staged"
   },
@@ -34,7 +35,7 @@
     ],
     "*.mdx": [
       "bun run lint:mdx",
-      "bun run lint:snippets"
+      "bun run lint:python"
     ],
     "*.py": "./scripts/lint-python.sh --path"
   },

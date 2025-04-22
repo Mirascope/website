@@ -18,6 +18,13 @@ bun install
 bun run start
 ```
 
+### Python Modules
+
+This project is mostly Typescript/React/etc (as stated above). However, there is a small amount of Python code:
+- In the public/examples directory. This includes example Python code which is incorporated into the documentation, and typechecked for safety.
+- In the public/extracted-snippets directory. This includes example Python code that is automatically extracted from the mdx content, and is typechecked for safety. This should not be edited by hand.
+- In the scripts/api_docs module, which contains custom Python code for generating API docs for mirascope/mirascope and other libraries.
+
 ### Commands
 
 #### Main Commands
@@ -27,7 +34,7 @@ bun run start
 - `bun run serve` - Preview production build
 - `bun run typecheck` - Check typescript
 - `bun test` - Run tests with Bun's built-in Jest-compatible test runner
-- `bun run lint` - All lint checks, except Python snippets
+- `bun run lint` - All lint checks
 - `bun run fix` - All automated fixes (e.g. running prettier)
 
 
@@ -37,10 +44,11 @@ bun run start
 - `bun run lint:snippets` - Check if code snippets are up-to-date
 - `bun run lint:social` - Check if generated social cards (OG images) are up to date
 - `bun run generate-social` - Update generated social cards and metadata
-- `bun run lint:snippets` - Update and run typechecking / ruff checking on snippets
+- `bun run lint:python` - Update and run typechecking / ruff checking on snippets and api_docs code
 - `bun run lint:format` - Check formatting with Prettier
 - `bun run fix:format` - Format all files with Prettier
 - `bun run fix:snippets` - Update extractable code snippets
+- `bun run fix:python` - Fix Python code in the scripts/api_docs module
 
 ### Pre-commit Hooks
 
