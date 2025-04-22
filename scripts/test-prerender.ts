@@ -34,8 +34,8 @@ Options:
   const outputDirArg = args.find((arg) => arg.startsWith("--output-dir="));
   const verbose = args.includes("--verbose");
 
-  // Default output directory is public/ssg
-  let outputDir = path.join(process.cwd(), "public", "ssg");
+  // Default output directory is dist
+  let outputDir = path.join(process.cwd(), "dist");
 
   // Parse output directory if provided
   if (outputDirArg) {

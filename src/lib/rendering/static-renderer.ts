@@ -29,8 +29,9 @@ export async function staticFetch(url: string) {
 
   // Check if the file exists
   if (!fs.existsSync(contentPath)) {
-    console.error(`File not found: ${contentPath}`);
-    throw new Error(`File not found: ${contentPath}`);
+    const error = new Error(`File not found: ${contentPath}`);
+    environment.onError(error);
+    throw error;
   }
 
   // Read the file content
@@ -115,66 +116,73 @@ export async function renderRouteToString(
     loadError = error;
   };
 
-  try {
-    // Create a memory history for the specified route
-    const memoryHistory = createMemoryHistory({
-      initialEntries: [route],
-    });
+  // Create a memory history for the specified route
+  const memoryHistory = createMemoryHistory({
+    initialEntries: [route],
+  });
 
-    // Create a router instance for the route
-    const router = createRouter({
-      routeTree,
-      history: memoryHistory,
-      context: {
-        environment: env,
-      },
-    });
+  // Create a router instance for the route
+  const router = createRouter({
+    routeTree,
+    history: memoryHistory,
+    context: {
+      environment: env,
+    },
+  });
 
-    // Actually load the data and the component
-    await router.load();
+  // Actually load the data and the component
+  await router.load();
 
-    // Router will catch errors, but if the error was properly
-    // wired to the environment handler, then we can throw it
-    // and correctly signal that the component failed to load
-    if (loadError) {
-      throw loadError;
-    }
-
-    // Render the app to a string
-    const appHtml = renderToString(React.createElement(RouterProvider, { router }));
-
-    // Extract title tag from the rendered HTML
-    const titleMatch = appHtml.match(/<title[^>]*>(.*?)<\/title>/);
-    const title = titleMatch ? decodeHtmlEntities(titleMatch[1]) : "Mirascope";
-
-    // Extract all meta tags
-    const metaTagsRegex = /<meta[^>]*>/g;
-    const metaTags = appHtml.match(metaTagsRegex) || [];
-    const metaTagsString = metaTags.join("\n");
-
-    // Extract all link tags
-    const linkTagsRegex = /<link[^>]*>/g;
-    const linkTags = appHtml.match(linkTagsRegex) || [];
-    const linkTagsString = linkTags.join("\n");
-
-    // Extract description from meta tags
-    const description = extractDescription(metaTagsString);
-
-    // Create metadata object
-    const metadata: PageMetadata = {
-      title,
-      description,
-      meta: metaTagsString,
-      link: linkTagsString,
-      htmlAttributes: "",
-      bodyAttributes: "",
-    };
-
-    return { html: appHtml, metadata };
-  } catch (error) {
-    console.error(`Error rendering route ${route}:`, error);
-    throw error;
+  // Router will catch errors, but if the error was properly
+  // wired to the environment handler, then we can throw it
+  // and correctly signal that the component failed to load
+  if (loadError) {
+    throw loadError;
   }
+
+  const originalError = console.error;
+  let renderError: unknown[] = [];
+  console.error = (...args: unknown[]) => {
+    renderError = [...args];
+  };
+  // Render the app to a string
+  const appHtml = renderToString(React.createElement(RouterProvider, { router }));
+  console.error = originalError;
+  if (renderError.length > 0) {
+    console.error("Error rendering app:", ...renderError);
+    throw new Error("Error rendering: " + renderError.join(" "));
+  }
+  // Extract title tag from the rendered HTML
+  const titleMatch = appHtml.match(/<title[^>]*>(.*?)<\/title>/);
+  const title = titleMatch ? decodeHtmlEntities(titleMatch[1]) : null;
+  if (!title) {
+    throw new Error("No title found in the rendered HTML");
+  }
+
+  // Extract all meta tags
+  const metaTagsRegex = /<meta[^>]*>/g;
+  const metaTags = appHtml.match(metaTagsRegex) || [];
+  const metaTagsString = metaTags.join("\n");
+
+  // Extract all link tags
+  const linkTagsRegex = /<link[^>]*>/g;
+  const linkTags = appHtml.match(linkTagsRegex) || [];
+  const linkTagsString = linkTags.join("\n");
+
+  // Extract description from meta tags
+  const description = extractDescription(metaTagsString);
+
+  // Create metadata object
+  const metadata: PageMetadata = {
+    title,
+    description,
+    meta: metaTagsString,
+    link: linkTagsString,
+    htmlAttributes: "",
+    bodyAttributes: "",
+  };
+
+  return { html: appHtml, metadata };
 }
 
 /**

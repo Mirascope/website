@@ -12,38 +12,33 @@ import { renderRouteToString, createHtmlDocument } from "../../src/lib/rendering
  */
 export async function prerenderPage(
   route: string,
-  outputDir: string = path.join(process.cwd(), "public", "ssg"),
+  outputDir: string,
   verbose: boolean = false
 ): Promise<string> {
   if (verbose) console.log(`Pre-rendering route: ${route}`);
 
-  try {
-    // Use the shared rendering utility to render the route
-    const { html: appHtml, metadata } = await renderRouteToString(route, verbose);
+  // Use the shared rendering utility to render the route
+  const { html: appHtml, metadata } = await renderRouteToString(route, verbose);
 
-    // Create the full HTML document
-    const html = createHtmlDocument(appHtml, metadata);
+  // Create the full HTML document
+  const html = createHtmlDocument(appHtml, metadata);
 
-    // Determine the output path
-    let outputPath;
-    if (route === "/") {
-      // Root route: /index.html
-      outputPath = path.join(outputDir, "index.html");
-    } else {
-      // Create directory for the route and place index.html inside
-      const dirPath = path.join(outputDir, route.slice(1));
-      fs.mkdirSync(dirPath, { recursive: true });
-      outputPath = path.join(dirPath, "index.html");
-    }
-
-    // Write the file
-    fs.writeFileSync(outputPath, html);
-
-    if (verbose) console.log(`Successfully rendered ${route} to ${outputPath}`);
-
-    return outputPath;
-  } catch (error) {
-    console.error(`Error pre-rendering route ${route}:`, error);
-    throw error;
+  // Determine the output path
+  let outputPath;
+  if (route === "/") {
+    // Root route: /index.html
+    outputPath = path.join(outputDir, "index.html");
+  } else {
+    // Create directory for the route and place index.html inside
+    const dirPath = path.join(outputDir, route.slice(1));
+    fs.mkdirSync(dirPath, { recursive: true });
+    outputPath = path.join(dirPath, "index.html");
   }
+
+  // Write the file
+  fs.writeFileSync(outputPath, html);
+
+  if (verbose) console.log(`Successfully rendered ${route} to ${outputPath}`);
+
+  return outputPath;
 }
