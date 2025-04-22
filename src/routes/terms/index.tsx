@@ -1,5 +1,5 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { environment } from "@/lib/content/environment";
+import { environment } from "@/src/lib/content/environment";
 
 // Redirect /terms/ to /terms/use
 export const Route = createFileRoute("/terms/")({

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 8: Error Reinsertion
 # Generated for provider: openai
-# Source: src/docs/mirascope/learn/retries.mdx:265
+# Source: content/doc/mirascope/learn/retries.mdx:265
 # This file is auto-generated; any edits should be made in the source file
 
 from typing import Annotated

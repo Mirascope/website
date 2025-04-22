@@ -8,7 +8,7 @@
  * Only include redirects here that need dynamic processing or aren't covered by Cloudflare.
  */
 import { isValidProduct } from "./route-types";
-import { getAllDocs } from "../docs/_meta";
+import { getAllDocs } from "@/content/doc/_meta";
 
 // Define exact redirects - maps old paths to new paths
 export const exactRedirects: Record<string, string> = {

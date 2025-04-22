@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useMatches } from "@tanstack/react-router";
-import { cn } from "@/lib/utils";
+import { cn } from "@/src/lib/utils";
 
 // Hardcoded dev routes for now
 const DEV_ROUTES = [

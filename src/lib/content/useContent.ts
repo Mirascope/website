@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import type { ContentMeta, ContentResult, GetContentFn } from "@/lib/content/types";
+import type { ContentMeta, ContentResult, GetContentFn } from "@/src/lib/content/types";
 
 /**
  * Base hook for loading and processing content

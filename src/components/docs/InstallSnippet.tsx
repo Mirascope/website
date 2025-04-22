@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useProvider } from "./ProviderContext";
 import type { Provider } from "./ProviderContext";
 import { CodeBlock } from "../CodeBlock";
-import { cn } from "@/lib/utils";
+import { cn } from "@/src/lib/utils";
 
 // Define available operating systems
 export type OS = "MacOS / Linux" | "Windows";

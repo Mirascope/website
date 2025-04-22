@@ -1,5 +1,5 @@
-import docsMetadata from "../../docs/_meta";
-import type { ProductDocs } from "../../docs/_meta";
+import docsMetadata from "@/content/doc/_meta";
+import type { ProductDocs } from "@/content/doc/_meta";
 import type { ContentType, ContentMeta, ValidationResult } from "./types";
 import type { DocMeta } from "./docs";
 import type { BlogMeta } from "./blog";

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 19: Object Attribute Access
 # Generated for provider: openai
-# Source: src/docs/mirascope/learn/prompts.mdx:613
+# Source: content/doc/mirascope/learn/prompts.mdx:613
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import prompt_template

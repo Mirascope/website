@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 6: Asynchronous Processing
 # Generated for provider: openai
-# Source: src/docs/mirascope/getting-started/quickstart.mdx:216
+# Source: content/doc/mirascope/getting-started/quickstart.mdx:216
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm

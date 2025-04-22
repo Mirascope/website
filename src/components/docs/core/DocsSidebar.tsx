@@ -1,11 +1,11 @@
 import React from "react";
 import { Link, useMatches } from "@tanstack/react-router";
-import { cn } from "@/lib/utils";
-import docsMetadata from "@/docs/_meta";
-import { getSectionsForProduct } from "@/lib/content/docs";
-import { getProductRoute, getSectionRoute, getSectionParams } from "@/lib/routes";
-import type { ProductName } from "@/lib/route-types";
-import type { DocMeta } from "@/lib/content/docs";
+import { cn } from "@/src/lib/utils";
+import docsMetadata from "@/content/doc/_meta";
+import { getSectionsForProduct } from "@/src/lib/content/docs";
+import { getProductRoute, getSectionRoute, getSectionParams } from "@/src/lib/routes";
+import type { ProductName } from "@/src/lib/route-types";
+import type { DocMeta } from "@/src/lib/content/docs";
 import { type Provider } from "../ProviderContext";
 
 interface DocsSidebarProps {

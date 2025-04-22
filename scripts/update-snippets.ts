@@ -26,7 +26,7 @@ import * as crypto from "crypto";
 import { processFile } from "./lib/snippet-extractor";
 
 // Import doc meta types and data
-import { getAllDocs } from "../src/docs/_meta";
+import { getAllDocs } from "@/content/doc/_meta";
 
 // Provider list to generate examples for
 const PROVIDERS = ["openai", "anthropic"];
@@ -35,7 +35,7 @@ const PROVIDERS = ["openai", "anthropic"];
 const SNIPPETS_ROOT = path.join(process.cwd(), "public", "extracted-snippets");
 
 // Docs root directory
-const DOCS_ROOT = path.join(process.cwd(), "src", "docs");
+const DOCS_ROOT = path.join(process.cwd(), "content", "doc");
 
 /**
  * Interface for a document with extractable snippets
@@ -327,8 +327,12 @@ function showHelp(): void {
   console.log("Examples:");
   console.log("  npm run update-snippets                                   # Update all snippets");
   console.log("  npm run update-snippets -- --check                        # Check all snippets");
-  console.log("  npm run update-snippets -- --path=src/docs/.../file.mdx   # Update specific file");
-  console.log("  npm run update-snippets -- --check --path=src/docs/...    # Check specific file");
+  console.log(
+    "  npm run update-snippets -- --path=content/doc/.../file.mdx   # Update specific file"
+  );
+  console.log(
+    "  npm run update-snippets -- --check --path=content/doc/...    # Check specific file"
+  );
   process.exit(0);
 }
 

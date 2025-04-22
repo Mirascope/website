@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { LoadingContent } from "@/components/docs";
-import DevLayout from "@/components/dev/DevLayout";
-import { MDXRenderer } from "@/components/MDXRenderer";
+import { LoadingContent } from "@/src/components/docs";
+import DevLayout from "@/src/components/dev/DevLayout";
+import { MDXRenderer } from "@/src/components/MDXRenderer";
 import { useState, useEffect } from "react";
-import { processMDXContent } from "@/lib/content/mdx-processor";
-import { environment } from "@/lib/content/environment";
+import { processMDXContent } from "@/src/lib/content/mdx-processor";
+import { environment } from "@/src/lib/content/environment";
 
 export const Route = createFileRoute("/dev/style-test")({
   component: StyleTestPage,
@@ -78,7 +78,9 @@ function StyleTestPage() {
           const rawContent = await response.text();
 
           // Process MDX content
-          const processed = await processMDXContent(rawContent);
+          const processed = await processMDXContent(rawContent, "dev", {
+            path: "/src/components/dev/style-test.mdx",
+          });
           code = processed.code;
           frontmatter = processed.frontmatter;
         } else {
@@ -92,7 +94,9 @@ function StyleTestPage() {
           const data = await response.json();
 
           // Process MDX content from the JSON
-          const processed = await processMDXContent(data.content);
+          const processed = await processMDXContent(data.content, "dev", {
+            path: "/static/dev/style-test.mdx.json",
+          });
           code = processed.code;
           frontmatter = processed.frontmatter;
         }

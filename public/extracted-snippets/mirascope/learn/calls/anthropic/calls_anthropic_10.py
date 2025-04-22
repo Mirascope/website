@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 10: Metadata
 # Generated for provider: anthropic
-# Source: src/docs/mirascope/learn/calls.mdx:390
+# Source: content/doc/mirascope/learn/calls.mdx:390
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import BaseDynamicConfig, llm, prompt_template

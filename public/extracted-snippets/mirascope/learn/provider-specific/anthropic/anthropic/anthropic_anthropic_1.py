@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 1: Message Caching
 # Generated for provider: anthropic
-# Source: src/docs/mirascope/learn/provider-specific/anthropic.mdx:24
+# Source: content/doc/mirascope/learn/provider-specific/anthropic.mdx:24
 # This file is auto-generated; any edits should be made in the source file
 
 import inspect

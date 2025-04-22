@@ -1,9 +1,9 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
-import PolicyPage, { PolicyPageLoading, PolicyPageError } from "@/components/PolicyPage";
-import SEOHelmet from "@/components/SEOHelmet";
-import { policyLoader } from "@/lib/content/loaders";
-import type { PolicyContent } from "@/lib/content/policy";
-import { environment } from "@/lib/content/environment";
+import PolicyPage, { PolicyPageLoading, PolicyPageError } from "@/src/components/PolicyPage";
+import SEOHelmet from "@/src/components/SEOHelmet";
+import { policyLoader } from "@/src/lib/content/loaders";
+import type { PolicyContent } from "@/src/lib/content/policy";
+import { environment } from "@/src/lib/content/environment";
 
 export const Route = createFileRoute("/privacy")({
   component: PrivacyPage,

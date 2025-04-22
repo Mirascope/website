@@ -1,18 +1,18 @@
 import { createFileRoute, useParams, Link, useLoaderData } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/src/components/ui/button";
 import { ChevronLeft, Sparkles, Clipboard, Check } from "lucide-react";
-import { MDXRenderer } from "@/components/MDXRenderer";
-import { LoadingContent } from "@/components/docs";
-import ContentErrorHandler from "@/components/ContentErrorHandler";
-import TableOfContents from "@/components/TableOfContents";
-import SEOHelmet from "@/components/SEOHelmet";
-import useFunMode from "@/lib/hooks/useFunMode";
-import { cn } from "@/lib/utils";
-import { blogLoader } from "@/lib/content/loaders";
-import analyticsManager from "@/lib/services/analytics";
-import type { BlogContent } from "@/lib/content/blog";
-import { environment } from "@/lib/content/environment";
+import { MDXRenderer } from "@/src/components/MDXRenderer";
+import { LoadingContent } from "@/src/components/docs";
+import ContentErrorHandler from "@/src/components/ContentErrorHandler";
+import TableOfContents from "@/src/components/TableOfContents";
+import SEOHelmet from "@/src/components/SEOHelmet";
+import useFunMode from "@/src/lib/hooks/useFunMode";
+import { cn } from "@/src/lib/utils";
+import { blogLoader } from "@/src/lib/content/loaders";
+import analyticsManager from "@/src/lib/services/analytics";
+import type { BlogContent } from "@/src/lib/content/blog";
+import { environment } from "@/src/lib/content/environment";
 
 export const Route = createFileRoute("/blog/$slug")({
   component: BlogPostPage,

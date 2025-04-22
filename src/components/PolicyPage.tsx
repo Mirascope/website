@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { LoadingContent } from "@/components/docs";
-import { MDXRenderer } from "@/components/MDXRenderer";
-import { type PolicyContent } from "@/lib/content/policy";
-import { Button } from "@/components/ui/button";
+import { LoadingContent } from "@/src/components/docs";
+import { MDXRenderer } from "@/src/components/MDXRenderer";
+import { type PolicyContent } from "@/src/lib/content/policy";
+import { Button } from "@/src/components/ui/button";
 import { Sparkles } from "lucide-react";
-import { cn, formatDate } from "@/lib/utils";
+import { cn, formatDate } from "@/src/lib/utils";
 
 interface PolicyPageProps {
   content: PolicyContent;

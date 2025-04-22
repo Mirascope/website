@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 4: Parallel Async Calls
 # Generated for provider: openai
-# Source: src/docs/mirascope/learn/async.mdx:130
+# Source: content/doc/mirascope/learn/async.mdx:130
 # This file is auto-generated; any edits should be made in the source file
 
 import asyncio

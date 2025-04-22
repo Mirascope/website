@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 2: State Management
 # Generated for provider: anthropic
-# Source: src/docs/mirascope/learn/agents.mdx:80
+# Source: content/doc/mirascope/learn/agents.mdx:80
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import Messages, llm, BaseMessageParam, prompt_template

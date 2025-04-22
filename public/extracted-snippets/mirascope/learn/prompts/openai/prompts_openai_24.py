@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 24: Lists
 # Generated for provider: openai
-# Source: src/docs/mirascope/learn/prompts.mdx:754
+# Source: content/doc/mirascope/learn/prompts.mdx:754
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import TextPart, prompt_template

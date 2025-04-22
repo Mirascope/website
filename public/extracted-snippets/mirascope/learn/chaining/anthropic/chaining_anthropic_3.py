@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 3: Nested Chains
 # Generated for provider: anthropic
-# Source: src/docs/mirascope/learn/chaining.mdx:76
+# Source: content/doc/mirascope/learn/chaining.mdx:76
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm

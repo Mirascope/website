@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { cn } from "@/lib/utils";
+import { cn } from "@/src/lib/utils";
 
 export default function Footer() {
   const router = useRouterState();

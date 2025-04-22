@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 2: HyperDX
 # Generated for provider: anthropic
-# Source: src/docs/mirascope/integrations/hyperdx.mdx:36
+# Source: content/doc/mirascope/integrations/hyperdx.mdx:36
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm, prompt_template

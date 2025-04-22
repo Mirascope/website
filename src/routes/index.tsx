@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import Logo from "@/components/Logo";
-import SEOHelmet from "@/components/SEOHelmet";
-import { environment } from "@/lib/content/environment";
+import Logo from "@/src/components/Logo";
+import SEOHelmet from "@/src/components/SEOHelmet";
+import { environment } from "@/src/lib/content/environment";
 
 export const Route = createFileRoute("/")({
   component: LandingPage,

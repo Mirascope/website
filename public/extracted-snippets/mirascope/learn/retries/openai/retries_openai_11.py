@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 11: Fallback With Retries
 # Generated for provider: openai
-# Source: src/docs/mirascope/learn/retries.mdx:408
+# Source: content/doc/mirascope/learn/retries.mdx:408
 # This file is auto-generated; any edits should be made in the source file
 
 from anthropic import RateLimitError as AnthropicRateLimitError
