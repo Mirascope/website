@@ -167,7 +167,7 @@ Now, let's implement the function to determine the most appropriate search type:
 
 ```python
 @throttled_groq_call(
-    "llama-3.2-90b-text-preview", response_model=SearchType, json_mode=True
+    "llama-3.3-70b-versatile", response_model=SearchType, json_mode=True
 )
 @prompt_template(
     """
@@ -279,7 +279,7 @@ Now, let's implement the functions to process the search results and extract the
 
 
 ```python
-@groq_call("llama-3.2-90b-text-preview")
+@groq_call("llama-3.3-70b-versatile")
 @prompt_template(
     """
 SYSTEM:
@@ -302,7 +302,7 @@ def search(question: str, search_results: dict[str, str]) -> str:
 
 
 @throttled_groq_call(
-    "llama-3.2-90b-text-preview", response_model=SearchResponse, json_mode=True
+    "llama-3.3-70b-versatile", response_model=SearchResponse, json_mode=True
 )  # Changed response_model from SearchType to SearchResponse
 @prompt_template(
     """
