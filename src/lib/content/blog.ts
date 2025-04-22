@@ -59,22 +59,12 @@ export function useBlogPost(slug: string): ContentResult<BlogMeta> {
  */
 export async function getAllBlogMeta(): Promise<BlogMeta[]> {
   try {
-    // Choose implementation based on environment
-    if (environment.isProd()) {
-      // Production: Use pre-generated static JSON file
-      const response = await environment.fetch("/static/posts-list.json");
-      if (!response.ok) {
-        throw new Error(`Error fetching posts list: ${response.statusText}`);
-      }
-      return await response.json();
-    } else {
-      // Development: Use the virtual middleware endpoint
-      const response = await environment.fetch("/api/posts-list");
-      if (!response.ok) {
-        throw new Error(`Error fetching posts list: ${response.statusText}`);
-      }
-      return await response.json();
+    // Both development and production use the same static file now
+    const response = await environment.fetch("/static/content-meta/blog/index.json");
+    if (!response.ok) {
+      throw new Error(`Error fetching blog metadata: ${response.statusText}`);
     }
+    return await response.json();
   } catch (error) {
     console.error("Error fetching posts metadata:", error);
     throw new ContentError(

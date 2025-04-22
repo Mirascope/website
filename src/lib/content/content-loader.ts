@@ -2,8 +2,8 @@ import { environment } from "./environment";
 import type { ContentType, ContentMeta, Content, ValidationResult } from "./types";
 import { validateMetadata as validateMetadataService } from "./metadata-service";
 import { processMDXContent } from "./mdx-processor";
-import { resolveContentPath, isValidPath } from "./path-resolver";
-import { handleContentError, InvalidPathError } from "./errors";
+import { resolveContentPath } from "./path-resolver";
+import { handleContentError } from "./errors";
 
 /**
  * Fetches raw content from a given path
@@ -42,13 +42,8 @@ export async function loadContent<T extends ContentMeta>(
   }
 ): Promise<Content<T>> {
   try {
-    // Validate the path
-    if (!isValidPath(path, contentType)) {
-      throw new InvalidPathError(contentType, path);
-    }
-
     // Get content path
-    const contentPath = resolveContentPath(path, contentType);
+    const contentPath = resolveContentPath(path);
 
     // Use fetch to get raw content
     const rawContent = await fetchRawContent(contentPath);

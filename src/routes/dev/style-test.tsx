@@ -10,10 +10,6 @@ export const Route = createFileRoute("/dev/style-test")({
   component: StyleTestPage,
   onError: (error: Error) => environment.onError(error),
 });
-
-// Flag to determine if we're in development mode
-const isDev = import.meta.env.DEV;
-
 type ColorThemeDisplayProps = {
   bgColors?: string[];
   textColors?: string[];
@@ -67,39 +63,20 @@ function StyleTestPage() {
         let code: string;
         let frontmatter: Record<string, any>;
 
-        if (isDev) {
-          // In development, fetch the MDX file directly
-          const response = await fetch("/src/components/dev/style-test.mdx");
+        const response = await fetch("/static/content/dev/style-test.json");
 
-          if (!response.ok) {
-            throw new Error(`Failed to load content in dev: ${response.statusText}`);
-          }
-
-          const rawContent = await response.text();
-
-          // Process MDX content
-          const processed = await processMDXContent(rawContent, "dev", {
-            path: "/src/components/dev/style-test.mdx",
-          });
-          code = processed.code;
-          frontmatter = processed.frontmatter;
-        } else {
-          // In production, fetch the preprocessed JSON file
-          const response = await fetch("/static/dev/style-test.mdx.json");
-
-          if (!response.ok) {
-            throw new Error(`Failed to load content in prod: ${response.statusText}`);
-          }
-
-          const data = await response.json();
-
-          // Process MDX content from the JSON
-          const processed = await processMDXContent(data.content, "dev", {
-            path: "/static/dev/style-test.mdx.json",
-          });
-          code = processed.code;
-          frontmatter = processed.frontmatter;
+        if (!response.ok) {
+          throw new Error(`Failed to load content in prod: ${response.statusText}`);
         }
+
+        const data = await response.json();
+
+        // Process MDX content from the JSON
+        const processed = await processMDXContent(data.content, "dev", {
+          path: "/static/content/dev/style-test.json",
+        });
+        code = processed.code;
+        frontmatter = processed.frontmatter;
 
         setMdxContent({ code, frontmatter });
         setIsLoading(false);
