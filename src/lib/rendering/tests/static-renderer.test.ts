@@ -2,13 +2,8 @@
  * Tests for static rendering utilities
  */
 
-import { Helmet } from "react-helmet";
 import { extractDescription, decodeHtmlEntities } from "../static-renderer";
 import { describe, test, expect } from "bun:test";
-
-// Monkeypatch Helmet's canUseDOM property to make renderStatic work in tests
-// @ts-ignore - accessing private property
-Helmet.canUseDOM = false;
 
 describe("Static Renderer", () => {
   // Test HTML entity decoding
@@ -57,18 +52,6 @@ describe("Static Renderer", () => {
     const noDescriptionMetaString = '<meta name="keywords" content="LLM, AI" />';
     const noDescription = extractDescription(noDescriptionMetaString);
     expect(noDescription).toBeNull();
-  });
-
-  // Test Helmet.renderStatic directly
-  test("Helmet.renderStatic can be used in tests after patching", () => {
-    // Create a title that should be returned by renderStatic
-    Helmet.renderStatic(); // Clear any existing title
-
-    // This should not throw an error after our patch
-    const helmet = Helmet.renderStatic();
-    expect(helmet).toBeDefined();
-    expect(typeof helmet.title.toString).toBe("function");
-    expect(typeof helmet.meta.toString).toBe("function");
   });
 
   // This test renders an actual route and verifies expected metadata

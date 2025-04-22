@@ -1,7 +1,6 @@
 /**
  * Types for the static rendering module
  */
-import { Helmet } from "react-helmet";
 
 /**
  * Interface for metadata extracted from page
@@ -13,7 +12,6 @@ export interface PageMetadata {
   link: string;
   htmlAttributes: string;
   bodyAttributes: string;
-  helmetObject: ReturnType<typeof Helmet.renderStatic>;
 }
 
 /**

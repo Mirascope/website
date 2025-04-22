@@ -1,6 +1,6 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import PolicyPage, { PolicyPageLoading, PolicyPageError } from "@/src/components/PolicyPage";
-import SEOHelmet from "@/src/components/SEOHelmet";
+import SEOMeta from "@/src/components/SEOMeta";
 import { policyLoader } from "@/src/lib/content/loaders";
 import type { PolicyContent } from "@/src/lib/content/policy";
 import { environment } from "@/src/lib/content/environment";
@@ -30,7 +30,7 @@ function PrivacyPage() {
 
   return (
     <>
-      <SEOHelmet
+      <SEOMeta
         title={content?.meta?.title || "Privacy Policy"}
         description={
           content?.mdx?.frontmatter?.description ||

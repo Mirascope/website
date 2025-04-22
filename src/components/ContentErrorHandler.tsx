@@ -1,6 +1,6 @@
 import React from "react";
 import ErrorContent from "./ErrorContent";
-import SEOHelmet from "./SEOHelmet";
+import SEOMeta from "./SEOMeta";
 import { DocumentNotFoundError, ContentError } from "@/src/lib/content/errors";
 
 export type ContentType = "blog" | "docs";
@@ -44,7 +44,7 @@ const ContentErrorHandler: React.FC<ContentErrorHandlerProps> = ({ error, conten
   return (
     <div className="relative">
       {/* SEO metadata */}
-      <SEOHelmet
+      <SEOMeta
         title={isNotFound ? `404 - ${config.title}` : config.title}
         description={message}
         robots="noindex, nofollow"

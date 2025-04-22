@@ -2,7 +2,7 @@
  * Static Rendering Utilities
  *
  * Shared functionality for rendering React components to static HTML
- * and extracting metadata using React Helmet.
+ * and extracting metadata from the document head.
  */
 
 import fs from "fs";
@@ -12,7 +12,6 @@ import { renderToString } from "react-dom/server";
 import { createMemoryHistory, createRouter, RouterProvider } from "@tanstack/react-router";
 import { routeTree } from "../../routeTree.gen";
 import { environment } from "../content/environment";
-import { Helmet } from "react-helmet";
 import type { PageMetadata, RenderResult } from "./types";
 
 /**
@@ -144,23 +143,31 @@ export async function renderRouteToString(
     // Render the app to a string
     const appHtml = renderToString(React.createElement(RouterProvider, { router }));
 
-    // Extract Helmet data after rendering
-    const helmet = Helmet.renderStatic();
+    // Extract title tag from the rendered HTML
+    const titleMatch = appHtml.match(/<title[^>]*>(.*?)<\/title>/);
+    const title = titleMatch ? decodeHtmlEntities(titleMatch[1]) : "Mirascope";
 
-    // Extract relevant metadata
+    // Extract all meta tags
+    const metaTagsRegex = /<meta[^>]*>/g;
+    const metaTags = appHtml.match(metaTagsRegex) || [];
+    const metaTagsString = metaTags.join("\n");
+
+    // Extract all link tags
+    const linkTagsRegex = /<link[^>]*>/g;
+    const linkTags = appHtml.match(linkTagsRegex) || [];
+    const linkTagsString = linkTags.join("\n");
+
+    // Extract description from meta tags
+    const description = extractDescription(metaTagsString);
+
+    // Create metadata object
     const metadata: PageMetadata = {
-      title: decodeHtmlEntities(
-        helmet.title
-          .toString()
-          .replace(/<title[^>]*>(.*?)<\/title>/g, "$1")
-          .trim()
-      ),
-      description: extractDescription(helmet.meta.toString()),
-      meta: helmet.meta.toString(),
-      link: helmet.link.toString(),
-      htmlAttributes: helmet.htmlAttributes.toString(),
-      bodyAttributes: helmet.bodyAttributes.toString(),
-      helmetObject: helmet,
+      title,
+      description,
+      meta: metaTagsString,
+      link: linkTagsString,
+      htmlAttributes: "",
+      bodyAttributes: "",
     };
 
     return { html: appHtml, metadata };
@@ -184,23 +191,12 @@ export function createHtmlDocument(
   // First cleanup any placeholder comments in head
   let html = indexHtml.replace("<!-- Minimal head - React Helmet will manage all metadata -->", "");
 
-  // Update HTML attributes (if any)
-  if (metadata.htmlAttributes) {
-    html = html.replace('<html lang="en">', `<html ${metadata.htmlAttributes}>`);
-  }
-
-  // Update body attributes (if any)
-  if (metadata.bodyAttributes) {
-    html = html.replace("<body>", `<body ${metadata.bodyAttributes}>`);
-  }
-
-  // Inject all Helmet metadata before </head>
+  // Inject all metadata before </head>
   html = html.replace(
     "</head>",
-    `${metadata.helmetObject.title.toString()}
-    ${metadata.helmetObject.meta.toString()}
-    ${metadata.helmetObject.link.toString()}
-    ${metadata.helmetObject.script.toString()}
+    `<title>${metadata.title}</title>
+    ${metadata.meta}
+    ${metadata.link}
   </head>`
   );
 
