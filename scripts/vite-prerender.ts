@@ -71,10 +71,7 @@ async function main() {
     }
 
     if (failureCount > 0) {
-      console.log(`\n\n❌ Pre-rendering completed with errors!`);
-      console.log(`   - Successfully pre-rendered: ${successCount} routes`);
-      console.log(`   - Failed to pre-render: ${failureCount} routes`);
-      process.exit(1);
+      throw new Error(`\n\n❌ Pre-rendering failed for ${failureCount} routes.`);
     } else {
       console.log(`\n\n✅ Pre-rendering complete!`);
       console.log(`   - Successfully pre-rendered: ${successCount} routes`);
@@ -99,6 +96,6 @@ async function main() {
 
 // Run the script
 main().catch((error) => {
-  console.error("❌ Pre-rendering failed:", error);
+  console.error(error instanceof Error ? error.message : error);
   process.exit(1);
 });

@@ -140,35 +140,44 @@ export async function renderRouteToString(
     throw loadError;
   }
 
+  const originalError = console.error;
+  let renderError: unknown[] = [];
+  console.error = (...args: unknown[]) => {
+    renderError = [...args];
+  };
   // Render the app to a string
   const appHtml = renderToString(React.createElement(RouterProvider, { router }));
+  console.error = originalError;
+  if (renderError.length > 0) {
+    console.error("Error rendering app:", ...renderError);
+    throw new Error("Error rendering: " + renderError.join(" "));
+  }
+  // Extract title tag from the rendered HTML
+  const titleMatch = appHtml.match(/<title[^>]*>(.*?)<\/title>/);
+  const title = titleMatch ? decodeHtmlEntities(titleMatch[1]) : "Mirascope";
 
-    // Extract title tag from the rendered HTML
-    const titleMatch = appHtml.match(/<title[^>]*>(.*?)<\/title>/);
-    const title = titleMatch ? decodeHtmlEntities(titleMatch[1]) : "Mirascope";
+  // Extract all meta tags
+  const metaTagsRegex = /<meta[^>]*>/g;
+  const metaTags = appHtml.match(metaTagsRegex) || [];
+  const metaTagsString = metaTags.join("\n");
 
-    // Extract all meta tags
-    const metaTagsRegex = /<meta[^>]*>/g;
-    const metaTags = appHtml.match(metaTagsRegex) || [];
-    const metaTagsString = metaTags.join("\n");
+  // Extract all link tags
+  const linkTagsRegex = /<link[^>]*>/g;
+  const linkTags = appHtml.match(linkTagsRegex) || [];
+  const linkTagsString = linkTags.join("\n");
 
-    // Extract all link tags
-    const linkTagsRegex = /<link[^>]*>/g;
-    const linkTags = appHtml.match(linkTagsRegex) || [];
-    const linkTagsString = linkTags.join("\n");
+  // Extract description from meta tags
+  const description = extractDescription(metaTagsString);
 
-    // Extract description from meta tags
-    const description = extractDescription(metaTagsString);
-
-    // Create metadata object
-    const metadata: PageMetadata = {
-      title,
-      description,
-      meta: metaTagsString,
-      link: linkTagsString,
-      htmlAttributes: "",
-      bodyAttributes: "",
-    };
+  // Create metadata object
+  const metadata: PageMetadata = {
+    title,
+    description,
+    meta: metaTagsString,
+    link: linkTagsString,
+    htmlAttributes: "",
+    bodyAttributes: "",
+  };
 
   return { html: appHtml, metadata };
 }
