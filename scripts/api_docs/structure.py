@@ -46,5 +46,3 @@ def organize_api_files(api_docs_path: Path) -> dict[str, list[Path]]:
         organized_files[parent].append(rel_path)
 
     return dict(organized_files)  # Convert back to regular dict before returning
-
-
