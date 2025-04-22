@@ -29,8 +29,9 @@ export async function staticFetch(url: string) {
 
   // Check if the file exists
   if (!fs.existsSync(contentPath)) {
-    console.error(`File not found: ${contentPath}`);
-    throw new Error(`File not found: ${contentPath}`);
+    const error = new Error(`File not found: ${contentPath}`);
+    environment.onError(error);
+    throw error;
   }
 
   // Read the file content
@@ -115,33 +116,32 @@ export async function renderRouteToString(
     loadError = error;
   };
 
-  try {
-    // Create a memory history for the specified route
-    const memoryHistory = createMemoryHistory({
-      initialEntries: [route],
-    });
+  // Create a memory history for the specified route
+  const memoryHistory = createMemoryHistory({
+    initialEntries: [route],
+  });
 
-    // Create a router instance for the route
-    const router = createRouter({
-      routeTree,
-      history: memoryHistory,
-      context: {
-        environment: env,
-      },
-    });
+  // Create a router instance for the route
+  const router = createRouter({
+    routeTree,
+    history: memoryHistory,
+    context: {
+      environment: env,
+    },
+  });
 
-    // Actually load the data and the component
-    await router.load();
+  // Actually load the data and the component
+  await router.load();
 
-    // Router will catch errors, but if the error was properly
-    // wired to the environment handler, then we can throw it
-    // and correctly signal that the component failed to load
-    if (loadError) {
-      throw loadError;
-    }
+  // Router will catch errors, but if the error was properly
+  // wired to the environment handler, then we can throw it
+  // and correctly signal that the component failed to load
+  if (loadError) {
+    throw loadError;
+  }
 
-    // Render the app to a string
-    const appHtml = renderToString(React.createElement(RouterProvider, { router }));
+  // Render the app to a string
+  const appHtml = renderToString(React.createElement(RouterProvider, { router }));
 
     // Extract title tag from the rendered HTML
     const titleMatch = appHtml.match(/<title[^>]*>(.*?)<\/title>/);
@@ -170,11 +170,7 @@ export async function renderRouteToString(
       bodyAttributes: "",
     };
 
-    return { html: appHtml, metadata };
-  } catch (error) {
-    console.error(`Error rendering route ${route}:`, error);
-    throw error;
-  }
+  return { html: appHtml, metadata };
 }
 
 /**

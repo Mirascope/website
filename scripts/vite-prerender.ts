@@ -63,15 +63,21 @@ async function main() {
         process.stdout.write(".");
       } catch (error) {
         failureCount++;
-        process.stdout.write("✗");
-        if (verbose) console.error(`\nError pre-rendering ${route}:`, error);
+        process.stdout.write("✗\n");
+        // Always log errors, but with different detail levels based on verbose mode
+        console.error(`\nError pre-rendering route ${route}:`);
+        console.error(error);
       }
     }
 
-    console.log(`\n\n✅ Pre-rendering complete!`);
-    console.log(`   - Successfully pre-rendered: ${successCount} routes`);
     if (failureCount > 0) {
+      console.log(`\n\n❌ Pre-rendering completed with errors!`);
+      console.log(`   - Successfully pre-rendered: ${successCount} routes`);
       console.log(`   - Failed to pre-render: ${failureCount} routes`);
+      process.exit(1);
+    } else {
+      console.log(`\n\n✅ Pre-rendering complete!`);
+      console.log(`   - Successfully pre-rendered: ${successCount} routes`);
     }
   } finally {
     // Restore the original template if it existed
