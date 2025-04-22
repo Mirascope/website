@@ -6,15 +6,53 @@ description: API documentation for mirascope.core.base.message_param
 
 # mirascope.core.base.message_param
 
-::: mirascope.core.base.message_param.BaseMessageParam
+**Type:** Class
 
-## `TextPart`
-::: mirascope.core.base.message_param.TextPart
+## Description
 
-## `ImagePart`
-::: mirascope.core.base.message_param.ImagePart
+A base class for message parameters.
 
-## `AudioPart`
-::: mirascope.core.base.message_param.AudioPart
+usage docs: learn/prompts.md#prompt-templates-messages
 
-> This is a placeholder. Future versions will render full API documentation.
+Attributes:
+    role: The role of the message (e.g. "system", "user", "assistant", "tool")
+    content: The content of the message
+    tool_name: The name of the tool, if any
+
+
+**Type:** Class
+
+## Description
+
+A content part for text.
+
+Attributes:
+    type: Always "text"
+    text: The text content
+
+
+**Type:** Class
+
+## Description
+
+A content part for images.
+
+Attributes:
+    type: Always "image"
+    media_type: The media type (e.g. image/jpeg)
+    image: The raw image bytes
+    detail: (Optional) The detail to use for the image (supported by OpenAI)
+
+
+**Type:** Class
+
+## Description
+
+A content part for audio.
+
+Attributes:
+    type: Always "audio"
+    media_type: The media type (e.g. audio/wav)
+    audio: The raw audio bytes or base64 encoded audio data
+
+
