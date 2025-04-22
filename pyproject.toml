@@ -48,7 +48,8 @@ dev-dependencies = [
 [tool.pyright]
 include = [
     "public/extracted-snippets",
-    "public/examples"
+    "public/examples",
+    "scripts/api_docs"
 ]
 exclude = [
     "**/__pycache__"
