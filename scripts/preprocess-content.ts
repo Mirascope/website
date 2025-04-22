@@ -2,7 +2,6 @@ import fs from "fs";
 import path from "path";
 import type { BlogMeta } from "../src/lib/content/blog";
 import { SITE_URL, getAllRoutes, getBlogPostsWithMeta } from "../src/lib/router-utils";
-import { processMDXContent } from "../src/lib/content/mdx-processor";
 import { parseFrontmatter } from "../src/lib/content/frontmatter";
 
 // Create static directories directly in public folder
@@ -38,17 +37,6 @@ async function processBlogPosts(verbose = true): Promise<void> {
 
     // Extract frontmatter
     const { frontmatter } = parseFrontmatter(fileContent);
-
-    // Check if MDX can be processed - we don't use the result but this ensures it's valid MDX
-    try {
-      await processMDXContent(fileContent, "blog", {
-        path: filepath,
-      });
-    } catch (error) {
-      // Always log errors regardless of verbosity
-      console.error(`Error processing ${filename}:`, error);
-      continue;
-    }
 
     const postMeta: BlogMeta = {
       title: frontmatter.title || "",
@@ -111,11 +99,6 @@ async function processDocsFiles(verbose = true): Promise<void> {
           // Extract frontmatter from the content
           const { frontmatter } = parseFrontmatter(fileContent);
 
-          // Just check if the MDX is valid by attempting to process it
-          await processMDXContent(fileContent, "doc", {
-            path: filePath,
-          });
-
           // Create directory path if it doesn't exist
           const dirName = path.dirname(path.join(DOCS_DIR, filePath));
           fs.mkdirSync(dirName, { recursive: true });
@@ -159,9 +142,7 @@ async function processPolicyFiles(verbose = true): Promise<void> {
     const fileContent = fs.readFileSync(privacyPath, "utf-8");
     try {
       const { frontmatter } = parseFrontmatter(fileContent);
-      await processMDXContent(fileContent, "policy", {
-        path: privacyPath,
-      }); // Validate the MDX
+
       fs.writeFileSync(
         path.join(POLICIES_DIR, "privacy.mdx.json"),
         JSON.stringify({
@@ -183,9 +164,7 @@ async function processPolicyFiles(verbose = true): Promise<void> {
       const fileContent = fs.readFileSync(filepath, "utf-8");
       try {
         const { frontmatter } = parseFrontmatter(fileContent);
-        await processMDXContent(fileContent, "policy", {
-          path: filepath,
-        }); // Validate the MDX
+
         fs.writeFileSync(
           path.join(TERMS_DIR, `${filename}.json`),
           JSON.stringify({
@@ -266,27 +245,33 @@ async function processDevFiles(verbose = true): Promise<void> {
   if (verbose) console.log("Processing dev tools content...");
 
   // Process the style test MDX file
-  const styleTestPath = path.join(process.cwd(), "src", "components", "dev", "style-test.mdx");
-  if (fs.existsSync(styleTestPath)) {
-    const fileContent = fs.readFileSync(styleTestPath, "utf-8");
+  const devDir = path.join(process.cwd(), "src", "components", "dev");
+  const files = fs.readdirSync(devDir).filter((file) => file.endsWith(".mdx"));
+
+  for (const filename of files) {
+    const filepath = path.join(devDir, filename);
+    const fileContent = fs.readFileSync(filepath, "utf-8");
     try {
       const { frontmatter } = parseFrontmatter(fileContent);
-      await processMDXContent(fileContent, "dev", {
-        path: styleTestPath,
-      }); // Validate the MDX
+
+      // Output filename matches the input but with .json extension
+      const outputPath = path.join(DEV_DIR, `${filename}.json`);
+
       fs.writeFileSync(
-        path.join(DEV_DIR, "style-test.mdx.json"),
+        outputPath,
         JSON.stringify({
           content: fileContent,
           frontmatter,
         })
       );
-      if (verbose) console.log("Processed style test MDX file");
+      if (verbose) console.log(`Processed dev file: ${filename}`);
     } catch (error) {
-      console.error(`Error processing style test MDX:`, error);
+      console.error(`Error processing dev file ${filename}:`, error);
     }
-  } else if (verbose) {
-    console.log("Style test MDX file not found at", styleTestPath);
+  }
+
+  if (verbose && files.length === 0) {
+    console.log("No dev MDX files found at", devDir);
   }
 }
 
@@ -310,6 +295,77 @@ export async function preprocessContent(verbose = true): Promise<void> {
     console.error("Error during preprocessing:", error);
     throw error; // Let the caller handle the error
   }
+}
+
+// Create a Vite plugin to run preprocessing and watch content dirs
+// Vite server interface for TypeScript
+interface ViteDevServer {
+  httpServer?: {
+    once(event: string, callback: () => void): void;
+  };
+  watcher: {
+    add(path: string): void;
+    on(event: string, callback: (path: string) => void): void;
+  };
+}
+
+export function contentPreprocessPlugin(options = { verbose: true }) {
+  const contentDirs = [
+    path.join(process.cwd(), "content"),
+    path.join(process.cwd(), "src", "components", "dev"),
+  ];
+
+  return {
+    name: "content-preprocess-plugin",
+    // Only apply during development
+    apply: "serve",
+    configureServer(server: ViteDevServer) {
+      const { verbose } = options;
+
+      // Run preprocessing when the server starts
+      server.httpServer?.once("listening", async () => {
+        if (verbose) console.log("Initial content preprocessing for development...");
+        await preprocessContent(verbose).catch((error) => {
+          console.error("Error preprocessing content:", error);
+        });
+      });
+
+      // Watch content directories for changes
+      contentDirs.forEach((dir) => {
+        if (verbose) console.log(`Watching directory for changes: ${dir}`);
+
+        server.watcher.add(dir);
+
+        // Only process content files
+        server.watcher.on("change", async (filePath: string) => {
+          if (filePath.endsWith(".mdx") && filePath.includes(dir)) {
+            if (verbose) console.log(`Content file changed: ${filePath}`);
+            await preprocessContent(false).catch((error) => {
+              console.error("Error preprocessing content after file change:", error);
+            });
+          }
+        });
+
+        server.watcher.on("add", async (filePath: string) => {
+          if (filePath.endsWith(".mdx") && filePath.includes(dir)) {
+            if (verbose) console.log(`Content file added: ${filePath}`);
+            await preprocessContent(false).catch((error) => {
+              console.error("Error preprocessing content after file add:", error);
+            });
+          }
+        });
+
+        server.watcher.on("unlink", async (filePath: string) => {
+          if (filePath.endsWith(".mdx") && filePath.includes(dir)) {
+            if (verbose) console.log(`Content file deleted: ${filePath}`);
+            await preprocessContent(false).catch((error) => {
+              console.error("Error preprocessing content after file delete:", error);
+            });
+          }
+        });
+      });
+    },
+  };
 }
 
 // Run the preprocessing when this script is executed directly

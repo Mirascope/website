@@ -1,6 +1,5 @@
 import type { ContentType } from "./types";
 import { InvalidPathError } from "./errors";
-import { environment } from "./environment";
 
 /**
  * Normalizes a URL path to a file system path based on content type
@@ -62,27 +61,10 @@ export function normalizePath(path: string, contentType: ContentType): string {
 }
 
 /**
- * Builds a file system path for development mode
+ * Builds a file system path for content
+ * With our preprocessing plugin, static files are always available in development and production
  */
-function buildDevPath(normalizedPath: string, contentType: ContentType): string {
-  switch (contentType) {
-    case "doc":
-      return `/content/doc/${normalizedPath}`;
-    case "blog":
-      return `/content/blog/${normalizedPath}`;
-    case "policy":
-      return `/content/policy/${normalizedPath}`;
-    case "dev":
-      return `/src/components/dev/${normalizedPath}`;
-    default:
-      throw new Error(`Unsupported content type: ${contentType}`);
-  }
-}
-
-/**
- * Builds a file system path for production mode
- */
-function buildProdPath(normalizedPath: string, contentType: ContentType): string {
+function buildContentPath(normalizedPath: string, contentType: ContentType): string {
   switch (contentType) {
     case "doc":
       return `/static/docs/${normalizedPath.replace(/\\/g, "/")}.json`;
@@ -91,6 +73,8 @@ function buildProdPath(normalizedPath: string, contentType: ContentType): string
       return `/static/posts/${normalizedPath.replace(/\.mdx$/, "").replace(/\\/g, "/")}.json`;
     case "policy":
       return `/static/policies/${normalizedPath.replace(/\\/g, "/")}.json`;
+    case "dev":
+      return `/static/dev/${normalizedPath.replace(/\\/g, "/")}.json`;
     default:
       throw new Error(`Unsupported content type: ${contentType}`);
   }
@@ -126,23 +110,15 @@ export function isValidPath(path: string, contentType: ContentType): boolean {
 }
 
 /**
- * Resolves a content path based on type, environment, and options
+ * Resolves a content path based on type
  *
  * @param path - The URL path to resolve
  * @param contentType - The type of content
- * @param options - Resolution options
  * @returns Resolved path string
  */
-export function resolveContentPath(
-  path: string,
-  contentType: ContentType,
-  options: { devMode?: boolean } = {}
-): string {
-  const devMode = options.devMode ?? environment.isDev();
+export function resolveContentPath(path: string, contentType: ContentType): string {
   const normalizedPath = normalizePath(path, contentType);
 
-  // Otherwise return file system path based on environment
-  return devMode
-    ? buildDevPath(normalizedPath, contentType)
-    : buildProdPath(normalizedPath, contentType);
+  // With our preprocessing plugin, we only need one path resolution approach
+  return buildContentPath(normalizedPath, contentType);
 }

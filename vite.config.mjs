@@ -3,8 +3,8 @@ import viteReact from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import { resolve } from "node:path";
-import { contentMiddlewarePlugin } from "./scripts/content-middleware";
 import { optimizedImageMiddleware } from "./scripts/optimized-image-middleware";
+import { contentPreprocessPlugin } from "./scripts/preprocess-content";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -12,7 +12,7 @@ export default defineConfig({
     TanStackRouterVite({ autoCodeSplitting: true }),
     viteReact(),
     tailwindcss(),
-    contentMiddlewarePlugin(),
+    contentPreprocessPlugin(),
     optimizedImageMiddleware(),
   ],
   resolve: {

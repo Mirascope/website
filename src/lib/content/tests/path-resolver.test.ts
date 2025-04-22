@@ -34,17 +34,21 @@ describe("Path Resolver", () => {
   });
 
   describe("resolveContentPath", () => {
-    // Test the new function
-    test("resolves doc paths in development mode", () => {
-      expect(resolveContentPath("/docs/mirascope/getting-started", "doc", { devMode: true })).toBe(
-        "/content/doc/mirascope/getting-started.mdx"
+    // Test the simplified function
+    test("resolves doc paths", () => {
+      expect(resolveContentPath("/docs/mirascope/getting-started", "doc")).toBe(
+        "/static/docs/mirascope/getting-started.mdx.json"
       );
     });
 
-    test("resolves doc paths in production mode", () => {
-      expect(resolveContentPath("/docs/mirascope/getting-started", "doc", { devMode: false })).toBe(
-        "/static/docs/mirascope/getting-started.mdx.json"
+    test("resolves blog paths", () => {
+      expect(resolveContentPath("/blog/new-release", "blog")).toBe(
+        "/static/posts/new-release.json"
       );
+    });
+
+    test("resolves policy paths", () => {
+      expect(resolveContentPath("/privacy", "policy")).toBe("/static/policies/privacy.mdx.json");
     });
   });
 
