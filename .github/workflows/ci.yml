@@ -49,8 +49,8 @@ jobs:
     - name: MDX Validation
       run: bun run lint:mdx
 
-    - name: Check & Validate Snippets
-      run: bun run lint:snippets
+    - name: Check & Validate Python Code
+      run: bun run lint:python
       
     - name: Social Metadata Check
       run: bun run lint:social
