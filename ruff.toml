@@ -36,6 +36,7 @@ ignore = [
     "D203",  # one-blank-line-before-class: incompatible with D211
     "D213",  # multi-line-summary-second-line: incompatible with D212
     "T201",  # print: allowed for CLI tools
+    "PLR0912", # Too many branches
 ]
 
 # Disable rules for example/snippet code
