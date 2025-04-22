@@ -106,7 +106,7 @@ class COTResult(BaseModel):
     )
 
 
-@groq.call("llama-3.1-70b-versatile", json_mode=True, response_model=COTResult)
+@groq.call("llama-3.3-70b-versatile", json_mode=True, response_model=COTResult)
 def cot_step(prompt: str, step_number: int, previous_steps: str) -> str:
     return f"""
     You are an expert AI assistant that explains your reasoning step by step.
@@ -134,7 +134,7 @@ def cot_step(prompt: str, step_number: int, previous_steps: str) -> str:
     """
 
 
-@groq.call("llama-3.1-70b-versatile")
+@groq.call("llama-3.3-70b-versatile")
 def final_answer(prompt: str, reasoning: str) -> str:
     return f"""
     Based on the following chain of reasoning, provide a final answer to the question.

@@ -62,7 +62,7 @@ export const providerDefaults: Record<
   },
   groq: {
     displayName: "Groq",
-    defaultModel: "llama-3.1-70b-versatile",
+    defaultModel: "llama-3.3-70b-versatile",
   },
   cohere: {
     displayName: "Cohere",
