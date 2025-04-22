@@ -40,6 +40,7 @@ interface SidebarLinkProps {
   isActive: boolean;
   product: ProductName;
   className?: string;
+  style?: React.CSSProperties;
   params?: Record<string, any>;
   children: React.ReactNode;
 }
@@ -49,6 +50,7 @@ const SidebarLink = ({
   isActive,
   product,
   className = "",
+  style,
   params,
   children,
 }: SidebarLinkProps) => {
@@ -63,6 +65,7 @@ const SidebarLink = ({
     <Link
       to={to}
       params={params}
+      style={style}
       className={cn(
         "block text-base rounded-md",
         className,
@@ -315,6 +318,148 @@ interface SectionContentProps {
   isActivePath: (path: string) => boolean;
 }
 
+// Helper component for rendering nested items (folders)
+interface NestedItemsProps {
+  items: Record<string, any>;
+  product: ProductName;
+  basePath: string;
+  isActivePath: (path: string) => boolean;
+  indentLevel?: number;
+}
+
+// Individual nested item component to ensure hooks are consistent
+const NestedItem = ({
+  itemSlug,
+  item,
+  product,
+  basePath,
+  isActivePath,
+  indentLevel,
+}: {
+  itemSlug: string;
+  item: any;
+  product: ProductName;
+  basePath: string;
+  isActivePath: (path: string) => boolean;
+  indentLevel: number;
+}) => {
+  const itemUrl = `${basePath}/${itemSlug}`;
+  // A folder is any item that has nested items
+  const hasNestedItems = item.items && Object.keys(item.items).length > 0;
+
+  // Determine if this folder or any of its children are active
+  const isActive = isActivePath(itemUrl);
+
+  // State to track if the folder is expanded
+  const [isExpanded, setIsExpanded] = React.useState(isActive);
+
+  // Auto-expand if this item or any of its children are active
+  React.useEffect(() => {
+    if (isActive && !isExpanded) {
+      setIsExpanded(true);
+    }
+  }, [isActive, isExpanded]);
+
+  return (
+    <div key={itemSlug}>
+      <div className="flex items-center">
+        {/* Render expand/collapse icon for folders */}
+        {hasNestedItems && (
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="w-5 h-5 flex items-center justify-center mr-1 text-muted-foreground"
+            aria-label={isExpanded ? "Collapse" : "Expand"}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              className="stroke-muted-foreground transition-transform"
+              style={{ transform: isExpanded ? "rotate(90deg)" : "rotate(0deg)" }}
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        )}
+
+        {/* For folders, render a clickable span that toggles expansion */}
+        {hasNestedItems ? (
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className={`py-1 font-medium text-muted-foreground block text-left w-full hover:bg-accent hover:text-accent-foreground rounded-md`}
+            style={{
+              paddingLeft: `${0.75 + indentLevel * 0.5}rem`,
+              paddingRight: "0.75rem",
+              flex: 1,
+            }}
+          >
+            {item.title}
+          </button>
+        ) : (
+          /* Render regular items as links */
+          <SidebarLink
+            to={itemUrl}
+            isActive={isActivePath(itemUrl)}
+            product={product}
+            className={`py-1`}
+            style={{
+              paddingLeft: `${0.75 + indentLevel * 0.5}rem`,
+              paddingRight: "0.75rem",
+              flex: 1,
+            }}
+          >
+            {item.title}
+          </SidebarLink>
+        )}
+      </div>
+
+      {/* Render nested items if exists and is expanded */}
+      {hasNestedItems && isExpanded && (
+        <NestedItems
+          items={item.items}
+          product={product}
+          basePath={itemUrl}
+          isActivePath={isActivePath}
+          indentLevel={indentLevel + 1}
+        />
+      )}
+    </div>
+  );
+};
+
+// Container component for a group of nested items
+const NestedItems = ({
+  items,
+  product,
+  basePath,
+  isActivePath,
+  indentLevel = 0,
+}: NestedItemsProps) => {
+  // Ensure we always have an object, even if items is undefined
+  const safeItems = items || {};
+
+  return (
+    <div className={`space-y-0.5 mt-1 ${indentLevel > 0 ? "ml-3" : ""}`}>
+      {Object.entries(safeItems).map(([itemSlug, item]) => (
+        <NestedItem
+          key={itemSlug}
+          itemSlug={itemSlug}
+          item={item}
+          product={product}
+          basePath={basePath}
+          isActivePath={isActivePath}
+          indentLevel={indentLevel}
+        />
+      ))}
+    </div>
+  );
+};
+
 // Renders content for a section (e.g., API)
 const SectionContent = ({ product, section, isActivePath }: SectionContentProps) => {
   const sectionData = docsMetadata[product]?.sections?.[section];
@@ -323,22 +468,12 @@ const SectionContent = ({ product, section, isActivePath }: SectionContentProps)
   return (
     <>
       {/* Section top-level items */}
-      {Object.entries(sectionData.items || {}).map(([slug, item]) => {
-        const url =
-          slug === "index" ? `/docs/${product}/${section}/` : `/docs/${product}/${section}/${slug}`;
-
-        return (
-          <SidebarLink
-            key={slug}
-            to={url}
-            isActive={isActivePath(url)}
-            product={product as ProductName}
-            className="px-3 py-1"
-          >
-            {item.title}
-          </SidebarLink>
-        );
-      })}
+      <NestedItems
+        items={sectionData.items || {}}
+        product={product}
+        basePath={`/docs/${product}/${section}`}
+        isActivePath={isActivePath}
+      />
 
       {/* Section groups */}
       {Object.entries(sectionData.groups || {}).map(([groupSlug, group]) => {
@@ -348,23 +483,13 @@ const SectionContent = ({ product, section, isActivePath }: SectionContentProps)
             <GroupTitle title={group.title} product={product} />
 
             {/* Group items */}
-            <div className="space-y-0.5 mt-1">
-              {Object.entries(group.items || {}).map(([itemSlug, item]) => {
-                const itemUrl = `/docs/${product}/${section}/${groupSlug}/${itemSlug}`;
-
-                return (
-                  <SidebarLink
-                    key={itemSlug}
-                    to={itemUrl}
-                    isActive={isActivePath(itemUrl)}
-                    product={product as ProductName}
-                    className="pl-6 pr-3 py-1"
-                  >
-                    {item.title}
-                  </SidebarLink>
-                );
-              })}
-            </div>
+            <NestedItems
+              items={group.items || {}}
+              product={product}
+              basePath={`/docs/${product}/${section}/${groupSlug}`}
+              isActivePath={isActivePath}
+              indentLevel={1}
+            />
           </div>
         );
       })}
@@ -385,21 +510,12 @@ const MainDocsContent = ({ product, isActivePath }: MainDocsContentProps) => {
   return (
     <>
       {/* Top-level items */}
-      {Object.entries(productData.items || {}).map(([slug, item]) => {
-        const url = slug === "index" ? `/docs/${product}` : `/docs/${product}/${slug}`;
-
-        return (
-          <SidebarLink
-            key={slug}
-            to={url}
-            isActive={isActivePath(url)}
-            product={product as ProductName}
-            className="px-3 py-1"
-          >
-            {item.title}
-          </SidebarLink>
-        );
-      })}
+      <NestedItems
+        items={productData.items || {}}
+        product={product}
+        basePath={`/docs/${product}`}
+        isActivePath={isActivePath}
+      />
 
       {/* Top-level groups */}
       {Object.entries(productData.groups || {}).map(([groupSlug, group]) => {
@@ -409,23 +525,13 @@ const MainDocsContent = ({ product, isActivePath }: MainDocsContentProps) => {
             <GroupTitle title={group.title} product={product} />
 
             {/* Group items */}
-            <div className="space-y-0.5 mt-1">
-              {Object.entries(group.items || {}).map(([itemSlug, item]) => {
-                const itemUrl = `/docs/${product}/${groupSlug}/${itemSlug}`;
-
-                return (
-                  <SidebarLink
-                    key={itemSlug}
-                    to={itemUrl}
-                    isActive={isActivePath(itemUrl)}
-                    product={product as ProductName}
-                    className="pl-6 pr-3 py-1"
-                  >
-                    {item.title}
-                  </SidebarLink>
-                );
-              })}
-            </div>
+            <NestedItems
+              items={group.items || {}}
+              product={product}
+              basePath={`/docs/${product}/${groupSlug}`}
+              isActivePath={isActivePath}
+              indentLevel={1}
+            />
           </div>
         );
       })}

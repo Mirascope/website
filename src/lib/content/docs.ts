@@ -4,7 +4,7 @@ import { getMetadataFromStructure, mergeMetadata } from "./metadata-service";
 
 // Import product docs metadata
 import docsMetadata from "@/content/doc/_meta";
-import type { ProductDocs } from "@/content/doc/_meta";
+import type { ProductDocs, DocMetaItem } from "@/content/doc/_meta";
 
 // Define doc-specific metadata
 export interface DocMeta extends ContentMeta {
@@ -73,19 +73,54 @@ export function getDocsForProduct(product: string): Promise<DocMeta[]> {
 
     const docs: DocMeta[] = [];
 
+    /**
+     * Helper function to process nested items recursively
+     */
+    function processNestedItems(
+      item: DocMetaItem,
+      itemPath: string,
+      itemSlug: string,
+      meta: {
+        section?: string;
+        sectionTitle?: string;
+        group?: string;
+        groupTitle?: string;
+      }
+    ) {
+      // Add the current item
+      docs.push({
+        title: item.title,
+        description: "", // Empty description, will be populated from frontmatter
+        slug: itemSlug,
+        path: itemPath,
+        product,
+        type: "doc",
+        ...meta,
+      });
+
+      // Process nested items if they exist
+      if (item.items) {
+        Object.keys(item.items).forEach((childSlug) => {
+          const childItem = item.items![childSlug];
+          const childPath = `${itemPath}/${childSlug}`;
+
+          processNestedItems(childItem, childPath, childSlug, meta);
+        });
+      }
+    }
+
     // Process top-level items
     if (productDocs.items) {
       Object.keys(productDocs.items).forEach((slug) => {
         const item = productDocs.items![slug];
         const path = `${product}/${slug}`;
-        docs.push({
-          title: item.title,
-          description: "", // Empty description, will be populated from frontmatter
-          slug,
+
+        processNestedItems(
+          item,
           path,
-          product,
-          type: "doc",
-        });
+          slug,
+          {} // No section or group metadata
+        );
       });
     }
 
@@ -99,13 +134,8 @@ export function getDocsForProduct(product: string): Promise<DocMeta[]> {
           Object.keys(group.items).forEach((itemSlug) => {
             const item = group.items![itemSlug];
             const path = `${product}/${groupSlug}/${itemSlug}`;
-            docs.push({
-              title: item.title,
-              description: "", // Empty description, will be populated from frontmatter
-              slug: itemSlug,
-              path,
-              product,
-              type: "doc",
+
+            processNestedItems(item, path, itemSlug, {
               group: groupSlug,
               groupTitle: group.title,
             });
@@ -124,13 +154,8 @@ export function getDocsForProduct(product: string): Promise<DocMeta[]> {
           Object.keys(section.items).forEach((itemSlug) => {
             const item = section.items![itemSlug];
             const path = `${product}/${sectionSlug}/${itemSlug}`;
-            docs.push({
-              title: item.title,
-              description: "", // Empty description, will be populated from frontmatter
-              slug: itemSlug,
-              path,
-              product,
-              type: "doc",
+
+            processNestedItems(item, path, itemSlug, {
               section: sectionSlug,
               sectionTitle: section.title,
             });
@@ -147,13 +172,8 @@ export function getDocsForProduct(product: string): Promise<DocMeta[]> {
               Object.keys(group.items).forEach((itemSlug) => {
                 const item = group.items![itemSlug];
                 const path = `${product}/${sectionSlug}/${groupSlug}/${itemSlug}`;
-                docs.push({
-                  title: item.title,
-                  description: "", // Empty description, will be populated from frontmatter
-                  slug: itemSlug,
-                  path,
-                  product,
-                  type: "doc",
+
+                processNestedItems(item, path, itemSlug, {
                   section: sectionSlug,
                   sectionTitle: section.title,
                   group: groupSlug,
