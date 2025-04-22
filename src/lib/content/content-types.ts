@@ -1,5 +1,14 @@
 // Core content type enum
-export type ContentType = "doc" | "blog" | "policy";
+export type ContentType = "doc" | "blog" | "policy" | "dev";
+
+/**
+ * Array of all recognized content types in the system
+ * Each type will have:
+ * - Source directory: content/{type}
+ * - Output directory: static/content/{type}
+ * - Metadata file: static/content-meta/{type}/index.json
+ */
+export const CONTENT_TYPES: ContentType[] = ["doc", "blog", "policy", "dev"];
 
 // Base metadata interface
 export interface ContentMeta {

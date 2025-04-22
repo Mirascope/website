@@ -1,277 +1,326 @@
 import fs from "fs";
 import path from "path";
-import type { BlogMeta } from "../src/lib/content/blog";
-import { SITE_URL, getAllRoutes, getBlogPostsWithMeta } from "../src/lib/router-utils";
+import { glob } from "glob";
+import { CONTENT_TYPES } from "../src/lib/content/content-types";
+import type { ContentType } from "../src/lib/content/content-types";
+import { SITE_URL, getAllRoutes } from "../src/lib/router-utils";
 import { parseFrontmatter } from "../src/lib/content/frontmatter";
 
 // Create static directories directly in public folder
 // This ensures they get copied to the right place in the final build
 const STATIC_DIR = path.join(process.cwd(), "public", "static");
-const POSTS_DIR = path.join(STATIC_DIR, "posts");
-const DOCS_DIR = path.join(STATIC_DIR, "docs");
-const POLICIES_DIR = path.join(STATIC_DIR, "policies");
-const TERMS_DIR = path.join(POLICIES_DIR, "terms");
-const DEV_DIR = path.join(STATIC_DIR, "dev");
+const CONTENT_DIR = path.join(STATIC_DIR, "content");
+const META_DIR = path.join(STATIC_DIR, "content-meta");
 
+// Create base content and metadata directories
 fs.mkdirSync(STATIC_DIR, { recursive: true });
-fs.mkdirSync(POSTS_DIR, { recursive: true });
-fs.mkdirSync(DOCS_DIR, { recursive: true });
-fs.mkdirSync(POLICIES_DIR, { recursive: true });
-fs.mkdirSync(TERMS_DIR, { recursive: true });
-fs.mkdirSync(DEV_DIR, { recursive: true });
+fs.mkdirSync(CONTENT_DIR, { recursive: true });
+fs.mkdirSync(META_DIR, { recursive: true });
 
 /**
- * Process all blog posts
+ * Interface for content metadata
  */
-async function processBlogPosts(verbose = true): Promise<void> {
-  if (verbose) console.log("Processing blog posts...");
-  const postsDir = path.join(process.cwd(), "content", "blog");
-  const files = fs.readdirSync(postsDir).filter((file) => file.endsWith(".mdx"));
-
-  const postsList: BlogMeta[] = [];
-
-  for (const filename of files) {
-    const slug = filename.replace(/\.mdx$/, "");
-    const filepath = path.join(postsDir, filename);
-    const fileContent = fs.readFileSync(filepath, "utf-8");
-
-    // Extract frontmatter
-    const { frontmatter } = parseFrontmatter(fileContent);
-
-    const postMeta: BlogMeta = {
-      title: frontmatter.title || "",
-      description: frontmatter.description || "",
-      date: frontmatter.date || "",
-      readTime: frontmatter.readTime || "",
-      author: frontmatter.author || "Mirascope Team",
-      slug,
-      path: `blog/${slug}`,
-      type: "blog",
-      lastUpdated: frontmatter.lastUpdated || frontmatter.date || "",
-    };
-
-    postsList.push(postMeta);
-
-    // Write individual post data to its own file - store raw content
-    fs.writeFileSync(
-      path.join(POSTS_DIR, `${slug}.json`),
-      JSON.stringify({
-        meta: postMeta,
-        content: fileContent, // Store the original MDX content
-      })
-    );
-  }
-
-  // Sort posts by date in descending order
-  postsList.sort((a, b) => {
-    return new Date(b.date).getTime() - new Date(a.date).getTime();
-  });
-
-  // Write just the metadata to the posts list
-  fs.writeFileSync(path.join(STATIC_DIR, "posts-list.json"), JSON.stringify(postsList));
-
-  if (verbose) console.log(`Processed ${postsList.length} blog posts`);
+interface ContentMetadata {
+  type: string;
+  slug: string;
+  path: string;
+  [key: string]: any;
 }
 
 /**
- * Process all docs files
+ * ContentPreprocessor - A class that handles preprocessing of MDX content files
+ * into static JSON files for consumption by the frontend.
  */
-async function processDocsFiles(verbose = true): Promise<void> {
-  if (verbose) console.log("Processing docs files...");
-  const docsDir = path.join(process.cwd(), "content", "doc");
-  const docsIndex: Record<string, { path: string }> = {};
+class ContentPreprocessor {
+  // Base directories
+  private readonly baseDir: string;
+  private readonly staticDir: string;
+  private readonly contentDir: string;
+  private readonly metaDir: string;
 
-  // Process docs directory recursively
-  async function processDirectory(dirPath: string, baseDir = ""): Promise<void> {
-    const items = fs.readdirSync(dirPath);
+  // Content tracking
+  private metadataByType: Record<string, ContentMetadata[]> = {};
+  private verbose: boolean;
 
-    for (const item of items) {
-      const itemPath = path.join(dirPath, item);
-      const relPath = path.join(baseDir, item);
+  /**
+   * Constructor - initializes directory structure and metadata tracking
+   */
+  constructor(verbose = true) {
+    this.verbose = verbose;
+    this.baseDir = process.cwd();
 
-      if (fs.statSync(itemPath).isDirectory()) {
-        await processDirectory(itemPath, relPath);
-      } else if (item.endsWith(".mdx")) {
-        const filePath = path.relative(docsDir, itemPath).replace(/\\/g, "/"); // Normalize for Windows
-        const fileContent = fs.readFileSync(itemPath, "utf-8");
+    // Create static directories directly in public folder
+    // This ensures they get copied to the right place in the final build
+    this.staticDir = path.join(this.baseDir, "public", "static");
+    this.contentDir = path.join(this.staticDir, "content");
+    this.metaDir = path.join(this.staticDir, "content-meta");
 
-        try {
-          // Extract frontmatter from the content
-          const { frontmatter } = parseFrontmatter(fileContent);
+    // Initialize directory structure
+    this.initializeDirectories();
 
-          // Create directory path if it doesn't exist
-          const dirName = path.dirname(path.join(DOCS_DIR, filePath));
-          fs.mkdirSync(dirName, { recursive: true });
+    // Initialize metadata tracking
+    this.initializeMetadataTracking();
+  }
 
-          // Write to individual file - store raw content
-          fs.writeFileSync(
-            path.join(DOCS_DIR, `${filePath}.json`),
-            JSON.stringify({
-              content: fileContent, // Store the original MDX content
-              frontmatter: frontmatter,
-            })
+  /**
+   * Create necessary directory structure
+   */
+  private initializeDirectories(): void {
+    // Create base directories
+    fs.mkdirSync(this.staticDir, { recursive: true });
+    fs.mkdirSync(this.contentDir, { recursive: true });
+    fs.mkdirSync(this.metaDir, { recursive: true });
+
+    // Create content type directories
+    for (const contentType of CONTENT_TYPES) {
+      fs.mkdirSync(path.join(this.contentDir, contentType), { recursive: true });
+      fs.mkdirSync(path.join(this.metaDir, contentType), { recursive: true });
+    }
+  }
+
+  /**
+   * Initialize metadata tracking for all content types
+   */
+  private initializeMetadataTracking(): void {
+    for (const contentType of CONTENT_TYPES) {
+      this.metadataByType[contentType] = [];
+    }
+  }
+
+  /**
+   * Process all content types
+   */
+  async processAllContent(): Promise<Record<string, ContentMetadata[]>> {
+    if (this.verbose) console.log("Processing all content...");
+
+    // Process each content type
+    for (const contentType of CONTENT_TYPES) {
+      await this.processContentType(contentType);
+    }
+
+    // Sort blog posts by date if they exist
+    this.sortBlogPosts();
+
+    // Write metadata files
+    this.writeMetadataFiles();
+
+    return this.metadataByType;
+  }
+
+  /**
+   * Process a specific content type
+   */
+  async processContentType(contentType: ContentType): Promise<void> {
+    if (this.verbose) console.log(`Processing ${contentType} content...`);
+
+    const srcDir = path.join(this.baseDir, "content", contentType);
+
+    // Skip if source directory doesn't exist
+    if (!fs.existsSync(srcDir)) {
+      if (this.verbose) console.error(`Source directory for ${contentType} not found: ${srcDir}`);
+      return;
+    }
+
+    // Process this content type's directory recursively
+    await this.processContentDirectory(srcDir, contentType);
+  }
+
+  /**
+   * Process a content directory using glob to find all MDX files
+   */
+  async processContentDirectory(srcDir: string, contentType: ContentType): Promise<void> {
+    // Create output directory for this content type if it doesn't exist
+    const outputBase = path.join(this.contentDir, contentType);
+    fs.mkdirSync(outputBase, { recursive: true });
+
+    // Use glob to find all MDX files in the source directory
+    const mdxFiles = await glob(path.join(srcDir, "**/*.mdx"));
+
+    if (this.verbose) {
+      console.log(`Found ${mdxFiles.length} MDX files for ${contentType}`);
+    }
+
+    // Process each MDX file
+    for (const filePath of mdxFiles) {
+      await this.processMdxFile(filePath, srcDir, contentType, outputBase);
+    }
+  }
+
+  /**
+   * Process a single MDX file
+   */
+  private async processMdxFile(
+    filePath: string,
+    srcDir: string,
+    contentType: ContentType,
+    outputBase: string
+  ): Promise<void> {
+    try {
+      // Read and parse file
+      const fileContent = fs.readFileSync(filePath, "utf-8");
+      const { frontmatter } = parseFrontmatter(fileContent);
+
+      // Get the relative path from the source directory
+      const relativePath = path.relative(srcDir, filePath);
+
+      // Get the file name without extension
+      const slug = path.basename(filePath, ".mdx");
+
+      // Build the output path based on directory structure
+      // Remove .mdx extension to get the clean path
+      const outputPath = relativePath.replace(/\.mdx$/, "");
+
+      // Create metadata object
+      const metadata: ContentMetadata = {
+        type: contentType,
+        slug: slug,
+        path: `${contentType}/${outputPath}`,
+        title: frontmatter.title || slug,
+        ...frontmatter,
+      };
+
+      // Special handling for blog posts
+      if (contentType === "blog") {
+        metadata.author = frontmatter.author || "Mirascope Team";
+        metadata.lastUpdated = frontmatter.lastUpdated || frontmatter.date || "";
+        metadata.readTime = frontmatter.readTime || "";
+      }
+
+      // Add to metadata map
+      this.metadataByType[contentType].push(metadata);
+
+      // Create output directory if needed
+      const outputDir = path.dirname(path.join(outputBase, `${outputPath}.json`));
+      fs.mkdirSync(outputDir, { recursive: true });
+
+      // Write content file with metadata
+      fs.writeFileSync(
+        path.join(outputBase, `${outputPath}.json`),
+        JSON.stringify({
+          meta: metadata,
+          content: fileContent,
+          frontmatter,
+        })
+      );
+
+      if (this.verbose) console.log(`Processed ${contentType} file: ${outputPath}`);
+    } catch (error) {
+      console.error(`Error processing ${contentType} file ${filePath}:`, error);
+    }
+  }
+
+  /**
+   * Sort blog posts by date (newest first)
+   */
+  private sortBlogPosts(): void {
+    if (this.metadataByType.blog && this.metadataByType.blog.length > 0) {
+      this.metadataByType.blog.sort((a, b) => {
+        return new Date(b.date || "").getTime() - new Date(a.date || "").getTime();
+      });
+
+      if (this.verbose) {
+        console.log(`Sorted ${this.metadataByType.blog.length} blog posts by date`);
+      }
+    }
+  }
+
+  /**
+   * Write metadata index files for each content type
+   */
+  private writeMetadataFiles(): void {
+    for (const contentType of CONTENT_TYPES) {
+      const metadataList = this.metadataByType[contentType];
+      if (metadataList && metadataList.length > 0) {
+        // Write index file
+        fs.writeFileSync(
+          path.join(this.metaDir, contentType, "index.json"),
+          JSON.stringify(metadataList)
+        );
+
+        if (this.verbose) {
+          console.log(
+            `Created metadata index for ${contentType} with ${metadataList.length} items`
           );
-
-          // Add to index - store just the file name without .mdx
-          docsIndex[filePath.replace(/\.mdx$/, "")] = { path: `${filePath}.json` };
-        } catch (error) {
-          // Always log errors regardless of verbosity
-          console.error(`Error processing doc ${filePath}:`, error);
         }
       }
     }
   }
 
-  await processDirectory(docsDir);
+  /**
+   * Generate sitemap.xml file based on the processed content
+   */
+  async generateSitemap(): Promise<void> {
+    if (this.verbose) console.log("Generating sitemap.xml...");
 
-  // Write the docs index
-  fs.writeFileSync(path.join(STATIC_DIR, "docs-index.json"), JSON.stringify(docsIndex));
+    // Get all routes using our centralized utility
+    const uniqueRoutes = getAllRoutes();
 
-  if (verbose) console.log(`Processed ${Object.keys(docsIndex).length} doc files`);
-}
+    // Use the already collected blog posts metadata
+    const postsList = this.metadataByType.blog || [];
 
-/**
- * Process policy files
- */
-async function processPolicyFiles(verbose = true): Promise<void> {
-  if (verbose) console.log("Processing policy files...");
+    // Current date for default lastmod
+    const today = new Date().toISOString().split("T")[0];
 
-  // Privacy policy
-  const privacyPath = path.join(process.cwd(), "content", "policy", "privacy.mdx");
-  if (fs.existsSync(privacyPath)) {
-    const fileContent = fs.readFileSync(privacyPath, "utf-8");
-    try {
-      const { frontmatter } = parseFrontmatter(fileContent);
+    // Get the date of the latest blog post for the /blog route
+    const latestBlogDate =
+      postsList.length > 0 ? postsList[0].lastUpdated || postsList[0].date : today;
 
-      fs.writeFileSync(
-        path.join(POLICIES_DIR, "privacy.mdx.json"),
-        JSON.stringify({
-          content: fileContent,
-          frontmatter,
-        })
-      );
-    } catch (error) {
-      console.error(`Error processing privacy policy:`, error);
-    }
-  }
+    // Generate sitemap XML
+    let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+    xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
 
-  // Terms files
-  const termsDir = path.join(process.cwd(), "content", "policy", "terms");
-  if (fs.existsSync(termsDir)) {
-    const files = fs.readdirSync(termsDir).filter((file) => file.endsWith(".mdx"));
-    for (const filename of files) {
-      const filepath = path.join(termsDir, filename);
-      const fileContent = fs.readFileSync(filepath, "utf-8");
-      try {
-        const { frontmatter } = parseFrontmatter(fileContent);
+    // Add each URL
+    uniqueRoutes.forEach((route) => {
+      xml += "  <url>\n";
+      xml += `    <loc>${SITE_URL}${route}</loc>\n`;
 
-        fs.writeFileSync(
-          path.join(TERMS_DIR, `${filename}.json`),
-          JSON.stringify({
-            content: fileContent,
-            frontmatter,
-          })
-        );
-      } catch (error) {
-        console.error(`Error processing terms file ${filename}:`, error);
-      }
-    }
-  }
-}
-
-/**
- * Generate sitemap.xml file based on the processed content
- */
-async function generateSitemap(verbose = true): Promise<void> {
-  if (verbose) console.log("Generating sitemap.xml...");
-
-  // Get all routes using our centralized utility
-  const uniqueRoutes = getAllRoutes();
-
-  // Get blog posts metadata for setting lastmod dates
-  const postsList = await getBlogPostsWithMeta();
-
-  // Current date for default lastmod
-  const today = new Date().toISOString().split("T")[0];
-
-  // Get the date of the latest blog post for the /blog route
-  const latestBlogDate =
-    postsList.length > 0 ? postsList[0].lastUpdated || postsList[0].date : today;
-
-  // Generate sitemap XML
-  let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
-  xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
-
-  // Add each URL
-  uniqueRoutes.forEach((route) => {
-    xml += "  <url>\n";
-    xml += `    <loc>${SITE_URL}${route}</loc>\n`;
-
-    // Set lastmod based on whether it's a blog post, blog index, or other page
-    if (route === "/blog") {
-      xml += `    <lastmod>${latestBlogDate}</lastmod>\n`;
-      xml += "    <changefreq>daily</changefreq>\n";
-    } else if (route.startsWith("/blog/")) {
-      // Find the post to get its lastUpdated date
-      const postSlug = route.replace("/blog/", "");
-      const post = postsList.find((p) => p.slug === postSlug);
-      if (post) {
-        xml += `    <lastmod>${post.lastUpdated || post.date}</lastmod>\n`;
+      // Set lastmod based on whether it's a blog post, blog index, or other page
+      if (route === "/blog") {
+        xml += `    <lastmod>${latestBlogDate}</lastmod>\n`;
+        xml += "    <changefreq>daily</changefreq>\n";
+      } else if (route.startsWith("/blog/")) {
+        // Find the post to get its lastUpdated date
+        const postSlug = route.replace("/blog/", "");
+        const post = postsList.find((p) => p.slug === postSlug);
+        if (post) {
+          xml += `    <lastmod>${post.lastUpdated || post.date}</lastmod>\n`;
+        } else {
+          xml += `    <lastmod>${today}</lastmod>\n`;
+        }
+        xml += "    <changefreq>weekly</changefreq>\n";
       } else {
         xml += `    <lastmod>${today}</lastmod>\n`;
+        xml += "    <changefreq>daily</changefreq>\n";
       }
-      xml += "    <changefreq>weekly</changefreq>\n";
-    } else {
-      xml += `    <lastmod>${today}</lastmod>\n`;
-      xml += "    <changefreq>daily</changefreq>\n";
-    }
 
-    xml += "  </url>\n";
-  });
+      xml += "  </url>\n";
+    });
 
-  xml += "</urlset>";
+    xml += "</urlset>";
 
-  // Write to file
-  const outFile = path.join(process.cwd(), "public", "sitemap.xml");
-  fs.writeFileSync(outFile, xml);
+    // Write to file
+    const outFile = path.join(this.baseDir, "public", "sitemap.xml");
+    fs.writeFileSync(outFile, xml);
 
-  if (verbose) console.log(`Sitemap generated with ${uniqueRoutes.length} URLs`);
-}
-
-/**
- * Process developer tool content files
- */
-async function processDevFiles(verbose = true): Promise<void> {
-  if (verbose) console.log("Processing dev tools content...");
-
-  // Process the style test MDX file
-  const devDir = path.join(process.cwd(), "src", "components", "dev");
-  const files = fs.readdirSync(devDir).filter((file) => file.endsWith(".mdx"));
-
-  for (const filename of files) {
-    const filepath = path.join(devDir, filename);
-    const fileContent = fs.readFileSync(filepath, "utf-8");
-    try {
-      const { frontmatter } = parseFrontmatter(fileContent);
-
-      // Output filename matches the input but with .json extension
-      const outputPath = path.join(DEV_DIR, `${filename}.json`);
-
-      fs.writeFileSync(
-        outputPath,
-        JSON.stringify({
-          content: fileContent,
-          frontmatter,
-        })
-      );
-      if (verbose) console.log(`Processed dev file: ${filename}`);
-    } catch (error) {
-      console.error(`Error processing dev file ${filename}:`, error);
-    }
+    if (this.verbose) console.log(`Sitemap generated with ${uniqueRoutes.length} URLs`);
   }
 
-  if (verbose && files.length === 0) {
-    console.log("No dev MDX files found at", devDir);
+  /**
+   * Process all content and generate sitemap
+   */
+  async run(): Promise<void> {
+    try {
+      await this.processAllContent();
+      await this.generateSitemap();
+
+      if (this.verbose) {
+        console.log("Content preprocessing complete!");
+        console.log("Static files are available in the public/static directory");
+      }
+    } catch (error) {
+      console.error("Error during preprocessing:", error);
+      throw error;
+    }
   }
 }
 
@@ -281,15 +330,8 @@ async function processDevFiles(verbose = true): Promise<void> {
  */
 export async function preprocessContent(verbose = true): Promise<void> {
   try {
-    await processBlogPosts(verbose);
-    await processDocsFiles(verbose);
-    await processPolicyFiles(verbose);
-    await processDevFiles(verbose);
-    await generateSitemap(verbose);
-    if (verbose) {
-      console.log("Content preprocessing complete!");
-      console.log("Static files are available in the public/static directory");
-    }
+    const preprocessor = new ContentPreprocessor(verbose);
+    await preprocessor.run();
     return;
   } catch (error) {
     console.error("Error during preprocessing:", error);
@@ -297,7 +339,6 @@ export async function preprocessContent(verbose = true): Promise<void> {
   }
 }
 
-// Create a Vite plugin to run preprocessing and watch content dirs
 // Vite server interface for TypeScript
 interface ViteDevServer {
   httpServer?: {
@@ -310,10 +351,8 @@ interface ViteDevServer {
 }
 
 export function contentPreprocessPlugin(options = { verbose: true }) {
-  const contentDirs = [
-    path.join(process.cwd(), "content"),
-    path.join(process.cwd(), "src", "components", "dev"),
-  ];
+  // Get all content directories
+  const contentDirs = CONTENT_TYPES.map((type) => path.join(process.cwd(), "content", type));
 
   return {
     name: "content-preprocess-plugin",
@@ -330,39 +369,52 @@ export function contentPreprocessPlugin(options = { verbose: true }) {
         });
       });
 
-      // Watch content directories for changes
+      // Create the base content directory if it doesn't exist
+      const baseContentDir = path.join(process.cwd(), "content");
+      if (!fs.existsSync(baseContentDir)) {
+        fs.mkdirSync(baseContentDir, { recursive: true });
+      }
+
+      // Always watch the base content directory
+      server.watcher.add(baseContentDir);
+
+      // Set up watching on content directories
       contentDirs.forEach((dir) => {
+        // Create the directory if it doesn't exist
+        if (!fs.existsSync(dir)) {
+          fs.mkdirSync(dir, { recursive: true });
+        }
+
         if (verbose) console.log(`Watching directory for changes: ${dir}`);
-
         server.watcher.add(dir);
+      });
 
-        // Only process content files
-        server.watcher.on("change", async (filePath: string) => {
-          if (filePath.endsWith(".mdx") && filePath.includes(dir)) {
-            if (verbose) console.log(`Content file changed: ${filePath}`);
-            await preprocessContent(false).catch((error) => {
-              console.error("Error preprocessing content after file change:", error);
-            });
-          }
-        });
+      // React to content changes - these will work for any content directory
+      server.watcher.on("change", async (filePath: string) => {
+        if (filePath.endsWith(".mdx") && filePath.includes("/content/")) {
+          if (verbose) console.log(`Content file changed: ${filePath}`);
+          await preprocessContent(false).catch((error) => {
+            console.error("Error preprocessing content after file change:", error);
+          });
+        }
+      });
 
-        server.watcher.on("add", async (filePath: string) => {
-          if (filePath.endsWith(".mdx") && filePath.includes(dir)) {
-            if (verbose) console.log(`Content file added: ${filePath}`);
-            await preprocessContent(false).catch((error) => {
-              console.error("Error preprocessing content after file add:", error);
-            });
-          }
-        });
+      server.watcher.on("add", async (filePath: string) => {
+        if (filePath.endsWith(".mdx") && filePath.includes("/content/")) {
+          if (verbose) console.log(`Content file added: ${filePath}`);
+          await preprocessContent(false).catch((error) => {
+            console.error("Error preprocessing content after file add:", error);
+          });
+        }
+      });
 
-        server.watcher.on("unlink", async (filePath: string) => {
-          if (filePath.endsWith(".mdx") && filePath.includes(dir)) {
-            if (verbose) console.log(`Content file deleted: ${filePath}`);
-            await preprocessContent(false).catch((error) => {
-              console.error("Error preprocessing content after file delete:", error);
-            });
-          }
-        });
+      server.watcher.on("unlink", async (filePath: string) => {
+        if (filePath.endsWith(".mdx") && filePath.includes("/content/")) {
+          if (verbose) console.log(`Content file deleted: ${filePath}`);
+          await preprocessContent(false).catch((error) => {
+            console.error("Error preprocessing content after file delete:", error);
+          });
+        }
       });
     },
   };

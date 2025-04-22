@@ -10,7 +10,7 @@ import { MetadataError, DocumentNotFoundError } from "../errors";
 
 describe("getMetadataFromStructure", () => {
   test("returns documentation index metadata", () => {
-    const meta = getMetadataFromStructure("/docs", "doc");
+    const meta = getMetadataFromStructure("/doc", "doc");
     expect(meta.title).toBe("Documentation");
     expect(meta.slug).toBe("index");
     expect(meta.path).toBe("index");
@@ -18,7 +18,7 @@ describe("getMetadataFromStructure", () => {
   });
 
   test("returns product index metadata", () => {
-    const meta = getMetadataFromStructure("/docs/mirascope", "doc") as DocMeta;
+    const meta = getMetadataFromStructure("/doc/mirascope", "doc") as DocMeta;
     expect(meta.title).toMatch(/Mirascope/); // The exact title might vary depending on the real data
     expect(meta.slug).toBe("mirascope");
     expect(meta.path).toBe("mirascope");
@@ -45,7 +45,7 @@ describe("getMetadataFromStructure", () => {
 
   test("throws DocumentNotFoundError for unknown doc paths", () => {
     expect(() => {
-      getMetadataFromStructure("/docs/unknown/path", "doc");
+      getMetadataFromStructure("/doc/unknown/path", "doc");
     }).toThrow(DocumentNotFoundError);
   });
 

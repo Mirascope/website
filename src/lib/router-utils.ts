@@ -27,9 +27,9 @@ export function getProjectRoot(): string {
   return path.join(__dirname, "..", "..");
 }
 
-// Get path to posts list json
+// Get path to blog metadata json
 export function getPostsListPath(): string {
-  return path.join(getProjectRoot(), "public", "static", "posts-list.json");
+  return path.join(getProjectRoot(), "public", "static", "content-meta", "blog", "index.json");
 }
 
 /**
@@ -163,20 +163,4 @@ export function getAllRoutes(includeHidden = false): string[] {
   // Combine all routes and remove duplicates
   const allRoutes = [...staticRoutes, ...blogRoutes, ...docRoutes];
   return [...new Set(allRoutes)].filter((route) => includeHidden || !isHiddenRoute(route)).sort();
-}
-
-/**
- * Get posts with metadata
- */
-export async function getBlogPostsWithMeta(): Promise<BlogMeta[]> {
-  const postsListPath = getPostsListPath();
-  if (!fs.existsSync(postsListPath)) {
-    throw new Error(`Blog posts list not found at: ${postsListPath}`);
-  }
-
-  try {
-    return JSON.parse(fs.readFileSync(postsListPath, "utf8"));
-  } catch (error) {
-    throw new Error(`Failed to load blog posts list: ${error}`);
-  }
 }
