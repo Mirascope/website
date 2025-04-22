@@ -154,7 +154,10 @@ export async function renderRouteToString(
   }
   // Extract title tag from the rendered HTML
   const titleMatch = appHtml.match(/<title[^>]*>(.*?)<\/title>/);
-  const title = titleMatch ? decodeHtmlEntities(titleMatch[1]) : "Mirascope";
+  const title = titleMatch ? decodeHtmlEntities(titleMatch[1]) : null;
+  if (!title) {
+    throw new Error("No title found in the rendered HTML");
+  }
 
   // Extract all meta tags
   const metaTagsRegex = /<meta[^>]*>/g;
