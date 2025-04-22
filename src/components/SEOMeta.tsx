@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet";
 import { useMemo } from "react";
 import { BASE_URL, PRODUCT_CONFIGS } from "../lib/constants/site";
 import { useRouterState } from "@tanstack/react-router";
@@ -29,7 +28,7 @@ export function routeToImagePath(route: string): string {
   return `/social-cards/${filename}.webp`;
 }
 
-export function SEOHelmet(props: SEOProps) {
+export function SEOMeta(props: SEOProps) {
   const router = useRouterState();
   const currentPath = router.location.pathname;
 
@@ -64,7 +63,7 @@ export function SEOHelmet(props: SEOProps) {
     : `${BASE_URL}${computedImage.startsWith("/") ? computedImage : `/${computedImage}`}`;
 
   return (
-    <Helmet>
+    <>
       <title>{pageTitle}</title>
       <meta name="description" content={metaDescription} />
       {robots && <meta name="robots" content={robots} />}
@@ -98,8 +97,8 @@ export function SEOHelmet(props: SEOProps) {
         article.tags.map((tag, index) => (
           <meta key={`tag-${index}`} property="article:tag" content={tag} />
         ))}
-    </Helmet>
+    </>
   );
 }
 
-export default SEOHelmet;
+export default SEOMeta;

@@ -2,7 +2,7 @@ import { createFileRoute, Link, useLoaderData } from "@tanstack/react-router";
 import { useState } from "react";
 import { type BlogMeta } from "@/src/lib/content/blog";
 import { blogListLoader } from "@/src/lib/content/loaders";
-import SEOHelmet from "@/src/components/SEOHelmet";
+import SEOMeta from "@/src/components/SEOMeta";
 import { LoadingContent } from "@/src/components/docs";
 import { environment } from "@/src/lib/content/environment";
 import ContentErrorHandler from "@/src/components/ContentErrorHandler";
@@ -71,7 +71,7 @@ function BlogPage() {
 
   return (
     <div className="flex justify-center pt-6">
-      <SEOHelmet
+      <SEOMeta
         title="Blog"
         description="The latest news, updates, and insights about Mirascope and LLM application development."
         url="/blog"
