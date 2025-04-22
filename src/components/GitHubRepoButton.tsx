@@ -1,8 +1,8 @@
 import React from "react";
 import { useRouterState } from "@tanstack/react-router";
-import { cn } from "@/lib/utils";
-import { PRODUCT_CONFIGS } from "@/lib/constants/site";
-import type { ProductName } from "@/lib/route-types";
+import { cn } from "@/src/lib/utils";
+import { PRODUCT_CONFIGS } from "@/src/lib/constants/site";
+import type { ProductName } from "@/src/lib/route-types";
 
 /**
  * Format star count with appropriate suffix

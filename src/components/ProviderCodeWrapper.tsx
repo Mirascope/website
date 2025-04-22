@@ -1,7 +1,7 @@
 // No need to import React with JSX transform
 import { useProvider } from "./docs/ProviderContext";
 import { CodeBlock } from "./CodeBlock";
-import { replaceProviderVariables } from "@/config/providers";
+import { replaceProviderVariables } from "@/src/config/providers";
 
 /**
  * A wrapper component for code blocks that handles provider-specific substitutions.

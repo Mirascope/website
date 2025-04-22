@@ -66,8 +66,9 @@ export async function loadContent<T extends ContentMeta>(
     const rawContent = await fetchRawContent(contentPath, devMode);
 
     // Process MDX with preprocessing if needed
-    const processed = await processMDXContent(rawContent, {
+    const processed = await processMDXContent(rawContent, contentType, {
       preprocessContent: options?.preprocessContent,
+      path: path,
     });
 
     // Create metadata

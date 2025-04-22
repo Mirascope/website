@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 3: Response Models
 # Generated for provider: anthropic
-# Source: src/docs/mirascope/getting-started/quickstart.mdx:84
+# Source: content/doc/mirascope/getting-started/quickstart.mdx:84
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm

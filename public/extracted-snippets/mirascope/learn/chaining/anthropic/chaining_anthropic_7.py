@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 7: Advanced Chaining Techniques
 # Generated for provider: anthropic
-# Source: src/docs/mirascope/learn/chaining.mdx:185
+# Source: content/doc/mirascope/learn/chaining.mdx:185
 # This file is auto-generated; any edits should be made in the source file
 
 from enum import Enum

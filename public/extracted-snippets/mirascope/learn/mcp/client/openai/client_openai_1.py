@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 1: Basic Usage and Syntax
 # Generated for provider: openai
-# Source: src/docs/mirascope/learn/mcp/client.mdx:17
+# Source: content/doc/mirascope/learn/mcp/client.mdx:17
 # This file is auto-generated; any edits should be made in the source file
 
 import asyncio

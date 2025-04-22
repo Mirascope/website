@@ -1,8 +1,8 @@
 import { createContext, useContext, useState } from "react";
 import type { ReactNode } from "react";
 // Import from shared config file
-import type { Provider } from "@/config/providers";
-import { providers, providerDefaults } from "@/config/providers";
+import type { Provider } from "@/src/config/providers";
+import { providers, providerDefaults } from "@/src/config/providers";
 
 // Re-export these for backward compatibility
 export type { Provider };

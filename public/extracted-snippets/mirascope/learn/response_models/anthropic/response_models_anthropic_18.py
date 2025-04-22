@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 18: FromCallArgs
 # Generated for provider: anthropic
-# Source: src/docs/mirascope/learn/response_models.mdx:768
+# Source: content/doc/mirascope/learn/response_models.mdx:768
 # This file is auto-generated; any edits should be made in the source file
 
 from typing import Annotated

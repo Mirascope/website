@@ -6,8 +6,8 @@ import {
   DropdownMenuTrigger,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-} from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
+} from "@/src/components/ui/dropdown-menu";
+import { cn } from "@/src/lib/utils";
 import { useRouterState } from "@tanstack/react-router";
 
 type Theme = "light" | "dark" | "sunset" | "system";

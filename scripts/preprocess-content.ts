@@ -3,6 +3,7 @@ import path from "path";
 import type { BlogMeta } from "../src/lib/content/blog";
 import { SITE_URL, getAllRoutes, getBlogPostsWithMeta } from "../src/lib/router-utils";
 import { processMDXContent } from "../src/lib/content/mdx-processor";
+import { parseFrontmatter } from "../src/lib/content/frontmatter";
 
 // Create static directories directly in public folder
 // This ensures they get copied to the right place in the final build
@@ -21,48 +22,11 @@ fs.mkdirSync(TERMS_DIR, { recursive: true });
 fs.mkdirSync(DEV_DIR, { recursive: true });
 
 /**
- * Extract frontmatter from MDX content
- */
-function extractFrontmatter(source: string): {
-  content: string;
-  frontmatter: Record<string, string>;
-} {
-  const frontmatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/;
-  const match = source.match(frontmatterRegex);
-
-  if (!match) {
-    return { content: source, frontmatter: {} };
-  }
-
-  const frontmatterStr = match[1];
-  const content = match[2];
-
-  // Parse frontmatter into key-value pairs
-  const frontmatter: Record<string, string> = {};
-  const lines = frontmatterStr.split("\n");
-
-  for (const line of lines) {
-    const colonIndex = line.indexOf(":");
-    if (colonIndex !== -1) {
-      const key = line.slice(0, colonIndex).trim();
-      // Remove quotes from value if present
-      const value = line
-        .slice(colonIndex + 1)
-        .trim()
-        .replace(/^"(.*)"$/, "$1");
-      frontmatter[key] = value;
-    }
-  }
-
-  return { content, frontmatter };
-}
-
-/**
  * Process all blog posts
  */
 async function processBlogPosts(verbose = true): Promise<void> {
   if (verbose) console.log("Processing blog posts...");
-  const postsDir = path.join(process.cwd(), "src", "posts");
+  const postsDir = path.join(process.cwd(), "content", "blog");
   const files = fs.readdirSync(postsDir).filter((file) => file.endsWith(".mdx"));
 
   const postsList: BlogMeta[] = [];
@@ -73,11 +37,13 @@ async function processBlogPosts(verbose = true): Promise<void> {
     const fileContent = fs.readFileSync(filepath, "utf-8");
 
     // Extract frontmatter
-    const { frontmatter } = extractFrontmatter(fileContent);
+    const { frontmatter } = parseFrontmatter(fileContent);
 
     // Check if MDX can be processed - we don't use the result but this ensures it's valid MDX
     try {
-      await processMDXContent(fileContent);
+      await processMDXContent(fileContent, "blog", {
+        path: filepath,
+      });
     } catch (error) {
       // Always log errors regardless of verbosity
       console.error(`Error processing ${filename}:`, error);
@@ -124,7 +90,7 @@ async function processBlogPosts(verbose = true): Promise<void> {
  */
 async function processDocsFiles(verbose = true): Promise<void> {
   if (verbose) console.log("Processing docs files...");
-  const docsDir = path.join(process.cwd(), "src", "docs");
+  const docsDir = path.join(process.cwd(), "content", "doc");
   const docsIndex: Record<string, { path: string }> = {};
 
   // Process docs directory recursively
@@ -148,10 +114,12 @@ async function processDocsFiles(verbose = true): Promise<void> {
 
         try {
           // Extract frontmatter from the content
-          const { frontmatter } = extractFrontmatter(fileContent);
+          const { frontmatter } = parseFrontmatter(fileContent);
 
           // Just check if the MDX is valid by attempting to process it
-          await processMDXContent(fileContent);
+          await processMDXContent(fileContent, "doc", {
+            path: filePath,
+          });
 
           // Create directory path if it doesn't exist
           const dirName = path.dirname(path.join(DOCS_DIR, filePath));
@@ -191,12 +159,14 @@ async function processPolicyFiles(verbose = true): Promise<void> {
   if (verbose) console.log("Processing policy files...");
 
   // Privacy policy
-  const privacyPath = path.join(process.cwd(), "src", "policies", "privacy.mdx");
+  const privacyPath = path.join(process.cwd(), "content", "policy", "privacy.mdx");
   if (fs.existsSync(privacyPath)) {
     const fileContent = fs.readFileSync(privacyPath, "utf-8");
     try {
-      const { frontmatter } = extractFrontmatter(fileContent);
-      await processMDXContent(fileContent); // Validate the MDX
+      const { frontmatter } = parseFrontmatter(fileContent);
+      await processMDXContent(fileContent, "policy", {
+        path: privacyPath,
+      }); // Validate the MDX
       fs.writeFileSync(
         path.join(POLICIES_DIR, "privacy.mdx.json"),
         JSON.stringify({
@@ -210,15 +180,17 @@ async function processPolicyFiles(verbose = true): Promise<void> {
   }
 
   // Terms files
-  const termsDir = path.join(process.cwd(), "src", "policies", "terms");
+  const termsDir = path.join(process.cwd(), "content", "policy", "terms");
   if (fs.existsSync(termsDir)) {
     const files = fs.readdirSync(termsDir).filter((file) => file.endsWith(".mdx"));
     for (const filename of files) {
       const filepath = path.join(termsDir, filename);
       const fileContent = fs.readFileSync(filepath, "utf-8");
       try {
-        const { frontmatter } = extractFrontmatter(fileContent);
-        await processMDXContent(fileContent); // Validate the MDX
+        const { frontmatter } = parseFrontmatter(fileContent);
+        await processMDXContent(fileContent, "policy", {
+          path: filepath,
+        }); // Validate the MDX
         fs.writeFileSync(
           path.join(TERMS_DIR, `${filename}.json`),
           JSON.stringify({
@@ -303,8 +275,10 @@ async function processDevFiles(verbose = true): Promise<void> {
   if (fs.existsSync(styleTestPath)) {
     const fileContent = fs.readFileSync(styleTestPath, "utf-8");
     try {
-      const { frontmatter } = extractFrontmatter(fileContent);
-      await processMDXContent(fileContent); // Validate the MDX
+      const { frontmatter } = parseFrontmatter(fileContent);
+      await processMDXContent(fileContent, "dev", {
+        path: styleTestPath,
+      }); // Validate the MDX
       fs.writeFileSync(
         path.join(DEV_DIR, "style-test.mdx.json"),
         JSON.stringify({

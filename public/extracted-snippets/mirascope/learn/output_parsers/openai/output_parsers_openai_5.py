@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 5: Additional Examples
 # Generated for provider: openai
-# Source: src/docs/mirascope/learn/output_parsers.mdx:163
+# Source: content/doc/mirascope/learn/output_parsers.mdx:163
 # This file is auto-generated; any edits should be made in the source file
 
 import json

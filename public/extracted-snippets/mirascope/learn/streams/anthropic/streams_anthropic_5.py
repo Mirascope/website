@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 5: Common Stream Properties and Methods
 # Generated for provider: anthropic
-# Source: src/docs/mirascope/learn/streams.mdx:170
+# Source: content/doc/mirascope/learn/streams.mdx:170
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm

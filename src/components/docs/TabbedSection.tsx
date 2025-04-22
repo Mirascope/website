@@ -1,7 +1,7 @@
 import React from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../ui/tabs";
 import Logo from "../Logo";
-import { cn } from "@/lib/utils";
+import { cn } from "@/src/lib/utils";
 
 /**
  * A Tab component to be used within TabbedSection

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { LoadingContent } from "@/components/docs";
+import { LoadingContent } from "@/src/components/docs";
 import { useProvider } from "./ProviderContext";
 import { CodeBlock } from "../CodeBlock";
-import { cn } from "@/lib/utils";
+import { cn } from "@/src/lib/utils";
 import { ChevronDown, ChevronUp, Wrench } from "lucide-react";
 
 interface ProviderCodeBlockProps {

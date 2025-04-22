@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 6: Async Streaming
 # Generated for provider: openai
-# Source: src/docs/mirascope/learn/async.mdx:188
+# Source: content/doc/mirascope/learn/async.mdx:188
 # This file is auto-generated; any edits should be made in the source file
 
 import asyncio

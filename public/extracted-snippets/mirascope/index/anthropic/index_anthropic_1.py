@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 1: Mirascope API
 # Generated for provider: anthropic
-# Source: src/docs/mirascope/index.mdx:39
+# Source: content/doc/mirascope/index.mdx:39
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm

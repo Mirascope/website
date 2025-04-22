@@ -3,8 +3,8 @@ import type { ContentMeta, Content } from "./types";
 import { getMetadataFromStructure, mergeMetadata } from "./metadata-service";
 
 // Import product docs metadata
-import docsMetadata from "@/docs/_meta";
-import type { ProductDocs } from "@/docs/_meta";
+import docsMetadata from "@/content/doc/_meta";
+import type { ProductDocs } from "@/content/doc/_meta";
 
 // Define doc-specific metadata
 export interface DocMeta extends ContentMeta {
