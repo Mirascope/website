@@ -353,21 +353,34 @@ const NestedItem = ({
   // State to track if the folder is expanded
   const [isExpanded, setIsExpanded] = React.useState(isActive);
 
-  // Auto-expand if this item or any of its children are active
+  // Auto-expand only when a folder becomes active, not on every render
   React.useEffect(() => {
+    // Only auto-expand when the item first becomes active
+    // Don't re-expand after user explicitly closes it
     if (isActive && !isExpanded) {
       setIsExpanded(true);
     }
-  }, [isActive, isExpanded]);
+    // Omitting isExpanded from dependencies to prevent re-expanding after user closes
+  }, [isActive]);
 
   return (
-    <div key={itemSlug}>
-      <div className="flex items-center">
+    <div
+      key={itemSlug}
+      className={cn(hasNestedItems && isActive ? "bg-accent/40 rounded-md my-1" : "")}
+    >
+      <div className="flex items-center py-1">
         {/* Render expand/collapse icon for folders */}
         {hasNestedItems && (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="w-5 h-5 flex items-center justify-center mr-1 text-muted-foreground"
+            className={cn(
+              "w-5 h-5 flex items-center justify-center mr-1",
+              isActive
+                ? product === "lilypad"
+                  ? "text-lilypad-green"
+                  : "text-mirascope-purple"
+                : "text-muted-foreground"
+            )}
             aria-label={isExpanded ? "Collapse" : "Expand"}
           >
             <svg
@@ -376,11 +389,12 @@ const NestedItem = ({
               height="16"
               viewBox="0 0 24 24"
               fill="none"
-              className="stroke-muted-foreground transition-transform"
+              className="transition-transform"
               style={{ transform: isExpanded ? "rotate(90deg)" : "rotate(0deg)" }}
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
+              stroke="currentColor"
             >
               <polyline points="9 18 15 12 9 6"></polyline>
             </svg>
@@ -391,9 +405,16 @@ const NestedItem = ({
         {hasNestedItems ? (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className={`py-1 font-medium text-muted-foreground block text-left w-full hover:bg-accent hover:text-accent-foreground rounded-md`}
+            className={cn(
+              "font-medium block text-left w-full hover:text-accent-foreground rounded-md",
+              isActive
+                ? product === "lilypad"
+                  ? "text-lilypad-green"
+                  : "text-mirascope-purple"
+                : "text-muted-foreground"
+            )}
             style={{
-              paddingLeft: `${0.75 + indentLevel * 0.5}rem`,
+              paddingLeft: hasNestedItems ? "0" : `${0.75 + indentLevel * 0.5}rem`,
               paddingRight: "0.75rem",
               flex: 1,
             }}
@@ -406,7 +427,7 @@ const NestedItem = ({
             to={itemUrl}
             isActive={isActivePath(itemUrl)}
             product={product}
-            className={`py-1`}
+            className=""
             style={{
               paddingLeft: `${0.75 + indentLevel * 0.5}rem`,
               paddingRight: "0.75rem",
@@ -420,13 +441,15 @@ const NestedItem = ({
 
       {/* Render nested items if exists and is expanded */}
       {hasNestedItems && isExpanded && (
-        <NestedItems
-          items={item.items}
-          product={product}
-          basePath={itemUrl}
-          isActivePath={isActivePath}
-          indentLevel={indentLevel + 1}
-        />
+        <div className="pt-1 pb-2">
+          <NestedItems
+            items={item.items}
+            product={product}
+            basePath={itemUrl}
+            isActivePath={isActivePath}
+            indentLevel={indentLevel + 1}
+          />
+        </div>
       )}
     </div>
   );

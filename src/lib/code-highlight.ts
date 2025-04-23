@@ -2,6 +2,42 @@ import { codeToHtml } from "shiki";
 import { transformerNotationHighlight } from "@shikijs/transformers";
 
 /**
+ * Strips highlight markers from code for clipboard copying
+ * Removes different syntax variations of [!code highlight] comments
+ */
+export function stripHighlightMarkers(code: string): string {
+  if (!code) return code;
+
+  // Process lines individually to better handle edge cases
+  const lines = code.split("\n");
+  const processedLines = lines.map((line) => {
+    // Case 1: Line contains only a highlight marker with no code
+    if (
+      /^\s*(?:\/\/|#|\/\*|\<\!--|\-\-)\s*\[!code highlight\](?:\s*\*\/|\s*--\>)?\s*$/.test(line)
+    ) {
+      return ""; // Replace with empty line to preserve line numbers
+    }
+
+    // Case 2: Line contains code followed by a highlight marker
+    if (
+      /\S.*\s*(?:\/\/|#|\/\*|\<\!--|\-\-)\s*\[!code highlight\](?:\s*\*\/|\s*--\>)?\s*$/.test(line)
+    ) {
+      // Remove the highlight marker but keep the code
+      return line.replace(
+        /\s*(?:\/\/|#|\/\*|\<\!--|\-\-)\s*\[!code highlight\](?:\s*\*\/|\s*--\>)?\s*$/,
+        ""
+      );
+    }
+
+    // Case 3: Regular line with no highlight marker
+    return line;
+  });
+
+  // Join the lines back together, preserving the original line endings
+  return processedLines.join("\n");
+}
+
+/**
  * Function to parse meta information and add highlighting comments
  * Transforms meta information like {1-3,5} into [!code highlight] comments
  */

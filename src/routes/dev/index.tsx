@@ -46,6 +46,16 @@ function DevIndexPage() {
               across themes. Includes typography, MDX components, and UI elements.
             </p>
           </div>
+
+          <div className="border rounded-lg p-6 shadow-sm">
+            <a href="/dev/code-highlight-test" className="hover:underline">
+              <h2 className="text-xl font-semibold mb-2 text-primary">Code Highlighting Test</h2>
+            </a>
+            <p className="mb-4">
+              Test page for demonstrating code line highlighting capabilities in code blocks.
+              Examples of highlighting in different languages and complex scenarios.
+            </p>
+          </div>
         </div>
       </div>
     </DevLayout>
