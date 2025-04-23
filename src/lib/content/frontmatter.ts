@@ -1,5 +1,3 @@
-import type { ContentType, ValidationResult } from "./content-types";
-
 export interface FrontmatterResult {
   frontmatter: Record<string, any>;
   content: string;
@@ -13,47 +11,31 @@ export interface FrontmatterResult {
  */
 export function parseFrontmatter(content: string): FrontmatterResult {
   try {
-    // Extract anything between the first two '---' markers
-    const frontmatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/;
-    const match = content.match(frontmatterRegex);
-
-    if (match) {
-      const frontmatterStr = match[1];
-      const cleanContent = match[2];
-
-      // Parse frontmatter into key-value pairs
-      const frontmatter: Record<string, any> = {};
-      const lines = frontmatterStr.split("\n");
-
-      for (const line of lines) {
-        const trimmedLine = line.trim();
-        if (!trimmedLine) continue; // Skip empty lines
-
-        // Look for key: value format
-        const colonIndex = trimmedLine.indexOf(":");
-        if (colonIndex > 0) {
-          const key = trimmedLine.slice(0, colonIndex).trim();
-          const value = trimmedLine.slice(colonIndex + 1).trim();
-
-          // Remove quotes if present
-          frontmatter[key] = value.replace(/^["'](.*)["']$/, "$1");
-        }
-      }
-
+    // Check for content with frontmatter pattern
+    if (!content.startsWith("---")) {
       return {
-        frontmatter,
-        content: cleanContent,
+        frontmatter: {},
+        content,
       };
     }
 
-    // Handle alternative format with multiple parts
     const parts = content.split("---");
+
+    // Handle case with empty frontmatter (---\n---)
+    if (parts.length >= 3 && parts[1].trim() === "") {
+      return {
+        frontmatter: {},
+        content: parts.slice(2).join("---").trimStart(),
+      };
+    }
+
+    // Normal case with frontmatter content
     if (parts.length >= 3) {
       const frontmatterStr = parts[1].trim();
       const contentParts = parts.slice(2).join("---");
       const cleanContent = contentParts.trimStart();
 
-      // Parse the frontmatter into a key-value object
+      // Parse frontmatter into key-value pairs
       const frontmatter: Record<string, any> = {};
 
       // Split by lines and process each line
@@ -78,7 +60,7 @@ export function parseFrontmatter(content: string): FrontmatterResult {
       };
     }
 
-    // If no frontmatter found, return the original content
+    // If no proper frontmatter found, return original content
     return {
       frontmatter: {},
       content,
@@ -90,46 +72,6 @@ export function parseFrontmatter(content: string): FrontmatterResult {
       content,
     };
   }
-}
-
-/**
- * Validates frontmatter against requirements for a specific content type
- *
- * @param frontmatter - The frontmatter to validate
- * @param contentType - The type of content to validate against
- * @returns Validation result with errors if invalid
- */
-export function validateFrontmatter(
-  frontmatter: Record<string, any>,
-  contentType: ContentType
-): ValidationResult {
-  const errors: string[] = [];
-
-  // Common validation for all content types
-  if (!frontmatter.title) {
-    errors.push("Missing required field: title");
-  }
-
-  // Type-specific validation
-  switch (contentType) {
-    case "blog":
-      if (!frontmatter.date) errors.push("Missing required field: date");
-      if (!frontmatter.author) errors.push("Missing required field: author");
-      break;
-
-    case "doc":
-      // Optional validation for docs
-      break;
-
-    case "policy":
-      // Optional validation for policies
-      break;
-  }
-
-  return {
-    isValid: errors.length === 0,
-    errors: errors.length > 0 ? errors : undefined,
-  };
 }
 
 /**
