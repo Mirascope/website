@@ -11,7 +11,7 @@ import type {
   DocSection,
   ProductDocs,
   DocsStructure,
-} from "@/content/doc/_meta";
+} from "./legacy-doc-meta";
 
 /**
  * Convert a DocSpec to a legacy DocMetaItem

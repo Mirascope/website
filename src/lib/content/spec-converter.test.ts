@@ -7,7 +7,7 @@ import {
 } from "./spec-converter";
 import { type DocSpec } from "./spec";
 import actualMeta from "@/content/doc/_meta";
-import type { DocMetaItem } from "@/content/doc/_meta";
+import type { DocMetaItem } from "./legacy-doc-meta";
 
 describe("DocSpec to Legacy conversion", () => {
   test("convertDocToLegacy converts basic document", () => {
