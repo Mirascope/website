@@ -17,17 +17,19 @@ export * from "@/src/lib/content/legacy-doc-meta";
 // import { toLegacyFormat } from "@/src/lib/content/doc-converter";
 
 // Import product-specific metadata
-import mirascopeMeta from "./mirascope/_meta";
-import lilypadMeta from "./lilypad/_meta";
+import mirascopeSpec from "./mirascope/_meta";
+import lilypadSpec from "./lilypad/_meta";
 
-// Define the metadata in the legacy format (for now)
-// Later this will be migrated to the new format
+import type { DocsSpec } from "@/src/lib/content/spec";
 import type { DocsStructure } from "@/src/lib/content/legacy-doc-meta";
+import { convertDocsToLegacy } from "@/src/lib/content/spec-converter";
 
-const meta: DocsStructure = {
-  mirascope: mirascopeMeta,
-  lilypad: lilypadMeta,
+const spec: DocsSpec = {
+  mirascope: mirascopeSpec,
+  lilypad: lilypadSpec,
 };
+
+const meta: DocsStructure = convertDocsToLegacy(spec);
 
 // Later this will be:
 // const newMeta: DocsSpec = {

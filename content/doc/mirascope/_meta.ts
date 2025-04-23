@@ -1,168 +1,190 @@
-/**
- * Documentation structure for Mirascope
- */
-import type { ProductDocs } from "../_meta";
+import type { ProductSpec } from "@/src/lib/content/spec";
 import guidesMeta from "./guides/_meta";
-import mirascopeApiMeta from "./api/_meta";
+import apiMeta from "./api/_meta";
 
-const mirascopeMeta: ProductDocs = {
-  // Top level pages
-  items: {
-    index: {
-      title: "Welcome",
+/**
+ * Documentation structure for mirascope in new DocSpec format
+ */
+const mirascopeSpec: ProductSpec = {
+  defaultSectionLabel: "Docs",
+  defaultSection: [
+    {
+      slug: "index",
+      label: "Welcome",
       hasExtractableSnippets: true,
     },
-  },
-
-  // Grouped pages in main area
-  groups: {
-    "getting-started": {
-      title: "Getting Started",
-      items: {
-        quickstart: {
-          title: "Quickstart",
+    {
+      slug: "getting-started",
+      label: "Getting Started",
+      children: [
+        {
+          slug: "quickstart",
+          label: "Quickstart",
           hasExtractableSnippets: true,
         },
-        why: {
-          title: "Why Mirascope?",
+        {
+          slug: "why",
+          label: "Why Mirascope?",
           hasExtractableSnippets: true,
         },
-        help: {
-          title: "Help",
+        {
+          slug: "help",
+          label: "Help",
         },
-        contributing: {
-          title: "Contributing",
+        {
+          slug: "contributing",
+          label: "Contributing",
         },
-        migration: {
-          title: "0.x Migration Guide",
+        {
+          slug: "migration",
+          label: "0.x Migration Guide",
         },
-      },
+      ],
     },
-    learn: {
-      title: "Learn",
-      items: {
-        index: {
-          title: "Overview",
+    {
+      slug: "learn",
+      label: "Learn",
+      children: [
+        {
+          slug: "index",
+          label: "Overview",
         },
-        prompts: {
-          title: "Prompts",
+        {
+          slug: "prompts",
+          label: "Prompts",
           hasExtractableSnippets: true,
         },
-        calls: {
-          title: "Calls",
+        {
+          slug: "calls",
+          label: "Calls",
           hasExtractableSnippets: true,
         },
-        streams: {
-          title: "Streams",
+        {
+          slug: "streams",
+          label: "Streams",
           hasExtractableSnippets: true,
         },
-        chaining: {
-          title: "Chaining",
+        {
+          slug: "chaining",
+          label: "Chaining",
           hasExtractableSnippets: true,
         },
-        response_models: {
-          title: "Response Models",
+        {
+          slug: "response_models",
+          label: "Response Models",
           hasExtractableSnippets: true,
         },
-        json_mode: {
-          title: "JSON Mode",
+        {
+          slug: "json_mode",
+          label: "JSON Mode",
           hasExtractableSnippets: true,
         },
-        output_parsers: {
-          title: "Output Parsers",
+        {
+          slug: "output_parsers",
+          label: "Output Parsers",
           hasExtractableSnippets: true,
         },
-        tools: {
-          title: "Tools",
+        {
+          slug: "tools",
+          label: "Tools",
           hasExtractableSnippets: true,
         },
-        agents: {
-          title: "Agents",
+        {
+          slug: "agents",
+          label: "Agents",
           hasExtractableSnippets: true,
         },
-        evals: {
-          title: "Evals",
+        {
+          slug: "evals",
+          label: "Evals",
           hasExtractableSnippets: true,
         },
-        async: {
-          title: "Async",
+        {
+          slug: "async",
+          label: "Async",
           hasExtractableSnippets: true,
         },
-        retries: {
-          title: "Retries",
+        {
+          slug: "retries",
+          label: "Retries",
           hasExtractableSnippets: true,
         },
-        local_models: {
-          title: "Local Models",
+        {
+          slug: "local_models",
+          label: "Local Models",
           hasExtractableSnippets: true,
         },
-      },
+      ],
     },
-    // Provider-specific features
-    "learn/provider-specific": {
-      title: "Provider-Specific Features",
-      items: {
-        openai: {
-          title: "OpenAI",
+    {
+      slug: "learn/provider-specific",
+      label: "Provider-Specific Features",
+      children: [
+        {
+          slug: "openai",
+          label: "OpenAI",
           hasExtractableSnippets: true,
         },
-        anthropic: {
-          title: "Anthropic",
+        {
+          slug: "anthropic",
+          label: "Anthropic",
           hasExtractableSnippets: true,
         },
-      },
+      ],
     },
-    // Extensions
-    "learn/extensions": {
-      title: "Extensions",
-      items: {
-        middleware: {
-          title: "Middleware",
+    {
+      slug: "learn/extensions",
+      label: "Extensions",
+      children: [
+        {
+          slug: "middleware",
+          label: "Middleware",
           hasExtractableSnippets: true,
         },
-        custom_provider: {
-          title: "Custom LLM Provider",
+        {
+          slug: "custom_provider",
+          label: "Custom LLM Provider",
         },
-      },
+      ],
     },
-    // MCP - Model Context Protocol
-    "learn/mcp": {
-      title: "MCP - Model Context Protocol",
-      items: {
-        client: {
-          title: "Client",
+    {
+      slug: "learn/mcp",
+      label: "MCP - Model Context Protocol",
+      children: [
+        {
+          slug: "client",
+          label: "Client",
           hasExtractableSnippets: true,
         },
-      },
+      ],
     },
-    integrations: {
-      title: "Integrations",
-      items: {
-        langfuse: {
-          title: "Langfuse",
+    {
+      slug: "integrations",
+      label: "Integrations",
+      children: [
+        {
+          slug: "langfuse",
+          label: "Langfuse",
           hasExtractableSnippets: true,
         },
-        hyperdx: {
-          title: "HyperDX",
+        {
+          slug: "hyperdx",
+          label: "HyperDX",
           hasExtractableSnippets: true,
         },
-        logfire: {
-          title: "Logfire",
+        {
+          slug: "logfire",
+          label: "Logfire",
           hasExtractableSnippets: true,
         },
-        otel: {
-          title: "OpenTelemetry",
+        {
+          slug: "otel",
+          label: "OpenTelemetry",
           hasExtractableSnippets: true,
         },
-      },
+      ],
     },
-  },
-
-  // Sections (like API, Guides)
-  sections: {
-    api: mirascopeApiMeta,
-    guides: guidesMeta,
-  },
+  ],
+  sections: [apiMeta, guidesMeta],
 };
-
-export default mirascopeMeta;
+export default mirascopeSpec;
