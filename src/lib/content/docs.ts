@@ -119,17 +119,14 @@ export function getDocsFromSpec(): DocMeta[] {
 
   // Process each product in the spec
   Object.entries(docsSpec).forEach(([product, productSpec]) => {
-    // Process default section items
-    productSpec.defaultSection.forEach((docSpec) => {
-      const docItems = processDocSpec(docSpec, product);
-      allDocs.push(...docItems);
-    });
-
-    // Process additional sections
+    // Process all sections
     productSpec.sections.forEach((section) => {
+      // For the default section (index), don't add a section slug prefix
+      const isDefaultSection = section.slug === "index";
+      const sectionPathPrefix = isDefaultSection ? product : `${product}/${section.slug}`;
+
+      // Process each document in this section
       section.children.forEach((docSpec) => {
-        // Process with section path prefix and section slug
-        const sectionPathPrefix = `${product}/${section.slug}`;
         const docItems = processDocSpec(docSpec, product, sectionPathPrefix);
         allDocs.push(...docItems);
       });

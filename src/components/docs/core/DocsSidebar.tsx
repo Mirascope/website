@@ -1,15 +1,10 @@
-import { meta as docsMetadata } from "@/content/doc/_meta";
-import { getSectionsForProduct } from "@/src/lib/content/docs";
+import docsSpec from "@/content/doc/_meta";
+import type { DocSpec } from "@/src/lib/content/spec";
 import { getProductRoute } from "@/src/lib/routes";
 import type { ProductName } from "@/src/lib/route-types";
 import { type Provider } from "../ProviderContext";
 import Sidebar from "@/src/components/Sidebar";
-import type {
-  SidebarConfig,
-  SidebarItem,
-  SidebarGroup,
-  SidebarSection,
-} from "@/src/components/Sidebar";
+import type { SidebarConfig, SidebarItem, SidebarGroup } from "@/src/components/Sidebar";
 import { Link } from "@tanstack/react-router";
 
 interface DocsSidebarProps {
@@ -36,14 +31,14 @@ const ProductLink = ({ product }: { product: ProductName }) => {
 };
 
 /**
- * Helper to convert the legacy doc metadata to the new sidebar format
+ * Helper to convert the spec metadata to the sidebar format
  */
 function createSidebarConfig(product: ProductName): SidebarConfig {
-  const productData = docsMetadata[product];
-  const sections = getSectionsForProduct(product);
+  // Get product spec directly
+  const productSpec = docsSpec[product];
 
-  // If no product data available, return minimal config
-  if (!productData) {
+  // If no product spec available, return minimal config
+  if (!productSpec) {
     return {
       label: product,
       sections: [],
@@ -60,76 +55,91 @@ function createSidebarConfig(product: ProductName): SidebarConfig {
     };
   }
 
-  // Create ordered sections with Guides between Docs and API
-  let orderedSections = [...sections]; // Clone the array
-  if (sections.some((s) => s.slug === "guides") && sections.some((s) => s.slug === "api")) {
-    // Filter out guides and api first
-    const guidesSection = sections.find((s) => s.slug === "guides");
-    const apiSection = sections.find((s) => s.slug === "api");
-    const otherSections = sections.filter((s) => s.slug !== "guides" && s.slug !== "api");
+  // Get all sections and order them appropriately
+  let allSections = [...productSpec.sections];
 
-    // Rebuild the array in the desired order: [other sections, guides, api]
-    orderedSections = [...otherSections];
-    if (guidesSection) orderedSections.push(guidesSection);
-    if (apiSection) orderedSections.push(apiSection);
+  // Find index section to ensure it appears first
+  const defaultIndex = allSections.findIndex((s) => s.slug === "index");
+  if (defaultIndex > 0) {
+    // Move index section to the front
+    const defaultSection = allSections.splice(defaultIndex, 1)[0];
+    allSections.unshift(defaultSection);
   }
 
-  // Convert items from legacy format to new sidebar item format
-  function convertItems(items: Record<string, any>): Record<string, SidebarItem> {
-    const result: Record<string, SidebarItem> = {};
+  // The rest of the sections remain in the order defined in the spec
 
-    for (const [slug, item] of Object.entries(items)) {
-      result[slug] = {
-        slug,
-        label: item.title,
-        items: item.items ? convertItems(item.items) : undefined,
-      };
+  // Convert doc specs to sidebar items
+  function convertDocToSidebarItem(doc: DocSpec): SidebarItem {
+    const item: SidebarItem = {
+      slug: doc.slug,
+      label: doc.label,
+    };
+
+    // Process children if any
+    if (doc.children && doc.children.length > 0) {
+      item.items = {};
+
+      doc.children.forEach((childDoc) => {
+        const childItem = convertDocToSidebarItem(childDoc);
+        if (item.items) {
+          item.items[childDoc.slug] = childItem;
+        }
+      });
     }
 
-    return result;
+    return item;
   }
 
-  // Convert groups from legacy format to new sidebar group format
-  function convertGroups(groups: Record<string, any>): Record<string, SidebarGroup> {
-    const result: Record<string, SidebarGroup> = {};
+  // Create sidebar sections from spec sections
+  const sidebarSections = allSections.map((section) => {
+    // Create basePath - for index section, don't include the section slug
+    const basePath =
+      section.slug === "index" ? `/docs/${product}` : `/docs/${product}/${section.slug}`;
 
-    for (const [slug, group] of Object.entries(groups)) {
-      result[slug] = {
-        slug,
-        label: group.title,
-        items: convertItems(group.items || {}),
-      };
-    }
+    // Process direct items (those without children) and create groups for top-level folders
+    const items: Record<string, SidebarItem> = {};
+    const groups: Record<string, SidebarGroup> = {};
 
-    return result;
-  }
+    section.children.forEach((child) => {
+      if (!child.children || child.children.length === 0) {
+        // This is a direct item, add it to items
+        items[child.slug] = {
+          slug: child.slug,
+          label: child.label,
+        };
+      } else {
+        // This is a top-level folder, add it as a group
+        const groupItems: Record<string, SidebarItem> = {};
 
-  // Create the main docs section
-  const mainSection: SidebarSection = {
-    slug: "docs",
-    label: "Docs",
-    basePath: `/docs/${product}`,
-    items: convertItems(productData.items || {}),
-    groups: convertGroups(productData.groups || {}),
-  };
+        // Process all items in this group
+        child.children.forEach((grandchild) => {
+          // Convert the grandchild and its descendants to sidebar items
+          const sidebarItem = convertDocToSidebarItem(grandchild);
+          groupItems[grandchild.slug] = sidebarItem;
+        });
 
-  // Create additional sections
-  const additionalSections: SidebarSection[] = orderedSections.map((section) => {
-    const sectionData = productData.sections?.[section.slug];
+        // Add the group
+        groups[child.slug] = {
+          slug: child.slug,
+          label: child.label,
+          items: groupItems,
+        };
+      }
+    });
 
     return {
       slug: section.slug,
-      label: section.title,
-      basePath: `/docs/${product}/${section.slug}`,
-      items: sectionData ? convertItems(sectionData.items || {}) : {},
-      groups: sectionData ? convertGroups(sectionData.groups || {}) : {},
+      label: section.label,
+      basePath,
+      items,
+      groups: Object.keys(groups).length > 0 ? groups : undefined,
     };
   });
 
   // Return the complete sidebar config
   return {
     label: product,
-    sections: [mainSection, ...additionalSections],
+    sections: sidebarSections,
     activeColors: {
       bg: product === "mirascope" ? "bg-button-primary" : "bg-lilypad-green",
       text: "text-white",
