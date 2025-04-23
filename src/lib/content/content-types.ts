@@ -13,7 +13,7 @@ export const CONTENT_TYPES: ContentType[] = ["doc", "blog", "policy", "dev"];
 // Base metadata interface
 export interface ContentMeta {
   title: string;
-  description?: string;
+  description: string;
   path: string;
   slug: string;
   type: ContentType;
@@ -29,11 +29,11 @@ export interface BlogMeta extends ContentMeta {
   date: string;
   author: string;
   readTime: string;
-  lastUpdated?: string;
+  lastUpdated: string;
 }
 
 export interface PolicyMeta extends ContentMeta {
-  lastUpdated?: string;
+  lastUpdated: string;
 }
 
 // Base content interface with metadata plus content

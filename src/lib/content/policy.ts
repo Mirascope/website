@@ -9,33 +9,10 @@ export type { PolicyMeta, PolicyContent };
 const KNOWN_POLICY_PATHS = ["privacy", "terms/service", "terms/use"];
 
 /**
- * Create metadata from frontmatter for policies
- */
-function createPolicyMeta(frontmatter: Record<string, any>, path: string): PolicyMeta {
-  return {
-    title: frontmatter.title || "",
-    path,
-    slug: path.split("/").pop() || "",
-    type: "policy",
-    ...(frontmatter.lastUpdated && { lastUpdated: frontmatter.lastUpdated }),
-    description: frontmatter.description || "",
-  };
-}
-
-/**
- * Clean up source mappings in policy content
- */
-function cleanupPolicyContent(content: string): string {
-  return content.replace(/\/\/# sourceMappingURL=.*$/gm, "");
-}
-
-/**
  * Get policy content by path
  */
 export async function getPolicy(path: string): Promise<PolicyContent> {
-  return loadContent<PolicyMeta>(path, "policy", createPolicyMeta, {
-    preprocessContent: cleanupPolicyContent,
-  });
+  return loadContent<PolicyMeta>(path, "policy");
 }
 
 /**

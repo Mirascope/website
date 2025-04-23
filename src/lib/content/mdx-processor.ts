@@ -9,7 +9,7 @@ export interface ProcessedContent {
 }
 
 /**
- * Enhanced MDX processing that supports preprocessing and returns full content info
+ * MDX processing that parses frontmatter and compiles MDX content
  *
  * @param rawContent - Raw content string with frontmatter
  * @param contentType - The type of content being processed
@@ -21,7 +21,6 @@ export async function processMDXContent(
   rawContent: string,
   contentType: ContentType,
   options?: {
-    preprocessContent?: (content: string) => string;
     path?: string; // Optional path for better error reporting
   }
 ): Promise<ProcessedContent> {
@@ -30,21 +29,16 @@ export async function processMDXContent(
   }
 
   try {
-    // Extract frontmatter once
+    // Extract frontmatter
     const { frontmatter, content } = parseFrontmatter(rawContent);
-
-    // Apply any preprocessing
-    const processedContent = options?.preprocessContent
-      ? options.preprocessContent(content)
-      : content;
 
     // Dynamically import next-mdx-remote/serialize since it's an ESM module
     const { serialize } = await import("next-mdx-remote/serialize");
-    const mdxSource = await serialize(processedContent, { scope: frontmatter });
+    const mdxSource = await serialize(content, { scope: frontmatter });
 
-    // Return complete processed content
+    // Return processed content
     return {
-      content: processedContent,
+      content,
       frontmatter,
       code: mdxSource.compiledSource,
     };
