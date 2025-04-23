@@ -1,6 +1,5 @@
-import { useContent } from "./useContent";
 import { loadContent } from "./content-loader";
-import type { ContentMeta, Content, ContentResult } from "./types";
+import type { ContentMeta, Content } from "./types";
 import { ContentError } from "./errors";
 
 // Define policy-specific metadata
@@ -42,13 +41,6 @@ export async function getPolicy(path: string): Promise<PolicyContent> {
   return loadContent<PolicyMeta>(path, "policy", createPolicyMeta, {
     preprocessContent: cleanupPolicyContent,
   });
-}
-
-/**
- * Hook for loading and rendering a policy page
- */
-export function usePolicy(path: string): ContentResult<PolicyMeta> {
-  return useContent<PolicyMeta>(path, getPolicy);
 }
 
 /**
