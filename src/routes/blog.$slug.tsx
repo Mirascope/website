@@ -9,16 +9,28 @@ import TableOfContents from "@/src/components/TableOfContents";
 import SEOMeta from "@/src/components/SEOMeta";
 import useFunMode from "@/src/lib/hooks/useFunMode";
 import { cn } from "@/src/lib/utils";
-import { blogLoader } from "@/src/lib/content/loaders";
+import { getBlogContent } from "@/src/lib/content/blog";
 import analyticsManager from "@/src/lib/services/analytics";
 import type { BlogContent } from "@/src/lib/content/blog";
 import { environment } from "@/src/lib/content/environment";
 
+/**
+ * Blog content loader that directly calls getBlogContent
+ */
+async function blogLoader({ params }: { params: { slug: string } }) {
+  try {
+    return await getBlogContent(`/blog/${params.slug}`);
+  } catch (error) {
+    console.error(`Error loading blog: ${params.slug}`, error);
+    throw error;
+  }
+}
+
 export const Route = createFileRoute("/blog/$slug")({
   component: BlogPostPage,
 
-  // Use the blog loader to fetch post content
-  loader: ({ params }) => blogLoader({ params }),
+  // Use our inline loader
+  loader: blogLoader,
 
   // Configure loading state
   pendingComponent: () => (

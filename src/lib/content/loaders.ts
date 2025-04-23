@@ -1,4 +1,3 @@
-import { getBlogContent, getAllBlogMeta } from "./blog";
 import { getPolicy } from "./policy";
 import type { ContentType, ContentMeta, GetContentFn } from "./content-types";
 
@@ -12,13 +11,6 @@ interface RouteParams {
  */
 
 export const policyLoader = createContentLoader(getPolicy, "policy");
-
-export const blogLoader = createContentLoader(getBlogContent, "blog");
-
-// Blog list loader
-export const blogListLoader = () => {
-  return getAllBlogMeta();
-};
 
 /**
  * Creates a content loader function compatible with TanStack Router
