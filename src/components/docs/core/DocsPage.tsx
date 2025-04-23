@@ -15,12 +15,6 @@ type DocsPageProps = {
  * DocsPage component - Uses loaded data from TanStack Router
  */
 const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat, document }) => {
-  // Parse the path into group/slug components
-  const pathParts = splat.split("/").filter(Boolean);
-
-  // Extract group if it exists (first part of the splat)
-  const group = pathParts.length > 0 ? pathParts[0] : null;
-
   // Define SEO properties based on document meta and product
   const title = document?.meta.title || "";
 
@@ -41,7 +35,7 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat, document }
   return (
     <>
       <SEOMeta title={title} description={description} url={urlPath} product={product} />
-      <DocsLayout product={product} group={group} document={document} />
+      <DocsLayout product={product} document={document} />
     </>
   );
 };
