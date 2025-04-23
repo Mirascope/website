@@ -1,14 +1,9 @@
 import { loadContent } from "./content-loader";
-import type { ContentMeta, Content } from "./types";
+import type { PolicyMeta, PolicyContent } from "./content-types";
 import { ContentError } from "./errors";
 
-// Define policy-specific metadata
-export interface PolicyMeta extends ContentMeta {
-  lastUpdated?: string;
-}
-
-// Define policy-specific content type
-export type PolicyContent = Content<PolicyMeta>;
+// Re-export type definitions
+export type { PolicyMeta, PolicyContent };
 
 // Define known policy paths
 const KNOWN_POLICY_PATHS = ["privacy", "terms/service", "terms/use"];

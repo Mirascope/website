@@ -1,5 +1,5 @@
 // Core types
-export * from "./types";
+export * from "./content-types";
 
 // Content domains
 export * from "./blog";
