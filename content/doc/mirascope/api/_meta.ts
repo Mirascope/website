@@ -15,10 +15,12 @@ export const apiMeta: SectionSpec = {
     {
       slug: "core",
       label: "Core",
+      hasNoContent: true,
       children: [
         {
           slug: "anthropic",
           label: "Anthropic",
+          hasNoContent: true,
           children: [
             {
               slug: "call",
@@ -53,6 +55,7 @@ export const apiMeta: SectionSpec = {
         {
           slug: "azure",
           label: "Azure",
+          hasNoContent: true,
           children: [
             {
               slug: "call",
@@ -87,6 +90,7 @@ export const apiMeta: SectionSpec = {
         {
           slug: "base",
           label: "Base",
+          hasNoContent: true,
           children: [
             {
               slug: "call_factory",
@@ -149,6 +153,7 @@ export const apiMeta: SectionSpec = {
         {
           slug: "bedrock",
           label: "Bedrock",
+          hasNoContent: true,
           children: [
             {
               slug: "call",
@@ -183,6 +188,7 @@ export const apiMeta: SectionSpec = {
         {
           slug: "cohere",
           label: "Cohere",
+          hasNoContent: true,
           children: [
             {
               slug: "call",
@@ -217,6 +223,7 @@ export const apiMeta: SectionSpec = {
         {
           slug: "costs",
           label: "Costs",
+          hasNoContent: true,
           children: [
             {
               slug: "calculate_cost",
@@ -227,6 +234,7 @@ export const apiMeta: SectionSpec = {
         {
           slug: "google",
           label: "Google",
+          hasNoContent: true,
           children: [
             {
               slug: "call",
@@ -261,6 +269,7 @@ export const apiMeta: SectionSpec = {
         {
           slug: "groq",
           label: "Groq",
+          hasNoContent: true,
           children: [
             {
               slug: "call",
@@ -295,6 +304,7 @@ export const apiMeta: SectionSpec = {
         {
           slug: "litellm",
           label: "Litellm",
+          hasNoContent: true,
           children: [
             {
               slug: "call",
@@ -329,6 +339,7 @@ export const apiMeta: SectionSpec = {
         {
           slug: "mistral",
           label: "Mistral",
+          hasNoContent: true,
           children: [
             {
               slug: "call",
@@ -363,6 +374,7 @@ export const apiMeta: SectionSpec = {
         {
           slug: "openai",
           label: "Openai",
+          hasNoContent: true,
           children: [
             {
               slug: "call",
@@ -397,6 +409,7 @@ export const apiMeta: SectionSpec = {
         {
           slug: "xai",
           label: "Xai",
+          hasNoContent: true,
           children: [
             {
               slug: "call",
@@ -433,6 +446,7 @@ export const apiMeta: SectionSpec = {
     {
       slug: "integrations",
       label: "Integrations",
+      hasNoContent: true,
       children: [
         {
           slug: "langfuse",
@@ -459,6 +473,7 @@ export const apiMeta: SectionSpec = {
     {
       slug: "llm",
       label: "Llm",
+      hasNoContent: true,
       children: [
         {
           slug: "call",
@@ -469,10 +484,12 @@ export const apiMeta: SectionSpec = {
     {
       slug: "tools",
       label: "Tools",
+      hasNoContent: true,
       children: [
         {
           slug: "system",
           label: "System",
+          hasNoContent: true,
           children: [
             {
               slug: "docker_operation",
@@ -487,6 +504,7 @@ export const apiMeta: SectionSpec = {
         {
           slug: "web",
           label: "Web",
+          hasNoContent: true,
           children: [
             {
               slug: "duckduckgo",

@@ -189,11 +189,6 @@
     "title": "A Guide to Synthetic Data Generation | Mirascope",
     "description": "Get started with synthetic data generation and learn how to create high-quality artificial datasets for machine learning and analytics."
   },
-  "/docs/lilypad": {
-    "route": "/docs/lilypad",
-    "title": "Welcome | Lilypad",
-    "description": "An open-source prompt engineering framework."
-  },
   "/docs/lilypad/api/index": {
     "route": "/docs/lilypad/api/index",
     "title": "Lilypad API Reference | Lilypad",
@@ -234,6 +229,11 @@
     "title": "Self Hosting | Lilypad",
     "description": "Run Lilypad in your own infrastructure"
   },
+  "/docs/lilypad/index": {
+    "route": "/docs/lilypad/index",
+    "title": "Welcome | Lilypad",
+    "description": "An open-source prompt engineering framework."
+  },
   "/docs/lilypad/observability/opentelemetry": {
     "route": "/docs/lilypad/observability/opentelemetry",
     "title": "OpenTelemetry | Lilypad",
@@ -263,11 +263,6 @@
     "route": "/docs/lilypad/under-development/vibe-synthesis",
     "title": "Vibe Synthesis | Lilypad",
     "description": "Automated synthesis of evaluation criteria"
-  },
-  "/docs/mirascope": {
-    "route": "/docs/mirascope",
-    "title": "Mirascope | Mirascope",
-    "description": "Mirascope is a Python library that streamlines working with LLMs"
   },
   "/docs/mirascope/api/core/anthropic/call": {
     "route": "/docs/mirascope/api/core/anthropic/call",
@@ -1078,6 +1073,11 @@
     "route": "/docs/mirascope/guides/prompt-engineering/thread-of-thought",
     "title": "Thread of Thought | Mirascope",
     "description": "LLM abstractions that aren't obstructions."
+  },
+  "/docs/mirascope/index": {
+    "route": "/docs/mirascope/index",
+    "title": "Mirascope | Mirascope",
+    "description": "Mirascope is a Python library that streamlines working with LLMs"
   },
   "/docs/mirascope/integrations/hyperdx": {
     "route": "/docs/mirascope/integrations/hyperdx",

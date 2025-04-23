@@ -30,6 +30,7 @@ export interface DocMeta extends ContentMeta {
 
 export interface FutureDocMeta extends ContentMeta {
   product: string;
+  hasExtractableSnippets: boolean;
 }
 
 export interface BlogMeta extends ContentMeta {

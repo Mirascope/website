@@ -14,6 +14,7 @@ const guidesMeta: SectionSpec = {
     {
       slug: "getting-started",
       label: "Getting Started",
+      hasNoContent: true,
       children: [
         {
           slug: "structured-outputs",
@@ -32,6 +33,7 @@ const guidesMeta: SectionSpec = {
     {
       slug: "agents",
       label: "Agents",
+      hasNoContent: true,
       children: [
         {
           slug: "web-search-agent",
@@ -66,6 +68,7 @@ const guidesMeta: SectionSpec = {
     {
       slug: "evals",
       label: "Evals",
+      hasNoContent: true,
       children: [
         {
           slug: "evaluating-documentation-agent",
@@ -84,6 +87,7 @@ const guidesMeta: SectionSpec = {
     {
       slug: "langgraph-vs-mirascope",
       label: "Langgraph Vs Mirascope",
+      hasNoContent: true,
       children: [
         {
           slug: "quickstart",
@@ -94,6 +98,7 @@ const guidesMeta: SectionSpec = {
     {
       slug: "more-advanced",
       label: "More Advanced",
+      hasNoContent: true,
       children: [
         {
           slug: "code-generation-and-execution",
@@ -176,6 +181,7 @@ const guidesMeta: SectionSpec = {
     {
       slug: "prompt-engineering",
       label: "Prompt Engineering",
+      hasNoContent: true,
       children: [
         {
           slug: "chain-of-verification",

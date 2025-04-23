@@ -243,6 +243,7 @@ function processDocSpec(
       path: docPath,
       type: "doc",
       product,
+      hasExtractableSnippets: docSpec.hasExtractableSnippets || false,
     });
   }
 
