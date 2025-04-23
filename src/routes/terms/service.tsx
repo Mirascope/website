@@ -1,15 +1,15 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import PolicyPage, { PolicyPageLoading, PolicyPageError } from "@/src/components/PolicyPage";
 import SEOMeta from "@/src/components/SEOMeta";
-import { policyLoader } from "@/src/lib/content/loaders";
+import { createPolicyLoader } from "@/src/lib/content/policy";
 import type { PolicyContent } from "@/src/lib/content/policy";
 import { environment } from "@/src/lib/content/environment";
 
 export const Route = createFileRoute("/terms/service")({
   component: TermsOfServicePage,
 
-  // Use the policy loader
-  loader: () => policyLoader({ params: { policy: "service" } }),
+  // Use our inline policy loader
+  loader: createPolicyLoader("/policy/terms/service"),
 
   // Configure loading state
   pendingComponent: () => <PolicyPageLoading type="terms-service" />,

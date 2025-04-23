@@ -87,3 +87,18 @@ export async function getPoliciesInCollection(collection: string): Promise<Polic
     );
   }
 }
+
+/**
+ * Creates a loader function for a policy page
+ * This makes it easy to inline policy loaders in route files
+ */
+export function createPolicyLoader(policyPath: string) {
+  return async () => {
+    try {
+      return await getPolicy(policyPath);
+    } catch (error) {
+      console.error(`Error loading policy: ${policyPath}`, error);
+      throw error;
+    }
+  };
+}
