@@ -15,17 +15,19 @@
     "build": "bun run --bun vite build && bun run optimize-images && bun run prerender",
     "serve": "bun scripts/serve-static.js",
     "test": "bun test",
-    "lint": "bun run typecheck && bun run lint:mdx && bun run lint:python && bun run lint:format && bun run lint:social && bun run lint:python",
+    "lint": "bun run typecheck && bun run lint:mdx && bun run lint:snippets && bun run lint:python && bun run lint:format && bun run lint:social",
     "lint:social": "bun run generate-social --check",
     "typecheck": "bun run tsc --noEmit",
     "lint:mdx": "bun run scripts/validate-mdx.ts",
-    "lint:python": "bun run scripts/update-snippets.ts --check && ./scripts/lint-python.sh",
+    "lint:snippets": "uv pip install -e '.[providers]' && bun run scripts/update-snippets.ts --check && uv run pyright public/examples/ public/extracted-snippets/ && uv run ruff check public/examples/ public/extracted-snippets/",
+    "lint:python": "uv pip install -e '.' && uv run pyright scripts/apigen/ && uv run ruff check scripts/apigen/",
     "lint:format": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\"",
     "fix": "bun run fix:format && bun run fix:snippets && bun run fix:python",
     "fix:format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\"",
     "fix:snippets": "bun run scripts/update-snippets.ts",
-    "fix:python": "uv run ruff format scripts/api_docs/ && uv run ruff check --fix scripts/api_docs/",
-    "regenerate-api-docs": "uv run -m scripts.api_docs.regenerate_api_docs",
+    "fix:python": "uv pip install -e '.' && uv run ruff format scripts/apigen/ && uv run ruff check --fix scripts/apigen/",
+    "apigen": "uv run -m scripts.apigen.main",
+    "regenerate-api-docs": "uv run -m scripts.apigen.main",
     "prepare": "husky",
     "pre-commit": "lint-staged"
   },
@@ -36,9 +38,10 @@
     ],
     "*.mdx": [
       "bun run lint:mdx",
-      "bun run lint:python"
+      "bun run scripts/update-snippets.ts --check"
     ],
-    "*.py": "./scripts/lint-python.sh --path"
+    "scripts/apigen/**/*.py": "bun run lint:python",
+    "public/**/*.py": "bun run lint:snippets"
   },
   "dependencies": {
     "@mdx-js/react": "^3.1.0",

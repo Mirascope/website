@@ -3,7 +3,7 @@
 # lint-python.sh
 # Validates Python code in the repository:
 # 1. Code snippets in public/examples/ and public/extracted-snippets/
-# 2. API documentation generation code in scripts/api_docs/
+# 2. API documentation generation code in scripts/apigen/
 # Runs both type checking (pyright) and style checking/formatting (ruff)
 # Uses uv for dependency management
 
@@ -56,10 +56,10 @@ fi
 # Count Python files to typecheck
 EXAMPLES_FILES=$(find "public/examples" -name "*.py" | wc -l | tr -d ' ')
 SNIPPETS_FILES=$(find "public/extracted-snippets" -name "*.py" | wc -l | tr -d ' ')
-API_DOCS_FILES=$(find "scripts/api_docs" -name "*.py" | wc -l | tr -d ' ')
-TOTAL_FILES=$((EXAMPLES_FILES + SNIPPETS_FILES + API_DOCS_FILES))
+APIGEN_FILES=$(find "scripts/apigen" -name "*.py" | wc -l | tr -d ' ')
+TOTAL_FILES=$((EXAMPLES_FILES + SNIPPETS_FILES + APIGEN_FILES))
 
-log $YELLOW "Found $TOTAL_FILES Python files ($EXAMPLES_FILES in examples, $SNIPPETS_FILES in snippets, $API_DOCS_FILES in api_docs)"
+log $YELLOW "Found $TOTAL_FILES Python files ($EXAMPLES_FILES in examples, $SNIPPETS_FILES in snippets, $APIGEN_FILES in apigen)"
 
 # Check for and create a virtual environment if needed
 if [ ! -d ".venv" ]; then
@@ -89,7 +89,7 @@ if [ -n "$SPECIFIC_PATH" ]; then
   fi
 else
   PYRIGHT_CMD="$PYRIGHT_CMD"
-  RUFF_CMD="$RUFF_CMD public/examples/ public/extracted-snippets/ scripts/api_docs/"
+  RUFF_CMD="$RUFF_CMD public/examples/ public/extracted-snippets/ scripts/apigen/"
 fi
 
 # Run pyright

@@ -39,7 +39,7 @@ ignore = [
     "PLR0912", # Too many branches
 ]
 
-# Disable rules for example/snippet code
+# Disable rules for example/snippet code and scripts
 [lint.per-file-ignores]
 "public/**/*.py" = [
     "E501",  # ignore line too long 
@@ -49,6 +49,9 @@ ignore = [
     "B905",  # ignore zip() without strict parameter
     "PL",    # ignore pylint
     "RUF",   # ignore ruff rules
+]
+"scripts/apigen/**/*.py" = [
+    "D103",  # missing docstring in public function
 ]
 
 [lint.isort]

@@ -92,7 +92,6 @@ class DocSection:
 
     Attributes:
         title: The title of the section
-        default_slug: Optional default slug for the section
         items: Direct section items
         groups: Grouped section items
 
@@ -101,7 +100,6 @@ class DocSection:
     def __init__(
         self,
         title: str,
-        default_slug: str | None = None,
         items: dict[str, DocMetaItem] | None = None,
         groups: dict[str, DocGroup] | None = None,
     ) -> None:
@@ -109,13 +107,11 @@ class DocSection:
 
         Args:
             title: The title of the section
-            default_slug: Default slug for the section
             items: Dictionary of items directly in this section
             groups: Dictionary of groups in this section
 
         """
         self.title = title
-        self.default_slug = default_slug
         self.items = items or {}
         self.groups = groups
 
@@ -125,9 +121,6 @@ class DocSection:
             "title": self.title,
             "items": {},
         }
-
-        if self.default_slug is not None:
-            result["defaultSlug"] = self.default_slug
 
         for key, item in self.items.items():
             result["items"][key] = item.to_dict()
@@ -147,9 +140,6 @@ class DocSection:
         # Convert to dict then to JSON with indentation for readability
         doc_dict = self.to_dict()
         json_str = json.dumps(doc_dict, indent=2)
-
-        # Replace double quotes with single quotes for TypeScript style
-        json_str = json_str.replace('"', "'")
 
         # Fix boolean values (true/false instead of True/False)
         json_str = json_str.replace("'true'", "true").replace("'false'", "false")
@@ -213,6 +203,15 @@ def generate_meta_from_organized_files(
     # Process files in the root directory
     root_files = organized_files.get("", [])
     items = create_items(root_files)
+
+    # Add an index item if it doesn't exist
+    if "index" not in items:
+        # Create a synthetic index item and put it first
+        synthetic_items = {"index": DocMetaItem(title="Overview")}
+        # Add the remaining items
+        synthetic_items.update(items)
+        items = synthetic_items
+
     # Process all subdirectories
     subdirectories = [dir_name for dir_name in organized_files.keys() if dir_name != ""]
     group_names = sorted({dir_name.split("/")[0] for dir_name in subdirectories})
