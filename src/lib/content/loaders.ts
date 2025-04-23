@@ -1,7 +1,6 @@
 import { getBlogContent, getAllBlogMeta } from "./blog";
-import { getDocsForProduct, getDoc } from "./docs";
+import { getDoc } from "./docs";
 import { getPolicy } from "./policy";
-import { type ProductName } from "@/src/lib/route-types";
 import type { ContentType, ContentMeta, GetContentFn } from "./content-types";
 
 // Define the route parameters interface
@@ -57,7 +56,7 @@ export const docsPageLoader = ({
     // are passed through to the content handler without appending /index
   }
 
-  return Promise.all([getDoc(finalPath), getDocsForProduct(product as ProductName)]);
+  return getDoc(finalPath);
 };
 
 /**
