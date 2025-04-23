@@ -27,7 +27,6 @@ export interface DocGroup {
 // Section of documentation (like API)
 export interface DocSection {
   title: string;
-  defaultSlug?: string;
   items: Record<string, DocMetaItem>; // Direct section items
   groups?: Record<string, DocGroup>; // Grouped section items
 }
