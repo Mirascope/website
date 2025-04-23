@@ -41,9 +41,9 @@ export interface ProductSpec {
 }
 
 /**
- * Overall docs structure
+ * Overall docs structure (collection of ProductSpec by product name)
  */
-export interface DocsSpec {
+export interface ProductDocsSpec {
   [product: string]: ProductSpec;
 }
 
@@ -289,9 +289,9 @@ export function validateProductSpec(spec: ProductSpec): ValidationResult {
 }
 
 /**
- * Validate an entire DocsSpec
+ * Validate an entire ProductDocsSpec
  */
-export function validateDocsSpec(spec: DocsSpec): ValidationResult {
+export function validateProductDocsSpec(spec: ProductDocsSpec): ValidationResult {
   const errors: string[] = [];
 
   // Validate each product
