@@ -268,8 +268,6 @@ export class ContentPreprocessor {
       path.join(outputBase, `${contentPath.subpath}.json`),
       JSON.stringify(contentObject)
     );
-
-    if (this.verbose) console.log(`Processed ${contentType} file: ${contentPath.subpath}`);
   }
 
   /**
@@ -286,8 +284,7 @@ export class ContentPreprocessor {
 
     // Check base required fields for all content types
     if (!frontmatter.title) missingFields.push("title");
-    // TODO: Enable description checking
-    // if (!frontmatter.description) missingFields.push('description');
+    if (!frontmatter.description) missingFields.push("description");
 
     // Type-specific required fields and validation
     let metadata: Partial<ContentMeta> = {
