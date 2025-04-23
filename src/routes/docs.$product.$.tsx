@@ -1,7 +1,6 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import { DocsPage, LoadingDocsPage } from "@/src/components/docs";
 import { docsPageLoader } from "@/src/lib/content/loaders";
-import type { DocContent } from "@/src/lib/content/docs";
 import { environment } from "@/src/lib/content/environment";
 import ContentErrorHandler from "@/src/components/ContentErrorHandler";
 
@@ -32,11 +31,11 @@ export const Route = createFileRoute("/docs/$product/$")({
 
 function DocsProductPage() {
   // Get the loaded data from the loader
-  const [document] = useLoaderData({
+  const doc = useLoaderData({
     from: "/docs/$product/$",
     structuralSharing: false,
-  }) as [DocContent];
+  });
 
   // Use the shared DocsPage component
-  return <DocsPage document={document} />;
+  return <DocsPage document={doc} />;
 }
