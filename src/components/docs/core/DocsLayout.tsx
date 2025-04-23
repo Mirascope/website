@@ -1,17 +1,16 @@
 import React from "react";
 import BaseLayout from "@/src/components/BaseLayout";
 import SidebarContainer from "@/src/components/SidebarContainer";
-import { type ProductName } from "@/src/lib/route-types";
 import useFunMode from "@/src/lib/hooks/useFunMode";
 import useProviderSelection from "@/src/lib/hooks/useProviderSelection";
 import { ProviderContextProvider } from "@/src/components/docs";
 import TocSidebar from "./TocSidebar";
 import MainContent from "./MainContent";
+import { type ProductName } from "@/src/lib/route-types";
 
 import type { DocContent } from "@/src/lib/content/docs";
 
 type DocsLayoutProps = {
-  product: ProductName;
   document: DocContent;
 };
 
@@ -21,13 +20,13 @@ type DocsLayoutProps = {
  * Handles the common layout between all doc page types
  * (product index, regular docs, API docs)
  */
-const DocsLayout: React.FC<DocsLayoutProps> = ({ product, document }) => {
+const DocsLayout: React.FC<DocsLayoutProps> = ({ document }) => {
   // Use custom hooks for state management
   const [funMode, toggleFunMode] = useFunMode();
   const [selectedProvider, handleProviderChange] = useProviderSelection();
 
   // Left sidebar content
-  const leftSidebar = <SidebarContainer product={product} />;
+  const leftSidebar = <SidebarContainer product={document.meta.product as ProductName} />;
 
   // Right sidebar content (TOC)
   const rightSidebar = (
