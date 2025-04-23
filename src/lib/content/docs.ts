@@ -221,7 +221,7 @@ function processDocSpec(
   const docPath = pathPrefix ? `${pathPrefix}/${docSpec.slug}` : `${product}/${docSpec.slug}`;
 
   // Add this doc to the result if it's a page (has content)
-  if (!docSpec.hasNoContent) {
+  if (!docSpec.children) {
     result.push({
       title: docSpec.label,
       description: "", // Will be populated from frontmatter later
