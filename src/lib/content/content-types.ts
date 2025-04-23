@@ -22,14 +22,6 @@ export interface ContentMeta {
 // Type-specific metadata extensions
 export interface DocMeta extends ContentMeta {
   product: string;
-  section?: string;
-  group?: string;
-  sectionTitle?: string;
-  groupTitle?: string;
-}
-
-export interface FutureDocMeta extends ContentMeta {
-  product: string;
   hasExtractableSnippets: boolean;
 }
 
@@ -59,7 +51,6 @@ export interface Content<T extends ContentMeta = ContentMeta> {
 // Type-specific content types
 export type BlogContent = Content<BlogMeta>;
 export type DocContent = Content<DocMeta>;
-export type FutureDocContent = Content<FutureDocMeta>;
 export type PolicyContent = Content<PolicyMeta>;
 
 // Result of document validation

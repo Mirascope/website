@@ -1,6 +1,5 @@
 import { environment } from "./environment";
-import type { ContentType, ContentMeta, Content, ValidationResult } from "./content-types";
-import { validateMetadata as validateMetadataService } from "./metadata-service";
+import type { ContentType, ContentMeta, Content } from "./content-types";
 import { processMDXContent } from "./mdx-processor";
 import { resolveContentPath } from "./path-resolver";
 import { handleContentError } from "./errors";
@@ -57,13 +56,6 @@ export async function loadContent<T extends ContentMeta>(
     // Create metadata
     const meta = createMeta(processed.frontmatter, path);
 
-    // Validate metadata
-    try {
-      validateContentMetadata(meta, contentType);
-    } catch (error) {
-      handleContentError(error, contentType, path);
-    }
-
     // Return complete content
     return {
       meta,
@@ -75,18 +67,5 @@ export async function loadContent<T extends ContentMeta>(
     };
   } catch (error) {
     return handleContentError(error, contentType, path);
-  }
-}
-
-/**
- * Enhanced validation that uses the metadata service but provides a simpler interface
- */
-function validateContentMetadata<T extends ContentMeta>(meta: T, contentType: ContentType): void {
-  // Use the metadata service for validation
-  const validation: ValidationResult = validateMetadataService(meta, contentType);
-
-  // Handle validation failures
-  if (!validation.isValid) {
-    throw new Error(`Invalid metadata: ${validation.errors?.join(", ")}`);
   }
 }

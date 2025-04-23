@@ -1,6 +1,6 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import { DocsPage, LoadingDocsPage } from "@/src/components/docs";
-import { futureGetDoc as getFutureDoc } from "@/src/lib/content/docs";
+import { getDoc } from "@/src/lib/content/docs";
 import { environment } from "@/src/lib/content/environment";
 import ContentErrorHandler from "@/src/components/ContentErrorHandler";
 
@@ -18,8 +18,8 @@ async function contentPathLoader({ params }: { params: { _splat: string } }) {
   }
 
   try {
-    // Use the new futureGetDoc function for content lookup
-    return await getFutureDoc(path);
+    // Use the getDoc function for content lookup
+    return await getDoc(path);
   } catch (error) {
     console.error(`Error loading doc: ${path}`, error);
     throw error;
