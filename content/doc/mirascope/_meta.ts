@@ -16,7 +16,6 @@ const mirascopeSpec: ProductSpec = {
     {
       slug: "getting-started",
       label: "Getting Started",
-      hasNoContent: true,
       children: [
         {
           slug: "quickstart",
@@ -45,7 +44,6 @@ const mirascopeSpec: ProductSpec = {
     {
       slug: "learn",
       label: "Learn",
-      hasNoContent: true,
       children: [
         {
           slug: "index",
@@ -121,7 +119,6 @@ const mirascopeSpec: ProductSpec = {
     {
       slug: "learn/provider-specific",
       label: "Provider-Specific Features",
-      hasNoContent: true,
       children: [
         {
           slug: "openai",
@@ -138,7 +135,6 @@ const mirascopeSpec: ProductSpec = {
     {
       slug: "learn/extensions",
       label: "Extensions",
-      hasNoContent: true,
       children: [
         {
           slug: "middleware",
@@ -154,7 +150,6 @@ const mirascopeSpec: ProductSpec = {
     {
       slug: "learn/mcp",
       label: "MCP - Model Context Protocol",
-      hasNoContent: true,
       children: [
         {
           slug: "client",
@@ -166,7 +161,7 @@ const mirascopeSpec: ProductSpec = {
     {
       slug: "integrations",
       label: "Integrations",
-      hasNoContent: true,
+
       children: [
         {
           slug: "langfuse",

@@ -17,7 +17,6 @@ export type Slug = string; // In practice: enforced by regex /^[a-z0-9-_]+$/
 export interface DocSpec {
   slug: Slug; // URL slug component (no slashes)
   label: string; // Display name in sidebar
-  hasNoContent?: boolean; // Explicitly mark as having no content
   children?: DocSpec[]; // Child items (if this is a folder)
   hasExtractableSnippets?: boolean;
 }
@@ -46,45 +45,6 @@ export interface ProductSpec {
 export interface ProductDocsSpec {
   [product: string]: ProductSpec;
 }
-
-/**
- * Future navigation structures
- *
- * These represent the document hierarchy for navigation and structure,
- * separate from the content metadata system.
- */
-
-// Section for navigation
-export interface SectionNode {
-  slug: Slug;
-  label: string;
-}
-
-// Document node in the navigation tree
-export interface DocNode {
-  slug: Slug; // URL slug component
-  label: string; // Display name in sidebar
-  fullPath: string; // Full URL path
-  product: string; // Product this belongs to
-  section?: SectionNode; // Section reference (if applicable)
-  parent: DocNode | null; // Parent node (null for top-level)
-  ancestry: DocNode[]; // Path to root (empty for top-level)
-  isPage: boolean; // Has associated content
-  isFolder: boolean; // Has children or is folder
-  contentPath?: string; // Path to content (if isPage is true)
-  children: DocNode[]; // Child nodes (empty if no children)
-}
-
-/**
- * Future DocMeta would reference the navigation structure
- *
- * This shows how DocMeta could be extended to link to the navigation:
- *
- * export interface FutureDocMeta extends ContentMeta {
- *   product: string;
- *   node: DocNode;  // Reference to the navigation node
- * }
- */
 
 /**
  * Validation results
