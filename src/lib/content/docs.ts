@@ -1,5 +1,5 @@
 import { loadContent } from "./content-loader";
-import type { FutureDocMeta, DocMeta, DocContent } from "./content-types";
+import type { FutureDocMeta, DocMeta, DocContent, FutureDocContent } from "./content-types";
 import { getMetadataFromStructure, mergeMetadata } from "./metadata-service";
 
 // Re-export type definitions
@@ -29,11 +29,31 @@ function createDocMeta(frontmatter: Record<string, any>, path: string): DocMeta 
   return mergeMetadata(structureMeta, frontmatterMeta) as DocMeta;
 }
 
+function createFutureDocMeta(frontmatter: Record<string, any>, path: string): FutureDocMeta {
+  const allDocs = getDocsFromSpec();
+  const docMeta = allDocs.find((doc) => doc.path === path);
+  if (!docMeta) {
+    throw new Error(`Doc not found for path: ${path}`);
+  }
+  // Create basic frontmatter metadata
+  const frontmatterMeta = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    // Other frontmatter fields can be added here
+  };
+  // Merge metadata (frontmatter takes precedence)
+  return mergeMetadata(docMeta, frontmatterMeta) as FutureDocMeta;
+}
+
 /**
  * Get doc content by path
  */
 export async function getDoc(path: string): Promise<DocContent> {
   return loadContent<DocMeta>(path, "doc", createDocMeta);
+}
+
+export async function futureGetDoc(path: string): Promise<FutureDocContent> {
+  return loadContent<FutureDocMeta>(path, "doc", createFutureDocMeta);
 }
 
 /**

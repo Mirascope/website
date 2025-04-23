@@ -59,6 +59,7 @@ export interface Content<T extends ContentMeta = ContentMeta> {
 // Type-specific content types
 export type BlogContent = Content<BlogMeta>;
 export type DocContent = Content<DocMeta>;
+export type FutureDocContent = Content<FutureDocMeta>;
 export type PolicyContent = Content<PolicyMeta>;
 
 // Result of document validation

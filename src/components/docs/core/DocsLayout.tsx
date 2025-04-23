@@ -1,7 +1,6 @@
 import React from "react";
 import BaseLayout from "@/src/components/BaseLayout";
 import SidebarContainer from "@/src/components/SidebarContainer";
-import ErrorContent from "@/src/components/ErrorContent";
 import { type DocMeta } from "@/src/lib/content/docs";
 import { type ProductName } from "@/src/lib/route-types";
 import useFunMode from "@/src/lib/hooks/useFunMode";
@@ -19,7 +18,6 @@ type DocsLayoutProps = {
   group: string | null;
   document: DocContent;
   docs: DocMeta[];
-  error?: string | null;
 };
 
 /**
@@ -35,7 +33,6 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
   group = null,
   document,
   docs,
-  error = null,
 }) => {
   // Use custom hooks for state management
   const [funMode, toggleFunMode] = useFunMode();
@@ -47,9 +44,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
   );
 
   // Right sidebar content (TOC)
-  const rightSidebar = error ? (
-    <div className="w-56 flex-shrink-0 hidden lg:block"></div>
-  ) : (
+  const rightSidebar = (
     <TocSidebar
       product={product}
       section={section}
@@ -61,49 +56,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
   );
 
   // Main content
-  const mainContent = error ? (
-    <ErrorContent
-      title="Document Not Found"
-      message={error || "The document you're looking for doesn't exist or is invalid."}
-    />
-  ) : (
-    <MainContent document={document} funMode={funMode} />
-  );
-
-  return (
-    <ProviderContextProvider
-      defaultProvider={selectedProvider}
-      onProviderChange={handleProviderChange}
-    >
-      <BaseLayout leftSidebar={leftSidebar} mainContent={mainContent} rightSidebar={rightSidebar} />
-    </ProviderContextProvider>
-  );
-};
-
-/**
- * Error boundary version of DocsLayout for when document loading fails
- */
-export const ErrorDocsLayout: React.FC<Omit<DocsLayoutProps, "document"> & { error: string }> = ({
-  product,
-  section,
-  slug,
-  group,
-  docs,
-  error,
-}) => {
-  // Use custom hooks for state management
-  const [selectedProvider, handleProviderChange] = useProviderSelection();
-
-  // Left sidebar content
-  const leftSidebar = (
-    <SidebarContainer product={product} section={section} slug={slug} group={group} docs={docs} />
-  );
-
-  // Empty right sidebar for error state
-  const rightSidebar = <div className="w-56 flex-shrink-0 hidden lg:block"></div>;
-
-  // Error content
-  const mainContent = <ErrorContent title="Document Not Found" message={error} />;
+  const mainContent = <MainContent document={document} funMode={funMode} />;
 
   return (
     <ProviderContextProvider
