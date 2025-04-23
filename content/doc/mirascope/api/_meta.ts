@@ -6,7 +6,11 @@ import type { DocSection } from "@/content/doc/_meta";
 
 export const apiMeta: DocSection = {
   title: "API Reference",
-  items: {},
+  items: {
+    index: {
+      title: "Overview",
+    },
+  },
   groups: {
     core: {
       title: "Core",

@@ -694,6 +694,11 @@
     "title": "mirascope.core.xai.tool | Mirascope",
     "description": "API documentation for mirascope.core.xai.tool"
   },
+  "/docs/mirascope/api/index": {
+    "route": "/docs/mirascope/api/index",
+    "title": "Mirascope API Reference | Mirascope",
+    "description": "API documentation for Mirascope"
+  },
   "/docs/mirascope/api/integrations/langfuse": {
     "route": "/docs/mirascope/api/integrations/langfuse",
     "title": "mirascope.integrations.langfuse | Mirascope",
