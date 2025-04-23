@@ -60,8 +60,6 @@ function getDocMetadataFromStructure(path: string): DocMeta {
   let description = "";
   let section = "";
   let group = "";
-  let sectionTitle = "";
-  let groupTitle = "";
   let slug = pathParts.length > 1 ? pathParts[pathParts.length - 1] : "index";
 
   // Define a function to get a default slug if needed
@@ -104,7 +102,6 @@ function getDocMetadataFromStructure(path: string): DocMeta {
               item: section.items[itemSlug],
               meta: {
                 section: sectionSlug,
-                sectionTitle: section.title,
               },
             };
           }
@@ -134,7 +131,6 @@ function getDocMetadataFromStructure(path: string): DocMeta {
                   item: currentItem,
                   meta: {
                     section: sectionSlug,
-                    sectionTitle: section.title,
                   },
                 };
               }
@@ -156,9 +152,7 @@ function getDocMetadataFromStructure(path: string): DocMeta {
                   item: group.items[itemSlug],
                   meta: {
                     section: sectionSlug,
-                    sectionTitle: section.title,
                     group: groupSlug,
-                    groupTitle: group.title,
                   },
                 };
               }
@@ -189,9 +183,7 @@ function getDocMetadataFromStructure(path: string): DocMeta {
                     item: currentItem,
                     meta: {
                       section: sectionSlug,
-                      sectionTitle: section.title,
                       group: groupSlug,
-                      groupTitle: group.title,
                     },
                   };
                 }
@@ -317,8 +309,6 @@ function getDocMetadataFromStructure(path: string): DocMeta {
     type: "doc",
     section,
     group,
-    sectionTitle,
-    groupTitle,
   };
 }
 

@@ -11,8 +11,6 @@ export interface DocMeta extends ContentMeta {
   product: string;
   section?: string;
   group?: string;
-  sectionTitle?: string;
-  groupTitle?: string;
 }
 
 // Define doc-specific content type
