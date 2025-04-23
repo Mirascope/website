@@ -28,6 +28,10 @@ export interface DocMeta extends ContentMeta {
   groupTitle?: string;
 }
 
+export interface FutureDocMeta extends ContentMeta {
+  product: string;
+}
+
 export interface BlogMeta extends ContentMeta {
   date: string;
   author: string;

@@ -1,10 +1,13 @@
 import { loadContent } from "./content-loader";
 import type { ContentMeta, Content } from "./types";
+import type { FutureDocMeta } from "./content-types";
 import { getMetadataFromStructure, mergeMetadata } from "./metadata-service";
 
-// Import product docs metadata (import the legacy format)
+// Import product docs metadata (both formats)
 import { meta as docsMetadata } from "@/content/doc/_meta";
+import docsSpec from "@/content/doc/_meta";
 import type { ProductDocs, DocMetaItem } from "@/src/lib/content/legacy-doc-meta";
+import type { DocSpec } from "@/src/lib/content/spec";
 
 // Define doc-specific metadata
 export interface DocMeta extends ContentMeta {
@@ -220,4 +223,74 @@ export function getSectionsForProduct(product: string): { slug: string; title: s
     slug: sectionSlug,
     title: productDocs.sections[sectionSlug].title,
   }));
+}
+
+/**
+ * Process a doc specification and build FutureDocMeta items
+ * @param docSpec Doc specification
+ * @param product Product this doc belongs to
+ * @param pathPrefix Base path for this doc
+ * @returns Array of FutureDocMeta items from this doc and its children
+ */
+function processDocSpec(
+  docSpec: DocSpec,
+  product: string,
+  pathPrefix: string = ""
+): FutureDocMeta[] {
+  const result: FutureDocMeta[] = [];
+
+  // Build the path for this doc
+  const docPath = pathPrefix ? `${pathPrefix}/${docSpec.slug}` : `${product}/${docSpec.slug}`;
+
+  // Add this doc to the result if it's a page (has content)
+  if (!docSpec.hasNoContent) {
+    result.push({
+      title: docSpec.label,
+      description: "", // Will be populated from frontmatter later
+      slug: docSpec.slug,
+      path: docPath,
+      type: "doc",
+      product,
+    });
+  }
+
+  // Process children recursively
+  if (docSpec.children && docSpec.children.length > 0) {
+    docSpec.children.forEach((childSpec) => {
+      const childItems = processDocSpec(childSpec, product, docPath);
+      result.push(...childItems);
+    });
+  }
+
+  return result;
+}
+
+/**
+ * Get all docs metadata using the new spec format
+ * Processes the ProductDocsSpec and returns FutureDocMeta items
+ * @returns Array of FutureDocMeta for all products and docs
+ */
+export function getDocsFromSpec(): FutureDocMeta[] {
+  const allDocs: FutureDocMeta[] = [];
+
+  // Process each product in the spec
+  Object.entries(docsSpec).forEach(([product, productSpec]) => {
+    // Process default section items
+    productSpec.defaultSection.forEach((docSpec) => {
+      const docItems = processDocSpec(docSpec, product);
+      allDocs.push(...docItems);
+    });
+
+    // Process additional sections
+    productSpec.sections.forEach((section) => {
+      section.children.forEach((docSpec) => {
+        // Process with section path prefix and section slug
+        const sectionPathPrefix = `${product}/${section.slug}`;
+        const docItems = processDocSpec(docSpec, product, sectionPathPrefix);
+        allDocs.push(...docItems);
+      });
+    });
+  });
+
+  return allDocs;
 }
