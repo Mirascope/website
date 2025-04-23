@@ -41,10 +41,10 @@ This project is mostly Typescript/React/etc (as stated above). However, there is
 #### Specialized Commands
 
 - `bun run lint:mdx` - Validate MDX files
-- `bun run lint:snippets` - Check if code snippets are up-to-date
 - `bun run lint:social` - Check if generated social cards (OG images) are up to date
 - `bun run generate-social` - Update generated social cards and metadata
-- `bun run lint:python` - Update and run typechecking / ruff checking on snippets and apigen code
+- `bun run lint:snippets` - Validate code snippets (update check and type/style checking)
+- `bun run lint:python` - Run typechecking and linting on the apigen module only
 - `bun run lint:format` - Check formatting with Prettier
 - `bun run fix:format` - Format all files with Prettier
 - `bun run fix:snippets` - Update extractable code snippets
