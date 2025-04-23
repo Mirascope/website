@@ -17,7 +17,6 @@ export type Slug = string; // In practice: enforced by regex /^[a-z0-9-_]+$/
 export interface DocSpec {
   slug: Slug; // URL slug component (no slashes)
   label: string; // Display name in sidebar
-  contentPath?: string; // Optional content path (if this is a page)
   hasNoContent?: boolean; // Explicitly mark as having no content
   children?: DocSpec[]; // Child items (if this is a folder)
   hasExtractableSnippets?: boolean;
@@ -172,13 +171,6 @@ export function validateDocSpec(spec: DocSpec): ValidationResult {
   const slugResult = validateSlug(spec.slug);
   if (!slugResult.isValid) {
     errors.push(...slugResult.errors.map((err) => `Invalid slug "${spec.slug}": ${err}`));
-  }
-
-  // Logical consistency checks
-  if (spec.contentPath && spec.hasNoContent) {
-    errors.push(
-      `Item "${spec.label}" has both contentPath and hasNoContent, which is contradictory`
-    );
   }
 
   // Validate children if present

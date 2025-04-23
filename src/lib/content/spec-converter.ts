@@ -64,39 +64,30 @@ export function convertSectionToLegacy(section: SectionSpec): DocSection {
 
   // Process children
   if (section.children && section.children.length > 0) {
-    // Separate top-level items from groups
-    const topLevelItems: DocSpec[] = [];
-    const groups: Record<string, DocSpec[]> = {};
+    // For sections, we need to be even more careful about matching the original structure
+    // In the original structure, most section children were direct items, except for specific groups
 
-    section.children.forEach((child) => {
-      // Check if this is a potential group
-      if (
-        child.children &&
-        child.children.length > 0 &&
-        (!child.contentPath || child.hasNoContent)
-      ) {
-        // This is a group
-        groups[child.slug] = child.children;
-      } else {
-        // This is a top-level item
-        topLevelItems.push(child);
-      }
-    });
+    // Extract direct items that don't have children
+    const directItems: DocSpec[] = section.children.filter(
+      (child) => !child.children || child.children.length === 0
+    );
 
-    // Convert top-level items
-    legacySection.items = convertDocsToLegacyRecord(topLevelItems);
+    // Convert direct items
+    legacySection.items = convertDocsToLegacyRecord(directItems);
 
-    // Convert groups
-    if (Object.keys(groups).length > 0) {
+    // If there are nested items with children, see if we need to convert them as groups
+    const nestedItems = section.children.filter(
+      (child) => child.children && child.children.length > 0
+    );
+
+    if (nestedItems.length > 0) {
       legacySection.groups = {};
 
-      Object.entries(groups).forEach(([groupSlug, groupItems]) => {
-        const group = section.children.find((child) => child.slug === groupSlug);
-        legacySection.groups![groupSlug] = {
-          title:
-            group?.label ||
-            groupSlug.charAt(0).toUpperCase() + groupSlug.slice(1).replace(/-/g, " "),
-          items: convertDocsToLegacyRecord(groupItems),
+      // Convert nested items as groups
+      nestedItems.forEach((nestedItem) => {
+        legacySection.groups![nestedItem.slug] = {
+          title: nestedItem.label,
+          items: convertDocsToLegacyRecord(nestedItem.children || []),
         };
       });
     }
@@ -116,13 +107,13 @@ export function convertProductToLegacy(productSpec: ProductSpec): ProductDocs {
     sections: {},
   };
 
-  // Convert default section items, separating groups from items
+  // Simple rule: in the default section, items with children are groups,
+  // items without children are top-level items
   const topLevelItems: DocSpec[] = [];
   const groups: Record<string, DocSpec[]> = {};
 
   productSpec.defaultSection.forEach((item) => {
-    // Check if this is a potential group (folder with children but no content)
-    if (item.children && item.children.length > 0 && (!item.contentPath || item.hasNoContent)) {
+    if (item.children && item.children.length > 0) {
       // This is a group
       groups[item.slug] = item.children;
     } else {
@@ -190,13 +181,6 @@ export function convertLegacyToDoc(slug: string, legacyItem: DocMetaItem): DocSp
     Object.entries(legacyItem.items).forEach(([childSlug, childItem]) => {
       newDoc.children!.push(convertLegacyToDoc(childSlug, childItem));
     });
-  }
-  // If no children and not a special marker for folder,
-  // assume it's a content page
-  else if (slug !== "index") {
-    // We're making an assumption that this is a content page
-    // In the future, we might need more specific logic
-    newDoc.contentPath = slug;
   }
 
   return newDoc;
@@ -266,7 +250,7 @@ export function convertLegacySectionToSection(
  */
 export function convertLegacyToProduct(legacyProduct: ProductDocs): ProductSpec {
   const newProduct: ProductSpec = {
-    defaultSectionLabel: "Documentation",
+    defaultSectionLabel: "Docs",
     defaultSection: [],
     sections: [],
   };

@@ -14,7 +14,6 @@ describe("DocSpec to Legacy conversion", () => {
     const doc: DocSpec = {
       slug: "test",
       label: "Test Document",
-      contentPath: "path/to/content.mdx",
     };
 
     const legacy = convertDocToLegacy(doc);
@@ -26,7 +25,6 @@ describe("DocSpec to Legacy conversion", () => {
     const doc: DocSpec = {
       slug: "test",
       label: "Test Document",
-      contentPath: "path/to/content.mdx",
       hasExtractableSnippets: true,
     };
 
@@ -42,12 +40,10 @@ describe("DocSpec to Legacy conversion", () => {
         {
           slug: "child1",
           label: "Child 1",
-          contentPath: "path/to/child1.mdx",
         },
         {
           slug: "child2",
           label: "Child 2",
-          contentPath: "path/to/child2.mdx",
         },
       ],
     };
@@ -70,7 +66,6 @@ describe("Legacy to DocSpec conversion", () => {
     const doc = convertLegacyToDoc("test", legacyItem);
     expect(doc.slug).toBe("test");
     expect(doc.label).toBe("Test Document");
-    expect(doc.contentPath).toBe("test");
   });
 
   test("convertLegacyToDoc preserves hasExtractableSnippets", () => {
@@ -112,18 +107,15 @@ describe("Round trip conversion", () => {
     const originalDoc: DocSpec = {
       slug: "test",
       label: "Test Document",
-      contentPath: "path/to/content.mdx",
       hasExtractableSnippets: true,
       children: [
         {
           slug: "child1",
           label: "Child 1",
-          contentPath: "path/to/child1.mdx",
         },
         {
           slug: "child2",
           label: "Child 2",
-          contentPath: "path/to/child2.mdx",
           hasExtractableSnippets: true,
         },
       ],

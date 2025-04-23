@@ -39,7 +39,6 @@ describe("validateDocSpec", () => {
     const validDoc: DocSpec = {
       slug: "valid-slug",
       label: "Valid Document",
-      contentPath: "path/to/content.mdx",
     };
     expect(validateDocSpec(validDoc).isValid).toBe(true);
   });
@@ -48,22 +47,8 @@ describe("validateDocSpec", () => {
     const invalidDoc: DocSpec = {
       slug: "Invalid/slug",
       label: "Invalid Document",
-      contentPath: "path/to/content.mdx",
     };
     expect(validateDocSpec(invalidDoc).isValid).toBe(false);
-  });
-
-  test("contradictory properties fail validation", () => {
-    const contradictoryDoc: DocSpec = {
-      slug: "valid-slug",
-      label: "Contradictory Document",
-      contentPath: "path/to/content.mdx",
-      hasNoContent: true,
-    };
-    expect(validateDocSpec(contradictoryDoc).isValid).toBe(false);
-    expect(validateDocSpec(contradictoryDoc).errors[0]).toContain(
-      "both contentPath and hasNoContent"
-    );
   });
 
   test("nested children are validated", () => {
