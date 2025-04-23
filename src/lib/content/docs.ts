@@ -1,23 +1,15 @@
 import { loadContent } from "./content-loader";
-import type { ContentMeta, Content } from "./types";
-import type { FutureDocMeta } from "./content-types";
+import type { FutureDocMeta, DocMeta, DocContent } from "./content-types";
 import { getMetadataFromStructure, mergeMetadata } from "./metadata-service";
+
+// Re-export type definitions
+export type { DocMeta, DocContent, FutureDocMeta };
 
 // Import product docs metadata (both formats)
 import { meta as docsMetadata } from "@/content/doc/_meta";
 import docsSpec from "@/content/doc/_meta";
 import type { ProductDocs, DocMetaItem } from "@/src/lib/content/legacy-doc-meta";
 import type { DocSpec } from "@/src/lib/content/spec";
-
-// Define doc-specific metadata
-export interface DocMeta extends ContentMeta {
-  product: string;
-  section?: string;
-  group?: string;
-}
-
-// Define doc-specific content type
-export type DocContent = Content<DocMeta>;
 
 /**
  * Create metadata from frontmatter for docs

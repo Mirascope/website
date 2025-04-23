@@ -1,6 +1,6 @@
 import { parseFrontmatter } from "./frontmatter";
 import { ContentError } from "./errors";
-import type { ContentType } from "./types";
+import type { ContentType } from "./content-types";
 
 export interface ProcessedContent {
   content: string;

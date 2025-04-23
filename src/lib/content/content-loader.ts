@@ -1,5 +1,5 @@
 import { environment } from "./environment";
-import type { ContentType, ContentMeta, Content, ValidationResult } from "./types";
+import type { ContentType, ContentMeta, Content, ValidationResult } from "./content-types";
 import { validateMetadata as validateMetadataService } from "./metadata-service";
 import { processMDXContent } from "./mdx-processor";
 import { resolveContentPath } from "./path-resolver";

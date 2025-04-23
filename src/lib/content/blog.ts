@@ -1,18 +1,10 @@
 import { loadContent } from "./content-loader";
-import type { ContentMeta, Content } from "./types";
+import type { BlogMeta, BlogContent } from "./content-types";
 import { ContentError } from "./errors";
 import { environment } from "./environment";
 
-// Define blog-specific metadata
-export interface BlogMeta extends ContentMeta {
-  date: string;
-  author: string;
-  readTime: string;
-  lastUpdated?: string;
-}
-
-// Define blog-specific content type
-export type BlogContent = Content<BlogMeta>;
+// Re-export type definitions
+export type { BlogMeta, BlogContent };
 
 /**
  * Create metadata from frontmatter for blog posts

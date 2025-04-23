@@ -46,9 +46,13 @@ export interface PolicyMeta extends ContentMeta {
 // Base content interface with metadata plus content
 export interface Content<T extends ContentMeta = ContentMeta> {
   meta: T; // Typed, validated metadata
-  frontmatter: Record<string, any>; // Original parsed frontmatter
   content: string; // Raw MDX with frontmatter stripped
-  compiledCode: string; // Processed/compiled MDX code
+
+  // MDX structure expected by components (this is used in MDXRenderer)
+  mdx: {
+    code: string;
+    frontmatter: Record<string, any>;
+  };
 }
 
 // Type-specific content types
@@ -73,18 +77,16 @@ export interface ContentResult<T extends ContentMeta = ContentMeta> {
  * Interface for content handlers
  */
 export interface ContentHandler<T extends ContentMeta> {
-  /**
-   * Retrieves content by path
-   *
-   * @param path - The path to the content
-   * @returns The content with its metadata
-   */
   getContent(path: string): Promise<Content<T>>;
-
-  /**
-   * Gets all metadata for this content type
-   *
-   * @returns Array of document metadata
-   */
   getAllMeta(): Promise<T[]>;
 }
+
+/**
+ * Type for content retrieval function
+ */
+export type GetContentFn<T extends ContentMeta> = (path: string) => Promise<Content<T>>;
+
+/**
+ * Type for metadata retrieval function
+ */
+export type GetMetaFn<T extends ContentMeta> = () => Promise<T[]>;

@@ -1,5 +1,5 @@
 import { describe, test, expect } from "bun:test";
-import type { ContentType, ContentMeta, ValidationResult } from "../types";
+import type { ContentType, ContentMeta, ValidationResult } from "../content-types";
 import type { DocMeta } from "../docs";
 import type { BlogMeta } from "../blog";
 import type { PolicyMeta } from "../policy";
