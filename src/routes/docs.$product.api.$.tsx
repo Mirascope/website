@@ -29,8 +29,6 @@ export const Route = createFileRoute("/docs/$product/api/$")({
     return (
       <DocsLayout
         product={product as ProductName}
-        section="api"
-        slug={currentSlug}
         group={group}
         // Provide a minimal empty document for the loading state
         document={{

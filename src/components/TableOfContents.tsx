@@ -10,11 +10,10 @@ type TOCItem = {
 type TableOfContentsProps = {
   contentId: string;
   product: string;
-  section: string | null;
-  slug: string;
+  path: string;
 };
 
-const TableOfContents: React.FC<TableOfContentsProps> = ({ contentId, product, section, slug }) => {
+const TableOfContents: React.FC<TableOfContentsProps> = ({ contentId, path, product }) => {
   const [headings, setHeadings] = useState<TOCItem[]>([]);
   const [activeId, setActiveId] = useState<string>("");
 
@@ -80,7 +79,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ contentId, product, s
       clearTimeout(initialTimer);
       observer.disconnect();
     };
-  }, [contentId, product, section, slug]); // Removed headings from dependency list
+  }, [contentId, path]);
 
   // Second effect: Set up observer for active heading tracking
   useEffect(() => {

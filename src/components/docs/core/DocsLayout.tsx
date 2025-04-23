@@ -12,8 +12,6 @@ import type { DocContent } from "@/src/lib/content/docs";
 
 type DocsLayoutProps = {
   product: ProductName;
-  section: string | null;
-  slug: string;
   group: string | null;
   document: DocContent;
 };
@@ -24,13 +22,7 @@ type DocsLayoutProps = {
  * Handles the common layout between all doc page types
  * (product index, regular docs, API docs)
  */
-const DocsLayout: React.FC<DocsLayoutProps> = ({
-  product,
-  section,
-  slug,
-  group = null,
-  document,
-}) => {
+const DocsLayout: React.FC<DocsLayoutProps> = ({ product, group = null, document }) => {
   // Use custom hooks for state management
   const [funMode, toggleFunMode] = useFunMode();
   const [selectedProvider, handleProviderChange] = useProviderSelection();
@@ -40,14 +32,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
 
   // Right sidebar content (TOC)
   const rightSidebar = (
-    <TocSidebar
-      product={product}
-      section={section}
-      slug={slug}
-      funMode={funMode}
-      toggleFunMode={toggleFunMode}
-      document={document}
-    />
+    <TocSidebar funMode={funMode} toggleFunMode={toggleFunMode} document={document} />
   );
 
   // Main content
