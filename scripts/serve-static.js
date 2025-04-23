@@ -33,13 +33,39 @@ const MIME_TYPES = {
   ".map": "application/json",
 };
 
-const PORT = 4173;
+// Parse command line arguments for port (first arg is the port)
+const PORT = parseInt(process.argv[2], 10) || 3000; // Default to 3000, matching dev server
+const HOST = "127.0.0.1"; // Use IPv4 explicitly
 const distDir = path.resolve(process.cwd(), "dist");
 
 // Check if the dist directory exists
 if (!fs.existsSync(distDir)) {
-  console.error("❌ Dist directory not found. Run `bun run build:static` first.");
+  console.error("❌ Dist directory not found. Run `bun run build` first.");
   process.exit(1);
+}
+
+// Check if the port is in use before starting
+async function checkPort() {
+  return new Promise((resolve) => {
+    const testServer = createServer();
+
+    testServer.once("error", (err) => {
+      if (err.code === "EADDRINUSE") {
+        console.error(`❌ Error: Port ${PORT} is already in use. Please try another port.`);
+        resolve(false);
+      } else {
+        console.error(`❌ Error checking port: ${err.message}`);
+        resolve(false);
+      }
+    });
+
+    testServer.once("listening", () => {
+      testServer.close();
+      resolve(true);
+    });
+
+    testServer.listen(PORT, HOST);
+  });
 }
 
 // Create HTTP server
@@ -127,13 +153,25 @@ function serveFile(url, res) {
   });
 }
 
-// Start the server
-server.listen(PORT, () => {
-  console.log(`✅ Static site server running at http://localhost:${PORT}`);
-});
+// Start the server after checking the port
+async function start() {
+  console.log(`Checking if port ${PORT} is available on ${HOST}...`);
+  const isAvailable = await checkPort();
+
+  if (!isAvailable) {
+    process.exit(1);
+  }
+
+  server.listen(PORT, HOST, () => {
+    console.log(`✅ Static site server running at http://${HOST}:${PORT}`);
+  });
+}
 
 // Handle server errors
 server.on("error", (err) => {
   console.error("❌ Server error:", err);
   process.exit(1);
 });
+
+// Start the server
+start();

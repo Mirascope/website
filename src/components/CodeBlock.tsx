@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { highlightCode } from "@/src/lib/code-highlight";
+import { highlightCode, stripHighlightMarkers } from "@/src/lib/code-highlight";
 import analyticsManager from "@/src/lib/services/analytics";
 
 interface CodeBlockProps {
@@ -45,7 +45,9 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
   }, [code, language, meta]);
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(code);
+    // Strip highlight markers before copying to clipboard
+    const cleanCode = stripHighlightMarkers(code);
+    navigator.clipboard.writeText(cleanCode);
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2000);
 
@@ -66,7 +68,7 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
 
     // Extract product from URL path if in docs section
     let product = "unknown";
-    const docsMatch = pagePath.match(/^\/docs\/([^/]+)/);
+    const docsMatch = pagePath.match(/^\/doc\/([^/]+)/);
     if (docsMatch && docsMatch[1]) {
       product = docsMatch[1];
     }
