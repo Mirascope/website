@@ -1,9 +1,8 @@
-import { createFileRoute, useParams, useLoaderData } from "@tanstack/react-router";
-import { DocsPage } from "@/src/components/docs";
+import { createFileRoute, useLoaderData } from "@tanstack/react-router";
+import { DocsPage, LoadingDocsPage } from "@/src/components/docs";
 import { type ProductName } from "@/src/lib/route-types";
 import { docsPageLoader } from "@/src/lib/content/loaders";
 import type { DocContent } from "@/src/lib/content/docs";
-import DocsLayout from "@/src/components/docs/core/DocsLayout";
 import { environment } from "@/src/lib/content/environment";
 import ContentErrorHandler from "@/src/components/ContentErrorHandler";
 
@@ -15,31 +14,8 @@ export const Route = createFileRoute("/docs/$product/$")({
 
   // Configure loading state
   pendingComponent: ({ params }) => {
-    const { product, _splat } = params;
-
-    // Parse the path into group/slug components
-    const pathParts = _splat.split("/").filter(Boolean);
-
-    // Extract current slug (last part) for sidebar highlighting
-    const currentSlug = pathParts.length > 0 ? pathParts[pathParts.length - 1] : "index";
-
-    return (
-      <DocsLayout
-        // Provide a minimal empty document for the loading state
-        document={{
-          meta: {
-            title: "Loading...",
-            description: "",
-            slug: currentSlug,
-            type: "doc",
-            product: product as ProductName,
-            path: "",
-          },
-          mdx: { code: "", frontmatter: {} },
-          content: "",
-        }}
-      />
-    );
+    const { product } = params;
+    return <LoadingDocsPage product={product as ProductName} />;
   },
   errorComponent: ({ error }) => {
     environment.onError(error);
@@ -53,25 +29,12 @@ export const Route = createFileRoute("/docs/$product/$")({
 });
 
 function DocsProductPage() {
-  // Get the product and remaining path
-  const { product, _splat } = useParams({ from: "/docs/$product/$" });
-
   // Get the loaded data from the loader
   const [document] = useLoaderData({
     from: "/docs/$product/$",
     structuralSharing: false,
   }) as [DocContent];
 
-  // No section for regular product routes
-  const section = null;
-
   // Use the shared DocsPage component
-  return (
-    <DocsPage
-      product={product as ProductName}
-      section={section}
-      splat={_splat || ""}
-      document={document}
-    />
-  );
+  return <DocsPage document={document} />;
 }

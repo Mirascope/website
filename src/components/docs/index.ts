@@ -8,8 +8,8 @@ export * from "./TabbedSection";
 export * from "./MermaidDiagram";
 
 // Export core docs components
-export { default as DocsLayout } from "./core/DocsLayout";
 export { default as DocsPage } from "./core/DocsPage";
+export { default as LoadingDocsPage } from "./core/LoadingDocsPage";
 export { default as DocsSidebar } from "./core/DocsSidebar";
 export { default as TocSidebar } from "./core/TocSidebar";
 export { default as MainContent } from "./core/MainContent";
