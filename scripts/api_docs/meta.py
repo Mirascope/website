@@ -210,6 +210,15 @@ def generate_meta_from_organized_files(
     # Process files in the root directory
     root_files = organized_files.get("", [])
     items = create_items(root_files)
+
+    # Add an index item if it doesn't exist
+    if "index" not in items:
+        # Create a synthetic index item and put it first
+        synthetic_items = {"index": DocMetaItem(title="Overview")}
+        # Add the remaining items
+        synthetic_items.update(items)
+        items = synthetic_items
+
     # Process all subdirectories
     subdirectories = [dir_name for dir_name in organized_files.keys() if dir_name != ""]
     group_names = sorted({dir_name.split("/")[0] for dir_name in subdirectories})
