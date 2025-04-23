@@ -1,7 +1,6 @@
 import React from "react";
 import BaseLayout from "@/src/components/BaseLayout";
 import SidebarContainer from "@/src/components/SidebarContainer";
-import { type DocMeta } from "@/src/lib/content/docs";
 import { type ProductName } from "@/src/lib/route-types";
 import useFunMode from "@/src/lib/hooks/useFunMode";
 import useProviderSelection from "@/src/lib/hooks/useProviderSelection";
@@ -17,7 +16,6 @@ type DocsLayoutProps = {
   slug: string;
   group: string | null;
   document: DocContent;
-  docs: DocMeta[];
 };
 
 /**
@@ -32,16 +30,13 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
   slug,
   group = null,
   document,
-  docs,
 }) => {
   // Use custom hooks for state management
   const [funMode, toggleFunMode] = useFunMode();
   const [selectedProvider, handleProviderChange] = useProviderSelection();
 
   // Left sidebar content
-  const leftSidebar = (
-    <SidebarContainer product={product} section={section} slug={slug} group={group} docs={docs} />
-  );
+  const leftSidebar = <SidebarContainer product={product} group={group} />;
 
   // Right sidebar content (TOC)
   const rightSidebar = (

@@ -2,7 +2,7 @@ import { createFileRoute, useParams, useLoaderData } from "@tanstack/react-route
 import { DocsPage } from "@/src/components/docs";
 import { type ProductName } from "@/src/lib/route-types";
 import { docsPageLoader } from "@/src/lib/content/loaders";
-import type { DocContent, DocMeta } from "@/src/lib/content/docs";
+import type { DocContent } from "@/src/lib/content/docs";
 import DocsLayout from "@/src/components/docs/core/DocsLayout";
 import { environment } from "@/src/lib/content/environment";
 import ContentErrorHandler from "@/src/components/ContentErrorHandler";
@@ -26,9 +26,6 @@ export const Route = createFileRoute("/docs/$product/guides/$")({
     // Extract current slug (last part) for sidebar highlighting
     const currentSlug = pathParts.length > 0 ? pathParts[pathParts.length - 1] : "index";
 
-    // Provide empty docs array
-    const emptyDocs: DocMeta[] = [];
-
     return (
       <DocsLayout
         product={product as ProductName}
@@ -48,7 +45,6 @@ export const Route = createFileRoute("/docs/$product/guides/$")({
           mdx: { code: "", frontmatter: {} },
           content: "",
         }}
-        docs={emptyDocs}
       />
     );
   },
@@ -68,10 +64,10 @@ function DocsGuidesPage() {
   const { product, _splat } = useParams({ from: "/docs/$product/guides/$" });
 
   // Get the loaded data from the loader
-  const [document, docs] = useLoaderData({
+  const [document] = useLoaderData({
     from: "/docs/$product/guides/$",
     structuralSharing: false,
-  }) as [DocContent, DocMeta[]];
+  }) as [DocContent];
 
   // For guides routes, the section is always 'guides'
   const section = "guides";
@@ -83,7 +79,6 @@ function DocsGuidesPage() {
       section={section}
       splat={_splat || ""}
       document={document}
-      docs={docs}
     />
   );
 }

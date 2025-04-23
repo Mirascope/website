@@ -1,7 +1,7 @@
 import React from "react";
 import DocsLayout from "./DocsLayout";
 import SEOMeta from "@/src/components/SEOMeta";
-import { type DocMeta, type DocContent } from "@/src/lib/content/docs";
+import { type DocContent } from "@/src/lib/content/docs";
 import { type ProductName } from "@/src/lib/route-types";
 
 type DocsPageProps = {
@@ -9,13 +9,12 @@ type DocsPageProps = {
   section: string | null;
   splat: string;
   document: DocContent;
-  docs: DocMeta[];
 };
 
 /**
  * DocsPage component - Uses loaded data from TanStack Router
  */
-const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat, document, docs }) => {
+const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat, document }) => {
   // Parse the path into group/slug components
   const pathParts = splat.split("/").filter(Boolean);
 
@@ -51,7 +50,6 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat, document, 
         slug={currentSlug}
         group={group}
         document={document}
-        docs={docs}
       />
     </>
   );

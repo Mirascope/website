@@ -5,15 +5,11 @@ import { meta as docsMetadata } from "@/content/doc/_meta";
 import { getSectionsForProduct } from "@/src/lib/content/docs";
 import { getProductRoute, getSectionRoute, getSectionParams } from "@/src/lib/routes";
 import type { ProductName } from "@/src/lib/route-types";
-import type { DocMeta } from "@/src/lib/content/docs";
 import { type Provider } from "../ProviderContext";
 
 interface DocsSidebarProps {
   product: ProductName;
-  section: string | null;
-  currentSlug: string;
   currentGroup: string | null;
-  docs: DocMeta[];
   selectedProvider?: Provider;
   onProviderChange?: (provider: Provider) => void;
 }
