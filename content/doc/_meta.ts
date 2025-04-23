@@ -14,12 +14,12 @@ export * from "@/src/lib/content/legacy-doc-meta";
 import mirascopeSpec from "./mirascope/_meta";
 import lilypadSpec from "./lilypad/_meta";
 
-import type { DocsSpec } from "@/src/lib/content/spec";
+import type { ProductDocsSpec } from "@/src/lib/content/spec";
 import type { DocsStructure } from "@/src/lib/content/legacy-doc-meta";
 import { toLegacyFormat } from "@/src/lib/content/doc-converter";
 
 // Build new format spec
-const spec: DocsSpec = {
+const spec: ProductDocsSpec = {
   mirascope: mirascopeSpec,
   lilypad: lilypadSpec,
 };

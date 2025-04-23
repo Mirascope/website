@@ -4,7 +4,7 @@
  * This provides compatibility with the existing codebase while we migrate to the new format.
  */
 
-import type { DocSpec, SectionSpec, ProductSpec, DocsSpec } from "./spec";
+import type { DocSpec, SectionSpec, ProductSpec, ProductDocsSpec } from "./spec";
 import type {
   DocMetaItem,
   DocGroup,
@@ -148,9 +148,9 @@ export function convertProductToLegacy(productSpec: ProductSpec): ProductDocs {
 }
 
 /**
- * Convert an entire DocsSpec to legacy DocsStructure
+ * Convert an entire ProductDocsSpec to legacy DocsStructure
  */
-export function convertDocsToLegacy(docsSpec: DocsSpec): DocsStructure {
+export function convertDocsToLegacy(docsSpec: ProductDocsSpec): DocsStructure {
   const legacyDocs: DocsStructure = {};
 
   Object.entries(docsSpec).forEach(([product, productSpec]) => {
@@ -274,10 +274,10 @@ export function convertLegacyToProduct(legacyProduct: ProductDocs): ProductSpec 
 }
 
 /**
- * Convert legacy DocsStructure to new DocsSpec
+ * Convert legacy DocsStructure to new ProductDocsSpec
  */
-export function convertLegacyToDocs(legacyDocs: DocsStructure): DocsSpec {
-  const newDocs: DocsSpec = {};
+export function convertLegacyToDocs(legacyDocs: DocsStructure): ProductDocsSpec {
+  const newDocs: ProductDocsSpec = {};
 
   Object.entries(legacyDocs).forEach(([product, productDocs]) => {
     newDocs[product] = convertLegacyToProduct(productDocs);
