@@ -49,7 +49,7 @@ dev-dependencies = [
 include = [
     "public/extracted-snippets",
     "public/examples",
-    "scripts/api_docs"
+    "scripts/apigen"
 ]
 exclude = [
     "**/__pycache__"
