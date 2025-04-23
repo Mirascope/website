@@ -1,6 +1,5 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import { DocsPage, LoadingDocsPage } from "@/src/components/docs";
-import { type ProductName } from "@/src/lib/route-types";
 import { docsPageLoader } from "@/src/lib/content/loaders";
 import type { DocContent } from "@/src/lib/content/docs";
 import { environment } from "@/src/lib/content/environment";
@@ -13,10 +12,13 @@ export const Route = createFileRoute("/docs/$product/$")({
   loader: ({ params }) => docsPageLoader({ params }),
 
   // Configure loading state
-  pendingComponent: ({ params }) => {
-    const { product } = params;
-    return <LoadingDocsPage product={product as ProductName} />;
+  pendingComponent: () => {
+    // Hardcoded to Mirascope to address router issues
+    // TODO: Better if we choose the correct product
+    // (Can split into hardcoded per-product routes if needed)
+    return <LoadingDocsPage product={"mirascope"} />;
   },
+
   errorComponent: ({ error }) => {
     environment.onError(error);
     return (
