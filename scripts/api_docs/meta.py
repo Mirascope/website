@@ -92,7 +92,6 @@ class DocSection:
 
     Attributes:
         title: The title of the section
-        default_slug: Optional default slug for the section
         items: Direct section items
         groups: Grouped section items
 
@@ -101,7 +100,6 @@ class DocSection:
     def __init__(
         self,
         title: str,
-        default_slug: str | None = None,
         items: dict[str, DocMetaItem] | None = None,
         groups: dict[str, DocGroup] | None = None,
     ) -> None:
@@ -109,13 +107,11 @@ class DocSection:
 
         Args:
             title: The title of the section
-            default_slug: Default slug for the section
             items: Dictionary of items directly in this section
             groups: Dictionary of groups in this section
 
         """
         self.title = title
-        self.default_slug = default_slug
         self.items = items or {}
         self.groups = groups
 
@@ -125,9 +121,6 @@ class DocSection:
             "title": self.title,
             "items": {},
         }
-
-        if self.default_slug is not None:
-            result["defaultSlug"] = self.default_slug
 
         for key, item in self.items.items():
             result["items"][key] = item.to_dict()
