@@ -21,9 +21,6 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat, document }
   // Extract group if it exists (first part of the splat)
   const group = pathParts.length > 0 ? pathParts[0] : null;
 
-  // Extract current slug (last part) for sidebar highlighting
-  const currentSlug = pathParts.length > 0 ? pathParts[pathParts.length - 1] : "index";
-
   // Define SEO properties based on document meta and product
   const title = document?.meta.title || "";
 
@@ -44,13 +41,7 @@ const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat, document }
   return (
     <>
       <SEOMeta title={title} description={description} url={urlPath} product={product} />
-      <DocsLayout
-        product={product}
-        section={section}
-        slug={currentSlug}
-        group={group}
-        document={document}
-      />
+      <DocsLayout product={product} group={group} document={document} />
     </>
   );
 };

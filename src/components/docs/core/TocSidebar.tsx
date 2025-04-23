@@ -4,14 +4,10 @@ import { Button } from "@/src/components/ui/button";
 import { Sparkles, Server, Clipboard, Check } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { ProviderDropdown } from "@/src/components/docs";
-import { type ProductName } from "@/src/lib/route-types";
 import { type DocContent } from "@/src/lib/content/docs";
 import analyticsManager from "@/src/lib/services/analytics";
 
 interface TocSidebarProps {
-  product: ProductName;
-  section: string | null;
-  slug: string;
   funMode: boolean;
   toggleFunMode: () => void;
   document?: DocContent | null;
@@ -22,14 +18,7 @@ interface TocSidebarProps {
  *
  * Displays fun mode toggle, provider selection dropdown, and table of contents
  */
-const TocSidebar: React.FC<TocSidebarProps> = ({
-  product,
-  section,
-  slug,
-  funMode,
-  toggleFunMode,
-  document,
-}) => {
+const TocSidebar: React.FC<TocSidebarProps> = ({ funMode, toggleFunMode, document }) => {
   const [isCopied, setIsCopied] = useState(false);
 
   const copyContentAsMarkdown = () => {
@@ -43,13 +32,11 @@ const TocSidebar: React.FC<TocSidebarProps> = ({
           }, 2000);
 
           const pagePath = window.location.pathname;
-          const docPath = section ? `${product}/${section}/${slug}` : `${product}/${slug}`;
-
           // Using GA4 standard "select_content" event with recommended parameters
           analyticsManager.trackEvent("select_content", {
             content_type: "document_markdown",
-            item_id: docPath,
-            product: product,
+            item_id: document.meta.path,
+            product: document.meta.product,
             page_path: pagePath,
           });
         })
@@ -114,9 +101,8 @@ const TocSidebar: React.FC<TocSidebarProps> = ({
           </div>
           <TableOfContents
             contentId="doc-content"
-            product={product}
-            section={section}
-            slug={slug}
+            product={document?.meta.product || "mirascope"}
+            path={document?.meta.path || ""}
           />
         </div>
       </div>
