@@ -14,28 +14,22 @@ type DocsPageProps = {
 /**
  * DocsPage component - Uses loaded data from TanStack Router
  */
-const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat, document }) => {
-  // Define SEO properties based on document meta and product
-  const title = document?.meta.title || "";
+const DocsPage: React.FC<DocsPageProps> = ({ document }) => {
+  const meta = document.meta;
+  const { title, path, description, product } = meta;
 
-  // Use product-specific descriptions
-  let description = document?.meta.description || "";
-  if (!description) {
-    if (product === "mirascope") {
-      description = "LLM abstractions that aren't obstructions.";
-    } else if (product === "lilypad") {
-      description = "An open-source prompt engineering framework.";
-    }
-  }
-
-  // Construct the URL path for SEO
-  const urlPath = section ? `/docs/${product}/${section}/${splat}` : `/docs/${product}/${splat}`;
+  const urlPath = `/docs/${path}`;
 
   // Render the layout with the loaded content
   return (
     <>
-      <SEOMeta title={title} description={description} url={urlPath} product={product} />
-      <DocsLayout product={product} document={document} />
+      <SEOMeta
+        title={title}
+        description={description}
+        url={urlPath}
+        product={product as ProductName}
+      />
+      <DocsLayout document={document} />
     </>
   );
 };
