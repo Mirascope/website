@@ -15,6 +15,7 @@ import {
   MermaidDiagram,
   Icon,
 } from "@/src/components/mdx/elements";
+import { ApiType, ApiSignature, ParametersTable, ReturnType } from "@/src/components/docs/api";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/src/components/ui/tabs";
 import { Button } from "@/src/components/ui/button";
 import { ButtonLink } from "@/src/components/ui/button-link";
@@ -80,6 +81,12 @@ export const components = {
   Success,
   MermaidDiagram,
   Icon,
+
+  // API documentation components
+  ApiType,
+  ApiSignature,
+  ParametersTable,
+  ReturnType,
 
   // UI Components
   Button,

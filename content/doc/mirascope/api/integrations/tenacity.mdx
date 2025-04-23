@@ -6,7 +6,11 @@ description: API documentation for mirascope.integrations.tenacity
 
 # mirascope.integrations.tenacity
 
-**Type:** Alias
+<ApiType type="Alias" />
+
+<ApiSignature>
+collect_errors(*args: type[Exception] = ())
+</ApiSignature>
 
 ## Description
 
@@ -35,5 +39,20 @@ except RetryError:
 
 Args:
     *args: The `Exception` types to catch.
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "*args",
+    "type": "type[Exception]",
+    "description": "The `Exception` types to catch.",
+    "default": "()"
+  }
+]}
+/>
+
+<ReturnType
+  type="Callable[[RetryCallState], None]"
+/>
 
 
