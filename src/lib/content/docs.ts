@@ -37,24 +37,6 @@ export async function getDoc(path: string): Promise<DocContent> {
 }
 
 /**
- * Get all documentation pages metadata
- */
-export async function getAllDocMeta(): Promise<DocMeta[]> {
-  // Build a list of all products
-  const products = Object.keys(docsMetadata);
-
-  // Get docs for each product
-  const allDocs: DocMeta[] = [];
-
-  for (const product of products) {
-    const productDocs = getDocsForProduct(product);
-    allDocs.push(...(await productDocs));
-  }
-
-  return allDocs;
-}
-
-/**
  * Get all documentation pages for a product
  */
 export function getDocsForProduct(product: string): Promise<DocMeta[]> {
@@ -184,22 +166,6 @@ export function getDocsForProduct(product: string): Promise<DocMeta[]> {
     console.error(`Failed to get documents for product ${product}:`, error);
     return Promise.resolve([]);
   }
-}
-
-/**
- * Get documentation pages for a specific section
- */
-export async function getDocsForSection(product: string, section: string): Promise<DocMeta[]> {
-  const allDocs = await getDocsForProduct(product);
-  return allDocs.filter((doc) => doc.section === section);
-}
-
-/**
- * Get documentation pages for a specific group
- */
-export async function getDocsForGroup(product: string, group: string): Promise<DocMeta[]> {
-  const allDocs = await getDocsForProduct(product);
-  return allDocs.filter((doc) => doc.group === group);
 }
 
 /**
