@@ -68,14 +68,10 @@ describe("ContentTypes", () => {
         product: "mirascope",
         section: "introduction",
         group: "basics",
-        sectionTitle: "Introduction",
-        groupTitle: "Basics",
       };
 
       expect(meta.section).toBe("introduction");
       expect(meta.group).toBe("basics");
-      expect(meta.sectionTitle).toBe("Introduction");
-      expect(meta.groupTitle).toBe("Basics");
     });
   });
 
