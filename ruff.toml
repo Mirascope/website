@@ -50,7 +50,7 @@ ignore = [
     "PL",    # ignore pylint
     "RUF",   # ignore ruff rules
 ]
-"scripts/api_docs/**/*.py" = [
+"scripts/apigen/**/*.py" = [
     "D103",  # missing docstring in public function
 ]
 

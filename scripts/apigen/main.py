@@ -14,7 +14,7 @@ from pathlib import Path
 
 import tomli
 
-from scripts.api_docs.documentation_generator import DocumentationGenerator
+from scripts.apigen.documentation_generator import DocumentationGenerator
 
 
 def get_mirascope_version(pyproject_path: Path) -> str:

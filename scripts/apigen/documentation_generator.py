@@ -13,12 +13,12 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from scripts.api_docs.griffe_integration import get_loader, process_directive
-from scripts.api_docs.meta import (
+from scripts.apigen.griffe_integration import get_loader, process_directive
+from scripts.apigen.meta import (
     generate_meta_file_content,
     generate_meta_from_organized_files,
 )
-from scripts.api_docs.structure import organize_api_files
+from scripts.apigen.structure import organize_api_files
 
 
 class DocumentationGenerator:

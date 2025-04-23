@@ -24,8 +24,9 @@
     "fix": "bun run fix:format && bun run fix:snippets && bun run fix:python",
     "fix:format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\"",
     "fix:snippets": "bun run scripts/update-snippets.ts",
-    "fix:python": "uv run ruff format scripts/api_docs/ && uv run ruff check --fix scripts/api_docs/",
-    "regenerate-api-docs": "uv run -m scripts.api_docs.regenerate_api_docs",
+    "fix:python": "uv run ruff format scripts/apigen/ && uv run ruff check --fix scripts/apigen/",
+    "apigen": "uv run -m scripts.apigen.main",
+    "regenerate-api-docs": "uv run -m scripts.apigen.main",
     "prepare": "husky",
     "pre-commit": "lint-staged"
   },
