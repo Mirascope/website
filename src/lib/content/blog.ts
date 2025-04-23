@@ -7,23 +7,6 @@ import { environment } from "./environment";
 export type { BlogMeta, BlogContent };
 
 /**
- * Create metadata from frontmatter for blog posts
- */
-function createBlogMeta(frontmatter: Record<string, any>, path: string): BlogMeta {
-  return {
-    title: frontmatter.title || "",
-    description: frontmatter.description || "",
-    date: frontmatter.date || "",
-    readTime: frontmatter.readTime || "",
-    author: frontmatter.author || "Mirascope Team",
-    slug: path,
-    path: path,
-    type: "blog",
-    ...(frontmatter.lastUpdated && { lastUpdated: frontmatter.lastUpdated }),
-  };
-}
-
-/**
  * Normalize a blog slug to ensure it has the proper prefix
  */
 function normalizeBlogPath(slug: string): string {
@@ -35,7 +18,7 @@ function normalizeBlogPath(slug: string): string {
  */
 export async function getBlogContent(slug: string): Promise<BlogContent> {
   const normalizedSlug = normalizeBlogPath(slug);
-  return loadContent<BlogMeta>(normalizedSlug, "blog", createBlogMeta);
+  return loadContent<BlogMeta>(normalizedSlug, "blog");
 }
 
 /**
