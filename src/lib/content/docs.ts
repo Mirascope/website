@@ -2,9 +2,9 @@ import { loadContent } from "./content-loader";
 import type { ContentMeta, Content } from "./types";
 import { getMetadataFromStructure, mergeMetadata } from "./metadata-service";
 
-// Import product docs metadata
-import docsMetadata from "@/content/doc/_meta";
-import type { ProductDocs, DocMetaItem } from "@/content/doc/_meta";
+// Import product docs metadata (import the legacy format)
+import { meta as docsMetadata } from "@/content/doc/_meta";
+import type { ProductDocs, DocMetaItem } from "@/src/lib/content/legacy-doc-meta";
 
 // Define doc-specific metadata
 export interface DocMeta extends ContentMeta {

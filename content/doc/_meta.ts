@@ -3,18 +3,12 @@
  *
  * This file defines the structure, order, and metadata for all documentation.
  *
- * We now use the DocSpec format from src/lib/content/spec.ts and convert
- * it to the legacy format for compatibility with the rest of the codebase.
+ * We now use the DocsSpec format from src/lib/content/spec.ts as the default export.
+ * A legacy-compatible version is also exported as 'meta' for backward compatibility.
  */
 
 // Re-export legacy types for files that import from here
 export * from "@/src/lib/content/legacy-doc-meta";
-
-// Import new spec types are commented out until we start using them
-// import type { DocsSpec, ProductSpec } from "@/src/lib/content/spec";
-
-// Import converter will be used once we migrate to the new format
-// import { toLegacyFormat } from "@/src/lib/content/doc-converter";
 
 // Import product-specific metadata
 import mirascopeSpec from "./mirascope/_meta";
@@ -22,20 +16,16 @@ import lilypadSpec from "./lilypad/_meta";
 
 import type { DocsSpec } from "@/src/lib/content/spec";
 import type { DocsStructure } from "@/src/lib/content/legacy-doc-meta";
-import { convertDocsToLegacy } from "@/src/lib/content/spec-converter";
+import { toLegacyFormat } from "@/src/lib/content/doc-converter";
 
+// Build new format spec
 const spec: DocsSpec = {
   mirascope: mirascopeSpec,
   lilypad: lilypadSpec,
 };
 
-const meta: DocsStructure = convertDocsToLegacy(spec);
-
-// Later this will be:
-// const newMeta: DocsSpec = {
-//   // New format definition
-// };
-// const meta: DocsStructure = toLegacyFormat(newMeta);
+// Convert to legacy format for backward compatibility
+export const meta: DocsStructure = toLegacyFormat(spec);
 
 // Import the getAllDocs function directly
 import { getAllDocs as getLegacyDocs } from "@/src/lib/content/legacy-doc-meta";
@@ -45,4 +35,5 @@ export function getAllDocs(): Array<{ product: string; path: string; meta: any }
   return getLegacyDocs(meta);
 }
 
-export default meta;
+// Default export is now the new format
+export default spec;
