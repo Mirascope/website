@@ -34,9 +34,9 @@ export interface SectionSpec {
  * Product documentation structure
  */
 export interface ProductSpec {
-  defaultSectionLabel: string; // Label for default section
-  defaultSection: DocSpec[]; // Default section items (no prefix in URL)
-  sections: SectionSpec[]; // Additional sections
+  // All sections (including the main/default section)
+  // A section with slug "index" is treated as the default section (no prefix in URL)
+  sections: SectionSpec[];
 }
 
 /**
@@ -202,27 +202,6 @@ export function validateSectionSpec(spec: SectionSpec): ValidationResult {
  */
 export function validateProductSpec(spec: ProductSpec): ValidationResult {
   const errors: string[] = [];
-
-  // Validate defaultSection
-  if (!spec.defaultSection || spec.defaultSection.length === 0) {
-    errors.push("Default section must have at least one item");
-  } else {
-    // Check for duplicates in defaultSection
-    const defaultSectionResult = checkDuplicateSlugs(spec.defaultSection);
-    if (!defaultSectionResult.isValid) {
-      errors.push(...defaultSectionResult.errors.map((err) => `In default section: ${err}`));
-    }
-
-    // Validate each item in defaultSection
-    spec.defaultSection.forEach((item) => {
-      const itemResult = validateDocSpec(item);
-      if (!itemResult.isValid) {
-        errors.push(
-          ...itemResult.errors.map((err) => `In default section, item "${item.label}": ${err}`)
-        );
-      }
-    });
-  }
 
   // Validate sections
   if (spec.sections) {

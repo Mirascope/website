@@ -1,13 +1,11 @@
-import type { ProductSpec } from "@/src/lib/content/spec";
-import guidesMeta from "./guides/_meta";
-import apiMeta from "./api/_meta";
+import type { ProductSpec, SectionSpec } from "@/src/lib/content/spec";
+import guides from "./guides/_meta";
+import api from "./api/_meta";
 
-/**
- * Documentation structure for mirascope in new DocSpec format
- */
-const mirascopeSpec: ProductSpec = {
-  defaultSectionLabel: "Docs",
-  defaultSection: [
+const docsSection: SectionSpec = {
+  label: "Docs",
+  slug: "index",
+  children: [
     {
       slug: "index",
       label: "Welcome",
@@ -186,6 +184,12 @@ const mirascopeSpec: ProductSpec = {
       ],
     },
   ],
-  sections: [apiMeta, guidesMeta],
+};
+
+/**
+ * Documentation structure for mirascope in new DocSpec format
+ */
+const mirascopeSpec: ProductSpec = {
+  sections: [docsSection, guides, api],
 };
 export default mirascopeSpec;

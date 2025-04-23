@@ -110,8 +110,6 @@ describe("validateSectionSpec", () => {
 describe("validateProductSpec", () => {
   test("valid product passes validation", () => {
     const validProduct: ProductSpec = {
-      defaultSectionLabel: "Default",
-      defaultSection: [{ slug: "index", label: "Welcome" }],
       sections: [
         {
           slug: "api",
@@ -125,8 +123,6 @@ describe("validateProductSpec", () => {
 
   test("product with duplicate sections fails validation", () => {
     const productWithDupeSections: ProductSpec = {
-      defaultSectionLabel: "Default",
-      defaultSection: [{ slug: "index", label: "Welcome" }],
       sections: [
         {
           slug: "api",
