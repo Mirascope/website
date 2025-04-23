@@ -44,28 +44,6 @@ export async function getAllPolicyMeta(): Promise<PolicyMeta[]> {
 }
 
 /**
- * Get policies in a specific collection
- */
-export async function getPoliciesInCollection(collection: string): Promise<PolicyMeta[]> {
-  try {
-    // Get all policies
-    const allPolicies = await getAllPolicyMeta();
-
-    // Filter by collection (e.g., "terms")
-    return allPolicies.filter((policy) => {
-      const pathParts = policy.path.split("/");
-      return pathParts.length > 1 && pathParts[0] === collection;
-    });
-  } catch (error) {
-    throw new ContentError(
-      `Failed to get policy documents for collection ${collection}: ${error instanceof Error ? error.message : String(error)}`,
-      "policy",
-      undefined
-    );
-  }
-}
-
-/**
  * Creates a loader function for a policy page
  * This makes it easy to inline policy loaders in route files
  */

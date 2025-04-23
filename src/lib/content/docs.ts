@@ -20,30 +20,6 @@ export async function getDoc(path: string): Promise<DocContent> {
 }
 
 /**
- * Get docs for a specific product
- */
-export function getDocsForProduct(product: string): DocMeta[] {
-  const allDocs = getDocsFromSpec();
-  return allDocs.filter((doc) => doc.product === product);
-}
-
-/**
- * Get sections for a product
- */
-export function getSectionsForProduct(product: string): { slug: string; title: string }[] {
-  // Get all sections from the spec
-  const productSpec = docsSpec[product];
-  if (!productSpec) {
-    return [];
-  }
-
-  return productSpec.sections.map((section) => ({
-    slug: section.slug,
-    title: section.label,
-  }));
-}
-
-/**
  * Process a doc specification and build DocMeta items
  * @param docSpec Doc specification
  * @param product Product this doc belongs to
