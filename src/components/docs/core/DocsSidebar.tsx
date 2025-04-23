@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useMatches } from "@tanstack/react-router";
 import { cn } from "@/src/lib/utils";
-import docsMetadata from "@/content/doc/_meta";
+import { meta as docsMetadata } from "@/content/doc/_meta";
 import { getSectionsForProduct } from "@/src/lib/content/docs";
 import { getProductRoute, getSectionRoute, getSectionParams } from "@/src/lib/routes";
 import type { ProductName } from "@/src/lib/route-types";
