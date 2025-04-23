@@ -31,16 +31,25 @@ function createDocMeta(frontmatter: Record<string, any>, path: string): DocMeta 
 
 function createFutureDocMeta(frontmatter: Record<string, any>, path: string): FutureDocMeta {
   const allDocs = getDocsFromSpec();
-  const docMeta = allDocs.find((doc) => doc.path === path);
+
+  // Extract content path from the full path
+  // The content path will look like 'mirascope/learn/index' without the '/doc/' prefix
+  const contentPath = path.replace(/^\/doc\//, "");
+
+  // Find the matching doc in our spec
+  const docMeta = allDocs.find((doc) => doc.path === contentPath);
+
   if (!docMeta) {
-    throw new Error(`Doc not found for path: ${path}`);
+    throw new Error(`Doc not found for path: ${path}, normalized to: ${contentPath}`);
   }
+
   // Create basic frontmatter metadata
   const frontmatterMeta = {
     title: frontmatter.title,
     description: frontmatter.description,
     // Other frontmatter fields can be added here
   };
+
   // Merge metadata (frontmatter takes precedence)
   return mergeMetadata(docMeta, frontmatterMeta) as FutureDocMeta;
 }
@@ -52,8 +61,15 @@ export async function getDoc(path: string): Promise<DocContent> {
   return loadContent<DocMeta>(path, "doc", createDocMeta);
 }
 
+/**
+ * Get doc content by path using the new spec format
+ * This is the replacement for getDoc that works with the simplified URL structure
+ */
 export async function futureGetDoc(path: string): Promise<FutureDocContent> {
-  return loadContent<FutureDocMeta>(path, "doc", createFutureDocMeta);
+  // Normalize to doc/ prefix format
+  const docPath = !path.startsWith("/doc/") ? `/doc/${path}` : path;
+
+  return loadContent<FutureDocMeta>(docPath, "doc", createFutureDocMeta);
 }
 
 /**
