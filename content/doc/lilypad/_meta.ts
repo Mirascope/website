@@ -12,6 +12,7 @@ const lilypadSpec: ProductSpec = {
     {
       slug: "getting-started",
       label: "Getting Started",
+      hasNoContent: true,
       children: [
         {
           slug: "quickstart",
@@ -34,6 +35,7 @@ const lilypadSpec: ProductSpec = {
     {
       slug: "evaluation",
       label: "Evaluation",
+      hasNoContent: true,
       children: [
         {
           slug: "annotations",
@@ -52,6 +54,7 @@ const lilypadSpec: ProductSpec = {
     {
       slug: "observability",
       label: "Observability",
+      hasNoContent: true,
       children: [
         {
           slug: "opentelemetry",
@@ -74,6 +77,7 @@ const lilypadSpec: ProductSpec = {
     {
       slug: "under-development",
       label: "Under Development",
+      hasNoContent: true,
       children: [
         {
           slug: "vibe-synthesis",

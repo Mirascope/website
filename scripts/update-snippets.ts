@@ -26,7 +26,7 @@ import * as crypto from "crypto";
 import { processFile } from "./lib/snippet-extractor";
 
 // Import doc meta types and data
-import { getAllDocs } from "@/content/doc/_meta";
+import { getDocsFromSpec } from "@/src/lib/content/docs";
 
 // Provider list to generate examples for
 const PROVIDERS = ["openai", "anthropic"];
@@ -41,7 +41,6 @@ const DOCS_ROOT = path.join(process.cwd(), "content", "doc");
  * Interface for a document with extractable snippets
  */
 interface ExtractableDoc {
-  product: string;
   logicalPath: string;
   filePath: string;
 }
@@ -54,20 +53,19 @@ function findExtractableDocs(specificFilePath?: string): ExtractableDoc[] {
   const absoluteTargetPath = specificFilePath ? path.resolve(specificFilePath) : null;
 
   // Get all docs from metadata
-  const allDocs = getAllDocs();
+  const allDocs = getDocsFromSpec();
 
   // Filter to only those marked as extractable
   for (const doc of allDocs) {
-    if (doc.meta.hasExtractableSnippets) {
+    if (doc.hasExtractableSnippets) {
       // Convert logical path to file path
       let filePath: string;
 
       if (doc.path.includes("/index")) {
-        filePath = path.join(DOCS_ROOT, doc.product, `${doc.path.replace("/index", "")}.mdx`);
+        filePath = path.join(DOCS_ROOT, `${doc.path.replace("/index", "")}.mdx`);
       } else {
-        filePath = path.join(DOCS_ROOT, doc.product, `${doc.path}.mdx`);
+        filePath = path.join(DOCS_ROOT, `${doc.path}.mdx`);
       }
-
       // Resolve to absolute path for comparison
       const absoluteFilePath = path.resolve(filePath);
 
@@ -78,7 +76,6 @@ function findExtractableDocs(specificFilePath?: string): ExtractableDoc[] {
 
       if (fs.existsSync(filePath)) {
         extractableDocs.push({
-          product: doc.product,
           logicalPath: doc.path,
           filePath,
         });
@@ -91,9 +88,9 @@ function findExtractableDocs(specificFilePath?: string): ExtractableDoc[] {
       let filePath: string;
 
       if (doc.path.includes("/index")) {
-        filePath = path.join(DOCS_ROOT, doc.product, `${doc.path.replace("/index", "")}.mdx`);
+        filePath = path.join(DOCS_ROOT, `${doc.path.replace("/index", "")}.mdx`);
       } else {
-        filePath = path.join(DOCS_ROOT, doc.product, `${doc.path}.mdx`);
+        filePath = path.join(DOCS_ROOT, `${doc.path}.mdx`);
       }
 
       const absoluteFilePath = path.resolve(filePath);
@@ -176,7 +173,7 @@ function compareDirectories(dir1: string, dir2: string): string[] {
  */
 function cleanSnippets(doc: ExtractableDoc): void {
   const relativePath = doc.logicalPath.replace(/\/index$/, "");
-  const snippetDir = path.join(SNIPPETS_ROOT, doc.product, relativePath);
+  const snippetDir = path.join(SNIPPETS_ROOT, relativePath);
 
   if (fs.existsSync(snippetDir)) {
     // Remove the directory recursively
@@ -254,7 +251,7 @@ function checkDocSnippets(doc: ExtractableDoc, providers: string[], verbose = fa
 
         // Get existing snippets paths
         const relativePath = doc.logicalPath.replace(/\/index$/, "");
-        const snippetDir = path.join(SNIPPETS_ROOT, doc.product, relativePath, provider);
+        const snippetDir = path.join(SNIPPETS_ROOT, relativePath, provider);
 
         if (!fs.existsSync(snippetDir)) {
           console.error(`Snippets not found for ${doc.filePath} with provider ${provider}`);

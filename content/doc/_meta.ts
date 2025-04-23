@@ -27,13 +27,5 @@ const spec: ProductDocsSpec = {
 // Convert to legacy format for backward compatibility
 export const meta: DocsStructure = toLegacyFormat(spec);
 
-// Import the getAllDocs function directly
-import { getAllDocs as getLegacyDocs } from "@/src/lib/content/legacy-doc-meta";
-
-export function getAllDocs(): Array<{ product: string; path: string; meta: any }> {
-  // Delegate to the implementation in legacy-doc-meta.ts
-  return getLegacyDocs(meta);
-}
-
 // Default export is now the new format
 export default spec;

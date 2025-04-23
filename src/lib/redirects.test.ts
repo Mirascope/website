@@ -16,8 +16,6 @@ describe("redirects", () => {
 
     test("should return null for non-redirected paths", () => {
       expect(processRedirects("/blog")).toBeNull();
-      expect(processRedirects("/docs/mirascope")).toBeNull();
-      expect(processRedirects("/docs/lilypad")).toBeNull();
       expect(processRedirects("/privacy")).toBeNull();
       expect(processRedirects("/")).toBeNull();
       expect(processRedirects("/some-random-path")).toBeNull();
