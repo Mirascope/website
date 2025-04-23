@@ -232,7 +232,7 @@
   "/docs/lilypad/index": {
     "route": "/docs/lilypad/index",
     "title": "Welcome | Lilypad",
-    "description": "An open-source prompt engineering framework."
+    "description": "Start building your data flywheel in one line of code."
   },
   "/docs/lilypad/observability/opentelemetry": {
     "route": "/docs/lilypad/observability/opentelemetry",
