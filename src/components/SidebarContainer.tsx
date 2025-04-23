@@ -4,7 +4,6 @@ import { type ProductName } from "@/src/lib/route-types";
 
 interface SidebarContainerProps {
   product: ProductName;
-  group: string | null;
 }
 
 /**
@@ -13,7 +12,7 @@ interface SidebarContainerProps {
  * Handles sidebar state (expanded/collapsed) based on screen size and
  * provides toggle functionality
  */
-const SidebarContainer: React.FC<SidebarContainerProps> = ({ product, group }) => {
+const SidebarContainer: React.FC<SidebarContainerProps> = ({ product }) => {
   // Track if we're at a small screen breakpoint
   const [isSmallScreen, setIsSmallScreen] = useState(() => {
     if (typeof window !== "undefined") {
@@ -133,7 +132,7 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ product, group }) =
         )}
 
         <div className="h-full overflow-y-auto">
-          <DocsSidebar product={product} currentGroup={group} />
+          <DocsSidebar product={product} />
         </div>
       </div>
     </div>

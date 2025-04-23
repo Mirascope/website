@@ -9,7 +9,6 @@ import { type Provider } from "../ProviderContext";
 
 interface DocsSidebarProps {
   product: ProductName;
-  currentGroup: string | null;
   selectedProvider?: Provider;
   onProviderChange?: (provider: Provider) => void;
 }
@@ -114,7 +113,7 @@ const GroupTitle = ({ title, product }: { title: string; product: ProductName })
   );
 };
 
-const DocsSidebar = ({ product, currentGroup }: DocsSidebarProps) => {
+const DocsSidebar = ({ product }: DocsSidebarProps) => {
   // Get current route from TanStack Router
   const matches = useMatches();
   const currentPath = matches[matches.length - 1]?.pathname || "";
@@ -209,23 +208,7 @@ const DocsSidebar = ({ product, currentGroup }: DocsSidebarProps) => {
     const normalizedPath = path.endsWith("/") ? path : `${path}/`;
     const normalizedCurrentPath = currentPath.endsWith("/") ? currentPath : `${currentPath}/`;
 
-    // Special case for product landing - both /docs/product and /docs/product/ should match
-    if (
-      path === `/docs/${product}` &&
-      (currentPath === `/docs/${product}` || currentPath === `/docs/${product}/`)
-    ) {
-      return true;
-    }
-
-    // Special case for group index pages - check if we're viewing any page in this group
-    if (path.includes(`/${currentGroup}/`) && currentGroup) {
-      if (normalizedCurrentPath.startsWith(normalizedPath)) {
-        return true;
-      }
-    }
-
-    // Direct path match
-    return currentPath === path || normalizedCurrentPath === normalizedPath;
+    return normalizedCurrentPath.startsWith(normalizedPath);
   };
 
   return (

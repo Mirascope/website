@@ -20,16 +20,12 @@ export const Route = createFileRoute("/docs/$product/$")({
     // Parse the path into group/slug components
     const pathParts = _splat.split("/").filter(Boolean);
 
-    // Extract group if it exists (first part of the splat)
-    const group = pathParts.length > 0 ? pathParts[0] : null;
-
     // Extract current slug (last part) for sidebar highlighting
     const currentSlug = pathParts.length > 0 ? pathParts[pathParts.length - 1] : "index";
 
     return (
       <DocsLayout
         product={product as ProductName}
-        group={group}
         // Provide a minimal empty document for the loading state
         document={{
           meta: {
