@@ -111,9 +111,9 @@ export default function Header() {
                       <NavigationMenuLink asChild>
                         <Link
                           to={getProductRoute("mirascope")}
-                          className="block p-4 space-y-1.5 rounded-md bg-muted/40 hover:bg-accent transition-colors"
+                          className="block p-4 space-y-1.5 rounded-md bg-background hover:bg-mirascope-purple/20 transition-colors"
                         >
-                          <div className="font-medium text-xl text-primary">Mirascope</div>
+                          <div className="font-medium text-xl text-mirascope-purple">Mirascope</div>
                           <p className="text-base text-foreground">
                             LLM abstractions that aren't obstructions.
                           </p>
@@ -124,7 +124,7 @@ export default function Header() {
                       <NavigationMenuLink asChild>
                         <Link
                           to={getProductRoute("lilypad")}
-                          className="block p-4 space-y-1.5 rounded-md bg-muted/40 hover:bg-accent transition-colors"
+                          className="block p-4 space-y-1.5 rounded-md bg-background hover:bg-lilypad-green/20 transition-colors"
                         >
                           <div className="font-medium text-xl text-lilypad-green">Lilypad</div>
                           <p className="text-base text-foreground">

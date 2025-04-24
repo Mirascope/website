@@ -9,11 +9,10 @@ type TOCItem = {
 
 type TableOfContentsProps = {
   contentId: string;
-  product: string;
   path: string;
 };
 
-const TableOfContents: React.FC<TableOfContentsProps> = ({ contentId, path, product }) => {
+const TableOfContents: React.FC<TableOfContentsProps> = ({ contentId, path }) => {
   const [headings, setHeadings] = useState<TOCItem[]>([]);
   const [activeId, setActiveId] = useState<string>("");
 
@@ -135,9 +134,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ contentId, path, prod
                 heading.level === 5 && "pl-8",
                 heading.level === 6 && "pl-10",
                 activeId === heading.id
-                  ? product === "mirascope"
-                    ? "border-mirascope-purple text-mirascope-purple font-medium"
-                    : "border-lilypad-green text-lilypad-green font-medium"
+                  ? "border-primary text-primary font-medium"
                   : "border-transparent text-muted-foreground hover:text-accent-foreground hover:border-accent-foreground"
               )}
             >
