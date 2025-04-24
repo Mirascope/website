@@ -95,6 +95,17 @@ export interface PolicyMeta extends ContentMeta {
 
 export type PolicyContent = Content<PolicyMeta>;
 
+/* ========== DEV CONTENT TYPES =========== */
+
+/**
+ * Dev-specific metadata extends the base ContentMeta
+ */
+export interface DevMeta extends ContentMeta {
+  // Add dev-specific metadata fields here if needed
+}
+
+export type DevContent = Content<DevMeta>;
+
 /* ========== ERROR HANDLING =========== */
 
 /**
@@ -408,4 +419,25 @@ export function createPolicyLoader(policyPath: string) {
       throw error;
     }
   };
+}
+
+/* ========== DEV CONTENT OPERATIONS =========== */
+
+/**
+ * Get dev content by slug
+ *
+ * @param slug - The dev page slug
+ * @returns The fully processed dev content
+ */
+export async function getDevContent(slug: string): Promise<DevContent> {
+  return loadContent<DevMeta>(slug, "dev");
+}
+
+/**
+ * Get all dev page metadata
+ *
+ * @returns Array of dev page metadata objects
+ */
+export async function getAllDevMeta(): Promise<DevMeta[]> {
+  return fetchJSON<DevMeta[]>("/static/content-meta/dev/index.json", "dev", "dev/index");
 }

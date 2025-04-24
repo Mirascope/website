@@ -22,10 +22,9 @@ import { Route as BlogIndexImport } from './routes/blog.index'
 import { Route as TermsUseImport } from './routes/terms/use'
 import { Route as TermsServiceImport } from './routes/terms/service'
 import { Route as DocsSplatImport } from './routes/docs.$'
-import { Route as DevStyleTestImport } from './routes/dev/style-test'
 import { Route as DevSocialCardImport } from './routes/dev/social-card'
-import { Route as DevCodeHighlightTestImport } from './routes/dev/code-highlight-test'
 import { Route as DevAuditMetadataImport } from './routes/dev/audit-metadata'
+import { Route as DevSlugImport } from './routes/dev.$slug'
 import { Route as BlogSlugImport } from './routes/blog.$slug'
 
 // Create/Update Routes
@@ -96,27 +95,21 @@ const DocsSplatRoute = DocsSplatImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const DevStyleTestRoute = DevStyleTestImport.update({
-  id: '/dev/style-test',
-  path: '/dev/style-test',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const DevSocialCardRoute = DevSocialCardImport.update({
   id: '/dev/social-card',
   path: '/dev/social-card',
   getParentRoute: () => rootRoute,
 } as any)
 
-const DevCodeHighlightTestRoute = DevCodeHighlightTestImport.update({
-  id: '/dev/code-highlight-test',
-  path: '/dev/code-highlight-test',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const DevAuditMetadataRoute = DevAuditMetadataImport.update({
   id: '/dev/audit-metadata',
   path: '/dev/audit-metadata',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DevSlugRoute = DevSlugImport.update({
+  id: '/dev/$slug',
+  path: '/dev/$slug',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -165,6 +158,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugImport
       parentRoute: typeof rootRoute
     }
+    '/dev/$slug': {
+      id: '/dev/$slug'
+      path: '/dev/$slug'
+      fullPath: '/dev/$slug'
+      preLoaderRoute: typeof DevSlugImport
+      parentRoute: typeof rootRoute
+    }
     '/dev/audit-metadata': {
       id: '/dev/audit-metadata'
       path: '/dev/audit-metadata'
@@ -172,25 +172,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DevAuditMetadataImport
       parentRoute: typeof rootRoute
     }
-    '/dev/code-highlight-test': {
-      id: '/dev/code-highlight-test'
-      path: '/dev/code-highlight-test'
-      fullPath: '/dev/code-highlight-test'
-      preLoaderRoute: typeof DevCodeHighlightTestImport
-      parentRoute: typeof rootRoute
-    }
     '/dev/social-card': {
       id: '/dev/social-card'
       path: '/dev/social-card'
       fullPath: '/dev/social-card'
       preLoaderRoute: typeof DevSocialCardImport
-      parentRoute: typeof rootRoute
-    }
-    '/dev/style-test': {
-      id: '/dev/style-test'
-      path: '/dev/style-test'
-      fullPath: '/dev/style-test'
-      preLoaderRoute: typeof DevStyleTestImport
       parentRoute: typeof rootRoute
     }
     '/docs/$': {
@@ -253,10 +239,9 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/dev/$slug': typeof DevSlugRoute
   '/dev/audit-metadata': typeof DevAuditMetadataRoute
-  '/dev/code-highlight-test': typeof DevCodeHighlightTestRoute
   '/dev/social-card': typeof DevSocialCardRoute
-  '/dev/style-test': typeof DevStyleTestRoute
   '/docs/$': typeof DocsSplatRoute
   '/terms/service': typeof TermsServiceRoute
   '/terms/use': typeof TermsUseRoute
@@ -272,10 +257,9 @@ export interface FileRoutesByTo {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/dev/$slug': typeof DevSlugRoute
   '/dev/audit-metadata': typeof DevAuditMetadataRoute
-  '/dev/code-highlight-test': typeof DevCodeHighlightTestRoute
   '/dev/social-card': typeof DevSocialCardRoute
-  '/dev/style-test': typeof DevStyleTestRoute
   '/docs/$': typeof DocsSplatRoute
   '/terms/service': typeof TermsServiceRoute
   '/terms/use': typeof TermsUseRoute
@@ -292,10 +276,9 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/dev/$slug': typeof DevSlugRoute
   '/dev/audit-metadata': typeof DevAuditMetadataRoute
-  '/dev/code-highlight-test': typeof DevCodeHighlightTestRoute
   '/dev/social-card': typeof DevSocialCardRoute
-  '/dev/style-test': typeof DevStyleTestRoute
   '/docs/$': typeof DocsSplatRoute
   '/terms/service': typeof TermsServiceRoute
   '/terms/use': typeof TermsUseRoute
@@ -313,10 +296,9 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/blog/$slug'
+    | '/dev/$slug'
     | '/dev/audit-metadata'
-    | '/dev/code-highlight-test'
     | '/dev/social-card'
-    | '/dev/style-test'
     | '/docs/$'
     | '/terms/service'
     | '/terms/use'
@@ -331,10 +313,9 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/blog/$slug'
+    | '/dev/$slug'
     | '/dev/audit-metadata'
-    | '/dev/code-highlight-test'
     | '/dev/social-card'
-    | '/dev/style-test'
     | '/docs/$'
     | '/terms/service'
     | '/terms/use'
@@ -349,10 +330,9 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/blog/$slug'
+    | '/dev/$slug'
     | '/dev/audit-metadata'
-    | '/dev/code-highlight-test'
     | '/dev/social-card'
-    | '/dev/style-test'
     | '/docs/$'
     | '/terms/service'
     | '/terms/use'
@@ -369,10 +349,9 @@ export interface RootRouteChildren {
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  DevSlugRoute: typeof DevSlugRoute
   DevAuditMetadataRoute: typeof DevAuditMetadataRoute
-  DevCodeHighlightTestRoute: typeof DevCodeHighlightTestRoute
   DevSocialCardRoute: typeof DevSocialCardRoute
-  DevStyleTestRoute: typeof DevStyleTestRoute
   DocsSplatRoute: typeof DocsSplatRoute
   TermsServiceRoute: typeof TermsServiceRoute
   TermsUseRoute: typeof TermsUseRoute
@@ -388,10 +367,9 @@ const rootRouteChildren: RootRouteChildren = {
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   BlogSlugRoute: BlogSlugRoute,
+  DevSlugRoute: DevSlugRoute,
   DevAuditMetadataRoute: DevAuditMetadataRoute,
-  DevCodeHighlightTestRoute: DevCodeHighlightTestRoute,
   DevSocialCardRoute: DevSocialCardRoute,
-  DevStyleTestRoute: DevStyleTestRoute,
   DocsSplatRoute: DocsSplatRoute,
   TermsServiceRoute: TermsServiceRoute,
   TermsUseRoute: TermsUseRoute,
@@ -416,10 +394,9 @@ export const routeTree = rootRoute
         "/pricing",
         "/privacy",
         "/blog/$slug",
+        "/dev/$slug",
         "/dev/audit-metadata",
-        "/dev/code-highlight-test",
         "/dev/social-card",
-        "/dev/style-test",
         "/docs/$",
         "/terms/service",
         "/terms/use",
@@ -444,17 +421,14 @@ export const routeTree = rootRoute
     "/blog/$slug": {
       "filePath": "blog.$slug.tsx"
     },
+    "/dev/$slug": {
+      "filePath": "dev.$slug.tsx"
+    },
     "/dev/audit-metadata": {
       "filePath": "dev/audit-metadata.tsx"
     },
-    "/dev/code-highlight-test": {
-      "filePath": "dev/code-highlight-test.tsx"
-    },
     "/dev/social-card": {
       "filePath": "dev/social-card.tsx"
-    },
-    "/dev/style-test": {
-      "filePath": "dev/style-test.tsx"
     },
     "/docs/$": {
       "filePath": "docs.$.tsx"
