@@ -13,14 +13,12 @@ const initializeTheme = () => {
   const savedTheme = localStorage.getItem("theme");
 
   // Remove any existing theme classes
-  document.documentElement.classList.remove("light", "dark", "sunset");
+  document.documentElement.classList.remove("light", "dark", "sunset-time");
 
   if (savedTheme === "light") {
     document.documentElement.classList.add("light");
   } else if (savedTheme === "dark") {
     document.documentElement.classList.add("dark");
-  } else if (savedTheme === "sunset") {
-    document.documentElement.classList.add("sunset");
   } else {
     // System preference for initial load
     if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
