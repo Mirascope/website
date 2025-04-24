@@ -1,225 +1,285 @@
 /**
  * Documentation structure for Mirascope Guides
  */
-import type { DocSection } from "../../_meta";
+import type { SectionSpec } from "@/src/lib/content/spec";
 
-const guidesMeta: DocSection = {
-  title: "Guides",
-
-  // Top-level guides pages
-  items: {
-    index: {
-      title: "Overview",
+const guidesMeta: SectionSpec = {
+  slug: "guides",
+  label: "Guides",
+  children: [
+    {
+      slug: "index",
+      label: "Overview",
     },
-  },
-
-  // Grouped guides by category
-  groups: {
-    "getting-started": {
-      title: "Getting Started",
-      items: {
-        "structured-outputs": {
-          title: "Structured Outputs",
+    {
+      slug: "getting-started",
+      label: "Getting Started",
+      children: [
+        {
+          slug: "structured-outputs",
+          label: "Structured Outputs",
         },
-        "dynamic-configuration-and-chaining": {
-          title: "Dynamic Configuration & Chaining",
+        {
+          slug: "dynamic-configuration-and-chaining",
+          label: "Dynamic Configuration & Chaining",
         },
-        "tools-and-agents": {
-          title: "Tools & Agents",
+        {
+          slug: "tools-and-agents",
+          label: "Tools & Agents",
         },
-      },
+      ],
     },
-    agents: {
-      title: "Agents",
-      items: {
-        "web-search-agent": {
-          title: "Web Search Agent",
+    {
+      slug: "agents",
+      label: "Agents",
+      children: [
+        {
+          slug: "web-search-agent",
+          label: "Web Search Agent",
         },
-        "blog-writing-agent": {
-          title: "Agent Executor: Blog Writing",
+        {
+          slug: "blog-writing-agent",
+          label: "Agent Executor: Blog Writing",
         },
-        "documentation-agent": {
-          title: "Documentation Agent",
+        {
+          slug: "documentation-agent",
+          label: "Documentation Agent",
         },
-        "local-chat-with-codebase": {
-          title: "Local Chat with Codebase",
+        {
+          slug: "local-chat-with-codebase",
+          label: "Local Chat with Codebase",
         },
-        "localized-agent": {
-          title: "Localized Agent",
+        {
+          slug: "localized-agent",
+          label: "Localized Agent",
         },
-        "qwant-search-agent-with-sources": {
-          title: "Qwant Search Agent with Sources",
+        {
+          slug: "qwant-search-agent-with-sources",
+          label: "Qwant Search Agent with Sources",
         },
-        "sql-agent": {
-          title: "Generate SQL with LLM",
+        {
+          slug: "sql-agent",
+          label: "Generate SQL with LLM",
         },
-      },
+      ],
     },
-    evals: {
-      title: "Evals",
-      items: {
-        "evaluating-documentation-agent": {
-          title: "Evaluating Documentation Agent",
+    {
+      slug: "evals",
+      label: "Evals",
+      children: [
+        {
+          slug: "evaluating-documentation-agent",
+          label: "Evaluating Documentation Agent",
         },
-        "evaluating-web-search-agent": {
-          title: "Evaluating Web Search Agent with LLM",
+        {
+          slug: "evaluating-web-search-agent",
+          label: "Evaluating Web Search Agent with LLM",
         },
-        "evaluating-sql-agent": {
-          title: "Evaluating Generating SQL with LLM",
+        {
+          slug: "evaluating-sql-agent",
+          label: "Evaluating Generating SQL with LLM",
         },
-      },
+      ],
     },
-    "langgraph-vs-mirascope": {
-      title: "Langgraph Vs Mirascope",
-      items: {
-        quickstart: {
-          title: "LangGraph Quickstart using Mirascope",
+    {
+      slug: "langgraph-vs-mirascope",
+      label: "Langgraph Vs Mirascope",
+      children: [
+        {
+          slug: "quickstart",
+          label: "LangGraph Quickstart using Mirascope",
         },
-      },
+      ],
     },
-    "more-advanced": {
-      title: "More Advanced",
-      items: {
-        "code-generation-and-execution": {
-          title: "Code Generation and Execution",
+    {
+      slug: "more-advanced",
+      label: "More Advanced",
+      children: [
+        {
+          slug: "code-generation-and-execution",
+          label: "Code Generation and Execution",
         },
-        "document-segmentation": {
-          title: "Document Segmentation",
+        {
+          slug: "document-segmentation",
+          label: "Document Segmentation",
         },
-        "extract-from-pdf": {
-          title: "Extracting from PDF",
+        {
+          slug: "extract-from-pdf",
+          label: "Extracting from PDF",
         },
-        "extraction-using-vision": {
-          title: "Extraction using Vision",
+        {
+          slug: "extraction-using-vision",
+          label: "Extraction using Vision",
         },
-        "generating-captions": {
-          title: "Generate Captions for an Image",
+        {
+          slug: "generating-captions",
+          label: "Generate Captions for an Image",
         },
-        "generating-synthetic-data": {
-          title: "Generate Synthetic Data",
+        {
+          slug: "generating-synthetic-data",
+          label: "Generate Synthetic Data",
         },
-        "llm-validation-with-retries": {
-          title: "LLM Validation With Retries",
+        {
+          slug: "llm-validation-with-retries",
+          label: "LLM Validation With Retries",
         },
-        "named-entity-recognition": {
-          title: "Named Entity Recognition",
+        {
+          slug: "named-entity-recognition",
+          label: "Named Entity Recognition",
         },
-        "o1-style-thinking": {
-          title: "o1 Style Thinking",
+        {
+          slug: "o1-style-thinking",
+          label: "o1 Style Thinking",
         },
-        "pii-scrubbing": {
-          title: "PII Scrubbing",
+        {
+          slug: "pii-scrubbing",
+          label: "PII Scrubbing",
         },
-        "query-plan": {
-          title: "Query Plan",
+        {
+          slug: "query-plan",
+          label: "Query Plan",
         },
-        "removing-semantic-duplicates": {
-          title: "Removing Semantic Duplicates",
+        {
+          slug: "removing-semantic-duplicates",
+          label: "Removing Semantic Duplicates",
         },
-        "search-with-sources": {
-          title: "Search with Sources",
+        {
+          slug: "search-with-sources",
+          label: "Search with Sources",
         },
-        "speech-transcription": {
-          title: "Transcribing Speech",
+        {
+          slug: "speech-transcription",
+          label: "Transcribing Speech",
         },
-        "support-ticket-routing": {
-          title: "Support Ticket Routing",
+        {
+          slug: "support-ticket-routing",
+          label: "Support Ticket Routing",
         },
-        "text-classification": {
-          title: "Text Classification",
+        {
+          slug: "text-classification",
+          label: "Text Classification",
         },
-        "text-summarization": {
-          title: "Text Summarization",
+        {
+          slug: "text-summarization",
+          label: "Text Summarization",
         },
-        "text-translation": {
-          title: "Text Translation",
+        {
+          slug: "text-translation",
+          label: "Text Translation",
         },
-        "knowledge-graph": {
-          title: "Knowledge Graph",
+        {
+          slug: "knowledge-graph",
+          label: "Knowledge Graph",
         },
-      },
+      ],
     },
-    "prompt-engineering": {
-      title: "Prompt Engineering",
-      items: {
-        "chain-of-verification": {
-          title: "Chain of Verification: Enhancing LLM Accuracy through Self-Verification",
+    {
+      slug: "prompt-engineering",
+      label: "Prompt Engineering",
+      children: [
+        {
+          slug: "chain-of-verification",
+          label: "Chain of Verification: Enhancing LLM Accuracy through Self-Verification",
         },
-        "decomposed-prompting": {
-          title: "Decomposed Prompting: Enhancing LLM Problem-Solving with Tool-Based Subproblems",
+        {
+          slug: "decomposed-prompting",
+          label: "Decomposed Prompting: Enhancing LLM Problem-Solving with Tool-Based Subproblems",
         },
-        "demonstration-ensembling": {
-          title: "Demonstration Ensembling: Enhancing LLM Responses with Aggregated Examples",
+        {
+          slug: "demonstration-ensembling",
+          label: "Demonstration Ensembling: Enhancing LLM Responses with Aggregated Examples",
         },
-        diverse: {
-          title: "DiVeRSe: Enhancing LLM Reasoning with Prompt Variations",
+        {
+          slug: "diverse",
+          label: "DiVeRSe: Enhancing LLM Reasoning with Prompt Variations",
         },
-        "mixture-of-reasoning": {
-          title: "Mixture of Reasoning: Enhancing LLM Performance with Multiple Techniques",
+        {
+          slug: "mixture-of-reasoning",
+          label: "Mixture of Reasoning: Enhancing LLM Performance with Multiple Techniques",
         },
-        "prompt-paraphrasing": {
-          title: "Prompt Paraphrasing: Generating Diverse Prompts for LLM Testing and Evaluation",
+        {
+          slug: "prompt-paraphrasing",
+          label: "Prompt Paraphrasing: Generating Diverse Prompts for LLM Testing and Evaluation",
         },
-        "self-consistency": {
-          title: "Self-Consistency: Enhancing LLM Reasoning with Multiple Outputs",
+        {
+          slug: "self-consistency",
+          label: "Self-Consistency: Enhancing LLM Reasoning with Multiple Outputs",
         },
-        "self-refine": {
-          title: "Self-Refine: Enhancing LLM Outputs Through Iterative Self-Improvement",
+        {
+          slug: "self-refine",
+          label: "Self-Refine: Enhancing LLM Outputs Through Iterative Self-Improvement",
         },
-        "sim-to-m": {
-          title: "Sim to M: Enhancing LLM Reasoning with Perspective-Taking",
+        {
+          slug: "sim-to-m",
+          label: "Sim to M: Enhancing LLM Reasoning with Perspective-Taking",
         },
-        "skeleton-of-thought": {
-          title: "Skeleton of Thought: Enhancing LLM Response Speed",
+        {
+          slug: "skeleton-of-thought",
+          label: "Skeleton of Thought: Enhancing LLM Response Speed",
         },
-        "step-back": {
-          title: "Step-back Prompting: Enhancing LLM Reasoning with High-Level Questions",
+        {
+          slug: "step-back",
+          label: "Step-back Prompting: Enhancing LLM Reasoning with High-Level Questions",
         },
-        "system-to-attention": {
-          title: "System to Attention (S2A): Enhancing LLM Focus with Query Filtering",
+        {
+          slug: "system-to-attention",
+          label: "System to Attention (S2A): Enhancing LLM Focus with Query Filtering",
         },
-        "chain-of-thought": {
-          title: "Chain of Thought",
+        {
+          slug: "chain-of-thought",
+          label: "Chain of Thought",
         },
-        "common-phrases": {
-          title: "Common Phrases (Prompt Mining)",
+        {
+          slug: "common-phrases",
+          label: "Common Phrases (Prompt Mining)",
         },
-        "contrastive-chain-of-thought": {
-          title: "Contrastive Chain of Thought",
+        {
+          slug: "contrastive-chain-of-thought",
+          label: "Contrastive Chain of Thought",
         },
-        "emotion-prompting": {
-          title: "Emotion Prompting",
+        {
+          slug: "emotion-prompting",
+          label: "Emotion Prompting",
         },
-        "plan-and-solve": {
-          title: "Plan and Solve",
+        {
+          slug: "plan-and-solve",
+          label: "Plan and Solve",
         },
-        "rephrase-and-respond": {
-          title: "Rephrase and Respond",
+        {
+          slug: "rephrase-and-respond",
+          label: "Rephrase and Respond",
         },
-        rereading: {
-          title: "Rereading",
+        {
+          slug: "rereading",
+          label: "Rereading",
         },
-        "self-ask": {
-          title: "Self-Ask",
+        {
+          slug: "self-ask",
+          label: "Self-Ask",
         },
-        "thread-of-thought": {
-          title: "Thread of Thought",
+        {
+          slug: "thread-of-thought",
+          label: "Thread of Thought",
         },
-        "least-to-most": {
-          title: "Least to Most",
+        {
+          slug: "least-to-most",
+          label: "Least to Most",
         },
-        "reverse-chain-of-thought": {
-          title: "Reverse Chain of Thought",
+        {
+          slug: "reverse-chain-of-thought",
+          label: "Reverse Chain of Thought",
         },
-        "role-prompting": {
-          title: "Role Prompting",
+        {
+          slug: "role-prompting",
+          label: "Role Prompting",
         },
-        "tabular-chain-of-thought": {
-          title: "Tabular Chain of Thought",
+        {
+          slug: "tabular-chain-of-thought",
+          label: "Tabular Chain of Thought",
         },
-      },
+      ],
     },
-  },
+  ],
 };
 
 export default guidesMeta;

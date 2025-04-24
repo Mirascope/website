@@ -1,6 +1,5 @@
 import { describe, test, expect } from "bun:test";
-import { parseFrontmatter, validateFrontmatter, mergeFrontmatter } from "../frontmatter";
-import type { ContentType } from "../content-types";
+import { parseFrontmatter, mergeFrontmatter } from "./mdx-processing";
 
 describe("Frontmatter Parser", () => {
   describe("parseFrontmatter", () => {
@@ -106,45 +105,6 @@ Content after malformed frontmatter.`;
 
       expect(result.frontmatter).toEqual({});
       expect(result.content.trim()).toBe("Content after malformed frontmatter.");
-    });
-  });
-
-  describe("validateFrontmatter", () => {
-    test("validates common required fields", () => {
-      const frontmatter = {};
-      const result = validateFrontmatter(frontmatter, "doc" as ContentType);
-
-      expect(result.isValid).toBe(false);
-      expect(result.errors).toContain("Missing required field: title");
-    });
-
-    test("passes validation when all required fields are present", () => {
-      const frontmatter = { title: "Test Document" };
-      const result = validateFrontmatter(frontmatter, "doc" as ContentType);
-
-      expect(result.isValid).toBe(true);
-      expect(result.errors).toBeUndefined();
-    });
-
-    test("validates blog-specific required fields", () => {
-      const frontmatter = { title: "Test Blog" };
-      const result = validateFrontmatter(frontmatter, "blog" as ContentType);
-
-      expect(result.isValid).toBe(false);
-      expect(result.errors).toContain("Missing required field: date");
-      expect(result.errors).toContain("Missing required field: author");
-    });
-
-    test("passes blog validation when all required fields are present", () => {
-      const frontmatter = {
-        title: "Test Blog",
-        date: "2023-01-01",
-        author: "Test Author",
-      };
-      const result = validateFrontmatter(frontmatter, "blog" as ContentType);
-
-      expect(result.isValid).toBe(true);
-      expect(result.errors).toBeUndefined();
     });
   });
 

@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from "react";
 import DocsSidebar from "@/src/components/docs/core/DocsSidebar";
 import { type ProductName } from "@/src/lib/route-types";
-import { type DocMeta } from "@/src/lib/content/docs";
 
 interface SidebarContainerProps {
   product: ProductName;
-  section: string | null;
-  slug: string;
-  group: string | null;
-  docs: DocMeta[];
 }
 
 /**
@@ -17,13 +12,7 @@ interface SidebarContainerProps {
  * Handles sidebar state (expanded/collapsed) based on screen size and
  * provides toggle functionality
  */
-const SidebarContainer: React.FC<SidebarContainerProps> = ({
-  product,
-  section,
-  slug,
-  group,
-  docs,
-}) => {
+const SidebarContainer: React.FC<SidebarContainerProps> = ({ product }) => {
   // Track if we're at a small screen breakpoint
   const [isSmallScreen, setIsSmallScreen] = useState(() => {
     if (typeof window !== "undefined") {
@@ -143,13 +132,7 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({
         )}
 
         <div className="h-full overflow-y-auto">
-          <DocsSidebar
-            product={product}
-            section={section}
-            currentSlug={slug}
-            currentGroup={group}
-            docs={docs}
-          />
+          <DocsSidebar product={product} />
         </div>
       </div>
     </div>

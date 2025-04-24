@@ -1,15 +1,15 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import PolicyPage, { PolicyPageLoading, PolicyPageError } from "@/src/components/PolicyPage";
 import SEOMeta from "@/src/components/SEOMeta";
-import { policyLoader } from "@/src/lib/content/loaders";
-import type { PolicyContent } from "@/src/lib/content/policy";
+import { createPolicyLoader } from "@/src/lib/content";
+import type { PolicyContent } from "@/src/lib/content";
 import { environment } from "@/src/lib/content/environment";
 
 export const Route = createFileRoute("/privacy")({
   component: PrivacyPage,
 
-  // Use the policy loader
-  loader: () => policyLoader({ params: { slug: "privacy" } }),
+  // Use our inline policy loader
+  loader: createPolicyLoader("/policy/privacy"),
 
   // Configure loading state
   pendingComponent: () => <PolicyPageLoading type="privacy" />,

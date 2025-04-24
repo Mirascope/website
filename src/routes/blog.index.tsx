@@ -1,7 +1,6 @@
 import { createFileRoute, Link, useLoaderData } from "@tanstack/react-router";
 import { useState } from "react";
-import { type BlogMeta } from "@/src/lib/content/blog";
-import { blogListLoader } from "@/src/lib/content/loaders";
+import { type BlogMeta, getAllBlogMeta } from "@/src/lib/content";
 import SEOMeta from "@/src/components/SEOMeta";
 import { LoadingContent } from "@/src/components/docs";
 import { environment } from "@/src/lib/content/environment";
@@ -10,10 +9,22 @@ import ContentErrorHandler from "@/src/components/ContentErrorHandler";
 // Posts per page
 const POSTS_PER_PAGE = 4;
 
+/**
+ * Blog list loader that fetches all blog metadata
+ */
+async function blogListLoader() {
+  try {
+    return await getAllBlogMeta();
+  } catch (error) {
+    console.error("Error loading blog list:", error);
+    throw error;
+  }
+}
+
 export const Route = createFileRoute("/blog/")({
   component: BlogPage,
 
-  // Load blog posts list
+  // Use our inline loader
   loader: blogListLoader,
 
   // Configure loading state

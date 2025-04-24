@@ -1,58 +1,63 @@
 import React from "react";
-import DocsLayout from "./DocsLayout";
+import BaseLayout from "@/src/components/BaseLayout";
+import SidebarContainer from "@/src/components/SidebarContainer";
+import useFunMode from "@/src/lib/hooks/useFunMode";
+import useProviderSelection from "@/src/lib/hooks/useProviderSelection";
+import { ProviderContextProvider } from "@/src/components/docs";
+import TocSidebar from "./TocSidebar";
+import MainContent from "./MainContent";
 import SEOMeta from "@/src/components/SEOMeta";
-import { type DocMeta, type DocContent } from "@/src/lib/content/docs";
 import { type ProductName } from "@/src/lib/route-types";
+import type { DocContent } from "@/src/lib/content";
 
 type DocsPageProps = {
-  product: ProductName;
-  section: string | null;
-  splat: string;
   document: DocContent;
-  docs: DocMeta[];
 };
 
 /**
- * DocsPage component - Uses loaded data from TanStack Router
+ * DocsPage component - Top-level documentation page component
+ *
+ * Handles metadata, layout and content rendering for all documentation pages
  */
-const DocsPage: React.FC<DocsPageProps> = ({ product, section, splat, document, docs }) => {
-  // Parse the path into group/slug components
-  const pathParts = splat.split("/").filter(Boolean);
+const DocsPage: React.FC<DocsPageProps> = ({ document }) => {
+  // Extract metadata for SEO
+  const meta = document.meta;
+  const { title, path, description, product } = meta;
+  const urlPath = `/docs/${path}`;
 
-  // Extract group if it exists (first part of the splat)
-  const group = pathParts.length > 0 ? pathParts[0] : null;
+  // Use custom hooks for state management
+  const [funMode, toggleFunMode] = useFunMode();
+  const [selectedProvider, handleProviderChange] = useProviderSelection();
 
-  // Extract current slug (last part) for sidebar highlighting
-  const currentSlug = pathParts.length > 0 ? pathParts[pathParts.length - 1] : "index";
+  // Left sidebar content
+  const leftSidebar = <SidebarContainer product={product as ProductName} />;
 
-  // Define SEO properties based on document meta and product
-  const title = document?.meta.title || "";
+  // Right sidebar content (TOC)
+  const rightSidebar = (
+    <TocSidebar funMode={funMode} toggleFunMode={toggleFunMode} document={document} />
+  );
 
-  // Use product-specific descriptions
-  let description = document?.meta.description || "";
-  if (!description) {
-    if (product === "mirascope") {
-      description = "LLM abstractions that aren't obstructions.";
-    } else if (product === "lilypad") {
-      description = "An open-source prompt engineering framework.";
-    }
-  }
+  // Main content
+  const mainContent = <MainContent document={document} funMode={funMode} />;
 
-  // Construct the URL path for SEO
-  const urlPath = section ? `/docs/${product}/${section}/${splat}` : `/docs/${product}/${splat}`;
-
-  // Render the layout with the loaded content
   return (
     <>
-      <SEOMeta title={title} description={description} url={urlPath} product={product} />
-      <DocsLayout
-        product={product}
-        section={section}
-        slug={currentSlug}
-        group={group}
-        document={document}
-        docs={docs}
+      <SEOMeta
+        title={title}
+        description={description}
+        url={urlPath}
+        product={product as ProductName}
       />
+      <ProviderContextProvider
+        defaultProvider={selectedProvider}
+        onProviderChange={handleProviderChange}
+      >
+        <BaseLayout
+          leftSidebar={leftSidebar}
+          mainContent={mainContent}
+          rightSidebar={rightSidebar}
+        />
+      </ProviderContextProvider>
     </>
   );
 };

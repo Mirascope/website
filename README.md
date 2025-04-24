@@ -79,6 +79,24 @@ bun test --watch
 
 ## Other Info
 
+### Content Management
+
+The website uses a unified content management system for handling docs, blog posts, and policy pages. This system provides:
+
+- MDX content processing with frontmatter
+- Consistent content loading across development and production
+- Typed metadata for each content type
+- Error handling and caching
+- Document structure specification for documentation
+
+For a detailed overview of the content system architecture, please see [Content System Design](src/lib/content/DESIGN.md). This document covers:
+
+- The content loading pipeline and data flow
+- File structure and key components
+- Type definitions and interfaces
+- Error handling strategy
+- Common tasks such as adding new content
+
 ### Code Snippet Extraction
 
 The documentation contains Python code snippets that are automatically extracted to create runnable example files. These examples are stored in the repository and verified by CI to ensure they stay in sync with the documentation.
