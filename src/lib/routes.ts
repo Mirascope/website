@@ -1,4 +1,5 @@
-import type { ProductName, ValidStaticPath } from "./route-types";
+import type { ValidStaticPath } from "./route-types";
+import type { ProductName } from "@/src/lib/content/spec";
 
 // Map of product names to their static route paths
 // This allows adding new products by just extending this object

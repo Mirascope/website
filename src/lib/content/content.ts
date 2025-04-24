@@ -13,11 +13,11 @@
  */
 
 import { environment } from "./environment";
-import { processDocSpec } from "./spec";
+import { getDocsFromSpec } from "./spec";
 import { processMDXContent } from "./mdx-processing";
 
 // Import docs specification
-import docsSpec from "@/content/doc/_meta";
+import fullSpec from "@/content/doc/_meta";
 
 /* ========== CONTENT TYPES =========== */
 
@@ -335,55 +335,7 @@ export async function getDocContent(path: string): Promise<DocContent> {
  * @returns Array of document metadata objects
  */
 export function getAllDocMeta(): DocMeta[] {
-  const allDocs: DocMeta[] = [];
-
-  // Process each product in the spec
-  Object.entries(docsSpec).forEach(([product, productSpec]) => {
-    // Process all sections
-    productSpec.sections.forEach((section) => {
-      // For the default section (index), don't add a section slug prefix
-      const isDefaultSection = section.slug === "index";
-      const sectionPathPrefix = isDefaultSection ? product : `${product}/${section.slug}`;
-
-      // Process each document in this section
-      section.children.forEach((docSpec) => {
-        const docItems = processDocSpec(docSpec, product, sectionPathPrefix);
-        allDocs.push(...docItems);
-      });
-    });
-  });
-
-  return allDocs;
-}
-
-/**
- * Get docs for a specific product
- *
- * @param product - The product identifier
- * @returns Array of document metadata objects for the specified product
- */
-export function getDocsForProduct(product: string): DocMeta[] {
-  const allDocs = getAllDocMeta();
-  return allDocs.filter((doc) => doc.product === product);
-}
-
-/**
- * Get sections for a product
- *
- * @param product - The product identifier
- * @returns Array of section objects with slug and title
- */
-export function getSectionsForProduct(product: string): { slug: string; title: string }[] {
-  // Get all sections from the spec
-  const productSpec = docsSpec[product];
-  if (!productSpec) {
-    return [];
-  }
-
-  return productSpec.sections.map((section) => ({
-    slug: section.slug,
-    title: section.label,
-  }));
+  return getDocsFromSpec(fullSpec);
 }
 
 /* ========== POLICY CONTENT OPERATIONS =========== */

@@ -2,7 +2,7 @@ import React from "react";
 import { useRouterState } from "@tanstack/react-router";
 import { cn } from "@/src/lib/utils";
 import { PRODUCT_CONFIGS } from "@/src/lib/constants/site";
-import type { ProductName } from "@/src/lib/route-types";
+import type { ProductName } from "@/src/lib/content/spec";
 
 /**
  * Format star count with appropriate suffix

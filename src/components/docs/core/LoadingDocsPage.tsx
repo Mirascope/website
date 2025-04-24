@@ -1,7 +1,7 @@
 import React from "react";
 import BaseLayout from "@/src/components/BaseLayout";
 import SidebarContainer from "@/src/components/SidebarContainer";
-import { type ProductName } from "@/src/lib/route-types";
+import { type ProductName } from "@/src/lib/content/spec";
 import LoadingContent from "./LoadingContent";
 import SEOMeta from "@/src/components/SEOMeta";
 

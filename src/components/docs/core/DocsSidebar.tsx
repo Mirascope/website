@@ -1,7 +1,6 @@
-import docsSpec from "@/content/doc/_meta";
-import type { DocSpec } from "@/src/lib/content/spec";
+import fullSpec from "@/content/doc/_meta";
+import type { DocSpec, ProductName } from "@/src/lib/content/spec";
 import { getProductRoute } from "@/src/lib/routes";
-import type { ProductName } from "@/src/lib/route-types";
 import { type Provider } from "../ProviderContext";
 import Sidebar from "@/src/components/Sidebar";
 import type { SidebarConfig, SidebarItem, SidebarGroup } from "@/src/components/Sidebar";
@@ -35,7 +34,7 @@ const ProductLink = ({ product }: { product: ProductName }) => {
  */
 function createSidebarConfig(product: ProductName): SidebarConfig {
   // Get product spec directly
-  const productSpec = docsSpec[product];
+  const productSpec = fullSpec.find((spec) => spec.product === product);
 
   // If no product spec available, return minimal config
   if (!productSpec) {
