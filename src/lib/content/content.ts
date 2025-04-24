@@ -13,11 +13,11 @@
  */
 
 import { environment } from "./environment";
-import { processDocSpec } from "./spec";
+import { getDocsFromSpec, type DocInfo } from "./spec";
 import { processMDXContent } from "./mdx-processing";
 
 // Import docs specification
-import docsSpec from "@/content/doc/_meta";
+import fullSpec from "@/content/doc/_meta";
 
 /* ========== CONTENT TYPES =========== */
 
@@ -206,6 +206,41 @@ function resolveContentPath(path: string, type: ContentType): string {
 }
 
 /**
+ * Generic JSON fetching utility that handles common error cases
+ *
+ * @param path - URL path to fetch JSON from
+ * @param contentType - The content type being fetched (for error handling)
+ * @param errorPath - Optional specific path to use in error messages
+ * @returns The parsed JSON data
+ * @throws ContentError on fetch or parsing failures
+ */
+async function fetchJSON<T>(
+  path: string,
+  contentType: ContentType,
+  errorPath: string = path
+): Promise<T> {
+  try {
+    // Fetch the JSON file
+    const response = await environment.fetch(path);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
+    }
+
+    // Parse the JSON data
+    return await response.json();
+  } catch (error) {
+    console.error(`Error fetching JSON from ${path}:`, error);
+    environment.onError(error instanceof Error ? error : new Error(String(error)));
+    throw new ContentError(
+      `Failed to fetch data: ${error instanceof Error ? error.message : String(error)}`,
+      contentType,
+      errorPath
+    );
+  }
+}
+
+/**
  * Core content loading function used by all content types
  *
  * This function implements the unified content loading pipeline:
@@ -227,15 +262,8 @@ export async function loadContent<T extends ContentMeta>(
     // Get content path
     const contentPath = resolveContentPath(path, contentType);
 
-    // Fetch content JSON file
-    const response = await environment.fetch(contentPath);
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch content: ${response.status} ${response.statusText}`);
-    }
-
-    // Get the JSON data containing meta and content
-    const data = await response.json();
+    // Fetch content JSON data using the shared utility
+    const data = await fetchJSON<{ meta: T; content: string }>(contentPath, contentType, path);
 
     // Raw content from JSON (includes frontmatter)
     const rawContent = data.content;
@@ -246,7 +274,7 @@ export async function loadContent<T extends ContentMeta>(
     });
 
     // Use the metadata from preprocessing - no need to recreate it
-    const meta = data.meta as T;
+    const meta = data.meta;
 
     // Return complete content
     return {
@@ -283,21 +311,8 @@ export async function getBlogContent(slug: string): Promise<BlogContent> {
  * @returns Array of blog metadata objects
  */
 export async function getAllBlogMeta(): Promise<BlogMeta[]> {
-  try {
-    // Both development and production use the same static file now
-    const response = await environment.fetch("/static/content-meta/blog/index.json");
-    if (!response.ok) {
-      throw new Error(`Error fetching blog metadata: ${response.statusText}`);
-    }
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching posts metadata:", error);
-    throw new ContentError(
-      `Failed to fetch posts metadata: ${error instanceof Error ? error.message : String(error)}`,
-      "blog",
-      undefined
-    );
-  }
+  // Use the shared fetchJSON utility to get blog metadata
+  return fetchJSON<BlogMeta[]>("/static/content-meta/blog/index.json", "blog", "blog/index");
 }
 
 /* ========== DOC CONTENT OPERATIONS =========== */
@@ -313,62 +328,21 @@ export async function getDocContent(path: string): Promise<DocContent> {
 }
 
 /**
- * Get all documentation metadata from the specification
+ * Get basic info (not full metadata) for all available docs, based on the spec.
  *
- * Processes the docs specification to generate metadata for all available docs
+ * @returns Array of DocInfo objects with path info
+ */
+export function getAllDocInfo(): DocInfo[] {
+  return getDocsFromSpec(fullSpec);
+}
+
+/**
+ * Get all documentation metadata from disk.
  *
  * @returns Array of document metadata objects
  */
-export function getAllDocMeta(): DocMeta[] {
-  const allDocs: DocMeta[] = [];
-
-  // Process each product in the spec
-  Object.entries(docsSpec).forEach(([product, productSpec]) => {
-    // Process all sections
-    productSpec.sections.forEach((section) => {
-      // For the default section (index), don't add a section slug prefix
-      const isDefaultSection = section.slug === "index";
-      const sectionPathPrefix = isDefaultSection ? product : `${product}/${section.slug}`;
-
-      // Process each document in this section
-      section.children.forEach((docSpec) => {
-        const docItems = processDocSpec(docSpec, product, sectionPathPrefix);
-        allDocs.push(...docItems);
-      });
-    });
-  });
-
-  return allDocs;
-}
-
-/**
- * Get docs for a specific product
- *
- * @param product - The product identifier
- * @returns Array of document metadata objects for the specified product
- */
-export function getDocsForProduct(product: string): DocMeta[] {
-  const allDocs = getAllDocMeta();
-  return allDocs.filter((doc) => doc.product === product);
-}
-
-/**
- * Get sections for a product
- *
- * @param product - The product identifier
- * @returns Array of section objects with slug and title
- */
-export function getSectionsForProduct(product: string): { slug: string; title: string }[] {
-  // Get all sections from the spec
-  const productSpec = docsSpec[product];
-  if (!productSpec) {
-    return [];
-  }
-
-  return productSpec.sections.map((section) => ({
-    slug: section.slug,
-    title: section.label,
-  }));
+export async function getAllDocMeta(): Promise<DocMeta[]> {
+  return fetchJSON<DocMeta[]>("/static/content-meta/doc/index.json", "doc", "doc/index");
 }
 
 /* ========== POLICY CONTENT OPERATIONS =========== */

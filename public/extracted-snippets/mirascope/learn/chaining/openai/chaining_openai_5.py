@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 5: Nested Chains
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/chaining.mdx:124
+# Source: content/doc/mirascope/learn/chaining.mdx:125
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import BaseDynamicConfig, Messages, llm

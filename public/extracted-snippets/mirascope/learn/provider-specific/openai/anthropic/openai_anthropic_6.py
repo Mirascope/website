@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 6: Basic Usage
 # Generated for provider: anthropic
-# Source: content/doc/mirascope/learn/provider-specific/openai.mdx:264
+# Source: content/doc/mirascope/learn/provider-specific/openai.mdx:265
 # This file is auto-generated; any edits should be made in the source file
 
 import asyncio

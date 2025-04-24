@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 3: Additional Examples
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/output_parsers.mdx:72
+# Source: content/doc/mirascope/learn/output_parsers.mdx:73
 # This file is auto-generated; any edits should be made in the source file
 
 import re

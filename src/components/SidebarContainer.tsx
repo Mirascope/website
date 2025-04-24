@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import DocsSidebar from "@/src/components/docs/core/DocsSidebar";
-import { type ProductName } from "@/src/lib/route-types";
+import { type ProductName } from "@/src/lib/content/spec";
 
 interface SidebarContainerProps {
   product: ProductName;

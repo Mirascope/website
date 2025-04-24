@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 4: OpenAI Compatibility
 # Generated for provider: anthropic
-# Source: content/doc/mirascope/learn/local_models.mdx:134
+# Source: content/doc/mirascope/learn/local_models.mdx:135
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope.core import openai
