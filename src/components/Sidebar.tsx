@@ -99,7 +99,7 @@ const SectionTab = ({
   params?: Record<string, any>;
   children: React.ReactNode;
 }) => {
-  const activeClass = `bg-button-primary text-primary-foreground font-medium`;
+  const activeClass = `bg-button-primary text-white font-medium`;
   const inactiveClass = `text-muted-foreground hover:bg-accent hover:text-accent-foreground`;
 
   return (
