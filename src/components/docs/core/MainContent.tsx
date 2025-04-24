@@ -2,6 +2,7 @@ import React from "react";
 import LoadingContent from "./LoadingContent";
 import { MDXRenderer } from "@/src/components/MDXRenderer";
 import { type DocContent } from "@/src/lib/content";
+import PagefindMeta from "@/src/components/PagefindMeta";
 
 interface MainContentProps {
   document: DocContent;
@@ -22,11 +23,17 @@ const MainContent: React.FC<MainContentProps> = ({ document, funMode }) => {
           className="prose prose-sm lg:prose-base prose-slate max-w-none overflow-x-auto mdx-container"
         >
           {document.mdx ? (
-            <MDXRenderer
-              code={document.mdx.code}
-              frontmatter={document.mdx.frontmatter}
-              useFunMode={funMode}
-            />
+            <PagefindMeta
+              title={document.meta.title}
+              description={document.meta.description}
+              section={document.meta.product}
+            >
+              <MDXRenderer
+                code={document.mdx.code}
+                frontmatter={document.mdx.frontmatter}
+                useFunMode={funMode}
+              />
+            </PagefindMeta>
           ) : (
             <LoadingContent spinnerClassName="h-8 w-8" fullHeight={false} />
           )}

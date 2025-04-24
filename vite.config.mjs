@@ -6,6 +6,7 @@ import { resolve } from "node:path";
 import { optimizedImageMiddleware } from "./scripts/optimized-image-middleware";
 import { contentPreprocessPlugin } from "./scripts/preprocess-content";
 import { json404Middleware } from "./scripts/json-404-middleware";
+import { pagefindDevPlugin } from "./scripts/pagefind-dev-plugin";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -16,6 +17,7 @@ export default defineConfig({
     contentPreprocessPlugin(),
     optimizedImageMiddleware(),
     json404Middleware(),
+    pagefindDevPlugin(),
   ],
   resolve: {
     alias: {
