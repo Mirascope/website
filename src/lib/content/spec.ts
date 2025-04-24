@@ -6,6 +6,9 @@
  * They are distinct from the ContentMeta types used at runtime.
  */
 
+// Define valid product names as a union type
+export type ProductName = "mirascope" | "lilypad";
+
 // Type for URL-friendly slugs (no slashes)
 export type Slug = string; // In practice: enforced by regex /^[a-z0-9-_]+$/
 
@@ -16,7 +19,7 @@ interface DocMeta {
   path: string;
   slug: string;
   type: "doc";
-  product: string; // Product this doc belongs to
+  product: ProductName; // Product this doc belongs to
   hasExtractableSnippets: boolean; // Whether this doc has extractable snippets
 }
 
@@ -43,17 +46,16 @@ export interface SectionSpec {
  * Product documentation structure
  */
 export interface ProductSpec {
+  product: ProductName;
   // All sections (including the main/default section)
   // A section with slug "index" is treated as the default section (no prefix in URL)
   sections: SectionSpec[];
 }
 
 /**
- * Overall docs structure (collection of ProductSpec by product name)
+ * Overall docs structure (ProductSpec for each product)
  */
-export interface ProductDocsSpec {
-  [product: string]: ProductSpec;
-}
+export type FullDocsSpec = ProductSpec[];
 
 /**
  * Validation results
@@ -64,15 +66,15 @@ export interface ValidationResult {
 }
 
 /**
- * Process a doc specification and build DocMeta items
+ * Process a doc specification and build DocInfo items
  * @param docSpec Doc specification
  * @param product Product this doc belongs to
  * @param pathPrefix Base path for this doc
- * @returns Array of DocMeta items from this doc and its children
+ * @returns Array of DocInfo items from this doc and its children
  */
 export function processDocSpec(
   docSpec: DocSpec,
-  product: string,
+  product: ProductName,
   pathPrefix: string = ""
 ): DocMeta[] {
   const result: DocMeta[] = [];
@@ -110,13 +112,12 @@ export function processDocSpec(
  * @param docsSpec The specification to process
  * @returns Array of DocMeta for all products and docs
  */
-export function getDocsFromSpec(docsSpec: ProductDocsSpec): DocMeta[] {
+export function getDocsFromSpec(fullSpec: FullDocsSpec): DocMeta[] {
   const allDocs: DocMeta[] = [];
 
-  // Process each product in the spec
-  Object.entries(docsSpec).forEach(([product, productSpec]) => {
+  fullSpec.forEach(({ product, sections }) => {
     // Process all sections
-    productSpec.sections.forEach((section) => {
+    sections.forEach((section) => {
       // For the default section (index), don't add a section slug prefix
       const isDefaultSection = section.slug === "index";
       const sectionPathPrefix = isDefaultSection ? product : `${product}/${section.slug}`;
@@ -306,18 +307,20 @@ export function validateProductSpec(spec: ProductSpec): ValidationResult {
 }
 
 /**
- * Validate an entire ProductDocsSpec
+ * Validate an entire FullDocsSpec
  */
-export function validateProductDocsSpec(spec: ProductDocsSpec): ValidationResult {
+export function validateFullDocsSpec(specs: FullDocsSpec): ValidationResult {
   const errors: string[] = [];
 
   // Validate each product
-  for (const [product, productSpec] of Object.entries(spec)) {
+  specs.forEach((productSpec) => {
     const productResult = validateProductSpec(productSpec);
     if (!productResult.isValid) {
-      errors.push(...productResult.errors.map((err) => `In product "${product}": ${err}`));
+      errors.push(
+        ...productResult.errors.map((err) => `In product "${productSpec.product}": ${err}`)
+      );
     }
-  }
+  });
 
   return {
     isValid: errors.length === 0,

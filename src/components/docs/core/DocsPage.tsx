@@ -7,8 +7,7 @@ import { ProviderContextProvider } from "@/src/components/docs";
 import TocSidebar from "./TocSidebar";
 import MainContent from "./MainContent";
 import SEOMeta from "@/src/components/SEOMeta";
-import { type ProductName } from "@/src/lib/route-types";
-import type { DocContent } from "@/src/lib/content";
+import type { DocContent, ProductName } from "@/src/lib/content";
 
 type DocsPageProps = {
   document: DocContent;

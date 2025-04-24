@@ -1,5 +1,4 @@
-// Define valid product names as a union type
-export type ProductName = "mirascope" | "lilypad";
+import { type ProductName } from "./content/spec";
 
 // Type guard to check if a string is a valid product name
 export function isValidProduct(product: string): product is ProductName {
