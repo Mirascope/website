@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { LoadingContent } from "@/src/components/docs";
 import { MDXRenderer } from "@/src/components/MDXRenderer";
-import { type PolicyContent } from "@/src/lib/content/policy";
+import { type PolicyContent } from "@/src/lib/content";
 import { Button } from "@/src/components/ui/button";
 import { Sparkles } from "lucide-react";
 import { cn, formatDate } from "@/src/lib/utils";

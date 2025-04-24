@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useLoaderData } from "@tanstack/react-router";
 import { useState } from "react";
-import { type BlogMeta, getAllBlogMeta } from "@/src/lib/content/blog";
+import { type BlogMeta, getAllBlogMeta } from "@/src/lib/content";
 import SEOMeta from "@/src/components/SEOMeta";
 import { LoadingContent } from "@/src/components/docs";
 import { environment } from "@/src/lib/content/environment";

@@ -3,10 +3,9 @@
  *
  * These types are used to define the structure of content in _meta.ts files.
  * They are distinct from the ContentMeta types used at runtime.
- *
- * NOTE: This is a proposed structure for future migration. The current
- * implementation still uses the structures in _meta.ts.
  */
+
+import type { DocMeta } from "./content-types";
 
 // Type for URL-friendly slugs (no slashes)
 export type Slug = string; // In practice: enforced by regex /^[a-z0-9-_]+$/
@@ -52,6 +51,75 @@ export interface ProductDocsSpec {
 export interface ValidationResult {
   isValid: boolean;
   errors: string[];
+}
+
+/**
+ * Process a doc specification and build DocMeta items
+ * @param docSpec Doc specification
+ * @param product Product this doc belongs to
+ * @param pathPrefix Base path for this doc
+ * @returns Array of DocMeta items from this doc and its children
+ */
+export function processDocSpec(
+  docSpec: DocSpec,
+  product: string,
+  pathPrefix: string = ""
+): DocMeta[] {
+  const result: DocMeta[] = [];
+
+  // Build the path for this doc
+  const docPath = pathPrefix ? `${pathPrefix}/${docSpec.slug}` : `${product}/${docSpec.slug}`;
+
+  // Add this doc to the result if it's a page (has content)
+  if (!docSpec.children) {
+    result.push({
+      title: docSpec.label,
+      description: "", // Will be populated from frontmatter later
+      slug: docSpec.slug,
+      path: docPath,
+      type: "doc",
+      product,
+      hasExtractableSnippets: docSpec.hasExtractableSnippets || false,
+    });
+  }
+
+  // Process children recursively
+  if (docSpec.children && docSpec.children.length > 0) {
+    docSpec.children.forEach((childSpec) => {
+      const childItems = processDocSpec(childSpec, product, docPath);
+      result.push(...childItems);
+    });
+  }
+
+  return result;
+}
+
+/**
+ * Get all docs metadata from a ProductDocsSpec
+ * Processes the ProductDocsSpec and returns DocMeta items
+ * @param docsSpec The specification to process
+ * @returns Array of DocMeta for all products and docs
+ */
+export function getDocsFromSpec(docsSpec: ProductDocsSpec): DocMeta[] {
+  const allDocs: DocMeta[] = [];
+
+  // Process each product in the spec
+  Object.entries(docsSpec).forEach(([product, productSpec]) => {
+    // Process all sections
+    productSpec.sections.forEach((section) => {
+      // For the default section (index), don't add a section slug prefix
+      const isDefaultSection = section.slug === "index";
+      const sectionPathPrefix = isDefaultSection ? product : `${product}/${section.slug}`;
+
+      // Process each document in this section
+      section.children.forEach((docSpec) => {
+        const docItems = processDocSpec(docSpec, product, sectionPathPrefix);
+        allDocs.push(...docItems);
+      });
+    });
+  });
+
+  return allDocs;
 }
 
 /**

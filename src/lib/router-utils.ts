@@ -2,8 +2,8 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import type { BlogMeta } from "./content/blog";
-import { getDocsFromSpec } from "@/src/lib/content/docs";
+import type { BlogMeta } from "./content/content-types";
+import { getAllDocMeta } from "@/src/lib/content";
 
 // Base URL for the site
 export const SITE_URL = "https://mirascope.com";
@@ -140,7 +140,7 @@ export function getBlogRoutes(): string[] {
  * Get doc routes
  */
 export function getDocsRoutes(): string[] {
-  const allDocs = getDocsFromSpec();
+  const allDocs = getAllDocMeta();
   return allDocs
     .map((doc) => {
       return `/docs/${doc.path}`;
