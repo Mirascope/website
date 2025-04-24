@@ -1,7 +1,7 @@
 import React from "react";
 import LoadingContent from "./LoadingContent";
 import { MDXRenderer } from "@/src/components/MDXRenderer";
-import { type DocContent } from "@/src/lib/content/docs";
+import { type DocContent } from "@/src/lib/content";
 
 interface MainContentProps {
   document: DocContent;

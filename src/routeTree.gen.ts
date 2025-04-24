@@ -21,14 +21,12 @@ import { Route as DevIndexImport } from './routes/dev/index'
 import { Route as BlogIndexImport } from './routes/blog.index'
 import { Route as TermsUseImport } from './routes/terms/use'
 import { Route as TermsServiceImport } from './routes/terms/service'
+import { Route as DocsSplatImport } from './routes/docs.$'
 import { Route as DevStyleTestImport } from './routes/dev/style-test'
 import { Route as DevSocialCardImport } from './routes/dev/social-card'
 import { Route as DevCodeHighlightTestImport } from './routes/dev/code-highlight-test'
 import { Route as DevAuditMetadataImport } from './routes/dev/audit-metadata'
 import { Route as BlogSlugImport } from './routes/blog.$slug'
-import { Route as DocsProductSplatImport } from './routes/docs.$product.$'
-import { Route as DocsProductGuidesSplatImport } from './routes/docs.$product.guides.$'
-import { Route as DocsProductApiSplatImport } from './routes/docs.$product.api.$'
 
 // Create/Update Routes
 
@@ -92,6 +90,12 @@ const TermsServiceRoute = TermsServiceImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const DocsSplatRoute = DocsSplatImport.update({
+  id: '/docs/$',
+  path: '/docs/$',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const DevStyleTestRoute = DevStyleTestImport.update({
   id: '/dev/style-test',
   path: '/dev/style-test',
@@ -119,24 +123,6 @@ const DevAuditMetadataRoute = DevAuditMetadataImport.update({
 const BlogSlugRoute = BlogSlugImport.update({
   id: '/blog/$slug',
   path: '/blog/$slug',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const DocsProductSplatRoute = DocsProductSplatImport.update({
-  id: '/docs/$product/$',
-  path: '/docs/$product/$',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const DocsProductGuidesSplatRoute = DocsProductGuidesSplatImport.update({
-  id: '/docs/$product/guides/$',
-  path: '/docs/$product/guides/$',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const DocsProductApiSplatRoute = DocsProductApiSplatImport.update({
-  id: '/docs/$product/api/$',
-  path: '/docs/$product/api/$',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -207,6 +193,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DevStyleTestImport
       parentRoute: typeof rootRoute
     }
+    '/docs/$': {
+      id: '/docs/$'
+      path: '/docs/$'
+      fullPath: '/docs/$'
+      preLoaderRoute: typeof DocsSplatImport
+      parentRoute: typeof rootRoute
+    }
     '/terms/service': {
       id: '/terms/service'
       path: '/terms/service'
@@ -249,27 +242,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsIndexImport
       parentRoute: typeof rootRoute
     }
-    '/docs/$product/$': {
-      id: '/docs/$product/$'
-      path: '/docs/$product/$'
-      fullPath: '/docs/$product/$'
-      preLoaderRoute: typeof DocsProductSplatImport
-      parentRoute: typeof rootRoute
-    }
-    '/docs/$product/api/$': {
-      id: '/docs/$product/api/$'
-      path: '/docs/$product/api/$'
-      fullPath: '/docs/$product/api/$'
-      preLoaderRoute: typeof DocsProductApiSplatImport
-      parentRoute: typeof rootRoute
-    }
-    '/docs/$product/guides/$': {
-      id: '/docs/$product/guides/$'
-      path: '/docs/$product/guides/$'
-      fullPath: '/docs/$product/guides/$'
-      preLoaderRoute: typeof DocsProductGuidesSplatImport
-      parentRoute: typeof rootRoute
-    }
   }
 }
 
@@ -285,15 +257,13 @@ export interface FileRoutesByFullPath {
   '/dev/code-highlight-test': typeof DevCodeHighlightTestRoute
   '/dev/social-card': typeof DevSocialCardRoute
   '/dev/style-test': typeof DevStyleTestRoute
+  '/docs/$': typeof DocsSplatRoute
   '/terms/service': typeof TermsServiceRoute
   '/terms/use': typeof TermsUseRoute
   '/blog': typeof BlogIndexRoute
   '/dev': typeof DevIndexRoute
   '/docs': typeof DocsIndexRoute
   '/terms': typeof TermsIndexRoute
-  '/docs/$product/$': typeof DocsProductSplatRoute
-  '/docs/$product/api/$': typeof DocsProductApiSplatRoute
-  '/docs/$product/guides/$': typeof DocsProductGuidesSplatRoute
 }
 
 export interface FileRoutesByTo {
@@ -306,15 +276,13 @@ export interface FileRoutesByTo {
   '/dev/code-highlight-test': typeof DevCodeHighlightTestRoute
   '/dev/social-card': typeof DevSocialCardRoute
   '/dev/style-test': typeof DevStyleTestRoute
+  '/docs/$': typeof DocsSplatRoute
   '/terms/service': typeof TermsServiceRoute
   '/terms/use': typeof TermsUseRoute
   '/blog': typeof BlogIndexRoute
   '/dev': typeof DevIndexRoute
   '/docs': typeof DocsIndexRoute
   '/terms': typeof TermsIndexRoute
-  '/docs/$product/$': typeof DocsProductSplatRoute
-  '/docs/$product/api/$': typeof DocsProductApiSplatRoute
-  '/docs/$product/guides/$': typeof DocsProductGuidesSplatRoute
 }
 
 export interface FileRoutesById {
@@ -328,15 +296,13 @@ export interface FileRoutesById {
   '/dev/code-highlight-test': typeof DevCodeHighlightTestRoute
   '/dev/social-card': typeof DevSocialCardRoute
   '/dev/style-test': typeof DevStyleTestRoute
+  '/docs/$': typeof DocsSplatRoute
   '/terms/service': typeof TermsServiceRoute
   '/terms/use': typeof TermsUseRoute
   '/blog/': typeof BlogIndexRoute
   '/dev/': typeof DevIndexRoute
   '/docs/': typeof DocsIndexRoute
   '/terms/': typeof TermsIndexRoute
-  '/docs/$product/$': typeof DocsProductSplatRoute
-  '/docs/$product/api/$': typeof DocsProductApiSplatRoute
-  '/docs/$product/guides/$': typeof DocsProductGuidesSplatRoute
 }
 
 export interface FileRouteTypes {
@@ -351,15 +317,13 @@ export interface FileRouteTypes {
     | '/dev/code-highlight-test'
     | '/dev/social-card'
     | '/dev/style-test'
+    | '/docs/$'
     | '/terms/service'
     | '/terms/use'
     | '/blog'
     | '/dev'
     | '/docs'
     | '/terms'
-    | '/docs/$product/$'
-    | '/docs/$product/api/$'
-    | '/docs/$product/guides/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -371,15 +335,13 @@ export interface FileRouteTypes {
     | '/dev/code-highlight-test'
     | '/dev/social-card'
     | '/dev/style-test'
+    | '/docs/$'
     | '/terms/service'
     | '/terms/use'
     | '/blog'
     | '/dev'
     | '/docs'
     | '/terms'
-    | '/docs/$product/$'
-    | '/docs/$product/api/$'
-    | '/docs/$product/guides/$'
   id:
     | '__root__'
     | '/'
@@ -391,15 +353,13 @@ export interface FileRouteTypes {
     | '/dev/code-highlight-test'
     | '/dev/social-card'
     | '/dev/style-test'
+    | '/docs/$'
     | '/terms/service'
     | '/terms/use'
     | '/blog/'
     | '/dev/'
     | '/docs/'
     | '/terms/'
-    | '/docs/$product/$'
-    | '/docs/$product/api/$'
-    | '/docs/$product/guides/$'
   fileRoutesById: FileRoutesById
 }
 
@@ -413,15 +373,13 @@ export interface RootRouteChildren {
   DevCodeHighlightTestRoute: typeof DevCodeHighlightTestRoute
   DevSocialCardRoute: typeof DevSocialCardRoute
   DevStyleTestRoute: typeof DevStyleTestRoute
+  DocsSplatRoute: typeof DocsSplatRoute
   TermsServiceRoute: typeof TermsServiceRoute
   TermsUseRoute: typeof TermsUseRoute
   BlogIndexRoute: typeof BlogIndexRoute
   DevIndexRoute: typeof DevIndexRoute
   DocsIndexRoute: typeof DocsIndexRoute
   TermsIndexRoute: typeof TermsIndexRoute
-  DocsProductSplatRoute: typeof DocsProductSplatRoute
-  DocsProductApiSplatRoute: typeof DocsProductApiSplatRoute
-  DocsProductGuidesSplatRoute: typeof DocsProductGuidesSplatRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -434,15 +392,13 @@ const rootRouteChildren: RootRouteChildren = {
   DevCodeHighlightTestRoute: DevCodeHighlightTestRoute,
   DevSocialCardRoute: DevSocialCardRoute,
   DevStyleTestRoute: DevStyleTestRoute,
+  DocsSplatRoute: DocsSplatRoute,
   TermsServiceRoute: TermsServiceRoute,
   TermsUseRoute: TermsUseRoute,
   BlogIndexRoute: BlogIndexRoute,
   DevIndexRoute: DevIndexRoute,
   DocsIndexRoute: DocsIndexRoute,
   TermsIndexRoute: TermsIndexRoute,
-  DocsProductSplatRoute: DocsProductSplatRoute,
-  DocsProductApiSplatRoute: DocsProductApiSplatRoute,
-  DocsProductGuidesSplatRoute: DocsProductGuidesSplatRoute,
 }
 
 export const routeTree = rootRoute
@@ -464,15 +420,13 @@ export const routeTree = rootRoute
         "/dev/code-highlight-test",
         "/dev/social-card",
         "/dev/style-test",
+        "/docs/$",
         "/terms/service",
         "/terms/use",
         "/blog/",
         "/dev/",
         "/docs/",
-        "/terms/",
-        "/docs/$product/$",
-        "/docs/$product/api/$",
-        "/docs/$product/guides/$"
+        "/terms/"
       ]
     },
     "/": {
@@ -502,6 +456,9 @@ export const routeTree = rootRoute
     "/dev/style-test": {
       "filePath": "dev/style-test.tsx"
     },
+    "/docs/$": {
+      "filePath": "docs.$.tsx"
+    },
     "/terms/service": {
       "filePath": "terms/service.tsx"
     },
@@ -519,15 +476,6 @@ export const routeTree = rootRoute
     },
     "/terms/": {
       "filePath": "terms/index.tsx"
-    },
-    "/docs/$product/$": {
-      "filePath": "docs.$product.$.tsx"
-    },
-    "/docs/$product/api/$": {
-      "filePath": "docs.$product.api.$.tsx"
-    },
-    "/docs/$product/guides/$": {
-      "filePath": "docs.$product.guides.$.tsx"
     }
   }
 }

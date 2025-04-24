@@ -8,7 +8,7 @@
  * Only include redirects here that need dynamic processing or aren't covered by Cloudflare.
  */
 import { isValidProduct } from "./route-types";
-import { getAllDocs } from "@/content/doc/_meta";
+import { getAllDocMeta } from "@/src/lib/content";
 
 // Define exact redirects - maps old paths to new paths
 export const exactRedirects: Record<string, string> = {
@@ -22,15 +22,14 @@ const groupRedirects: Record<string, string> = {};
 
 // Build the group redirects map from docs metadata
 function buildGroupRedirects() {
-  const allDocs = getAllDocs();
+  const allDocs = getAllDocMeta();
 
   // Track valid doc paths
   const validDocPaths = new Set<string>();
 
   // First pass: collect all valid doc paths
   allDocs.forEach((doc) => {
-    const docPath = doc.product + "/" + doc.path;
-    validDocPaths.add(docPath);
+    validDocPaths.add(doc.path);
   });
 
   // Second pass: find potential group paths and their first document
@@ -45,14 +44,13 @@ function buildGroupRedirects() {
     if (pathParts.length <= 1) return;
 
     // Build potential group paths
-    for (let i = 1; i < pathParts.length; i++) {
-      const groupPath = pathParts.slice(0, i).join("/");
-      const fullGroupPath = doc.product + "/" + groupPath;
+    for (let i = 0; i < pathParts.length; i++) {
+      const partialPath = pathParts.slice(0, i).join("/");
 
       // If this group path doesn't exist as a valid doc itself and
       // we haven't assigned a redirect target yet, use this doc
-      if (!validDocPaths.has(fullGroupPath) && !groupToFirstDoc[fullGroupPath]) {
-        groupToFirstDoc[fullGroupPath] = doc.product + "/" + doc.path;
+      if (!validDocPaths.has(partialPath) && !groupToFirstDoc[partialPath]) {
+        groupToFirstDoc[partialPath] = doc.path;
       }
     }
   });

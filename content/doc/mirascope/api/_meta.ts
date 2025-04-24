@@ -2,398 +2,513 @@
  * AUTO-GENERATED API DOCUMENTATION - DO NOT EDIT
  */
 
-import type { DocSection } from "@/content/doc/_meta";
+import type { SectionSpec } from "@/src/lib/content/spec";
 
-export const apiMeta: DocSection = {
-  title: "API Reference",
-  items: {
-    index: {
-      title: "Overview",
+export const apiMeta: SectionSpec = {
+  slug: "api",
+  label: "API Reference",
+  children: [
+    {
+      slug: "index",
+      label: "Overview",
     },
-  },
-  groups: {
-    core: {
-      title: "Core",
-      items: {
-        anthropic: {
-          title: "Anthropic",
-          items: {
-            call: {
-              title: "Call",
+    {
+      slug: "core",
+      label: "Core",
+      children: [
+        {
+          slug: "anthropic",
+          label: "Anthropic",
+          children: [
+            {
+              slug: "call",
+              label: "Call",
             },
-            call_params: {
-              title: "Call Params",
+            {
+              slug: "call_params",
+              label: "Call Params",
             },
-            call_response: {
-              title: "Call Response",
+            {
+              slug: "call_response",
+              label: "Call Response",
             },
-            call_response_chunk: {
-              title: "Call Response Chunk",
+            {
+              slug: "call_response_chunk",
+              label: "Call Response Chunk",
             },
-            dynamic_config: {
-              title: "Dynamic Config",
+            {
+              slug: "dynamic_config",
+              label: "Dynamic Config",
             },
-            stream: {
-              title: "Stream",
+            {
+              slug: "stream",
+              label: "Stream",
             },
-            tool: {
-              title: "Tool",
+            {
+              slug: "tool",
+              label: "Tool",
             },
-          },
+          ],
         },
-        azure: {
-          title: "Azure",
-          items: {
-            call: {
-              title: "Call",
+        {
+          slug: "azure",
+          label: "Azure",
+          children: [
+            {
+              slug: "call",
+              label: "Call",
             },
-            call_params: {
-              title: "Call Params",
+            {
+              slug: "call_params",
+              label: "Call Params",
             },
-            call_response: {
-              title: "Call Response",
+            {
+              slug: "call_response",
+              label: "Call Response",
             },
-            call_response_chunk: {
-              title: "Call Response Chunk",
+            {
+              slug: "call_response_chunk",
+              label: "Call Response Chunk",
             },
-            dynamic_config: {
-              title: "Dynamic Config",
+            {
+              slug: "dynamic_config",
+              label: "Dynamic Config",
             },
-            stream: {
-              title: "Stream",
+            {
+              slug: "stream",
+              label: "Stream",
             },
-            tool: {
-              title: "Tool",
+            {
+              slug: "tool",
+              label: "Tool",
             },
-          },
+          ],
         },
-        base: {
-          title: "Base",
-          items: {
-            call_factory: {
-              title: "Call Factory",
+        {
+          slug: "base",
+          label: "Base",
+          children: [
+            {
+              slug: "call_factory",
+              label: "Call Factory",
             },
-            call_params: {
-              title: "Call Params",
+            {
+              slug: "call_params",
+              label: "Call Params",
             },
-            call_response: {
-              title: "Call Response",
+            {
+              slug: "call_response",
+              label: "Call Response",
             },
-            call_response_chunk: {
-              title: "Call Response Chunk",
+            {
+              slug: "call_response_chunk",
+              label: "Call Response Chunk",
             },
-            dynamic_config: {
-              title: "Dynamic Config",
+            {
+              slug: "dynamic_config",
+              label: "Dynamic Config",
             },
-            merge_decorators: {
-              title: "Merge Decorators",
+            {
+              slug: "merge_decorators",
+              label: "Merge Decorators",
             },
-            message_param: {
-              title: "Message Param",
+            {
+              slug: "message_param",
+              label: "Message Param",
             },
-            metadata: {
-              title: "Metadata",
+            {
+              slug: "metadata",
+              label: "Metadata",
             },
-            prompt: {
-              title: "Prompt",
+            {
+              slug: "prompt",
+              label: "Prompt",
             },
-            stream: {
-              title: "Stream",
+            {
+              slug: "stream",
+              label: "Stream",
             },
-            structured_stream: {
-              title: "Structured Stream",
+            {
+              slug: "structured_stream",
+              label: "Structured Stream",
             },
-            tool: {
-              title: "Tool",
+            {
+              slug: "tool",
+              label: "Tool",
             },
-            toolkit: {
-              title: "Toolkit",
+            {
+              slug: "toolkit",
+              label: "Toolkit",
             },
-            types: {
-              title: "Types",
+            {
+              slug: "types",
+              label: "Types",
             },
-          },
+          ],
         },
-        bedrock: {
-          title: "Bedrock",
-          items: {
-            call: {
-              title: "Call",
+        {
+          slug: "bedrock",
+          label: "Bedrock",
+          children: [
+            {
+              slug: "call",
+              label: "Call",
             },
-            call_params: {
-              title: "Call Params",
+            {
+              slug: "call_params",
+              label: "Call Params",
             },
-            call_response: {
-              title: "Call Response",
+            {
+              slug: "call_response",
+              label: "Call Response",
             },
-            call_response_chunk: {
-              title: "Call Response Chunk",
+            {
+              slug: "call_response_chunk",
+              label: "Call Response Chunk",
             },
-            dynamic_config: {
-              title: "Dynamic Config",
+            {
+              slug: "dynamic_config",
+              label: "Dynamic Config",
             },
-            stream: {
-              title: "Stream",
+            {
+              slug: "stream",
+              label: "Stream",
             },
-            tool: {
-              title: "Tool",
+            {
+              slug: "tool",
+              label: "Tool",
             },
-          },
+          ],
         },
-        cohere: {
-          title: "Cohere",
-          items: {
-            call: {
-              title: "Call",
+        {
+          slug: "cohere",
+          label: "Cohere",
+          children: [
+            {
+              slug: "call",
+              label: "Call",
             },
-            call_params: {
-              title: "Call Params",
+            {
+              slug: "call_params",
+              label: "Call Params",
             },
-            call_response: {
-              title: "Call Response",
+            {
+              slug: "call_response",
+              label: "Call Response",
             },
-            call_response_chunk: {
-              title: "Call Response Chunk",
+            {
+              slug: "call_response_chunk",
+              label: "Call Response Chunk",
             },
-            dynamic_config: {
-              title: "Dynamic Config",
+            {
+              slug: "dynamic_config",
+              label: "Dynamic Config",
             },
-            stream: {
-              title: "Stream",
+            {
+              slug: "stream",
+              label: "Stream",
             },
-            tool: {
-              title: "Tool",
+            {
+              slug: "tool",
+              label: "Tool",
             },
-          },
+          ],
         },
-        costs: {
-          title: "Costs",
-          items: {
-            calculate_cost: {
-              title: "Calculate Cost",
+        {
+          slug: "costs",
+          label: "Costs",
+          children: [
+            {
+              slug: "calculate_cost",
+              label: "Calculate Cost",
             },
-          },
+          ],
         },
-        google: {
-          title: "Google",
-          items: {
-            call: {
-              title: "Call",
+        {
+          slug: "google",
+          label: "Google",
+          children: [
+            {
+              slug: "call",
+              label: "Call",
             },
-            call_params: {
-              title: "Call Params",
+            {
+              slug: "call_params",
+              label: "Call Params",
             },
-            call_response: {
-              title: "Call Response",
+            {
+              slug: "call_response",
+              label: "Call Response",
             },
-            call_response_chunk: {
-              title: "Call Response Chunk",
+            {
+              slug: "call_response_chunk",
+              label: "Call Response Chunk",
             },
-            dynamic_config: {
-              title: "Dynamic Config",
+            {
+              slug: "dynamic_config",
+              label: "Dynamic Config",
             },
-            stream: {
-              title: "Stream",
+            {
+              slug: "stream",
+              label: "Stream",
             },
-            tool: {
-              title: "Tool",
+            {
+              slug: "tool",
+              label: "Tool",
             },
-          },
+          ],
         },
-        groq: {
-          title: "Groq",
-          items: {
-            call: {
-              title: "Call",
+        {
+          slug: "groq",
+          label: "Groq",
+          children: [
+            {
+              slug: "call",
+              label: "Call",
             },
-            call_params: {
-              title: "Call Params",
+            {
+              slug: "call_params",
+              label: "Call Params",
             },
-            call_response: {
-              title: "Call Response",
+            {
+              slug: "call_response",
+              label: "Call Response",
             },
-            call_response_chunk: {
-              title: "Call Response Chunk",
+            {
+              slug: "call_response_chunk",
+              label: "Call Response Chunk",
             },
-            dynamic_config: {
-              title: "Dynamic Config",
+            {
+              slug: "dynamic_config",
+              label: "Dynamic Config",
             },
-            stream: {
-              title: "Stream",
+            {
+              slug: "stream",
+              label: "Stream",
             },
-            tool: {
-              title: "Tool",
+            {
+              slug: "tool",
+              label: "Tool",
             },
-          },
+          ],
         },
-        litellm: {
-          title: "Litellm",
-          items: {
-            call: {
-              title: "Call",
+        {
+          slug: "litellm",
+          label: "Litellm",
+          children: [
+            {
+              slug: "call",
+              label: "Call",
             },
-            call_params: {
-              title: "Call Params",
+            {
+              slug: "call_params",
+              label: "Call Params",
             },
-            call_response: {
-              title: "Call Response",
+            {
+              slug: "call_response",
+              label: "Call Response",
             },
-            call_response_chunk: {
-              title: "Call Response Chunk",
+            {
+              slug: "call_response_chunk",
+              label: "Call Response Chunk",
             },
-            dynamic_config: {
-              title: "Dynamic Config",
+            {
+              slug: "dynamic_config",
+              label: "Dynamic Config",
             },
-            stream: {
-              title: "Stream",
+            {
+              slug: "stream",
+              label: "Stream",
             },
-            tool: {
-              title: "Tool",
+            {
+              slug: "tool",
+              label: "Tool",
             },
-          },
+          ],
         },
-        mistral: {
-          title: "Mistral",
-          items: {
-            call: {
-              title: "Call",
+        {
+          slug: "mistral",
+          label: "Mistral",
+          children: [
+            {
+              slug: "call",
+              label: "Call",
             },
-            call_params: {
-              title: "Call Params",
+            {
+              slug: "call_params",
+              label: "Call Params",
             },
-            call_response: {
-              title: "Call Response",
+            {
+              slug: "call_response",
+              label: "Call Response",
             },
-            call_response_chunk: {
-              title: "Call Response Chunk",
+            {
+              slug: "call_response_chunk",
+              label: "Call Response Chunk",
             },
-            dynamic_config: {
-              title: "Dynamic Config",
+            {
+              slug: "dynamic_config",
+              label: "Dynamic Config",
             },
-            stream: {
-              title: "Stream",
+            {
+              slug: "stream",
+              label: "Stream",
             },
-            tool: {
-              title: "Tool",
+            {
+              slug: "tool",
+              label: "Tool",
             },
-          },
+          ],
         },
-        openai: {
-          title: "Openai",
-          items: {
-            call: {
-              title: "Call",
+        {
+          slug: "openai",
+          label: "Openai",
+          children: [
+            {
+              slug: "call",
+              label: "Call",
             },
-            call_params: {
-              title: "Call Params",
+            {
+              slug: "call_params",
+              label: "Call Params",
             },
-            call_response: {
-              title: "Call Response",
+            {
+              slug: "call_response",
+              label: "Call Response",
             },
-            call_response_chunk: {
-              title: "Call Response Chunk",
+            {
+              slug: "call_response_chunk",
+              label: "Call Response Chunk",
             },
-            dynamic_config: {
-              title: "Dynamic Config",
+            {
+              slug: "dynamic_config",
+              label: "Dynamic Config",
             },
-            stream: {
-              title: "Stream",
+            {
+              slug: "stream",
+              label: "Stream",
             },
-            tool: {
-              title: "Tool",
+            {
+              slug: "tool",
+              label: "Tool",
             },
-          },
+          ],
         },
-        xai: {
-          title: "Xai",
-          items: {
-            call: {
-              title: "Call",
+        {
+          slug: "xai",
+          label: "Xai",
+          children: [
+            {
+              slug: "call",
+              label: "Call",
             },
-            call_params: {
-              title: "Call Params",
+            {
+              slug: "call_params",
+              label: "Call Params",
             },
-            call_response: {
-              title: "Call Response",
+            {
+              slug: "call_response",
+              label: "Call Response",
             },
-            call_response_chunk: {
-              title: "Call Response Chunk",
+            {
+              slug: "call_response_chunk",
+              label: "Call Response Chunk",
             },
-            dynamic_config: {
-              title: "Dynamic Config",
+            {
+              slug: "dynamic_config",
+              label: "Dynamic Config",
             },
-            stream: {
-              title: "Stream",
+            {
+              slug: "stream",
+              label: "Stream",
             },
-            tool: {
-              title: "Tool",
+            {
+              slug: "tool",
+              label: "Tool",
             },
-          },
+          ],
         },
-      },
+      ],
     },
-    integrations: {
-      title: "Integrations",
-      items: {
-        langfuse: {
-          title: "Langfuse",
+    {
+      slug: "integrations",
+      label: "Integrations",
+      children: [
+        {
+          slug: "langfuse",
+          label: "Langfuse",
         },
-        logfire: {
-          title: "Logfire",
+        {
+          slug: "logfire",
+          label: "Logfire",
         },
-        middleware: {
-          title: "Middleware",
+        {
+          slug: "middleware",
+          label: "Middleware",
         },
-        otel: {
-          title: "Otel",
+        {
+          slug: "otel",
+          label: "Otel",
         },
-        tenacity: {
-          title: "Tenacity",
+        {
+          slug: "tenacity",
+          label: "Tenacity",
         },
-      },
+      ],
     },
-    llm: {
-      title: "Llm",
-      items: {
-        call: {
-          title: "Call",
+    {
+      slug: "llm",
+      label: "Llm",
+      children: [
+        {
+          slug: "call",
+          label: "Call",
         },
-      },
+      ],
     },
-    tools: {
-      title: "Tools",
-      items: {
-        system: {
-          title: "System",
-          items: {
-            docker_operation: {
-              title: "Docker Operation",
+    {
+      slug: "tools",
+      label: "Tools",
+      children: [
+        {
+          slug: "system",
+          label: "System",
+          children: [
+            {
+              slug: "docker_operation",
+              label: "Docker Operation",
             },
-            file_system: {
-              title: "File System",
+            {
+              slug: "file_system",
+              label: "File System",
             },
-          },
+          ],
         },
-        web: {
-          title: "Web",
-          items: {
-            duckduckgo: {
-              title: "Duckduckgo",
+        {
+          slug: "web",
+          label: "Web",
+          children: [
+            {
+              slug: "duckduckgo",
+              label: "Duckduckgo",
             },
-            httpx: {
-              title: "Httpx",
+            {
+              slug: "httpx",
+              label: "Httpx",
             },
-            parse_url_content: {
-              title: "Parse Url Content",
+            {
+              slug: "parse_url_content",
+              label: "Parse Url Content",
             },
-            requests: {
-              title: "Requests",
+            {
+              slug: "requests",
+              label: "Requests",
             },
-          },
+          ],
         },
-      },
+      ],
     },
-  },
+  ],
 };
 
 export default apiMeta;

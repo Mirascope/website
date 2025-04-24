@@ -1,13 +1,7 @@
-// Core types
-export * from "./types";
+// Consolidated content service
+export * from "./content";
 
-// Content domains
-export * from "./blog";
-export * from "./docs";
-export * from "./policy";
+// MDX processing and frontmatter
+export * from "./mdx-processing";
 
-// Content hooks
-export { useContent } from "./useContent";
-
-// Utilities
-export { loadContent } from "./content-loader";
+export * from "./environment";

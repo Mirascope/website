@@ -314,8 +314,12 @@ class DocumentationGenerator:
 
         # Write to file
         meta_path = self.project_root / self.config["target_path"] / "_meta.ts"
-        with open(meta_path, "w") as f:
-            f.write(content)
+        with open(meta_path, "w") as _:
+            print("Not writing meta content until migration to new format")
+            _ = content
+            # f.write(content)
+        if 1:
+            return
 
         # Run prettier to format the file
         try:
