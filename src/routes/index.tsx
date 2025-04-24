@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import Logo from "@/src/components/Logo";
 import SEOMeta from "@/src/components/SEOMeta";
 import { environment } from "@/src/lib/content/environment";
+import { useSunsetTime } from "@/src/lib/hooks/useSunsetTime";
 
 export const Route = createFileRoute("/")({
   component: LandingPage,
@@ -9,6 +10,7 @@ export const Route = createFileRoute("/")({
 });
 
 function LandingPage() {
+  useSunsetTime();
   return (
     <>
       <SEOMeta title="Home" description="The AI Engineer's Developer Stack" />
@@ -24,7 +26,12 @@ function LandingPage() {
             />
           </div>
 
-          <div className="text-foreground mt-0 flex flex-col font-medium tracking-tight drop-shadow-lg">
+          <div
+            className="text-white mt-0 flex flex-col font-medium tracking-tight"
+            style={{
+              textShadow: "0 2px 10px rgba(0,0,0,0.3), 0 4px 20px rgba(0,0,0,0.2)",
+            }}
+          >
             <span
               style={{ fontSize: "clamp(2.5rem, 8vw, 6rem)", lineHeight: "0.9" }}
               className="whitespace-normal sm:whitespace-nowrap font-handwriting mb-8"
