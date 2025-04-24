@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Sun, Moon, Sunset, Monitor } from "lucide-react";
+import { Sun, Moon, Monitor } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,7 +10,7 @@ import {
 import { cn } from "@/src/lib/utils";
 import { useRouterState } from "@tanstack/react-router";
 
-type Theme = "light" | "dark" | "sunset" | "system";
+type Theme = "light" | "dark" | "system";
 
 export default function ThemeSwitcher() {
   const [theme, setTheme] = useState<Theme>("system");
@@ -36,9 +36,9 @@ export default function ThemeSwitcher() {
     // Store previous theme for comparison
     const prevTheme = localStorage.getItem("theme") || "system";
 
-    // Clear previous themes
+    // Clear previous theme classes only
     const root = document.documentElement;
-    root.classList.remove("light", "dark", "sunset");
+    root.classList.remove("light", "dark");
 
     // Apply current theme
     if (theme === "system") {
@@ -53,16 +53,12 @@ export default function ThemeSwitcher() {
     // Store the current theme
     localStorage.setItem("theme", theme);
 
-    // For sunset mode on homepage, update the background without reloading
-    if (
-      (prevTheme === "sunset" || theme === "sunset") &&
-      prevTheme !== theme &&
-      window.location.pathname === "/"
-    ) {
+    // For theme changes on homepage, update the background without reloading
+    if (isLandingPage && prevTheme !== theme) {
       // Instead of reloading, dynamically update the background
       document.body.style.transition = "background-image 0.3s ease";
     }
-  }, [theme, mounted]);
+  }, [theme, mounted, isLandingPage]);
 
   // Add listener for system theme changes
   useEffect(() => {
@@ -73,7 +69,7 @@ export default function ThemeSwitcher() {
     const handleChange = () => {
       if (theme === "system") {
         const systemTheme = mediaQuery.matches ? "dark" : "light";
-        document.documentElement.classList.remove("light", "dark", "sunset");
+        document.documentElement.classList.remove("light", "dark");
         document.documentElement.classList.add(systemTheme);
       }
     };
@@ -100,7 +96,6 @@ export default function ThemeSwitcher() {
         >
           {theme === "light" && <Sun size={20} />}
           {theme === "dark" && <Moon size={20} />}
-          {theme === "sunset" && <Sunset size={20} />}
           {theme === "system" && <Monitor size={20} />}
         </button>
       </DropdownMenuTrigger>
@@ -109,10 +104,6 @@ export default function ThemeSwitcher() {
           <DropdownMenuRadioItem value="light">
             <Sun className="mr-2 h-4 w-4" />
             <span>Light</span>
-          </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="sunset">
-            <Sunset className="mr-2 h-4 w-4" />
-            <span>Sunset</span>
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem value="dark">
             <Moon className="mr-2 h-4 w-4" />

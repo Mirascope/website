@@ -246,20 +246,21 @@ h6 code {
   }
 }
 
-.sunset .bg-watercolor-flipped::before {
+/* Apply sunset background during sunset time */
+.sunset-time .bg-watercolor-flipped::before {
   background-image: url("/assets/backgrounds/sunset.webp");
   transition: background-image 0.3s ease;
 }
 
 /* Responsive sunset backgrounds for smaller screens */
 @media (max-width: 1200px) {
-  .sunset .bg-watercolor-flipped::before {
+  .sunset-time .bg-watercolor-flipped::before {
     background-image: url("/assets/backgrounds/sunset-medium.webp");
   }
 }
 
 @media (max-width: 800px) {
-  .sunset .bg-watercolor-flipped::before {
+  .sunset-time .bg-watercolor-flipped::before {
     background-image: url("/assets/backgrounds/sunset-small.webp");
   }
 }
@@ -282,14 +283,6 @@ h6 code {
   --texture-opacity: 0.6; /* Adjusted opacity for dark mode */
   --texture-blend-mode: screen;
   --texture-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500' viewBox='0 0 500 500'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.9' numOctaves='1' seed='2'/%3E%3CfeDiffuseLighting lighting-color='%23505050' surfaceScale='1'%3E%3CfeDistantLight azimuth='45' elevation='60'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='500' height='500' filter='url(%23grain)' opacity='0.6'/%3E%3C/svg%3E");
-}
-
-.sunset {
-  /* Paper texture variables for sunset mode */
-  --text-offset: 2px;
-  --texture-opacity: 0.35;
-  --texture-blend-mode: multiply;
-  --texture-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500' viewBox='0 0 500 500'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.9' numOctaves='1' seed='2'/%3E%3CfeDiffuseLighting lighting-color='%23f7d2a2' surfaceScale='1'%3E%3CfeDistantLight azimuth='45' elevation='60'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='500' height='500' filter='url(%23grain)' opacity='0.6'/%3E%3C/svg%3E");
 }
 
 @theme inline {
