@@ -1,19 +1,21 @@
-/* Mirascope Theme System */
+/* Multi-product Theme System */
 
-/* Base theme definition */
+/* Shared brand colors */
 @theme {
-  /* Shared brand colors */
+  /* Base brand colors */
   --color-mirascope-purple: oklch(0.5854 0.2041 277.12); /* Mirascope purple */
-  --color-lilypad-green: var(--color-emerald-500); /* I think this worked well */
+  --color-mirascope-purple-dark: oklch(0.5254 0.2041 277.12); /* Darker purple */
+  --color-lilypad-green: var(--color-emerald-500); /* Lilypad green */
+  --color-lilypad-green-dark: var(--color-emerald-600); /* Darker green */
 
-  /* Theme colors */
+  /* Default (Mirascope) theme colors */
 
   /* Base */
   --color-background: oklch(0.995 0 0); /* Pure white background - keep as is */
   --color-foreground: oklch(0.1 0.2041 282.8); /* Dark text - keep as is */
 
   /* Components */
-  --color-button-primary: oklch(0.5254 0.2041 277.12); /* Darker purple */
+  --color-button-primary: var(--color-mirascope-purple-dark);
   --color-primary: var(--color-mirascope-purple);
   --color-primary-foreground: oklch(0.985 0 0);
 
@@ -31,10 +33,10 @@
   /* Utility - keep as is */
   --color-border: oklch(0.92 0.004 286.32);
   --color-input: oklch(0.92 0.004 286.32);
-  --color-ring: oklch(0.5854 0.2041 277.12);
+  --color-ring: var(--color-mirascope-purple);
 }
 
-/* Dark theme variant */
+/* Dark theme variant - Mirascope Dark */
 :is(.dark) {
   /* Theme colors */
   /* Base */
@@ -42,7 +44,7 @@
   --color-foreground: oklch(0.95 0 0); /* Light text */
 
   /* Components */
-  --color-primary: oklch(0.5854 0.2041 277.12); /* Keep your brand purple */
+  --color-primary: var(--color-mirascope-purple); /* Keep your brand purple */
   --color-button-primary: var(--color-indigo-900);
 
   --color-primary-foreground: var(--color-slate-900);
@@ -62,4 +64,34 @@
   --color-border: oklch(0.16 0.006 286.033); /* Border color */
   --color-input: oklch(0.16 0.006 286.033); /* Input border color */
   --color-ring: oklch(0.35 0.017 285.786); /* Focus ring color */
+}
+
+/* Lilypad Light Theme */
+:is([data-product="lilypad"]) {
+  --color-button-primary: var(--color-lilypad-green-dark);
+  --color-primary: var(--color-lilypad-green);
+  --color-primary-foreground: oklch(0.985 0 0);
+
+  --color-secondary: var(--color-indigo-500);
+  --color-secondary-foreground: oklch(0.985 0 0);
+
+  --color-accent: var(--color-emerald-200);
+  --color-accent-foreground: var(--color-emerald-900);
+
+  --color-ring: var(--color-lilypad-green);
+}
+
+/* Lilypad Dark Theme */
+:is(.dark[data-product="lilypad"]) {
+  --color-button-primary: var(--color-emerald-900);
+  --color-primary: var(--color-lilypad-green-dark);
+  --color-primary-foreground: var(--color-slate-900);
+
+  --color-secondary: var(--color-indigo-800);
+  --color-secondary-foreground: oklch(0.95 0 0);
+
+  --color-accent: var(--color-slate-900);
+  --color-accent-foreground: var(--color-emerald-300);
+
+  --color-ring: var(--color-emerald-700);
 }

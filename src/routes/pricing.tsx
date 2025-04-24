@@ -36,8 +36,8 @@ const FeatureRow = ({
             {typeof free === "boolean" ? (
               <div className="flex justify-center">
                 {free ? (
-                  <div className="rounded-full p-1 bg-secondary/30">
-                    <Check size={16} className="text-secondary" />
+                  <div className="rounded-full p-1 bg-primary/30">
+                    <Check size={16} className="text-primary" />
                   </div>
                 ) : (
                   <div className="rounded-full p-1 bg-muted">
@@ -54,8 +54,8 @@ const FeatureRow = ({
             {typeof pro === "boolean" ? (
               <div className="flex justify-center">
                 {pro ? (
-                  <div className="rounded-full p-1 bg-secondary/30">
-                    <Check size={16} className="text-secondary" />
+                  <div className="rounded-full p-1 bg-primary/30">
+                    <Check size={16} className="text-primary" />
                   </div>
                 ) : (
                   <div className="rounded-full p-1 bg-muted">
@@ -93,11 +93,11 @@ const PricingTier = ({
     <div
       className={cn(
         "px-6 py-8",
-        isGreen ? "bg-gradient-to-br from-secondary/10 to-background" : "bg-background"
+        isGreen ? "bg-gradient-to-br from-primary/10 to-background" : "bg-background"
       )}
     >
       <h3
-        className={cn("text-xl font-semibold mb-2", isGreen ? "text-secondary" : "text-foreground")}
+        className={cn("text-xl font-semibold mb-2", isGreen ? "text-primary" : "text-foreground")}
       >
         {name}
       </h3>
@@ -113,7 +113,7 @@ const PricingTier = ({
         className={cn(
           "block w-full py-2 px-4 rounded-md text-center transition-colors",
           isGreen
-            ? "bg-secondary text-secondary-foreground hover:bg-secondary/90"
+            ? "bg-primary text-primary-foreground hover:bg-primary/90"
             : "bg-muted text-muted-foreground hover:bg-accent"
         )}
       >
@@ -161,7 +161,7 @@ function PricingPage() {
   // Beta notice content for tooltips
   const betaNoticeContent = (
     <div className="font-handwriting">
-      <h3 className="text-lg font-semibold text-secondary mb-2">Open Beta Notice</h3>
+      <h3 className="text-lg font-semibold text-primary mb-2">Open Beta Notice</h3>
       <p className="text-lg mb-2">
         Lilypad is currently in an open beta, during which we will not be charging for the platform.
         All users during this period will have free access to Pro features.
@@ -214,7 +214,7 @@ function PricingPage() {
                   price="$0"
                   description="For individuals just getting started"
                   buttonText="Get Started"
-                  buttonLink="/docs/lilypad/quickstart"
+                  buttonLink="/docs/lilypad/"
                   isGreen={true}
                 />
                 <div className="bg-background border border-border rounded-lg shadow-sm overflow-hidden">
@@ -223,11 +223,11 @@ function PricingPage() {
                       <h3 className="text-xl font-semibold text-foreground">Pro</h3>
                       <Tooltip>
                         <TooltipTrigger>
-                          <Info size={16} className="text-secondary cursor-pointer" />
+                          <Info size={16} className="text-primary cursor-pointer" />
                         </TooltipTrigger>
                         <TooltipContent
                           side="right"
-                          className="w-md p-4 bg-secondary/10 text-secondary border border-secondary/20"
+                          className="w-md p-4 bg-primary/10 text-primary border border-primary/20"
                         >
                           {betaNoticeContent}
                         </TooltipContent>
@@ -238,7 +238,7 @@ function PricingPage() {
                       <span className="text-3xl font-bold">TBD</span>
                     </div>
                     <a
-                      href="/docs/lilypad/quickstart"
+                      href="/docs/lilypad/"
                       className="block w-full py-2 px-4 rounded-md text-center transition-colors bg-muted text-muted-foreground hover:bg-accent"
                     >
                       *Get Started
@@ -287,11 +287,11 @@ function PricingPage() {
                       <h3 className="text-xl font-semibold text-foreground">Pro</h3>
                       <Tooltip>
                         <TooltipTrigger>
-                          <Info size={16} className="text-secondary cursor-pointer" />
+                          <Info size={16} className="text-primary cursor-pointer" />
                         </TooltipTrigger>
                         <TooltipContent
                           side="right"
-                          className="w-96 p-4 bg-secondary/10 text-secondary border border-secondary/20"
+                          className="w-96 p-4 bg-primary/10 text-primary border border-primary/20"
                         >
                           {betaNoticeContent}
                         </TooltipContent>

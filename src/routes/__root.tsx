@@ -2,6 +2,7 @@ import { Outlet, createRootRoute, useRouterState, redirect } from "@tanstack/rea
 import { processRedirects } from "../lib/redirects";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { useEffect } from "react";
+import { getProductFromPath } from "../lib/utils";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -26,7 +27,23 @@ export const Route = createRootRoute({
   },
   component: () => {
     const router = useRouterState();
-    const isLandingPage = router.location.pathname === "/";
+    const path = router.location.pathname;
+    const isLandingPage = path === "/";
+
+    // Determine product based on URL path - this runs on initial render
+    const currentProduct = getProductFromPath(path);
+
+    // Update document product attribute when route changes
+    useEffect(() => {
+      const newProduct = getProductFromPath(path);
+      document.documentElement.setAttribute("data-product", newProduct);
+    }, [path]);
+
+    // For initial render, we set the attribute during SSR
+    if (typeof document !== "undefined" && document.documentElement) {
+      // This runs on client-side only, on the first render
+      document.documentElement.setAttribute("data-product", currentProduct);
+    }
 
     // Initialize analytics during component mount
     useEffect(() => {
@@ -35,10 +52,9 @@ export const Route = createRootRoute({
 
     // Track page views when route changes
     useEffect(() => {
-      const path = router.location.pathname;
       // Will only track if analytics are enabled (respects consent / GDPR)
       analyticsManager.trackPageView(path);
-    }, [router.location.pathname]);
+    }, [path]);
 
     return (
       <>

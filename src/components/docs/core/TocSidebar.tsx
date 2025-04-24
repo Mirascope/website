@@ -99,11 +99,7 @@ const TocSidebar: React.FC<TocSidebarProps> = ({ funMode, toggleFunMode, documen
 
             <h4 className="text-sm font-medium text-muted-foreground mt-4">On this page</h4>
           </div>
-          <TableOfContents
-            contentId="doc-content"
-            product={document?.meta.product || "mirascope"}
-            path={document?.meta.path || ""}
-          />
+          <TableOfContents contentId="doc-content" path={document?.meta.path || ""} />
         </div>
       </div>
     </div>
