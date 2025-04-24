@@ -41,8 +41,6 @@ async function contentPathLoader({ params }: { params: { _splat: string } }) {
   const splat = params._splat;
   const routePath = `/docs/${splat}`;
 
-  console.log("Loading content for route path:", routePath);
-
   try {
     // Look up DocInfo for this route path
     const docInfo = routePathToDocInfo.get(routePath);
