@@ -13,7 +13,7 @@
  */
 
 import { environment } from "./environment";
-import { getDocsFromSpec } from "./spec";
+import { getDocsFromSpec, type DocInfo } from "./spec";
 import { processMDXContent } from "./mdx-processing";
 
 // Import docs specification
@@ -328,14 +328,21 @@ export async function getDocContent(path: string): Promise<DocContent> {
 }
 
 /**
- * Get all documentation metadata from the specification
+ * Get basic info (not full metadata) for all available docs, based on the spec.
  *
- * Processes the docs specification to generate metadata for all available docs
+ * @returns Array of DocInfo objects with path info
+ */
+export function getAllDocInfo(): DocInfo[] {
+  return getDocsFromSpec(fullSpec);
+}
+
+/**
+ * Get all documentation metadata from disk.
  *
  * @returns Array of document metadata objects
  */
-export function getAllDocMeta(): DocMeta[] {
-  return getDocsFromSpec(fullSpec);
+export async function getAllDocMeta(): Promise<DocMeta[]> {
+  return fetchJSON<DocMeta[]>("/static/content-meta/doc/index.json", "doc", "doc/index");
 }
 
 /* ========== POLICY CONTENT OPERATIONS =========== */

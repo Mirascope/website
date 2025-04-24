@@ -8,28 +8,21 @@
  * Only include redirects here that need dynamic processing or aren't covered by Cloudflare.
  */
 import { isValidProduct } from "./route-types";
-import { getAllDocMeta } from "@/src/lib/content";
-
-// Define exact redirects - maps old paths to new paths
-export const exactRedirects: Record<string, string> = {
-  // Legacy docs paths
-  "/docs": "/docs/mirascope",
-  "/docs/": "/docs/mirascope",
-};
+import { getAllDocInfo } from "@/src/lib/content";
 
 // Group redirects map - this will be populated dynamically
 const groupRedirects: Record<string, string> = {};
 
 // Build the group redirects map from docs metadata
 function buildGroupRedirects() {
-  const allDocs = getAllDocMeta();
+  const allDocs = getAllDocInfo();
 
   // Track valid doc paths
   const validDocPaths = new Set<string>();
 
   // First pass: collect all valid doc paths
   allDocs.forEach((doc) => {
-    validDocPaths.add(doc.path);
+    validDocPaths.add(doc.routePath);
   });
 
   // Second pass: find potential group paths and their first document
@@ -38,7 +31,7 @@ function buildGroupRedirects() {
   // Use docs in their original order (from _meta.ts files)
   // Process each doc to find group paths
   allDocs.forEach((doc) => {
-    const pathParts = doc.path.split("/");
+    const pathParts = doc.routePath.split("/");
 
     // Skip processing if this is a top-level doc
     if (pathParts.length <= 1) return;
@@ -50,14 +43,14 @@ function buildGroupRedirects() {
       // If this group path doesn't exist as a valid doc itself and
       // we haven't assigned a redirect target yet, use this doc
       if (!validDocPaths.has(partialPath) && !groupToFirstDoc[partialPath]) {
-        groupToFirstDoc[partialPath] = doc.path;
+        groupToFirstDoc[partialPath] = doc.routePath;
       }
     }
   });
 
   // Convert to URL paths for our redirects
   Object.entries(groupToFirstDoc).forEach(([groupPath, docPath]) => {
-    groupRedirects["/docs/" + groupPath] = "/docs/" + docPath;
+    groupRedirects[groupPath] = docPath;
   });
 }
 
@@ -79,17 +72,12 @@ export function processRedirects(path: string): string | null {
     path = path.slice(0, -1);
   }
 
-  // 1. Check exact redirects first
-  if (exactRedirects[path]) {
-    return exactRedirects[path];
-  }
-
-  // 2. Check group redirects for docs paths
+  // 1. Check group redirects for docs paths
   if (groupRedirects[path]) {
     return groupRedirects[path];
   }
 
-  // 3. Check pattern redirects
+  // 2. Check pattern redirects
   for (const { pattern, replacement } of patternRedirects) {
     const match = path.match(pattern);
     if (match) {
@@ -97,7 +85,7 @@ export function processRedirects(path: string): string | null {
     }
   }
 
-  // 4. Special case: redirect /docs/{invalid-product} to /docs/mirascope
+  // 3. Special case: redirect /docs/{invalid-product} to /docs/mirascope
   const docsProductMatch = path.match(/^\/docs\/([^\/]+)(?:\/.*)?$/);
   if (docsProductMatch && !isValidProduct(docsProductMatch[1])) {
     return "/docs/mirascope";

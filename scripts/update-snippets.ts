@@ -26,7 +26,7 @@ import * as crypto from "crypto";
 import { processFile } from "./lib/snippet-extractor";
 
 // Import doc meta types and data
-import { getAllDocMeta } from "@/src/lib/content";
+import { getAllDocInfo } from "@/src/lib/content";
 
 // Provider list to generate examples for
 const PROVIDERS = ["openai", "anthropic"];
@@ -35,7 +35,7 @@ const PROVIDERS = ["openai", "anthropic"];
 const SNIPPETS_ROOT = path.join(process.cwd(), "public", "extracted-snippets");
 
 // Docs root directory
-const DOCS_ROOT = path.join(process.cwd(), "content", "doc");
+const CONTENT_ROOT = path.join(process.cwd(), "content");
 
 /**
  * Interface for a document with extractable snippets
@@ -53,19 +53,14 @@ function findExtractableDocs(specificFilePath?: string): ExtractableDoc[] {
   const absoluteTargetPath = specificFilePath ? path.resolve(specificFilePath) : null;
 
   // Get all docs from metadata
-  const allDocs = getAllDocMeta();
+  const allDocs = getAllDocInfo();
 
   // Filter to only those marked as extractable
   for (const doc of allDocs) {
     if (doc.hasExtractableSnippets) {
-      // Convert logical path to file path
-      let filePath: string;
+      // Construct the file path from the document path
+      const filePath = path.join(CONTENT_ROOT, "doc", `${doc.path}.mdx`);
 
-      if (doc.path.includes("/index")) {
-        filePath = path.join(DOCS_ROOT, `${doc.path.replace("/index", "")}.mdx`);
-      } else {
-        filePath = path.join(DOCS_ROOT, `${doc.path}.mdx`);
-      }
       // Resolve to absolute path for comparison
       const absoluteFilePath = path.resolve(filePath);
 
@@ -75,8 +70,11 @@ function findExtractableDocs(specificFilePath?: string): ExtractableDoc[] {
       }
 
       if (fs.existsSync(filePath)) {
+        // Extract the logical path from path
+        // This is the path without the leading /content/doc/ and trailing .mdx
+        const logicalPath = doc.path;
         extractableDocs.push({
-          logicalPath: doc.path,
+          logicalPath,
           filePath,
         });
       } else if (!absoluteTargetPath) {
@@ -85,13 +83,7 @@ function findExtractableDocs(specificFilePath?: string): ExtractableDoc[] {
       }
     } else if (absoluteTargetPath) {
       // Check if this is the specific target file but not marked extractable
-      let filePath: string;
-
-      if (doc.path.includes("/index")) {
-        filePath = path.join(DOCS_ROOT, `${doc.path.replace("/index", "")}.mdx`);
-      } else {
-        filePath = path.join(DOCS_ROOT, `${doc.path}.mdx`);
-      }
+      const filePath = path.join(CONTENT_ROOT, "doc", `${doc.path}.mdx`);
 
       const absoluteFilePath = path.resolve(filePath);
 

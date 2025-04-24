@@ -5,6 +5,7 @@ import { type Provider } from "../ProviderContext";
 import Sidebar from "@/src/components/Sidebar";
 import type { SidebarConfig, SidebarItem, SidebarGroup } from "@/src/components/Sidebar";
 import { Link } from "@tanstack/react-router";
+import { getAllDocInfo } from "@/src/lib/content";
 
 interface DocsSidebarProps {
   product: ProductName;
@@ -35,6 +36,22 @@ const ProductLink = ({ product }: { product: ProductName }) => {
 function createSidebarConfig(product: ProductName): SidebarConfig {
   // Get product spec directly
   const productSpec = fullSpec.find((spec) => spec.product === product);
+
+  // Get all DocInfo objects for this product
+  const allDocInfo = getAllDocInfo();
+
+  // Create a map from slug pattern to routePath for quick lookup
+  // Key format: product/section/slug or product/slug for root items
+  const slugToRoutePathMap: Map<string, string> = new Map();
+
+  allDocInfo.forEach((doc) => {
+    if (doc.product === product) {
+      // Extract the slug pattern from the path
+      // This could be product/section/slug or product/slug
+      const keyPath = doc.path;
+      slugToRoutePathMap.set(keyPath, doc.routePath);
+    }
+  });
 
   // If no product spec available, return minimal config
   if (!productSpec) {
@@ -68,18 +85,29 @@ function createSidebarConfig(product: ProductName): SidebarConfig {
   // The rest of the sections remain in the order defined in the spec
 
   // Convert doc specs to sidebar items
-  function convertDocToSidebarItem(doc: DocSpec): SidebarItem {
+  function convertDocToSidebarItem(doc: DocSpec, parentPath: string = ""): SidebarItem {
+    // Construct the logical path for this item (used to look up routePath)
+    const itemPath = parentPath ? `${parentPath}/${doc.slug}` : `${product}/${doc.slug}`;
+
+    // Look up the routePath from DocInfo if available
+    const routePath = slugToRoutePathMap.get(itemPath);
+
     const item: SidebarItem = {
       slug: doc.slug,
       label: doc.label,
     };
+
+    // Add routePath if we found a match
+    if (routePath) {
+      item.routePath = routePath;
+    }
 
     // Process children if any
     if (doc.children && doc.children.length > 0) {
       item.items = {};
 
       doc.children.forEach((childDoc) => {
-        const childItem = convertDocToSidebarItem(childDoc);
+        const childItem = convertDocToSidebarItem(childDoc, itemPath);
         if (item.items) {
           item.items[childDoc.slug] = childItem;
         }
@@ -99,21 +127,25 @@ function createSidebarConfig(product: ProductName): SidebarConfig {
     const items: Record<string, SidebarItem> = {};
     const groups: Record<string, SidebarGroup> = {};
 
+    // Get path prefix for section items (used for lookup)
+    const pathPrefix = section.slug === "index" ? product : `${product}/${section.slug}`;
+
     section.children.forEach((child) => {
       if (!child.children || child.children.length === 0) {
         // This is a direct item, add it to items
-        items[child.slug] = {
-          slug: child.slug,
-          label: child.label,
-        };
+        // Convert using our helper that adds routePath
+        items[child.slug] = convertDocToSidebarItem(child, pathPrefix);
       } else {
         // This is a top-level folder, add it as a group
         const groupItems: Record<string, SidebarItem> = {};
 
+        // Get path for this group's children
+        const groupPathPrefix = `${pathPrefix}/${child.slug}`;
+
         // Process all items in this group
         child.children.forEach((grandchild) => {
           // Convert the grandchild and its descendants to sidebar items
-          const sidebarItem = convertDocToSidebarItem(grandchild);
+          const sidebarItem = convertDocToSidebarItem(grandchild, groupPathPrefix);
           groupItems[grandchild.slug] = sidebarItem;
         });
 
