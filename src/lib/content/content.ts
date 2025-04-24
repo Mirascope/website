@@ -147,6 +147,9 @@ export class ContentLoadError extends ContentError {
  * @throws A well-typed error with consistent format
  */
 export function handleContentError(error: unknown, contentType: ContentType, path: string): never {
+  // Pass the error to the environment handler, to e.g. let the prerenderer know the build is broken
+  environment.onError(error instanceof Error ? error : new Error(String(error)));
+
   // Handle known error types
   if (error instanceof DocumentNotFoundError || error instanceof ContentError) {
     throw error;
