@@ -229,7 +229,7 @@ function BlogPostPage() {
 
                 {/* Scrollable table of contents */}
                 <div className="overflow-y-auto pr-4 pl-4 pb-6 flex-grow">
-                  <TableOfContents contentId="blog-content" product="mirascope" path={path} />
+                  <TableOfContents contentId="blog-content" path={path} />
                 </div>
               </div>
             </div>
@@ -337,7 +337,7 @@ function BlogPostPage() {
 
                 {/* Mobile scrollable table of contents */}
                 <div className="overflow-y-auto flex-grow px-4 py-4">
-                  <TableOfContents contentId="blog-content" product="mirascope" path={path} />
+                  <TableOfContents contentId="blog-content" path={path} />
                 </div>
               </div>
             </div>
