@@ -19,7 +19,7 @@ import type {
 import { environment } from "./environment";
 import { processDocSpec } from "./spec";
 
-import { processMDXContent } from "./mdx-processor";
+import { processMDXContent } from "./mdx-processing";
 
 // Import docs specification
 import docsSpec from "@/content/doc/_meta";

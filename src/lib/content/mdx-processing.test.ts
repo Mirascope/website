@@ -1,5 +1,5 @@
 import { describe, test, expect } from "bun:test";
-import { parseFrontmatter, mergeFrontmatter } from "../frontmatter";
+import { parseFrontmatter, mergeFrontmatter } from "./mdx-processing";
 
 describe("Frontmatter Parser", () => {
   describe("parseFrontmatter", () => {

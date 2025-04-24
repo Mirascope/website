@@ -1,8 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { parseFrontmatter } from "../src/lib/content/frontmatter";
-import { processMDXContent } from "../src/lib/content/mdx-processor";
-import type { ContentType } from "../src/lib/content/content-types";
+import { parseFrontmatter, processMDXContent, type ContentType } from "@/src/lib/content";
 
 // Define content locations
 interface ContentLocation {

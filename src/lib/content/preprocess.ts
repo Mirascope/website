@@ -9,7 +9,7 @@ import {
   type DocMeta,
   type PolicyMeta,
 } from "./content-types";
-import { parseFrontmatter } from "./frontmatter";
+import { parseFrontmatter } from "./mdx-processing";
 
 /**
  * Path representation for consistent handling across the application
