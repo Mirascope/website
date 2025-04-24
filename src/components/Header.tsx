@@ -14,6 +14,7 @@ import { getProductRoute } from "@/src/lib/routes";
 import Logo from "@/src/components/Logo";
 import ThemeSwitcher from "@/src/components/ThemeSwitcher";
 import GitHubRepoButton from "@/src/components/GitHubRepoButton";
+import SearchBar from "@/src/components/SearchBar";
 
 // Reusable navigation link component
 interface NavLinkProps {
@@ -143,6 +144,7 @@ export default function Header() {
         </div>
 
         <div className="hidden md:flex items-center gap-3">
+          <SearchBar />
           <GitHubRepoButton />
           <ThemeSwitcher />
         </div>
@@ -200,6 +202,9 @@ export default function Header() {
             <div className="py-2 flex items-center">
               <span className="font-medium text-xl mr-3">Theme</span>
               <ThemeSwitcher />
+            </div>
+            <div className="py-2 flex items-center justify-center w-full mt-2">
+              <SearchBar />
             </div>
           </div>
         </div>
