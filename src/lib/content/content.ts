@@ -5,7 +5,6 @@
  * across all content types (blog, docs, policy)
  */
 
-import { loadContent } from "./content-loader";
 import type {
   BlogMeta,
   DocMeta,
@@ -13,10 +12,16 @@ import type {
   BlogContent,
   DocContent,
   PolicyContent,
+  ContentMeta,
+  Content,
+  ContentType,
 } from "./content-types";
 import { environment } from "./environment";
 import { ContentError } from "./errors";
 import { processDocSpec } from "./spec";
+
+import { processMDXContent } from "./mdx-processor";
+import { handleContentError } from "./errors";
 
 // Import docs specification
 import docsSpec from "@/content/doc/_meta";
@@ -25,23 +30,88 @@ import docsSpec from "@/content/doc/_meta";
 export type { BlogMeta, DocMeta, PolicyMeta, BlogContent, DocContent, PolicyContent };
 
 // Define known policy paths
-const KNOWN_POLICY_PATHS = ["privacy", "terms/service", "terms/use"];
 
-/* ========== BLOG CONTENT ========== */
+/* ========= CONTENT LOADING ========== */
 
 /**
- * Normalize a blog slug to ensure it has the proper prefix
+ * Maps a URL path to a content JSON file path
+ * Automatically determines the content type from the path
+ *
+ * @param path - The URL path to resolve
+ * @returns Resolved path to JSON content file
  */
-function normalizeBlogPath(slug: string): string {
-  return slug.startsWith("/blog/") ? slug : `/blog/${slug}`;
+function resolveContentPath(path: string, type: ContentType): string {
+  if (!path) {
+    throw new Error("Path cannot be empty");
+  }
+  if (path.startsWith("/")) {
+    path = path.slice(1); // Remove leading slash
+  }
+
+  path = !path.startsWith(`${type}/`) ? `${type}/${path}` : path;
+
+  if (path.endsWith("/")) {
+    path = `${path}index`;
+  }
+
+  // Return the full path to the content file
+  return `/static/content/${path}.json`;
 }
+
+/**
+ * Unified content loading pipeline that gets preprocessed content from JSON
+ * and processes it for rendering
+ */
+export async function loadContent<T extends ContentMeta>(
+  path: string,
+  contentType: ContentType
+): Promise<Content<T>> {
+  try {
+    // Get content path
+    const contentPath = resolveContentPath(path, contentType);
+
+    // Fetch content JSON file
+    const response = await environment.fetch(contentPath);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch content: ${response.status} ${response.statusText}`);
+    }
+
+    // Get the JSON data containing meta and content
+    const data = await response.json();
+
+    // Raw content from JSON (includes frontmatter)
+    const rawContent = data.content;
+
+    // Process MDX for rendering
+    const processed = await processMDXContent(rawContent, contentType, {
+      path: path,
+    });
+
+    // Use the metadata from preprocessing - no need to recreate it
+    const meta = data.meta as T;
+
+    // Return complete content
+    return {
+      meta,
+      content: processed.content,
+      mdx: {
+        code: processed.code,
+        frontmatter: processed.frontmatter,
+      },
+    };
+  } catch (error) {
+    return handleContentError(error, contentType, path);
+  }
+}
+
+/* ========== BLOG CONTENT ========== */
 
 /**
  * Get blog content by path
  */
 export async function getBlogContent(slug: string): Promise<BlogContent> {
-  const normalizedSlug = normalizeBlogPath(slug);
-  return loadContent<BlogMeta>(normalizedSlug, "blog");
+  return loadContent<BlogMeta>(slug, "blog");
 }
 
 /**
@@ -71,9 +141,7 @@ export async function getAllBlogMeta(): Promise<BlogMeta[]> {
  * Get doc content by path using the spec format
  */
 export async function getDocContent(path: string): Promise<DocContent> {
-  // Normalize to doc/ prefix format
-  const docPath = !path.startsWith("/doc/") ? `/doc/${path}` : path;
-  return loadContent<DocMeta>(docPath, "doc");
+  return loadContent<DocMeta>(path, "doc");
 }
 
 /**
@@ -127,6 +195,8 @@ export function getSectionsForProduct(product: string): { slug: string; title: s
 
 /* ========== POLICY CONTENT ========== */
 
+const KNOWN_POLICY_PATHS = ["privacy", "terms/service", "terms/use"];
+
 /**
  * Get policy content by path
  */
@@ -156,28 +226,6 @@ export async function getAllPolicyMeta(): Promise<PolicyMeta[]> {
   } catch (error) {
     throw new ContentError(
       `Failed to get all policy documents: ${error instanceof Error ? error.message : String(error)}`,
-      "policy",
-      undefined
-    );
-  }
-}
-
-/**
- * Get policies in a specific collection
- */
-export async function getPoliciesInCollection(collection: string): Promise<PolicyMeta[]> {
-  try {
-    // Get all policies
-    const allPolicies = await getAllPolicyMeta();
-
-    // Filter by collection (e.g., "terms")
-    return allPolicies.filter((policy) => {
-      const pathParts = policy.path.split("/");
-      return pathParts.length > 1 && pathParts[0] === collection;
-    });
-  } catch (error) {
-    throw new ContentError(
-      `Failed to get policy documents for collection ${collection}: ${error instanceof Error ? error.message : String(error)}`,
       "policy",
       undefined
     );
