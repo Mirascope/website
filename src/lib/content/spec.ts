@@ -12,11 +12,10 @@ export type ProductName = "mirascope" | "lilypad";
 // Type for URL-friendly slugs (no slashes)
 export type Slug = string; // In practice: enforced by regex /^[a-z0-9-_]+$/
 
-// Redeclare the DocMeta to avoid circular dependency
-interface DocMeta {
-  title: string;
-  description: string;
-  path: string;
+export interface DocInfo {
+  label: string;
+  path: string; // Doc-relative path for content loading (product/section/slug format, may include /index)
+  routePath: string; // URL path with /docs/ prefix and index pages represented as trailing slashes
   slug: string;
   type: "doc";
   product: ProductName; // Product this doc belongs to
@@ -75,20 +74,28 @@ export interface ValidationResult {
 export function processDocSpec(
   docSpec: DocSpec,
   product: ProductName,
-  pathPrefix: string = ""
-): DocMeta[] {
-  const result: DocMeta[] = [];
+  pathPrefix: string
+): DocInfo[] {
+  const result: DocInfo[] = [];
 
-  // Build the path for this doc
-  const docPath = pathPrefix ? `${pathPrefix}/${docSpec.slug}` : `${product}/${docSpec.slug}`;
+  const slug = docSpec.slug;
+
+  // Simple path construction for content loading - always include the slug
+  const path = `${pathPrefix}/${slug}`;
+
+  // For URL route path: handle index pages with trailing slashes
+  let routePath = `/docs/${pathPrefix}`;
+  if (slug !== "index") {
+    routePath += `/${slug}`; // Add the slug for non-index pages
+  }
 
   // Add this doc to the result if it's a page (has content)
   if (!docSpec.children) {
     result.push({
-      title: docSpec.label,
-      description: "", // Will be populated from frontmatter later
+      label: docSpec.label,
       slug: docSpec.slug,
-      path: docPath,
+      path,
+      routePath,
       type: "doc",
       product,
       hasExtractableSnippets: docSpec.hasExtractableSnippets || false,
@@ -98,7 +105,7 @@ export function processDocSpec(
   // Process children recursively
   if (docSpec.children && docSpec.children.length > 0) {
     docSpec.children.forEach((childSpec) => {
-      const childItems = processDocSpec(childSpec, product, docPath);
+      const childItems = processDocSpec(childSpec, product, path);
       result.push(...childItems);
     });
   }
@@ -112,8 +119,8 @@ export function processDocSpec(
  * @param docsSpec The specification to process
  * @returns Array of DocMeta for all products and docs
  */
-export function getDocsFromSpec(fullSpec: FullDocsSpec): DocMeta[] {
-  const allDocs: DocMeta[] = [];
+export function getDocsFromSpec(fullSpec: FullDocsSpec): DocInfo[] {
+  const allDocs: DocInfo[] = [];
 
   fullSpec.forEach(({ product, sections }) => {
     // Process all sections

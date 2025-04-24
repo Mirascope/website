@@ -8,6 +8,7 @@ import { cn } from "@/src/lib/utils";
 export interface SidebarItem {
   slug: string; // URL-friendly identifier
   label: string; // Display label for sidebar
+  routePath?: string; // Optional explicit route path (overrides constructed path)
   items?: Record<string, SidebarItem>; // Nested items
 }
 
@@ -178,12 +179,19 @@ const NestedItem = ({
   accentColor: string;
   indentLevel: number;
 }) => {
-  const itemUrl = `${basePath}/${itemSlug}`;
+  // For navigation: Use routePath if provided, otherwise construct the path
+  const navigationUrl = item.routePath || `${basePath}/${itemSlug}`;
+
+  // For active state determination: Use the logical path which may include /index
+  const logicalPath = `${basePath}/${itemSlug}`;
+
   // A folder is any item that has nested items
   const children = item.items || {};
   const hasNestedItems = Object.keys(children).length > 0;
+
   // Determine if this folder or any of its children are active
-  const isActive = isActivePath(itemUrl);
+  // Use the logical path for matching, even if we navigate with the routePath
+  const isActive = isActivePath(logicalPath);
 
   // State to track if the folder is expanded
   const [isExpanded, setIsExpanded] = React.useState(isActive);
@@ -251,8 +259,8 @@ const NestedItem = ({
         ) : (
           /* Render regular items as links */
           <SidebarLink
-            to={itemUrl}
-            isActive={isActivePath(itemUrl)}
+            to={navigationUrl}
+            isActive={isActive}
             activeColors={activeColors}
             inactiveColors={inactiveColors}
             className=""
@@ -272,7 +280,7 @@ const NestedItem = ({
         <div className="pt-1 pb-2">
           <NestedItems
             items={children}
-            basePath={itemUrl}
+            basePath={logicalPath}
             isActivePath={isActivePath}
             activeColors={activeColors}
             inactiveColors={inactiveColors}
@@ -420,9 +428,33 @@ const Sidebar = ({ config, headerContent, footerContent }: SidebarProps) => {
 
   // Helper function to check if a path matches the current path
   const isActivePath = (path: string) => {
+    // For index pages, their logical path is e.g. /docs/product/index
+    // but the current path will be /docs/product/ in the browser
+    // First check for direct match with current path (as-is)
+    if (path === currentPath) {
+      return true;
+    }
+
+    // Then check for index-specific matches
+    if (path.endsWith("/index")) {
+      // Remove 'index' to get the parent path with trailing slash
+      const parentPath = path.slice(0, -5);
+
+      // Check if current path equals the parent path (with or without trailing slash)
+      if (parentPath === currentPath || parentPath === currentPath + "/") {
+        return true;
+      }
+    }
+
+    // If it's not an index page, check parent/child relationship
     // Normalize paths by ensuring they end with a slash
     const normalizedPath = path.endsWith("/") ? path : `${path}/`;
     const normalizedCurrentPath = currentPath.endsWith("/") ? currentPath : `${currentPath}/`;
+
+    // Special case to avoid matching the root path with everything
+    if (normalizedPath === "/") {
+      return normalizedCurrentPath === "/";
+    }
 
     return normalizedCurrentPath.startsWith(normalizedPath);
   };
