@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { type ProductName } from "./content";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -32,3 +33,23 @@ export const formatDate = (dateString: string): string => {
     return dateString;
   }
 };
+
+/**
+ * Determines the product from a route path
+ * @param path The route path
+ * @returns The product name or "mirascope" as default
+ */
+export function getProductFromPath(path: string): ProductName {
+  // Check for docs paths that explicitly mention lilypad
+  if (path.startsWith("/docs/lilypad")) {
+    return "lilypad";
+  }
+
+  // Special case for the pricing page
+  if (path === "/pricing") {
+    return "lilypad";
+  }
+
+  // Default to mirascope for all other paths
+  return "mirascope";
+}

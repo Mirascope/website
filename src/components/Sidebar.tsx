@@ -38,16 +38,6 @@ export interface SidebarSection {
 export interface SidebarConfig {
   label?: string;
   sections: SidebarSection[];
-  activeColors: {
-    bg: string;
-    text: string;
-  };
-  inactiveColors: {
-    text: string;
-    hoverBg: string;
-    hoverText: string;
-  };
-  accentColor: string;
 }
 
 interface SidebarProps {
@@ -62,8 +52,6 @@ interface SidebarProps {
 const SidebarLink = ({
   to,
   isActive,
-  activeColors,
-  inactiveColors,
   className = "",
   style,
   params,
@@ -71,15 +59,13 @@ const SidebarLink = ({
 }: {
   to: string;
   isActive: boolean;
-  activeColors: { bg: string; text: string };
-  inactiveColors: { text: string; hoverBg: string; hoverText: string };
   className?: string;
   style?: React.CSSProperties;
   params?: Record<string, any>;
   children: React.ReactNode;
 }) => {
-  const activeClass = `${activeColors.bg} ${activeColors.text} font-medium`;
-  const inactiveClass = `text-${inactiveColors.text} hover:bg-${inactiveColors.hoverBg} hover:text-${inactiveColors.hoverText}`;
+  const activeClass = `bg-button-primary text-white font-medium`;
+  const inactiveClass = `text-muted-foreground hover:bg-accent hover:text-accent-foreground`;
 
   return (
     <Link
@@ -103,22 +89,18 @@ const SidebarLink = ({
 const SectionTab = ({
   to,
   isActive,
-  activeColors,
-  inactiveColors,
   className = "",
   params,
   children,
 }: {
   to: string;
   isActive: boolean;
-  activeColors: { bg: string; text: string };
-  inactiveColors: { text: string; hoverBg: string; hoverText: string };
   className?: string;
   params?: Record<string, any>;
   children: React.ReactNode;
 }) => {
-  const activeClass = `${activeColors.bg} ${activeColors.text} font-medium`;
-  const inactiveClass = `text-${inactiveColors.text} hover:bg-${inactiveColors.hoverBg} hover:text-${inactiveColors.hoverText}`;
+  const activeClass = `bg-button-primary text-white font-medium`;
+  const inactiveClass = `text-muted-foreground hover:bg-accent hover:text-accent-foreground`;
 
   return (
     <Link
@@ -138,9 +120,9 @@ const SectionTab = ({
 /**
  * Group label header
  */
-const GroupLabel = ({ label, accentColor }: { label: string; accentColor: string }) => {
+const GroupLabel = ({ label }: { label: string }) => {
   return (
-    <div className={cn("font-semibold px-3 py-1 block cursor-default", accentColor)}>{label}</div>
+    <div className={cn("font-semibold px-3 py-1 block cursor-default text-primary")}>{label}</div>
   );
 };
 
@@ -151,9 +133,6 @@ interface NestedItemsProps {
   items: Record<string, SidebarItem>;
   basePath: string;
   isActivePath: (path: string) => boolean;
-  activeColors: { bg: string; text: string };
-  inactiveColors: { text: string; hoverBg: string; hoverText: string };
-  accentColor: string;
   indentLevel?: number;
 }
 
@@ -165,18 +144,12 @@ const NestedItem = ({
   item,
   basePath,
   isActivePath,
-  activeColors,
-  inactiveColors,
-  accentColor,
   indentLevel,
 }: {
   itemSlug: string;
   item: SidebarItem;
   basePath: string;
   isActivePath: (path: string) => boolean;
-  activeColors: { bg: string; text: string };
-  inactiveColors: { text: string; hoverBg: string; hoverText: string };
-  accentColor: string;
   indentLevel: number;
 }) => {
   // For navigation: Use routePath if provided, otherwise construct the path
@@ -218,7 +191,7 @@ const NestedItem = ({
             onClick={() => setIsExpanded(!isExpanded)}
             className={cn(
               "w-5 h-5 flex items-center justify-center mr-1",
-              isActive ? accentColor : "text-muted-foreground"
+              isActive ? "text-primary" : "text-muted-foreground"
             )}
             aria-label={isExpanded ? "Collapse" : "Expand"}
           >
@@ -246,7 +219,7 @@ const NestedItem = ({
             onClick={() => setIsExpanded(!isExpanded)}
             className={cn(
               "font-medium block text-left w-full hover:text-accent-foreground rounded-md",
-              isActive ? accentColor : "text-muted-foreground"
+              isActive ? "text-primary" : "text-muted-foreground"
             )}
             style={{
               paddingLeft: hasNestedItems ? "0" : `${0.75 + indentLevel * 0.5}rem`,
@@ -261,8 +234,6 @@ const NestedItem = ({
           <SidebarLink
             to={navigationUrl}
             isActive={isActive}
-            activeColors={activeColors}
-            inactiveColors={inactiveColors}
             className=""
             style={{
               paddingLeft: `${0.75 + indentLevel * 0.5}rem`,
@@ -282,9 +253,6 @@ const NestedItem = ({
             items={children}
             basePath={logicalPath}
             isActivePath={isActivePath}
-            activeColors={activeColors}
-            inactiveColors={inactiveColors}
-            accentColor={accentColor}
             indentLevel={indentLevel + 1}
           />
         </div>
@@ -296,15 +264,7 @@ const NestedItem = ({
 /**
  * Container component for a group of nested items
  */
-const NestedItems = ({
-  items,
-  basePath,
-  isActivePath,
-  activeColors,
-  inactiveColors,
-  accentColor,
-  indentLevel = 0,
-}: NestedItemsProps) => {
+const NestedItems = ({ items, basePath, isActivePath, indentLevel = 0 }: NestedItemsProps) => {
   // Ensure we always have an object, even if items is undefined
   const safeItems = items || {};
 
@@ -317,9 +277,6 @@ const NestedItems = ({
           item={item}
           basePath={basePath}
           isActivePath={isActivePath}
-          activeColors={activeColors}
-          inactiveColors={inactiveColors}
-          accentColor={accentColor}
           indentLevel={indentLevel}
         />
       ))}
@@ -333,15 +290,9 @@ const NestedItems = ({
 const SectionContent = ({
   section,
   isActivePath,
-  activeColors,
-  inactiveColors,
-  accentColor,
 }: {
   section: SidebarSection;
   isActivePath: (path: string) => boolean;
-  activeColors: { bg: string; text: string };
-  inactiveColors: { text: string; hoverBg: string; hoverText: string };
-  accentColor: string;
 }) => {
   if (!section) return null;
 
@@ -353,9 +304,6 @@ const SectionContent = ({
           items={section.items}
           basePath={section.basePath}
           isActivePath={isActivePath}
-          activeColors={activeColors}
-          inactiveColors={inactiveColors}
-          accentColor={accentColor}
         />
       )}
 
@@ -365,16 +313,13 @@ const SectionContent = ({
           return (
             <div key={groupSlug} className="pt-2">
               {/* Group label - not selectable/highlightable */}
-              <GroupLabel label={group.label} accentColor={accentColor} />
+              <GroupLabel label={group.label} />
 
               {/* Group items */}
               <NestedItems
                 items={group.items}
                 basePath={`${section.basePath}/${groupSlug}`}
                 isActivePath={isActivePath}
-                activeColors={activeColors}
-                inactiveColors={inactiveColors}
-                accentColor={accentColor}
                 indentLevel={1}
               />
             </div>
@@ -482,8 +427,6 @@ const Sidebar = ({ config, headerContent, footerContent }: SidebarProps) => {
                 key={section.slug}
                 to={section.basePath}
                 isActive={section.slug === activeSection}
-                activeColors={config.activeColors}
-                inactiveColors={config.inactiveColors}
               >
                 {section.label}
               </SectionTab>
@@ -492,7 +435,7 @@ const Sidebar = ({ config, headerContent, footerContent }: SidebarProps) => {
 
           {/* Border line below section buttons */}
           <div className="pb-4">
-            <div className={cn("border-b", config.accentColor)}></div>
+            <div className="border-b border-primary"></div>
           </div>
         </>
       )}
@@ -509,20 +452,11 @@ const Sidebar = ({ config, headerContent, footerContent }: SidebarProps) => {
               <SectionContent
                 section={config.sections.find((s) => s.slug === activeSection)!}
                 isActivePath={isActivePath}
-                activeColors={config.activeColors}
-                inactiveColors={config.inactiveColors}
-                accentColor={config.accentColor}
               />
             ) : (
               // If no active section, show first section as default
               config.sections.length > 0 && (
-                <SectionContent
-                  section={config.sections[0]}
-                  isActivePath={isActivePath}
-                  activeColors={config.activeColors}
-                  inactiveColors={config.inactiveColors}
-                  accentColor={config.accentColor}
-                />
+                <SectionContent section={config.sections[0]} isActivePath={isActivePath} />
               )
             )}
           </nav>

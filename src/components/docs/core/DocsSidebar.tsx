@@ -20,10 +20,12 @@ const ProductTitle = ({ product }: { product: ProductName }) => {
 };
 
 const ProductLink = ({ product }: { product: ProductName }) => {
+  const hoverClass =
+    product === "mirascope" ? "hover:text-mirascope-purple" : "hover:text-lilypad-green";
   return (
     <Link
       to={getProductRoute(product)}
-      className={`text-xl font-medium text-muted-foreground hover:text-accent-foreground`}
+      className={`text-xl font-medium text-muted-foreground ${hoverClass}`}
     >
       {product === "mirascope" ? "Mirascope" : "Lilypad"}
     </Link>
@@ -58,16 +60,6 @@ function createSidebarConfig(product: ProductName): SidebarConfig {
     return {
       label: product,
       sections: [],
-      activeColors: {
-        bg: product === "mirascope" ? "bg-button-primary" : "bg-lilypad-green",
-        text: "text-white",
-      },
-      inactiveColors: {
-        text: "muted-foreground",
-        hoverBg: "accent",
-        hoverText: "accent-foreground",
-      },
-      accentColor: product === "mirascope" ? "text-mirascope-purple" : "text-lilypad-green",
     };
   }
 
@@ -171,16 +163,6 @@ function createSidebarConfig(product: ProductName): SidebarConfig {
   return {
     label: product,
     sections: sidebarSections,
-    activeColors: {
-      bg: product === "mirascope" ? "bg-button-primary" : "bg-lilypad-green",
-      text: "text-white",
-    },
-    inactiveColors: {
-      text: "muted-foreground",
-      hoverBg: "accent",
-      hoverText: "accent-foreground",
-    },
-    accentColor: product === "mirascope" ? "text-mirascope-purple" : "text-lilypad-green",
   };
 }
 
