@@ -1,9 +1,7 @@
 import React from "react";
 import ErrorContent from "./ErrorContent";
 import SEOMeta from "./SEOMeta";
-import { DocumentNotFoundError, ContentError } from "@/src/lib/content/content";
-
-export type ContentType = "blog" | "docs";
+import { DocumentNotFoundError, ContentError, type ContentType } from "@/src/lib/content/content";
 
 interface ContentErrorHandlerProps {
   error: Error;
@@ -24,11 +22,23 @@ const ContentErrorHandler: React.FC<ContentErrorHandlerProps> = ({ error, conten
       backTo: "/blog",
       backLabel: "Back to Blog",
     },
-    docs: {
+    doc: {
       title: isNotFound ? "Page Not Found" : "Error Loading Page",
       notFoundMessage: "The documentation page you're looking for doesn't exist or has been moved.",
       backTo: "/docs",
       backLabel: "Back to Documentation",
+    },
+    policy: {
+      title: isNotFound ? "Page Not Found" : "Error Loading Page",
+      notFoundMessage: "The policy page you're looking for doesn't exist or has been moved.",
+      backTo: "/",
+      backLabel: "Back to Home",
+    },
+    dev: {
+      title: isNotFound ? "Page Not Found" : "Error Loading Page",
+      notFoundMessage: "The development page you're looking for doesn't exist or has been moved.",
+      backTo: "/dev",
+      backLabel: "Back to Dev Tools",
     },
   };
 

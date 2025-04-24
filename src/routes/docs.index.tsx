@@ -10,7 +10,7 @@ export const Route = createFileRoute("/docs/")({
     return (
       <ContentErrorHandler
         error={error instanceof Error ? error : new Error(String(error))}
-        contentType="docs"
+        contentType="doc"
       />
     );
   },
