@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 7: Call Params
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/calls.mdx:331
+# Source: content/doc/mirascope/learn/calls.mdx:332
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import BaseDynamicConfig, Messages, llm

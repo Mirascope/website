@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 10: Streaming
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/agents.mdx:555
+# Source: content/doc/mirascope/learn/agents.mdx:556
 # This file is auto-generated; any edits should be made in the source file
 
 import json

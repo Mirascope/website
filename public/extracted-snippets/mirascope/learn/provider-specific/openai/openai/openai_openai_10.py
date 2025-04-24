@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 10: Basic Usage
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/provider-specific/openai.mdx:453
+# Source: content/doc/mirascope/learn/provider-specific/openai.mdx:454
 # This file is auto-generated; any edits should be made in the source file
 
 import asyncio

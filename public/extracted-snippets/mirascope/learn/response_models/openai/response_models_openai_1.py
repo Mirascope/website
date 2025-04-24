@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 1: Basic Usage and Syntax
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/response_models.mdx:26
+# Source: content/doc/mirascope/learn/response_models.mdx:27
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm
