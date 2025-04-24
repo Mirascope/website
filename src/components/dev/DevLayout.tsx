@@ -1,8 +1,10 @@
 import React from "react";
 import DevSidebar from "./DevSidebar";
+import type { DevMeta } from "@/src/lib/content";
 
 interface DevLayoutProps {
   children: React.ReactNode;
+  devPages: DevMeta[];
 }
 
 /**
@@ -11,9 +13,9 @@ interface DevLayoutProps {
  * Provides a consistent layout for all dev tool pages without the 60px top padding
  * that's present in the main BaseLayout component
  */
-const DevLayout: React.FC<DevLayoutProps> = ({ children }) => {
+const DevLayout: React.FC<DevLayoutProps> = ({ children, devPages }) => {
   // Sidebar content
-  const leftSidebar = <DevSidebar />;
+  const leftSidebar = <DevSidebar devPages={devPages} />;
 
   // Main content
   const mainContent = <div className="flex-1 min-w-0 px-8">{children}</div>;

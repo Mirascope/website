@@ -1,12 +1,42 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { routeToFilename } from "../../lib/utils";
 import DevLayout from "@/src/components/dev/DevLayout";
 import { environment } from "@/src/lib/content/environment";
+import { getAllDevMeta } from "@/src/lib/content";
+import ContentErrorHandler from "@/src/components/ContentErrorHandler";
+import { LoadingContent } from "@/src/components/docs";
 
 export const Route = createFileRoute("/dev/audit-metadata")({
   component: AuditMetadata,
-  onError: (error: Error) => environment.onError(error),
+  loader: async () => {
+    try {
+      // Get all MDX-based dev pages for the sidebar
+      const devPages = await getAllDevMeta();
+      return { devPages };
+    } catch (error) {
+      console.error("Error loading dev pages:", error);
+      return { devPages: [] };
+    }
+  },
+  pendingComponent: () => {
+    return (
+      <DevLayout devPages={[]}>
+        <div className="container py-8">
+          <LoadingContent spinnerClassName="h-12 w-12" fullHeight={false} />
+        </div>
+      </DevLayout>
+    );
+  },
+  errorComponent: ({ error }) => {
+    environment.onError(error);
+    return (
+      <ContentErrorHandler
+        error={error instanceof Error ? error : new Error(String(error))}
+        contentType="dev"
+      />
+    );
+  },
 });
 
 interface SEOMetadataItem {
@@ -22,6 +52,7 @@ interface SEOMetadataItem {
 type MetadataRecord = Record<string, SEOMetadataItem>;
 
 function AuditMetadata() {
+  const { devPages } = useLoaderData({ from: "/dev/audit-metadata" });
   const [metadata, setMetadata] = useState<MetadataRecord>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -61,7 +92,7 @@ function AuditMetadata() {
       <>
         <h1 className="text-3xl font-bold mb-6">SEO Metadata Audit</h1>
 
-        <p className="mb-6 text-gray-600">
+        <p className="mb-6 text-muted-foreground">
           This page displays all routes with their SEO metadata for auditing purposes.
         </p>
 
@@ -71,7 +102,7 @@ function AuditMetadata() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-5">
                   <div>
-                    <span className="text-gray-500 mr-2">Route:</span>
+                    <span className="text-foreground mr-2">Route:</span>
                     <a
                       href={item.route}
                       className="text-blue-600 hover:underline break-all font-medium"
@@ -83,12 +114,12 @@ function AuditMetadata() {
                   </div>
 
                   <div>
-                    <div className="text-gray-500 mb-1">Title:</div>
+                    <div className="text-foreground mb-1">Title:</div>
                     <div className="font-medium text-lg">{item.title}</div>
                   </div>
 
                   <div>
-                    <div className="text-gray-500 mb-1">Description:</div>
+                    <div className="text-foreground mb-1">Description:</div>
                     <div className="text-lg">{item.description}</div>
                   </div>
                 </div>
@@ -104,7 +135,7 @@ function AuditMetadata() {
                         const target = e.target as HTMLImageElement;
                         target.style.display = "none";
                         target.parentElement!.innerHTML =
-                          '<div class="p-4 text-gray-500 italic">No social card available</div>';
+                          '<div class="p-4 text-foreground italic">No social card available</div>';
                       }}
                     />
                   </div>
@@ -118,7 +149,7 @@ function AuditMetadata() {
   };
 
   return (
-    <DevLayout>
+    <DevLayout devPages={devPages}>
       <div className="container py-8">{content()}</div>
     </DevLayout>
   );

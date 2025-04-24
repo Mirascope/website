@@ -1,11 +1,41 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import { useState, useEffect, useRef, useCallback } from "react";
 import DevLayout from "@/src/components/dev/DevLayout";
 import { environment } from "@/src/lib/content/environment";
+import { getAllDevMeta } from "@/src/lib/content";
+import ContentErrorHandler from "@/src/components/ContentErrorHandler";
+import { LoadingContent } from "@/src/components/docs";
 
 export const Route = createFileRoute("/dev/social-card")({
   component: SocialCardPreview,
-  onError: (error: Error) => environment.onError(error),
+  loader: async () => {
+    try {
+      // Get all MDX-based dev pages for the sidebar
+      const devPages = await getAllDevMeta();
+      return { devPages };
+    } catch (error) {
+      console.error("Error loading dev pages:", error);
+      return { devPages: [] };
+    }
+  },
+  pendingComponent: () => {
+    return (
+      <DevLayout devPages={[]}>
+        <div className="container py-8">
+          <LoadingContent spinnerClassName="h-12 w-12" fullHeight={false} />
+        </div>
+      </DevLayout>
+    );
+  },
+  errorComponent: ({ error }) => {
+    environment.onError(error);
+    return (
+      <ContentErrorHandler
+        error={error instanceof Error ? error : new Error(String(error))}
+        contentType="dev"
+      />
+    );
+  },
 });
 
 // Helper interface for iframe communication
@@ -26,6 +56,7 @@ declare global {
 type FontSizeRule = { maxChars: number; fontSize: string; label: string };
 
 function SocialCardPreview() {
+  const { devPages } = useLoaderData({ from: "/dev/social-card" });
   const [title, setTitle] = useState("Your Title Goes Here");
   const [fontSizeRules, setFontSizeRules] = useState<FontSizeRule[]>([]);
 
@@ -60,7 +91,7 @@ function SocialCardPreview() {
   };
 
   return (
-    <DevLayout>
+    <DevLayout devPages={devPages}>
       <div className="container py-8">
         <h1 className="text-3xl font-bold mb-6">Social Card Preview</h1>
 
