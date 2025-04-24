@@ -2,8 +2,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import type { BlogMeta } from "./content/content-types";
-import { getAllDocMeta } from "@/src/lib/content";
+import { getAllDocMeta, type BlogMeta } from "@/src/lib/content";
 
 // Base URL for the site
 export const SITE_URL = "https://mirascope.com";
