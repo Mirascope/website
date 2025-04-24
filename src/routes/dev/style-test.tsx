@@ -3,7 +3,7 @@ import { LoadingContent } from "@/src/components/docs";
 import DevLayout from "@/src/components/dev/DevLayout";
 import { MDXRenderer } from "@/src/components/MDXRenderer";
 import { useState, useEffect } from "react";
-import { processMDXContent } from "@/src/lib/content/mdx-processor";
+import { processMDXContent } from "@/src/lib/content";
 import { environment } from "@/src/lib/content/environment";
 
 export const Route = createFileRoute("/dev/style-test")({
