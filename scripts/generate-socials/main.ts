@@ -103,25 +103,33 @@ async function updateChangedMetadata() {
       // Extract metadata using static rendering
       const newRecord = await extractAllMetadata(true);
 
-      // Find items that are changed or new
-      const changedRoutes: string[] = [];
+      // Track routes needing different types of updates
+      const routesNeedingImageRegen: string[] = [];
+      const routesNeedingMetadataUpdate: string[] = [];
       const removedRoutes: string[] = [];
 
       // Check for new or modified routes
       for (const [route, newItem] of Object.entries(newRecord)) {
         // If the route doesn't exist in old record, it's new
         if (!oldRecord[route]) {
-          changedRoutes.push(route);
+          routesNeedingImageRegen.push(route);
           continue;
         }
 
         const oldItem = oldRecord[route];
 
-        // Compare fields that matter for image generation
-        if (oldItem.title !== newItem.title || oldItem.description !== newItem.description) {
-          changedRoutes.push(route);
+        // Only regenerate images if title changed (title appears in the image)
+        if (oldItem.title !== newItem.title) {
+          routesNeedingImageRegen.push(route);
+        }
+        // If only description changed, just update metadata without regenerating image
+        else if (oldItem.description !== newItem.description) {
+          routesNeedingMetadataUpdate.push(route);
         }
       }
+
+      // Combine routes needing any kind of update
+      const changedRoutes = [...routesNeedingImageRegen, ...routesNeedingMetadataUpdate];
 
       // Check for removed routes
       for (const [route, _] of Object.entries(oldRecord)) {
@@ -162,18 +170,31 @@ async function updateChangedMetadata() {
           });
         }
 
-        // Generate images only for changed/new items
+        // Handle routes that need updates
         if (changedRoutes.length > 0) {
-          // Extract the changed items for image generation
-          const changedItems = changedRoutes.map((route) => newRecord[route]);
+          // Generate images only for routes that need image regeneration
+          if (routesNeedingImageRegen.length > 0) {
+            // Extract only the items that need image regeneration
+            const itemsNeedingImages = routesNeedingImageRegen.map((route) => newRecord[route]);
 
-          // Generate images only for changed items
-          await generateImages(browser, changedItems);
+            // Generate images only for routes that need it
+            await generateImages(browser, itemsNeedingImages);
 
-          // Only save metadata after successful image generation
-          saveMetadataToFile(newRecord);
+            // Only save metadata after successful image generation to maintain consistency
+            saveMetadataToFile(newRecord);
 
-          coloredLog("Metadata and images updated successfully.", "green");
+            coloredLog(
+              `Regenerated ${routesNeedingImageRegen.length} images and updated metadata for all ${changedRoutes.length} routes.`,
+              "green"
+            );
+          } else if (routesNeedingMetadataUpdate.length > 0) {
+            // If we only have metadata updates (no image regeneration needed)
+            saveMetadataToFile(newRecord);
+            coloredLog(
+              `Updated metadata for ${routesNeedingMetadataUpdate.length} routes.`,
+              "green"
+            );
+          }
         } else {
           // If we only removed routes (no additions/changes), we can safely update metadata
           saveMetadataToFile(newRecord);

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 8: Call Params
 # Generated for provider: anthropic
-# Source: content/doc/mirascope/learn/calls.mdx:349
+# Source: content/doc/mirascope/learn/calls.mdx:350
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import BaseDynamicConfig, llm, prompt_template

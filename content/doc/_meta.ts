@@ -9,13 +9,10 @@
 import mirascopeSpec from "./mirascope/_meta";
 import lilypadSpec from "./lilypad/_meta";
 
-import type { ProductDocsSpec } from "@/src/lib/content/spec";
+import type { FullDocsSpec } from "@/src/lib/content/spec";
 
 // Build spec with all products
-const spec: ProductDocsSpec = {
-  mirascope: mirascopeSpec,
-  lilypad: lilypadSpec,
-};
+const spec: FullDocsSpec = [mirascopeSpec, lilypadSpec];
 
 // Default export the spec
 export default spec;

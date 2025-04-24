@@ -3,6 +3,7 @@ import type { ProductSpec } from "@/src/lib/content/spec";
  * Documentation structure for lilypad in new DocSpec format
  */
 const lilypadSpec: ProductSpec = {
+  product: "lilypad",
   sections: [
     {
       slug: "index",

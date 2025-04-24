@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 5: Accessing Original Tool Call
 # Generated for provider: anthropic
-# Source: content/doc/mirascope/learn/tools.mdx:222
+# Source: content/doc/mirascope/learn/tools.mdx:223
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import BaseTool, llm

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 9: Streaming
 # Generated for provider: anthropic
-# Source: content/doc/mirascope/learn/agents.mdx:493
+# Source: content/doc/mirascope/learn/agents.mdx:494
 # This file is auto-generated; any edits should be made in the source file
 
 import json

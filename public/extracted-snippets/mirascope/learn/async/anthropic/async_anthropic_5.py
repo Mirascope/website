@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 5: Async Streaming
 # Generated for provider: anthropic
-# Source: content/doc/mirascope/learn/async.mdx:167
+# Source: content/doc/mirascope/learn/async.mdx:168
 # This file is auto-generated; any edits should be made in the source file
 
 import asyncio

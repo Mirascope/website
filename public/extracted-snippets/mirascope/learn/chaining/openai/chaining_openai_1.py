@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 1: Function Chaining
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/chaining.mdx:27
+# Source: content/doc/mirascope/learn/chaining.mdx:28
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 1: Calls
 # Generated for provider: anthropic
-# Source: content/doc/mirascope/learn/retries.mdx:26
+# Source: content/doc/mirascope/learn/retries.mdx:27
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm

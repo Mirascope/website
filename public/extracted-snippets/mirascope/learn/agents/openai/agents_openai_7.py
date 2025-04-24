@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 7: Human-In-The-Loop
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/agents.mdx:368
+# Source: content/doc/mirascope/learn/agents.mdx:369
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import BaseDynamicConfig, Messages, llm, BaseMessageParam
