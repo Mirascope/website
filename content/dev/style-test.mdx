@@ -201,6 +201,30 @@ graph TD
 
 
 
+## Color Theme Combinations
+
+<h3 className="text-xl font-semibold mb-3">Background + Text Colors</h3>
+<ColorThemeDisplay
+  bgColors={["bg-background", "bg-muted", "bg-accent"]}
+  textColors={[
+    "text-foreground",
+    "text-primary",
+    "text-secondary",
+    "text-accent-foreground",
+    "text-muted-foreground",
+  ]}
+/>
+
+<h3 className="text-xl font-semibold mb-3">Semantic Background + Text Colors</h3>
+<ColorThemeDisplay
+  bgColors={["bg-button-primary", "bg-primary", "bg-secondary", "bg-lilypad-green"]}
+  textColors={[
+    "text-primary-foreground",
+    "text-secondary-foreground",
+    "text-accent-foreground",
+  ]}
+/>
+
 ## Cards
 
 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">

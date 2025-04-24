@@ -132,7 +132,7 @@ const GroupLabel = ({ label }: { label: string }) => {
 interface NestedItemsProps {
   items: Record<string, SidebarItem>;
   basePath: string;
-  isActivePath: (path: string) => boolean;
+  isActivePath: (path: string, routePath?: string) => boolean;
   indentLevel?: number;
 }
 
@@ -149,7 +149,7 @@ const NestedItem = ({
   itemSlug: string;
   item: SidebarItem;
   basePath: string;
-  isActivePath: (path: string) => boolean;
+  isActivePath: (path: string, routePath?: string) => boolean;
   indentLevel: number;
 }) => {
   // For navigation: Use routePath if provided, otherwise construct the path
@@ -163,8 +163,8 @@ const NestedItem = ({
   const hasNestedItems = Object.keys(children).length > 0;
 
   // Determine if this folder or any of its children are active
-  // Use the logical path for matching, even if we navigate with the routePath
-  const isActive = isActivePath(logicalPath);
+  // Use routePath if provided, otherwise use the logical path
+  const isActive = isActivePath(logicalPath, item.routePath);
 
   // State to track if the folder is expanded
   const [isExpanded, setIsExpanded] = React.useState(isActive);
@@ -372,10 +372,15 @@ const Sidebar = ({ config, headerContent, footerContent }: SidebarProps) => {
   }, [sidebarId, currentPath]);
 
   // Helper function to check if a path matches the current path
-  const isActivePath = (path: string) => {
+  const isActivePath = (path: string, routePath?: string) => {
+    // If a routePath is provided, check that first
+    if (routePath && routePath === currentPath) {
+      return true;
+    }
+
     // For index pages, their logical path is e.g. /docs/product/index
     // but the current path will be /docs/product/ in the browser
-    // First check for direct match with current path (as-is)
+    // Check for direct match with current path (as-is)
     if (path === currentPath) {
       return true;
     }

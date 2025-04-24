@@ -19,6 +19,7 @@ import Logo from "./Logo";
 import { Underline } from "./Underline";
 import { ProviderCodeWrapper } from "./ProviderCodeWrapper";
 import { ResponsiveImage } from "./ResponsiveImage";
+import { devComponents } from "./dev/DevComponents";
 
 // Helper function to generate heading ID from text
 const slugify = (text: string): string => {
@@ -60,6 +61,9 @@ export const components = {
   TabsTrigger,
   TabsContent,
   Logo,
+
+  // Dev components
+  ...devComponents,
 
   // Shorthand components
   Install: InstallSnippet,
