@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 5: Integrating Tools
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/agents.mdx:216
+# Source: content/doc/mirascope/learn/agents.mdx:217
 # This file is auto-generated; any edits should be made in the source file
 
 import json

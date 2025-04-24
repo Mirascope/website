@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 1: Tools
 # Generated for provider: anthropic
-# Source: content/doc/mirascope/learn/provider-specific/openai.mdx:17
+# Source: content/doc/mirascope/learn/provider-specific/openai.mdx:18
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope.core import BaseTool, openai

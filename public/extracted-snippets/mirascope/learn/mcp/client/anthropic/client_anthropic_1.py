@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 1: Basic Usage and Syntax
 # Generated for provider: anthropic
-# Source: content/doc/mirascope/learn/mcp/client.mdx:17
+# Source: content/doc/mirascope/learn/mcp/client.mdx:18
 # This file is auto-generated; any edits should be made in the source file
 
 import asyncio

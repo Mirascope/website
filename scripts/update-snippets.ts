@@ -164,7 +164,8 @@ function compareDirectories(dir1: string, dir2: string): string[] {
  * Clean extracted snippets for a specific doc
  */
 function cleanSnippets(doc: ExtractableDoc): void {
-  const relativePath = doc.logicalPath.replace(/\/index$/, "");
+  // Use the full logical path without modifications
+  const relativePath = doc.logicalPath;
   const snippetDir = path.join(SNIPPETS_ROOT, relativePath);
 
   if (fs.existsSync(snippetDir)) {
@@ -241,8 +242,8 @@ function checkDocSnippets(doc: ExtractableDoc, providers: string[], verbose = fa
           });
         }
 
-        // Get existing snippets paths
-        const relativePath = doc.logicalPath.replace(/\/index$/, "");
+        // Get existing snippets paths - use full path without modifications
+        const relativePath = doc.logicalPath;
         const snippetDir = path.join(SNIPPETS_ROOT, relativePath, provider);
 
         if (!fs.existsSync(snippetDir)) {
@@ -305,7 +306,7 @@ function checkDocSnippets(doc: ExtractableDoc, providers: string[], verbose = fa
  * Display help information
  */
 function showHelp(): void {
-  console.log("Usage: npm run update-snippets -- [options]");
+  console.log("Usage: bun run scripts/update-snippets -- [options]");
   console.log("");
   console.log("Options:");
   console.log("  --check               Check if snippets are up-to-date");
@@ -314,13 +315,17 @@ function showHelp(): void {
   console.log("  --help                Show this help message");
   console.log("");
   console.log("Examples:");
-  console.log("  npm run update-snippets                                   # Update all snippets");
-  console.log("  npm run update-snippets -- --check                        # Check all snippets");
   console.log(
-    "  npm run update-snippets -- --path=content/doc/.../file.mdx   # Update specific file"
+    "  bun run scripts/update-snippets                                   # Update all snippets"
   );
   console.log(
-    "  npm run update-snippets -- --check --path=content/doc/...    # Check specific file"
+    "  bun run scripts/update-snippets -- --check                        # Check all snippets"
+  );
+  console.log(
+    "  bun run scripts/update-snippets -- --path=content/doc/.../file.mdx   # Update specific file"
+  );
+  console.log(
+    "  bun run scripts/update-snippets -- --check --path=content/doc/...    # Check specific file"
   );
   process.exit(0);
 }

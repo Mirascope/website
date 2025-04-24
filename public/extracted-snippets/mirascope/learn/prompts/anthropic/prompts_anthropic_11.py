@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 11: Audio Inputs
 # Generated for provider: anthropic
-# Source: content/doc/mirascope/learn/prompts.mdx:366
+# Source: content/doc/mirascope/learn/prompts.mdx:367
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import prompt_template

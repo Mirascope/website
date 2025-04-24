@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 5: Multi-Line Prompts
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/prompts.mdx:131
+# Source: content/doc/mirascope/learn/prompts.mdx:132
 # This file is auto-generated; any edits should be made in the source file
 
 import inspect

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 1: Basic Usage and Syntax
 # Generated for provider: anthropic
-# Source: content/doc/mirascope/learn/streams.mdx:54
+# Source: content/doc/mirascope/learn/streams.mdx:55
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm
