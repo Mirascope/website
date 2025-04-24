@@ -4,7 +4,7 @@ import { Button } from "@/src/components/ui/button";
 import { Sparkles, Server, Clipboard, Check } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { ProviderDropdown } from "@/src/components/docs";
-import { type DocContent } from "@/src/lib/content/docs";
+import { type DocContent } from "@/src/lib/content";
 import analyticsManager from "@/src/lib/services/analytics";
 
 interface TocSidebarProps {

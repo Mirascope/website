@@ -26,7 +26,7 @@ import * as crypto from "crypto";
 import { processFile } from "./lib/snippet-extractor";
 
 // Import doc meta types and data
-import { getDocsFromSpec } from "@/src/lib/content/docs";
+import { getAllDocMeta } from "@/src/lib/content";
 
 // Provider list to generate examples for
 const PROVIDERS = ["openai", "anthropic"];
@@ -53,7 +53,7 @@ function findExtractableDocs(specificFilePath?: string): ExtractableDoc[] {
   const absoluteTargetPath = specificFilePath ? path.resolve(specificFilePath) : null;
 
   // Get all docs from metadata
-  const allDocs = getDocsFromSpec();
+  const allDocs = getAllDocMeta();
 
   // Filter to only those marked as extractable
   for (const doc of allDocs) {

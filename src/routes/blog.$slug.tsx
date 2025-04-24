@@ -9,9 +9,9 @@ import TableOfContents from "@/src/components/TableOfContents";
 import SEOMeta from "@/src/components/SEOMeta";
 import useFunMode from "@/src/lib/hooks/useFunMode";
 import { cn } from "@/src/lib/utils";
-import { getBlogContent } from "@/src/lib/content/blog";
+import { getBlogContent } from "@/src/lib/content";
 import analyticsManager from "@/src/lib/services/analytics";
-import type { BlogContent } from "@/src/lib/content/blog";
+import type { BlogContent } from "@/src/lib/content";
 import { environment } from "@/src/lib/content/environment";
 
 /**

@@ -1,8 +1,8 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import PolicyPage, { PolicyPageLoading, PolicyPageError } from "@/src/components/PolicyPage";
 import SEOMeta from "@/src/components/SEOMeta";
-import { createPolicyLoader } from "@/src/lib/content/policy";
-import type { PolicyContent } from "@/src/lib/content/policy";
+import { createPolicyLoader } from "@/src/lib/content";
+import type { PolicyContent } from "@/src/lib/content";
 import { environment } from "@/src/lib/content/environment";
 
 export const Route = createFileRoute("/terms/use")({
