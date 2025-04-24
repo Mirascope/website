@@ -6,9 +6,6 @@ dist-ssr
 scratch
 package-lock.json
 
-# Claude Code
-CLAUDE.md
-
 # Cursor
 .cursorrules
 
