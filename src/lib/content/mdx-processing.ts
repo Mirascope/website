@@ -1,5 +1,4 @@
-import { ContentError } from "./content";
-import type { ContentType } from "./content-types";
+import { ContentError, type ContentType } from "./content";
 
 /**
  * Result of frontmatter parsing

@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { ContentPreprocessor } from "@/src/lib/content/preprocess";
 import { SITE_URL, getAllRoutes } from "@/src/lib/router-utils";
-import type { BlogMeta } from "@/src/lib/content/content-types";
+import type { BlogMeta } from "@/src/lib/content";
 
 /**
  * Main processing function that generates static JSON files for all MDX content

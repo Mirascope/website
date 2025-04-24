@@ -2,13 +2,23 @@
  * Content specification types
  *
  * These types are used to define the structure of content in _meta.ts files.
+ * They define which documents are available in the site, and how they are organized in the sidebar.
  * They are distinct from the ContentMeta types used at runtime.
  */
 
-import type { DocMeta } from "./content-types";
-
 // Type for URL-friendly slugs (no slashes)
 export type Slug = string; // In practice: enforced by regex /^[a-z0-9-_]+$/
+
+// Redeclare the DocMeta to avoid circular dependency
+interface DocMeta {
+  title: string;
+  description: string;
+  path: string;
+  slug: string;
+  type: "doc";
+  product: string; // Product this doc belongs to
+  hasExtractableSnippets: boolean; // Whether this doc has extractable snippets
+}
 
 /**
  * Item in the documentation structure

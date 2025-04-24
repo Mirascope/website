@@ -8,7 +8,7 @@ import {
   type BlogMeta,
   type DocMeta,
   type PolicyMeta,
-} from "./content-types";
+} from "./content";
 import { parseFrontmatter } from "./mdx-processing";
 
 /**
