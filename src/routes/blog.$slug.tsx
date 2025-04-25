@@ -175,11 +175,7 @@ function BlogPostPage() {
                 className="bg-background rounded-xl shadow-sm p-4 sm:p-6 border border-border blog-content"
               >
                 {post.mdx ? (
-                  <PagefindMeta
-                    title={post.meta.title}
-                    description={post.meta.description}
-                    section="Blog"
-                  >
+                  <PagefindMeta title={post.meta.title}>
                     <MDXRenderer
                       code={post.mdx.code}
                       frontmatter={post.mdx.frontmatter}

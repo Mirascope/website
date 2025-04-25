@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from "react";
-import { Search as SearchIcon, X } from "lucide-react";
+import { useState, useRef, useEffect, type KeyboardEvent } from "react";
+import { Search as SearchIcon, Command } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 
 // Declare Pagefind types on the window object
@@ -10,6 +10,12 @@ declare global {
       search: (query: string) => Promise<{
         results: PagefindResult[];
       }>;
+      debouncedSearch: (
+        query: string,
+        time?: number
+      ) => Promise<{
+        results: PagefindResult[];
+      } | null>;
       options: (options: any) => Promise<void>;
     };
   }
@@ -22,7 +28,7 @@ interface PagefindResult {
   data: () => Promise<{
     url: string;
     excerpt: string;
-    meta: Record<string, string>;
+    meta?: Record<string, string>;
     content: string;
   }>;
 }
@@ -41,14 +47,195 @@ interface SearchResultGroup {
   results: SearchResultItem[];
 }
 
+// Component for an individual search result
+interface SearchResultProps {
+  result: SearchResultItem;
+  onSelect: () => void;
+}
+
+function SearchResult({ result, onSelect }: SearchResultProps) {
+  return (
+    <Link
+      to={result.url}
+      onClick={onSelect}
+      className="flex px-4 py-3 hover:bg-accent/50 transition-colors text-sm border-t border-border/40 first:border-0"
+    >
+      <div className="flex-1 min-w-0">
+        <h4 className="font-medium text-foreground mb-1 truncate">{result.title || "Untitled"}</h4>
+        <p
+          className="text-xs text-muted-foreground line-clamp-2 search-excerpt"
+          dangerouslySetInnerHTML={{ __html: result.excerpt }}
+        />
+      </div>
+    </Link>
+  );
+}
+
+// Component for a group of search results
+interface SearchResultGroupProps {
+  group: SearchResultGroup;
+  onResultSelect: () => void;
+}
+
+function SearchResultGroupComponent({ group, onResultSelect }: SearchResultGroupProps) {
+  return (
+    <div className="border-b border-border last:border-0">
+      <h3 className="text-xs font-semibold text-muted-foreground px-4 py-2 uppercase bg-muted/40">
+        {group.name}
+      </h3>
+      {group.results.map((result, idx) => (
+        <SearchResult key={`${result.url}-${idx}`} result={result} onSelect={onResultSelect} />
+      ))}
+    </div>
+  );
+}
+
+// Component for the search input
+interface SearchInputProps {
+  query: string;
+  onChange: (value: string) => void;
+  onFocus: () => void;
+  inputRef: React.RefObject<HTMLInputElement | null>;
+  isOpen: boolean;
+}
+
+function SearchInput({ query, onChange, onFocus, inputRef, isOpen }: SearchInputProps) {
+  return (
+    <div
+      className="relative flex items-center rounded-full border border-border bg-background/20 hover:bg-accent/30 transition-colors"
+      onClick={onFocus}
+    >
+      <SearchIcon size={16} className="absolute left-3 text-muted-foreground" />
+      <input
+        ref={inputRef}
+        readOnly={!isOpen}
+        type="text"
+        placeholder="Search..."
+        className="flex h-9 w-40 lg:w-60 bg-transparent pl-10 pr-4 text-sm outline-none placeholder:text-muted-foreground cursor-pointer focus:cursor-text"
+        value={query}
+        onChange={(e) => onChange(e.target.value)}
+        onFocus={onFocus}
+      />
+      <kbd className="absolute right-3 top-1/2 -translate-y-1/2 hidden lg:flex h-5 items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-60">
+        <span className="text-xs">⌘</span>K
+      </kbd>
+    </div>
+  );
+}
+
+// Component for the search results container
+interface SearchResultsContainerProps {
+  isOpen: boolean;
+  isLoading: boolean;
+  isSearching: boolean;
+  isPagefindLoaded: boolean;
+  error: string;
+  query: string;
+  resultGroups: SearchResultGroup[];
+  resultsRef: React.RefObject<HTMLDivElement | null>;
+  onResultSelect: () => void;
+}
+
+function SearchResultsContainer({
+  isOpen,
+  isLoading,
+  isSearching,
+  isPagefindLoaded,
+  error,
+  query,
+  resultGroups,
+  resultsRef,
+  onResultSelect,
+}: SearchResultsContainerProps) {
+  if (!isOpen) return null;
+
+  return (
+    <div
+      className="absolute top-full right-0 md:left-0 mt-2 w-screen max-w-sm bg-background border border-border rounded-lg shadow-2xl overflow-hidden z-50 search-results"
+      ref={resultsRef}
+    >
+      {renderSearchContent()}
+      <SearchFooter />
+    </div>
+  );
+
+  function renderSearchContent() {
+    if (isLoading && !isPagefindLoaded) {
+      return <div className="p-6 text-center text-muted-foreground">Loading search engine...</div>;
+    }
+
+    if (isLoading || isSearching) {
+      return (
+        <div className="flex justify-center p-4">
+          <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-primary"></div>
+          <span className="sr-only">Loading results...</span>
+        </div>
+      );
+    }
+
+    if (error) {
+      return (
+        <div className="p-4 text-center text-muted-foreground">
+          <p className="mb-2">Search index not available</p>
+          <p className="text-xs">
+            Run <code className="bg-muted px-1 py-0.5 rounded">bun run build</code> to generate the
+            search index
+          </p>
+        </div>
+      );
+    }
+
+    if (resultGroups.length > 0) {
+      return (
+        <div className="max-h-[calc(100vh-200px)] overflow-y-auto">
+          {resultGroups.map((group) => (
+            <SearchResultGroupComponent
+              key={group.name}
+              group={group}
+              onResultSelect={onResultSelect}
+            />
+          ))}
+        </div>
+      );
+    }
+
+    // Only show "No results" if we're not in a loading or searching state
+    if (query.trim() && !isLoading && !isSearching) {
+      return (
+        <div className="p-4 text-center text-muted-foreground">No results found for "{query}"</div>
+      );
+    }
+
+    return <div className="p-4 text-center text-muted-foreground">Type to start searching</div>;
+  }
+}
+
+// Component for the keyboard shortcut footer
+function SearchFooter() {
+  return (
+    <div className="border-t border-border p-2 flex justify-between items-center bg-muted/40 text-xs text-muted-foreground">
+      <div className="flex items-center gap-2 px-2">
+        <Command size={12} /> <kbd className="px-1.5 py-0.5 text-[10px] border rounded">K</kbd>
+        <span>to search</span>
+      </div>
+      <div className="flex items-center gap-2 px-2">
+        <kbd className="px-1.5 py-0.5 text-[10px] border rounded">Esc</kbd>
+        <span>to close</span>
+      </div>
+    </div>
+  );
+}
+
 export default function SearchBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [resultGroups, setResultGroups] = useState<SearchResultGroup[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
   const [isPagefindLoaded, setIsPagefindLoaded] = useState(false);
 
   // Focus input when search is opened
@@ -58,27 +245,29 @@ export default function SearchBar() {
     }
   }, [isOpen]);
 
-  // Close on escape key
+  // Handle keyboard shortcuts
   useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Close on escape key
       if (e.key === "Escape") {
         setIsOpen(false);
       }
+
+      // Open on Cmd+K or Ctrl+K
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setIsOpen(true);
+      }
     };
 
-    window.addEventListener("keydown", handleEscape);
-    return () => window.removeEventListener("keydown", handleEscape);
+    window.addEventListener("keydown", handleKeyDown as any);
+    return () => window.removeEventListener("keydown", handleKeyDown as any);
   }, []);
 
   // Close on click outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (
-        resultsRef.current &&
-        !resultsRef.current.contains(e.target as Node) &&
-        inputRef.current &&
-        !inputRef.current.contains(e.target as Node)
-      ) {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(e.target as Node)) {
         setIsOpen(false);
       }
     };
@@ -93,6 +282,119 @@ export default function SearchBar() {
       loadPagefind();
     }
   }, [isOpen, isPagefindLoaded]);
+
+  // Perform search when query changes
+  useEffect(() => {
+    if (!query.trim() || !isPagefindLoaded) {
+      setResultGroups([]);
+      return;
+    }
+
+    // Set searching state immediately when query changes
+    setIsSearching(true);
+
+    // We'll use Pagefind's built-in debounced search instead of our own setTimeout
+    const performSearch = async () => {
+      try {
+        if (!window.pagefind) return;
+
+        console.log("🔍 [SearchBar] Performing search for:", query);
+
+        // Use the built-in debouncedSearch with 300ms delay
+        const result = await window.pagefind.debouncedSearch(query, 300);
+
+        // If the search was cancelled (due to rapid typing), don't process results
+        if (result === null) {
+          // Don't clear loading state here, as a new search will be initiated
+          // Keep the spinner showing during rapid typing
+          return;
+        }
+
+        console.log(`🔍 [SearchBar] Found ${result.results.length} results, using top 20`);
+
+        // Process and transform results - only take the top 20
+        const topResults = result.results.slice(0, 20);
+        const items: SearchResultItem[] = await Promise.all(
+          topResults.map(async (result, index) => {
+            const data = await result.data();
+
+            if (index < 3) {
+              // Only log a few examples to keep console clean
+              console.log(`🔍 [SearchBar] Result ${index} data:`, {
+                title: data.meta?.title,
+                url: data.url,
+                meta: data.meta,
+              });
+            }
+
+            const title = data.meta?.title || "Untitled";
+            const excerpt = data.excerpt || "";
+            const url = data.url || "";
+            const section = data.meta?.section || getSectionFromUrl(data.url);
+
+            return {
+              title,
+              excerpt,
+              url,
+              section,
+            };
+          })
+        );
+
+        // Group results by section
+        const groupedResults = items.reduce((groups, item) => {
+          const sectionName = item.section;
+          const existingGroup = groups.find((g) => g.name === sectionName);
+
+          if (existingGroup) {
+            existingGroup.results.push(item);
+          } else {
+            groups.push({
+              name: sectionName,
+              results: [item],
+            });
+          }
+
+          return groups;
+        }, [] as SearchResultGroup[]);
+
+        // Sort groups and results within groups
+        const sortedGroups = groupedResults
+          .map((group) => ({
+            ...group,
+            results: group.results.sort((a, b) => a.title.localeCompare(b.title)),
+          }))
+          .sort((a, b) => a.name.localeCompare(b.name));
+
+        // First update the results, then clear loading states to prevent flash of "No results"
+        setResultGroups(sortedGroups);
+        // Use small timeout to ensure state batching occurs properly
+        setTimeout(() => {
+          setIsLoading(false);
+          setIsSearching(false);
+        }, 10);
+      } catch (error) {
+        console.error("Search error:", error);
+        setError("Failed to search");
+        setResultGroups([]);
+        setIsLoading(false);
+        setIsSearching(false);
+      }
+    };
+
+    setIsLoading(true);
+    performSearch();
+
+    return () => {
+      // No need to clean up timers as Pagefind handles debouncing internally
+    };
+  }, [query, isPagefindLoaded]);
+
+  // Handle result selection
+  const handleResultSelect = () => {
+    setIsOpen(false);
+    setQuery("");
+  };
 
   // Load Pagefind script
   const loadPagefind = async () => {
@@ -133,99 +435,8 @@ export default function SearchBar() {
     }
   };
 
-  // Perform search with debounce
-  useEffect(() => {
-    if (!query.trim() || !isPagefindLoaded) {
-      setResultGroups([]);
-      return;
-    }
-
-    const timer = setTimeout(() => {
-      performSearch(query);
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [query, isPagefindLoaded]);
-
-  const performSearch = async (searchQuery: string) => {
-    if (!window.pagefind) return;
-
-    setIsLoading(true);
-    setError("");
-
-    try {
-      console.log("🔍 [SearchBar] Performing search for:", searchQuery);
-
-      // Limit to 20 results to avoid overwhelming the UI
-      const result = await window.pagefind.search(searchQuery);
-      console.log(`🔍 [SearchBar] Found ${result.results.length} results, using top 20`);
-
-      // Process and transform results - only take the top 20
-      const topResults = result.results.slice(0, 20);
-      const items: SearchResultItem[] = await Promise.all(
-        topResults.map(async (result, index) => {
-          const data = await result.data();
-
-          if (index < 3) {
-            // Only log a few examples to keep console clean
-            console.log(`🔍 [SearchBar] Result ${index} data:`, {
-              title: data.meta?.title,
-              url: data.url,
-              meta: data.meta,
-            });
-          }
-
-          const title = data.meta?.title || "Untitled";
-          const excerpt = data.excerpt || "";
-          const url = data.url || "";
-          const section = data.meta?.section || getSectionFromUrl(data.url);
-
-          return {
-            title,
-            excerpt,
-            url,
-            section,
-          };
-        })
-      );
-
-      // Group results by section
-      const groupedResults = items.reduce((groups, item) => {
-        const sectionName = item.section;
-        const existingGroup = groups.find((g) => g.name === sectionName);
-
-        if (existingGroup) {
-          existingGroup.results.push(item);
-        } else {
-          groups.push({
-            name: sectionName,
-            results: [item],
-          });
-        }
-
-        return groups;
-      }, [] as SearchResultGroup[]);
-
-      // Sort groups and results within groups
-      const sortedGroups = groupedResults
-        .map((group) => ({
-          ...group,
-          results: group.results.sort((a, b) => a.title.localeCompare(b.title)),
-        }))
-        .sort((a, b) => a.name.localeCompare(b.name));
-
-      setResultGroups(sortedGroups);
-    } catch (error) {
-      console.error("Search error:", error);
-      setError("Failed to search");
-      setResultGroups([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   // Extract section from URL
-  const getSectionFromUrl = (url: string): string => {
+  const getSectionFromUrl = (url?: string): string => {
     if (!url) return "Other";
 
     try {
@@ -243,110 +454,26 @@ export default function SearchBar() {
   };
 
   return (
-    <div className="relative">
-      {/* Search Button */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className="flex items-center gap-2 text-sm font-medium px-3 py-2 rounded-md text-foreground hover:bg-accent transition-colors"
-        aria-label="Search website"
-      >
-        <SearchIcon size={18} />
-        <span className="hidden sm:inline">Search</span>
-      </button>
+    <div className="relative" ref={searchContainerRef}>
+      <SearchInput
+        query={query}
+        onChange={setQuery}
+        onFocus={() => setIsOpen(true)}
+        inputRef={inputRef}
+        isOpen={isOpen}
+      />
 
-      {/* Search Modal */}
-      {isOpen && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-start justify-center pt-16 px-4">
-          <div
-            className="w-full max-w-xl bg-background rounded-lg shadow-lg overflow-hidden"
-            ref={resultsRef}
-          >
-            {/* Search Input */}
-            <div className="flex items-center border-b border-border p-4">
-              <SearchIcon size={20} className="text-muted-foreground mr-3" />
-              <input
-                ref={inputRef}
-                type="text"
-                placeholder="Search for docs, blogs, guides..."
-                className="flex-1 bg-transparent border-none outline-none text-foreground text-base"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-              {query && (
-                <button
-                  onClick={() => setQuery("")}
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  <X size={18} />
-                </button>
-              )}
-            </div>
-
-            {/* Results */}
-            <div className="max-h-[70vh] overflow-y-auto">
-              {isLoading && !isPagefindLoaded ? (
-                <div className="p-6 text-center text-muted-foreground">
-                  Loading search engine...
-                </div>
-              ) : isLoading ? (
-                <div className="flex justify-center p-6">
-                  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
-                </div>
-              ) : error ? (
-                <div className="p-6 text-center text-muted-foreground">
-                  <p className="mb-2">Search index not available</p>
-                  <p className="text-xs">
-                    Run <code className="bg-muted px-1 py-0.5 rounded">bun run build</code> to
-                    generate the search index
-                  </p>
-                </div>
-              ) : resultGroups.length > 0 ? (
-                <div className="py-2">
-                  {resultGroups.map((group) => (
-                    <div key={group.name} className="mb-4">
-                      <h3 className="text-sm font-semibold text-muted-foreground px-4 py-2 uppercase tracking-wider">
-                        {group.name}
-                      </h3>
-                      {group.results.map((result, idx) => (
-                        <Link
-                          key={`${result.url}-${idx}`}
-                          to={result.url}
-                          onClick={() => setIsOpen(false)}
-                          className="block p-4 hover:bg-accent/50 transition-colors"
-                        >
-                          <h3 className="font-medium text-foreground mb-1">
-                            {result.title || "Untitled"}
-                          </h3>
-                          <p
-                            className="text-sm text-muted-foreground"
-                            dangerouslySetInnerHTML={{ __html: result.excerpt }}
-                          />
-                        </Link>
-                      ))}
-                    </div>
-                  ))}
-                </div>
-              ) : query.trim() ? (
-                <div className="p-6 text-center text-muted-foreground">
-                  No results found for "{query}"
-                </div>
-              ) : (
-                <div className="p-6 text-center text-muted-foreground">Type to start searching</div>
-              )}
-            </div>
-
-            <div className="border-t border-border p-4 flex justify-between items-center">
-              <span className="text-xs text-muted-foreground">Press ESC to close</span>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="text-xs font-medium text-primary hover:underline"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <SearchResultsContainer
+        isOpen={isOpen}
+        isLoading={isLoading}
+        isSearching={isSearching}
+        isPagefindLoaded={isPagefindLoaded}
+        error={error}
+        query={query}
+        resultGroups={resultGroups}
+        resultsRef={resultsRef}
+        onResultSelect={handleResultSelect}
+      />
     </div>
   );
 }
