@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, type KeyboardEvent } from "react";
 import { Search as SearchIcon, Command } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { cn } from "@/src/lib/utils";
 
 // Declare Pagefind types on the window object
 declare global {
@@ -111,28 +112,65 @@ interface SearchInputProps {
   onFocus: () => void;
   inputRef: React.RefObject<HTMLInputElement | null>;
   isOpen: boolean;
+  isLandingPage?: boolean;
 }
 
-function SearchInput({ query, onChange, onFocus, inputRef, isOpen }: SearchInputProps) {
+function SearchInput({
+  query,
+  onChange,
+  onFocus,
+  inputRef,
+  isOpen,
+  isLandingPage = false,
+}: SearchInputProps) {
   return (
     <div
-      className="relative flex items-center rounded-full border border-border bg-background/20 hover:bg-accent/30 transition-colors"
+      className={cn(
+        "rounded-full border transition-all duration-300 h-9",
+        isLandingPage
+          ? "border-white/30 bg-white/10 hover:bg-white/20"
+          : "border-border bg-background/20 hover:bg-accent/30",
+        isOpen ? "w-72 md:w-96" : "w-36" // Wider default size with text, much wider when expanded
+      )}
       onClick={onFocus}
     >
-      <SearchIcon size={16} className="absolute left-3 text-muted-foreground" />
-      <input
-        ref={inputRef}
-        readOnly={!isOpen}
-        type="text"
-        placeholder="Search..."
-        className="flex h-9 w-40 lg:w-60 bg-transparent pl-10 pr-4 text-sm outline-none placeholder:text-muted-foreground cursor-pointer focus:cursor-text"
-        value={query}
-        onChange={(e) => onChange(e.target.value)}
-        onFocus={onFocus}
-      />
-      <kbd className="absolute right-3 top-1/2 -translate-y-1/2 hidden lg:flex h-5 items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-60">
-        <span className="text-xs">⌘</span>K
-      </kbd>
+      <div className="flex items-center h-full relative">
+        <SearchIcon
+          size={16}
+          className={cn(
+            "absolute left-3 transition-all duration-300",
+            isLandingPage ? "text-white/90" : "text-muted-foreground"
+          )}
+        />
+        <input
+          ref={inputRef}
+          readOnly={!isOpen}
+          type="text"
+          placeholder="Search..."
+          className={cn(
+            "h-full bg-transparent text-sm outline-none cursor-pointer transition-all duration-300",
+            isLandingPage
+              ? "text-white placeholder:text-white/90"
+              : "text-foreground placeholder:text-muted-foreground",
+            isOpen ? "w-full pl-10 pr-9 opacity-100" : "w-28 pl-10 pr-3 opacity-80"
+          )}
+          value={query}
+          onChange={(e) => onChange(e.target.value)}
+          onFocus={onFocus}
+        />
+        {isOpen && (
+          <kbd
+            className={cn(
+              "absolute right-3 top-1/2 -translate-y-1/2 hidden lg:flex h-5 items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-small opacity-80",
+              isLandingPage
+                ? "border-white/30 bg-white/10 text-white"
+                : "border-border bg-muted text-foreground"
+            )}
+          >
+            <span className="text-xs">⌘</span>K
+          </kbd>
+        )}
+      </div>
     </div>
   );
 }
@@ -148,6 +186,7 @@ interface SearchResultsContainerProps {
   resultGroups: SearchResultGroup[];
   resultsRef: React.RefObject<HTMLDivElement | null>;
   onResultSelect: () => void;
+  isLandingPage?: boolean;
 }
 
 function SearchResultsContainer({
@@ -160,16 +199,22 @@ function SearchResultsContainer({
   resultGroups,
   resultsRef,
   onResultSelect,
+  isLandingPage = false,
 }: SearchResultsContainerProps) {
   if (!isOpen) return null;
 
   return (
     <div
-      className="absolute top-full right-0 md:left-0 mt-2 w-screen max-w-sm bg-background border border-border rounded-lg shadow-2xl overflow-hidden z-50 search-results"
+      className={cn(
+        "absolute top-full right-0 md:left-0 mt-2 w-screen max-w-sm rounded-lg shadow-2xl overflow-hidden z-50 search-results",
+        isLandingPage
+          ? "bg-background/95 backdrop-blur-sm border border-white/20"
+          : "bg-background border border-border"
+      )}
       ref={resultsRef}
     >
       {renderSearchContent()}
-      <SearchFooter />
+      <SearchFooter isLandingPage={isLandingPage} />
     </div>
   );
 
@@ -225,22 +270,53 @@ function SearchResultsContainer({
 }
 
 // Component for the keyboard shortcut footer
-function SearchFooter() {
+interface SearchFooterProps {
+  isLandingPage?: boolean;
+}
+
+function SearchFooter({ isLandingPage = false }: SearchFooterProps = {}) {
   return (
-    <div className="border-t border-border p-2 flex justify-between items-center bg-muted/40 text-xs text-muted-foreground">
+    <div
+      className={cn(
+        "border-t p-2 flex justify-between items-center text-xs",
+        isLandingPage
+          ? "border-white/20 bg-white/5 text-white/80"
+          : "border-border bg-muted/40 text-muted-foreground"
+      )}
+    >
       <div className="flex items-center gap-2 px-2">
-        <Command size={12} /> <kbd className="px-1.5 py-0.5 text-[10px] border rounded">K</kbd>
+        <Command size={12} />
+        <kbd
+          className={cn(
+            "px-1.5 py-0.5 text-[10px] border rounded",
+            isLandingPage ? "border-white/30" : "border-border"
+          )}
+        >
+          K
+        </kbd>
         <span>to search</span>
       </div>
       <div className="flex items-center gap-2 px-2">
-        <kbd className="px-1.5 py-0.5 text-[10px] border rounded">Esc</kbd>
+        <kbd
+          className={cn(
+            "px-1.5 py-0.5 text-[10px] border rounded",
+            isLandingPage ? "border-white/30" : "border-border"
+          )}
+        >
+          Esc
+        </kbd>
         <span>to close</span>
       </div>
     </div>
   );
 }
 
-export default function SearchBar() {
+interface SearchBarProps {
+  onOpenChange?: (isOpen: boolean) => void;
+  isLandingPage?: boolean;
+}
+
+export default function SearchBar({ onOpenChange, isLandingPage = false }: SearchBarProps = {}) {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [resultGroups, setResultGroups] = useState<SearchResultGroup[]>([]);
@@ -257,7 +333,19 @@ export default function SearchBar() {
     if (isOpen && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [isOpen]);
+
+    // Use a slight delay to toggle visibility
+    if (isOpen) {
+      // Hide navigation immediately
+      if (onOpenChange) onOpenChange(true);
+    } else {
+      // Show navigation after search closes with a delay for smooth transition
+      const timer = setTimeout(() => {
+        if (onOpenChange) onOpenChange(false);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen, onOpenChange]);
 
   // Handle keyboard shortcuts
   useEffect(() => {
@@ -503,6 +591,7 @@ export default function SearchBar() {
         onFocus={() => setIsOpen(true)}
         inputRef={inputRef}
         isOpen={isOpen}
+        isLandingPage={isLandingPage}
       />
 
       <SearchResultsContainer
@@ -515,6 +604,7 @@ export default function SearchBar() {
         resultGroups={resultGroups}
         resultsRef={resultsRef}
         onResultSelect={handleResultSelect}
+        isLandingPage={isLandingPage}
       />
     </div>
   );
