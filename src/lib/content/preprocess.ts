@@ -8,6 +8,7 @@ import {
   type BlogMeta,
   type DocMeta,
   type PolicyMeta,
+  docRegistry,
 } from "./content";
 import { parseFrontmatter } from "./mdx-processing";
 
@@ -325,13 +326,24 @@ export class ContentPreprocessor {
         // Check product if not in path
         if (!product) missingFields.push("product");
 
-        // Construct doc metadata
+        // Find matching DocInfo from docRegistry to get section path and search weight
+        const docInfo = docRegistry.getDocInfoByPath(contentPath.subpath);
+
+        if (!docInfo) {
+          throw new Error(
+            `No DocInfo found for path: ${contentPath.subpath}. ` +
+              `Ensure this document is defined in the product's _meta.ts file.`
+          );
+        }
+
+        // Construct doc metadata with section path and search weight
         metadata = {
           ...metadata,
           title: frontmatter.title,
           description: frontmatter.description,
           product,
           hasExtractableSnippets: frontmatter.hasExtractableSnippets || false,
+          searchWeight: docInfo.searchWeight,
         } as Partial<DocMeta>;
         break;
 
