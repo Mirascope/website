@@ -14,6 +14,7 @@ const docsSection: SectionSpec = {
     {
       slug: "getting-started",
       label: "Getting Started",
+      weight: 2,
       children: [
         {
           slug: "quickstart",
@@ -42,6 +43,7 @@ const docsSection: SectionSpec = {
     {
       slug: "learn",
       label: "Learn",
+      weight: 4,
       children: [
         {
           slug: "index",

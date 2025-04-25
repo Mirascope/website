@@ -80,6 +80,8 @@ export type BlogContent = Content<BlogMeta>;
 export interface DocMeta extends ContentMeta {
   product: string; // Which product this doc belongs to
   hasExtractableSnippets: boolean; // Whether this doc has code snippets that can be extracted
+  sectionPath: string; // Hierarchical section path (e.g. "docs>mirascope>learn")
+  searchWeight: number; // Computed weight based on hierarchical position
 }
 
 export type DocContent = Content<DocMeta>;
