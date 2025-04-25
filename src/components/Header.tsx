@@ -84,66 +84,70 @@ export default function Header() {
           />
         </Link>
 
-        {/* Desktop Navigation - Centered */}
-        <div className="hidden md:flex items-center gap-6 absolute left-1/2 transform -translate-x-1/2 z-20">
-          {/* Products Menu */}
-          <NavigationMenu>
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger
-                  className={cn(
-                    "!bg-transparent hover:!bg-transparent data-[state=open]:!bg-transparent data-[state=open]:hover:!bg-transparent focus:!bg-transparent font-medium text-xl flex items-center p-0 cursor-pointer transition-colors duration-200",
-                    isLandingPage
-                      ? "hover:text-accent-foreground data-[state=open]:text-accent-foreground"
-                      : "hover:text-accent-foreground data-[state=open]:text-accent-foreground"
-                  )}
-                  onClick={(e) => {
-                    // Prevent the default behavior which would toggle the dropdown
-                    e.preventDefault();
-                    // Navigate to Mirascope docs
-                    window.location.href = getProductRoute("mirascope");
-                  }}
-                >
-                  Docs
-                </NavigationMenuTrigger>
-                <NavigationMenuContent className="bg-background p-2">
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 w-[300px] sm:w-[480px] gap-2">
-                    <li>
-                      <NavigationMenuLink asChild>
-                        <Link
-                          to={getProductRoute("mirascope")}
-                          className="block p-4 space-y-1.5 rounded-md bg-background hover:bg-mirascope-purple/20 transition-colors"
-                        >
-                          <div className="font-medium text-xl text-mirascope-purple">Mirascope</div>
-                          <p className="text-base text-foreground">
-                            LLM abstractions that aren't obstructions.
-                          </p>
-                        </Link>
-                      </NavigationMenuLink>
-                    </li>
-                    <li>
-                      <NavigationMenuLink asChild>
-                        <Link
-                          to={getProductRoute("lilypad")}
-                          className="block p-4 space-y-1.5 rounded-md bg-background hover:bg-lilypad-green/20 transition-colors"
-                        >
-                          <div className="font-medium text-xl text-lilypad-green">Lilypad</div>
-                          <p className="text-base text-foreground">
-                            Start building your data flywheel in one line of code.
-                          </p>
-                        </Link>
-                      </NavigationMenuLink>
-                    </li>
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
-          <NavLink href="/blog">Blog</NavLink>
-          <NavLink href="/pricing">Pricing</NavLink>
+        {/* Main navigation area - redesigned for better spacing */}
+        <div className="hidden md:flex flex-1 justify-center items-center">
+          <div className="flex items-center gap-6 mx-auto">
+            {/* Products Menu */}
+            <NavigationMenu>
+              <NavigationMenuList>
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger
+                    className={cn(
+                      "!bg-transparent hover:!bg-transparent data-[state=open]:!bg-transparent data-[state=open]:hover:!bg-transparent focus:!bg-transparent font-medium text-xl flex items-center p-0 cursor-pointer transition-colors duration-200",
+                      isLandingPage
+                        ? "hover:text-accent-foreground data-[state=open]:text-accent-foreground"
+                        : "hover:text-accent-foreground data-[state=open]:text-accent-foreground"
+                    )}
+                    onClick={(e) => {
+                      // Prevent the default behavior which would toggle the dropdown
+                      e.preventDefault();
+                      // Navigate to Mirascope docs
+                      window.location.href = getProductRoute("mirascope");
+                    }}
+                  >
+                    Docs
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent className="bg-background p-2">
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 w-[300px] sm:w-[480px] gap-2">
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            to={getProductRoute("mirascope")}
+                            className="block p-4 space-y-1.5 rounded-md bg-background hover:bg-mirascope-purple/20 transition-colors"
+                          >
+                            <div className="font-medium text-xl text-mirascope-purple">
+                              Mirascope
+                            </div>
+                            <p className="text-base text-foreground">
+                              LLM abstractions that aren't obstructions.
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            to={getProductRoute("lilypad")}
+                            className="block p-4 space-y-1.5 rounded-md bg-background hover:bg-lilypad-green/20 transition-colors"
+                          >
+                            <div className="font-medium text-xl text-lilypad-green">Lilypad</div>
+                            <p className="text-base text-foreground">
+                              Start building your data flywheel in one line of code.
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
+            <NavLink href="/blog">Blog</NavLink>
+            <NavLink href="/pricing">Pricing</NavLink>
+          </div>
         </div>
 
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-3 ml-4">
           <SearchBar />
           <GitHubRepoButton />
           <ThemeSwitcher />
@@ -203,7 +207,7 @@ export default function Header() {
               <span className="font-medium text-xl mr-3">Theme</span>
               <ThemeSwitcher />
             </div>
-            <div className="py-2 flex items-center justify-center w-full mt-2">
+            <div className="py-2 w-full mt-2">
               <SearchBar />
             </div>
           </div>
