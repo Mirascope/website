@@ -39,6 +39,7 @@ interface SearchResultItem {
   excerpt: string;
   url: string;
   section: string;
+  score?: number; // Add score from Pagefind
 }
 
 // Grouped search results
@@ -54,6 +55,9 @@ interface SearchResultProps {
 }
 
 function SearchResult({ result, onSelect }: SearchResultProps) {
+  // Get development mode from environment
+  const isDev = import.meta.env.DEV || import.meta.env.MODE === "development";
+
   return (
     <Link
       to={result.url}
@@ -61,7 +65,20 @@ function SearchResult({ result, onSelect }: SearchResultProps) {
       className="flex px-4 py-3 hover:bg-accent/50 transition-colors text-sm border-t border-border/40 first:border-0"
     >
       <div className="flex-1 min-w-0">
-        <h4 className="font-medium text-foreground mb-1 truncate">{result.title || "Untitled"}</h4>
+        <div className="flex items-center justify-between mb-1">
+          <h4 className="font-medium text-foreground truncate">{result.title || "Untitled"}</h4>
+          <div className="flex items-center gap-2">
+            {/* Section badge */}
+            <span className="text-[10px] px-1.5 py-0.5 bg-muted rounded text-muted-foreground">
+              {result.section}
+            </span>
+
+            {/* Score indicator in development mode */}
+            {isDev && result.score !== undefined && (
+              <span className="text-[10px] text-muted-foreground">{result.score.toFixed(2)}</span>
+            )}
+          </div>
+        </div>
         <p
           className="text-xs text-muted-foreground line-clamp-2 search-excerpt"
           dangerouslySetInnerHTML={{ __html: result.excerpt }}
@@ -79,10 +96,7 @@ interface SearchResultGroupProps {
 
 function SearchResultGroupComponent({ group, onResultSelect }: SearchResultGroupProps) {
   return (
-    <div className="border-b border-border last:border-0">
-      <h3 className="text-xs font-semibold text-muted-foreground px-4 py-2 uppercase bg-muted/40">
-        {group.name}
-      </h3>
+    <div>
       {group.results.map((result, idx) => (
         <SearchResult key={`${result.url}-${idx}`} result={result} onSelect={onResultSelect} />
       ))}
@@ -314,57 +328,64 @@ export default function SearchBar() {
 
         // Process and transform results - only take the top 20
         const topResults = result.results.slice(0, 20);
-        const items: SearchResultItem[] = await Promise.all(
-          topResults.map(async (result, index) => {
-            const data = await result.data();
 
-            if (index < 3) {
-              // Only log a few examples to keep console clean
-              console.log(`🔍 [SearchBar] Result ${index} data:`, {
-                title: data.meta?.title,
-                url: data.url,
-                meta: data.meta,
-              });
-            }
+        console.log(
+          `🔍 [SearchBar] Search query: "${query}" - Found ${result.results.length} results`
+        );
+
+        // Get all result data in a single batch of promises
+        const items: SearchResultItem[] = await Promise.all(
+          topResults.map(async (pagefindResult, index) => {
+            const data = await pagefindResult.data();
 
             const title = data.meta?.title || "Untitled";
             const excerpt = data.excerpt || "";
             const url = data.url || "";
             const section = data.meta?.section || getSectionFromUrl(data.url);
 
-            return {
+            // Create the result item with score included
+            const resultItem = {
               title,
               excerpt,
               url,
               section,
+              score: pagefindResult.score,
             };
+
+            // Log detailed information for each result for debugging
+            console.log(`🔍 [SearchBar] Result #${index} (score: ${pagefindResult.score})`, {
+              score: pagefindResult.score,
+              title,
+              description: data.meta?.description || "No description",
+              excerpt,
+              url,
+              meta: data.meta,
+              content_preview: data.content.substring(0, 100) + "...",
+            });
+
+            return resultItem;
           })
         );
 
-        // Group results by section
-        const groupedResults = items.reduce((groups, item) => {
-          const sectionName = item.section;
-          const existingGroup = groups.find((g) => g.name === sectionName);
-
-          if (existingGroup) {
-            existingGroup.results.push(item);
-          } else {
-            groups.push({
-              name: sectionName,
-              results: [item],
-            });
-          }
-
-          return groups;
-        }, [] as SearchResultGroup[]);
-
-        // Sort groups and results within groups
-        const sortedGroups = groupedResults
-          .map((group) => ({
-            ...group,
-            results: group.results.sort((a, b) => a.title.localeCompare(b.title)),
+        // Log table of results with titles for easier overview
+        console.table(
+          items.map((item) => ({
+            title: item.title,
+            score: item.score,
+            section: item.section,
           }))
-          .sort((a, b) => a.name.localeCompare(b.name));
+        );
+
+        // Sort all results directly by score (highest first)
+        const sortedItems = [...items].sort((a, b) => (b.score || 0) - (a.score || 0));
+
+        // Create a single group with all results
+        const sortedGroups = [
+          {
+            name: "Results",
+            results: sortedItems,
+          },
+        ];
 
         // First update the results, then clear loading states to prevent flash of "No results"
         setResultGroups(sortedGroups);

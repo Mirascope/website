@@ -23,7 +23,7 @@ const MainContent: React.FC<MainContentProps> = ({ document, funMode }) => {
           className="prose prose-sm lg:prose-base prose-slate max-w-none overflow-x-auto mdx-container"
         >
           {document.mdx ? (
-            <PagefindMeta title={document.meta.title}>
+            <PagefindMeta title={document.meta.title} description={document.meta.description}>
               <MDXRenderer
                 code={document.mdx.code}
                 frontmatter={document.mdx.frontmatter}

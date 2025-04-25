@@ -68,10 +68,6 @@ export function SEOMeta(props: SEOProps) {
       <meta name="description" content={metaDescription} />
       {robots && <meta name="robots" content={robots} />}
 
-      {/* Pagefind Metadata */}
-      <meta data-pagefind-meta="title" content={pageTitle} />
-      <meta data-pagefind-meta="description" content={metaDescription} />
-
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />
       <meta property="og:url" content={ogUrl} />
