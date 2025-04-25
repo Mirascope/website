@@ -13,11 +13,11 @@
  */
 
 import { environment } from "./environment";
-import { getDocsFromSpec, type DocInfo } from "./spec";
 import { processMDXContent } from "./mdx-processing";
+import { docRegistry, type DocInfo } from "./doc-registry";
 
-// Import docs specification
-import fullSpec from "@/content/doc/_meta";
+// Re-export docRegistry for convenience
+export { docRegistry };
 
 /* ========== CONTENT TYPES =========== */
 
@@ -344,7 +344,7 @@ export async function getDocContent(path: string): Promise<DocContent> {
  * @returns Array of DocInfo objects with path info
  */
 export function getAllDocInfo(): DocInfo[] {
-  return getDocsFromSpec(fullSpec);
+  return docRegistry.getAllDocs();
 }
 
 /**

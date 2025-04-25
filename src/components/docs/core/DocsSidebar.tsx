@@ -1,11 +1,10 @@
-import fullSpec from "@/content/doc/_meta";
-import type { DocSpec, ProductName } from "@/src/lib/content/spec";
+import { docRegistry } from "@/src/lib/content";
+import type { DocSpec, ProductName } from "@/src/lib/content/doc-registry";
 import { getProductRoute } from "@/src/lib/routes";
 import { type Provider } from "../ProviderContext";
 import Sidebar from "@/src/components/Sidebar";
 import type { SidebarConfig, SidebarItem, SidebarGroup } from "@/src/components/Sidebar";
 import { Link } from "@tanstack/react-router";
-import { getAllDocInfo } from "@/src/lib/content";
 
 interface DocsSidebarProps {
   product: ProductName;
@@ -36,11 +35,11 @@ const ProductLink = ({ product }: { product: ProductName }) => {
  * Helper to convert the spec metadata to the sidebar format
  */
 function createSidebarConfig(product: ProductName): SidebarConfig {
-  // Get product spec directly
-  const productSpec = fullSpec.find((spec) => spec.product === product);
+  // Get product spec from the registry
+  const productSpec = docRegistry.getProductSpec(product);
 
   // Get all DocInfo objects for this product
-  const allDocInfo = getAllDocInfo();
+  const allDocInfo = docRegistry.getDocsByProduct(product);
 
   // Create a map from slug pattern to routePath for quick lookup
   // Key format: product/section/slug or product/slug for root items
