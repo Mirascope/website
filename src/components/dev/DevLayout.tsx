@@ -17,11 +17,8 @@ const DevLayout: React.FC<DevLayoutProps> = ({ children, devPages }) => {
   // Sidebar content
   const leftSidebar = <DevSidebar devPages={devPages} />;
 
-  // Main content
+  // Main content - expanded to use full width
   const mainContent = <div className="flex-1 min-w-0 px-8">{children}</div>;
-
-  // Empty right sidebar
-  const rightSidebar = <div className="w-56 flex-shrink-0 hidden lg:block"></div>;
 
   return (
     <div className="flex justify-center pt-0">
@@ -31,9 +28,6 @@ const DevLayout: React.FC<DevLayoutProps> = ({ children, devPages }) => {
 
         {/* Main content area */}
         {mainContent}
-
-        {/* Right sidebar */}
-        {rightSidebar}
       </div>
     </div>
   );
