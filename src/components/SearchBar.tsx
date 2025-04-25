@@ -312,7 +312,12 @@ export default function SearchBar() {
       try {
         if (!window.pagefind) return;
 
-        console.log("🔍 [SearchBar] Performing search for:", query);
+        // Get development mode from environment
+        const isDev = import.meta.env.DEV || import.meta.env.MODE === "development";
+
+        if (isDev) {
+          console.log("🔍 [SearchBar] Performing search for:", query);
+        }
 
         // Use the built-in debouncedSearch with 300ms delay
         const result = await window.pagefind.debouncedSearch(query, 300);
@@ -324,14 +329,18 @@ export default function SearchBar() {
           return;
         }
 
-        console.log(`🔍 [SearchBar] Found ${result.results.length} results, using top 20`);
+        if (isDev) {
+          console.log(`🔍 [SearchBar] Found ${result.results.length} results, using top 20`);
+        }
 
         // Process and transform results - only take the top 20
         const topResults = result.results.slice(0, 20);
 
-        console.log(
-          `🔍 [SearchBar] Search query: "${query}" - Found ${result.results.length} results`
-        );
+        if (isDev) {
+          console.log(
+            `🔍 [SearchBar] Search query: "${query}" - Found ${result.results.length} results`
+          );
+        }
 
         // Get all result data in a single batch of promises
         const items: SearchResultItem[] = await Promise.all(
@@ -353,28 +362,32 @@ export default function SearchBar() {
             };
 
             // Log detailed information for each result for debugging
-            console.log(`🔍 [SearchBar] Result #${index} (score: ${pagefindResult.score})`, {
-              score: pagefindResult.score,
-              title,
-              description: data.meta?.description || "No description",
-              excerpt,
-              url,
-              meta: data.meta,
-              content_preview: data.content.substring(0, 100) + "...",
-            });
+            if (isDev) {
+              console.log(`🔍 [SearchBar] Result #${index} (score: ${pagefindResult.score})`, {
+                score: pagefindResult.score,
+                title,
+                description: data.meta?.description || "No description",
+                excerpt,
+                url,
+                meta: data.meta,
+                content_preview: data.content.substring(0, 100) + "...",
+              });
+            }
 
             return resultItem;
           })
         );
 
         // Log table of results with titles for easier overview
-        console.table(
-          items.map((item) => ({
-            title: item.title,
-            score: item.score,
-            section: item.section,
-          }))
-        );
+        if (isDev) {
+          console.table(
+            items.map((item) => ({
+              title: item.title,
+              score: item.score,
+              section: item.section,
+            }))
+          );
+        }
 
         // Sort all results directly by score (highest first)
         const sortedItems = [...items].sort((a, b) => (b.score || 0) - (a.score || 0));
@@ -421,7 +434,11 @@ export default function SearchBar() {
   const loadPagefind = async () => {
     try {
       setIsLoading(true);
-      console.log("🔍 [SearchBar] Attempting to load Pagefind...");
+      const isDev = import.meta.env.DEV || import.meta.env.MODE === "development";
+
+      if (isDev) {
+        console.log("🔍 [SearchBar] Attempting to load Pagefind...");
+      }
 
       // Try to dynamically import Pagefind
       // Using a trick to bypass Vite's static analysis of import statements
@@ -444,12 +461,16 @@ export default function SearchBar() {
 
         setIsPagefindLoaded(true);
       } catch (error) {
-        console.error("🔍 [SearchBar] Error loading Pagefind:", error);
+        if (isDev) {
+          console.error("🔍 [SearchBar] Error loading Pagefind:", error);
+        }
         setError("Search index not available. Run 'bun run build' to generate it.");
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An error occurred";
-      console.error("🔍 [SearchBar] Error in loadPagefind:", error);
+      if (import.meta.env.DEV) {
+        console.error("🔍 [SearchBar] Error in loadPagefind:", error);
+      }
       setError(errorMessage);
     } finally {
       setIsLoading(false);
