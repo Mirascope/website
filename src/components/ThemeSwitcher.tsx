@@ -94,9 +94,11 @@ export default function ThemeSwitcher() {
           )}
           aria-label="Select theme"
         >
-          {theme === "light" && <Sun size={20} />}
-          {theme === "dark" && <Moon size={20} />}
-          {theme === "system" && <Monitor size={20} />}
+          {theme === "light" && <Sun size={20} className={cn(isLandingPage && "icon-shadow")} />}
+          {theme === "dark" && <Moon size={20} className={cn(isLandingPage && "icon-shadow")} />}
+          {theme === "system" && (
+            <Monitor size={20} className={cn(isLandingPage && "icon-shadow")} />
+          )}
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

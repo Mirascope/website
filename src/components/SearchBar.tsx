@@ -132,6 +132,11 @@ function SearchInput({
           : "border-border bg-background/20 hover:bg-accent/30",
         isOpen ? "w-72 md:w-96" : "w-36" // Wider default size with text, much wider when expanded
       )}
+      style={
+        isLandingPage
+          ? { boxShadow: "0 1px 5px rgba(0, 0, 0, 0.15), 0 2px 10px rgba(0, 0, 0, 0.1)" }
+          : undefined
+      }
       onClick={onFocus}
     >
       <div className="flex items-center h-full relative">
@@ -139,7 +144,7 @@ function SearchInput({
           size={16}
           className={cn(
             "absolute left-3 transition-all duration-300",
-            isLandingPage ? "text-white/90" : "text-muted-foreground"
+            isLandingPage ? "text-white/90 icon-shadow" : "text-muted-foreground"
           )}
         />
         <input
@@ -206,15 +211,18 @@ function SearchResultsContainer({
   return (
     <div
       className={cn(
-        "absolute top-full right-0 md:left-0 mt-2 w-screen max-w-sm rounded-lg shadow-2xl overflow-hidden z-50 search-results",
-        isLandingPage
-          ? "bg-background/95 backdrop-blur-sm border border-white/20"
-          : "bg-background border border-border"
+        "absolute top-full right-0 md:left-0 mt-2 w-screen max-w-sm rounded-lg shadow-2xl overflow-hidden z-50 search-results [text-shadow:none]",
+        "bg-background border border-border"
       )}
+      style={
+        isLandingPage
+          ? { boxShadow: "0 1px 5px rgba(0, 0, 0, 0.15), 0 2px 10px rgba(0, 0, 0, 0.1)" }
+          : undefined
+      }
       ref={resultsRef}
     >
       {renderSearchContent()}
-      <SearchFooter isLandingPage={isLandingPage} />
+      <SearchFooter />
     </div>
   );
 
@@ -270,41 +278,16 @@ function SearchResultsContainer({
 }
 
 // Component for the keyboard shortcut footer
-interface SearchFooterProps {
-  isLandingPage?: boolean;
-}
-
-function SearchFooter({ isLandingPage = false }: SearchFooterProps = {}) {
+function SearchFooter() {
   return (
-    <div
-      className={cn(
-        "border-t p-2 flex justify-between items-center text-xs",
-        isLandingPage
-          ? "border-white/20 bg-white/5 text-white/80"
-          : "border-border bg-muted/40 text-muted-foreground"
-      )}
-    >
+    <div className="border-t border-border p-2 flex justify-between items-center text-xs bg-muted/40 text-muted-foreground">
       <div className="flex items-center gap-2 px-2">
         <Command size={12} />
-        <kbd
-          className={cn(
-            "px-1.5 py-0.5 text-[10px] border rounded",
-            isLandingPage ? "border-white/30" : "border-border"
-          )}
-        >
-          K
-        </kbd>
+        <kbd className="px-1.5 py-0.5 text-[10px] border rounded border-border">K</kbd>
         <span>to search</span>
       </div>
       <div className="flex items-center gap-2 px-2">
-        <kbd
-          className={cn(
-            "px-1.5 py-0.5 text-[10px] border rounded",
-            isLandingPage ? "border-white/30" : "border-border"
-          )}
-        >
-          Esc
-        </kbd>
+        <kbd className="px-1.5 py-0.5 text-[10px] border rounded border-border">Esc</kbd>
         <span>to close</span>
       </div>
     </div>

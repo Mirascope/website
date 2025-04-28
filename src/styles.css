@@ -171,6 +171,11 @@ pre,
     0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
+/* Icon shadow utility class */
+.icon-shadow {
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.5));
+}
+
 /* Ensure inline code stands out from text */
 p code,
 li code,
