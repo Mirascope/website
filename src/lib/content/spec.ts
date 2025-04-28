@@ -20,6 +20,7 @@ export interface DocInfo {
   type: "doc";
   product: ProductName; // Product this doc belongs to
   hasExtractableSnippets: boolean; // Whether this doc has extractable snippets
+  searchWeight: number; // Computed weight based on hierarchical position
 }
 
 /**
@@ -30,6 +31,7 @@ export interface DocSpec {
   label: string; // Display name in sidebar
   children?: DocSpec[]; // Child items (if this is a folder)
   hasExtractableSnippets?: boolean;
+  weight?: number; // Search weight for this item (multiplicative with parent weights)
 }
 
 /**
@@ -39,6 +41,7 @@ export interface SectionSpec {
   slug: Slug; // Section slug for URL
   label: string; // Display name
   children: DocSpec[]; // Items in this section
+  weight?: number; // Search weight for this section (multiplicative with product weight)
 }
 
 /**
@@ -49,6 +52,7 @@ export interface ProductSpec {
   // All sections (including the main/default section)
   // A section with slug "index" is treated as the default section (no prefix in URL)
   sections: SectionSpec[];
+  weight?: number; // Base search weight for this product
 }
 
 /**
@@ -69,16 +73,21 @@ export interface ValidationResult {
  * @param docSpec Doc specification
  * @param product Product this doc belongs to
  * @param pathPrefix Base path for this doc
+ * @param parentWeight Accumulated weight from parent nodes
  * @returns Array of DocInfo items from this doc and its children
  */
 export function processDocSpec(
   docSpec: DocSpec,
   product: ProductName,
-  pathPrefix: string
+  pathPrefix: string,
+  parentWeight: number = 1.0
 ): DocInfo[] {
   const result: DocInfo[] = [];
 
   const slug = docSpec.slug;
+
+  // Calculate the current weight by multiplying parent weight with this item's weight
+  const currentWeight = parentWeight * (docSpec.weight || 1.0);
 
   // Simple path construction for content loading - always include the slug
   const path = `${pathPrefix}/${slug}`;
@@ -99,13 +108,14 @@ export function processDocSpec(
       type: "doc",
       product,
       hasExtractableSnippets: docSpec.hasExtractableSnippets || false,
+      searchWeight: currentWeight,
     });
   }
 
-  // Process children recursively
+  // Process children recursively with updated section path and weight
   if (docSpec.children && docSpec.children.length > 0) {
     docSpec.children.forEach((childSpec) => {
-      const childItems = processDocSpec(childSpec, product, path);
+      const childItems = processDocSpec(childSpec, product, path, currentWeight);
       result.push(...childItems);
     });
   }
@@ -122,7 +132,9 @@ export function processDocSpec(
 export function getDocsFromSpec(fullSpec: FullDocsSpec): DocInfo[] {
   const allDocs: DocInfo[] = [];
 
-  fullSpec.forEach(({ product, sections }) => {
+  fullSpec.forEach((productSpec) => {
+    const { product, sections, weight: productWeight = 1.0 } = productSpec;
+
     // Process all sections
     sections.forEach((section) => {
       // For the default section (index), don't add a section slug prefix
@@ -131,7 +143,7 @@ export function getDocsFromSpec(fullSpec: FullDocsSpec): DocInfo[] {
 
       // Process each document in this section
       section.children.forEach((docSpec) => {
-        const docItems = processDocSpec(docSpec, product, sectionPathPrefix);
+        const docItems = processDocSpec(docSpec, product, sectionPathPrefix, productWeight);
         allDocs.push(...docItems);
       });
     });

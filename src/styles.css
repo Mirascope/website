@@ -723,6 +723,16 @@ header button:not(.font-toggle-button),
   border-radius: 0.2rem;
 }
 
+/* Pagefind search result highlighting */
+mark,
+.search-results mark,
+[data-pagefind-body] mark {
+  background: transparent;
+  color: var(--color-primary);
+  font-weight: 600;
+  padding: 0;
+}
+
 /* Styles moved from MDXProvider.tsx */
 /* Base styles for content - Sans-serif font */
 .mdx-content {

@@ -14,6 +14,7 @@ import { getProductRoute } from "@/src/lib/routes";
 import Logo from "@/src/components/Logo";
 import ThemeSwitcher from "@/src/components/ThemeSwitcher";
 import GitHubRepoButton from "@/src/components/GitHubRepoButton";
+import SearchBar from "@/src/components/SearchBar";
 
 // Reusable navigation link component
 interface NavLinkProps {
@@ -40,6 +41,7 @@ const NavLink = ({ href, children, className, onClick }: NavLinkProps) => {
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const router = useRouterState();
   const isLandingPage = router.location.pathname === "/";
 
@@ -83,8 +85,13 @@ export default function Header() {
           />
         </Link>
 
-        {/* Desktop Navigation - Centered */}
-        <div className="hidden md:flex items-center gap-6 absolute left-1/2 transform -translate-x-1/2 z-20">
+        {/* Desktop Navigation - Perfectly centered, but hidden during search */}
+        <div
+          className={cn(
+            "hidden md:flex items-center gap-6 absolute left-1/2 transform -translate-x-1/2 z-20 transition-opacity duration-300",
+            isSearchOpen ? "opacity-0 pointer-events-none" : "opacity-100"
+          )}
+        >
           {/* Products Menu */}
           <NavigationMenu>
             <NavigationMenuList>
@@ -142,9 +149,16 @@ export default function Header() {
           <NavLink href="/pricing">Pricing</NavLink>
         </div>
 
+        {/* Right section with responsive search and controls */}
         <div className="hidden md:flex items-center gap-3">
-          <GitHubRepoButton />
-          <ThemeSwitcher />
+          {/* Search bar that expands left */}
+          <SearchBar onOpenChange={setIsSearchOpen} isLandingPage={isLandingPage} />
+
+          {/* GitHub and Theme buttons that stay visible */}
+          <div className="flex items-center gap-3">
+            <GitHubRepoButton />
+            <ThemeSwitcher />
+          </div>
         </div>
 
         {/* Mobile Menu Button */}
@@ -200,6 +214,12 @@ export default function Header() {
             <div className="py-2 flex items-center">
               <span className="font-medium text-xl mr-3">Theme</span>
               <ThemeSwitcher />
+            </div>
+            <div className="py-2 w-full mt-3">
+              <SearchBar
+                onOpenChange={(open) => open && setIsMenuOpen(false)}
+                isLandingPage={isLandingPage}
+              />
             </div>
           </div>
         </div>
