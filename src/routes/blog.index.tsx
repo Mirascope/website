@@ -115,7 +115,7 @@ function BlogPage() {
                       params={{ slug: post.slug }}
                       className="block h-full cursor-pointer group"
                     >
-                      <div className="h-[320px] flex flex-col hover:shadow-lg transition-all duration-200 shadow-sm bg-accent rounded-lg border-1 border-primary overflow-hidden">
+                      <div className="h-[320px] flex flex-col hover:shadow-lg transition-all duration-200 shadow-sm bg-card rounded-lg border-1 border-border overflow-hidden">
                         <div className="p-6 flex flex-col h-full">
                           <div>
                             <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
