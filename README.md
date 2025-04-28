@@ -206,6 +206,19 @@ bun run apigen --only mirascope:llm/call.mdx
 bun run apigen --only llm/call.mdx --with-meta
 ```
 
+### On dev server start failures
+
+Sometimes, when running `bun run start`, I see the following failure:
+
+```
+Port 3000 is available. Starting server...
+failed to load config from /Users/dandelion/git/mweb-multi/mweb-2/vite.config.mjs
+error when starting dev server:
+Error: The service was stopped
+```
+
+In these occasions, `rm -rf node_modules && bun install` fixes it.
+
 
 ## License
 

@@ -7,6 +7,7 @@ import { LoadingContent } from "@/src/components/docs";
 import ContentErrorHandler from "@/src/components/ContentErrorHandler";
 import TableOfContents from "@/src/components/TableOfContents";
 import SEOMeta from "@/src/components/SEOMeta";
+import PagefindMeta from "@/src/components/PagefindMeta";
 import useFunMode from "@/src/lib/hooks/useFunMode";
 import { cn } from "@/src/lib/utils";
 import { getBlogContent } from "@/src/lib/content";
@@ -174,11 +175,18 @@ function BlogPostPage() {
                 className="bg-background rounded-xl shadow-sm p-4 sm:p-6 border border-border blog-content"
               >
                 {post.mdx ? (
-                  <MDXRenderer
-                    code={post.mdx.code}
-                    frontmatter={post.mdx.frontmatter}
-                    useFunMode={funMode}
-                  />
+                  <PagefindMeta
+                    title={post.meta.title}
+                    description={post.meta.description}
+                    searchWeight={0.7}
+                    section={"blog"}
+                  >
+                    <MDXRenderer
+                      code={post.mdx.code}
+                      frontmatter={post.mdx.frontmatter}
+                      useFunMode={funMode}
+                    />
+                  </PagefindMeta>
                 ) : (
                   <LoadingContent spinnerClassName="h-8 w-8" fullHeight={false} />
                 )}

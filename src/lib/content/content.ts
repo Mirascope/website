@@ -13,11 +13,11 @@
  */
 
 import { environment } from "./environment";
-import { getDocsFromSpec, type DocInfo } from "./spec";
 import { processMDXContent } from "./mdx-processing";
+import { docRegistry, type DocInfo } from "./doc-registry";
 
-// Import docs specification
-import fullSpec from "@/content/doc/_meta";
+// Re-export docRegistry for convenience
+export { docRegistry };
 
 /* ========== CONTENT TYPES =========== */
 
@@ -80,6 +80,8 @@ export type BlogContent = Content<BlogMeta>;
 export interface DocMeta extends ContentMeta {
   product: string; // Which product this doc belongs to
   hasExtractableSnippets: boolean; // Whether this doc has code snippets that can be extracted
+  sectionPath: string; // Hierarchical section path (e.g. "docs>mirascope>learn")
+  searchWeight: number; // Computed weight based on hierarchical position
 }
 
 export type DocContent = Content<DocMeta>;
@@ -344,7 +346,7 @@ export async function getDocContent(path: string): Promise<DocContent> {
  * @returns Array of DocInfo objects with path info
  */
 export function getAllDocInfo(): DocInfo[] {
-  return getDocsFromSpec(fullSpec);
+  return docRegistry.getAllDocs();
 }
 
 /**
