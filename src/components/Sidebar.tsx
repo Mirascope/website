@@ -73,7 +73,7 @@ const SidebarLink = ({
       params={params}
       style={style}
       className={cn(
-        "block text-base rounded-md",
+        "block text-base rounded-md py-1",
         className,
         isActive ? activeClass : inactiveClass
       )}
@@ -184,7 +184,7 @@ const NestedItem = ({
       key={itemSlug}
       className={cn(hasNestedItems && isActive ? "bg-accent/40 rounded-md my-1" : "")}
     >
-      <div className="flex items-center py-1">
+      <div className="flex items-center">
         {/* Render expand/collapse icon for folders */}
         {hasNestedItems && (
           <button
@@ -218,7 +218,7 @@ const NestedItem = ({
           <button
             onClick={() => setIsExpanded(!isExpanded)}
             className={cn(
-              "font-medium block text-left w-full hover:text-accent-foreground rounded-md",
+              "font-medium block text-left w-full hover:text-accent-foreground rounded-md py-1",
               isActive ? "text-primary" : "text-muted-foreground"
             )}
             style={{
@@ -440,7 +440,7 @@ const Sidebar = ({ config, headerContent, footerContent }: SidebarProps) => {
 
           {/* Border line below section buttons */}
           <div className="pb-4">
-            <div className="border-b border-primary"></div>
+            <div className="border-b border-1 border-muted"></div>
           </div>
         </>
       )}
