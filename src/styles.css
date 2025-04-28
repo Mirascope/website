@@ -785,7 +785,7 @@ mark,
     "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
     "Courier New", monospace !important;
   /* SINGLE SOURCE OF TRUTH FOR CODE BLOCK FONT SIZE */
-  font-size: 0.7rem !important;
+  font-size: 0.8rem !important;
 }
 
 /* Inline code gets monospace font but scales with context */

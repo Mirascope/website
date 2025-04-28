@@ -399,7 +399,7 @@ export const ThemeColorCombinations: React.FC = () => {
         { name: "Primary", textClass: "text-primary" },
         { name: "Secondary", textClass: "text-secondary" },
         { name: "Muted", textClass: "text-muted-foreground" },
-        { name: "Accent", textClass: "text-accent" },
+        { name: "Accent", textClass: "text-accent-foreground" },
       ],
     },
     {
@@ -410,7 +410,7 @@ export const ThemeColorCombinations: React.FC = () => {
         { name: "Primary", textClass: "text-primary" },
         { name: "Secondary", textClass: "text-secondary" },
         { name: "Muted", textClass: "text-muted-foreground" },
-        { name: "Accent", textClass: "text-accent" },
+        { name: "Accent", textClass: "text-accent-foreground" },
       ],
     },
     {
@@ -421,7 +421,7 @@ export const ThemeColorCombinations: React.FC = () => {
         { name: "Primary", textClass: "text-primary" },
         { name: "Secondary", textClass: "text-secondary" },
         { name: "Muted", textClass: "text-muted-foreground" },
-        { name: "Accent", textClass: "text-accent" },
+        { name: "Accent", textClass: "text-accent-foreground" },
       ],
     },
     {
