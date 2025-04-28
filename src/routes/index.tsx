@@ -55,7 +55,7 @@ function LandingPage() {
             </a>
             <a
               href="https://join.slack.com/t/mirascope-community/shared_invite/zt-2ilqhvmki-FB6LWluInUCkkjYD3oSjNA"
-              className="bg-background border border-border text-foreground px-6 py-3 rounded-md text-lg font-medium hover:bg-accent hover:border-primary transition-colors w-fit sm:w-auto text-center shadow-sm"
+              className="bg-white border border-none text-black px-6 py-3 rounded-md text-lg font-medium hover:bg-primary/50 hover:border-primary transition-colors w-fit sm:w-auto text-center shadow-sm"
             >
               Join the community
             </a>

@@ -68,7 +68,9 @@ export function TabbedSection({
   }
 
   return (
-    <div className={cn("rounded-md bg-muted shadow-md overflow-hidden", className)}>
+    <div
+      className={cn("rounded-md px-1 pb-0.75 pt-2 bg-muted shadow-md overflow-hidden", className)}
+    >
       {showLogo && (
         <div className="px-4 py-2.5 flex items-center">
           <Logo size="micro" withText={true} textClassName="text-mirascope-purple font-medium" />
@@ -77,7 +79,7 @@ export function TabbedSection({
 
       <Tabs defaultValue={defaultTab} className="w-full">
         <div className="flex px-1">
-          <TabsList className="bg-transparent p-0 h-auto">
+          <TabsList className="bg-transparent p-0 gap-x-2 h-auto">
             {tabs.map((tab) => (
               <TabsTrigger key={tab.value} value={tab.value}>
                 {tab.value}

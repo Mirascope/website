@@ -336,7 +336,7 @@ function PricingPage() {
           </Tabs>
 
           {/* FAQ Section */}
-          <div className="mt-16 bg-accent p-8 rounded-lg border border-border">
+          <div className="mt-16 bg-card p-8 rounded-lg border border-border">
             <h2 className="text-2xl font-semibold mb-4 text-foreground">
               Frequently Asked Questions
             </h2>
