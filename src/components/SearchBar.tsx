@@ -129,7 +129,7 @@ function SearchInput({
         "h-9 rounded-full border transition-all duration-300",
         isLandingPage
           ? "border-white/30 bg-white/10 hover:bg-white/20"
-          : "border-border bg-background/20 hover:bg-accent/30",
+          : "border-border bg-background/20 hover:bg-mirascope-purple/10 hover:border-mirascope-purple/80",
         isOpen ? "w-72 md:w-96" : "w-36" // Wider default size with text, much wider when expanded
       )}
       style={
@@ -144,7 +144,7 @@ function SearchInput({
           size={16}
           className={cn(
             "absolute left-3 transition-all duration-300",
-            isLandingPage ? "icon-shadow text-white/90" : "text-muted-foreground"
+            isLandingPage ? "nav-icon-landing" : "nav-icon-regular"
           )}
         />
         <input
@@ -156,7 +156,7 @@ function SearchInput({
             "h-full cursor-pointer bg-transparent text-sm transition-all duration-300 outline-none",
             isLandingPage
               ? "text-white placeholder:text-white/90"
-              : "text-foreground placeholder:text-muted-foreground",
+              : "text-foreground placeholder:text-foreground",
             isOpen ? "w-full pr-9 pl-10 opacity-100" : "w-28 pr-3 pl-10 opacity-80"
           )}
           value={query}

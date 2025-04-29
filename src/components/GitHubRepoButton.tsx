@@ -68,10 +68,8 @@ const GitHubRepoButton: React.FC<GitHubRepoButtonProps> = ({ className }) => {
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
-        "flex flex-col px-2 py-1 transition-colors duration-200",
-        isLandingPage
-          ? "hover:text-primary text-white"
-          : "text-foreground hover:text-muted-foreground",
+        "flex flex-col px-2 py-1",
+        isLandingPage ? "nav-text-landing" : "nav-text-regular",
         className
       )}
     >
