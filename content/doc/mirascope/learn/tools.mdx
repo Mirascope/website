@@ -13,7 +13,7 @@ Tools are user-defined functions that an LLM (Large Language Model) can ask the 
 
 Mirascope enables defining tools in a provider-agnostic way, which can be used across all supported LLM providers without modification.
 
-<Info title="Diagram illustrating how tools are called" collapsible={true} defaultCollapsed={true}>
+<Info title="Diagram illustrating how tools are called" collapsible={true} defaultOpen={false}>
   When an LLM decides to use a tool, it indicates the tool name and argument values in its response. It's important to note that the LLM doesn't actually execute the function; instead, you are responsible for calling the tool and (optionally) providing the output back to the LLM in a subsequent interaction. For more details on such iterative tool-use flows, check out the [Tool Message Parameters](#tool-message-parameters) section below as well as the section on [Agents](/docs/mirascope/learn/agents).
 
   ```mermaid
@@ -34,7 +34,7 @@ Mirascope enables defining tools in a provider-agnostic way, which can be used a
 
 ## Basic Usage and Syntax
 
-<Info title="API Documentation" collapsible={true} defaultCollapsed={true}>
+<Info title="API Documentation" collapsible={true} defaultOpen={false}>
   [`mirascope.llm.tool`](/docs/mirascope/api)
 </Info>
 
@@ -194,7 +194,7 @@ else:
   examplePath="mirascope/learn/tools/basic_usage/sdk"
   collapsible={true}
   headerText="Provider SDK Example"
-  defaultCollapsed={true}
+  defaultOpen={false}
 />
 
 In this example we:
@@ -1561,13 +1561,13 @@ else:
 
 Both approaches will result in the same tool schema with examples included. The function approach gets automatically converted to use Pydantic fields internally, making both methods equivalent in terms of functionality.
 
-<Info title="Field level examples in both styles" collapsible={true} defaultCollapsed={true}>
+<Info title="Field level examples in both styles" collapsible={true} defaultOpen={false}>
   Both `BaseTool` and function-style definitions support field level examples through Pydantic's `Field`. When using function-style definitions, you'll need to wrap the type with `Annotated` to use `Field`.
 </Info>
 
 ## ToolKit
 
-<Info title="API Documentation" collapsible={true} defaultCollapsed={true}>
+<Info title="API Documentation" collapsible={true} defaultOpen={false}>
   [`mirascope.llm.toolkit`](/docs/mirascope/api)
 </Info>
 
@@ -1704,7 +1704,7 @@ Mirascope provides several pre-made tools and toolkits to help you get started q
 
 ### Pre-Made Tools
 
-<Info title="API Documentation" collapsible={true} defaultCollapsed={true}>
+<Info title="API Documentation" collapsible={true} defaultOpen={false}>
   - [`mirascope.tools.web.DuckDuckGoSearch`](/docs/mirascope/api)
   - [`mirascope.tools.web.HTTPX`](/docs/mirascope/api)
   - [`mirascope.tools.web.ParseURLContent`](/docs/mirascope/api)
@@ -1842,7 +1842,7 @@ if tool := response.tool:
 
 ### Pre-Made ToolKits
 
-<Info title="API Documentation" collapsible={true} defaultCollapsed={true}>
+<Info title="API Documentation" collapsible={true} defaultOpen={false}>
   - [`mirascope.tools.system.FileSystemToolKit`](/docs/mirascope/api)
   - [`mirascope.tools.system.DockerOperationToolKit`](/docs/mirascope/api)
 </Info>
