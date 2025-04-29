@@ -129,7 +129,7 @@ function SearchInput({
         "h-9 rounded-full border transition-all duration-300",
         isLandingPage
           ? "border-white/30 bg-white/10 hover:bg-white/20"
-          : "border-border bg-background/20 hover:bg-mirascope-purple/10 hover:border-mirascope-purple/80",
+          : "border-border bg-background/20 hover:bg-primary/10 hover:border-primary/80",
         isOpen ? "w-72 md:w-96" : "w-36" // Wider default size with text, much wider when expanded
       )}
       style={
