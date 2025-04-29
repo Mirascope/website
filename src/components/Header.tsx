@@ -167,14 +167,17 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden p-2 text-foreground"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        {/* Mobile controls: Theme Switcher + Menu Button */}
+        <div className="md:hidden flex items-center gap-1">
+          <ThemeSwitcher />
+          <button
+            className={cn("p-2", isLandingPage ? "text-white" : "text-foreground")}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </nav>
 
       {/* Mobile Menu */}
@@ -217,10 +220,6 @@ export default function Header() {
               Pricing
             </Link>
             <hr className="my-2" />
-            <div className="py-2 flex items-center">
-              <span className="font-medium text-xl mr-3">Theme</span>
-              <ThemeSwitcher />
-            </div>
             <div className="py-2 w-full mt-3">
               <SearchBar
                 onOpenChange={(open) => open && setIsMenuOpen(false)}
