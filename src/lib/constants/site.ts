@@ -4,6 +4,7 @@
 
 // Import GitHub stats from build-time generated file
 import githubStats from "./github-stats.json";
+import type { ProductName } from "../content/spec";
 
 // Site version information
 export const SITE_VERSION = "1.1";
@@ -15,11 +16,22 @@ export const BASE_URL = "https://beta.mirascope.com";
 // Analytics constants
 export const GA_MEASUREMENT_ID = "G-DJHT1QG9GK";
 
+export interface GithubInfo {
+  repo: string;
+  stars: number;
+  version: string;
+}
+
+export interface ProductConfig {
+  title: string;
+  description: string;
+  github: GithubInfo;
+}
+
 // Product configurations
-export const PRODUCT_CONFIGS = {
+export const PRODUCT_CONFIGS: Record<ProductName, ProductConfig> = {
   mirascope: {
     title: "Mirascope",
-    color: "#6366f1",
     description: "LLM abstractions that aren't obstructions.",
     github: {
       repo: "Mirascope/mirascope",
@@ -29,7 +41,6 @@ export const PRODUCT_CONFIGS = {
   },
   lilypad: {
     title: "Lilypad",
-    color: "#2d8031",
     description: "Start building your data flywheel in one line of code.",
     github: {
       repo: "Mirascope/lilypad",
@@ -38,3 +49,8 @@ export const PRODUCT_CONFIGS = {
     },
   },
 };
+
+// Helper function to get product config with defaulting to Mirascope
+export function getProductConfig(product?: ProductName): ProductConfig {
+  return PRODUCT_CONFIGS[product || "mirascope"];
+}
