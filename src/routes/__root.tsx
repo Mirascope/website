@@ -30,31 +30,20 @@ export const Route = createRootRoute({
     const path = router.location.pathname;
     const isLandingPage = path === "/";
 
-    // Determine product based on URL path - this runs on initial render
-    const currentProduct = getProductFromPath(path);
-
-    // Update document product attribute when route changes
     useEffect(() => {
       const newProduct = getProductFromPath(path);
       document.documentElement.setAttribute("data-product", newProduct);
-    }, [path]);
-
-    // For initial render, we set the attribute during SSR
-    if (typeof document !== "undefined" && document.documentElement) {
-      // This runs on client-side only, on the first render
-      document.documentElement.setAttribute("data-product", currentProduct);
-    }
-
-    // Initialize analytics during component mount
-    useEffect(() => {
-      analyticsManager.enableAnalytics();
-    }, []);
-
-    // Track page views when route changes
-    useEffect(() => {
-      // Will only track if analytics are enabled (respects consent / GDPR)
       analyticsManager.trackPageView(path);
     }, [path]);
+
+    // Initialize analytics and set product on first mount
+    useEffect(() => {
+      if (typeof document !== "undefined" && document.documentElement) {
+        const currentProduct = getProductFromPath(path);
+        document.documentElement.setAttribute("data-product", currentProduct);
+      }
+      analyticsManager.enableAnalytics();
+    }, []);
 
     return (
       <>
