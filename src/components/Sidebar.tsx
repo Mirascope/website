@@ -73,7 +73,7 @@ const SidebarLink = ({
       params={params}
       style={style}
       className={cn(
-        "block text-base rounded-md py-1",
+        "block rounded-md py-1 text-base",
         className,
         isActive ? activeClass : inactiveClass
       )}
@@ -107,7 +107,7 @@ const SectionTab = ({
       to={to}
       params={params}
       className={cn(
-        "px-3 py-1 text-base rounded-md w-full",
+        "w-full rounded-md px-3 py-1 text-base",
         className,
         isActive ? activeClass : inactiveClass
       )}
@@ -122,7 +122,7 @@ const SectionTab = ({
  */
 const GroupLabel = ({ label }: { label: string }) => {
   return (
-    <div className={cn("font-semibold px-3 py-1 block cursor-default text-primary")}>{label}</div>
+    <div className={cn("text-primary block cursor-default px-3 py-1 font-semibold")}>{label}</div>
   );
 };
 
@@ -182,7 +182,7 @@ const NestedItem = ({
   return (
     <div
       key={itemSlug}
-      className={cn(hasNestedItems && isActive ? "bg-accent/40 rounded-md my-1" : "")}
+      className={cn(hasNestedItems && isActive ? "bg-accent/40 my-1 rounded-md" : "")}
     >
       <div className="flex items-center">
         {/* Render expand/collapse icon for folders */}
@@ -190,7 +190,7 @@ const NestedItem = ({
           <button
             onClick={() => setIsExpanded(!isExpanded)}
             className={cn(
-              "w-5 h-5 flex items-center justify-center mr-1",
+              "mr-1 flex h-5 w-5 items-center justify-center",
               isActive ? "text-primary" : "text-muted-foreground"
             )}
             aria-label={isExpanded ? "Collapse" : "Expand"}
@@ -218,7 +218,7 @@ const NestedItem = ({
           <button
             onClick={() => setIsExpanded(!isExpanded)}
             className={cn(
-              "font-medium block text-left w-full hover:text-accent-foreground rounded-md py-1",
+              "hover:text-accent-foreground block w-full rounded-md py-1 text-left font-medium",
               isActive ? "text-primary" : "text-muted-foreground"
             )}
             style={{
@@ -269,7 +269,7 @@ const NestedItems = ({ items, basePath, isActivePath, indentLevel = 0 }: NestedI
   const safeItems = items || {};
 
   return (
-    <div className={`space-y-0.5 mt-1 ${indentLevel > 0 ? "ml-3" : ""}`}>
+    <div className={`mt-1 space-y-0.5 ${indentLevel > 0 ? "ml-3" : ""}`}>
       {Object.entries(safeItems).map(([itemSlug, item]) => (
         <NestedItem
           key={itemSlug}
@@ -419,14 +419,14 @@ const Sidebar = ({ config, headerContent, footerContent }: SidebarProps) => {
   const activeSection = matchingSections.length > 0 ? matchingSections[0].slug : undefined;
 
   return (
-    <aside className="h-full pt-6 overflow-hidden">
+    <aside className="h-full overflow-hidden pt-6">
       {/* Custom header content if provided */}
       {headerContent && <div className="mb-5">{headerContent}</div>}
 
       {/* Section tabs */}
       {config.sections.length > 1 && (
         <>
-          <div className="flex flex-col space-y-0.5 mb-4">
+          <div className="mb-4 flex flex-col space-y-0.5">
             {config.sections.map((section) => (
               <SectionTab
                 key={section.slug}
@@ -440,13 +440,13 @@ const Sidebar = ({ config, headerContent, footerContent }: SidebarProps) => {
 
           {/* Border line below section buttons */}
           <div className="pb-4">
-            <div className="border-b border-1 border-muted"></div>
+            <div className="border-muted border-1 border-b"></div>
           </div>
         </>
       )}
 
       {/* Scrollable content area with fixed height */}
-      <div className="flex flex-col h-[calc(100vh-220px)]">
+      <div className="flex h-[calc(100vh-220px)] flex-col">
         <div
           ref={sidebarRef}
           className="flex-1 overflow-y-auto" // Flexbox will allow this to fill available space

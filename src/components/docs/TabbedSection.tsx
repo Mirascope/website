@@ -61,7 +61,7 @@ export function TabbedSection({
 
   if (tabs.length === 0) {
     return (
-      <div className="p-4 border-2 border-red-500 rounded-md">
+      <div className="rounded-md border-2 border-red-500 p-4">
         No valid tabs found. Please use Tab components with value props.
       </div>
     );
@@ -69,17 +69,17 @@ export function TabbedSection({
 
   return (
     <div
-      className={cn("rounded-md px-1 pb-0.75 pt-2 bg-muted shadow-md overflow-hidden", className)}
+      className={cn("bg-muted overflow-hidden rounded-md px-1 pt-2 pb-0.75 shadow-md", className)}
     >
       {showLogo && (
-        <div className="px-4 py-2.5 flex items-center">
+        <div className="flex items-center px-4 py-2.5">
           <Logo size="micro" withText={true} textClassName="text-mirascope-purple font-medium" />
         </div>
       )}
 
       <Tabs defaultValue={defaultTab} className="w-full">
         <div className="flex px-1">
-          <TabsList className="bg-transparent p-0 gap-x-2 h-auto">
+          <TabsList className="h-auto gap-x-2 bg-transparent p-0">
             {tabs.map((tab) => (
               <TabsTrigger key={tab.value} value={tab.value}>
                 {tab.value}
@@ -89,7 +89,7 @@ export function TabbedSection({
         </div>
 
         {tabs.map((tab) => (
-          <TabsContent key={tab.value} value={tab.value} className="p-0 m-0">
+          <TabsContent key={tab.value} value={tab.value} className="m-0 p-0">
             {tab.content}
           </TabsContent>
         ))}

@@ -18,11 +18,11 @@ const DevLayout: React.FC<DevLayoutProps> = ({ children, devPages }) => {
   const leftSidebar = <DevSidebar devPages={devPages} />;
 
   // Main content - expanded to use full width
-  const mainContent = <div className="flex-1 min-w-0 px-8">{children}</div>;
+  const mainContent = <div className="min-w-0 flex-1 px-8">{children}</div>;
 
   return (
     <div className="flex justify-center pt-0">
-      <div className="flex mx-auto w-full max-w-7xl">
+      <div className="mx-auto flex w-full max-w-7xl">
         {/* Left sidebar */}
         {leftSidebar}
 

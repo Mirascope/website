@@ -25,8 +25,8 @@ const FeatureRow = ({
   const sameNonBoolean = free === pro && typeof free === "string" && free !== "";
 
   return (
-    <div className="grid grid-cols-3 gap-4 py-3 border-b border-border items-center min-h-[48px]">
-      <div className="text-lg font-medium text-foreground">{feature}</div>
+    <div className="border-border grid min-h-[48px] grid-cols-3 items-center gap-4 border-b py-3">
+      <div className="text-foreground text-lg font-medium">{feature}</div>
 
       {sameNonBoolean ? (
         <div className="col-span-2 text-center text-lg whitespace-pre-line">{free}</div>
@@ -36,17 +36,17 @@ const FeatureRow = ({
             {typeof free === "boolean" ? (
               <div className="flex justify-center">
                 {free ? (
-                  <div className="rounded-full p-1 bg-primary/30">
+                  <div className="bg-primary/30 rounded-full p-1">
                     <Check size={16} className="text-primary" />
                   </div>
                 ) : (
-                  <div className="rounded-full p-1 bg-muted">
+                  <div className="bg-muted rounded-full p-1">
                     <X size={16} className="text-muted-foreground" />
                   </div>
                 )}
               </div>
             ) : (
-              <span className="text-lg whitespace-pre-line text-foreground">{free}</span>
+              <span className="text-foreground text-lg whitespace-pre-line">{free}</span>
             )}
           </div>
 
@@ -54,17 +54,17 @@ const FeatureRow = ({
             {typeof pro === "boolean" ? (
               <div className="flex justify-center">
                 {pro ? (
-                  <div className="rounded-full p-1 bg-primary/30">
+                  <div className="bg-primary/30 rounded-full p-1">
                     <Check size={16} className="text-primary" />
                   </div>
                 ) : (
-                  <div className="rounded-full p-1 bg-muted">
+                  <div className="bg-muted rounded-full p-1">
                     <X size={16} className="text-muted-foreground" />
                   </div>
                 )}
               </div>
             ) : (
-              <span className="text-lg whitespace-pre-line text-foreground">{pro}</span>
+              <span className="text-foreground text-lg whitespace-pre-line">{pro}</span>
             )}
           </div>
         </>
@@ -89,29 +89,29 @@ const PricingTier = ({
   buttonLink: string;
   isGreen?: boolean;
 }) => (
-  <div className="bg-background border border-border rounded-lg shadow-sm overflow-hidden">
+  <div className="bg-background border-border overflow-hidden rounded-lg border shadow-sm">
     <div
       className={cn(
         "px-6 py-8",
-        isGreen ? "bg-gradient-to-br from-primary/10 to-background" : "bg-background"
+        isGreen ? "from-primary/10 to-background bg-gradient-to-br" : "bg-background"
       )}
     >
       <h3
-        className={cn("text-xl font-semibold mb-2", isGreen ? "text-primary" : "text-foreground")}
+        className={cn("mb-2 text-xl font-semibold", isGreen ? "text-primary" : "text-foreground")}
       >
         {name}
       </h3>
       <p className="text-muted-foreground mb-5">{description}</p>
       <div className="mb-6">
-        <span className="text-3xl font-bold text-foreground">{price}</span>
+        <span className="text-foreground text-3xl font-bold">{price}</span>
         {price !== "TBD" && price !== "N/A" && (
-          <span className="text-sm text-muted-foreground ml-1">/ month</span>
+          <span className="text-muted-foreground ml-1 text-sm">/ month</span>
         )}
       </div>
       <a
         href={buttonLink}
         className={cn(
-          "block w-full py-2 px-4 rounded-md text-center transition-colors",
+          "block w-full rounded-md px-4 py-2 text-center transition-colors",
           isGreen
             ? "bg-primary text-primary-foreground hover:bg-primary/90"
             : "bg-muted text-muted-foreground hover:bg-accent"
@@ -161,12 +161,12 @@ function PricingPage() {
   // Beta notice content for tooltips
   const betaNoticeContent = (
     <div className="font-handwriting">
-      <h3 className="text-lg font-semibold text-primary mb-2">Open Beta Notice</h3>
-      <p className="text-lg mb-2">
+      <h3 className="text-primary mb-2 text-lg font-semibold">Open Beta Notice</h3>
+      <p className="mb-2 text-lg">
         Lilypad is currently in an open beta, during which we will not be charging for the platform.
         All users during this period will have free access to Pro features.
       </p>
-      <p className="text-lg mb-2">
+      <p className="mb-2 text-lg">
         Once we finalize our pricing and release the production stable version, we will give all
         existing users a grace period during which they can continue to evaluate the platform to
         determine if they would like to continue on a paid plan.
@@ -185,21 +185,21 @@ function PricingPage() {
         product="lilypad"
         url="/pricing"
       />
-      <div className="py-12 px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16">
-            <h1 className="text-4xl font-bold mb-4 text-center text-foreground">Lilypad Pricing</h1>
-            <p className="text-xl text-foreground max-w-2xl mx-auto mb-2">
+      <div className="px-4 py-12">
+        <div className="mx-auto max-w-4xl">
+          <div className="mb-16 text-center">
+            <h1 className="text-foreground mb-4 text-center text-4xl font-bold">Lilypad Pricing</h1>
+            <p className="text-foreground mx-auto mb-2 max-w-2xl text-xl">
               Get started with the Free plan today.
             </p>
-            <p className="text-md text-muted-foreground max-w-2xl mx-auto italic">
+            <p className="text-md text-muted-foreground mx-auto max-w-2xl italic">
               No credit card required.
             </p>
           </div>
 
           {/* Shadcn Tabs */}
-          <Tabs defaultValue="hosted" className="w-full mb-10">
-            <div className="flex justify-center mb-8">
+          <Tabs defaultValue="hosted" className="mb-10 w-full">
+            <div className="mb-8 flex justify-center">
               <TabsList>
                 <TabsTrigger value="hosted">Hosted By Us</TabsTrigger>
                 <TabsTrigger value="selfhosted">Self Hosting</TabsTrigger>
@@ -208,7 +208,7 @@ function PricingPage() {
 
             {/* Hosted By Us Tab Content */}
             <TabsContent value="hosted">
-              <div className="grid md:grid-cols-2 gap-8 mb-10">
+              <div className="mb-10 grid gap-8 md:grid-cols-2">
                 <PricingTier
                   name="Free"
                   price="$0"
@@ -217,17 +217,17 @@ function PricingPage() {
                   buttonLink="/docs/lilypad/"
                   isGreen={true}
                 />
-                <div className="bg-background border border-border rounded-lg shadow-sm overflow-hidden">
-                  <div className="px-6 py-8 bg-background">
-                    <div className="flex items-center gap-2 mb-2">
-                      <h3 className="text-xl font-semibold text-foreground">Pro</h3>
+                <div className="bg-background border-border overflow-hidden rounded-lg border shadow-sm">
+                  <div className="bg-background px-6 py-8">
+                    <div className="mb-2 flex items-center gap-2">
+                      <h3 className="text-foreground text-xl font-semibold">Pro</h3>
                       <Tooltip>
                         <TooltipTrigger>
                           <Info size={16} className="text-primary cursor-pointer" />
                         </TooltipTrigger>
                         <TooltipContent
                           side="right"
-                          className="w-md p-4 bg-primary/10 text-primary border border-primary/20"
+                          className="bg-primary/10 text-primary border-primary/20 w-md border p-4"
                         >
                           {betaNoticeContent}
                         </TooltipContent>
@@ -239,7 +239,7 @@ function PricingPage() {
                     </div>
                     <a
                       href="/docs/lilypad/"
-                      className="block w-full py-2 px-4 rounded-md text-center transition-colors bg-muted text-muted-foreground hover:bg-accent"
+                      className="bg-muted text-muted-foreground hover:bg-accent block w-full rounded-md px-4 py-2 text-center transition-colors"
                     >
                       *Get Started
                     </a>
@@ -248,18 +248,18 @@ function PricingPage() {
               </div>
 
               {/* Feature comparison table */}
-              <div className="bg-background border border-border rounded-lg shadow-sm overflow-hidden">
-                <div className="px-4 py-5 sm:px-6 bg-accent border-b border-border">
-                  <h3 className="text-lg font-medium text-foreground">Feature Comparison</h3>
+              <div className="bg-background border-border overflow-hidden rounded-lg border shadow-sm">
+                <div className="bg-accent border-border border-b px-4 py-5 sm:px-6">
+                  <h3 className="text-foreground text-lg font-medium">Feature Comparison</h3>
                 </div>
-                <div className="px-4 py-5 sm:p-6 overflow-x-auto bg-background">
+                <div className="bg-background overflow-x-auto px-4 py-5 sm:p-6">
                   {/* Table header */}
-                  <div className="grid grid-cols-3 gap-4 pb-4 border-b border-border">
-                    <div className="text-lg font-medium text-muted-foreground">Feature</div>
-                    <div className="text-lg font-medium text-muted-foreground text-center">
+                  <div className="border-border grid grid-cols-3 gap-4 border-b pb-4">
+                    <div className="text-muted-foreground text-lg font-medium">Feature</div>
+                    <div className="text-muted-foreground text-center text-lg font-medium">
                       Free
                     </div>
-                    <div className="text-lg font-medium text-muted-foreground text-center">Pro</div>
+                    <div className="text-muted-foreground text-center text-lg font-medium">Pro</div>
                   </div>
 
                   {/* Table rows */}
@@ -272,7 +272,7 @@ function PricingPage() {
 
             {/* Self Hosting Tab Content */}
             <TabsContent value="selfhosted">
-              <div className="grid md:grid-cols-2 gap-8 mb-10">
+              <div className="mb-10 grid gap-8 md:grid-cols-2">
                 <PricingTier
                   name="Free"
                   price="$0"
@@ -281,17 +281,17 @@ function PricingPage() {
                   buttonLink="/docs/lilypad/self-hosting"
                   isGreen={true}
                 />
-                <div className="bg-background border border-border rounded-lg shadow-sm overflow-hidden">
+                <div className="bg-background border-border overflow-hidden rounded-lg border shadow-sm">
                   <div className="px-6 py-8">
-                    <div className="flex items-center gap-2 mb-2">
-                      <h3 className="text-xl font-semibold text-foreground">Pro</h3>
+                    <div className="mb-2 flex items-center gap-2">
+                      <h3 className="text-foreground text-xl font-semibold">Pro</h3>
                       <Tooltip>
                         <TooltipTrigger>
                           <Info size={16} className="text-primary cursor-pointer" />
                         </TooltipTrigger>
                         <TooltipContent
                           side="right"
-                          className="w-96 p-4 bg-primary/10 text-primary border border-primary/20"
+                          className="bg-primary/10 text-primary border-primary/20 w-96 border p-4"
                         >
                           {betaNoticeContent}
                         </TooltipContent>
@@ -303,7 +303,7 @@ function PricingPage() {
                     </div>
                     <a
                       href="mailto:sales@mirascope.com"
-                      className="block w-full py-2 px-4 rounded-md text-center transition-colors bg-muted text-muted-foreground hover:bg-accent"
+                      className="bg-muted text-muted-foreground hover:bg-accent block w-full rounded-md px-4 py-2 text-center transition-colors"
                     >
                       Request License
                     </a>
@@ -312,18 +312,18 @@ function PricingPage() {
               </div>
 
               {/* Feature comparison table */}
-              <div className="bg-background border border-border rounded-lg shadow-sm overflow-hidden">
-                <div className="px-4 py-5 sm:px-6 bg-muted border-b border-border">
-                  <h3 className="text-lg font-medium text-foreground">Feature Comparison</h3>
+              <div className="bg-background border-border overflow-hidden rounded-lg border shadow-sm">
+                <div className="bg-muted border-border border-b px-4 py-5 sm:px-6">
+                  <h3 className="text-foreground text-lg font-medium">Feature Comparison</h3>
                 </div>
-                <div className="px-4 py-5 sm:p-6 overflow-x-auto bg-background">
+                <div className="bg-background overflow-x-auto px-4 py-5 sm:p-6">
                   {/* Table header */}
-                  <div className="grid grid-cols-3 gap-4 pb-4 border-b border-border">
-                    <div className="text-lg font-medium text-muted-foreground">Feature</div>
-                    <div className="text-lg font-medium text-muted-foreground text-center">
+                  <div className="border-border grid grid-cols-3 gap-4 border-b pb-4">
+                    <div className="text-muted-foreground text-lg font-medium">Feature</div>
+                    <div className="text-muted-foreground text-center text-lg font-medium">
                       Free
                     </div>
-                    <div className="text-lg font-medium text-muted-foreground text-center">Pro</div>
+                    <div className="text-muted-foreground text-center text-lg font-medium">Pro</div>
                   </div>
 
                   {/* Table rows */}
@@ -336,13 +336,13 @@ function PricingPage() {
           </Tabs>
 
           {/* FAQ Section */}
-          <div className="mt-16 bg-card p-8 rounded-lg border border-border">
-            <h2 className="text-2xl font-semibold mb-4 text-foreground">
+          <div className="bg-card border-border mt-16 rounded-lg border p-8">
+            <h2 className="text-foreground mb-4 text-2xl font-semibold">
               Frequently Asked Questions
             </h2>
             <div className="space-y-6">
               <div>
-                <h3 className="text-lg font-medium mb-2 text-foreground">
+                <h3 className="text-foreground mb-2 text-lg font-medium">
                   How long will the open beta last?
                 </h3>
                 <p className="text-muted-foreground">
@@ -351,7 +351,7 @@ function PricingPage() {
                 </p>
               </div>
               <div>
-                <h3 className="text-lg font-medium mb-2 text-foreground">
+                <h3 className="text-foreground mb-2 text-lg font-medium">
                   What happens when the beta ends?
                 </h3>
                 <p className="text-muted-foreground">
@@ -363,7 +363,7 @@ function PricingPage() {
           </div>
 
           <div className="mt-16 text-center">
-            <h2 className="text-2xl font-semibold mb-4 text-foreground">
+            <h2 className="text-foreground mb-4 text-2xl font-semibold">
               Have questions about our pricing?
             </h2>
             <p className="text-muted-foreground">

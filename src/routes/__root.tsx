@@ -79,7 +79,7 @@ export const Route = createRootRoute({
         </head>
 
         <div
-          className={`px-4 sm:px-6 flex flex-col min-h-screen ${
+          className={`flex min-h-screen flex-col px-4 sm:px-6 ${
             isLandingPage ? "bg-watercolor-flipped" : ""
           } handwriting-enabled`}
         >
@@ -87,7 +87,7 @@ export const Route = createRootRoute({
           <Header />
 
           {/* Content container with padding to account for fixed header */}
-          <div className="pt-24 max-w-7xl mx-auto w-full flex-grow">
+          <div className="mx-auto w-full max-w-7xl flex-grow pt-24">
             <main className="flex-grow">
               <Outlet />
             </main>

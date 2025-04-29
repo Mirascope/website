@@ -67,7 +67,7 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ product }) => {
 
   return (
     <div
-      className={`transition-all duration-300 ease-in-out flex flex-shrink-0 ${
+      className={`flex flex-shrink-0 transition-all duration-300 ease-in-out ${
         sidebarExpanded ? "w-64" : isSmallScreen ? "w-10" : "w-64"
       }`}
     >
@@ -76,7 +76,7 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ product }) => {
         <div className="fixed top-[110px] z-20">
           <button
             onClick={toggleSidebar}
-            className="flex items-center rounded bg-background border border-border justify-center w-6 h-6 rounded hover:bg-muted"
+            className="bg-background border-border hover:bg-muted flex h-6 w-6 items-center justify-center rounded border"
             aria-label="Expand sidebar"
           >
             <svg
@@ -98,11 +98,11 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ product }) => {
 
       {/* Sidebar content */}
       <div
-        className={`fixed h-[calc(100vh-60px)] top-[60px] pt-6 transition-all duration-300 ease-in-out ${
+        className={`fixed top-[60px] h-[calc(100vh-60px)] pt-6 transition-all duration-300 ease-in-out ${
           sidebarExpanded
             ? "w-64 opacity-100"
             : isSmallScreen
-              ? "w-0 opacity-0 overflow-hidden"
+              ? "w-0 overflow-hidden opacity-0"
               : "w-64 opacity-100"
         }`}
       >
@@ -111,7 +111,7 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ product }) => {
           <div className="absolute top-12 right-2 z-20">
             <button
               onClick={toggleSidebar}
-              className="flex items-center justify-center rounded border border-border w-6 h-6 hover:bg-muted"
+              className="border-border hover:bg-muted flex h-6 w-6 items-center justify-center rounded border"
               aria-label="Collapse sidebar"
             >
               <svg

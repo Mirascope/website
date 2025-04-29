@@ -45,8 +45,8 @@ export function MDXRenderer({ code, frontmatter }: MDXRendererProps) {
   } catch (error) {
     console.error("Error rendering MDX with next-mdx-remote:", error);
     return (
-      <div className="p-4 border border-red-500 rounded-md bg-red-50 text-red-800">
-        <h3 className="font-bold mb-2">Error rendering MDX</h3>
+      <div className="rounded-md border border-red-500 bg-red-50 p-4 text-red-800">
+        <h3 className="mb-2 font-bold">Error rendering MDX</h3>
         <p>{error instanceof Error ? error.message : String(error)}</p>
       </div>
     );

@@ -16,7 +16,7 @@ interface BaseLayoutProps {
 const BaseLayout: React.FC<BaseLayoutProps> = ({ leftSidebar, mainContent, rightSidebar }) => {
   return (
     <div className="flex justify-center">
-      <div className="flex mx-auto w-full max-w-7xl">
+      <div className="mx-auto flex w-full max-w-7xl">
         {/* Left sidebar */}
         {leftSidebar}
 
@@ -24,7 +24,7 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({ leftSidebar, mainContent, right
         {mainContent}
 
         {/* Right sidebar (optional) */}
-        {rightSidebar || <div className="w-56 flex-shrink-0 hidden lg:block"></div>}
+        {rightSidebar || <div className="hidden w-56 flex-shrink-0 lg:block"></div>}
       </div>
     </div>
   );

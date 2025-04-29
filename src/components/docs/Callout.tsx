@@ -81,15 +81,15 @@ export function Callout({
       {showHeader && (
         <div
           className={cn(
-            "flex items-center gap-3 py-2 px-3 border-b border-accent bg-primary rounded-t-lg",
+            "border-accent bg-primary flex items-center gap-3 rounded-t-lg border-b px-3 py-2",
             collapsible && "cursor-pointer"
           )}
           onClick={collapsible ? () => setIsCollapsed(!isCollapsed) : undefined}
         >
-          <div className={cn("rounded-full flex items-center justify-center w-6 h-6", iconClass)}>
-            <Icon className="w-3.5 h-3.5" />
+          <div className={cn("flex h-6 w-6 items-center justify-center rounded-full", iconClass)}>
+            <Icon className="h-3.5 w-3.5" />
           </div>
-          <div className="font-semibold text-primary-foreground text-base flex-1">
+          <div className="text-primary-foreground flex-1 text-base font-semibold">
             {displayTitle}
           </div>
           {collapsible && (
@@ -103,7 +103,7 @@ export function Callout({
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className={cn("transition-transform", isCollapsed ? "" : "transform rotate-180")}
+                className={cn("transition-transform", isCollapsed ? "" : "rotate-180 transform")}
               >
                 <polyline points="6 9 12 15 18 9"></polyline>
               </svg>

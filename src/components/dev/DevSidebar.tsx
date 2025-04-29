@@ -82,7 +82,7 @@ const DevSidebar: React.FC<DevSidebarProps> = ({ devPages }) => {
 
   // Simple header content
   const headerContent = (
-    <div className="px-3 mb-2">
+    <div className="mb-2 px-3">
       <span className="text-xl font-semibold">Developer Tools</span>
     </div>
   );

@@ -44,10 +44,10 @@ const TocSidebar: React.FC<TocSidebarProps> = ({ document }) => {
   };
 
   return (
-    <div className="w-56 flex-shrink-0 hidden lg:block">
-      <div className="fixed w-56 top-[60px] max-h-[calc(100vh-60px)] overflow-y-auto">
+    <div className="hidden w-56 flex-shrink-0 lg:block">
+      <div className="fixed top-[60px] max-h-[calc(100vh-60px)] w-56 overflow-y-auto">
         <div className="px-4 pt-12">
-          <div className="flex flex-col gap-3 mb-4">
+          <div className="mb-4 flex flex-col gap-3">
             {document && (
               <Button
                 variant="outline"
@@ -58,12 +58,12 @@ const TocSidebar: React.FC<TocSidebarProps> = ({ document }) => {
               >
                 {isCopied ? (
                   <>
-                    <Check className="w-4 h-4 mr-1" />
+                    <Check className="mr-1 h-4 w-4" />
                     Copied!
                   </>
                 ) : (
                   <>
-                    <Clipboard className="w-4 h-4 mr-1" />
+                    <Clipboard className="mr-1 h-4 w-4" />
                     Copy as Markdown
                   </>
                 )}
@@ -72,16 +72,16 @@ const TocSidebar: React.FC<TocSidebarProps> = ({ document }) => {
 
             {/* Provider dropdown */}
             <div className="mt-3">
-              <h4 className="text-sm font-medium text-muted-foreground mb-2">
+              <h4 className="text-muted-foreground mb-2 text-sm font-medium">
                 <div className="flex items-center">
-                  <Server className="w-3 h-3 mr-1" />
+                  <Server className="mr-1 h-3 w-3" />
                   Provider
                 </div>
               </h4>
               <ProviderDropdown />
             </div>
 
-            <h4 className="text-sm font-medium text-muted-foreground mt-4">On this page</h4>
+            <h4 className="text-muted-foreground mt-4 text-sm font-medium">On this page</h4>
           </div>
           <TableOfContents contentId="doc-content" path={document?.meta.path || ""} />
         </div>

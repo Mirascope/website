@@ -35,10 +35,10 @@ export const Route = createFileRoute("/blog/$slug")({
   // Configure loading state
   pendingComponent: () => (
     <div className="flex justify-center">
-      <div className="flex mx-auto w-full max-w-7xl px-4">
-        <div className="w-56 flex-shrink-0 hidden lg:block"></div>
-        <LoadingContent className="flex-1 min-w-0" fullHeight={true} />
-        <div className="w-56 flex-shrink-0 hidden lg:block"></div>
+      <div className="mx-auto flex w-full max-w-7xl px-4">
+        <div className="hidden w-56 flex-shrink-0 lg:block"></div>
+        <LoadingContent className="min-w-0 flex-1" fullHeight={true} />
+        <div className="hidden w-56 flex-shrink-0 lg:block"></div>
       </div>
     </div>
   ),
@@ -137,38 +137,38 @@ function BlogPostPage() {
       />
       {tocOpen && (
         <div
-          className="fixed inset-0 bg-foreground/50 z-30 lg:hidden"
+          className="bg-foreground/50 fixed inset-0 z-30 lg:hidden"
           onClick={() => setTocOpen(false)}
         ></div>
       )}
 
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="mx-auto max-w-7xl px-4">
         <div className="flex flex-col lg:flex-row">
-          <div className="w-56 flex-shrink-0 hidden lg:block"></div>
-          <div className="flex-1 min-w-0 py-6">
-            <div className="max-w-5xl mx-auto">
+          <div className="hidden w-56 flex-shrink-0 lg:block"></div>
+          <div className="min-w-0 flex-1 py-6">
+            <div className="mx-auto max-w-5xl">
               <div className="mb-6">
                 <Link to="/blog" className="inline-block">
                   <Button variant="outline" size="sm">
-                    <ChevronLeft className="w-4 h-4 mr-1" />
+                    <ChevronLeft className="mr-1 h-4 w-4" />
                     Back to Blog
                   </Button>
                 </Link>
               </div>
               <div className="mb-6">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold mb-4">{title}</h1>
+                <h1 className="mb-4 text-2xl font-semibold sm:text-3xl md:text-4xl">{title}</h1>
                 <p className="text-muted-foreground text-sm sm:text-base">
                   {date} · {readTime} · By {author}
                 </p>
                 {lastUpdated && (
-                  <p className="text-muted-foreground text-sm sm:text-base mt-1 italic">
+                  <p className="text-muted-foreground mt-1 text-sm italic sm:text-base">
                     Last updated: {lastUpdated}
                   </p>
                 )}
               </div>
               <div
                 id="blog-content"
-                className="bg-background rounded-xl shadow-sm p-4 sm:p-6 border border-border blog-content"
+                className="bg-background border-border blog-content rounded-xl border p-4 shadow-sm sm:p-6"
               >
                 {post.mdx ? (
                   <PagefindMeta
@@ -185,12 +185,12 @@ function BlogPostPage() {
               </div>
             </div>
           </div>
-          <div className="w-56 flex-shrink-0 hidden lg:block">
+          <div className="hidden w-56 flex-shrink-0 lg:block">
             {/* Desktop fixed ToC */}
-            <div className="fixed w-56 top-[96px] h-[calc(100vh-96px)] overflow-hidden">
-              <div className="flex flex-col h-full">
+            <div className="fixed top-[96px] h-[calc(100vh-96px)] w-56 overflow-hidden">
+              <div className="flex h-full flex-col">
                 {/* Fixed header section with Copy as Markdown button */}
-                <div className="flex flex-col gap-3 mb-4 pt-6 px-4 bg-background">
+                <div className="bg-background mb-4 flex flex-col gap-3 px-4 pt-6">
                   <Button
                     variant="outline"
                     size="sm"
@@ -200,29 +200,29 @@ function BlogPostPage() {
                   >
                     {isCopied ? (
                       <>
-                        <Check className="w-4 h-4 mr-1" />
+                        <Check className="mr-1 h-4 w-4" />
                         Copied!
                       </>
                     ) : (
                       <>
-                        <Clipboard className="w-4 h-4 mr-1" />
+                        <Clipboard className="mr-1 h-4 w-4" />
                         Copy as Markdown
                       </>
                     )}
                   </Button>
 
-                  <h4 className="text-sm font-medium text-muted-foreground mt-3">On this page</h4>
+                  <h4 className="text-muted-foreground mt-3 text-sm font-medium">On this page</h4>
                 </div>
 
                 {/* Scrollable table of contents */}
-                <div className="overflow-y-auto pr-4 pl-4 pb-6 flex-grow">
+                <div className="flex-grow overflow-y-auto pr-4 pb-6 pl-4">
                   <TableOfContents contentId="blog-content" path={path} />
                 </div>
               </div>
             </div>
 
             {/* Mobile buttons (Fun Mode & ToC) */}
-            <div className="fixed bottom-6 right-6 flex flex-col gap-2 z-40 lg:hidden">
+            <div className="fixed right-6 bottom-6 z-40 flex flex-col gap-2 lg:hidden">
               {/* Fun Mode mobile button */}
 
               {/* ToC toggle button */}
@@ -231,7 +231,7 @@ function BlogPostPage() {
                 size="sm"
                 onClick={() => setTocOpen(!tocOpen)}
                 className={cn(
-                  "rounded-full w-12 h-12 p-0 shadow-md",
+                  "h-12 w-12 rounded-full p-0 shadow-md",
                   tocOpen ? "bg-muted" : "bg-background"
                 )}
               >
@@ -255,21 +255,16 @@ function BlogPostPage() {
 
             {/* Mobile slide-in TOC panel */}
             <div
-              className={`
-              fixed top-0 right-0 w-72 h-full z-40 bg-background shadow-lg border-l border-border
-              ${tocOpen ? "translate-x-0" : "translate-x-full"}
-              transition-transform duration-300 ease-in-out
-              lg:hidden
-            `}
+              className={`bg-background border-border fixed top-0 right-0 z-40 h-full w-72 border-l shadow-lg ${tocOpen ? "translate-x-0" : "translate-x-full"} transition-transform duration-300 ease-in-out lg:hidden`}
             >
               {/* Mobile TOC content */}
-              <div className="flex flex-col h-full">
+              <div className="flex h-full flex-col">
                 {/* Mobile close button */}
-                <div className="flex justify-between items-center p-4 border-b border-border">
+                <div className="border-border flex items-center justify-between border-b p-4">
                   <h3 className="font-medium">Table of Contents</h3>
                   <button
                     onClick={() => setTocOpen(false)}
-                    className="p-1 rounded-md hover:bg-muted"
+                    className="hover:bg-muted rounded-md p-1"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -299,12 +294,12 @@ function BlogPostPage() {
                   >
                     {isCopied ? (
                       <>
-                        <Check className="w-4 h-4 mr-1" />
+                        <Check className="mr-1 h-4 w-4" />
                         Copied!
                       </>
                     ) : (
                       <>
-                        <Clipboard className="w-4 h-4 mr-1" />
+                        <Clipboard className="mr-1 h-4 w-4" />
                         Copy as Markdown
                       </>
                     )}
@@ -312,7 +307,7 @@ function BlogPostPage() {
                 </div>
 
                 {/* Mobile scrollable table of contents */}
-                <div className="overflow-y-auto flex-grow px-4 py-4">
+                <div className="flex-grow overflow-y-auto px-4 py-4">
                   <TableOfContents contentId="blog-content" path={path} />
                 </div>
               </div>

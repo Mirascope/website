@@ -71,7 +71,7 @@ const Logo: React.FC<LogoProps> = ({
         <h1
           className={cn(
             selectedSize.text,
-            "text-mirascope-purple mb-0 font-handwriting",
+            "text-mirascope-purple font-handwriting mb-0",
             textClassName
           )}
         >
@@ -84,7 +84,7 @@ const Logo: React.FC<LogoProps> = ({
   if (background) {
     return (
       <div className={cn("relative", className)}>
-        <div className="absolute inset-0 bg-white torn-paper-effect"></div>
+        <div className="torn-paper-effect absolute inset-0 bg-white"></div>
         <div className="relative z-10">{logoContent}</div>
       </div>
     );
