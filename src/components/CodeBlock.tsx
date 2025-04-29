@@ -1,6 +1,9 @@
 import { useEffect, useState, useRef } from "react";
 import { highlightCode, stripHighlightMarkers } from "@/src/lib/code-highlight";
 import analyticsManager from "@/src/lib/services/analytics";
+import { Sparkles } from "lucide-react";
+import { cn } from "@/src/lib/utils";
+import useFunMode from "@/src/lib/hooks/useFunMode";
 
 interface CodeBlockProps {
   code: string;
@@ -14,6 +17,7 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
   const [darkHtml, setDarkHtml] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isCopied, setIsCopied] = useState<boolean>(false);
+  const [funMode, toggleFunMode] = useFunMode();
   const codeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -98,44 +102,64 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
   return (
     <div
       ref={codeRef}
-      className={`code-block-wrapper relative group overflow-hidden m-0 p-0 border border-border text-sm ${className}`}
+      className={cn(
+        "code-block-wrapper relative group overflow-hidden m-0 p-0 border border-border text-sm",
+        funMode && "fun-mode",
+        className
+      )}
     >
-      <button
-        className="copy-button absolute border right-3 top-3 opacity-0 group-hover:opacity-100 transition-opacity p-1.5 rounded-md bg-background hover:bg-muted cursor-pointer"
-        onClick={copyToClipboard}
-        aria-label="Copy code to clipboard"
-      >
-        {isCopied ? (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-        ) : (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-        )}
-      </button>
+      {/* Copy button in top right */}
+      <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+        <button
+          className="border p-1.5 rounded-md bg-background hover:bg-muted cursor-pointer relative"
+          onClick={copyToClipboard}
+          aria-label="Copy code"
+          title="Copy code"
+        >
+          {isCopied ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+          )}
+        </button>
+      </div>
+
+      {/* Fun mode button in bottom right (easter egg) */}
+      <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+        <button
+          className="border p-1.5 rounded-md bg-background hover:bg-muted cursor-pointer relative"
+          onClick={toggleFunMode}
+          aria-label="Toggle fun mode"
+          title="Toggle fun mode"
+        >
+          <Sparkles className={cn("w-4 h-4", funMode ? "text-primary" : "text-muted-foreground")} />
+        </button>
+      </div>
 
       {/* Light theme code */}
       <div

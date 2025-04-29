@@ -1,14 +1,13 @@
 import { createFileRoute, useParams, Link, useLoaderData } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { Button } from "@/src/components/ui/button";
-import { ChevronLeft, Sparkles, Clipboard, Check } from "lucide-react";
+import { ChevronLeft, Clipboard, Check } from "lucide-react";
 import { MDXRenderer } from "@/src/components/MDXRenderer";
 import { LoadingContent } from "@/src/components/docs";
 import ContentErrorHandler from "@/src/components/ContentErrorHandler";
 import TableOfContents from "@/src/components/TableOfContents";
 import SEOMeta from "@/src/components/SEOMeta";
 import PagefindMeta from "@/src/components/PagefindMeta";
-import useFunMode from "@/src/lib/hooks/useFunMode";
 import { cn } from "@/src/lib/utils";
 import { getBlogContent } from "@/src/lib/content";
 import analyticsManager from "@/src/lib/services/analytics";
@@ -66,9 +65,6 @@ function BlogPostPage() {
   const [tocOpen, setTocOpen] = useState(false);
   const [ogImage, setOgImage] = useState<string | undefined>(undefined);
   const [isCopied, setIsCopied] = useState(false);
-
-  // Use fun mode
-  const [funMode, toggleFunMode] = useFunMode();
 
   // Copy post content as Markdown
   const copyContentAsMarkdown = () => {
@@ -181,11 +177,7 @@ function BlogPostPage() {
                     searchWeight={0.7}
                     section={"blog"}
                   >
-                    <MDXRenderer
-                      code={post.mdx.code}
-                      frontmatter={post.mdx.frontmatter}
-                      useFunMode={funMode}
-                    />
+                    <MDXRenderer code={post.mdx.code} frontmatter={post.mdx.frontmatter} />
                   </PagefindMeta>
                 ) : (
                   <LoadingContent spinnerClassName="h-8 w-8" fullHeight={false} />
@@ -197,21 +189,8 @@ function BlogPostPage() {
             {/* Desktop fixed ToC */}
             <div className="fixed w-56 top-[96px] h-[calc(100vh-96px)] overflow-hidden">
               <div className="flex flex-col h-full">
-                {/* Fixed header section with Fun Mode button */}
+                {/* Fixed header section with Copy as Markdown button */}
                 <div className="flex flex-col gap-3 mb-4 pt-6 px-4 bg-background">
-                  <Button
-                    variant={funMode ? "default" : "outline"}
-                    size="sm"
-                    onClick={toggleFunMode}
-                    className={cn(
-                      funMode ? "bg-primary text-primary-foreground" : "hover:bg-muted",
-                      "transition-colors w-full"
-                    )}
-                  >
-                    <Sparkles className="w-4 h-4 mr-1" />
-                    Fun Mode
-                  </Button>
-
                   <Button
                     variant="outline"
                     size="sm"
@@ -245,17 +224,6 @@ function BlogPostPage() {
             {/* Mobile buttons (Fun Mode & ToC) */}
             <div className="fixed bottom-6 right-6 flex flex-col gap-2 z-40 lg:hidden">
               {/* Fun Mode mobile button */}
-              <Button
-                variant={funMode ? "default" : "outline"}
-                size="sm"
-                onClick={toggleFunMode}
-                className={cn(
-                  "rounded-full w-12 h-12 p-0 shadow-md",
-                  funMode ? "bg-primary text-primary-foreground" : "bg-background hover:bg-muted"
-                )}
-              >
-                <Sparkles className="w-5 h-5" />
-              </Button>
 
               {/* ToC toggle button */}
               <Button

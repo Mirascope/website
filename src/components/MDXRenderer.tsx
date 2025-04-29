@@ -5,7 +5,6 @@ import { LoadingContent } from "@/src/components/docs";
 interface MDXRendererProps {
   code: string;
   frontmatter: Record<string, any>;
-  useFunMode?: boolean;
 }
 
 // Define interface for what MDXRemote expects - must match MDXRemoteSerializeResult
@@ -20,7 +19,7 @@ interface MDXRemoteProps {
 /**
  * MDXRenderer - Renders MDX content using @mdx-js/react
  */
-export function MDXRenderer({ code, frontmatter, useFunMode = false }: MDXRendererProps) {
+export function MDXRenderer({ code, frontmatter }: MDXRendererProps) {
   // Handle case when no code is provided
   if (!code) {
     return <LoadingContent spinnerClassName="h-8 w-8" fullHeight={false} />;
@@ -37,8 +36,8 @@ export function MDXRenderer({ code, frontmatter, useFunMode = false }: MDXRender
     };
 
     return (
-      <div className={`mdx-content prose max-w-none ${useFunMode ? "fun-mode" : ""}`}>
-        <MDXProviderWrapper useFunMode={useFunMode}>
+      <div className="mdx-content prose max-w-none">
+        <MDXProviderWrapper>
           <MDXRemote {...mdxProps} />
         </MDXProviderWrapper>
       </div>
