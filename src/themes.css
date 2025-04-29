@@ -6,7 +6,8 @@
   --color-mirascope-purple: oklch(0.5854 0.2041 277.12); /* Mirascope purple */
   --color-mirascope-purple-dark: oklch(0.5254 0.2041 277.12); /* Darker purple */
   --color-lilypad-green: oklch(0.61 0.1479 145.06);
-  --color-lilypad-green-dark: oklch(0.4 0.087 145.44);
+  --color-lilypad-green-dark: oklch(0.44 0.107 145.44);
+  --color-lilypad-green-light: oklch(0.61 0.134 145.17);
 
   /* Default (Mirascope) theme colors */
 
@@ -154,21 +155,21 @@
   --color-foreground: oklch(0.95 0 0);
 
   /* Components */
-  --color-button-primary: var(--color-emerald-900);
-  --color-primary: var(--color-lilypad-green-dark);
-  --color-primary-foreground: var(--color-slate-900);
+  --color-button-primary: var(--color-lilypad-green-dark);
+  --color-primary: var(--color-lilypad-green);
+  --color-primary-foreground: var(--color-foreground);
 
-  --color-secondary: var(--color-gray-800);
-  --color-secondary-foreground: oklch(0.95 0 0);
+  --color-secondary: var(--color-lilypad-green-dark);
+  --color-secondary-foreground: var(--color-lilypad-green);
 
   --color-muted: var(--color-gray-800);
   --color-muted-foreground: var(--color-gray-400);
 
-  --color-accent: var(--color-gray-800);
-  --color-accent-foreground: var(--color-emerald-300);
+  --color-accent: var(--color-lilypad-green-light);
+  --color-accent-foreground: var(--color-foreground);
 
   /* ShadCn UI extras */
-  --color-card: oklch(0.11 0.01 240);
+  --color-card: oklch(0.12 0.0368 145.64);
   --color-card-foreground: oklch(0.95 0 0);
   --color-popover: oklch(0.11 0.01 240);
   --color-popover-foreground: oklch(0.95 0 0);
