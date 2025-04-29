@@ -1,6 +1,7 @@
 import React from "react";
 import DevSidebar from "./DevSidebar";
 import type { DevMeta } from "@/src/lib/content";
+import { ProductSelector } from "./DevComponents";
 
 interface DevLayoutProps {
   children: React.ReactNode;
@@ -22,6 +23,7 @@ const DevLayout: React.FC<DevLayoutProps> = ({ children, devPages }) => {
 
   return (
     <div className="flex justify-center pt-0">
+      <ProductSelector />
       <div className="mx-auto flex w-full max-w-7xl">
         {/* Left sidebar */}
         {leftSidebar}
