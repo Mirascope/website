@@ -1,7 +1,6 @@
 import React from "react";
 import BaseLayout from "@/src/components/BaseLayout";
 import SidebarContainer from "@/src/components/SidebarContainer";
-import useFunMode from "@/src/lib/hooks/useFunMode";
 import useProviderSelection from "@/src/lib/hooks/useProviderSelection";
 import { ProviderContextProvider } from "@/src/components/docs";
 import TocSidebar from "./TocSidebar";
@@ -25,19 +24,16 @@ const DocsPage: React.FC<DocsPageProps> = ({ document }) => {
   const urlPath = `/docs/${path}`;
 
   // Use custom hooks for state management
-  const [funMode, toggleFunMode] = useFunMode();
   const [selectedProvider, handleProviderChange] = useProviderSelection();
 
   // Left sidebar content
   const leftSidebar = <SidebarContainer product={product as ProductName} />;
 
   // Right sidebar content (TOC)
-  const rightSidebar = (
-    <TocSidebar funMode={funMode} toggleFunMode={toggleFunMode} document={document} />
-  );
+  const rightSidebar = <TocSidebar document={document} />;
 
   // Main content
-  const mainContent = <MainContent document={document} funMode={funMode} />;
+  const mainContent = <MainContent document={document} />;
 
   return (
     <>

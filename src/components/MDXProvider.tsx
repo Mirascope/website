@@ -1,6 +1,5 @@
 import React from "react";
 import { MDXProvider } from "@mdx-js/react";
-import { cn } from "@/src/lib/utils";
 import {
   InstallSnippet,
   CodeSnippet,
@@ -314,12 +313,11 @@ export const components = {
 
 interface MDXProviderWrapperProps {
   children: React.ReactNode;
-  useFunMode?: boolean;
 }
 
-export function MDXProviderWrapper({ children, useFunMode = false }: MDXProviderWrapperProps) {
+export function MDXProviderWrapper({ children }: MDXProviderWrapperProps) {
   return (
-    <div className={cn("mdx-content", useFunMode ? "fun-mode" : "")}>
+    <div className="mdx-content">
       <MDXProvider components={components}>{children}</MDXProvider>
     </div>
   );

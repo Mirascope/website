@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { LoadingContent } from "@/src/components/docs";
 import { MDXRenderer } from "@/src/components/MDXRenderer";
 import { type PolicyContent } from "@/src/lib/content";
-import { Button } from "@/src/components/ui/button";
-import { Sparkles } from "lucide-react";
-import { cn, formatDate } from "@/src/lib/utils";
+
+import { formatDate } from "@/src/lib/utils";
 
 interface PolicyPageProps {
   content: PolicyContent;
@@ -28,25 +27,6 @@ const PolicyPage: React.FC<PolicyPageProps> = ({ content, type = "privacy" }) =>
   const title = content?.meta?.title ?? defaultTitle;
   const lastUpdated = content?.meta?.lastUpdated ? formatDate(content.meta.lastUpdated) : "";
 
-  // Initialize fun mode from localStorage if available
-  const [funMode, setFunMode] = useState(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("funMode") === "true";
-    }
-    return false;
-  });
-
-  // Toggle fun mode for policy content
-  const toggleFunMode = () => {
-    const newMode = !funMode;
-    setFunMode(newMode);
-
-    // Save preference to localStorage
-    if (typeof window !== "undefined") {
-      localStorage.setItem("funMode", newMode.toString());
-    }
-  };
-
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       {/* Header with title and fun mode button aligned horizontally */}
@@ -57,18 +37,6 @@ const PolicyPage: React.FC<PolicyPageProps> = ({ content, type = "privacy" }) =>
             <p className="font-medium text-muted-foreground mt-1">Last Updated: {lastUpdated}</p>
           )}
         </div>
-        <Button
-          variant={funMode ? "default" : "outline"}
-          size="sm"
-          onClick={toggleFunMode}
-          className={cn(
-            funMode ? "bg-primary text-primary-foreground" : "hover:bg-muted",
-            "transition-colors"
-          )}
-        >
-          <Sparkles className="w-4 h-4 mr-1" />
-          Fun Mode
-        </Button>
       </div>
 
       <div
@@ -76,11 +44,7 @@ const PolicyPage: React.FC<PolicyPageProps> = ({ content, type = "privacy" }) =>
         className="bg-background rounded-xl shadow-sm p-4 sm:p-6 border border-border"
       >
         <article className="prose prose-lg max-w-none">
-          <MDXRenderer
-            code={content.mdx.code}
-            frontmatter={content.mdx.frontmatter}
-            useFunMode={funMode}
-          />
+          <MDXRenderer code={content.mdx.code} frontmatter={content.mdx.frontmatter} />
         </article>
       </div>
     </div>

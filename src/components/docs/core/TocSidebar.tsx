@@ -1,24 +1,21 @@
 import React, { useState } from "react";
 import TableOfContents from "@/src/components/TableOfContents";
 import { Button } from "@/src/components/ui/button";
-import { Sparkles, Server, Clipboard, Check } from "lucide-react";
-import { cn } from "@/src/lib/utils";
+import { Server, Clipboard, Check } from "lucide-react";
 import { ProviderDropdown } from "@/src/components/docs";
 import { type DocContent } from "@/src/lib/content";
 import analyticsManager from "@/src/lib/services/analytics";
 
 interface TocSidebarProps {
-  funMode: boolean;
-  toggleFunMode: () => void;
   document?: DocContent | null;
 }
 
 /**
  * TocSidebar - Right sidebar containing the table of contents and controls
  *
- * Displays fun mode toggle, provider selection dropdown, and table of contents
+ * Displays provider selection dropdown and table of contents
  */
-const TocSidebar: React.FC<TocSidebarProps> = ({ funMode, toggleFunMode, document }) => {
+const TocSidebar: React.FC<TocSidebarProps> = ({ document }) => {
   const [isCopied, setIsCopied] = useState(false);
 
   const copyContentAsMarkdown = () => {
@@ -51,19 +48,6 @@ const TocSidebar: React.FC<TocSidebarProps> = ({ funMode, toggleFunMode, documen
       <div className="fixed w-56 top-[60px] max-h-[calc(100vh-60px)] overflow-y-auto">
         <div className="px-4 pt-12">
           <div className="flex flex-col gap-3 mb-4">
-            <Button
-              variant={funMode ? "default" : "outline"}
-              size="sm"
-              onClick={toggleFunMode}
-              className={cn(
-                funMode ? "bg-primary text-primary-foreground" : "hover:bg-muted",
-                "transition-colors w-full"
-              )}
-            >
-              <Sparkles className="w-4 h-4 mr-1" />
-              Fun Mode
-            </Button>
-
             {document && (
               <Button
                 variant="outline"

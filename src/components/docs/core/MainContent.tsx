@@ -6,7 +6,6 @@ import PagefindMeta from "@/src/components/PagefindMeta";
 
 interface MainContentProps {
   document: DocContent;
-  funMode: boolean;
 }
 
 /**
@@ -14,7 +13,7 @@ interface MainContentProps {
  *
  * Displays the document title, description, and rendered MDX content
  */
-const MainContent: React.FC<MainContentProps> = ({ document, funMode }) => {
+const MainContent: React.FC<MainContentProps> = ({ document }) => {
   const path = document.meta.path;
   const pieces = path.split("/");
   const section = pieces.slice(0, 3).join("/");
@@ -32,11 +31,7 @@ const MainContent: React.FC<MainContentProps> = ({ document, funMode }) => {
               section={section}
               searchWeight={document.meta.searchWeight}
             >
-              <MDXRenderer
-                code={document.mdx.code}
-                frontmatter={document.mdx.frontmatter}
-                useFunMode={funMode}
-              />
+              <MDXRenderer code={document.mdx.code} frontmatter={document.mdx.frontmatter} />
             </PagefindMeta>
           ) : (
             <LoadingContent spinnerClassName="h-8 w-8" fullHeight={false} />
