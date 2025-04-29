@@ -3,6 +3,8 @@ import Logo from "@/src/components/Logo";
 import SEOMeta from "@/src/components/SEOMeta";
 import { environment } from "@/src/lib/content/environment";
 import { useSunsetTime } from "@/src/lib/hooks/useSunsetTime";
+import { ButtonLink } from "@/src/components/ui/button-link";
+import { BookOpen, Users } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: LandingPage,
@@ -26,12 +28,7 @@ function LandingPage() {
             />
           </div>
 
-          <div
-            className="text-white mt-0 flex flex-col font-medium tracking-tight"
-            style={{
-              textShadow: "0 2px 10px rgba(0,0,0,0.3), 0 4px 20px rgba(0,0,0,0.2)",
-            }}
-          >
+          <div className="text-white mt-0 flex flex-col font-medium tracking-tight landing-page-text-shadow">
             <span
               style={{ fontSize: "clamp(2.5rem, 8vw, 6rem)", lineHeight: "0.9" }}
               className="whitespace-normal sm:whitespace-nowrap font-handwriting mb-8"
@@ -47,18 +44,22 @@ function LandingPage() {
           </div>
 
           <div className="mt-10 sm:mt-12 md:mt-14 flex flex-col sm:flex-row gap-4 justify-center items-center w-full">
-            <a
+            <ButtonLink
               href="/docs/mirascope"
-              className="bg-primary text-primary-foreground px-6 py-3 rounded-md text-lg font-medium hover:bg-primary/90 transition-colors w-full sm:w-auto max-w-[200px] text-center shadow-sm"
+              variant="default"
+              size="lg"
+              className="w-full sm:w-auto min-w-[220px] text-center font-medium text-lg py-6 px-8 landing-page-box-shadow"
             >
-              Learn more
-            </a>
-            <a
+              <BookOpen className="size-6" aria-hidden="true" /> Learn more
+            </ButtonLink>
+            <ButtonLink
               href="https://join.slack.com/t/mirascope-community/shared_invite/zt-2ilqhvmki-FB6LWluInUCkkjYD3oSjNA"
-              className="bg-white border border-none text-black px-6 py-3 rounded-md text-lg font-medium hover:bg-primary/50 hover:border-primary transition-colors w-fit sm:w-auto text-center shadow-sm"
+              variant="outline"
+              size="lg"
+              className="w-full sm:w-auto min-w-[220px] text-center font-medium text-lg py-6 px-8 bg-white text-black border-0 landing-page-box-shadow"
             >
-              Join the community
-            </a>
+              <Users className="size-6" aria-hidden="true" /> Join the community
+            </ButtonLink>
           </div>
         </div>
       </div>
