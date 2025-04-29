@@ -182,12 +182,7 @@ export default function Header() {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div
-          className={cn(
-            "absolute top-full right-4 mt-2 p-6 md:hidden z-50 shadow-lg text-foreground rounded-lg max-w-xs",
-            isLandingPage ? "bg-background/90 backdrop-blur-sm" : "bg-background"
-          )}
-        >
+        <div className="absolute top-full right-4 mt-2 p-6 md:hidden z-50 text-foreground rounded-lg max-w-xs shadow-lg [text-shadow:none] bg-background">
           <div className="flex flex-col space-y-4">
             <div className="font-medium text-xl my-2">Docs</div>
             <Link
@@ -219,13 +214,6 @@ export default function Header() {
             >
               Pricing
             </Link>
-            <hr className="my-2" />
-            <div className="py-2 w-full mt-3">
-              <SearchBar
-                onOpenChange={(open) => open && setIsMenuOpen(false)}
-                isLandingPage={isLandingPage}
-              />
-            </div>
           </div>
         </div>
       )}
