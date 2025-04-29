@@ -105,6 +105,32 @@ const PricingTier = ({
   </div>
 );
 
+// Feature comparison table component
+const FeatureComparisonTable = ({
+  features,
+}: {
+  features: Array<{ feature: string; free: string | boolean; pro: string | boolean }>;
+}) => (
+  <div className="bg-background border-border overflow-hidden rounded-lg border shadow-sm">
+    <div className="bg-accent border-border border-b px-4 py-5 sm:px-6">
+      <h3 className="text-foreground text-lg font-medium">Feature Comparison</h3>
+    </div>
+    <div className="bg-background overflow-x-auto px-4 py-5 sm:p-6">
+      {/* Table header */}
+      <div className="border-border grid grid-cols-3 gap-4 border-b pb-4">
+        <div className="text-muted-foreground text-lg font-medium">Feature</div>
+        <div className="text-muted-foreground text-center text-lg font-medium">Free</div>
+        <div className="text-muted-foreground text-center text-lg font-medium">Pro</div>
+      </div>
+
+      {/* Table rows */}
+      {features.map((feat, i) => (
+        <FeatureRow key={i} feature={feat.feature} free={feat.free} pro={feat.pro} />
+      ))}
+    </div>
+  </div>
+);
+
 function PricingPage() {
   // Cloud hosted features
   const cloudHostedFeatures = [
@@ -167,14 +193,14 @@ function PricingPage() {
         product="lilypad"
         url="/pricing"
       />
-      <div className="px-4 py-12">
+      <div className="px-4 py-4">
         <div className="mx-auto max-w-4xl">
-          <div className="mb-16 text-center">
+          <div className="mb-4 text-center">
             <h1 className="text-foreground mb-4 text-center text-4xl font-bold">Lilypad Pricing</h1>
             <p className="text-foreground mx-auto mb-2 max-w-2xl text-xl">
               Get started with the Free plan today.
             </p>
-            <p className="text-md text-muted-foreground mx-auto max-w-2xl italic">
+            <p className="text-muted-foreground mx-auto max-w-2xl text-sm italic">
               No credit card required.
             </p>
           </div>
@@ -226,26 +252,7 @@ function PricingPage() {
               </div>
 
               {/* Feature comparison table */}
-              <div className="bg-background border-border overflow-hidden rounded-lg border shadow-sm">
-                <div className="bg-accent border-border border-b px-4 py-5 sm:px-6">
-                  <h3 className="text-foreground text-lg font-medium">Feature Comparison</h3>
-                </div>
-                <div className="bg-background overflow-x-auto px-4 py-5 sm:p-6">
-                  {/* Table header */}
-                  <div className="border-border grid grid-cols-3 gap-4 border-b pb-4">
-                    <div className="text-muted-foreground text-lg font-medium">Feature</div>
-                    <div className="text-muted-foreground text-center text-lg font-medium">
-                      Free
-                    </div>
-                    <div className="text-muted-foreground text-center text-lg font-medium">Pro</div>
-                  </div>
-
-                  {/* Table rows */}
-                  {cloudHostedFeatures.map((feat, i) => (
-                    <FeatureRow key={i} feature={feat.feature} free={feat.free} pro={feat.pro} />
-                  ))}
-                </div>
-              </div>
+              <FeatureComparisonTable features={cloudHostedFeatures} />
             </TabsContent>
 
             {/* Self Hosting Tab Content */}
@@ -290,26 +297,7 @@ function PricingPage() {
               </div>
 
               {/* Feature comparison table */}
-              <div className="bg-background border-border overflow-hidden rounded-lg border shadow-sm">
-                <div className="bg-muted border-border border-b px-4 py-5 sm:px-6">
-                  <h3 className="text-foreground text-lg font-medium">Feature Comparison</h3>
-                </div>
-                <div className="bg-background overflow-x-auto px-4 py-5 sm:p-6">
-                  {/* Table header */}
-                  <div className="border-border grid grid-cols-3 gap-4 border-b pb-4">
-                    <div className="text-muted-foreground text-lg font-medium">Feature</div>
-                    <div className="text-muted-foreground text-center text-lg font-medium">
-                      Free
-                    </div>
-                    <div className="text-muted-foreground text-center text-lg font-medium">Pro</div>
-                  </div>
-
-                  {/* Table rows */}
-                  {selfHostedFeatures.map((feat, i) => (
-                    <FeatureRow key={i} feature={feat.feature} free={feat.free} pro={feat.pro} />
-                  ))}
-                </div>
-              </div>
+              <FeatureComparisonTable features={selfHostedFeatures} />
             </TabsContent>
           </Tabs>
 
