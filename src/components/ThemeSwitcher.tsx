@@ -88,9 +88,7 @@ export default function ThemeSwitcher() {
         <button
           className={cn(
             "focus:ring-primary mr-2 rounded-md p-2 transition-colors focus:ring-2 focus:outline-none",
-            isLandingPage
-              ? "hover:text-muted-foreground text-white"
-              : "text-foreground hover:text-foreground dark:text-foreground dark:hover:text-foreground"
+            isLandingPage ? "nav-icon-landing" : "nav-text-regular"
           )}
           aria-label="Select theme"
         >

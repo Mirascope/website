@@ -32,8 +32,8 @@ const NavLink = ({ href, children, className, onClick }: NavLinkProps) => {
     <Link
       to={href}
       className={cn(
-        "hover:text-accent-foreground relative flex cursor-pointer items-center px-2 py-2 text-xl font-medium transition-colors duration-200",
-        isLandingPage && "landing-page-text-shadow",
+        "relative flex cursor-pointer items-center px-2 py-2 text-xl font-medium",
+        isLandingPage ? "nav-text-landing" : "nav-text-regular",
         className
       )}
       onClick={onClick}
@@ -105,9 +105,7 @@ export default function Header() {
                 <NavigationMenuTrigger
                   className={cn(
                     "flex cursor-pointer items-center !bg-transparent p-0 text-xl font-medium transition-colors duration-200 hover:!bg-transparent focus:!bg-transparent data-[state=open]:!bg-transparent data-[state=open]:hover:!bg-transparent",
-                    isLandingPage
-                      ? "hover:text-accent-foreground data-[state=open]:text-accent-foreground landing-page-text-shadow"
-                      : "hover:text-accent-foreground data-[state=open]:text-accent-foreground"
+                    isLandingPage ? "nav-text-landing" : "nav-text-regular"
                   )}
                   onClick={(e) => {
                     // Prevent the default behavior which would toggle the dropdown
