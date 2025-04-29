@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Check, Info, X } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/src/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/src/components/ui/tooltip";
+import { ButtonLink } from "@/src/components/ui/button-link";
 import { cn } from "@/src/lib/utils";
 import SEOMeta from "@/src/components/SEOMeta";
 import { environment } from "@/src/lib/content/environment";
@@ -80,27 +81,16 @@ const PricingTier = ({
   description,
   buttonText,
   buttonLink,
-  isGreen = false,
 }: {
   name: string;
   price: string;
   description: string;
   buttonText: string;
   buttonLink: string;
-  isGreen?: boolean;
 }) => (
   <div className="bg-background border-border overflow-hidden rounded-lg border shadow-sm">
-    <div
-      className={cn(
-        "px-6 py-8",
-        isGreen ? "from-primary/10 to-background bg-gradient-to-br" : "bg-background"
-      )}
-    >
-      <h3
-        className={cn("mb-2 text-xl font-semibold", isGreen ? "text-primary" : "text-foreground")}
-      >
-        {name}
-      </h3>
+    <div className={cn("bg-background px-6 py-8")}>
+      <h3 className={cn("text-foreground mb-2 text-xl font-semibold")}>{name}</h3>
       <p className="text-muted-foreground mb-5">{description}</p>
       <div className="mb-6">
         <span className="text-foreground text-3xl font-bold">{price}</span>
@@ -108,17 +98,9 @@ const PricingTier = ({
           <span className="text-muted-foreground ml-1 text-sm">/ month</span>
         )}
       </div>
-      <a
-        href={buttonLink}
-        className={cn(
-          "block w-full rounded-md px-4 py-2 text-center transition-colors",
-          isGreen
-            ? "bg-primary text-primary-foreground hover:bg-primary/90"
-            : "bg-muted text-muted-foreground hover:bg-accent"
-        )}
-      >
+      <ButtonLink href={buttonLink} className="w-full" variant="default">
         {buttonText}
-      </a>
+      </ButtonLink>
     </div>
   </div>
 );
@@ -215,7 +197,6 @@ function PricingPage() {
                   description="For individuals just getting started"
                   buttonText="Get Started"
                   buttonLink="/docs/lilypad/"
-                  isGreen={true}
                 />
                 <div className="bg-background border-border overflow-hidden rounded-lg border shadow-sm">
                   <div className="bg-background px-6 py-8">
@@ -227,7 +208,7 @@ function PricingPage() {
                         </TooltipTrigger>
                         <TooltipContent
                           side="right"
-                          className="bg-primary/10 text-primary border-primary/20 w-md border p-4"
+                          className="bg-popover text-primary border-primary/20 w-md border p-4"
                         >
                           {betaNoticeContent}
                         </TooltipContent>
@@ -237,12 +218,9 @@ function PricingPage() {
                     <div className="mb-6">
                       <span className="text-3xl font-bold">TBD</span>
                     </div>
-                    <a
-                      href="/docs/lilypad/"
-                      className="bg-muted text-muted-foreground hover:bg-accent block w-full rounded-md px-4 py-2 text-center transition-colors"
-                    >
+                    <ButtonLink href="/docs/lilypad/" variant="outline" className="w-full">
                       *Get Started
-                    </a>
+                    </ButtonLink>
                   </div>
                 </div>
               </div>
@@ -278,8 +256,7 @@ function PricingPage() {
                   price="$0"
                   description="For individuals just getting started"
                   buttonText="Get Started"
-                  buttonLink="/docs/lilypad/self-hosting"
-                  isGreen={true}
+                  buttonLink="/docs/lilypad/getting-started/self-hosting"
                 />
                 <div className="bg-background border-border overflow-hidden rounded-lg border shadow-sm">
                   <div className="px-6 py-8">
@@ -301,12 +278,13 @@ function PricingPage() {
                     <div className="mb-6">
                       <span className="text-3xl font-bold">TBD</span>
                     </div>
-                    <a
+                    <ButtonLink
                       href="mailto:sales@mirascope.com"
-                      className="bg-muted text-muted-foreground hover:bg-accent block w-full rounded-md px-4 py-2 text-center transition-colors"
+                      variant="outline"
+                      className="w-full"
                     >
                       Request License
-                    </a>
+                    </ButtonLink>
                   </div>
                 </div>
               </div>
@@ -368,12 +346,13 @@ function PricingPage() {
             </h2>
             <p className="text-muted-foreground">
               Join our{" "}
-              <a
+              <ButtonLink
                 href="https://join.slack.com/t/mirascope-community/shared_invite/zt-2ilqhvmki-FB6LWluInUCkkjYD3oSjNA"
-                className="text-primary font-medium hover:underline"
+                variant="link"
+                className="h-auto p-0"
               >
                 community
-              </a>{" "}
+              </ButtonLink>{" "}
               and ask the team directly!
             </p>
           </div>
