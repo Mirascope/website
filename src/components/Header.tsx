@@ -25,11 +25,15 @@ interface NavLinkProps {
 }
 
 const NavLink = ({ href, children, className, onClick }: NavLinkProps) => {
+  const router = useRouterState();
+  const isLandingPage = router.location.pathname === "/";
+
   return (
     <Link
       to={href}
       className={cn(
         "font-medium px-2 py-2 text-xl flex items-center relative cursor-pointer transition-colors duration-200 hover:text-accent-foreground",
+        isLandingPage && "landing-page-text-shadow",
         className
       )}
       onClick={onClick}
@@ -68,7 +72,9 @@ export default function Header() {
     <header
       className={cn(
         "py-6 px-4 sm:px-6 flex justify-center items-center fixed top-0 left-0 right-0 w-full z-50",
-        isLandingPage ? "bg-transparent text-white" : "bg-background text-foreground",
+        isLandingPage
+          ? "bg-transparent text-white landing-page-text-shadow"
+          : "bg-background text-foreground",
         scrolled && !isLandingPage ? "border-b border-border shadow-sm" : "",
         scrolled && isLandingPage ? "bg-foreground/80 backdrop-blur-sm" : ""
       )}
@@ -100,7 +106,7 @@ export default function Header() {
                   className={cn(
                     "!bg-transparent hover:!bg-transparent data-[state=open]:!bg-transparent data-[state=open]:hover:!bg-transparent focus:!bg-transparent font-medium text-xl flex items-center p-0 cursor-pointer transition-colors duration-200",
                     isLandingPage
-                      ? "hover:text-accent-foreground data-[state=open]:text-accent-foreground"
+                      ? "hover:text-accent-foreground data-[state=open]:text-accent-foreground landing-page-text-shadow"
                       : "hover:text-accent-foreground data-[state=open]:text-accent-foreground"
                   )}
                   onClick={(e) => {
@@ -112,7 +118,7 @@ export default function Header() {
                 >
                   Docs
                 </NavigationMenuTrigger>
-                <NavigationMenuContent className="bg-background p-2">
+                <NavigationMenuContent className="bg-background p-2 [text-shadow:none]">
                   <ul className="grid grid-cols-1 sm:grid-cols-2 w-[300px] sm:w-[480px] gap-2">
                     <li>
                       <NavigationMenuLink asChild>
@@ -161,24 +167,22 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden p-2 text-foreground"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        {/* Mobile controls: Theme Switcher + Menu Button */}
+        <div className="md:hidden flex items-center gap-1">
+          <ThemeSwitcher />
+          <button
+            className={cn("p-2", isLandingPage ? "text-white" : "text-foreground")}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </nav>
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div
-          className={cn(
-            "absolute top-full right-4 mt-2 p-6 md:hidden z-50 shadow-lg text-foreground rounded-lg max-w-xs",
-            isLandingPage ? "bg-background/90 backdrop-blur-sm" : "bg-background"
-          )}
-        >
+        <div className="absolute top-full right-4 mt-2 p-6 md:hidden z-50 text-foreground rounded-lg max-w-xs shadow-lg [text-shadow:none] bg-background">
           <div className="flex flex-col space-y-4">
             <div className="font-medium text-xl my-2">Docs</div>
             <Link
@@ -210,17 +214,6 @@ export default function Header() {
             >
               Pricing
             </Link>
-            <hr className="my-2" />
-            <div className="py-2 flex items-center">
-              <span className="font-medium text-xl mr-3">Theme</span>
-              <ThemeSwitcher />
-            </div>
-            <div className="py-2 w-full mt-3">
-              <SearchBar
-                onOpenChange={(open) => open && setIsMenuOpen(false)}
-                isLandingPage={isLandingPage}
-              />
-            </div>
           </div>
         </div>
       )}

@@ -15,11 +15,15 @@ import {
   MermaidDiagram,
 } from "./docs";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
+import { Button } from "./ui/button";
+import { ButtonLink } from "./ui/button-link";
 import Logo from "./Logo";
 import { Underline } from "./Underline";
 import { ProviderCodeWrapper } from "./ProviderCodeWrapper";
 import { ResponsiveImage } from "./ResponsiveImage";
 import { devComponents } from "./dev/DevComponents";
+// Import all Lucide icons
+import * as Lucide from "lucide-react";
 
 // Helper function to generate heading ID from text
 const slugify = (text: string): string => {
@@ -40,6 +44,28 @@ const slugify = (text: string): string => {
   ); // Default to 'heading' if nothing remains
 };
 
+// MDX-specific ButtonLink wrapper that bypasses type checking at the MDX boundary
+// and handles nested paragraph tags that MDX generates
+const MDXButtonLink = (props: React.ComponentProps<typeof ButtonLink>) => {
+  // Extract children from paragraph tags that MDX might add
+  return (
+    <ButtonLink {...props}>
+      {React.Children.map(props.children, (child) => {
+        // If it's a paragraph element, extract its children
+        if (
+          React.isValidElement(child) &&
+          (child.type === "p" || (typeof child.type === "function" && child.type.name === "p"))
+        ) {
+          // Type assertion to access props safely
+          const elementProps = (child as React.ReactElement<{ children?: React.ReactNode }>).props;
+          return elementProps.children;
+        }
+        return child;
+      })}
+    </ButtonLink>
+  );
+};
+
 // Custom components that will be available in MDX files
 export const components = {
   // Custom components for docs
@@ -56,11 +82,22 @@ export const components = {
   MermaidDiagram,
 
   // UI Components
+  Button,
+  ButtonLink: MDXButtonLink, // Use the MDX-specific wrapper for ButtonLink
   Tabs,
   TabsList,
   TabsTrigger,
   TabsContent,
   Logo,
+
+  // Individual Lucide icons as needed
+  // We can't expose the entire Lucide namespace due to MDX type constraints
+  LightbulbIcon: Lucide.Lightbulb,
+  UsersIcon: Lucide.Users,
+  GithubIcon: Lucide.Github,
+  StarIcon: Lucide.Star,
+  RocketIcon: Lucide.Rocket,
+  BookOpenIcon: Lucide.BookOpen,
 
   // Dev components
   ...devComponents,
