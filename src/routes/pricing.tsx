@@ -234,7 +234,7 @@ function PricingPage() {
                         </TooltipTrigger>
                         <TooltipContent
                           side="right"
-                          className="bg-popover text-primary border-primary/20 w-md border p-4"
+                          className="bg-popover text-primary border-primary/20 w-96 border p-4"
                         >
                           {betaNoticeContent}
                         </TooltipContent>
@@ -266,7 +266,7 @@ function PricingPage() {
                   buttonLink="/docs/lilypad/getting-started/self-hosting"
                 />
                 <div className="bg-background border-border overflow-hidden rounded-lg border shadow-sm">
-                  <div className="px-6 py-8">
+                  <div className="bg-background px-6 py-8">
                     <div className="mb-2 flex items-center gap-2">
                       <h3 className="text-foreground text-xl font-semibold">Pro</h3>
                       <Tooltip>
@@ -275,7 +275,7 @@ function PricingPage() {
                         </TooltipTrigger>
                         <TooltipContent
                           side="right"
-                          className="bg-primary/10 text-primary border-primary/20 w-96 border p-4"
+                          className="bg-popover text-primary border-primary/20 w-96 border p-4"
                         >
                           {betaNoticeContent}
                         </TooltipContent>
