@@ -90,9 +90,9 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
   if (isLoading) {
     return (
       <div
-        className={`code-block-wrapper relative overflow-hidden m-0 p-0 border border-border text-sm ${className}`}
+        className={`code-block-wrapper border-border relative m-0 overflow-hidden border p-0 text-sm ${className}`}
       >
-        <pre className="p-4 bg-button-primary m-0">
+        <pre className="bg-button-primary m-0 p-4">
           <code className="opacity-0">{code}</code>
         </pre>
       </div>
@@ -103,15 +103,15 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
     <div
       ref={codeRef}
       className={cn(
-        "code-block-wrapper relative group overflow-hidden m-0 p-0 border border-border text-sm",
+        "code-block-wrapper group border-border relative m-0 overflow-hidden border p-0 text-sm",
         funMode && "fun-mode",
         className
       )}
     >
       {/* Copy button in top right */}
-      <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+      <div className="absolute top-3 right-3 z-10 opacity-0 transition-opacity group-hover:opacity-100">
         <button
-          className="border p-1.5 rounded-md bg-background hover:bg-muted cursor-pointer relative"
+          className="bg-background hover:bg-muted relative cursor-pointer rounded-md border p-1.5"
           onClick={copyToClipboard}
           aria-label="Copy code"
           title="Copy code"
@@ -150,26 +150,26 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
       </div>
 
       {/* Fun mode button in bottom right (easter egg) */}
-      <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+      <div className="absolute right-3 bottom-3 z-10 opacity-0 transition-opacity group-hover:opacity-100">
         <button
-          className="border p-1.5 rounded-md bg-background hover:bg-muted cursor-pointer relative"
+          className="bg-background hover:bg-muted relative cursor-pointer rounded-md border p-1.5"
           onClick={toggleFunMode}
           aria-label="Toggle fun mode"
           title="Toggle fun mode"
         >
-          <Sparkles className={cn("w-4 h-4", funMode ? "text-primary" : "text-muted-foreground")} />
+          <Sparkles className={cn("h-4 w-4", funMode ? "text-primary" : "text-muted-foreground")} />
         </button>
       </div>
 
       {/* Light theme code */}
       <div
-        className="light-theme-code dark:hidden w-full text-sm"
+        className="light-theme-code w-full text-sm dark:hidden"
         dangerouslySetInnerHTML={{ __html: lightHtml }}
       />
 
       {/* Dark theme code */}
       <div
-        className="dark-theme-code hidden dark:block w-full text-sm"
+        className="dark-theme-code hidden w-full text-sm dark:block"
         dangerouslySetInnerHTML={{ __html: darkHtml }}
       />
     </div>

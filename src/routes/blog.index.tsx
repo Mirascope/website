@@ -30,18 +30,18 @@ export const Route = createFileRoute("/blog/")({
   // Configure loading state
   pendingComponent: () => (
     <div className="flex justify-center pt-6">
-      <div className="flex mx-auto w-full max-w-[1800px] px-4">
-        <div className="flex-1 min-w-0 py-6">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-8">
-              <h1 className="text-4xl font-bold mb-4 text-center">Blog</h1>
-              <p className="text-xl text-foreground max-w-2xl mx-auto">
+      <div className="mx-auto flex w-full max-w-[1800px] px-4">
+        <div className="min-w-0 flex-1 py-6">
+          <div className="mx-auto max-w-5xl">
+            <div className="mb-8 text-center">
+              <h1 className="mb-4 text-center text-4xl font-bold">Blog</h1>
+              <p className="text-foreground mx-auto max-w-2xl text-xl">
                 The latest news, updates, and insights about
                 <br />
                 Mirascope and LLM application development.
               </p>
             </div>
-            <div className="flex justify-center items-center h-64">
+            <div className="flex h-64 items-center justify-center">
               <LoadingContent spinnerClassName="h-12 w-12" fullHeight={false} />
             </div>
           </div>
@@ -88,12 +88,12 @@ function BlogPage() {
         url="/blog"
         type="website"
       />
-      <div className="flex mx-auto w-full max-w-[1800px] px-4">
-        <div className="flex-1 min-w-0 py-6">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-8">
-              <h1 className="text-4xl font-bold mb-4 text-center">Blog</h1>
-              <p className="text-xl text-foreground max-w-2xl mx-auto">
+      <div className="mx-auto flex w-full max-w-[1800px] px-4">
+        <div className="min-w-0 flex-1 py-6">
+          <div className="mx-auto max-w-5xl">
+            <div className="mb-8 text-center">
+              <h1 className="mb-4 text-center text-4xl font-bold">Blog</h1>
+              <p className="text-foreground mx-auto max-w-2xl text-xl">
                 The latest news, updates, and insights about
                 <br />
                 Mirascope and LLM application development.
@@ -102,33 +102,33 @@ function BlogPage() {
 
             <div className="mb-10 min-h-[700px]">
               {posts.length === 0 ? (
-                <div className="text-center py-12">
-                  <h2 className="text-xl font-medium text-foreground">No posts found</h2>
+                <div className="py-12 text-center">
+                  <h2 className="text-foreground text-xl font-medium">No posts found</h2>
                   <p className="text-foreground mt-2">Check back soon for new content!</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 min-h-[650px]">
+                <div className="grid min-h-[650px] grid-cols-1 gap-8 md:grid-cols-2">
                   {currentPosts.map((post) => (
                     <Link
                       key={post.slug}
                       to="/blog/$slug"
                       params={{ slug: post.slug }}
-                      className="block h-full cursor-pointer group"
+                      className="group block h-full cursor-pointer"
                     >
-                      <div className="h-[320px] flex flex-col hover:shadow-lg transition-all duration-200 shadow-sm bg-card rounded-lg border-1 border-border overflow-hidden">
-                        <div className="p-6 flex flex-col h-full">
+                      <div className="bg-card border-border flex h-[320px] flex-col overflow-hidden rounded-lg border-1 shadow-sm transition-all duration-200 hover:shadow-lg">
+                        <div className="flex h-full flex-col p-6">
                           <div>
-                            <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
+                            <h3 className="group-hover:text-primary mb-2 text-xl font-semibold transition-colors">
                               {post.title}
                             </h3>
-                            <p className="text-sm text-muted-foreground mb-4 select-none">
+                            <p className="text-muted-foreground mb-4 text-sm select-none">
                               {post.date} · {post.readTime} · By {post.author}
                             </p>
-                            <p className="text-foreground mb-4 select-none line-clamp-3">
+                            <p className="text-foreground mb-4 line-clamp-3 select-none">
                               {post.description}
                             </p>
                           </div>
-                          <span className="text-accent-foreground group-hover:text-primary transition-colors font-medium mt-auto">
+                          <span className="text-accent-foreground group-hover:text-primary mt-auto font-medium transition-colors">
                             Read more
                           </span>
                         </div>
@@ -138,20 +138,20 @@ function BlogPage() {
 
                   {/* Spacer elements to maintain grid layout when fewer than POSTS_PER_PAGE posts */}
                   {[...Array(Math.max(0, POSTS_PER_PAGE - currentPosts.length))].map((_, index) => (
-                    <div key={`spacer-${index}`} className="h-[320px] md:h-[320px] invisible" />
+                    <div key={`spacer-${index}`} className="invisible h-[320px] md:h-[320px]" />
                   ))}
                 </div>
               )}
             </div>
 
             {posts.length > 0 && (
-              <div className="pb-8 pt-4 border-t w-full">
+              <div className="w-full border-t pt-4 pb-8">
                 <div className="flex justify-center">
                   <nav className="flex gap-2">
                     <button
                       onClick={() => handlePageChange(currentPage - 1)}
                       disabled={currentPage === 1}
-                      className={`px-3 py-1 rounded border border-border font-medium ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:bg-muted"}`}
+                      className={`border-border rounded border px-3 py-1 font-medium ${currentPage === 1 ? "cursor-not-allowed opacity-50" : "hover:bg-muted cursor-pointer"}`}
                     >
                       Previous
                     </button>
@@ -160,10 +160,10 @@ function BlogPage() {
                       <button
                         key={i + 1}
                         onClick={() => handlePageChange(i + 1)}
-                        className={`w-8 h-8 flex items-center justify-center rounded font-medium ${
+                        className={`flex h-8 w-8 items-center justify-center rounded font-medium ${
                           currentPage === i + 1
                             ? "bg-primary text-primary-foreground"
-                            : "border border-border hover:bg-muted"
+                            : "border-border hover:bg-muted border"
                         }`}
                       >
                         {i + 1}
@@ -173,7 +173,7 @@ function BlogPage() {
                     <button
                       onClick={() => handlePageChange(currentPage + 1)}
                       disabled={currentPage === totalPages}
-                      className={`px-3 py-1 rounded border border-border font-medium ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:bg-muted"}`}
+                      className={`border-border rounded border px-3 py-1 font-medium ${currentPage === totalPages ? "cursor-not-allowed opacity-50" : "hover:bg-muted cursor-pointer"}`}
                     >
                       Next
                     </button>

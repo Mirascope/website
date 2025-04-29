@@ -159,16 +159,16 @@ export function MermaidDiagram({ chart, className = "" }: MermaidDiagramProps) {
 
   if (error) {
     return (
-      <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-md text-destructive">
+      <div className="bg-destructive/10 border-destructive/20 text-destructive rounded-md border p-4">
         <p className="font-medium">Diagram Error</p>
-        <p className="text-sm font-mono whitespace-pre-wrap">{error}</p>
+        <p className="font-mono text-sm whitespace-pre-wrap">{error}</p>
       </div>
     );
   }
 
   return (
     <div
-      className={`mermaid-diagram overflow-x-auto my-6 rounded-md bg-background p-4 ${className}`}
+      className={`mermaid-diagram bg-background my-6 overflow-x-auto rounded-md p-4 ${className}`}
       ref={mermaidRef}
     >
       {svgContent ? (

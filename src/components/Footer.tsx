@@ -14,22 +14,22 @@ export default function Footer() {
   return (
     <footer
       className={cn(
-        "w-full pt-6 pb-3 px-4 sm:px-6 md:px-12 mt-auto",
+        "mt-auto w-full px-4 pt-6 pb-3 sm:px-6 md:px-12",
         isLandingPage ? `bg-transparent ${textStyles}` : "bg-background"
       )}
     >
-      <div className="max-w-5xl mx-auto flex flex-col-reverse md:flex-row justify-between items-center md:items-center">
-        <div className="text-sm sm:text-base mt-4 md:mt-0 text-center md:text-left">
+      <div className="mx-auto flex max-w-5xl flex-col-reverse items-center justify-between md:flex-row md:items-center">
+        <div className="mt-4 text-center text-sm sm:text-base md:mt-0 md:text-left">
           <p>© 2025 Mirascope. All rights reserved.</p>
         </div>
 
         <div className="flex gap-4 sm:gap-8">
-          <Link to="/privacy" className={cn("text-sm sm:text-base transition-colors", hoverStyles)}>
+          <Link to="/privacy" className={cn("text-sm transition-colors sm:text-base", hoverStyles)}>
             Privacy Policy
           </Link>
           <Link
             to="/terms/use"
-            className={cn("text-sm sm:text-base transition-colors", hoverStyles)}
+            className={cn("text-sm transition-colors sm:text-base", hoverStyles)}
           >
             Terms of Use
           </Link>

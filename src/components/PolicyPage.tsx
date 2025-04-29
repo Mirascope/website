@@ -28,20 +28,20 @@ const PolicyPage: React.FC<PolicyPageProps> = ({ content, type = "privacy" }) =>
   const lastUpdated = content?.meta?.lastUpdated ? formatDate(content.meta.lastUpdated) : "";
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="container mx-auto max-w-4xl px-4 py-8">
       {/* Header with title and fun mode button aligned horizontally */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold uppercase">{title}</h1>
           {lastUpdated && (
-            <p className="font-medium text-muted-foreground mt-1">Last Updated: {lastUpdated}</p>
+            <p className="text-muted-foreground mt-1 font-medium">Last Updated: {lastUpdated}</p>
           )}
         </div>
       </div>
 
       <div
         id={contentId}
-        className="bg-background rounded-xl shadow-sm p-4 sm:p-6 border border-border"
+        className="bg-background border-border rounded-xl border p-4 shadow-sm sm:p-6"
       >
         <article className="prose prose-lg max-w-none">
           <MDXRenderer code={content.mdx.code} frontmatter={content.mdx.frontmatter} />
@@ -66,7 +66,7 @@ export const PolicyPageError: React.FC<{
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="text-center mb-8">
+      <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold uppercase">{defaultTitle}</h1>
       </div>
       <p>This content is currently unavailable. Please check back later.</p>
@@ -89,7 +89,7 @@ export const PolicyPageLoading: React.FC<{ type: "privacy" | "terms-use" | "term
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="text-center mb-8">
+      <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold uppercase">{defaultTitle}</h1>
       </div>
       <LoadingContent spinnerClassName="h-12 w-12" fullHeight={false} />

@@ -32,7 +32,7 @@ const NavLink = ({ href, children, className, onClick }: NavLinkProps) => {
     <Link
       to={href}
       className={cn(
-        "font-medium px-2 py-2 text-xl flex items-center relative cursor-pointer transition-colors duration-200 hover:text-accent-foreground",
+        "hover:text-accent-foreground relative flex cursor-pointer items-center px-2 py-2 text-xl font-medium transition-colors duration-200",
         isLandingPage && "landing-page-text-shadow",
         className
       )}
@@ -71,18 +71,18 @@ export default function Header() {
   return (
     <header
       className={cn(
-        "py-6 px-4 sm:px-6 flex justify-center items-center fixed top-0 left-0 right-0 w-full z-50",
+        "fixed top-0 right-0 left-0 z-50 flex w-full items-center justify-center px-4 py-6 sm:px-6",
         isLandingPage
-          ? "bg-transparent text-white landing-page-text-shadow"
+          ? "landing-page-text-shadow bg-transparent text-white"
           : "bg-background text-foreground",
-        scrolled && !isLandingPage ? "border-b border-border shadow-sm" : "",
+        scrolled && !isLandingPage ? "border-border border-b shadow-sm" : "",
         scrolled && isLandingPage ? "bg-foreground/80 backdrop-blur-sm" : ""
       )}
     >
-      <nav className="flex flex-row items-center justify-between w-full max-w-7xl mx-auto">
+      <nav className="mx-auto flex w-full max-w-7xl flex-row items-center justify-between">
         <Link
           to="/"
-          className={cn("flex items-center relative z-10", isLandingPage ? "invisible" : "visible")}
+          className={cn("relative z-10 flex items-center", isLandingPage ? "invisible" : "visible")}
         >
           <Logo
             size="small"
@@ -94,8 +94,8 @@ export default function Header() {
         {/* Desktop Navigation - Perfectly centered, but hidden during search */}
         <div
           className={cn(
-            "hidden md:flex items-center gap-6 absolute left-1/2 transform -translate-x-1/2 z-20 transition-opacity duration-300",
-            isSearchOpen ? "opacity-0 pointer-events-none" : "opacity-100"
+            "absolute left-1/2 z-20 hidden -translate-x-1/2 transform items-center gap-6 transition-opacity duration-300 md:flex",
+            isSearchOpen ? "pointer-events-none opacity-0" : "opacity-100"
           )}
         >
           {/* Products Menu */}
@@ -104,7 +104,7 @@ export default function Header() {
               <NavigationMenuItem>
                 <NavigationMenuTrigger
                   className={cn(
-                    "!bg-transparent hover:!bg-transparent data-[state=open]:!bg-transparent data-[state=open]:hover:!bg-transparent focus:!bg-transparent font-medium text-xl flex items-center p-0 cursor-pointer transition-colors duration-200",
+                    "flex cursor-pointer items-center !bg-transparent p-0 text-xl font-medium transition-colors duration-200 hover:!bg-transparent focus:!bg-transparent data-[state=open]:!bg-transparent data-[state=open]:hover:!bg-transparent",
                     isLandingPage
                       ? "hover:text-accent-foreground data-[state=open]:text-accent-foreground landing-page-text-shadow"
                       : "hover:text-accent-foreground data-[state=open]:text-accent-foreground"
@@ -119,15 +119,15 @@ export default function Header() {
                   Docs
                 </NavigationMenuTrigger>
                 <NavigationMenuContent className="bg-background p-2 [text-shadow:none]">
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 w-[300px] sm:w-[480px] gap-2">
+                  <ul className="grid w-[300px] grid-cols-1 gap-2 sm:w-[480px] sm:grid-cols-2">
                     <li>
                       <NavigationMenuLink asChild>
                         <Link
                           to={getProductRoute("mirascope")}
-                          className="block p-4 space-y-1.5 rounded-md bg-background hover:bg-mirascope-purple/20 transition-colors"
+                          className="bg-background hover:bg-mirascope-purple/20 block space-y-1.5 rounded-md p-4 transition-colors"
                         >
-                          <div className="font-medium text-xl text-mirascope-purple">Mirascope</div>
-                          <p className="text-base text-foreground">
+                          <div className="text-mirascope-purple text-xl font-medium">Mirascope</div>
+                          <p className="text-foreground text-base">
                             LLM abstractions that aren't obstructions.
                           </p>
                         </Link>
@@ -137,10 +137,10 @@ export default function Header() {
                       <NavigationMenuLink asChild>
                         <Link
                           to={getProductRoute("lilypad")}
-                          className="block p-4 space-y-1.5 rounded-md bg-background hover:bg-lilypad-green/20 transition-colors"
+                          className="bg-background hover:bg-lilypad-green/20 block space-y-1.5 rounded-md p-4 transition-colors"
                         >
-                          <div className="font-medium text-xl text-lilypad-green">Lilypad</div>
-                          <p className="text-base text-foreground">
+                          <div className="text-lilypad-green text-xl font-medium">Lilypad</div>
+                          <p className="text-foreground text-base">
                             Start building your data flywheel in one line of code.
                           </p>
                         </Link>
@@ -156,7 +156,7 @@ export default function Header() {
         </div>
 
         {/* Right section with responsive search and controls */}
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden items-center gap-3 md:flex">
           {/* Search bar that expands left */}
           <SearchBar onOpenChange={setIsSearchOpen} isLandingPage={isLandingPage} />
 
@@ -168,7 +168,7 @@ export default function Header() {
         </div>
 
         {/* Mobile controls: Theme Switcher + Menu Button */}
-        <div className="md:hidden flex items-center gap-1">
+        <div className="flex items-center gap-1 md:hidden">
           <ThemeSwitcher />
           <button
             className={cn("p-2", isLandingPage ? "text-white" : "text-foreground")}
@@ -182,19 +182,19 @@ export default function Header() {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="absolute top-full right-4 mt-2 p-6 md:hidden z-50 text-foreground rounded-lg max-w-xs shadow-lg [text-shadow:none] bg-background">
+        <div className="text-foreground bg-background absolute top-full right-4 z-50 mt-2 max-w-xs rounded-lg p-6 shadow-lg [text-shadow:none] md:hidden">
           <div className="flex flex-col space-y-4">
-            <div className="font-medium text-xl my-2">Docs</div>
+            <div className="my-2 text-xl font-medium">Docs</div>
             <Link
               to={getProductRoute("mirascope")}
-              className="p-3 rounded-md bg-background text-primary font-medium hover:bg-muted transition-colors"
+              className="bg-background text-primary hover:bg-muted rounded-md p-3 font-medium transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               Mirascope
             </Link>
             <Link
               to={getProductRoute("lilypad")}
-              className="p-3 rounded-md bg-background text-lilypad-green font-medium hover:bg-muted transition-colors"
+              className="bg-background text-lilypad-green hover:bg-muted rounded-md p-3 font-medium transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               Lilypad
@@ -202,14 +202,14 @@ export default function Header() {
             <hr className="my-2" />
             <Link
               to="/blog"
-              className="font-medium py-2 text-xl flex items-center relative cursor-pointer hover:text-primary transition-colors duration-200"
+              className="hover:text-primary relative flex cursor-pointer items-center py-2 text-xl font-medium transition-colors duration-200"
               onClick={() => setIsMenuOpen(false)}
             >
               Blog
             </Link>
             <Link
               to="/pricing"
-              className="font-medium py-2 text-xl flex items-center relative cursor-pointer hover:text-primary transition-colors duration-200"
+              className="hover:text-primary relative flex cursor-pointer items-center py-2 text-xl font-medium transition-colors duration-200"
               onClick={() => setIsMenuOpen(false)}
             >
               Pricing
