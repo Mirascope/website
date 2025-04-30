@@ -12,70 +12,76 @@ import { useRouterState } from "@tanstack/react-router";
 
 type Theme = "light" | "dark" | "system";
 
+// Pure functions for theme management
+const getStoredTheme = (): Theme => {
+  if (typeof window === "undefined") return "system";
+  return (localStorage.getItem("theme") as Theme) || "system";
+};
+
+const storeTheme = (theme: Theme): void => {
+  localStorage.setItem("theme", theme);
+};
+
+const getEffectiveTheme = (theme: Theme): "light" | "dark" => {
+  if (theme !== "system") return theme;
+
+  if (typeof window === "undefined") return "light";
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+};
+
+const applyTheme = (theme: Theme): void => {
+  const root = document.documentElement;
+  const effectiveTheme = getEffectiveTheme(theme);
+
+  root.classList.remove("light", "dark");
+  root.classList.add(effectiveTheme);
+};
+
 export default function ThemeSwitcher() {
   const [theme, setTheme] = useState<Theme>("system");
   const [mounted, setMounted] = useState(false);
   const router = useRouterState();
   const isLandingPage = router.location.pathname === "/";
 
-  // Initialize theme state from localStorage or system preference
+  const handleThemeChange = (newTheme: Theme) => {
+    setTheme(newTheme);
+    storeTheme(newTheme);
+
+    if (mounted) {
+      const prevEffectiveTheme = getEffectiveTheme(theme);
+      const newEffectiveTheme = getEffectiveTheme(newTheme);
+
+      applyTheme(newTheme);
+
+      // For theme changes on homepage, update the background transition
+      if (isLandingPage && prevEffectiveTheme !== newEffectiveTheme) {
+        document.body.style.transition = "background-image 0.3s ease";
+      }
+    }
+  };
+
+  // Initialize on mount
   useEffect(() => {
     setMounted(true);
-    const savedTheme = localStorage.getItem("theme") as Theme | null;
-    if (savedTheme) {
-      setTheme(savedTheme);
-    } else {
-      setTheme("system");
-    }
+    const savedTheme = getStoredTheme();
+    setTheme(savedTheme);
+    applyTheme(savedTheme);
   }, []);
 
-  // Apply theme when it changes
-  useEffect(() => {
-    if (!mounted) return;
-
-    // Store previous theme for comparison
-    const prevTheme = localStorage.getItem("theme") || "system";
-
-    // Clear previous theme classes only
-    const root = document.documentElement;
-    root.classList.remove("light", "dark");
-
-    // Apply current theme
-    if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light";
-      root.classList.add(systemTheme);
-    } else {
-      root.classList.add(theme);
-    }
-
-    // Store the current theme
-    localStorage.setItem("theme", theme);
-
-    // For theme changes on homepage, update the background without reloading
-    if (isLandingPage && prevTheme !== theme) {
-      // Instead of reloading, dynamically update the background
-      document.body.style.transition = "background-image 0.3s ease";
-    }
-  }, [theme, mounted, isLandingPage]);
-
-  // Add listener for system theme changes
+  // Handle system theme changes
   useEffect(() => {
     if (!mounted) return;
 
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
-    const handleChange = () => {
+    const handleSystemThemeChange = () => {
       if (theme === "system") {
-        const systemTheme = mediaQuery.matches ? "dark" : "light";
-        document.documentElement.classList.remove("light", "dark");
-        document.documentElement.classList.add(systemTheme);
+        applyTheme("system");
       }
     };
 
-    mediaQuery.addEventListener("change", handleChange);
-    return () => mediaQuery.removeEventListener("change", handleChange);
+    mediaQuery.addEventListener("change", handleSystemThemeChange);
+    return () => mediaQuery.removeEventListener("change", handleSystemThemeChange);
   }, [theme, mounted]);
 
   if (!mounted) {
@@ -100,7 +106,10 @@ export default function ThemeSwitcher() {
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuRadioGroup value={theme} onValueChange={(value) => setTheme(value as Theme)}>
+        <DropdownMenuRadioGroup
+          value={theme}
+          onValueChange={(value) => handleThemeChange(value as Theme)}
+        >
           <DropdownMenuRadioItem value="light">
             <Sun className="mr-2 h-4 w-4" />
             <span>Light</span>
