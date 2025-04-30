@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-type CalloutType = "note" | "warning" | "info" | "success" | "mira";
+type CalloutType = "note" | "warning" | "info" | "success";
 
 interface CalloutProps {
   type: CalloutType;
@@ -52,16 +52,6 @@ const calloutStyles: Record<
     bgClass: "bg-secondary/10",
     Icon: CheckCircle,
   },
-  mira: {
-    containerClass: "border-mirascope-purple",
-    iconClass: "text-mirascope-purple",
-    bgClass: "bg-mirascope-purple/10",
-    Icon: () => (
-      <div className="flex items-center justify-center">
-        <img src="/assets/branding/logo.webp" alt="Mirascope Logo" className="h-4 w-auto" />
-      </div>
-    ),
-  },
 };
 
 export function Callout({
@@ -103,16 +93,20 @@ export function Callout({
       {showHeader && (
         <div
           className={cn(
-            "flex items-center gap-3 rounded-t-lg border-b px-3 py-2",
+            "flex items-center gap-3 px-3 py-2",
+            // Use rounded-lg when collapsed and collapsible, otherwise just round the top
+            collapsible && !isOpen ? "rounded-lg" : "rounded-t-lg",
+            // Only show the bottom border when the content is expanded
+            isOpen && "border-b",
             bgClass,
-            containerClass.replace("border-", "border-b-"),
+            isOpen ? containerClass.replace("border-", "border-b-") : "",
             collapsible && "cursor-pointer"
           )}
           onClick={collapsible ? () => setIsOpen(!isOpen) : undefined}
           aria-expanded={collapsible ? isOpen : undefined}
         >
           <div className={cn("flex h-6 w-6 items-center justify-center rounded-full", iconClass)}>
-            <Icon className={cn(type === "mira" ? "" : "h-4 w-4")} />
+            <Icon className={cn("h-4 w-4")} />
           </div>
           <div className="flex-1 text-base font-semibold">{displayTitle}</div>
           {collapsible && (
@@ -148,8 +142,4 @@ export function Info(props: Omit<CalloutProps, "type">) {
 
 export function Success(props: Omit<CalloutProps, "type">) {
   return <Callout type="success" {...props} />;
-}
-
-export function Mira(props: Omit<CalloutProps, "type">) {
-  return <Callout type="mira" {...props} />;
 }
