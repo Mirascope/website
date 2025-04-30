@@ -61,7 +61,7 @@ export function TabbedSection({
 
   if (tabs.length === 0) {
     return (
-      <div className="rounded-md border-2 border-red-500 p-4">
+      <div className="border-destructive rounded-md border-2 p-4">
         No valid tabs found. Please use Tab components with value props.
       </div>
     );
@@ -71,7 +71,7 @@ export function TabbedSection({
     <div
       className={cn(
         showLogo ? "bg-primary/20" : "bg-muted",
-        "overflow-hidden rounded-md px-1 pt-2 pb-0.75 shadow-md",
+        "border-primary/20 overflow-hidden rounded-md border-1 px-1 pt-2 pb-0.75 shadow-md",
         className
       )}
     >
