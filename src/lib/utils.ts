@@ -86,7 +86,7 @@ export function getProductFromPath(path: string): ProductName {
   }
 
   // Special case for the pricing page
-  if (path === "/pricing") {
+  if (path.startsWith("/pricing")) {
     return "lilypad";
   }
 

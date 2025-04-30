@@ -101,7 +101,7 @@ const SectionTab = ({
   children: React.ReactNode;
 }) => {
   const activeClass = `bg-button-primary text-white font-medium`;
-  const inactiveClass = `text-muted-foreground hover:bg-accent hover:text-accent-foreground`;
+  const inactiveClass = `text-muted-foreground hover:bg-muted hover:text-muted-foreground`;
 
   return (
     <Link
