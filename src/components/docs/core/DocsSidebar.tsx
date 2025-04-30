@@ -1,10 +1,8 @@
 import { docRegistry } from "@/src/lib/content";
 import type { DocSpec, ProductName } from "@/src/lib/content/doc-registry";
-import { getProductRoute } from "@/src/lib/routes";
 import { type Provider } from "../ProviderContext";
 import Sidebar from "@/src/components/Sidebar";
 import type { SidebarConfig, SidebarItem, SidebarGroup } from "@/src/components/Sidebar";
-import { Link } from "@tanstack/react-router";
 
 interface DocsSidebarProps {
   product: ProductName;
@@ -12,24 +10,7 @@ interface DocsSidebarProps {
   onProviderChange?: (provider: Provider) => void;
 }
 
-// Components for product selector header
-const ProductTitle = ({ product }: { product: ProductName }) => {
-  const titleClass = `text-xl font-medium ${product === "mirascope" ? "text-mirascope-purple" : "text-lilypad-green"}`;
-  return <span className={titleClass}>{product === "mirascope" ? "Mirascope" : "Lilypad"}</span>;
-};
-
-const ProductLink = ({ product }: { product: ProductName }) => {
-  const hoverClass =
-    product === "mirascope" ? "hover:text-mirascope-purple" : "hover:text-lilypad-green";
-  return (
-    <Link
-      to={getProductRoute(product)}
-      className={`text-muted-foreground text-xl font-medium ${hoverClass}`}
-    >
-      {product === "mirascope" ? "Mirascope" : "Lilypad"}
-    </Link>
-  );
-};
+// No product selector needed in sidebar - now in header
 
 /**
  * Helper to convert the spec metadata to the sidebar format
@@ -166,27 +147,11 @@ function createSidebarConfig(product: ProductName): SidebarConfig {
 }
 
 const DocsSidebar = ({ product }: DocsSidebarProps) => {
-  // Create product selector header
-  const ProductSelector = () => (
-    <div className="flex space-x-4">
-      {product === "mirascope" ? (
-        <ProductTitle product="mirascope" />
-      ) : (
-        <ProductLink product="mirascope" />
-      )}
-
-      {product === "lilypad" ? (
-        <ProductTitle product="lilypad" />
-      ) : (
-        <ProductLink product="lilypad" />
-      )}
-    </div>
-  );
-
   // Create sidebar configuration
   const sidebarConfig = createSidebarConfig(product);
 
-  return <Sidebar config={sidebarConfig} headerContent={<ProductSelector />} />;
+  // No header content needed since product links are in the main header now
+  return <Sidebar config={sidebarConfig} />;
 };
 
 export default DocsSidebar;
