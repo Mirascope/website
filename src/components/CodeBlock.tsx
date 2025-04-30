@@ -19,6 +19,7 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [funMode, toggleFunMode] = useFunMode();
   const codeRef = useRef<HTMLDivElement>(null);
+  const [isSmallBlock, setIsSmallBlock] = useState<boolean>(false);
 
   useEffect(() => {
     async function highlight() {
@@ -47,6 +48,16 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
 
     highlight();
   }, [code, language, meta]);
+
+  // Check if code block is small after rendering
+  useEffect(() => {
+    if (codeRef.current) {
+      // Get the height of the code block
+      const height = codeRef.current.clientHeight;
+      // Consider blocks less than 80px as small
+      setIsSmallBlock(height < 80);
+    }
+  }, [isLoading, lightHtml, darkHtml]);
 
   const copyToClipboard = () => {
     // Strip highlight markers before copying to clipboard
@@ -108,8 +119,28 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
         className
       )}
     >
-      {/* Copy button in top right */}
-      <div className="absolute top-3 right-3 z-10 opacity-0 transition-opacity group-hover:opacity-100">
+      {/* Buttons - positioned based on block size */}
+      <div
+        className={cn(
+          "absolute z-10 opacity-0 transition-opacity group-hover:opacity-100",
+          isSmallBlock ? "top-1/2 right-3 flex -translate-y-1/2 space-x-1" : "top-3 right-3"
+        )}
+      >
+        {/* Fun mode button - positioned to the left of copy button for small blocks */}
+        {isSmallBlock && (
+          <button
+            className="bg-background hover:bg-muted relative cursor-pointer rounded-md border p-1.5"
+            onClick={toggleFunMode}
+            aria-label="Toggle fun mode"
+            title="Toggle fun mode"
+          >
+            <Sparkles
+              className={cn("h-4 w-4", funMode ? "text-primary" : "text-muted-foreground")}
+            />
+          </button>
+        )}
+
+        {/* Copy button */}
         <button
           className="bg-background hover:bg-muted relative cursor-pointer rounded-md border p-1.5"
           onClick={copyToClipboard}
@@ -149,17 +180,21 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
         </button>
       </div>
 
-      {/* Fun mode button in bottom right (easter egg) */}
-      <div className="absolute right-3 bottom-3 z-10 opacity-0 transition-opacity group-hover:opacity-100">
-        <button
-          className="bg-background hover:bg-muted relative cursor-pointer rounded-md border p-1.5"
-          onClick={toggleFunMode}
-          aria-label="Toggle fun mode"
-          title="Toggle fun mode"
-        >
-          <Sparkles className={cn("h-4 w-4", funMode ? "text-primary" : "text-muted-foreground")} />
-        </button>
-      </div>
+      {/* Fun mode button in bottom right for normal sized blocks */}
+      {!isSmallBlock && (
+        <div className="absolute right-3 bottom-3 z-10 opacity-0 transition-opacity group-hover:opacity-100">
+          <button
+            className="bg-background hover:bg-muted relative cursor-pointer rounded-md border p-1.5"
+            onClick={toggleFunMode}
+            aria-label="Toggle fun mode"
+            title="Toggle fun mode"
+          >
+            <Sparkles
+              className={cn("h-4 w-4", funMode ? "text-primary" : "text-muted-foreground")}
+            />
+          </button>
+        </div>
+      )}
 
       {/* Light theme code */}
       <div
