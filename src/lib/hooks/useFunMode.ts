@@ -1,30 +1,18 @@
-import { useState } from "react";
+import { useContext } from "react";
+import { FunModeContext } from "@/src/components/FunModeContext";
 
 /**
- * Custom hook to manage "fun mode" state with localStorage persistence
+ * Custom hook to access fun mode state from context
  *
  * @returns [funMode, toggleFunMode] - Current state and toggle function
  */
 export function useFunMode(): [boolean, () => void] {
-  // Initialize from localStorage if available
-  const [funMode, setFunMode] = useState(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("funMode") === "true";
-    }
-    return false;
-  });
+  const context = useContext(FunModeContext);
+  if (!context) {
+    throw new Error("useFunMode must be used within a FunModeProvider");
+  }
 
-  // Toggle fun mode and update localStorage
-  const toggleFunMode = () => {
-    const newMode = !funMode;
-    setFunMode(newMode);
-
-    if (typeof window !== "undefined") {
-      localStorage.setItem("funMode", newMode.toString());
-    }
-  };
-
-  return [funMode, toggleFunMode];
+  return [context.funMode, context.toggleFunMode];
 }
 
 export default useFunMode;

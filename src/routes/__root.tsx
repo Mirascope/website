@@ -9,6 +9,7 @@ import Footer from "../components/Footer";
 import CookieBanner from "../components/CookieBanner";
 import { DevToolsButton } from "../components/dev";
 import analyticsManager from "../lib/services/analytics";
+import { FunModeProvider } from "../components/FunModeContext";
 
 export const Route = createRootRoute({
   beforeLoad: ({ location }) => {
@@ -73,9 +74,11 @@ export const Route = createRootRoute({
 
           {/* Content container with padding to account for fixed header */}
           <div className="mx-auto w-full max-w-7xl flex-grow pt-24">
-            <main className="flex-grow">
-              <Outlet />
-            </main>
+            <FunModeProvider>
+              <main className="flex-grow">
+                <Outlet />
+              </main>
+            </FunModeProvider>
           </div>
           <Footer />
         </div>
