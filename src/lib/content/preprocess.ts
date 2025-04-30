@@ -96,6 +96,9 @@ export class ContentPreprocessor {
     // Write metadata index files
     this.writeMetadataFiles();
 
+    // Generate the unified metadata file
+    this.writeUnifiedMetaFile();
+
     // Report any errors
     if (this.errors.length > 0) {
       console.error("\n🚨 Content preprocessing failed with errors:");
@@ -196,6 +199,42 @@ export class ContentPreprocessor {
   }
 
   /**
+   * Generate a full URL route from content type and path
+   * This creates routes that match the actual URLs used in the site
+   */
+  private generateRouteFromPath(contentType: ContentType, contentPath: ContentPath): string {
+    switch (contentType) {
+      case "blog":
+        return `/blog/${contentPath.slug}`;
+
+      case "doc":
+        // Use the DocRegistry to get the pre-calculated routePath
+        const docInfo = docRegistry.getDocInfoByPath(contentPath.subpath);
+
+        if (docInfo) {
+          return docInfo.routePath;
+        }
+
+        // If doc not found in registry, this is an error condition
+        throw new Error(
+          `Doc not found in registry: ${contentPath.subpath}. Make sure it's defined in the _meta.ts file.`
+        );
+
+      case "policy":
+        if (contentPath.subpath.startsWith("terms/")) {
+          return `/${contentPath.subpath}`;
+        }
+        return `/${contentPath.subpath}`;
+
+      case "dev":
+        return `/dev/${contentPath.slug}`;
+
+      default:
+        return `/${contentPath.subpath}`;
+    }
+  }
+
+  /**
    * Validate that a filename is a valid slug
    */
   private validateSlug(filename: string, filePath: string): void {
@@ -287,11 +326,15 @@ export class ContentPreprocessor {
     if (!frontmatter.title) missingFields.push("title");
     if (!frontmatter.description) missingFields.push("description");
 
+    // Generate route based on content type and path
+    const route = this.generateRouteFromPath(contentType, contentPath);
+
     // Type-specific required fields and validation
     let metadata: Partial<ContentMeta> = {
       type: contentType,
       path: contentPath.typePath,
       slug: contentPath.slug,
+      route: route,
     };
 
     switch (contentType) {
@@ -461,6 +504,32 @@ export class ContentPreprocessor {
       if (this.verbose) {
         console.log(`Created metadata index for dev with ${this.devMetadata.length} items`);
       }
+    }
+  }
+
+  /**
+   * Write a unified metadata file that combines metadata from all content types
+   * This is useful for search functionality, where we need to lookup metadata by URL route
+   */
+  private writeUnifiedMetaFile(): void {
+    // Combine all metadata arrays
+    const allMetadata = [
+      ...this.blogMetadata,
+      ...this.docMetadata,
+      ...this.policyMetadata,
+      ...this.devMetadata,
+    ];
+
+    // Skip if there's no metadata
+    if (allMetadata.length === 0) {
+      return;
+    }
+
+    // Write to the unified metadata file
+    fs.writeFileSync(path.join(this.metaDir, "unified.json"), JSON.stringify(allMetadata));
+
+    if (this.verbose) {
+      console.log(`Created unified metadata file with ${allMetadata.length} items`);
     }
   }
 

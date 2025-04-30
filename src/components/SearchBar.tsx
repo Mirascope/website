@@ -2,52 +2,8 @@ import { useState, useRef, useEffect, type KeyboardEvent } from "react";
 import { Search as SearchIcon, Command } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/src/lib/utils";
-
-// Declare Pagefind types on the window object
-declare global {
-  interface Window {
-    pagefind?: {
-      init: () => Promise<void>;
-      search: (query: string) => Promise<{
-        results: PagefindResult[];
-      }>;
-      debouncedSearch: (
-        query: string,
-        time?: number
-      ) => Promise<{
-        results: PagefindResult[];
-      } | null>;
-      options: (options: any) => Promise<void>;
-    };
-  }
-}
-
-// Pagefind result interface based on actual API
-interface PagefindResult {
-  id: string;
-  score: number;
-  data: () => Promise<{
-    url: string;
-    excerpt: string;
-    meta?: Record<string, string>;
-    content: string;
-  }>;
-}
-
-// Simplified search result for our UI
-interface SearchResultItem {
-  title: string;
-  excerpt: string;
-  url: string;
-  section: string;
-  score?: number; // Add score from Pagefind
-}
-
-// Grouped search results
-interface SearchResultGroup {
-  name: string;
-  results: SearchResultItem[];
-}
+import { getSearchService, type SearchResultItem } from "@/src/lib/services/search";
+import { environment } from "@/src/lib/content/environment";
 
 // Component for an individual search result
 interface SearchResultProps {
@@ -57,20 +13,26 @@ interface SearchResultProps {
 
 function SearchResult({ result, onSelect }: SearchResultProps) {
   // Get development mode from environment
-  const isDev = import.meta.env.DEV || import.meta.env.MODE === "development";
+  const isDev = environment.isDev();
+
+  // Get description and excerpt separately
+  const description = result.meta?.description;
+  const excerpt = result.excerpt;
 
   return (
     <Link
       to={result.url}
       onClick={onSelect}
-      className="hover:bg-accent/50 border-border/40 flex border-t px-4 py-3 text-sm transition-colors first:border-0"
+      className="hover:bg-accent/50 border-border/40 flex border-t px-5 py-4 text-sm transition-colors first:border-0"
     >
       <div className="min-w-0 flex-1">
-        <div className="mb-1 flex items-center justify-between">
-          <h4 className="text-foreground truncate font-medium">{result.title || "Untitled"}</h4>
+        <div className="mb-2 flex items-center justify-between">
+          <h4 className="text-foreground truncate text-base font-medium">
+            {result.title || "Untitled"}
+          </h4>
           <div className="flex items-center gap-2">
             {/* Section badge */}
-            <span className="bg-muted text-muted-foreground rounded px-1.5 py-0.5 text-[10px]">
+            <span className="bg-muted text-muted-foreground max-w-[150px] truncate rounded px-1.5 py-0.5 text-[10px]">
               {result.section}
             </span>
 
@@ -80,27 +42,47 @@ function SearchResult({ result, onSelect }: SearchResultProps) {
             )}
           </div>
         </div>
+
+        {/* Description - shown if available */}
+        {description && (
+          <p className="text-muted-foreground search-description mb-1.5 line-clamp-2 text-sm">
+            {description}
+          </p>
+        )}
+
+        {/* Excerpt - always shown, italicized */}
         <p
-          className="text-muted-foreground search-excerpt line-clamp-2 text-xs"
-          dangerouslySetInnerHTML={{ __html: result.excerpt }}
+          className="text-muted-foreground search-excerpt line-clamp-2 text-xs italic"
+          dangerouslySetInnerHTML={{ __html: excerpt }}
         />
       </div>
     </Link>
   );
 }
 
-// Component for a group of search results
-interface SearchResultGroupProps {
-  group: SearchResultGroup;
+// Maximum number of search results to display
+const MAX_DISPLAYED_RESULTS = 20;
+
+// Component for a list of search results
+interface SearchResultListProps {
+  results: SearchResultItem[];
   onResultSelect: () => void;
 }
 
-function SearchResultGroupComponent({ group, onResultSelect }: SearchResultGroupProps) {
+function SearchResultList({ results, onResultSelect }: SearchResultListProps) {
+  // Only display up to MAX_DISPLAYED_RESULTS
+  const displayedResults = results.slice(0, MAX_DISPLAYED_RESULTS);
+
   return (
     <div>
-      {group.results.map((result, idx) => (
+      {displayedResults.map((result, idx) => (
         <SearchResult key={`${result.url}-${idx}`} result={result} onSelect={onResultSelect} />
       ))}
+      {results.length > MAX_DISPLAYED_RESULTS && (
+        <div className="text-muted-foreground border-border/40 border-t px-4 py-2 text-center text-xs">
+          Showing top {MAX_DISPLAYED_RESULTS} of {results.length} results
+        </div>
+      )}
     </div>
   );
 }
@@ -126,11 +108,11 @@ function SearchInput({
   return (
     <div
       className={cn(
-        "h-9 rounded-full border transition-all duration-300",
+        "h-9 rounded-full border transition-all duration-500",
         isLandingPage
           ? "border-white/30 bg-white/10 hover:bg-white/20"
           : "border-border bg-background/20 hover:bg-primary/10 hover:border-primary/80",
-        isOpen ? "w-72 md:w-96" : "w-36" // Wider default size with text, much wider when expanded
+        isOpen ? "w-80 md:w-[32rem]" : "w-36" // Wider default size with text, much wider when expanded
       )}
       style={
         isLandingPage
@@ -143,7 +125,7 @@ function SearchInput({
         <SearchIcon
           size={16}
           className={cn(
-            "absolute left-3 transition-all duration-300",
+            "absolute left-3 transition-all duration-500",
             isLandingPage ? "nav-icon-landing" : "nav-icon-regular"
           )}
         />
@@ -153,7 +135,7 @@ function SearchInput({
           type="text"
           placeholder="Search..."
           className={cn(
-            "h-full cursor-pointer bg-transparent text-sm transition-all duration-300 outline-none",
+            "h-full cursor-pointer bg-transparent text-sm transition-all duration-500 outline-none",
             isLandingPage
               ? "text-white placeholder:text-white/90"
               : "text-foreground placeholder:text-foreground",
@@ -188,7 +170,7 @@ interface SearchResultsContainerProps {
   isPagefindLoaded: boolean;
   error: string;
   query: string;
-  resultGroups: SearchResultGroup[];
+  results: SearchResultItem[];
   resultsRef: React.RefObject<HTMLDivElement | null>;
   onResultSelect: () => void;
   isLandingPage?: boolean;
@@ -201,24 +183,39 @@ function SearchResultsContainer({
   isPagefindLoaded,
   error,
   query,
-  resultGroups,
+  results,
   resultsRef,
   onResultSelect,
   isLandingPage = false,
 }: SearchResultsContainerProps) {
+  // Use a fixed state derived from isOpen with some delayed rendering logic
+  const [isReallyVisible, setIsReallyVisible] = useState(false);
+
+  // When isOpen changes, update visibility with a delay for animation
+  useEffect(() => {
+    if (isOpen) {
+      // Slight delay to allow search bar to expand first
+      const timer = setTimeout(() => setIsReallyVisible(true), 150);
+      return () => clearTimeout(timer);
+    } else {
+      setIsReallyVisible(false);
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
     <div
       className={cn(
-        "search-results absolute top-full right-0 z-50 mt-2 w-screen max-w-sm overflow-hidden rounded-lg shadow-2xl [text-shadow:none] md:left-0",
-        "bg-background border-border border"
+        "search-results absolute top-full right-0 z-50 mt-2 w-screen max-w-[32rem] overflow-hidden rounded-lg shadow-2xl [text-shadow:none] md:left-0",
+        "bg-background border-border border transition-opacity duration-300"
       )}
-      style={
-        isLandingPage
+      style={{
+        opacity: isReallyVisible ? 1 : 0,
+        ...(isLandingPage
           ? { boxShadow: "0 1px 5px rgba(0, 0, 0, 0.15), 0 2px 10px rgba(0, 0, 0, 0.1)" }
-          : undefined
-      }
+          : {}),
+      }}
       ref={resultsRef}
     >
       {renderSearchContent()}
@@ -252,22 +249,20 @@ function SearchResultsContainer({
       );
     }
 
-    if (resultGroups.length > 0) {
+    // Check if we have any results to show
+    const hasResults = results.length > 0;
+
+    if (hasResults) {
       return (
         <div className="max-h-[calc(100vh-200px)] overflow-y-auto">
-          {resultGroups.map((group) => (
-            <SearchResultGroupComponent
-              key={group.name}
-              group={group}
-              onResultSelect={onResultSelect}
-            />
-          ))}
+          <SearchResultList results={results} onResultSelect={onResultSelect} />
         </div>
       );
     }
 
     // Only show "No results" if we're not in a loading or searching state
-    if (query.trim() && !isLoading && !isSearching) {
+    // and there's actually no results to show
+    if (query.trim() && !isLoading && !isSearching && !hasResults) {
       return (
         <div className="text-muted-foreground p-4 text-center">No results found for "{query}"</div>
       );
@@ -302,7 +297,7 @@ interface SearchBarProps {
 export default function SearchBar({ onOpenChange, isLandingPage = false }: SearchBarProps = {}) {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const [resultGroups, setResultGroups] = useState<SearchResultGroup[]>([]);
+  const [results, setResults] = useState<SearchResultItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState("");
@@ -310,6 +305,9 @@ export default function SearchBar({ onOpenChange, isLandingPage = false }: Searc
   const resultsRef = useRef<HTMLDivElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const [isPagefindLoaded, setIsPagefindLoaded] = useState(false);
+
+  // Get the search service
+  const searchService = getSearchService();
 
   // Focus input when search is opened
   useEffect(() => {
@@ -325,7 +323,7 @@ export default function SearchBar({ onOpenChange, isLandingPage = false }: Searc
       // Show navigation after search closes with a delay for smooth transition
       const timer = setTimeout(() => {
         if (onOpenChange) onOpenChange(false);
-      }, 300);
+      }, 500);
       return () => clearTimeout(timer);
     }
   }, [isOpen, onOpenChange]);
@@ -361,139 +359,54 @@ export default function SearchBar({ onOpenChange, isLandingPage = false }: Searc
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Load Pagefind when the search is opened for the first time
+  // Initialize search service when the search is opened for the first time
   useEffect(() => {
-    if (isOpen && !isPagefindLoaded && !window.pagefind) {
-      loadPagefind();
+    if (isOpen && !isPagefindLoaded) {
+      initializeSearch();
     }
   }, [isOpen, isPagefindLoaded]);
 
   // Perform search when query changes
   useEffect(() => {
     if (!query.trim() || !isPagefindLoaded) {
-      setResultGroups([]);
+      setResults([]);
       return;
     }
 
     // Set searching state immediately when query changes
     setIsSearching(true);
+    setIsLoading(true);
 
-    // We'll use Pagefind's built-in debounced search instead of our own setTimeout
     const performSearch = async () => {
       try {
-        if (!window.pagefind) return;
+        // Use the search service to perform the search
+        const response = await searchService.search(query);
 
-        // Get development mode from environment
-        const isDev = import.meta.env.DEV || import.meta.env.MODE === "development";
-
-        if (isDev) {
-          console.log("🔍 [SearchBar] Performing search for:", query);
-        }
-
-        // Use the built-in debouncedSearch with 300ms delay
-        const result = await window.pagefind.debouncedSearch(query, 300);
-
-        // If the search was cancelled (due to rapid typing), don't process results
-        if (result === null) {
-          // Don't clear loading state here, as a new search will be initiated
-          // Keep the spinner showing during rapid typing
+        // If null, a new search will be started soon, so maintain loading state
+        if (response === null) {
           return;
         }
 
-        if (isDev) {
-          console.log(`🔍 [SearchBar] Found ${result.results.length} results, using top 20`);
-        }
-
-        // Process and transform results - only take the top 20
-        const topResults = result.results.slice(0, 20);
-
-        if (isDev) {
-          console.log(
-            `🔍 [SearchBar] Search query: "${query}" - Found ${result.results.length} results`
-          );
-        }
-
-        // Get all result data in a single batch of promises
-        const items: SearchResultItem[] = await Promise.all(
-          topResults.map(async (pagefindResult, index) => {
-            const data = await pagefindResult.data();
-
-            const title = data.meta?.title || "Untitled";
-            const excerpt = data.excerpt || "";
-            const url = data.url || "";
-            const section = data.meta?.section || getSectionFromUrl(data.url);
-
-            // Create the result item with score included
-            const resultItem = {
-              title,
-              excerpt,
-              url,
-              section,
-              score: pagefindResult.score,
-            };
-
-            // Log detailed information for each result for debugging
-            if (isDev) {
-              console.log(`🔍 [SearchBar] Result #${index} (score: ${pagefindResult.score})`, {
-                score: pagefindResult.score,
-                title,
-                description: data.meta?.description || "No description",
-                excerpt,
-                url,
-                meta: data.meta,
-                content_preview: data.content.substring(0, 100) + "...",
-              });
-            }
-
-            return resultItem;
-          })
-        );
-
-        // Log table of results with titles for easier overview
-        if (isDev) {
-          console.table(
-            items.map((item) => ({
-              title: item.title,
-              score: item.score,
-              section: item.section,
-            }))
-          );
-        }
-
-        // Sort all results directly by score (highest first)
-        const sortedItems = [...items].sort((a, b) => (b.score || 0) - (a.score || 0));
-
-        // Create a single group with all results
-        const sortedGroups = [
-          {
-            name: "Results",
-            results: sortedItems,
-          },
-        ];
-
-        // First update the results, then clear loading states to prevent flash of "No results"
-        setResultGroups(sortedGroups);
-        // Use small timeout to ensure state batching occurs properly
-        setTimeout(() => {
-          setIsLoading(false);
-          setIsSearching(false);
-        }, 10);
+        // Update state with the results
+        setResults(response.items);
+        setError("");
+        setIsLoading(false);
+        setIsSearching(false);
       } catch (error) {
         console.error("Search error:", error);
-        setError("Failed to search");
-        setResultGroups([]);
+        setError(error instanceof Error ? error.message : "Failed to search");
+        setResults([]);
         setIsLoading(false);
         setIsSearching(false);
       }
     };
 
-    setIsLoading(true);
     performSearch();
 
     return () => {
-      // No need to clean up timers as Pagefind handles debouncing internally
+      // No need to clean up timers as search service handles debouncing internally
     };
-  }, [query, isPagefindLoaded]);
+  }, [query, isPagefindLoaded, searchService]);
 
   // Handle result selection
   const handleResultSelect = () => {
@@ -501,68 +414,27 @@ export default function SearchBar({ onOpenChange, isLandingPage = false }: Searc
     setQuery("");
   };
 
-  // Load Pagefind script
-  const loadPagefind = async () => {
+  // Initialize the search service
+  const initializeSearch = async () => {
     try {
       setIsLoading(true);
-      const isDev = import.meta.env.DEV || import.meta.env.MODE === "development";
 
-      if (isDev) {
-        console.log("🔍 [SearchBar] Attempting to load Pagefind...");
+      if (environment.isDev()) {
+        console.log("🔍 [SearchBar] Initializing search service...");
       }
 
-      // Try to dynamically import Pagefind
-      // Using a trick to bypass Vite's static analysis of import statements
-      // We use the Function constructor to create a dynamic import that Vite won't analyze
-      try {
-        // This creates a function that will execute: return import("/_pagefind/pagefind.js")
-        const dynamicImport = new Function("url", "return import(url)");
-        const pagefind = await dynamicImport("/_pagefind/pagefind.js");
-
-        // Assign the module to window.pagefind (it has methods directly on it, not as a default export)
-        window.pagefind = pagefind;
-
-        // Initialize Pagefind - required before using it
-        await pagefind.init();
-
-        // Configure Pagefind
-        await pagefind.options({
-          baseUrl: "/",
-        });
-
-        setIsPagefindLoaded(true);
-      } catch (error) {
-        if (isDev) {
-          console.error("🔍 [SearchBar] Error loading Pagefind:", error);
-        }
-        setError("Search index not available. Run 'bun run build' to generate it.");
-      }
+      await searchService.init();
+      setIsPagefindLoaded(true);
+      setError("");
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An error occurred";
-      if (import.meta.env.DEV) {
-        console.error("🔍 [SearchBar] Error in loadPagefind:", error);
+      if (environment.isDev()) {
+        console.error("🔍 [SearchBar] Error initializing search:", error);
       }
       setError(errorMessage);
+      setIsPagefindLoaded(false);
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  // Extract section from URL
-  const getSectionFromUrl = (url?: string): string => {
-    if (!url) return "Other";
-
-    try {
-      const path = new URL(url, window.location.origin).pathname;
-      const segments = path.split("/").filter(Boolean);
-
-      if (segments.length === 0) return "Home";
-
-      // Format the section name
-      const section = segments[0].charAt(0).toUpperCase() + segments[0].slice(1);
-      return section;
-    } catch (e) {
-      return "Other";
     }
   };
 
@@ -584,7 +456,7 @@ export default function SearchBar({ onOpenChange, isLandingPage = false }: Searc
         isPagefindLoaded={isPagefindLoaded}
         error={error}
         query={query}
-        resultGroups={resultGroups}
+        results={results}
         resultsRef={resultsRef}
         onResultSelect={handleResultSelect}
         isLandingPage={isLandingPage}
