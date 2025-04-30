@@ -21,31 +21,41 @@ interface CalloutProps {
 
 const calloutStyles: Record<
   CalloutType,
-  { containerClass: string; iconClass: string; Icon: React.ElementType }
+  {
+    containerClass: string;
+    iconClass: string;
+    bgClass: string;
+    Icon: React.ElementType;
+  }
 > = {
   note: {
     containerClass: "border-primary",
     iconClass: "text-primary",
+    bgClass: "bg-primary/10",
     Icon: AlertCircle,
   },
   info: {
     containerClass: "border-secondary",
     iconClass: "text-secondary",
+    bgClass: "bg-secondary/10",
     Icon: InfoIcon,
   },
   warning: {
     containerClass: "border-destructive",
     iconClass: "text-destructive",
+    bgClass: "bg-destructive/10",
     Icon: AlertTriangle,
   },
   success: {
     containerClass: "border-secondary",
     iconClass: "text-secondary",
+    bgClass: "bg-secondary/10",
     Icon: CheckCircle,
   },
   mira: {
-    containerClass: "border-primary",
-    iconClass: "text-primary",
+    containerClass: "border-mirascope-purple",
+    iconClass: "text-mirascope-purple",
+    bgClass: "bg-mirascope-purple/10",
     Icon: () => (
       <div className="flex items-center justify-center">
         <img src="/assets/branding/logo.webp" alt="Mirascope Logo" className="h-4 w-auto" />
@@ -62,7 +72,7 @@ export function Callout({
   collapsible = false,
   defaultOpen = true,
 }: CalloutProps) {
-  const { containerClass, iconClass, Icon } = calloutStyles[type];
+  const { containerClass, iconClass, bgClass, Icon } = calloutStyles[type];
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   // Determine if we should show a header
@@ -93,7 +103,8 @@ export function Callout({
       {showHeader && (
         <div
           className={cn(
-            "bg-accent/30 flex items-center gap-3 rounded-t-lg border-b px-3 py-2",
+            "flex items-center gap-3 rounded-t-lg border-b px-3 py-2",
+            bgClass,
             containerClass.replace("border-", "border-b-"),
             collapsible && "cursor-pointer"
           )}
