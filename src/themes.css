@@ -20,8 +20,8 @@
   --color-primary: var(--color-mirascope-purple);
   --color-primary-foreground: oklch(0.985 0 0);
 
-  --color-secondary: var(--color-emerald-500);
-  --color-secondary-foreground: oklch(0.985 0 0);
+  --color-secondary: oklch(0.7 0.14 195); /* Teal that complements purple */
+  --color-secondary-foreground: oklch(1 0 0); /* Pure white */
 
   --color-code-background: var(--color-background);
 
@@ -36,7 +36,7 @@
   --color-card-foreground: oklch(0.1 0.2041 282.8);
   --color-popover: oklch(0.995 0 0);
   --color-popover-foreground: oklch(0.1 0.2041 282.8);
-  --color-destructive: var(--color-red-500);
+  --color-destructive: oklch(0.67 0.18 48); /* Warm orange that complements purple */
   --color-destructive-foreground: oklch(0.985 0 0);
 
   /* Utility - keep as is */
@@ -65,7 +65,7 @@
 
   --color-primary-foreground: oklch(0.985 0 0);
 
-  --color-secondary: var(--color-lilypad-green);
+  --color-secondary: oklch(0.55 0.25 195); /* Darker teal that complements purple */
   --color-secondary-foreground: oklch(0.95 0 0);
 
   --color-muted: oklch(0.18 0.006 286.033);
@@ -79,7 +79,7 @@
   --color-card-foreground: oklch(0.95 0 0);
   --color-popover: oklch(0.11 0.005 285.823);
   --color-popover-foreground: oklch(0.95 0 0);
-  --color-destructive: var(--color-red-700);
+  --color-destructive: oklch(0.55 0.18 48); /* Darker warm orange that complements purple */
   --color-destructive-foreground: oklch(0.95 0 0);
 
   /* Utility */
@@ -173,7 +173,7 @@
   --color-card-foreground: oklch(0.95 0 0);
   --color-popover: oklch(0.11 0.01 240);
   --color-popover-foreground: oklch(0.95 0 0);
-  --color-destructive: var(--color-red-700);
+  --color-destructive: oklch(0.55 0.18 48); /* Darker warm orange that complements purple */
   --color-destructive-foreground: oklch(0.95 0 0);
 
   /* Utility */
