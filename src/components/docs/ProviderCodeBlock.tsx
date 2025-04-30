@@ -95,7 +95,6 @@ export function ProviderCodeBlock({
       defaultOpen={!collapsible}
       className={className}
       customIcon={<Wrench className="h-3 w-3" />}
-      contentClassName="p-0"
     >
       {!currentProviderCode && (
         <div className="bg-destructive/20 text-destructive mb-2 px-4 py-2 text-sm">
