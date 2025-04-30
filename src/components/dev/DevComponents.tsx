@@ -21,8 +21,7 @@ import {
 } from "../ui/pagination";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
-import { useRouterState } from "@tanstack/react-router";
-import { getProductFromPath, setDevProductPreference } from "@/src/lib/utils";
+import { useRouter, useRouterState } from "@tanstack/react-router";
 import type { ProductName } from "@/src/lib/content/spec";
 
 // Color theme display component from style-test.tsx
@@ -688,22 +687,47 @@ export const ThemeColorCombinations: React.FC = () => {
   );
 };
 
+// Session storage key for dev product preference
+const DEV_PRODUCT_STORAGE_KEY = "devProductPreference";
+
 // ProductSelector - allows switching between product themes
 export const ProductSelector: React.FC = () => {
-  const router = useRouterState();
-  const path = router.location.pathname;
+  const routerState = useRouterState();
+  const router = useRouter();
+  const path = routerState.location.pathname;
+  const devRoute = routerState.matches.find(
+    (match: { routeId: string }) => match.routeId === "/dev"
+  );
 
-  // Use the getProductFromPath function to initialize state
-  // This will check session storage for dev routes
-  const [product, setProduct] = React.useState<ProductName>(() => {
-    return getProductFromPath(path);
-  });
+  // Get product from search params if available
+  const searchProduct = devRoute
+    ? (devRoute.search as { product?: ProductName }).product
+    : undefined;
 
-  // Handle product change
+  // Function to read from session storage
+  const readFromStorage = React.useCallback(() => {
+    if (typeof sessionStorage !== "undefined") {
+      return sessionStorage.getItem(DEV_PRODUCT_STORAGE_KEY) as ProductName | null;
+    }
+    return null;
+  }, []);
+
+  // Re-read from storage whenever the URL changes
+  const sessionProduct = React.useMemo(() => {
+    return readFromStorage();
+  }, [readFromStorage, path]);
+
+  // Determine which product is currently active
+  // Priority: 1. Search params 2. Session storage 3. Default
+  const currentProduct = searchProduct || sessionProduct || "mirascope";
+
+  // Navigate to set search params - the parent route component will handle saving to session storage
   const handleProductChange = (newProduct: ProductName) => {
-    setProduct(newProduct);
-    // Use our utility function to set the preference
-    setDevProductPreference(newProduct);
+    router.navigate({
+      to: path,
+      search: (prev: Record<string, unknown>) => ({ ...prev, product: newProduct }),
+      replace: true,
+    });
   };
 
   return (
@@ -712,7 +736,7 @@ export const ProductSelector: React.FC = () => {
       <div className="flex space-x-2">
         <button
           className={`rounded-md px-3 py-1 text-sm ${
-            product === "mirascope"
+            currentProduct === "mirascope"
               ? "bg-primary text-primary-foreground"
               : "bg-muted text-muted-foreground hover:text-foreground"
           }`}
@@ -722,7 +746,7 @@ export const ProductSelector: React.FC = () => {
         </button>
         <button
           className={`rounded-md px-3 py-1 text-sm ${
-            product === "lilypad"
+            currentProduct === "lilypad"
               ? "bg-primary text-primary-foreground"
               : "bg-muted text-muted-foreground hover:text-foreground"
           }`}

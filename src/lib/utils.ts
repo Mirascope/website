@@ -58,12 +58,23 @@ export function setDevProductPreference(product: ProductName): void {
  * @returns The product name or "mirascope" as default
  */
 export function getProductFromPath(path: string): ProductName {
-  // Special case for dev routes - check session storage
+  // Special case for dev routes - check search params and session storage
   if (path.startsWith("/dev")) {
-    // In dev routes, check for stored preference
+    try {
+      // Check the URL for search params if available
+      const url = new URL(window.location.href);
+      const productParam = url.searchParams.get("product") as ProductName;
+      if (productParam && (productParam === "mirascope" || productParam === "lilypad")) {
+        return productParam;
+      }
+    } catch (e) {
+      // Ignore any errors when trying to access URL params
+    }
+
+    // Then check session storage
     if (typeof sessionStorage !== "undefined") {
       const storedProduct = sessionStorage.getItem(DEV_PRODUCT_STORAGE_KEY) as ProductName;
-      if (storedProduct) {
+      if (storedProduct && (storedProduct === "mirascope" || storedProduct === "lilypad")) {
         return storedProduct;
       }
     }

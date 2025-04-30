@@ -2,7 +2,7 @@ import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import { LoadingContent } from "@/src/components/docs";
 import DevLayout from "@/src/components/dev/DevLayout";
 import { MDXRenderer } from "@/src/components/MDXRenderer";
-import { getDevContent, getAllDevMeta } from "@/src/lib/content";
+import { getDevContent } from "@/src/lib/content";
 import { environment } from "@/src/lib/content/environment";
 import ContentErrorHandler from "@/src/components/ContentErrorHandler";
 
@@ -10,8 +10,10 @@ export const Route = createFileRoute("/dev/$slug")({
   component: DevContentPage,
   loader: async ({ params }) => {
     const { slug } = params;
-    const [content, allDevMeta] = await Promise.all([getDevContent(slug), getAllDevMeta()]);
-    return { content, devPages: allDevMeta };
+    // Get content for this specific slug
+    const content = await getDevContent(slug);
+    // Parent route loader already loads devPages, so we don't need to load them again
+    return { content };
   },
   pendingComponent: () => {
     return (
@@ -34,9 +36,15 @@ export const Route = createFileRoute("/dev/$slug")({
 });
 
 function DevContentPage() {
-  const { content, devPages } = useLoaderData({
+  // Get specific content from this route's loader
+  const { content } = useLoaderData({
     from: "/dev/$slug",
     structuralSharing: false,
+  });
+
+  // Get devPages from parent route's loader
+  const { devPages } = useLoaderData({
+    from: "/dev",
   });
 
   return (
