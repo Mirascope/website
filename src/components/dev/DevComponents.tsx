@@ -21,6 +21,9 @@ import {
 } from "../ui/pagination";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import { useRouterState } from "@tanstack/react-router";
+import { getProductFromPath, setDevProductPreference } from "@/src/lib/utils";
+import type { ProductName } from "@/src/lib/content/spec";
 
 // Color theme display component from style-test.tsx
 export interface ColorThemeDisplayProps {
@@ -687,27 +690,20 @@ export const ThemeColorCombinations: React.FC = () => {
 
 // ProductSelector - allows switching between product themes
 export const ProductSelector: React.FC = () => {
-  // Add state for product selection
-  const [product, setProduct] = React.useState<string>(() => {
-    // Initialize from document if available (client-side)
-    if (typeof document !== "undefined") {
-      return document.documentElement.getAttribute("data-product") || "mirascope";
-    }
-    return "mirascope";
+  const router = useRouterState();
+  const path = router.location.pathname;
+
+  // Use the getProductFromPath function to initialize state
+  // This will check session storage for dev routes
+  const [product, setProduct] = React.useState<ProductName>(() => {
+    return getProductFromPath(path);
   });
 
   // Handle product change
-  const handleProductChange = (newProduct: string) => {
+  const handleProductChange = (newProduct: ProductName) => {
     setProduct(newProduct);
-
-    // Update the data-product attribute on the document
-    if (typeof document !== "undefined") {
-      if (newProduct === "mirascope") {
-        document.documentElement.removeAttribute("data-product");
-      } else {
-        document.documentElement.setAttribute("data-product", newProduct);
-      }
-    }
+    // Use our utility function to set the preference
+    setDevProductPreference(newProduct);
   };
 
   return (
