@@ -110,7 +110,7 @@ export const components = {
     // Generate an ID from the text content if not provided
     const id = props.id || (typeof children === "string" ? slugify(children) : undefined);
     return (
-      <h1 id={id} className="my-6 scroll-mt-28 text-3xl font-bold" {...props}>
+      <h1 id={id} className="my-6 scroll-mt-28 text-3xl font-bold first:mt-0" {...props}>
         {children}
       </h1>
     );
