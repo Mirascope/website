@@ -1,8 +1,8 @@
 import React from "react";
 import { useRouterState } from "@tanstack/react-router";
 import { cn } from "@/src/lib/utils";
-import { PRODUCT_CONFIGS } from "@/src/lib/constants/site";
-import type { ProductName } from "@/src/lib/content/spec";
+import { getProductConfig } from "@/src/lib/constants/site";
+import { getProductFromPath } from "../lib/utils";
 
 /**
  * Format star count with appropriate suffix
@@ -24,18 +24,12 @@ interface GitHubRepoButtonProps {
 
 const GitHubRepoButton: React.FC<GitHubRepoButtonProps> = ({ className }) => {
   const router = useRouterState();
-  const isLandingPage = router.location.pathname === "/";
+  const path = router.location.pathname;
+  const isLandingPage = path === "/";
 
   // Determine which product repo to show based on the current route
-  let currentProduct: ProductName = "mirascope"; // Default to mirascope
-
-  // Check if we're in a product-specific route
-  const path = router.location.pathname;
-  if (path.startsWith("/docs/lilypad")) {
-    currentProduct = "lilypad";
-  }
-
-  const productConfig = PRODUCT_CONFIGS[currentProduct];
+  const currentProduct = getProductFromPath(path);
+  const productConfig = getProductConfig(currentProduct);
 
   if (!productConfig?.github) {
     return null;
@@ -68,21 +62,19 @@ const GitHubRepoButton: React.FC<GitHubRepoButtonProps> = ({ className }) => {
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
-        "flex flex-col py-1 px-2 transition-colors duration-200",
-        isLandingPage
-          ? "text-white hover:text-primary"
-          : "text-foreground hover:text-muted-foreground",
+        "flex flex-col px-2 py-1",
+        isLandingPage ? "nav-text-landing" : "nav-text-regular",
         className
       )}
     >
       {/* GitHub icon and product name */}
-      <div className="flex items-center gap-1 font-medium text-base">
+      <div className="flex items-center gap-1 text-base font-medium">
         {GitHubIcon}
         <span>{currentProduct}</span>
       </div>
 
       {/* Stats on second line */}
-      <div className="flex items-center gap-2 text-xs mt-0.5 opacity-80">
+      <div className="mt-0.5 flex items-center gap-2 text-xs opacity-80">
         {/* Version tag */}
         {version && (
           <div className="flex items-center gap-0.5">

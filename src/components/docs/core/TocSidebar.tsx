@@ -1,24 +1,21 @@
 import React, { useState } from "react";
 import TableOfContents from "@/src/components/TableOfContents";
 import { Button } from "@/src/components/ui/button";
-import { Sparkles, Server, Clipboard, Check } from "lucide-react";
-import { cn } from "@/src/lib/utils";
+import { Server, Clipboard, Check } from "lucide-react";
 import { ProviderDropdown } from "@/src/components/docs";
 import { type DocContent } from "@/src/lib/content";
 import analyticsManager from "@/src/lib/services/analytics";
 
 interface TocSidebarProps {
-  funMode: boolean;
-  toggleFunMode: () => void;
   document?: DocContent | null;
 }
 
 /**
  * TocSidebar - Right sidebar containing the table of contents and controls
  *
- * Displays fun mode toggle, provider selection dropdown, and table of contents
+ * Displays provider selection dropdown and table of contents
  */
-const TocSidebar: React.FC<TocSidebarProps> = ({ funMode, toggleFunMode, document }) => {
+const TocSidebar: React.FC<TocSidebarProps> = ({ document }) => {
   const [isCopied, setIsCopied] = useState(false);
 
   const copyContentAsMarkdown = () => {
@@ -47,23 +44,10 @@ const TocSidebar: React.FC<TocSidebarProps> = ({ funMode, toggleFunMode, documen
   };
 
   return (
-    <div className="w-56 flex-shrink-0 hidden lg:block">
-      <div className="fixed w-56 top-[60px] max-h-[calc(100vh-60px)] overflow-y-auto">
+    <div className="hidden w-56 flex-shrink-0 lg:block">
+      <div className="fixed top-[60px] max-h-[calc(100vh-60px)] w-56 overflow-y-auto">
         <div className="px-4 pt-12">
-          <div className="flex flex-col gap-3 mb-4">
-            <Button
-              variant={funMode ? "default" : "outline"}
-              size="sm"
-              onClick={toggleFunMode}
-              className={cn(
-                funMode ? "bg-primary text-primary-foreground" : "hover:bg-muted",
-                "transition-colors w-full"
-              )}
-            >
-              <Sparkles className="w-4 h-4 mr-1" />
-              Fun Mode
-            </Button>
-
+          <div className="mb-4 flex flex-col gap-3">
             {document && (
               <Button
                 variant="outline"
@@ -74,12 +58,12 @@ const TocSidebar: React.FC<TocSidebarProps> = ({ funMode, toggleFunMode, documen
               >
                 {isCopied ? (
                   <>
-                    <Check className="w-4 h-4 mr-1" />
+                    <Check className="mr-1 h-4 w-4" />
                     Copied!
                   </>
                 ) : (
                   <>
-                    <Clipboard className="w-4 h-4 mr-1" />
+                    <Clipboard className="mr-1 h-4 w-4" />
                     Copy as Markdown
                   </>
                 )}
@@ -88,16 +72,16 @@ const TocSidebar: React.FC<TocSidebarProps> = ({ funMode, toggleFunMode, documen
 
             {/* Provider dropdown */}
             <div className="mt-3">
-              <h4 className="text-sm font-medium text-muted-foreground mb-2">
+              <h4 className="text-muted-foreground mb-2 text-sm font-medium">
                 <div className="flex items-center">
-                  <Server className="w-3 h-3 mr-1" />
+                  <Server className="mr-1 h-3 w-3" />
                   Provider
                 </div>
               </h4>
               <ProviderDropdown />
             </div>
 
-            <h4 className="text-sm font-medium text-muted-foreground mt-4">On this page</h4>
+            <h4 className="text-muted-foreground mt-4 text-sm font-medium">On this page</h4>
           </div>
           <TableOfContents contentId="doc-content" path={document?.meta.path || ""} />
         </div>

@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useMatches } from "@tanstack/react-router";
 import { cn } from "@/src/lib/utils";
+import { ChevronDown, ChevronRight } from "lucide-react";
 
 /**
  * Generic section item data structure for sidebar navigation
@@ -64,8 +65,8 @@ const SidebarLink = ({
   params?: Record<string, any>;
   children: React.ReactNode;
 }) => {
-  const activeClass = `bg-button-primary text-white font-medium`;
-  const inactiveClass = `text-muted-foreground hover:bg-accent hover:text-accent-foreground`;
+  const activeClass = `bg-accent text-accent-foreground font-medium`;
+  const inactiveClass = `text-muted-foreground hover:bg-muted hover:text-muted-foreground`;
 
   return (
     <Link
@@ -73,7 +74,7 @@ const SidebarLink = ({
       params={params}
       style={style}
       className={cn(
-        "block text-base rounded-md py-1",
+        "block rounded-md py-1 text-base",
         className,
         isActive ? activeClass : inactiveClass
       )}
@@ -107,7 +108,7 @@ const SectionTab = ({
       to={to}
       params={params}
       className={cn(
-        "px-3 py-1 text-base rounded-md w-full",
+        "w-full rounded-md px-3 py-1 text-base",
         className,
         isActive ? activeClass : inactiveClass
       )}
@@ -122,7 +123,7 @@ const SectionTab = ({
  */
 const GroupLabel = ({ label }: { label: string }) => {
   return (
-    <div className={cn("font-semibold px-3 py-1 block cursor-default text-primary")}>{label}</div>
+    <div className={cn("text-primary block cursor-default px-3 py-1 font-semibold")}>{label}</div>
   );
 };
 
@@ -137,9 +138,9 @@ interface NestedItemsProps {
 }
 
 /**
- * Individual nested item component
+ * Regular item component (without nested items)
  */
-const NestedItem = ({
+const SidebarItemLink = ({
   itemSlug,
   item,
   basePath,
@@ -154,16 +155,49 @@ const NestedItem = ({
 }) => {
   // For navigation: Use routePath if provided, otherwise construct the path
   const navigationUrl = item.routePath || `${basePath}/${itemSlug}`;
-
   // For active state determination: Use the logical path which may include /index
   const logicalPath = `${basePath}/${itemSlug}`;
+  // Determine if this item is active
+  const isActive = isActivePath(logicalPath, item.routePath);
 
-  // A folder is any item that has nested items
+  return (
+    <SidebarLink
+      to={navigationUrl}
+      isActive={isActive}
+      className=""
+      style={{
+        paddingLeft: `${0.75 + indentLevel * 0.5}rem`,
+        paddingRight: "0.75rem",
+        flex: 1,
+      }}
+    >
+      {item.label}
+    </SidebarLink>
+  );
+};
+
+/**
+ * Folder component (with nested items)
+ */
+const NestedFolder = ({
+  itemSlug,
+  item,
+  basePath,
+  isActivePath,
+  indentLevel,
+}: {
+  itemSlug: string;
+  item: SidebarItem;
+  basePath: string;
+  isActivePath: (path: string, routePath?: string) => boolean;
+  indentLevel: number;
+}) => {
+  // For active state determination: Use the logical path which may include /index
+  const logicalPath = `${basePath}/${itemSlug}`;
+  // Get children items
   const children = item.items || {};
-  const hasNestedItems = Object.keys(children).length > 0;
 
   // Determine if this folder or any of its children are active
-  // Use routePath if provided, otherwise use the logical path
   const isActive = isActivePath(logicalPath, item.routePath);
 
   // State to track if the folder is expanded
@@ -179,75 +213,45 @@ const NestedItem = ({
     // Omitting isExpanded from dependencies to prevent re-expanding after user closes
   }, [isActive]);
 
-  return (
-    <div
-      key={itemSlug}
-      className={cn(hasNestedItems && isActive ? "bg-accent/40 rounded-md my-1" : "")}
-    >
-      <div className="flex items-center">
-        {/* Render expand/collapse icon for folders */}
-        {hasNestedItems && (
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className={cn(
-              "w-5 h-5 flex items-center justify-center mr-1",
-              isActive ? "text-primary" : "text-muted-foreground"
-            )}
-            aria-label={isExpanded ? "Collapse" : "Expand"}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              className="transition-transform"
-              style={{ transform: isExpanded ? "rotate(90deg)" : "rotate(0deg)" }}
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              stroke="currentColor"
-            >
-              <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
-          </button>
-        )}
+  // Toggle folder expansion
+  const toggleExpand = () => setIsExpanded(!isExpanded);
 
-        {/* For folders, render a clickable span that toggles expansion */}
-        {hasNestedItems ? (
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className={cn(
-              "font-medium block text-left w-full hover:text-accent-foreground rounded-md py-1",
-              isActive ? "text-primary" : "text-muted-foreground"
-            )}
-            style={{
-              paddingLeft: hasNestedItems ? "0" : `${0.75 + indentLevel * 0.5}rem`,
-              paddingRight: "0.75rem",
-              flex: 1,
-            }}
-          >
-            {item.label}
-          </button>
-        ) : (
-          /* Render regular items as links */
-          <SidebarLink
-            to={navigationUrl}
-            isActive={isActive}
-            className=""
-            style={{
-              paddingLeft: `${0.75 + indentLevel * 0.5}rem`,
-              paddingRight: "0.75rem",
-              flex: 1,
-            }}
-          >
-            {item.label}
-          </SidebarLink>
+  return (
+    <div>
+      <div
+        className={cn(
+          "hover:bg-muted flex items-center rounded-md",
+          isActive ? "text-accent" : "text-muted-foreground"
         )}
+      >
+        {/* Chevron icon button */}
+        <button
+          onClick={toggleExpand}
+          className={cn("mr-1 flex h-5 w-5 items-center justify-center")}
+          aria-label={isExpanded ? "Collapse" : "Expand"}
+        >
+          {isExpanded ? (
+            <ChevronDown size={16} className="text-muted-foreground" />
+          ) : (
+            <ChevronRight size={16} className="text-muted-foreground" />
+          )}
+        </button>
+
+        {/* Folder label button */}
+        <button
+          onClick={toggleExpand}
+          className={cn("block w-full rounded-md py-1 text-left font-medium")}
+          style={{
+            paddingRight: "0.75rem",
+            flex: 1,
+          }}
+        >
+          {item.label}
+        </button>
       </div>
 
-      {/* Render nested items if exists and is expanded */}
-      {hasNestedItems && isExpanded && (
+      {/* Render nested items if expanded */}
+      {isExpanded && (
         <div className="pt-1 pb-2">
           <NestedItems
             items={children}
@@ -262,6 +266,44 @@ const NestedItem = ({
 };
 
 /**
+ * Individual nested item component - renders either a folder or a link
+ */
+const NestedItem = ({
+  itemSlug,
+  item,
+  basePath,
+  isActivePath,
+  indentLevel,
+}: {
+  itemSlug: string;
+  item: SidebarItem;
+  basePath: string;
+  isActivePath: (path: string, routePath?: string) => boolean;
+  indentLevel: number;
+}) => {
+  // Determine if this is a folder (has nested items)
+  const hasNestedItems = Object.keys(item.items || {}).length > 0;
+
+  return hasNestedItems ? (
+    <NestedFolder
+      itemSlug={itemSlug}
+      item={item}
+      basePath={basePath}
+      isActivePath={isActivePath}
+      indentLevel={indentLevel}
+    />
+  ) : (
+    <SidebarItemLink
+      itemSlug={itemSlug}
+      item={item}
+      basePath={basePath}
+      isActivePath={isActivePath}
+      indentLevel={indentLevel}
+    />
+  );
+};
+
+/**
  * Container component for a group of nested items
  */
 const NestedItems = ({ items, basePath, isActivePath, indentLevel = 0 }: NestedItemsProps) => {
@@ -269,7 +311,7 @@ const NestedItems = ({ items, basePath, isActivePath, indentLevel = 0 }: NestedI
   const safeItems = items || {};
 
   return (
-    <div className={`space-y-0.5 mt-1 ${indentLevel > 0 ? "ml-3" : ""}`}>
+    <div className={`mt-1 space-y-0.5 ${indentLevel > 0 ? "ml-3" : ""}`}>
       {Object.entries(safeItems).map(([itemSlug, item]) => (
         <NestedItem
           key={itemSlug}
@@ -419,14 +461,14 @@ const Sidebar = ({ config, headerContent, footerContent }: SidebarProps) => {
   const activeSection = matchingSections.length > 0 ? matchingSections[0].slug : undefined;
 
   return (
-    <aside className="h-full pt-6 overflow-hidden">
+    <aside className="h-full overflow-hidden pt-6">
       {/* Custom header content if provided */}
       {headerContent && <div className="mb-5">{headerContent}</div>}
 
       {/* Section tabs */}
       {config.sections.length > 1 && (
         <>
-          <div className="flex flex-col space-y-0.5 mb-4">
+          <div className="mb-4 flex flex-col space-y-0.5">
             {config.sections.map((section) => (
               <SectionTab
                 key={section.slug}
@@ -440,13 +482,13 @@ const Sidebar = ({ config, headerContent, footerContent }: SidebarProps) => {
 
           {/* Border line below section buttons */}
           <div className="pb-4">
-            <div className="border-b border-1 border-muted"></div>
+            <div className="border-muted border-1 border-b"></div>
           </div>
         </>
       )}
 
       {/* Scrollable content area with fixed height */}
-      <div className="flex flex-col h-[calc(100vh-220px)]">
+      <div className="flex h-[calc(100vh-220px)] flex-col">
         <div
           ref={sidebarRef}
           className="flex-1 overflow-y-auto" // Flexbox will allow this to fill available space

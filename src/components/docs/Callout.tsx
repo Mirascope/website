@@ -1,6 +1,12 @@
-import React from "react";
 import { cn } from "@/src/lib/utils";
-import { AlertCircle, Info as InfoIcon, CheckCircle, AlertTriangle } from "lucide-react";
+import {
+  AlertCircle,
+  Info as InfoIcon,
+  CheckCircle,
+  AlertTriangle,
+  ChevronDown,
+} from "lucide-react";
+import { useState } from "react";
 
 type CalloutType = "note" | "warning" | "info" | "success";
 
@@ -10,31 +16,40 @@ interface CalloutProps {
   children: React.ReactNode;
   className?: string;
   collapsible?: boolean;
-  defaultCollapsed?: boolean;
+  defaultOpen?: boolean;
 }
 
 const calloutStyles: Record<
   CalloutType,
-  { containerClass: string; iconClass: string; Icon: React.ElementType }
+  {
+    containerClass: string;
+    iconClass: string;
+    bgClass: string;
+    Icon: React.ElementType;
+  }
 > = {
   note: {
     containerClass: "border-primary",
-    iconClass: "bg-primary text-muted-foreground",
+    iconClass: "text-primary",
+    bgClass: "bg-primary/10",
+    Icon: AlertCircle,
+  },
+  info: {
+    containerClass: "border-secondary",
+    iconClass: "text-secondary",
+    bgClass: "bg-secondary/10",
     Icon: InfoIcon,
   },
   warning: {
-    containerClass: "border-button-primary",
-    iconClass: "bg-orange-500 text-foreground",
+    containerClass: "border-destructive",
+    iconClass: "text-destructive",
+    bgClass: "bg-destructive/10",
     Icon: AlertTriangle,
-  },
-  info: {
-    containerClass: "border-primary",
-    iconClass: "bg-primary text-accent-foreground",
-    Icon: AlertCircle,
   },
   success: {
     containerClass: "border-secondary",
-    iconClass: "bg-secondary text-white",
+    iconClass: "text-secondary",
+    bgClass: "bg-secondary/10",
     Icon: CheckCircle,
   },
 };
@@ -45,10 +60,10 @@ export function Callout({
   children,
   className,
   collapsible = false,
-  defaultCollapsed = false,
+  defaultOpen = true,
 }: CalloutProps) {
-  const { containerClass, iconClass, Icon } = calloutStyles[type];
-  const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
+  const { containerClass, iconClass, bgClass, Icon } = calloutStyles[type];
+  const [isOpen, setIsOpen] = useState(defaultOpen);
 
   // Determine if we should show a header
   const showHeader = collapsible || title !== undefined;
@@ -62,141 +77,69 @@ export function Callout({
           ? "Warning"
           : type === "info"
             ? "Info"
-            : "Success"
+            : type === "success"
+              ? "Success"
+              : "Mirascope"
       : "";
 
   const displayTitle = title || defaultTitle;
 
   // Content styling changes based on whether we have a header
-  const contentClassName = cn(
-    "bg-accent",
-    showHeader ? "px-3 py-1 rounded-b-lg" : "px-3 py-1 rounded-lg"
-  );
+  const contentClassName = cn("px-3 py-2", showHeader ? "rounded-b-lg" : "rounded-lg");
 
   return (
-    <div
-      className={cn("rounded-lg border", showHeader ? "my-6" : "my-3", containerClass, className)}
-    >
+    <div className={cn("my-4 rounded-lg border", containerClass, className)}>
       {/* Title bar - only render if we need a header */}
       {showHeader && (
         <div
           className={cn(
-            "flex items-center gap-3 py-2 px-3 border-b border-accent bg-primary rounded-t-lg",
+            "flex items-center gap-3 px-3 py-2",
+            // Use rounded-lg when collapsed and collapsible, otherwise just round the top
+            collapsible && !isOpen ? "rounded-lg" : "rounded-t-lg",
+            // Only show the bottom border when the content is expanded
+            isOpen && "border-b",
+            bgClass,
+            isOpen ? containerClass.replace("border-", "border-b-") : "",
             collapsible && "cursor-pointer"
           )}
-          onClick={collapsible ? () => setIsCollapsed(!isCollapsed) : undefined}
+          onClick={collapsible ? () => setIsOpen(!isOpen) : undefined}
+          aria-expanded={collapsible ? isOpen : undefined}
         >
-          <div className={cn("rounded-full flex items-center justify-center w-6 h-6", iconClass)}>
-            <Icon className="w-3.5 h-3.5" />
+          <div className={cn("flex h-6 w-6 items-center justify-center rounded-full", iconClass)}>
+            <Icon className={cn("h-4 w-4")} />
           </div>
-          <div className="font-semibold text-primary-foreground text-base flex-1">
-            {displayTitle}
-          </div>
+          <div className="flex-1 text-base font-semibold">{displayTitle}</div>
           {collapsible && (
-            <div className="text-accent-foreground">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className={cn("transition-transform", isCollapsed ? "" : "transform rotate-180")}
-              >
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
+            <div className="text-foreground">
+              <ChevronDown
+                className={cn("h-4 w-4 transition-transform", !isOpen ? "" : "rotate-180")}
+              />
             </div>
           )}
         </div>
       )}
 
       {/* Content - only show if not collapsed */}
-      {(!showHeader || !isCollapsed) && (
-        <div className={cn(contentClassName, "callout-content")}>{children}</div>
+      {(!showHeader || isOpen) && (
+        <div className={cn(contentClassName, "callout-content bg-background")}>{children}</div>
       )}
     </div>
   );
 }
 
 // Shorthand components
-export function Note({
-  title,
-  children,
-  className,
-  collapsible,
-  defaultCollapsed,
-}: Omit<CalloutProps, "type">) {
-  return (
-    <Callout
-      type="note"
-      title={title}
-      className={className}
-      collapsible={collapsible}
-      defaultCollapsed={defaultCollapsed}
-    >
-      {children}
-    </Callout>
-  );
+export function Note(props: Omit<CalloutProps, "type">) {
+  return <Callout type="note" {...props} />;
 }
 
-export function Warning({
-  title,
-  children,
-  className,
-  collapsible,
-  defaultCollapsed,
-}: Omit<CalloutProps, "type">) {
-  return (
-    <Callout
-      type="warning"
-      title={title}
-      className={className}
-      collapsible={collapsible}
-      defaultCollapsed={defaultCollapsed}
-    >
-      {children}
-    </Callout>
-  );
+export function Warning(props: Omit<CalloutProps, "type">) {
+  return <Callout type="warning" {...props} />;
 }
 
-export function Info({
-  title,
-  children,
-  className,
-  collapsible,
-  defaultCollapsed,
-}: Omit<CalloutProps, "type">) {
-  return (
-    <Callout
-      type="info"
-      title={title}
-      className={className}
-      collapsible={collapsible}
-      defaultCollapsed={defaultCollapsed}
-    >
-      {children}
-    </Callout>
-  );
+export function Info(props: Omit<CalloutProps, "type">) {
+  return <Callout type="info" {...props} />;
 }
 
-export function Success({
-  title,
-  children,
-  className,
-  collapsible,
-  defaultCollapsed,
-}: Omit<CalloutProps, "type">) {
-  return (
-    <Callout
-      type="success"
-      title={title}
-      className={className}
-      collapsible={collapsible}
-      defaultCollapsed={defaultCollapsed}
-    >
-      {children}
-    </Callout>
-  );
+export function Success(props: Omit<CalloutProps, "type">) {
+  return <Callout type="success" {...props} />;
 }

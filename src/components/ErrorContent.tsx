@@ -27,20 +27,20 @@ const ErrorContent: React.FC<ErrorContentProps> = ({
   children,
 }) => {
   return (
-    <div className="flex-1 min-w-0 py-6 px-4">
-      <div className="max-w-5xl mx-auto">
+    <div className="min-w-0 flex-1 px-4 py-6">
+      <div className="mx-auto max-w-5xl">
         {showBackButton && (
           <div className="mb-6">
             <Link to={backTo} className="inline-block">
               <Button variant="outline" size="sm">
-                <ChevronLeft className="w-4 h-4 mr-1" />
+                <ChevronLeft className="mr-1 h-4 w-4" />
                 {backLabel}
               </Button>
             </Link>
           </div>
         )}
 
-        <h1 className="text-2xl font-medium mb-4">{title}</h1>
+        <h1 className="mb-4 text-2xl font-medium">{title}</h1>
 
         {message && <p className="text-muted-foreground mb-4">{message}</p>}
 

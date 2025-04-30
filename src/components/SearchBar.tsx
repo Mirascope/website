@@ -63,25 +63,25 @@ function SearchResult({ result, onSelect }: SearchResultProps) {
     <Link
       to={result.url}
       onClick={onSelect}
-      className="flex px-4 py-3 hover:bg-accent/50 transition-colors text-sm border-t border-border/40 first:border-0"
+      className="hover:bg-accent/50 border-border/40 flex border-t px-4 py-3 text-sm transition-colors first:border-0"
     >
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center justify-between mb-1">
-          <h4 className="font-medium text-foreground truncate">{result.title || "Untitled"}</h4>
+      <div className="min-w-0 flex-1">
+        <div className="mb-1 flex items-center justify-between">
+          <h4 className="text-foreground truncate font-medium">{result.title || "Untitled"}</h4>
           <div className="flex items-center gap-2">
             {/* Section badge */}
-            <span className="text-[10px] px-1.5 py-0.5 bg-muted rounded text-muted-foreground">
+            <span className="bg-muted text-muted-foreground rounded px-1.5 py-0.5 text-[10px]">
               {result.section}
             </span>
 
             {/* Score indicator in development mode */}
             {isDev && result.score !== undefined && (
-              <span className="text-[10px] text-muted-foreground">{result.score.toFixed(2)}</span>
+              <span className="text-muted-foreground text-[10px]">{result.score.toFixed(2)}</span>
             )}
           </div>
         </div>
         <p
-          className="text-xs text-muted-foreground line-clamp-2 search-excerpt"
+          className="text-muted-foreground search-excerpt line-clamp-2 text-xs"
           dangerouslySetInnerHTML={{ __html: result.excerpt }}
         />
       </div>
@@ -126,10 +126,10 @@ function SearchInput({
   return (
     <div
       className={cn(
-        "rounded-full border transition-all duration-300 h-9",
+        "h-9 rounded-full border transition-all duration-300",
         isLandingPage
           ? "border-white/30 bg-white/10 hover:bg-white/20"
-          : "border-border bg-background/20 hover:bg-accent/30",
+          : "border-border bg-background/20 hover:bg-primary/10 hover:border-primary/80",
         isOpen ? "w-72 md:w-96" : "w-36" // Wider default size with text, much wider when expanded
       )}
       style={
@@ -139,12 +139,12 @@ function SearchInput({
       }
       onClick={onFocus}
     >
-      <div className="flex items-center h-full relative">
+      <div className="relative flex h-full items-center">
         <SearchIcon
           size={16}
           className={cn(
             "absolute left-3 transition-all duration-300",
-            isLandingPage ? "text-white/90 icon-shadow" : "text-muted-foreground"
+            isLandingPage ? "nav-icon-landing" : "nav-icon-regular"
           )}
         />
         <input
@@ -153,11 +153,11 @@ function SearchInput({
           type="text"
           placeholder="Search..."
           className={cn(
-            "h-full bg-transparent text-sm outline-none cursor-pointer transition-all duration-300",
+            "h-full cursor-pointer bg-transparent text-sm transition-all duration-300 outline-none",
             isLandingPage
               ? "text-white placeholder:text-white/90"
-              : "text-foreground placeholder:text-muted-foreground",
-            isOpen ? "w-full pl-10 pr-9 opacity-100" : "w-28 pl-10 pr-3 opacity-80"
+              : "text-foreground placeholder:text-foreground",
+            isOpen ? "w-full pr-9 pl-10 opacity-100" : "w-28 pr-3 pl-10 opacity-80"
           )}
           value={query}
           onChange={(e) => onChange(e.target.value)}
@@ -166,7 +166,7 @@ function SearchInput({
         {isOpen && (
           <kbd
             className={cn(
-              "absolute right-3 top-1/2 -translate-y-1/2 hidden lg:flex h-5 items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-small opacity-80",
+              "font-small absolute top-1/2 right-3 hidden h-5 -translate-y-1/2 items-center gap-1 rounded border px-1.5 font-mono text-[10px] opacity-80 lg:flex",
               isLandingPage
                 ? "border-white/30 bg-white/10 text-white"
                 : "border-border bg-muted text-foreground"
@@ -211,8 +211,8 @@ function SearchResultsContainer({
   return (
     <div
       className={cn(
-        "absolute top-full right-0 md:left-0 mt-2 w-screen max-w-sm rounded-lg shadow-2xl overflow-hidden z-50 search-results [text-shadow:none]",
-        "bg-background border border-border"
+        "search-results absolute top-full right-0 z-50 mt-2 w-screen max-w-sm overflow-hidden rounded-lg shadow-2xl [text-shadow:none] md:left-0",
+        "bg-background border-border border"
       )}
       style={
         isLandingPage
@@ -228,13 +228,13 @@ function SearchResultsContainer({
 
   function renderSearchContent() {
     if (isLoading && !isPagefindLoaded) {
-      return <div className="p-6 text-center text-muted-foreground">Loading search engine...</div>;
+      return <div className="text-muted-foreground p-6 text-center">Loading search engine...</div>;
     }
 
     if (isLoading || isSearching) {
       return (
         <div className="flex justify-center p-4">
-          <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-primary"></div>
+          <div className="border-primary h-6 w-6 animate-spin rounded-full border-t-2 border-b-2"></div>
           <span className="sr-only">Loading results...</span>
         </div>
       );
@@ -242,10 +242,10 @@ function SearchResultsContainer({
 
     if (error) {
       return (
-        <div className="p-4 text-center text-muted-foreground">
+        <div className="text-muted-foreground p-4 text-center">
           <p className="mb-2">Search index not available</p>
           <p className="text-xs">
-            Run <code className="bg-muted px-1 py-0.5 rounded">bun run build</code> to generate the
+            Run <code className="bg-muted rounded px-1 py-0.5">bun run build</code> to generate the
             search index
           </p>
         </div>
@@ -269,25 +269,25 @@ function SearchResultsContainer({
     // Only show "No results" if we're not in a loading or searching state
     if (query.trim() && !isLoading && !isSearching) {
       return (
-        <div className="p-4 text-center text-muted-foreground">No results found for "{query}"</div>
+        <div className="text-muted-foreground p-4 text-center">No results found for "{query}"</div>
       );
     }
 
-    return <div className="p-4 text-center text-muted-foreground">Type to start searching</div>;
+    return <div className="text-muted-foreground p-4 text-center">Type to start searching</div>;
   }
 }
 
 // Component for the keyboard shortcut footer
 function SearchFooter() {
   return (
-    <div className="border-t border-border p-2 flex justify-between items-center text-xs bg-muted/40 text-muted-foreground">
+    <div className="border-border bg-muted/40 text-muted-foreground flex items-center justify-between border-t p-2 text-xs">
       <div className="flex items-center gap-2 px-2">
         <Command size={12} />
-        <kbd className="px-1.5 py-0.5 text-[10px] border rounded border-border">K</kbd>
+        <kbd className="border-border rounded border px-1.5 py-0.5 text-[10px]">K</kbd>
         <span>to search</span>
       </div>
       <div className="flex items-center gap-2 px-2">
-        <kbd className="px-1.5 py-0.5 text-[10px] border rounded border-border">Esc</kbd>
+        <kbd className="border-border rounded border px-1.5 py-0.5 text-[10px]">Esc</kbd>
         <span>to close</span>
       </div>
     </div>

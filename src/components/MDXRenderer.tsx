@@ -5,7 +5,6 @@ import { LoadingContent } from "@/src/components/docs";
 interface MDXRendererProps {
   code: string;
   frontmatter: Record<string, any>;
-  useFunMode?: boolean;
 }
 
 // Define interface for what MDXRemote expects - must match MDXRemoteSerializeResult
@@ -20,7 +19,7 @@ interface MDXRemoteProps {
 /**
  * MDXRenderer - Renders MDX content using @mdx-js/react
  */
-export function MDXRenderer({ code, frontmatter, useFunMode = false }: MDXRendererProps) {
+export function MDXRenderer({ code, frontmatter }: MDXRendererProps) {
   // Handle case when no code is provided
   if (!code) {
     return <LoadingContent spinnerClassName="h-8 w-8" fullHeight={false} />;
@@ -37,8 +36,8 @@ export function MDXRenderer({ code, frontmatter, useFunMode = false }: MDXRender
     };
 
     return (
-      <div className={`mdx-content prose max-w-none ${useFunMode ? "fun-mode" : ""}`}>
-        <MDXProviderWrapper useFunMode={useFunMode}>
+      <div className="mdx-content prose max-w-none">
+        <MDXProviderWrapper>
           <MDXRemote {...mdxProps} />
         </MDXProviderWrapper>
       </div>
@@ -46,8 +45,8 @@ export function MDXRenderer({ code, frontmatter, useFunMode = false }: MDXRender
   } catch (error) {
     console.error("Error rendering MDX with next-mdx-remote:", error);
     return (
-      <div className="p-4 border border-red-500 rounded-md bg-red-50 text-red-800">
-        <h3 className="font-bold mb-2">Error rendering MDX</h3>
+      <div className="rounded-md border border-red-500 bg-red-50 p-4 text-red-800">
+        <h3 className="mb-2 font-bold">Error rendering MDX</h3>
         <p>{error instanceof Error ? error.message : String(error)}</p>
       </div>
     );

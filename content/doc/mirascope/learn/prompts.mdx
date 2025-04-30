@@ -171,7 +171,7 @@ print(recommend_book_prompt("fantasy"))
 
 In this example, we use `inspect.cleandoc` to remove unnecessary tokens while maintaining proper formatting in our codebase.
 
-<Warning title="Multi-Line String Templates" collapsible={true} defaultCollapsed={true}>
+<Warning title="Multi-Line String Templates" collapsible={true} defaultOpen={false}>
 When using string templates, the template is automatically cleaned for you, so there is no need to use `inspect.cleandoc` in that case. However, it's extremely important to note that you must start messages with the same indentation in order to properly remove the unnecessary tokens. For example:
 
 ```python
@@ -325,7 +325,7 @@ with Image.open("path/to/image.jpg") as image:
 </Tab>
 </TabbedSection>
 
-<Info title="Additional String Template Image Functionality" collapsible={true} defaultCollapsed={true}>
+<Info title="Additional String Template Image Functionality" collapsible={true} defaultOpen={false}>
 When using string templates, you can also specify `:images` to inject multiple image inputs through a single template variable.
 
 The `:image` and `:images` tags support the `bytes | str` and `list[bytes] | list[str]` types, respectively. When passing in a `str`, the string template assumes it indicates a url or local filepath and will attempt to load the bytes from the source.
@@ -440,7 +440,7 @@ print(identify_book_prompt(b"..."))
 </Tab>
 </TabbedSection>
 
-<Info title="Additional String Template Audio Functionality" collapsible={true} defaultCollapsed={true}>
+<Info title="Additional String Template Audio Functionality" collapsible={true} defaultOpen={false}>
 When using string templates, you can also specify `:audios` to inject multiple audio inputs through a single template variable.
 
 The `:audio` and `:audios` tags support the `bytes | str` and `list[bytes] | list[str]` types, respectively. When passing in a `str`, the string template assumes it indicates a url or local filepath and will attempt to load the bytes from the source.
@@ -508,7 +508,7 @@ print(recommend_book_prompt(b"..."))
 </Tab>
 </TabbedSection>
 
-<Note title="Supported Document Types" collapsible={true} defaultCollapsed={true}>
+<Note title="Supported Document Types" collapsible={true} defaultOpen={false}>
 Document support varies by provider, but generally includes:
 - PDF (.pdf)
 - Word (.doc, .docx)
@@ -520,7 +520,7 @@ Document support varies by provider, but generally includes:
 Currently, Anthropic is the only provider with explicit document support via their <a href="https://docs.anthropic.com/claude/docs/document-reading" target="_blank" rel="noopener noreferrer">Document Reading</a> feature. Other providers may require converting documents to text or using specialized tools.
 </Note>
 
-<Info title="Additional String Template Document Functionality" collapsible={true} defaultCollapsed={true}>
+<Info title="Additional String Template Document Functionality" collapsible={true} defaultOpen={false}>
 When using string templates, you can also specify `:documents` to inject multiple document inputs through a single template variable.
 
 The `:document` and `:documents` tags support the `bytes | str` and `list[bytes] | list[str]` types, respectively. When passing in a `str`, the string template assumes it indicates a url or local filepath and will attempt to load the bytes from the source.

@@ -24,7 +24,7 @@ const ProductLink = ({ product }: { product: ProductName }) => {
   return (
     <Link
       to={getProductRoute(product)}
-      className={`text-xl font-medium text-muted-foreground ${hoverClass}`}
+      className={`text-muted-foreground text-xl font-medium ${hoverClass}`}
     >
       {product === "mirascope" ? "Mirascope" : "Lilypad"}
     </Link>

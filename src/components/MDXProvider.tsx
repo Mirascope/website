@@ -1,6 +1,5 @@
 import React from "react";
 import { MDXProvider } from "@mdx-js/react";
-import { cn } from "@/src/lib/utils";
 import {
   InstallSnippet,
   CodeSnippet,
@@ -111,7 +110,7 @@ export const components = {
     // Generate an ID from the text content if not provided
     const id = props.id || (typeof children === "string" ? slugify(children) : undefined);
     return (
-      <h1 id={id} className="text-3xl font-bold my-6 scroll-mt-28" {...props}>
+      <h1 id={id} className="my-6 scroll-mt-28 text-3xl font-bold" {...props}>
         {children}
       </h1>
     );
@@ -119,7 +118,7 @@ export const components = {
   h2: ({ children, ...props }: React.ComponentPropsWithoutRef<"h2">) => {
     const id = props.id || (typeof children === "string" ? slugify(children) : undefined);
     return (
-      <h2 id={id} className="text-2xl font-semibold my-5 scroll-mt-28" {...props}>
+      <h2 id={id} className="my-5 scroll-mt-28 text-2xl font-semibold" {...props}>
         {children}
       </h2>
     );
@@ -127,7 +126,7 @@ export const components = {
   h3: ({ children, ...props }: React.ComponentPropsWithoutRef<"h3">) => {
     const id = props.id || (typeof children === "string" ? slugify(children) : undefined);
     return (
-      <h3 id={id} className="text-xl font-medium my-4 scroll-mt-28" {...props}>
+      <h3 id={id} className="my-4 scroll-mt-28 text-xl font-medium" {...props}>
         {children}
       </h3>
     );
@@ -135,7 +134,7 @@ export const components = {
   h4: ({ children, ...props }: React.ComponentPropsWithoutRef<"h4">) => {
     const id = props.id || (typeof children === "string" ? slugify(children) : undefined);
     return (
-      <h4 id={id} className="text-lg font-medium my-3 scroll-mt-28" {...props}>
+      <h4 id={id} className="my-3 scroll-mt-28 text-lg font-medium" {...props}>
         {children}
       </h4>
     );
@@ -143,20 +142,20 @@ export const components = {
   h5: ({ children, ...props }: React.ComponentPropsWithoutRef<"h5">) => {
     const id = props.id || (typeof children === "string" ? slugify(children) : undefined);
     return (
-      <h5 id={id} className="text-base font-medium my-3 scroll-mt-28" {...props}>
+      <h5 id={id} className="my-3 scroll-mt-28 text-base font-medium" {...props}>
         {children}
       </h5>
     );
   },
   p: (props: React.ComponentPropsWithoutRef<"p">) => <p className="my-3" {...props} />,
   a: (props: React.ComponentPropsWithoutRef<"a">) => (
-    <a className="text-primary hover:underline no-underline" {...props} />
+    <a className="text-primary no-underline hover:underline" {...props} />
   ),
   ul: (props: React.ComponentPropsWithoutRef<"ul">) => (
-    <ul className="list-disc pl-5 my-4" {...props} />
+    <ul className="my-4 list-disc pl-5" {...props} />
   ),
   ol: (props: React.ComponentPropsWithoutRef<"ol">) => (
-    <ol className="list-decimal pl-5 my-4" {...props} />
+    <ol className="my-4 list-decimal pl-5" {...props} />
   ),
   li: (props: React.ComponentPropsWithoutRef<"li">) => <li className="mb-2" {...props} />,
   // Responsive image component
@@ -182,7 +181,7 @@ export const components = {
 
     return (
       <code
-        className="bg-muted text-muted-foreground px-1 py-0.5 rounded text-[0.9em] font-mono"
+        className="bg-muted text-muted-foreground rounded px-1 py-0.5 font-mono text-[0.9em]"
         {...props}
       />
     );
@@ -288,7 +287,7 @@ export const components = {
     // Fallback to standard pre if not a code block or couldn't extract content
     return (
       <pre
-        className="rounded-lg p-4 my-6 bg-muted overflow-x-auto border border-border"
+        className="bg-muted border-border my-6 overflow-x-auto rounded-lg border p-4"
         {...props}
       />
     );
@@ -296,30 +295,29 @@ export const components = {
   strong: (props: React.ComponentPropsWithoutRef<"strong">) => <strong {...props} />,
   em: (props: React.ComponentPropsWithoutRef<"em">) => <em {...props} />,
   blockquote: (props: React.ComponentPropsWithoutRef<"blockquote">) => (
-    <blockquote className="border-l-4 border-border pl-4 my-4 italic" {...props} />
+    <blockquote className="border-border my-4 border-l-4 pl-4 italic" {...props} />
   ),
   table: (props: React.ComponentPropsWithoutRef<"table">) => (
-    <table className="min-w-full divide-y divide-border my-6" {...props} />
+    <table className="divide-border my-6 min-w-full divide-y" {...props} />
   ),
   th: (props: React.ComponentPropsWithoutRef<"th">) => (
-    <th className="px-4 py-2 bg-muted text-left text-sm font-medium" {...props} />
+    <th className="bg-muted px-4 py-2 text-left text-sm font-medium" {...props} />
   ),
   td: (props: React.ComponentPropsWithoutRef<"td">) => (
-    <td className="px-4 py-2 border-t border-border" {...props} />
+    <td className="border-border border-t px-4 py-2" {...props} />
   ),
   hr: (props: React.ComponentPropsWithoutRef<"hr">) => (
-    <hr className="my-6 border-border" {...props} />
+    <hr className="border-border my-6" {...props} />
   ),
 };
 
 interface MDXProviderWrapperProps {
   children: React.ReactNode;
-  useFunMode?: boolean;
 }
 
-export function MDXProviderWrapper({ children, useFunMode = false }: MDXProviderWrapperProps) {
+export function MDXProviderWrapper({ children }: MDXProviderWrapperProps) {
   return (
-    <div className={cn("mdx-content", useFunMode ? "fun-mode" : "")}>
+    <div className="mdx-content">
       <MDXProvider components={components}>{children}</MDXProvider>
     </div>
   );

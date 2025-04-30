@@ -24,12 +24,12 @@ export function ProviderDropdown({ className }: ProviderDropdownProps) {
             variant="outline"
             size="sm"
             className={cn(
-              "w-full justify-between font-handwriting text-base",
+              "font-handwriting w-full justify-between text-base",
               "text-primary border-primary" // Always show the selected provider in primary color
             )}
           >
             {providerDefaults[provider].displayName}
-            <ChevronDown className="h-4 w-4 ml-2" />
+            <ChevronDown className="ml-2 h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[200px]">
@@ -38,7 +38,7 @@ export function ProviderDropdown({ className }: ProviderDropdownProps) {
               key={p}
               onClick={() => setProvider(p)}
               className={cn(
-                "cursor-pointer font-handwriting text-base text-foreground",
+                "font-handwriting text-foreground cursor-pointer text-base",
                 provider === p && "text-primary font-medium"
               )}
             >

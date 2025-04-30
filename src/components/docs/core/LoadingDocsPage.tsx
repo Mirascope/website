@@ -23,8 +23,8 @@ const LoadingDocsPage: React.FC<LoadingDocsPageProps> = ({ product }) => {
 
   // No right sidebar (TOC) during loading
   const rightSidebar = (
-    <div className="w-56 h-full">
-      <div className="animate-pulse mt-16 mx-4 h-6 bg-muted rounded-md"></div>
+    <div className="h-full w-56">
+      <div className="bg-muted mx-4 mt-16 h-6 animate-pulse rounded-md"></div>
     </div>
   );
 

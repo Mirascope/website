@@ -93,7 +93,7 @@ function SocialCardPreview() {
   return (
     <DevLayout devPages={devPages}>
       <div className="container py-8">
-        <h1 className="text-3xl font-bold mb-6">Social Card Preview</h1>
+        <h1 className="mb-6 text-3xl font-bold">Social Card Preview</h1>
 
         <p className="mb-6 text-gray-600">
           This page lets you preview how social cards will look. Edit the title to see the card
@@ -102,11 +102,11 @@ function SocialCardPreview() {
         </p>
 
         <div className="mb-6">
-          <div className="flex items-center justify-between mb-2">
+          <div className="mb-2 flex items-center justify-between">
             <label htmlFor="title" className="font-medium">
               Title
             </label>
-            <span className="text-gray-500 text-sm">
+            <span className="text-sm text-gray-500">
               {title.length} characters
               {getCurrentFontSizeRule() &&
                 ` - ${getCurrentFontSizeRule()?.fontSize} (${getCurrentFontSizeRule()?.label})`}
@@ -117,17 +117,17 @@ function SocialCardPreview() {
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full px-3 py-2 border rounded-md"
+            className="w-full rounded-md border px-3 py-2"
           />
         </div>
 
         <div className="flex justify-center">
           <div
-            className="border rounded-lg overflow-hidden bg-gray-50"
+            className="overflow-hidden rounded-lg border bg-gray-50"
             style={{ width: "600px", height: "315px" }}
           >
             <div
-              className="transform scale-50 origin-top-left"
+              className="origin-top-left scale-50 transform"
               style={{ width: "200%", height: "200%" }}
             >
               <iframe
