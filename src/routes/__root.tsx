@@ -7,6 +7,7 @@ import { getProductFromPath } from "../lib/utils";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import CookieBanner from "../components/CookieBanner";
+import { DevToolsButton } from "../components/dev";
 import analyticsManager from "../lib/services/analytics";
 
 export const Route = createRootRoute({
@@ -94,7 +95,9 @@ export const Route = createRootRoute({
         {/* Cookie consent banner - positioned in lower left corner */}
         <CookieBanner />
 
+        {/* Dev tools - only visible in development */}
         <TanStackRouterDevtools />
+        <DevToolsButton className="fixed right-4 bottom-4 z-50" />
       </>
     );
   },
