@@ -36,12 +36,19 @@ export const Route = createRootRoute({
       analyticsManager.trackPageView(path);
     }, [path]);
 
+    // Make sure we set the data-product on first render (and not in useEffect),
+    // so we will SSR product pages with correct styles.
+    if (
+      typeof document !== "undefined" &&
+      document.documentElement &&
+      !document.documentElement.getAttribute("data-product")
+    ) {
+      const currentProduct = getProductFromPath(path);
+      document.documentElement.setAttribute("data-product", currentProduct);
+    }
+
     // Initialize analytics and set product on first mount
     useEffect(() => {
-      if (typeof document !== "undefined" && document.documentElement) {
-        const currentProduct = getProductFromPath(path);
-        document.documentElement.setAttribute("data-product", currentProduct);
-      }
       analyticsManager.enableAnalytics();
     }, []);
 
