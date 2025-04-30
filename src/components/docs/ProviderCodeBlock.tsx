@@ -99,7 +99,10 @@ export function ProviderCodeBlock({
   // Display the code
   return (
     <div
-      className={cn("bg-button-primary overflow-hidden rounded-md border-2 shadow-md", className)}
+      className={cn(
+        "bg-secondary/10 border-secondary overflow-hidden rounded-md shadow-md",
+        className
+      )}
     >
       {collapsible && (
         <div
@@ -107,15 +110,15 @@ export function ProviderCodeBlock({
           onClick={toggleExpand}
         >
           <div className="flex items-center">
-            <div className="mr-2 flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 p-0.5">
-              <Wrench className="h-3 w-3 text-white" />
+            <div className="mr-2 flex h-5 w-5 items-center justify-center rounded-full p-0.5">
+              <Wrench className="text-secondary h-3 w-3" />
             </div>
-            <span className="font-medium text-white">{headerText || "Official SDK"}</span>
+            <span className="text-foreground font-medium">{headerText || "Official SDK"}</span>
           </div>
           {isExpanded ? (
-            <ChevronUp className="h-5 w-5 text-white" />
+            <ChevronUp className="text-foreground h-5 w-5" />
           ) : (
-            <ChevronDown className="h-5 w-5 text-white" />
+            <ChevronDown className="text-foreground h-5 w-5" />
           )}
         </div>
       )}
@@ -123,15 +126,11 @@ export function ProviderCodeBlock({
       {isExpanded && (
         <div className="m-0 p-0">
           {!currentProviderCode && (
-            <div className="bg-yellow-900/20 px-4 py-2 text-sm text-yellow-300">
+            <div className="bg-destructive/20 text-destructive px-4 py-2 text-sm">
               Example for {provider} not available yet.
             </div>
           )}
-          <CodeBlock
-            code={codeToDisplay}
-            language={language}
-            className="m-0 border-0 bg-transparent p-0"
-          />
+          <CodeBlock code={codeToDisplay} language={language} />
         </div>
       )}
     </div>

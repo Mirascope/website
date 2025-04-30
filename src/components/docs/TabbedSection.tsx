@@ -69,11 +69,15 @@ export function TabbedSection({
 
   return (
     <div
-      className={cn("bg-muted overflow-hidden rounded-md px-1 pt-2 pb-0.75 shadow-md", className)}
+      className={cn(
+        showLogo ? "bg-primary/20" : "bg-muted",
+        "overflow-hidden rounded-md px-1 pt-2 pb-0.75 shadow-md",
+        className
+      )}
     >
       {showLogo && (
-        <div className="flex items-center px-4 py-2.5">
-          <Logo size="micro" withText={true} textClassName="text-mirascope-purple font-medium" />
+        <div className="flex items-center px-2 pb-2">
+          <Logo size="micro" withText={true} />
         </div>
       )}
 
