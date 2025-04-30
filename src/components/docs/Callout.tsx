@@ -17,6 +17,8 @@ interface CalloutProps {
   className?: string;
   collapsible?: boolean;
   defaultOpen?: boolean;
+  customIcon?: React.ReactNode;
+  contentClassName?: string;
 }
 
 const calloutStyles: Record<
@@ -61,6 +63,8 @@ export function Callout({
   className,
   collapsible = false,
   defaultOpen = true,
+  customIcon,
+  contentClassName: customContentClassName,
 }: CalloutProps) {
   const { containerClass, iconClass, bgClass, Icon } = calloutStyles[type];
   const [isOpen, setIsOpen] = useState(defaultOpen);
@@ -85,7 +89,10 @@ export function Callout({
   const displayTitle = title || defaultTitle;
 
   // Content styling changes based on whether we have a header
-  const contentClassName = cn("px-3 py-2", showHeader ? "rounded-b-lg" : "rounded-lg");
+  const contentClassName = cn(
+    customContentClassName ?? "px-3 py-2",
+    showHeader ? "rounded-b-lg" : "rounded-lg"
+  );
 
   return (
     <div className={cn("my-4 rounded-lg border", containerClass, className)}>
@@ -106,7 +113,7 @@ export function Callout({
           aria-expanded={collapsible ? isOpen : undefined}
         >
           <div className={cn("flex h-6 w-6 items-center justify-center rounded-full", iconClass)}>
-            <Icon className={cn("h-4 w-4")} />
+            {customIcon || <Icon className={cn("h-4 w-4")} />}
           </div>
           <div className="flex-1 text-base font-semibold">{displayTitle}</div>
           {collapsible && (
