@@ -64,8 +64,8 @@ const SidebarLink = ({
   params?: Record<string, any>;
   children: React.ReactNode;
 }) => {
-  const activeClass = `bg-button-primary text-white font-medium`;
-  const inactiveClass = `text-muted-foreground hover:bg-accent hover:text-accent-foreground`;
+  const activeClass = `bg-accent text-accent-foreground font-medium`;
+  const inactiveClass = `text-muted-foreground hover:bg-muted hover:text-muted-foreground`;
 
   return (
     <Link
@@ -180,19 +180,13 @@ const NestedItem = ({
   }, [isActive]);
 
   return (
-    <div
-      key={itemSlug}
-      className={cn(hasNestedItems && isActive ? "bg-accent/40 my-1 rounded-md" : "")}
-    >
-      <div className="flex items-center">
+    <div key={itemSlug}>
+      <div className={cn("flex items-center rounded-md")}>
         {/* Render expand/collapse icon for folders */}
         {hasNestedItems && (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className={cn(
-              "mr-1 flex h-5 w-5 items-center justify-center",
-              isActive ? "text-primary" : "text-muted-foreground"
-            )}
+            className={cn("mr-1 flex h-5 w-5 items-center justify-center")}
             aria-label={isExpanded ? "Collapse" : "Expand"}
           >
             <svg
@@ -218,8 +212,8 @@ const NestedItem = ({
           <button
             onClick={() => setIsExpanded(!isExpanded)}
             className={cn(
-              "hover:text-accent-foreground block w-full rounded-md py-1 text-left font-medium",
-              isActive ? "text-primary" : "text-muted-foreground"
+              "hover:text-muted-foreground hover:bg-muted block w-full rounded-md py-1 text-left font-medium",
+              isActive ? "text-accent" : "text-muted-foreground"
             )}
             style={{
               paddingLeft: hasNestedItems ? "0" : `${0.75 + indentLevel * 0.5}rem`,
