@@ -41,6 +41,7 @@ export interface ContentMeta {
   path: string;
   slug: string;
   type: ContentType;
+  route: string; // Full URL route for cross-referencing with search results
 }
 
 /**
