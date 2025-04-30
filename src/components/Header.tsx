@@ -108,12 +108,14 @@ export default function Header() {
                     isLandingPage ? "nav-text-landing" : "nav-text-regular"
                   )}
                 >
-                  <Link
-                    to={getProductRoute(getProductFromPath(router.location.pathname))}
-                    className="h-full w-full"
-                  >
-                    Docs
-                  </Link>
+                  <span className="px-2 py-2">
+                    <Link
+                      to={getProductRoute(getProductFromPath(router.location.pathname))}
+                      className="h-full w-full"
+                    >
+                      Docs
+                    </Link>
+                  </span>
                 </NavigationMenuTrigger>
                 <NavigationMenuContent className="bg-background p-2 [text-shadow:none]">
                   <ul className="grid w-[300px] grid-cols-1 gap-2 sm:w-[480px] sm:grid-cols-2">
