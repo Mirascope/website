@@ -54,8 +54,8 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
     if (codeRef.current) {
       // Get the height of the code block
       const height = codeRef.current.clientHeight;
-      // Consider blocks less than 80px as small
-      setIsSmallBlock(height < 80);
+      // Consider blocks less than 100px as small
+      setIsSmallBlock(height < 100);
     }
   }, [isLoading, lightHtml, darkHtml]);
 
