@@ -21,6 +21,8 @@ import {
 } from "../ui/pagination";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import { useRouter, useRouterState } from "@tanstack/react-router";
+import type { ProductName } from "@/src/lib/content/spec";
 
 // Color theme display component from style-test.tsx
 export interface ColorThemeDisplayProps {
@@ -39,15 +41,15 @@ export const ColorThemeDisplay: React.FC<ColorThemeDisplayProps> = ({
   ],
 }) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 my-6">
+    <div className="my-6 grid grid-cols-1 gap-3 md:grid-cols-3">
       {bgColors.map((bgColor) => (
-        <div key={bgColor} className={`border rounded-lg shadow-sm ${bgColor}`}>
-          <h3 className="px-3 pt-3 text-md font-medium block">{bgColor}</h3>
-          <div className="p-3 space-y-2">
+        <div key={bgColor} className={`rounded-lg border shadow-sm ${bgColor}`}>
+          <h3 className="text-md block px-3 pt-3 font-medium">{bgColor}</h3>
+          <div className="space-y-2 p-3">
             {textColors.map((textColor) => (
               <div
                 key={`${bgColor}-${textColor}`}
-                className={`w-full h-8 ${textColor} flex items-center justify-center font-sm`}
+                className={`h-8 w-full ${textColor} font-sm flex items-center justify-center`}
               >
                 {textColor}
               </div>
@@ -87,8 +89,8 @@ export const ShadCnThemeDisplay: React.FC = () => {
     <div className="space-y-12">
       {/* Color Swatches Section */}
       <section>
-        <h2 className="text-2xl font-bold mb-4">Theme Colors</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <h2 className="mb-4 text-2xl font-bold">Theme Colors</h2>
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
           {themeColors.map((color) => (
             <div key={color.name} className="space-y-2">
               <div
@@ -96,7 +98,7 @@ export const ShadCnThemeDisplay: React.FC = () => {
               >
                 {color.name}
               </div>
-              <div className="text-xs text-muted-foreground text-center">{color.name}</div>
+              <div className="text-muted-foreground text-center text-xs">{color.name}</div>
             </div>
           ))}
         </div>
@@ -104,22 +106,22 @@ export const ShadCnThemeDisplay: React.FC = () => {
 
       {/* Button Variants */}
       <section>
-        <h2 className="text-2xl font-bold mb-4">Buttons</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <h2 className="mb-4 text-2xl font-bold">Buttons</h2>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           <div className="space-y-2">
             <Button variant="default" className="w-full">
               Default/Primary Button
             </Button>
-            <div className="text-xs text-muted-foreground text-center">variant="default"</div>
+            <div className="text-muted-foreground text-center text-xs">variant="default"</div>
           </div>
           <div className="space-y-2">
             <Button
               variant="outline"
-              className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90"
+              className="bg-secondary text-secondary-foreground hover:bg-secondary/90 w-full"
             >
               Secondary Button
             </Button>
-            <div className="text-xs text-muted-foreground text-center">
+            <div className="text-muted-foreground text-center text-xs">
               variant="outline" with secondary colors
             </div>
           </div>
@@ -127,16 +129,16 @@ export const ShadCnThemeDisplay: React.FC = () => {
             <Button variant="outline" className="w-full">
               Outline Button
             </Button>
-            <div className="text-xs text-muted-foreground text-center">variant="outline"</div>
+            <div className="text-muted-foreground text-center text-xs">variant="outline"</div>
           </div>
           <div className="space-y-2">
             <Button
               variant="default"
-              className="w-full bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90 w-full"
             >
               Destructive Button
             </Button>
-            <div className="text-xs text-muted-foreground text-center">
+            <div className="text-muted-foreground text-center text-xs">
               variant="default" with destructive colors
             </div>
           </div>
@@ -144,21 +146,21 @@ export const ShadCnThemeDisplay: React.FC = () => {
             <Button variant="ghost" className="w-full">
               Ghost Button
             </Button>
-            <div className="text-xs text-muted-foreground text-center">variant="ghost"</div>
+            <div className="text-muted-foreground text-center text-xs">variant="ghost"</div>
           </div>
           <div className="space-y-2">
             <Button variant="link" className="w-full">
               Link Button
             </Button>
-            <div className="text-xs text-muted-foreground text-center">variant="link"</div>
+            <div className="text-muted-foreground text-center text-xs">variant="link"</div>
           </div>
         </div>
       </section>
 
       {/* Card Examples */}
       <section>
-        <h2 className="text-2xl font-bold mb-4">Cards</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <h2 className="mb-4 text-2xl font-bold">Cards</h2>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <Card>
             <CardHeader>
               <CardTitle>Card Title</CardTitle>
@@ -184,7 +186,7 @@ export const ShadCnThemeDisplay: React.FC = () => {
             <CardFooter>
               <Button
                 variant="outline"
-                className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90"
+                className="bg-secondary text-secondary-foreground hover:bg-secondary/90 w-full"
               >
                 Action
               </Button>
@@ -195,11 +197,11 @@ export const ShadCnThemeDisplay: React.FC = () => {
 
       {/* Interactive Components */}
       <section>
-        <h2 className="text-2xl font-bold mb-4">Interactive Components</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <h2 className="mb-4 text-2xl font-bold">Interactive Components</h2>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {/* Dropdown Menu */}
-          <div className="p-6 border rounded-lg">
-            <h3 className="text-lg font-medium mb-4">Dropdown Menu</h3>
+          <div className="rounded-lg border p-6">
+            <h3 className="mb-4 text-lg font-medium">Dropdown Menu</h3>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button>Open Dropdown</Button>
@@ -217,29 +219,29 @@ export const ShadCnThemeDisplay: React.FC = () => {
           </div>
 
           {/* Tabs */}
-          <div className="p-6 border rounded-lg">
-            <h3 className="text-lg font-medium mb-4">Tabs</h3>
+          <div className="rounded-lg border p-6">
+            <h3 className="mb-4 text-lg font-medium">Tabs</h3>
             <Tabs defaultValue="account">
               <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="account">Account</TabsTrigger>
                 <TabsTrigger value="password">Password</TabsTrigger>
                 <TabsTrigger value="settings">Settings</TabsTrigger>
               </TabsList>
-              <TabsContent value="account" className="p-4 bg-muted mt-2 rounded-md">
+              <TabsContent value="account" className="bg-muted mt-2 rounded-md p-4">
                 Account tab content
               </TabsContent>
-              <TabsContent value="password" className="p-4 bg-muted mt-2 rounded-md">
+              <TabsContent value="password" className="bg-muted mt-2 rounded-md p-4">
                 Password tab content
               </TabsContent>
-              <TabsContent value="settings" className="p-4 bg-muted mt-2 rounded-md">
+              <TabsContent value="settings" className="bg-muted mt-2 rounded-md p-4">
                 Settings tab content
               </TabsContent>
             </Tabs>
           </div>
 
           {/* Tooltip */}
-          <div className="p-6 border rounded-lg">
-            <h3 className="text-lg font-medium mb-4">Tooltip</h3>
+          <div className="rounded-lg border p-6">
+            <h3 className="mb-4 text-lg font-medium">Tooltip</h3>
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -253,8 +255,8 @@ export const ShadCnThemeDisplay: React.FC = () => {
           </div>
 
           {/* Pagination */}
-          <div className="p-6 border rounded-lg">
-            <h3 className="text-lg font-medium mb-4">Pagination</h3>
+          <div className="rounded-lg border p-6">
+            <h3 className="mb-4 text-lg font-medium">Pagination</h3>
             <Pagination>
               <PaginationContent>
                 <PaginationItem>
@@ -285,7 +287,7 @@ export const ShadCnThemeDisplay: React.FC = () => {
 
       {/* Component Combinations */}
       <section>
-        <h2 className="text-2xl font-bold mb-4">Combined Components</h2>
+        <h2 className="mb-4 text-2xl font-bold">Combined Components</h2>
         <Card>
           <CardHeader>
             <CardTitle>User Dashboard</CardTitle>
@@ -354,10 +356,10 @@ export const ShadCnThemeDisplay: React.FC = () => {
                 </div>
               </TabsContent>
               <TabsContent value="analytics" className="mt-4">
-                <div className="p-4 bg-muted rounded-md">Analytics content would go here</div>
+                <div className="bg-muted rounded-md p-4">Analytics content would go here</div>
               </TabsContent>
               <TabsContent value="reports" className="mt-4">
-                <div className="p-4 bg-muted rounded-md">Reports content would go here</div>
+                <div className="bg-muted rounded-md p-4">Reports content would go here</div>
               </TabsContent>
             </Tabs>
           </CardContent>
@@ -376,9 +378,9 @@ export const DevPagesList: React.FC<{ devPages: DevMeta[] }> = ({ devPages }) =>
   return (
     <div className="space-y-4">
       {devPages.map((page) => (
-        <div key={page.slug} className="border rounded-lg p-6 shadow-sm">
+        <div key={page.slug} className="rounded-lg border p-6 shadow-sm">
           <a href={`/dev/${page.slug}`} className="hover:underline">
-            <h2 className="text-xl font-semibold mb-2 text-primary">{page.title}</h2>
+            <h2 className="text-primary mb-2 text-xl font-semibold">{page.title}</h2>
           </a>
           <p className="mb-4">{page.description}</p>
         </div>
@@ -479,15 +481,15 @@ export const ThemeColorCombinations: React.FC = () => {
     <div className="space-y-10">
       {/* Text content combinations */}
       <section>
-        <h2 className="text-2xl font-bold mb-4">Realistic Text/Background Combinations</h2>
+        <h2 className="mb-4 text-2xl font-bold">Realistic Text/Background Combinations</h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
           {textBackgroundCombinations.map((combo) => (
-            <div key={combo.title} className={`p-5 rounded-lg border ${combo.background}`}>
-              <h3 className="text-xl font-semibold mb-3">{combo.title}</h3>
+            <div key={combo.title} className={`rounded-lg border p-5 ${combo.background}`}>
+              <h3 className="mb-3 text-xl font-semibold">{combo.title}</h3>
               {combo.combinations.map((textCombo) => (
                 <div key={textCombo.name} className="mb-4">
-                  <div className={`font-medium mb-1 ${textCombo.textClass}`}>
+                  <div className={`mb-1 font-medium ${textCombo.textClass}`}>
                     {textCombo.name}: {sampleText.heading}
                   </div>
                   <div className={`text-sm ${textCombo.textClass}`}>{sampleText.paragraph}</div>
@@ -500,11 +502,11 @@ export const ThemeColorCombinations: React.FC = () => {
 
       {/* Realistic UI examples */}
       <section>
-        <h2 className="text-2xl font-bold mb-4">UI Examples with Text Emphasis</h2>
+        <h2 className="mb-4 text-2xl font-bold">UI Examples with Text Emphasis</h2>
 
         {/* Article/Blog Post Card */}
         <div className="mb-8">
-          <h3 className="text-lg font-medium mb-3">Article/Blog Post Example</h3>
+          <h3 className="mb-3 text-lg font-medium">Article/Blog Post Example</h3>
           <Card>
             <CardHeader>
               <CardTitle className="text-foreground">
@@ -531,7 +533,7 @@ export const ThemeColorCombinations: React.FC = () => {
                 </span>
                 .
               </p>
-              <div className="bg-muted p-3 rounded-md">
+              <div className="bg-muted rounded-md p-3">
                 <p className="text-muted-foreground italic">
                   "Color is a power which directly influences the soul." — Wassily Kandinsky
                 </p>
@@ -541,7 +543,7 @@ export const ThemeColorCombinations: React.FC = () => {
                 Creating a balanced color palette is essential for a cohesive design. The{" "}
                 <span className="text-accent">60-30-10 rule</span> suggests using:
               </p>
-              <ul className="list-disc list-inside space-y-1 text-foreground">
+              <ul className="text-foreground list-inside list-disc space-y-1">
                 <li>60% primary color</li>
                 <li>30% secondary color</li>
                 <li>10% accent color</li>
@@ -565,10 +567,10 @@ export const ThemeColorCombinations: React.FC = () => {
 
         {/* Dashboard UI */}
         <div className="mb-8">
-          <h3 className="text-lg font-medium mb-3">Dashboard UI Example</h3>
+          <h3 className="mb-3 text-lg font-medium">Dashboard UI Example</h3>
           <Card>
             <CardHeader className="border-b">
-              <div className="flex justify-between items-center">
+              <div className="flex items-center justify-between">
                 <CardTitle className="text-foreground">Analytics Dashboard</CardTitle>
                 <div className="flex space-x-2">
                   <Button variant="outline" size="sm">
@@ -585,54 +587,54 @@ export const ThemeColorCombinations: React.FC = () => {
               </div>
             </CardHeader>
             <CardContent className="pt-6">
-              <div className="grid grid-cols-3 gap-4 mb-6">
+              <div className="mb-6 grid grid-cols-3 gap-4">
                 <Card className="bg-muted">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">
+                    <CardTitle className="text-muted-foreground text-sm font-medium">
                       Total Users
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-2xl font-bold text-foreground">24,531</p>
-                    <p className="text-xs text-primary">+12% from last month</p>
+                    <p className="text-foreground text-2xl font-bold">24,531</p>
+                    <p className="text-primary text-xs">+12% from last month</p>
                   </CardContent>
                 </Card>
                 <Card className="bg-muted">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">
+                    <CardTitle className="text-muted-foreground text-sm font-medium">
                       Revenue
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-2xl font-bold text-foreground">$54,237</p>
-                    <p className="text-xs text-accent">+8% from last month</p>
+                    <p className="text-foreground text-2xl font-bold">$54,237</p>
+                    <p className="text-accent text-xs">+8% from last month</p>
                   </CardContent>
                 </Card>
                 <Card className="bg-muted">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">
+                    <CardTitle className="text-muted-foreground text-sm font-medium">
                       Active Sessions
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-2xl font-bold text-foreground">1,342</p>
-                    <p className="text-xs text-destructive">-3% from last month</p>
+                    <p className="text-foreground text-2xl font-bold">1,342</p>
+                    <p className="text-destructive text-xs">-3% from last month</p>
                   </CardContent>
                 </Card>
               </div>
 
-              <div className="bg-card border rounded-md p-4 mb-6">
-                <h3 className="text-card-foreground font-medium mb-2">Recent Activity</h3>
+              <div className="bg-card mb-6 rounded-md border p-4">
+                <h3 className="text-card-foreground mb-2 font-medium">Recent Activity</h3>
                 <div className="space-y-3">
-                  <div className="flex justify-between items-center border-b pb-2">
+                  <div className="flex items-center justify-between border-b pb-2">
                     <span className="text-foreground">New user signup</span>
                     <span className="text-muted-foreground text-sm">5 minutes ago</span>
                   </div>
-                  <div className="flex justify-between items-center border-b pb-2">
+                  <div className="flex items-center justify-between border-b pb-2">
                     <span className="text-foreground">Purchase completed</span>
                     <span className="text-primary text-sm">10 minutes ago</span>
                   </div>
-                  <div className="flex justify-between items-center border-b pb-2">
+                  <div className="flex items-center justify-between border-b pb-2">
                     <span className="text-foreground">Server error reported</span>
                     <span className="text-destructive text-sm">25 minutes ago</span>
                   </div>
@@ -644,7 +646,7 @@ export const ThemeColorCombinations: React.FC = () => {
 
         {/* Form Example */}
         <div>
-          <h3 className="text-lg font-medium mb-3">Form Example</h3>
+          <h3 className="mb-3 text-lg font-medium">Form Example</h3>
           <Card>
             <CardHeader>
               <CardTitle>Account Settings</CardTitle>
@@ -652,26 +654,26 @@ export const ThemeColorCombinations: React.FC = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-1">
-                <label className="text-sm font-medium text-foreground">Email</label>
-                <div className="bg-input border rounded-md px-3 py-2 text-foreground">
+                <label className="text-foreground text-sm font-medium">Email</label>
+                <div className="bg-input text-foreground rounded-md border px-3 py-2">
                   user@example.com
                 </div>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-muted-foreground text-xs">
                   Your email address is used for notifications.
                 </p>
               </div>
 
               <div className="space-y-1">
-                <label className="text-sm font-medium text-foreground">Password</label>
-                <div className="bg-input border rounded-md px-3 py-2 text-foreground">
+                <label className="text-foreground text-sm font-medium">Password</label>
+                <div className="bg-input text-foreground rounded-md border px-3 py-2">
                   ••••••••••••
                 </div>
-                <p className="text-xs text-muted-foreground">Last changed 30 days ago.</p>
+                <p className="text-muted-foreground text-xs">Last changed 30 days ago.</p>
               </div>
 
               <div className="pt-2">
-                <p className="text-sm text-accent">Two-factor authentication is enabled.</p>
-                <p className="text-xs text-destructive">Your security key will expire in 5 days.</p>
+                <p className="text-accent text-sm">Two-factor authentication is enabled.</p>
+                <p className="text-destructive text-xs">Your security key will expire in 5 days.</p>
               </div>
             </CardContent>
             <CardFooter className="flex justify-end space-x-2 border-t pt-4">
@@ -685,38 +687,56 @@ export const ThemeColorCombinations: React.FC = () => {
   );
 };
 
+// Session storage key for dev product preference
+const DEV_PRODUCT_STORAGE_KEY = "devProductPreference";
+
 // ProductSelector - allows switching between product themes
 export const ProductSelector: React.FC = () => {
-  // Add state for product selection
-  const [product, setProduct] = React.useState<string>(() => {
-    // Initialize from document if available (client-side)
-    if (typeof document !== "undefined") {
-      return document.documentElement.getAttribute("data-product") || "mirascope";
-    }
-    return "mirascope";
-  });
+  const routerState = useRouterState();
+  const router = useRouter();
+  const path = routerState.location.pathname;
+  const devRoute = routerState.matches.find(
+    (match: { routeId: string }) => match.routeId === "/dev"
+  );
 
-  // Handle product change
-  const handleProductChange = (newProduct: string) => {
-    setProduct(newProduct);
+  // Get product from search params if available
+  const searchProduct = devRoute
+    ? (devRoute.search as { product?: ProductName }).product
+    : undefined;
 
-    // Update the data-product attribute on the document
-    if (typeof document !== "undefined") {
-      if (newProduct === "mirascope") {
-        document.documentElement.removeAttribute("data-product");
-      } else {
-        document.documentElement.setAttribute("data-product", newProduct);
-      }
+  // Function to read from session storage
+  const readFromStorage = React.useCallback(() => {
+    if (typeof sessionStorage !== "undefined") {
+      return sessionStorage.getItem(DEV_PRODUCT_STORAGE_KEY) as ProductName | null;
     }
+    return null;
+  }, []);
+
+  // Re-read from storage whenever the URL changes
+  const sessionProduct = React.useMemo(() => {
+    return readFromStorage();
+  }, [readFromStorage, path]);
+
+  // Determine which product is currently active
+  // Priority: 1. Search params 2. Session storage 3. Default
+  const currentProduct = searchProduct || sessionProduct || "mirascope";
+
+  // Navigate to set search params - the parent route component will handle saving to session storage
+  const handleProductChange = (newProduct: ProductName) => {
+    router.navigate({
+      to: path,
+      search: (prev: Record<string, unknown>) => ({ ...prev, product: newProduct }),
+      replace: true,
+    });
   };
 
   return (
-    <div className="fixed top-25 right-4 z-50 flex items-center space-x-2 bg-card p-2 bg-background rounded-md border shadow-sm">
+    <div className="bg-card bg-background fixed top-25 right-4 z-50 flex items-center space-x-2 rounded-md border p-2 shadow-sm">
       <span className="text-sm font-medium">Product:</span>
       <div className="flex space-x-2">
         <button
-          className={`px-3 py-1 text-sm rounded-md ${
-            product === "mirascope"
+          className={`rounded-md px-3 py-1 text-sm ${
+            currentProduct === "mirascope"
               ? "bg-primary text-primary-foreground"
               : "bg-muted text-muted-foreground hover:text-foreground"
           }`}
@@ -725,8 +745,8 @@ export const ProductSelector: React.FC = () => {
           Mirascope
         </button>
         <button
-          className={`px-3 py-1 text-sm rounded-md ${
-            product === "lilypad"
+          className={`rounded-md px-3 py-1 text-sm ${
+            currentProduct === "lilypad"
               ? "bg-primary text-primary-foreground"
               : "bg-muted text-muted-foreground hover:text-foreground"
           }`}

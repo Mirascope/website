@@ -7,6 +7,7 @@ import { getProductFromPath } from "../lib/utils";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import CookieBanner from "../components/CookieBanner";
+import { DevToolsButton } from "../components/dev";
 import analyticsManager from "../lib/services/analytics";
 
 export const Route = createRootRoute({
@@ -30,31 +31,14 @@ export const Route = createRootRoute({
     const path = router.location.pathname;
     const isLandingPage = path === "/";
 
-    // Determine product based on URL path - this runs on initial render
-    const currentProduct = getProductFromPath(path);
-
-    // Update document product attribute when route changes
     useEffect(() => {
-      const newProduct = getProductFromPath(path);
-      document.documentElement.setAttribute("data-product", newProduct);
+      analyticsManager.trackPageView(path);
     }, [path]);
 
-    // For initial render, we set the attribute during SSR
-    if (typeof document !== "undefined" && document.documentElement) {
-      // This runs on client-side only, on the first render
-      document.documentElement.setAttribute("data-product", currentProduct);
-    }
-
-    // Initialize analytics during component mount
+    // Initialize analytics and set product on first mount
     useEffect(() => {
       analyticsManager.enableAnalytics();
     }, []);
-
-    // Track page views when route changes
-    useEffect(() => {
-      // Will only track if analytics are enabled (respects consent / GDPR)
-      analyticsManager.trackPageView(path);
-    }, [path]);
 
     return (
       <>
@@ -79,7 +63,8 @@ export const Route = createRootRoute({
         </head>
 
         <div
-          className={`px-4 sm:px-6 flex flex-col min-h-screen ${
+          data-product={getProductFromPath(path)}
+          className={`flex min-h-screen flex-col px-4 sm:px-6 ${
             isLandingPage ? "bg-watercolor-flipped" : ""
           } handwriting-enabled`}
         >
@@ -87,7 +72,7 @@ export const Route = createRootRoute({
           <Header />
 
           {/* Content container with padding to account for fixed header */}
-          <div className="pt-24 max-w-7xl mx-auto w-full flex-grow">
+          <div className="mx-auto w-full max-w-7xl flex-grow pt-24">
             <main className="flex-grow">
               <Outlet />
             </main>
@@ -98,7 +83,9 @@ export const Route = createRootRoute({
         {/* Cookie consent banner - positioned in lower left corner */}
         <CookieBanner />
 
+        {/* Dev tools - only visible in development */}
         <TanStackRouterDevtools />
+        <DevToolsButton className="fixed right-4 bottom-4 z-50" />
       </>
     );
   },

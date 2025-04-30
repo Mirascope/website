@@ -99,39 +99,38 @@ export function ProviderCodeBlock({
   // Display the code
   return (
     <div
-      className={cn("rounded-md border-2 bg-button-primary shadow-md overflow-hidden", className)}
+      className={cn(
+        "bg-secondary/10 border-secondary overflow-hidden rounded-md shadow-md",
+        className
+      )}
     >
       {collapsible && (
         <div
-          className="px-4 py-2.5 flex items-center justify-between cursor-pointer"
+          className="flex cursor-pointer items-center justify-between px-4 py-2.5"
           onClick={toggleExpand}
         >
           <div className="flex items-center">
-            <div className="bg-blue-500 rounded-full p-0.5 mr-2 flex items-center justify-center w-5 h-5">
-              <Wrench className="text-white w-3 h-3" />
+            <div className="mr-2 flex h-5 w-5 items-center justify-center rounded-full p-0.5">
+              <Wrench className="text-secondary h-3 w-3" />
             </div>
-            <span className="text-white font-medium">{headerText || "Official SDK"}</span>
+            <span className="text-foreground font-medium">{headerText || "Official SDK"}</span>
           </div>
           {isExpanded ? (
-            <ChevronUp className="h-5 w-5 text-white" />
+            <ChevronUp className="text-foreground h-5 w-5" />
           ) : (
-            <ChevronDown className="h-5 w-5 text-white" />
+            <ChevronDown className="text-foreground h-5 w-5" />
           )}
         </div>
       )}
 
       {isExpanded && (
-        <div className="p-0 m-0">
+        <div className="m-0 p-0">
           {!currentProviderCode && (
-            <div className="px-4 py-2 text-sm text-yellow-300 bg-yellow-900/20">
+            <div className="bg-destructive/20 text-destructive px-4 py-2 text-sm">
               Example for {provider} not available yet.
             </div>
           )}
-          <CodeBlock
-            code={codeToDisplay}
-            language={language}
-            className="border-0 bg-transparent m-0 p-0"
-          />
+          <CodeBlock code={codeToDisplay} language={language} />
         </div>
       )}
     </div>

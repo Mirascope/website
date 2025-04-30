@@ -90,22 +90,22 @@ function AuditMetadata() {
 
     return (
       <>
-        <h1 className="text-3xl font-bold mb-6">SEO Metadata Audit</h1>
+        <h1 className="mb-6 text-3xl font-bold">SEO Metadata Audit</h1>
 
-        <p className="mb-6 text-muted-foreground">
+        <p className="text-muted-foreground mb-6">
           This page displays all routes with their SEO metadata for auditing purposes.
         </p>
 
         <div className="space-y-6">
           {metadataItems.map((item) => (
-            <div key={item.route} className="border rounded-lg p-6 shadow-sm">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div key={item.route} className="rounded-lg border p-6 shadow-sm">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div className="space-y-5">
                   <div>
                     <span className="text-foreground mr-2">Route:</span>
                     <a
                       href={item.route}
-                      className="text-blue-600 hover:underline break-all font-medium"
+                      className="font-medium break-all text-blue-600 hover:underline"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -115,7 +115,7 @@ function AuditMetadata() {
 
                   <div>
                     <div className="text-foreground mb-1">Title:</div>
-                    <div className="font-medium text-lg">{item.title}</div>
+                    <div className="text-lg font-medium">{item.title}</div>
                   </div>
 
                   <div>
@@ -125,7 +125,7 @@ function AuditMetadata() {
                 </div>
 
                 <div>
-                  <div className="border rounded overflow-hidden">
+                  <div className="overflow-hidden rounded border">
                     <img
                       src={`/social-cards/${routeToFilename(item.route)}.webp`}
                       alt={`Social card for ${item.route}`}

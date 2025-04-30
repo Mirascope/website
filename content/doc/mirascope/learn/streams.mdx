@@ -11,7 +11,7 @@ description: Learn how to process LLM responses in real-time as they are generat
 
 Streaming is a powerful feature when using LLMs that allows you to process chunks of an LLM response in real-time as they are generated. This can be particularly useful for long-running tasks, providing immediate feedback to users, or implementing more responsive applications.
 
-<Info title="Diagram illustrating standard vs. streaming responses" collapsible={true} defaultCollapsed={true}>
+<Info title="Diagram illustrating standard vs. streaming responses" collapsible={true} defaultOpen={false}>
     ```mermaid
     sequenceDiagram
         participant User
@@ -42,7 +42,7 @@ This approach offers several benefits:
 5. **Early termination**: If the desired information is found early in the response, processing can be stopped without waiting for the full generation.
 </Info>
 
-<Info title="API Documentation" collapsible={true} defaultCollapsed={true}>
+<Info title="API Documentation" collapsible={true} defaultOpen={false}>
     [`mirascope.core.base.stream`](/docs/mirascope/api)
 </Info>
 
@@ -97,7 +97,7 @@ In this example:
 
 ## Handling Streamed Responses
 
-<Info title="API Documentation" collapsible={true} defaultCollapsed={true}>
+<Info title="API Documentation" collapsible={true} defaultOpen={false}>
     [`mirascope.core.base.call_response_chunk`](/docs/mirascope/api)
 </Info>
 

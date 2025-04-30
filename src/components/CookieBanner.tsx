@@ -46,11 +46,11 @@ export default function CookieBanner() {
       role="alertdialog"
       aria-labelledby="cookie-title"
       aria-describedby="cookie-description"
-      className="fixed 2xl:bottom-4 xl:bottom-12 sm:bottom-12 xs:bottom-18 bottom-18 lg:left-4 md:left-4 sm:left-4 left-4 w-[180px] p-3 bg-background/80 backdrop-blur-sm border border-primary shadow-lg rounded-lg z-50"
+      className="xs:bottom-18 bg-background/80 border-primary fixed bottom-18 left-4 z-50 w-[180px] rounded-lg border p-3 shadow-lg backdrop-blur-sm sm:bottom-12 sm:left-4 md:left-4 lg:left-4 xl:bottom-12 2xl:bottom-4"
       tabIndex={-1}
     >
       <div className="flex flex-col gap-2">
-        <div className="text-base text-muted-foreground font-handwriting text-center">
+        <div className="text-muted-foreground font-handwriting text-center text-base">
           <h2 id="cookie-title" className="sr-only">
             Cookie Consent
           </h2>
@@ -60,14 +60,14 @@ export default function CookieBanner() {
           <button
             onClick={handleReject}
             aria-label="Reject cookies"
-            className="px-2 py-1 text-sm font-medium font-handwriting text-muted-foreground bg-muted hover:bg-accent rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-ring"
+            className="font-handwriting text-muted-foreground bg-muted hover:bg-accent focus:ring-ring rounded-md px-2 py-1 text-sm font-medium transition-colors focus:ring-2 focus:outline-none"
           >
             Reject
           </button>
           <button
             onClick={handleAccept}
             aria-label="Accept cookies"
-            className="px-2 py-1 text-sm font-medium font-handwriting text-primary-foreground bg-primary hover:bg-primary/90 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-ring"
+            className="font-handwriting text-primary-foreground bg-primary hover:bg-primary/90 focus:ring-ring rounded-md px-2 py-1 text-sm font-medium transition-colors focus:ring-2 focus:outline-none"
           >
             Accept
           </button>

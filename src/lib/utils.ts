@@ -34,12 +34,52 @@ export const formatDate = (dateString: string): string => {
   }
 };
 
+// Session storage key for dev product preference (used internally)
+const DEV_PRODUCT_STORAGE_KEY = "devProductPreference";
+
+/**
+ * Sets the product preference for dev routes
+ * @param product The product to set as preference
+ */
+export function setDevProductPreference(product: ProductName): void {
+  if (typeof sessionStorage !== "undefined") {
+    sessionStorage.setItem(DEV_PRODUCT_STORAGE_KEY, product);
+  }
+
+  if (typeof document !== "undefined") {
+    // Always set the attribute for consistency
+    document.documentElement.setAttribute("data-product", product);
+  }
+}
+
 /**
  * Determines the product from a route path
  * @param path The route path
  * @returns The product name or "mirascope" as default
  */
 export function getProductFromPath(path: string): ProductName {
+  // Special case for dev routes - check search params and session storage
+  if (path.startsWith("/dev")) {
+    try {
+      // Check the URL for search params if available
+      const url = new URL(window.location.href);
+      const productParam = url.searchParams.get("product") as ProductName;
+      if (productParam && (productParam === "mirascope" || productParam === "lilypad")) {
+        return productParam;
+      }
+    } catch (e) {
+      // Ignore any errors when trying to access URL params
+    }
+
+    // Then check session storage
+    if (typeof sessionStorage !== "undefined") {
+      const storedProduct = sessionStorage.getItem(DEV_PRODUCT_STORAGE_KEY) as ProductName;
+      if (storedProduct && (storedProduct === "mirascope" || storedProduct === "lilypad")) {
+        return storedProduct;
+      }
+    }
+  }
+
   // Check for docs paths that explicitly mention lilypad
   if (path.startsWith("/docs/lilypad")) {
     return "lilypad";

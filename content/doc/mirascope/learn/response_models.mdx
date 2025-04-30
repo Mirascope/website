@@ -79,7 +79,7 @@ print(book)
 
 Notice how Mirascope makes generating structured outputs significantly simpler than the official SDKs. It also greatly reduces boilerplate and standardizes the interaction across all supported LLM providers.
 
-<Info title="Tools By Default" collapsible={true} defaultCollapsed={true}>
+<Info title="Tools By Default" collapsible={true} defaultOpen={false}>
   By default, `response_model` will use [Tools](/docs/mirascope/learn/tools) under the hood, forcing to the LLM to call that specific tool and constructing the response model from the tool's arguments.
 
   We default to using tools because all supported providers support tools. You can also optionally set `json_mode=True` to use [JSON Mode](/docs/mirascope/learn/json_mode) instead, which we cover in [more detail below](#json-mode).

@@ -11,7 +11,7 @@ description: Learn how to request structured JSON outputs from LLMs with Mirasco
 
 JSON Mode is a feature in Mirascope that allows you to request structured JSON output from Large Language Models (LLMs). This mode is particularly useful when you need to extract structured information from the model's responses, making it easier to parse and use the data in your applications.
 
-<Info title="Not all providers have an official JSON Mode" collapsible={true} defaultCollapsed={true}>
+<Info title="Not all providers have an official JSON Mode" collapsible={true} defaultOpen={false}>
   For providers with explicit support, Mirascope uses the native JSON Mode feature of the API. For providers without explicit support (e.g. Anthropic), Mirascope implements a pseudo JSON Mode by instructing the model in the prompt to output JSON.
 
   <div className="overflow-x-auto">

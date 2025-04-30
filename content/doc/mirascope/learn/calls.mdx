@@ -17,7 +17,7 @@ We currently support [OpenAI](https://openai.com/), [Anthropic](https://www.anth
 
 If there are any providers we don't yet support that you'd like to see supported, let us know!
 
-<Info title="API Documentation" collapsible={true} defaultCollapsed={true}>
+<Info title="API Documentation" collapsible={true} defaultOpen={false}>
   [`mirascope.llm.call`](/docs/mirascope/api)
 </Info>
 
@@ -135,7 +135,7 @@ print(override_response.content)
 
 ### Common Response Properties and Methods
 
-<Info title="API Documentation" collapsible={true} defaultCollapsed={true}>
+<Info title="API Documentation" collapsible={true} defaultOpen={false}>
   [`mirascope.core.base.call_response`](/docs/mirascope/api)
 </Info>
 
@@ -257,7 +257,7 @@ When using models that support audio outputs, you'll have access to:
 - `audio`: The raw audio bytes of the response
 - `audio_transcript`: The transcript of the audio response
 
-<Warning title="Audio Playback Requirements" collapsible={true} defaultCollapsed={true}>
+<Warning title="Audio Playback Requirements" collapsible={true} defaultOpen={false}>
   The example above uses `pydub` and `ffmpeg` for audio playback, but you can use any audio processing libraries or media players that can handle WAV format audio data. Choose the tools that best fit your needs and environment.
 
   If you decide to use pydub:
@@ -265,7 +265,7 @@ When using models that support audio outputs, you'll have access to:
   - Install ffmpeg: Available from [ffmpeg.org](https://www.ffmpeg.org/) or through system package managers
 </Warning>
 
-<Note title="Voice Options" collapsible={true} defaultCollapsed={true}>
+<Note title="Voice Options" collapsible={true} defaultOpen={false}>
   For providers that support audio outputs, refer to their documentation for available voice options and configurations:
   
   - OpenAI: [Text to Speech Guide](https://platform.openai.com/docs/guides/text-to-speech)
@@ -409,7 +409,7 @@ print(response.content)
 
 ## Provider-Specific Usage
 
-<Info title="API Documentation" collapsible={true} defaultCollapsed={true}>
+<Info title="API Documentation" collapsible={true} defaultOpen={false}>
   For details on provider-specific modules, see the API documentation for each provider:
   
   - [`mirascope.core.openai.call`](/docs/mirascope/api)
@@ -438,7 +438,7 @@ When using the provider modules, you'll receive a provider-specific `BaseCallRes
 </Tab>
 </TabbedSection>
 
-<Note title="Reasoning For Provider-Specific BaseCallResponse Objects" collapsible={true} defaultCollapsed={true}>
+<Note title="Reasoning For Provider-Specific BaseCallResponse Objects" collapsible={true} defaultOpen={false}>
   The reason that we have provider-specific response objects (e.g. `OpenAICallResponse`) is to provide proper type hints and safety when accessing the original response.
 </Note>
 
@@ -500,7 +500,7 @@ You can also configure the client dynamically at runtime through the dynamic con
 </Tab>
 </TabbedSection>
 
-<Warning title="Make sure to use the correct client!" collapsible={true} defaultCollapsed={true}>
+<Warning title="Make sure to use the correct client!" collapsible={true} defaultOpen={false}>
   A common mistake is to use the synchronous client with async calls. Read the section on [Async Custom Client](/docs/mirascope/learn/async#custom-client) to see how to use a custom client with asynchronous calls.
 </Warning>
 

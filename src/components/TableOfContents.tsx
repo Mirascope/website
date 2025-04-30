@@ -114,11 +114,11 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ contentId, path }) =>
   }, [headings, contentId]);
 
   if (headings.length === 0) {
-    return <p className="text-sm text-muted-foreground italic pl-5">No headings found</p>;
+    return <p className="text-muted-foreground pl-5 text-sm italic">No headings found</p>;
   }
 
   return (
-    <div className="overflow-y-auto max-h-[calc(100vh-18rem)]">
+    <div className="max-h-[calc(100vh-18rem)] overflow-y-auto">
       <div className="pl-4">
         <nav className="space-y-1">
           {headings.map((heading) => (
@@ -126,7 +126,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ contentId, path }) =>
               key={heading.id}
               href={`#${heading.id}`}
               className={cn(
-                "block text-[13px] py-1 transition-colors border-l-2 -ml-[1px] truncate",
+                "-ml-[1px] block truncate border-l-2 py-1 text-[13px] transition-colors",
                 heading.level === 1 && "pl-2",
                 heading.level === 2 && "pl-2",
                 heading.level === 3 && "pl-4",
@@ -135,7 +135,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ contentId, path }) =>
                 heading.level === 6 && "pl-10",
                 activeId === heading.id
                   ? "border-primary text-primary font-medium"
-                  : "border-transparent text-muted-foreground hover:text-accent-foreground hover:border-accent-foreground"
+                  : "text-muted-foreground hover:text-accent-foreground hover:border-accent-foreground border-transparent"
               )}
             >
               {heading.text}

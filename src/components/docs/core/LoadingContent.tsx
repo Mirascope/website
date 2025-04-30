@@ -18,10 +18,10 @@ const LoadingContent: React.FC<LoadingContentProps> = ({
 }) => {
   return (
     <div
-      className={`flex justify-center items-center ${fullHeight ? "h-[calc(100vh-136px)]" : "py-20"} ${className}`}
+      className={`flex items-center justify-center ${fullHeight ? "h-[calc(100vh-136px)]" : "py-20"} ${className}`}
     >
       <div
-        className={`animate-spin rounded-full border-t-2 border-b-2 border-primary ${spinnerClassName}`}
+        className={`border-primary animate-spin rounded-full border-t-2 border-b-2 ${spinnerClassName}`}
       ></div>
     </div>
   );
