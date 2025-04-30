@@ -15,6 +15,9 @@ function SearchResult({ result, onSelect }: SearchResultProps) {
   // Get development mode from environment
   const isDev = environment.isDev();
 
+  // Use meta.description if available, otherwise use excerpt
+  const displayText = result.meta?.description || result.excerpt;
+
   return (
     <Link
       to={result.url}
@@ -38,12 +41,15 @@ function SearchResult({ result, onSelect }: SearchResultProps) {
         </div>
         <p
           className="text-muted-foreground search-excerpt line-clamp-2 text-xs"
-          dangerouslySetInnerHTML={{ __html: result.excerpt }}
+          dangerouslySetInnerHTML={{ __html: displayText }}
         />
       </div>
     </Link>
   );
 }
+
+// Maximum number of search results to display
+const MAX_DISPLAYED_RESULTS = 20;
 
 // Component for a list of search results
 interface SearchResultListProps {
@@ -52,11 +58,19 @@ interface SearchResultListProps {
 }
 
 function SearchResultList({ results, onResultSelect }: SearchResultListProps) {
+  // Only display up to MAX_DISPLAYED_RESULTS
+  const displayedResults = results.slice(0, MAX_DISPLAYED_RESULTS);
+
   return (
     <div>
-      {results.map((result, idx) => (
+      {displayedResults.map((result, idx) => (
         <SearchResult key={`${result.url}-${idx}`} result={result} onSelect={onResultSelect} />
       ))}
+      {results.length > MAX_DISPLAYED_RESULTS && (
+        <div className="text-muted-foreground border-border/40 border-t px-4 py-2 text-center text-xs">
+          Showing top {MAX_DISPLAYED_RESULTS} of {results.length} results
+        </div>
+      )}
     </div>
   );
 }
