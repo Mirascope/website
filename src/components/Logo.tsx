@@ -28,7 +28,7 @@ const Logo: React.FC<LogoProps> = ({
     micro: {
       container: "w-auto",
       img: "h-4 w-auto",
-      text: "text-xs",
+      text: "text-s",
       spacing: "mr-1.5",
       wrapper: "px-1.5 py-0.5",
     },
