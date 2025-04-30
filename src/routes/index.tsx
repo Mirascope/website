@@ -48,7 +48,7 @@ function LandingPage() {
               href="/docs/mirascope"
               variant="default"
               size="lg"
-              className="landing-page-box-shadow w-full min-w-[220px] px-8 py-6 text-center text-lg font-medium sm:w-auto"
+              className="landing-page-box-shadow landing-page-box-shadow-hover w-full min-w-[220px] px-8 py-6 text-center text-lg font-medium sm:w-auto"
             >
               <BookOpen className="size-6" aria-hidden="true" /> Learn more
             </ButtonLink>
@@ -56,7 +56,7 @@ function LandingPage() {
               href="https://join.slack.com/t/mirascope-community/shared_invite/zt-2ilqhvmki-FB6LWluInUCkkjYD3oSjNA"
               variant="outline"
               size="lg"
-              className="landing-page-box-shadow w-full min-w-[220px] border-0 bg-white px-8 py-6 text-center text-lg font-medium text-black sm:w-auto"
+              className="landing-page-box-shadow landing-page-box-shadow-hover w-full min-w-[220px] border-0 bg-white px-8 py-6 text-center text-lg font-medium text-black hover:bg-indigo-100 hover:text-black sm:w-auto"
             >
               <Users className="size-6" aria-hidden="true" /> Join the community
             </ButtonLink>
