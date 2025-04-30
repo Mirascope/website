@@ -7,7 +7,6 @@
   --color-mirascope-purple-dark: oklch(0.5254 0.2041 277.12); /* Darker purple */
   --color-lilypad-green: oklch(0.54 0.18 140); /* Vibrant lily pad green */
   --color-lilypad-green-dark: oklch(0.44 0.14 140); /* Darker version of the lily pad green */
-  --color-lilypad-green-light: oklch(0.75 0.14 140); /* Lighter version of the lily pad green */
 
   /* Default (Mirascope) theme colors */
 
@@ -28,8 +27,8 @@
   --color-muted: var(--color-gray-200);
   --color-muted-foreground: var(--color-slate-700);
 
-  --color-accent: var(--color-indigo-200);
-  --color-accent-foreground: var(--color-indigo-900);
+  --color-accent: oklch(0.74 0.25 277.12);
+  --color-accent-foreground: var(--color-background);
 
   /* ShadCn UI extras */
   --color-card: oklch(0.995 0 0);
@@ -165,8 +164,8 @@
   --color-muted: var(--color-gray-800);
   --color-muted-foreground: var(--color-gray-400);
 
-  --color-accent: var(--color-lilypad-green-light);
-  --color-accent-foreground: var(--color-foreground);
+  --color-accent: oklch(0.45 0.06 140);
+  --color-accent-foreground: var(--color-gray-200);
 
   /* ShadCn UI extras */
   --color-card: oklch(0.12 0.0368 145.64);

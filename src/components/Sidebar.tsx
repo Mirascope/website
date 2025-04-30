@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useMatches } from "@tanstack/react-router";
 import { cn } from "@/src/lib/utils";
+import { ChevronDown, ChevronRight } from "lucide-react";
 
 /**
  * Generic section item data structure for sidebar navigation
@@ -137,9 +138,9 @@ interface NestedItemsProps {
 }
 
 /**
- * Individual nested item component
+ * Regular item component (without nested items)
  */
-const NestedItem = ({
+const SidebarItemLink = ({
   itemSlug,
   item,
   basePath,
@@ -154,16 +155,49 @@ const NestedItem = ({
 }) => {
   // For navigation: Use routePath if provided, otherwise construct the path
   const navigationUrl = item.routePath || `${basePath}/${itemSlug}`;
-
   // For active state determination: Use the logical path which may include /index
   const logicalPath = `${basePath}/${itemSlug}`;
+  // Determine if this item is active
+  const isActive = isActivePath(logicalPath, item.routePath);
 
-  // A folder is any item that has nested items
+  return (
+    <SidebarLink
+      to={navigationUrl}
+      isActive={isActive}
+      className=""
+      style={{
+        paddingLeft: `${0.75 + indentLevel * 0.5}rem`,
+        paddingRight: "0.75rem",
+        flex: 1,
+      }}
+    >
+      {item.label}
+    </SidebarLink>
+  );
+};
+
+/**
+ * Folder component (with nested items)
+ */
+const NestedFolder = ({
+  itemSlug,
+  item,
+  basePath,
+  isActivePath,
+  indentLevel,
+}: {
+  itemSlug: string;
+  item: SidebarItem;
+  basePath: string;
+  isActivePath: (path: string, routePath?: string) => boolean;
+  indentLevel: number;
+}) => {
+  // For active state determination: Use the logical path which may include /index
+  const logicalPath = `${basePath}/${itemSlug}`;
+  // Get children items
   const children = item.items || {};
-  const hasNestedItems = Object.keys(children).length > 0;
 
   // Determine if this folder or any of its children are active
-  // Use routePath if provided, otherwise use the logical path
   const isActive = isActivePath(logicalPath, item.routePath);
 
   // State to track if the folder is expanded
@@ -179,69 +213,45 @@ const NestedItem = ({
     // Omitting isExpanded from dependencies to prevent re-expanding after user closes
   }, [isActive]);
 
-  return (
-    <div key={itemSlug}>
-      <div className={cn("flex items-center rounded-md")}>
-        {/* Render expand/collapse icon for folders */}
-        {hasNestedItems && (
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className={cn("mr-1 flex h-5 w-5 items-center justify-center")}
-            aria-label={isExpanded ? "Collapse" : "Expand"}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              className="transition-transform"
-              style={{ transform: isExpanded ? "rotate(90deg)" : "rotate(0deg)" }}
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              stroke="currentColor"
-            >
-              <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
-          </button>
-        )}
+  // Toggle folder expansion
+  const toggleExpand = () => setIsExpanded(!isExpanded);
 
-        {/* For folders, render a clickable span that toggles expansion */}
-        {hasNestedItems ? (
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className={cn(
-              "hover:text-muted-foreground hover:bg-muted block w-full rounded-md py-1 text-left font-medium",
-              isActive ? "text-accent" : "text-muted-foreground"
-            )}
-            style={{
-              paddingLeft: hasNestedItems ? "0" : `${0.75 + indentLevel * 0.5}rem`,
-              paddingRight: "0.75rem",
-              flex: 1,
-            }}
-          >
-            {item.label}
-          </button>
-        ) : (
-          /* Render regular items as links */
-          <SidebarLink
-            to={navigationUrl}
-            isActive={isActive}
-            className=""
-            style={{
-              paddingLeft: `${0.75 + indentLevel * 0.5}rem`,
-              paddingRight: "0.75rem",
-              flex: 1,
-            }}
-          >
-            {item.label}
-          </SidebarLink>
+  return (
+    <div>
+      <div
+        className={cn(
+          "hover:bg-muted flex items-center rounded-md",
+          isActive ? "text-accent" : "text-muted-foreground"
         )}
+      >
+        {/* Chevron icon button */}
+        <button
+          onClick={toggleExpand}
+          className={cn("mr-1 flex h-5 w-5 items-center justify-center")}
+          aria-label={isExpanded ? "Collapse" : "Expand"}
+        >
+          {isExpanded ? (
+            <ChevronDown size={16} className="text-muted-foreground" />
+          ) : (
+            <ChevronRight size={16} className="text-muted-foreground" />
+          )}
+        </button>
+
+        {/* Folder label button */}
+        <button
+          onClick={toggleExpand}
+          className={cn("block w-full rounded-md py-1 text-left font-medium")}
+          style={{
+            paddingRight: "0.75rem",
+            flex: 1,
+          }}
+        >
+          {item.label}
+        </button>
       </div>
 
-      {/* Render nested items if exists and is expanded */}
-      {hasNestedItems && isExpanded && (
+      {/* Render nested items if expanded */}
+      {isExpanded && (
         <div className="pt-1 pb-2">
           <NestedItems
             items={children}
@@ -252,6 +262,44 @@ const NestedItem = ({
         </div>
       )}
     </div>
+  );
+};
+
+/**
+ * Individual nested item component - renders either a folder or a link
+ */
+const NestedItem = ({
+  itemSlug,
+  item,
+  basePath,
+  isActivePath,
+  indentLevel,
+}: {
+  itemSlug: string;
+  item: SidebarItem;
+  basePath: string;
+  isActivePath: (path: string, routePath?: string) => boolean;
+  indentLevel: number;
+}) => {
+  // Determine if this is a folder (has nested items)
+  const hasNestedItems = Object.keys(item.items || {}).length > 0;
+
+  return hasNestedItems ? (
+    <NestedFolder
+      itemSlug={itemSlug}
+      item={item}
+      basePath={basePath}
+      isActivePath={isActivePath}
+      indentLevel={indentLevel}
+    />
+  ) : (
+    <SidebarItemLink
+      itemSlug={itemSlug}
+      item={item}
+      basePath={basePath}
+      isActivePath={isActivePath}
+      indentLevel={indentLevel}
+    />
   );
 };
 
