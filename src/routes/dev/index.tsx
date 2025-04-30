@@ -1,22 +1,12 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import DevLayout from "@/src/components/dev/DevLayout";
 import { environment } from "@/src/lib/content/environment";
-import { getAllDevMeta } from "@/src/lib/content";
 import ContentErrorHandler from "@/src/components/ContentErrorHandler";
 import { LoadingContent } from "@/src/components/docs";
 
 export const Route = createFileRoute("/dev/")({
   component: DevIndexPage,
-  loader: async () => {
-    try {
-      // Get all MDX-based dev pages for the sidebar
-      const devPages = await getAllDevMeta();
-      return { devPages };
-    } catch (error) {
-      console.error("Error loading dev pages:", error);
-      return { devPages: [] };
-    }
-  },
+  // No loader needed since we use the parent route's loader
   pendingComponent: () => {
     return (
       <DevLayout devPages={[]}>
@@ -38,7 +28,8 @@ export const Route = createFileRoute("/dev/")({
 });
 
 function DevIndexPage() {
-  const { devPages } = useLoaderData({ from: "/dev/" });
+  // Get devPages from parent route's loader
+  const { devPages } = useLoaderData({ from: "/dev" });
 
   return (
     <DevLayout devPages={devPages}>

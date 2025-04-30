@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as PrivacyImport } from './routes/privacy'
 import { Route as PricingImport } from './routes/pricing'
+import { Route as DevImport } from './routes/dev'
 import { Route as CatchallImport } from './routes/$catchall'
 import { Route as IndexImport } from './routes/index'
 import { Route as TermsIndexImport } from './routes/terms/index'
@@ -41,6 +42,12 @@ const PricingRoute = PricingImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const DevRoute = DevImport.update({
+  id: '/dev',
+  path: '/dev',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const CatchallRoute = CatchallImport.update({
   id: '/$catchall',
   path: '/$catchall',
@@ -66,9 +73,9 @@ const DocsIndexRoute = DocsIndexImport.update({
 } as any)
 
 const DevIndexRoute = DevIndexImport.update({
-  id: '/dev/',
-  path: '/dev/',
-  getParentRoute: () => rootRoute,
+  id: '/',
+  path: '/',
+  getParentRoute: () => DevRoute,
 } as any)
 
 const BlogIndexRoute = BlogIndexImport.update({
@@ -96,21 +103,21 @@ const DocsSplatRoute = DocsSplatImport.update({
 } as any)
 
 const DevSocialCardRoute = DevSocialCardImport.update({
-  id: '/dev/social-card',
-  path: '/dev/social-card',
-  getParentRoute: () => rootRoute,
+  id: '/social-card',
+  path: '/social-card',
+  getParentRoute: () => DevRoute,
 } as any)
 
 const DevAuditMetadataRoute = DevAuditMetadataImport.update({
-  id: '/dev/audit-metadata',
-  path: '/dev/audit-metadata',
-  getParentRoute: () => rootRoute,
+  id: '/audit-metadata',
+  path: '/audit-metadata',
+  getParentRoute: () => DevRoute,
 } as any)
 
 const DevSlugRoute = DevSlugImport.update({
-  id: '/dev/$slug',
-  path: '/dev/$slug',
-  getParentRoute: () => rootRoute,
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => DevRoute,
 } as any)
 
 const BlogSlugRoute = BlogSlugImport.update({
@@ -137,6 +144,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CatchallImport
       parentRoute: typeof rootRoute
     }
+    '/dev': {
+      id: '/dev'
+      path: '/dev'
+      fullPath: '/dev'
+      preLoaderRoute: typeof DevImport
+      parentRoute: typeof rootRoute
+    }
     '/pricing': {
       id: '/pricing'
       path: '/pricing'
@@ -160,24 +174,24 @@ declare module '@tanstack/react-router' {
     }
     '/dev/$slug': {
       id: '/dev/$slug'
-      path: '/dev/$slug'
+      path: '/$slug'
       fullPath: '/dev/$slug'
       preLoaderRoute: typeof DevSlugImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof DevImport
     }
     '/dev/audit-metadata': {
       id: '/dev/audit-metadata'
-      path: '/dev/audit-metadata'
+      path: '/audit-metadata'
       fullPath: '/dev/audit-metadata'
       preLoaderRoute: typeof DevAuditMetadataImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof DevImport
     }
     '/dev/social-card': {
       id: '/dev/social-card'
-      path: '/dev/social-card'
+      path: '/social-card'
       fullPath: '/dev/social-card'
       preLoaderRoute: typeof DevSocialCardImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof DevImport
     }
     '/docs/$': {
       id: '/docs/$'
@@ -209,10 +223,10 @@ declare module '@tanstack/react-router' {
     }
     '/dev/': {
       id: '/dev/'
-      path: '/dev'
-      fullPath: '/dev'
+      path: '/'
+      fullPath: '/dev/'
       preLoaderRoute: typeof DevIndexImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof DevImport
     }
     '/docs/': {
       id: '/docs/'
@@ -233,9 +247,26 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
+interface DevRouteChildren {
+  DevSlugRoute: typeof DevSlugRoute
+  DevAuditMetadataRoute: typeof DevAuditMetadataRoute
+  DevSocialCardRoute: typeof DevSocialCardRoute
+  DevIndexRoute: typeof DevIndexRoute
+}
+
+const DevRouteChildren: DevRouteChildren = {
+  DevSlugRoute: DevSlugRoute,
+  DevAuditMetadataRoute: DevAuditMetadataRoute,
+  DevSocialCardRoute: DevSocialCardRoute,
+  DevIndexRoute: DevIndexRoute,
+}
+
+const DevRouteWithChildren = DevRoute._addFileChildren(DevRouteChildren)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$catchall': typeof CatchallRoute
+  '/dev': typeof DevRouteWithChildren
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -246,7 +277,7 @@ export interface FileRoutesByFullPath {
   '/terms/service': typeof TermsServiceRoute
   '/terms/use': typeof TermsUseRoute
   '/blog': typeof BlogIndexRoute
-  '/dev': typeof DevIndexRoute
+  '/dev/': typeof DevIndexRoute
   '/docs': typeof DocsIndexRoute
   '/terms': typeof TermsIndexRoute
 }
@@ -273,6 +304,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/$catchall': typeof CatchallRoute
+  '/dev': typeof DevRouteWithChildren
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -293,6 +325,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/$catchall'
+    | '/dev'
     | '/pricing'
     | '/privacy'
     | '/blog/$slug'
@@ -303,7 +336,7 @@ export interface FileRouteTypes {
     | '/terms/service'
     | '/terms/use'
     | '/blog'
-    | '/dev'
+    | '/dev/'
     | '/docs'
     | '/terms'
   fileRoutesByTo: FileRoutesByTo
@@ -327,6 +360,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/$catchall'
+    | '/dev'
     | '/pricing'
     | '/privacy'
     | '/blog/$slug'
@@ -346,17 +380,14 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CatchallRoute: typeof CatchallRoute
+  DevRoute: typeof DevRouteWithChildren
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   BlogSlugRoute: typeof BlogSlugRoute
-  DevSlugRoute: typeof DevSlugRoute
-  DevAuditMetadataRoute: typeof DevAuditMetadataRoute
-  DevSocialCardRoute: typeof DevSocialCardRoute
   DocsSplatRoute: typeof DocsSplatRoute
   TermsServiceRoute: typeof TermsServiceRoute
   TermsUseRoute: typeof TermsUseRoute
   BlogIndexRoute: typeof BlogIndexRoute
-  DevIndexRoute: typeof DevIndexRoute
   DocsIndexRoute: typeof DocsIndexRoute
   TermsIndexRoute: typeof TermsIndexRoute
 }
@@ -364,17 +395,14 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CatchallRoute: CatchallRoute,
+  DevRoute: DevRouteWithChildren,
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   BlogSlugRoute: BlogSlugRoute,
-  DevSlugRoute: DevSlugRoute,
-  DevAuditMetadataRoute: DevAuditMetadataRoute,
-  DevSocialCardRoute: DevSocialCardRoute,
   DocsSplatRoute: DocsSplatRoute,
   TermsServiceRoute: TermsServiceRoute,
   TermsUseRoute: TermsUseRoute,
   BlogIndexRoute: BlogIndexRoute,
-  DevIndexRoute: DevIndexRoute,
   DocsIndexRoute: DocsIndexRoute,
   TermsIndexRoute: TermsIndexRoute,
 }
@@ -391,17 +419,14 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/$catchall",
+        "/dev",
         "/pricing",
         "/privacy",
         "/blog/$slug",
-        "/dev/$slug",
-        "/dev/audit-metadata",
-        "/dev/social-card",
         "/docs/$",
         "/terms/service",
         "/terms/use",
         "/blog/",
-        "/dev/",
         "/docs/",
         "/terms/"
       ]
@@ -411,6 +436,15 @@ export const routeTree = rootRoute
     },
     "/$catchall": {
       "filePath": "$catchall.tsx"
+    },
+    "/dev": {
+      "filePath": "dev.tsx",
+      "children": [
+        "/dev/$slug",
+        "/dev/audit-metadata",
+        "/dev/social-card",
+        "/dev/"
+      ]
     },
     "/pricing": {
       "filePath": "pricing.tsx"
@@ -422,13 +456,16 @@ export const routeTree = rootRoute
       "filePath": "blog.$slug.tsx"
     },
     "/dev/$slug": {
-      "filePath": "dev.$slug.tsx"
+      "filePath": "dev.$slug.tsx",
+      "parent": "/dev"
     },
     "/dev/audit-metadata": {
-      "filePath": "dev/audit-metadata.tsx"
+      "filePath": "dev/audit-metadata.tsx",
+      "parent": "/dev"
     },
     "/dev/social-card": {
-      "filePath": "dev/social-card.tsx"
+      "filePath": "dev/social-card.tsx",
+      "parent": "/dev"
     },
     "/docs/$": {
       "filePath": "docs.$.tsx"
@@ -443,7 +480,8 @@ export const routeTree = rootRoute
       "filePath": "blog.index.tsx"
     },
     "/dev/": {
-      "filePath": "dev/index.tsx"
+      "filePath": "dev/index.tsx",
+      "parent": "/dev"
     },
     "/docs/": {
       "filePath": "docs.index.tsx"
