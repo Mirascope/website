@@ -90,7 +90,7 @@ export function Callout({
 
   // Content styling changes based on whether we have a header
   const contentClassName = cn(
-    customContentClassName ?? "px-3 py-2",
+    customContentClassName ?? "px-2 py-2",
     showHeader ? "rounded-b-lg" : "rounded-lg"
   );
 
