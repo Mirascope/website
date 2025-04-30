@@ -174,7 +174,7 @@ function BlogPostPage() {
                   <PagefindMeta
                     title={post.meta.title}
                     description={post.meta.description}
-                    searchWeight={0.7}
+                    searchWeight={0.5}
                     section={"blog"}
                   >
                     <MDXRenderer code={post.mdx.code} frontmatter={post.mdx.frontmatter} />

@@ -5,6 +5,7 @@ import api from "./api/_meta";
 const docsSection: SectionSpec = {
   label: "Docs",
   slug: "index",
+  weight: 2,
   children: [
     {
       slug: "index",
