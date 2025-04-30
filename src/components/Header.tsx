@@ -15,6 +15,26 @@ import Logo from "@/src/components/Logo";
 import ThemeSwitcher from "@/src/components/ThemeSwitcher";
 import GitHubRepoButton from "@/src/components/GitHubRepoButton";
 import SearchBar from "@/src/components/SearchBar";
+import type { ProductName } from "@/src/lib/content/doc-registry";
+
+// Product links components
+const ProductTitle = ({ product }: { product: ProductName }) => {
+  const titleClass = `text-xl font-medium ${product === "mirascope" ? "text-mirascope-purple" : "text-lilypad-green"}`;
+  return <span className={titleClass}>{product === "mirascope" ? "Mirascope" : "Lilypad"}</span>;
+};
+
+const ProductLink = ({ product }: { product: ProductName }) => {
+  const hoverClass =
+    product === "mirascope" ? "hover:text-mirascope-purple" : "hover:text-lilypad-green";
+  return (
+    <Link
+      to={getProductRoute(product)}
+      className={`text-muted-foreground text-xl font-medium ${hoverClass}`}
+    >
+      {product === "mirascope" ? "Mirascope" : "Lilypad"}
+    </Link>
+  );
+};
 
 // Reusable navigation link component
 interface NavLinkProps {
@@ -49,6 +69,11 @@ export default function Header() {
   const router = useRouterState();
   const isLandingPage = router.location.pathname === "/";
 
+  // Determine if we're on a docs page and get the product
+  const path = router.location.pathname;
+  const isDocsPage = path.startsWith("/docs/");
+  const currentProduct = isDocsPage ? getProductFromPath(path) : null;
+
   // State to track scroll position
   const [scrolled, setScrolled] = useState(false);
 
@@ -71,7 +96,7 @@ export default function Header() {
   return (
     <header
       className={cn(
-        "fixed top-0 right-0 left-0 z-50 flex w-full items-center justify-center px-4 py-6 sm:px-6",
+        "fixed top-0 right-0 left-0 z-50 flex w-full flex-col items-center justify-center px-4 py-2 sm:px-6",
         isLandingPage
           ? "landing-page-text-shadow bg-transparent text-white"
           : "bg-background text-foreground",
@@ -178,6 +203,25 @@ export default function Header() {
           </button>
         </div>
       </nav>
+
+      {/* Product links for docs pages */}
+      {isDocsPage && currentProduct && (
+        <div className="flex w-full justify-center pt-1">
+          <div className="flex space-x-8">
+            {currentProduct === "mirascope" ? (
+              <ProductTitle product="mirascope" />
+            ) : (
+              <ProductLink product="mirascope" />
+            )}
+
+            {currentProduct === "lilypad" ? (
+              <ProductTitle product="lilypad" />
+            ) : (
+              <ProductLink product="lilypad" />
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Mobile Menu */}
       {isMenuOpen && (
