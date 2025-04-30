@@ -9,7 +9,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/src/components/ui/navigation-menu";
-import { cn } from "@/src/lib/utils";
+import { cn, getProductFromPath } from "@/src/lib/utils";
 import { getProductRoute } from "@/src/lib/routes";
 import Logo from "@/src/components/Logo";
 import ThemeSwitcher from "@/src/components/ThemeSwitcher";
@@ -107,14 +107,13 @@ export default function Header() {
                     "flex cursor-pointer items-center !bg-transparent p-0 text-xl font-medium transition-colors duration-200 hover:!bg-transparent focus:!bg-transparent data-[state=open]:!bg-transparent data-[state=open]:hover:!bg-transparent",
                     isLandingPage ? "nav-text-landing" : "nav-text-regular"
                   )}
-                  onClick={(e) => {
-                    // Prevent the default behavior which would toggle the dropdown
-                    e.preventDefault();
-                    // Navigate to Mirascope docs
-                    window.location.href = getProductRoute("mirascope");
-                  }}
                 >
-                  Docs
+                  <Link
+                    to={getProductRoute(getProductFromPath(router.location.pathname))}
+                    className="h-full w-full"
+                  >
+                    Docs
+                  </Link>
                 </NavigationMenuTrigger>
                 <NavigationMenuContent className="bg-background p-2 [text-shadow:none]">
                   <ul className="grid w-[300px] grid-cols-1 gap-2 sm:w-[480px] sm:grid-cols-2">
