@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { LoadingContent } from "@/src/components/docs";
 import { useProvider } from "./ProviderContext";
 import { CodeBlock } from "../CodeBlock";
-import { cn } from "@/src/lib/utils";
-import { ChevronDown, ChevronUp, Wrench } from "lucide-react";
+import { Info } from "./Callout";
+import { Wrench } from "lucide-react";
 
 interface ProviderCodeBlockProps {
   examplePath: string; // Path relative to public/examples
@@ -30,10 +30,6 @@ export function ProviderCodeBlock({
   // State for code examples and loading
   const [codeMap, setCodeMap] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(true);
-
-  // State for collapsible behavior - must be declared here, not conditionally
-  // Default to collapsed when collapsible is true
-  const [isExpanded, setIsExpanded] = useState(!collapsible);
 
   // Load all available provider code examples on mount
   useEffect(() => {
@@ -91,48 +87,22 @@ export function ProviderCodeBlock({
   // If we don't have code for the current provider, show an empty code block
   const codeToDisplay = currentProviderCode || "// No example available for this provider yet";
 
-  // Toggle collapse/expand
-  const toggleExpand = () => {
-    setIsExpanded(!isExpanded);
-  };
-
-  // Display the code
+  // Display the code with the Info callout component
   return (
-    <div
-      className={cn(
-        "bg-secondary/10 border-secondary overflow-hidden rounded-md shadow-md",
-        className
-      )}
+    <Info
+      title={headerText || "Official SDK"}
+      collapsible={collapsible}
+      defaultOpen={!collapsible}
+      className={className}
+      customIcon={<Wrench className="h-3 w-3" />}
+      contentClassName="p-0"
     >
-      {collapsible && (
-        <div
-          className="flex cursor-pointer items-center justify-between px-4 py-2.5"
-          onClick={toggleExpand}
-        >
-          <div className="flex items-center">
-            <div className="mr-2 flex h-5 w-5 items-center justify-center rounded-full p-0.5">
-              <Wrench className="text-secondary h-3 w-3" />
-            </div>
-            <span className="text-foreground font-medium">{headerText || "Official SDK"}</span>
-          </div>
-          {isExpanded ? (
-            <ChevronUp className="text-foreground h-5 w-5" />
-          ) : (
-            <ChevronDown className="text-foreground h-5 w-5" />
-          )}
+      {!currentProviderCode && (
+        <div className="bg-destructive/20 text-destructive mb-2 px-4 py-2 text-sm">
+          Example for {provider} not available yet.
         </div>
       )}
-
-      {isExpanded && (
-        <div className="m-0 p-0">
-          {!currentProviderCode && (
-            <div className="bg-destructive/20 text-destructive px-4 py-2 text-sm">
-              Example for {provider} not available yet.
-            </div>
-          )}
-          <CodeBlock code={codeToDisplay} language={language} />
-        </div>
-      )}
-    </div>
+      <CodeBlock code={codeToDisplay} language={language} />
+    </Info>
   );
 }

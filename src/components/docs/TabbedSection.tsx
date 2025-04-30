@@ -71,7 +71,7 @@ export function TabbedSection({
     <div
       className={cn(
         showLogo ? "bg-primary/20" : "bg-muted",
-        "border-primary/20 overflow-hidden rounded-md border-1 px-1 pt-2 pb-0.75 shadow-md",
+        "border-primary/20 my-4 overflow-hidden rounded-md border-1 px-3 py-2 shadow-md",
         className
       )}
     >
