@@ -96,11 +96,11 @@ function SearchInput({
   return (
     <div
       className={cn(
-        "h-9 rounded-full border transition-all duration-300",
+        "h-9 rounded-full border transition-all duration-500",
         isLandingPage
           ? "border-white/30 bg-white/10 hover:bg-white/20"
           : "border-border bg-background/20 hover:bg-primary/10 hover:border-primary/80",
-        isOpen ? "w-72 md:w-96" : "w-36" // Wider default size with text, much wider when expanded
+        isOpen ? "w-80 md:w-[32rem]" : "w-36" // Wider default size with text, much wider when expanded
       )}
       style={
         isLandingPage
@@ -113,7 +113,7 @@ function SearchInput({
         <SearchIcon
           size={16}
           className={cn(
-            "absolute left-3 transition-all duration-300",
+            "absolute left-3 transition-all duration-500",
             isLandingPage ? "nav-icon-landing" : "nav-icon-regular"
           )}
         />
@@ -123,7 +123,7 @@ function SearchInput({
           type="text"
           placeholder="Search..."
           className={cn(
-            "h-full cursor-pointer bg-transparent text-sm transition-all duration-300 outline-none",
+            "h-full cursor-pointer bg-transparent text-sm transition-all duration-500 outline-none",
             isLandingPage
               ? "text-white placeholder:text-white/90"
               : "text-foreground placeholder:text-foreground",
@@ -176,19 +176,34 @@ function SearchResultsContainer({
   onResultSelect,
   isLandingPage = false,
 }: SearchResultsContainerProps) {
+  // Use a fixed state derived from isOpen with some delayed rendering logic
+  const [isReallyVisible, setIsReallyVisible] = useState(false);
+
+  // When isOpen changes, update visibility with a delay for animation
+  useEffect(() => {
+    if (isOpen) {
+      // Slight delay to allow search bar to expand first
+      const timer = setTimeout(() => setIsReallyVisible(true), 150);
+      return () => clearTimeout(timer);
+    } else {
+      setIsReallyVisible(false);
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
     <div
       className={cn(
-        "search-results absolute top-full right-0 z-50 mt-2 w-screen max-w-sm overflow-hidden rounded-lg shadow-2xl [text-shadow:none] md:left-0",
-        "bg-background border-border border"
+        "search-results absolute top-full right-0 z-50 mt-2 w-screen max-w-[32rem] overflow-hidden rounded-lg shadow-2xl [text-shadow:none] md:left-0",
+        "bg-background border-border border transition-opacity duration-300"
       )}
-      style={
-        isLandingPage
+      style={{
+        opacity: isReallyVisible ? 1 : 0,
+        ...(isLandingPage
           ? { boxShadow: "0 1px 5px rgba(0, 0, 0, 0.15), 0 2px 10px rgba(0, 0, 0, 0.1)" }
-          : undefined
-      }
+          : {}),
+      }}
       ref={resultsRef}
     >
       {renderSearchContent()}
@@ -296,7 +311,7 @@ export default function SearchBar({ onOpenChange, isLandingPage = false }: Searc
       // Show navigation after search closes with a delay for smooth transition
       const timer = setTimeout(() => {
         if (onOpenChange) onOpenChange(false);
-      }, 300);
+      }, 500);
       return () => clearTimeout(timer);
     }
   }, [isOpen, onOpenChange]);
