@@ -76,4 +76,24 @@ describe("Static Renderer", () => {
     expect(result.metadata.meta).toContain("og:description");
     expect(result.metadata.meta).toContain("twitter:card");
   });
+
+  test("renders home route with mirascope product attribute", async () => {
+    const { renderRouteToString } = await import("../static-renderer");
+
+    // Render the index route
+    const result = await renderRouteToString("/", false);
+
+    // Verify the data-product attribute is set to "mirascope" on the root div
+    expect(result.html).toContain('<div data-product="mirascope"');
+  });
+
+  test("renders pricing route with lilypad product attribute", async () => {
+    const { renderRouteToString } = await import("../static-renderer");
+
+    // Render the pricing route
+    const result = await renderRouteToString("/pricing", false);
+
+    // Verify the data-product attribute is set to "lilypad" on the root div
+    expect(result.html).toContain('<div data-product="lilypad"');
+  });
 });

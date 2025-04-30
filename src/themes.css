@@ -96,7 +96,7 @@
 }
 
 /* Lilypad Light Theme */
-:is([data-product="lilypad"]) {
+:root:has(div[data-product="lilypad"]) {
   /* Base */
   --color-background: oklch(0.995 0 0);
   --color-foreground: oklch(0.1 0.01 240);
@@ -149,7 +149,7 @@
 }
 
 /* Lilypad Dark Theme */
-:is(.dark[data-product="lilypad"]) {
+.dark:has(div[data-product="lilypad"]) {
   /* Base */
   --color-background: oklch(0.1 0.01 240);
   --color-foreground: oklch(0.95 0 0);
