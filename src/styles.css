@@ -136,8 +136,8 @@ pre,
 /* Landing page text shadow */
 .landing-page-text-shadow {
   text-shadow:
-    0 2px 10px rgba(0, 0, 0, 0.3),
-    0 4px 20px rgba(0, 0, 0, 0.2);
+    0 2px 6px rgba(0, 0, 0, 0.3),
+    0 4px 14px rgba(0, 0, 0, 0.2);
 }
 
 /* Landing page hover text shadow - lighter for accent color text */
