@@ -5,7 +5,7 @@
   /* Base brand colors */
   --color-mirascope-purple: oklch(0.5854 0.2041 277.12); /* Mirascope purple */
   --color-mirascope-purple-dark: oklch(0.5254 0.2041 277.12); /* Darker purple */
-  --color-lilypad-green: oklch(0.58 0.22 140); /* Vibrant lily pad green */
+  --color-lilypad-green: oklch(0.54 0.18 140); /* Vibrant lily pad green */
   --color-lilypad-green-dark: oklch(0.44 0.14 140); /* Darker version of the lily pad green */
   --color-lilypad-green-light: oklch(0.75 0.14 140); /* Lighter version of the lily pad green */
 
