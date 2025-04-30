@@ -24,32 +24,32 @@ const calloutStyles: Record<
   { containerClass: string; iconClass: string; Icon: React.ElementType }
 > = {
   note: {
-    containerClass: "border-muted",
-    iconClass: "bg-muted/30 text-muted-foreground",
-    Icon: InfoIcon,
+    containerClass: "border-primary",
+    iconClass: "text-primary",
+    Icon: AlertCircle,
   },
   info: {
-    containerClass: "border-primary",
-    iconClass: "bg-primary/30 text-primary",
-    Icon: AlertCircle,
+    containerClass: "border-secondary",
+    iconClass: "text-secondary",
+    Icon: InfoIcon,
   },
   warning: {
     containerClass: "border-destructive",
-    iconClass: "bg-destructive/30 text-destructive",
+    iconClass: "text-destructive",
     Icon: AlertTriangle,
   },
   success: {
     containerClass: "border-secondary",
-    iconClass: "bg-secondary/30 text-secondary",
+    iconClass: "text-secondary",
     Icon: CheckCircle,
   },
   mira: {
-    containerClass: "border-accent",
-    iconClass: "bg-accent/30 text-accent-foreground",
+    containerClass: "border-primary",
+    iconClass: "text-primary",
     Icon: () => (
-      <svg width="16" height="16" viewBox="0 0 512 512" fill="currentColor">
-        <path d="M256,0C114.6,0,0,114.6,0,256s114.6,256,256,256s256-114.6,256-256S397.4,0,256,0z M256,448 c-105.9,0-192-86.1-192-192S150.1,64,256,64s192,86.1,192,192S361.9,448,256,448z M256,128c-17.7,0-32,14.3-32,32 s14.3,32,32,32s32-14.3,32-32S273.7,128,256,128z M96,224c-17.7,0-32,14.3-32,32s14.3,32,32,32s32-14.3,32-32 S113.7,224,96,224z M416,224c-17.7,0-32,14.3-32,32s14.3,32,32,32s32-14.3,32-32S433.7,224,416,224z M320,384 c0-35.3-28.7-64-64-64s-64,28.7-64,64H320z" />
-      </svg>
+      <div className="flex items-center justify-center">
+        <img src="/assets/branding/logo.webp" alt="Mirascope Logo" className="h-4 w-auto" />
+      </div>
     ),
   },
 };
@@ -93,14 +93,15 @@ export function Callout({
       {showHeader && (
         <div
           className={cn(
-            "border-border bg-background flex items-center gap-3 rounded-t-lg border-b px-3 py-2",
+            "bg-accent/30 flex items-center gap-3 rounded-t-lg border-b px-3 py-2",
+            containerClass.replace("border-", "border-b-"),
             collapsible && "cursor-pointer"
           )}
           onClick={collapsible ? () => setIsOpen(!isOpen) : undefined}
           aria-expanded={collapsible ? isOpen : undefined}
         >
           <div className={cn("flex h-6 w-6 items-center justify-center rounded-full", iconClass)}>
-            <Icon className="h-4 w-4" />
+            <Icon className={cn(type === "mira" ? "" : "h-4 w-4")} />
           </div>
           <div className="flex-1 text-base font-semibold">{displayTitle}</div>
           {collapsible && (
