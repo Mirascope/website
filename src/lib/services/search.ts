@@ -211,18 +211,11 @@ export class PagefindSearchService implements SearchService {
       throw new Error("Search engine not initialized");
     }
 
-    if (environment.isDev()) {
-      console.log("🔍 [SearchService] Performing search for:", query);
-    }
-
     // Use the built-in debouncedSearch with 300ms delay
     const result = await this.pagefind.debouncedSearch(query, 300);
 
     // If the search was cancelled (due to rapid typing), return null
     if (result === null) {
-      if (environment.isDev()) {
-        console.log("🔍 [SearchService] Search cancelled (returning null)");
-      }
       return null;
     }
 
@@ -230,12 +223,10 @@ export class PagefindSearchService implements SearchService {
       console.log(`🔍 [SearchService] Found ${result.results.length} results`);
     }
 
-    // Process and transform results - only take the top 20
-    const topResults = result.results.slice(0, 20);
-
+    // Process and transform all results
     // Get all result data in a single batch of promises
     const rawResults: RawSearchResult[] = await Promise.all(
-      topResults.map(async (pagefindResult) => {
+      result.results.map(async (pagefindResult) => {
         const data = await pagefindResult.data();
 
         // Normalize the URL to match our routes
