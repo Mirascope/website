@@ -602,25 +602,6 @@ header button:not(.font-toggle-button),
   transform: scale(1.08);
 }
 
-/* This is the new vertical alignment approach */
-
-/* Brand-specific colors */
-.text-mirascope-purple {
-  color: #6366f1;
-}
-
-.text-lilypad-green {
-  color: var(--color-emerald-600);
-}
-
-.bg-mirascope-purple {
-  background-color: #6366f1;
-}
-
-.bg-lilypad-green {
-  background-color: var(--color-emerald-700);
-}
-
 /* Badge container for docs and usage info */
 .badge-container {
   display: flex;
