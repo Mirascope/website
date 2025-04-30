@@ -15,21 +15,24 @@ function SearchResult({ result, onSelect }: SearchResultProps) {
   // Get development mode from environment
   const isDev = environment.isDev();
 
-  // Use meta.description if available, otherwise use excerpt
-  const displayText = result.meta?.description || result.excerpt;
+  // Get description and excerpt separately
+  const description = result.meta?.description;
+  const excerpt = result.excerpt;
 
   return (
     <Link
       to={result.url}
       onClick={onSelect}
-      className="hover:bg-accent/50 border-border/40 flex border-t px-4 py-3 text-sm transition-colors first:border-0"
+      className="hover:bg-accent/50 border-border/40 flex border-t px-5 py-4 text-sm transition-colors first:border-0"
     >
       <div className="min-w-0 flex-1">
-        <div className="mb-1 flex items-center justify-between">
-          <h4 className="text-foreground truncate font-medium">{result.title || "Untitled"}</h4>
+        <div className="mb-2 flex items-center justify-between">
+          <h4 className="text-foreground truncate text-base font-medium">
+            {result.title || "Untitled"}
+          </h4>
           <div className="flex items-center gap-2">
             {/* Section badge */}
-            <span className="bg-muted text-muted-foreground rounded px-1.5 py-0.5 text-[10px]">
+            <span className="bg-muted text-muted-foreground max-w-[150px] truncate rounded px-1.5 py-0.5 text-[10px]">
               {result.section}
             </span>
 
@@ -39,9 +42,18 @@ function SearchResult({ result, onSelect }: SearchResultProps) {
             )}
           </div>
         </div>
+
+        {/* Description - shown if available */}
+        {description && (
+          <p className="text-muted-foreground search-description mb-1.5 line-clamp-2 text-sm">
+            {description}
+          </p>
+        )}
+
+        {/* Excerpt - always shown, italicized */}
         <p
-          className="text-muted-foreground search-excerpt line-clamp-2 text-xs"
-          dangerouslySetInnerHTML={{ __html: displayText }}
+          className="text-muted-foreground search-excerpt line-clamp-2 text-xs italic"
+          dangerouslySetInnerHTML={{ __html: excerpt }}
         />
       </div>
     </Link>

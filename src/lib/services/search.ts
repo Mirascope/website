@@ -60,25 +60,8 @@ export interface SearchService {
   isInitialized(): boolean;
 }
 
-// Helper function to extract section from URL
-const getSectionFromUrl = (url?: string): string => {
-  if (!url) return "Other";
-
-  try {
-    // Use server-side compatible URL parsing
-    const path = url.startsWith("http") ? new URL(url).pathname : url;
-
-    const segments = path.split("/").filter(Boolean);
-
-    if (segments.length === 0) return "Home";
-
-    // Format the section name
-    const section = segments[0].charAt(0).toUpperCase() + segments[0].slice(1);
-    return section;
-  } catch (e) {
-    return "Other";
-  }
-};
+// Default section value when metadata is not available
+const DEFAULT_SECTION = "other";
 
 // Implementation of the search service using Pagefind
 export class PagefindSearchService implements SearchService {
@@ -243,9 +226,7 @@ export class PagefindSearchService implements SearchService {
         // Use metadata if found, otherwise fallback to Pagefind data
         const title = meta?.title || data.meta?.title || "Untitled";
         const excerpt = data.excerpt || "";
-        const section = meta
-          ? this.getSectionFromMeta(meta)
-          : data.meta?.section || getSectionFromUrl(url);
+        const section = this.getSectionFromMeta(meta);
 
         // Create the raw search result
         const rawResult: RawSearchResult = {
@@ -321,25 +302,38 @@ export class PagefindSearchService implements SearchService {
   /**
    * Extract section name from content metadata
    */
-  private getSectionFromMeta(meta: ContentMeta): string {
+  private getSectionFromMeta(meta: ContentMeta | undefined): string {
+    // If no metadata is available, return the default section
+    if (!meta) return DEFAULT_SECTION;
+
     // For blog, doc, policy, and dev, we can derive section from the content type
     switch (meta.type) {
       case "blog":
-        return "Blog";
+        return "blog";
       case "doc":
-        // For docs, we can extract the product name for a more specific section
-        const docPath = meta.path.split("/");
+        // For docs, we want to show the full path up to the slug
+        const docPath = meta.path.split("/").filter(Boolean);
+
+        // If path has segments, display all except the last one (which is the slug)
         if (docPath.length > 1) {
-          const product = docPath[1];
-          return product.charAt(0).toUpperCase() + product.slice(1);
+          // Skip the 'doc' prefix, then take everything except the last segment
+          const pathSegments = docPath.slice(1, -1);
+
+          // If there are path segments, join them with slashes (keeping original case)
+          if (pathSegments.length > 0) {
+            return pathSegments.join("/");
+          }
+
+          // If there's just one segment after 'doc', use it as is (like 'mirascope')
+          return docPath[1];
         }
-        return "Docs";
+        return "docs";
       case "policy":
-        return "Policy";
+        return "policy";
       case "dev":
-        return "Dev";
+        return "dev";
       default:
-        return "Other";
+        return DEFAULT_SECTION;
     }
   }
 
