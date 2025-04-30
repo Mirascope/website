@@ -32,21 +32,8 @@ export const Route = createRootRoute({
     const isLandingPage = path === "/";
 
     useEffect(() => {
-      const newProduct = getProductFromPath(path);
-      document.documentElement.setAttribute("data-product", newProduct);
       analyticsManager.trackPageView(path);
     }, [path]);
-
-    // Make sure we set the data-product on first render (and not in useEffect),
-    // so we will SSR product pages with correct styles.
-    if (
-      typeof document !== "undefined" &&
-      document.documentElement &&
-      !document.documentElement.getAttribute("data-product")
-    ) {
-      const currentProduct = getProductFromPath(path);
-      document.documentElement.setAttribute("data-product", currentProduct);
-    }
 
     // Initialize analytics and set product on first mount
     useEffect(() => {
@@ -76,6 +63,7 @@ export const Route = createRootRoute({
         </head>
 
         <div
+          data-product={getProductFromPath(path)}
           className={`flex min-h-screen flex-col px-4 sm:px-6 ${
             isLandingPage ? "bg-watercolor-flipped" : ""
           } handwriting-enabled`}
