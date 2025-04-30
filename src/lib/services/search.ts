@@ -1,4 +1,5 @@
 import { environment } from "../content/environment";
+import { type ContentMeta } from "../content/content";
 
 // Define Pagefind types
 interface PagefindResult {
@@ -33,6 +34,7 @@ export interface SearchResultItem {
   url: string;
   section: string;
   score?: number;
+  meta?: ContentMeta; // Optional content metadata if found
 }
 
 export interface SearchResponse {
@@ -70,6 +72,8 @@ const getSectionFromUrl = (url?: string): string => {
 export class PagefindSearchService implements SearchService {
   private pagefind: PagefindAPI | null = null;
   private initialized = false;
+  private contentMeta: ContentMeta[] = [];
+  private routeToMetaMap: Map<string, ContentMeta> = new Map();
 
   constructor() {}
 
@@ -85,10 +89,31 @@ export class PagefindSearchService implements SearchService {
       throw new Error("Cannot initialize search in a non-browser environment");
     }
 
+    try {
+      // We need to run two initialization tasks in parallel:
+      // 1. Load Pagefind search engine
+      // 2. Load the unified content metadata
+      await Promise.all([this.initPagefind(), this.loadContentMeta()]);
+
+      this.initialized = true;
+    } catch (error) {
+      this.initialized = false;
+      if (environment.isDev()) {
+        console.error("🔍 [SearchService] Error during initialization:", error);
+      }
+      throw new Error(
+        "Search initialization failed. Try running 'bun run build' to regenerate content."
+      );
+    }
+  }
+
+  /**
+   * Initialize the Pagefind search engine
+   */
+  private async initPagefind(): Promise<void> {
     // Check if Pagefind is already loaded
     if (window.pagefind) {
       this.pagefind = window.pagefind;
-      this.initialized = true;
       return;
     }
 
@@ -108,13 +133,54 @@ export class PagefindSearchService implements SearchService {
         baseUrl: "/",
       });
 
-      this.initialized = true;
+      if (environment.isDev()) {
+        console.log("🔍 [SearchService] Pagefind loaded successfully");
+      }
     } catch (error) {
-      this.initialized = false;
       if (environment.isDev()) {
         console.error("🔍 [SearchService] Error loading Pagefind:", error);
       }
       throw new Error("Search index not available. Run 'bun run build' to generate it.");
+    }
+  }
+
+  /**
+   * Load the unified content metadata and build route map
+   */
+  private async loadContentMeta(): Promise<void> {
+    try {
+      if (environment.isDev()) {
+        console.log("🔍 [SearchService] Loading content metadata...");
+      }
+
+      // Fetch the unified metadata file
+      const response = await fetch("/static/content-meta/unified.json");
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to load content metadata: ${response.status} ${response.statusText}`
+        );
+      }
+
+      // Parse the JSON response
+      this.contentMeta = await response.json();
+
+      // Build the route to metadata map for quick lookups
+      this.routeToMetaMap = new Map();
+      for (const meta of this.contentMeta) {
+        this.routeToMetaMap.set(meta.route, meta);
+      }
+
+      if (environment.isDev()) {
+        console.log(`🔍 [SearchService] Loaded ${this.contentMeta.length} content metadata items`);
+      }
+    } catch (error) {
+      if (environment.isDev()) {
+        console.error("🔍 [SearchService] Error loading content metadata:", error);
+      }
+      throw new Error(
+        "Content metadata not available. Try running 'bun run build' to regenerate content."
+      );
     }
   }
 
@@ -160,10 +226,23 @@ export class PagefindSearchService implements SearchService {
       topResults.map(async (pagefindResult, index) => {
         const data = await pagefindResult.data();
 
-        const title = data.meta?.title || "Untitled";
-        const excerpt = data.excerpt || "";
+        // Normalize the URL to match our routes
         const url = data.url || "";
-        const section = data.meta?.section || getSectionFromUrl(data.url);
+
+        // Try to find matching metadata using the URL as route
+        const meta = this.findMetadataByUrl(url);
+
+        // Log warning for documents without metadata
+        if (!meta) {
+          console.warn(`🔍 [SearchService] No metadata found for URL: ${url}`);
+        }
+
+        // Use metadata if found, otherwise fallback to Pagefind data
+        const title = meta?.title || data.meta?.title || "Untitled";
+        const excerpt = data.excerpt || "";
+        const section = meta
+          ? this.getSectionFromMeta(meta)
+          : data.meta?.section || getSectionFromUrl(url);
 
         // Create the result item with score included
         const resultItem = {
@@ -172,6 +251,7 @@ export class PagefindSearchService implements SearchService {
           url,
           section,
           score: pagefindResult.score,
+          meta: meta || undefined, // Include the full metadata if found
         };
 
         // Log detailed information for each result for debugging
@@ -181,6 +261,7 @@ export class PagefindSearchService implements SearchService {
             title,
             section,
             url,
+            meta,
           });
         }
 
@@ -193,6 +274,81 @@ export class PagefindSearchService implements SearchService {
 
     // Return the search response with reweighted items
     return { items: reweightedItems };
+  }
+
+  /**
+   * Finds the matching content metadata for a given URL
+   * Handles URL normalization to match our route formats
+   */
+  private findMetadataByUrl(url: string): ContentMeta | undefined {
+    // Normalize URL to handle potential differences
+    let normalizedUrl = url;
+
+    // Strip any domain part if present
+    if (normalizedUrl.startsWith("http")) {
+      try {
+        normalizedUrl = new URL(normalizedUrl).pathname;
+      } catch (e) {
+        console.warn(`🔍 [SearchService] Failed to parse URL: ${url}`);
+      }
+    }
+
+    // Ensure leading slash
+    if (!normalizedUrl.startsWith("/")) {
+      normalizedUrl = "/" + normalizedUrl;
+    }
+
+    // Remove trailing slash if present (except for root)
+    if (normalizedUrl.endsWith("/") && normalizedUrl !== "/") {
+      normalizedUrl = normalizedUrl.slice(0, -1);
+    }
+
+    // Try to find metadata by route
+    const meta = this.routeToMetaMap.get(normalizedUrl);
+
+    // If not found, try alternative versions of the URL
+    if (!meta) {
+      // Try with trailing slash
+      if (!normalizedUrl.endsWith("/")) {
+        const withSlash = normalizedUrl + "/";
+        const metaWithSlash = this.routeToMetaMap.get(withSlash);
+        if (metaWithSlash) return metaWithSlash;
+      }
+
+      // Try without trailing slash
+      if (normalizedUrl.endsWith("/")) {
+        const withoutSlash = normalizedUrl.slice(0, -1);
+        const metaWithoutSlash = this.routeToMetaMap.get(withoutSlash);
+        if (metaWithoutSlash) return metaWithoutSlash;
+      }
+    }
+
+    return meta;
+  }
+
+  /**
+   * Extract section name from content metadata
+   */
+  private getSectionFromMeta(meta: ContentMeta): string {
+    // For blog, doc, policy, and dev, we can derive section from the content type
+    switch (meta.type) {
+      case "blog":
+        return "Blog";
+      case "doc":
+        // For docs, we can extract the product name for a more specific section
+        const docPath = meta.path.split("/");
+        if (docPath.length > 1) {
+          const product = docPath[1];
+          return product.charAt(0).toUpperCase() + product.slice(1);
+        }
+        return "Docs";
+      case "policy":
+        return "Policy";
+      case "dev":
+        return "Dev";
+      default:
+        return "Other";
+    }
   }
 
   // Custom reweighting logic for search results - no-op for now
