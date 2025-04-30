@@ -244,8 +244,12 @@ function PricingPage() {
                     <div className="mb-6">
                       <span className="text-3xl font-bold">TBD</span>
                     </div>
-                    <ButtonLink href="/docs/lilypad/" variant="outline" className="w-full">
-                      *Get Started
+                    <ButtonLink
+                      href="mailto:sales@mirascope.com"
+                      variant="outline"
+                      className="w-full"
+                    >
+                      Contact Us
                     </ButtonLink>
                   </div>
                 </div>
