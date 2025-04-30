@@ -186,7 +186,7 @@ export default function Header() {
             <div className="my-2 text-xl font-medium">Docs</div>
             <Link
               to={getProductRoute("mirascope")}
-              className="bg-background text-primary hover:bg-muted rounded-md p-3 font-medium transition-colors"
+              className="bg-background text-mirascope-purple hover:bg-muted rounded-md p-3 font-medium transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               Mirascope
