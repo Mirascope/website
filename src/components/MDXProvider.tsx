@@ -9,7 +9,6 @@ import {
   Warning,
   Info,
   Success,
-  Mira,
   TabbedSection,
   Tab,
   MermaidDiagram,
@@ -79,7 +78,6 @@ export const components = {
   Warning,
   Info,
   Success,
-  Mira,
   MermaidDiagram,
 
   // UI Components
