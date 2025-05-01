@@ -23,7 +23,7 @@ But calling an API isn’t the end of the story - **the software must be designe
 * Model vendor lock-in requires flexible and open design.  
 * Experimenting with different prompts requires version control and observability.
 
-That’s why we created [Mirascope](https://github.com/mirascope/mirascope/), a user-friendly toolkit for integrating LLMs into applications, and [Lilypad](https://lilypad.so/docs), our prompt management and observability platform.
+That’s why we created [Mirascope](https://github.com/mirascope/mirascope/), a user-friendly toolkit for integrating LLMs into applications, and [Lilypad](/docs/lilypad), our prompt management and observability platform.
 
 Below, we dive into real-world examples of LLM integrations and then explain the different ways you can set this up.
 
@@ -395,7 +395,7 @@ It got so bad that at one point, one of our developers forbade anyone from touch
 
 That’s why having a structured system for tracking, versioning, and iterating on prompts is important - not just for maintaining consistency, but for ensuring that past optimizations aren’t lost and for making improvements with confidence.
 
-[Lilypad](https://lilypad.so/docs/) versions and traces your LLM code automatically with every change you make.
+[Lilypad](/docs/lilypad/) versions and traces your LLM code automatically with every change you make.
 
 You just add a Lilypad decorator `@lilypad.generation` to any function to start automatically versioning any changes that occur:
 
@@ -454,4 +454,4 @@ It offers the right level of abstraction for simplifying development and experim
 
 Want to learn more about Mirascope’s tools for building generative AI agents? You can find Mirascope code samples both in our [documentation](https://mirascope.com/WELCOME/) and our [GitHub repository](https://github.com/mirascope/mirascope).
 
-Lilypad code samples can also be found in our [documentation](https://lilypad.so/docs). These resources can help you incorporate automation into your LLM integration workflow, speeding up deployment and reducing manual tasks.
+Lilypad code samples can also be found in our [documentation](/docs/lilypad). These resources can help you incorporate automation into your LLM integration workflow, speeding up deployment and reducing manual tasks.

@@ -203,7 +203,7 @@ Mirascope also embraces developer best practices like [colocation](https://miras
 
 You can see this in the code example above, where the `@openai.call` decorator encapsulates parameters such as the model name (`"gpt-4o-mini"`) and tool definitions (`tools=[GetCityPopulation]`) within the context of the `city_population` call.
 
-Our prompt management tool [Lilypad](https://lilypad.so/docs) automatically versions and traces every LLM function call to ensure code readability and maintainability and to facilitate testing.
+Our prompt management tool [Lilypad](/docs/lilypad) automatically versions and traces every LLM function call to ensure code readability and maintainability and to facilitate testing.
 
 For instance, you can version an LLM call simply by adding the `generation` decorator to ensure that any call the function makes is traced against the version:
 
