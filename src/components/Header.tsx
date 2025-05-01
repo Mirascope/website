@@ -15,26 +15,7 @@ import Logo from "@/src/components/Logo";
 import ThemeSwitcher from "@/src/components/ThemeSwitcher";
 import GitHubRepoButton from "@/src/components/GitHubRepoButton";
 import SearchBar from "@/src/components/SearchBar";
-import type { ProductName } from "@/src/lib/content/doc-registry";
-
-// Product links components
-const ProductTitle = ({ product }: { product: ProductName }) => {
-  const titleClass = `text-xl font-medium ${product === "mirascope" ? "text-mirascope-purple" : "text-lilypad-green"}`;
-  return <span className={titleClass}>{product === "mirascope" ? "Mirascope" : "Lilypad"}</span>;
-};
-
-const ProductLink = ({ product }: { product: ProductName }) => {
-  const hoverClass =
-    product === "mirascope" ? "hover:text-mirascope-purple" : "hover:text-lilypad-green";
-  return (
-    <Link
-      to={getProductRoute(product)}
-      className={`text-muted-foreground text-xl font-medium ${hoverClass}`}
-    >
-      {product === "mirascope" ? "Mirascope" : "Lilypad"}
-    </Link>
-  );
-};
+import { DocsProductSelector, DevProductSelector } from "@/src/components/ProductSelectors";
 
 // Reusable navigation link component
 interface NavLinkProps {
@@ -69,10 +50,11 @@ export default function Header() {
   const router = useRouterState();
   const isLandingPage = router.location.pathname === "/";
 
-  // Determine if we're on a docs page and get the product
+  // Determine page type and get the product
   const path = router.location.pathname;
   const isDocsPage = path.startsWith("/docs/");
-  const currentProduct = isDocsPage ? getProductFromPath(path) : null;
+  const isDevPage = path.startsWith("/dev");
+  const currentProduct = isDocsPage || isDevPage ? getProductFromPath(path) : null;
 
   // State to track scroll position
   const [scrolled, setScrolled] = useState(false);
@@ -204,22 +186,11 @@ export default function Header() {
         </div>
       </nav>
 
-      {/* Product links for docs pages */}
-      {isDocsPage && currentProduct && (
+      {/* Product selectors for docs and dev pages */}
+      {currentProduct && (isDocsPage || isDevPage) && (
         <div className="mx-auto flex w-full max-w-7xl pt-1">
-          <div className="flex space-x-8">
-            {currentProduct === "mirascope" ? (
-              <ProductTitle product="mirascope" />
-            ) : (
-              <ProductLink product="mirascope" />
-            )}
-
-            {currentProduct === "lilypad" ? (
-              <ProductTitle product="lilypad" />
-            ) : (
-              <ProductLink product="lilypad" />
-            )}
-          </div>
+          {isDocsPage && <DocsProductSelector currentProduct={currentProduct} />}
+          {isDevPage && <DevProductSelector currentProduct={currentProduct} />}
         </div>
       )}
 

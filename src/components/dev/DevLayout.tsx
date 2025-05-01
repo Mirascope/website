@@ -3,7 +3,6 @@ import DevSidebar from "./DevSidebar";
 import BaseLayout from "@/src/components/BaseLayout";
 import SidebarContainer from "@/src/components/SidebarContainer";
 import type { DevMeta } from "@/src/lib/content";
-import { ProductSelector } from "./DevComponents";
 
 interface DevLayoutProps {
   children: React.ReactNode;
@@ -28,7 +27,6 @@ const DevLayout: React.FC<DevLayoutProps> = ({ children, devPages }) => {
 
   return (
     <div className="flex justify-center pt-0">
-      <ProductSelector />
       <BaseLayout leftSidebar={leftSidebar} mainContent={mainContent} />
     </div>
   );
