@@ -147,7 +147,13 @@ export default function Header() {
                       <NavigationMenuLink asChild>
                         <Link
                           to={getProductRoute("mirascope")}
-                          className="bg-background hover:bg-mirascope-purple/20 block space-y-1.5 rounded-md p-4 transition-colors"
+                          className={cn(
+                            "bg-background block space-y-1.5 rounded-md p-4 transition-colors",
+                            "hover:bg-mirascope-purple/20 focus:bg-mirascope-purple/20",
+                            "active:bg-mirascope-purple/60 active:scale-[0.98]",
+                            "data-[active=true]:bg-mirascope-purple/50 data-[active=true]:hover:bg-mirascope-purple/60",
+                            "data-[active=true]:focus:bg-mirascope-purple/60"
+                          )}
                         >
                           <div className="text-mirascope-purple text-xl font-medium">Mirascope</div>
                           <p className="text-foreground text-base">
@@ -160,7 +166,13 @@ export default function Header() {
                       <NavigationMenuLink asChild>
                         <Link
                           to={getProductRoute("lilypad")}
-                          className="bg-background hover:bg-lilypad-green/20 block space-y-1.5 rounded-md p-4 transition-colors"
+                          className={cn(
+                            "bg-background block space-y-1.5 rounded-md p-4 transition-colors",
+                            "hover:bg-lilypad-green/20 focus:bg-lilypad-green/20",
+                            "active:bg-lilypad-green/60 active:scale-[0.98]",
+                            "data-[active=true]:bg-lilypad-green/50 data-[active=true]:hover:bg-lilypad-green/60",
+                            "data-[active=true]:focus:bg-lilypad-green/60"
+                          )}
                         >
                           <div className="text-lilypad-green text-xl font-medium">Lilypad</div>
                           <p className="text-foreground text-base">
