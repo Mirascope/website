@@ -320,7 +320,9 @@ h6 code {
 
 :root {
   --radius: 0.625rem;
-  --header-height: 60px;
+  --header-height-base: 74px; /* Standard header without selector (measured) */
+  --header-height-with-selector: 126px; /* Header with product selector (measured) */
+  --header-height: var(--header-height-base); /* Default value */
 
   /* Paper texture variables for light mode */
   --text-offset: 2px;

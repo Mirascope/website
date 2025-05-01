@@ -49,7 +49,7 @@ function DevContentPage() {
 
   return (
     <DevLayout devPages={devPages}>
-      <div className="container py-8">
+      <div className="container">
         <div className="prose dark:prose-invert max-w-none">
           <MDXRenderer code={content.mdx.code} frontmatter={content.mdx.frontmatter} />
         </div>
