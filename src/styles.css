@@ -320,6 +320,7 @@ h6 code {
 
 :root {
   --radius: 0.625rem;
+  --header-height: 60px;
 
   /* Paper texture variables for light mode */
   --text-offset: 2px;
