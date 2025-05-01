@@ -49,10 +49,10 @@ Our three core beliefs around prompt engineering have influenced our approach
 in building Mirascope:
 
 1. **Prompt engineering is engineering because prompting is a complex endeavor that defies standardization**. LLM outputs aren’t entirely predictable and require, for instance, different prompt tuning techniques. Also, LLM tasks are diverse and require varying steps and approaches. Prompting demands a more manual, hands-on approach than other tools and frameworks might acknowledge or recognize. For all this, you need developer tools that help you build complex prompts as easily as possible.
-2. [**Prompts should live in your codebase,**](https://mirascope.com/blog/engineers-should-handle-prompting-llms)**not outside of it**. Separating prompting from engineering workflows limits what you can build with LLMs. The code inside of prompts should be co-located with the codebase, since changing variables or classes within a prompt might generate errors if these changes aren’t also tracked in the codebase. The same goes for functionality that can impact the quality of a prompt (e.g. temperature, model, tools, etc.) so that you don't have to worry about a code change external to the prompt changing its quality or behavior. Tools like GitHub's Codespaces allow non-technical roles to create and edit prompts that remain in engineering workflows.
+2. [**Prompts should live in your codebase,**](/blog/engineers-should-handle-prompting-llms)**not outside of it**. Separating prompting from engineering workflows limits what you can build with LLMs. The code inside of prompts should be co-located with the codebase, since changing variables or classes within a prompt might generate errors if these changes aren’t also tracked in the codebase. The same goes for functionality that can impact the quality of a prompt (e.g. temperature, model, tools, etc.) so that you don't have to worry about a code change external to the prompt changing its quality or behavior. Tools like GitHub's Codespaces allow non-technical roles to create and edit prompts that remain in engineering workflows.
 3. **Generalized wrappers and complex abstractions aren’t always necessary**. You can accomplish a lot with vanilla Python and OpenAI’s API. Why create complexity when you can leverage Python’s inherent strengths?
 
-For us, [prompt engineering](https://mirascope.com/blog/prompt-engineering-tools) deserves the same level of tooling and consideration as any other aspect of software engineering. This means providing features to free you of cumbersome and repetitive tasks so you can focus on creativity and effectiveness.
+For us, [prompt engineering](/blog/prompt-engineering-tools) deserves the same level of tooling and consideration as any other aspect of software engineering. This means providing features to free you of cumbersome and repetitive tasks so you can focus on creativity and effectiveness.
 
 Mirascope allows you to:
 
@@ -80,7 +80,7 @@ def book_recommendation_prompt(book_titles: list[str]) -> BaseDynamicConfig:
     return {"computed_fields": {"titles_in_quotes": titles_in_quotes}}
 ```
 
-The computed field `titles_in_quotes` illustrates co-location in that each [version of the prompt](https://mirascope.com/blog/prompt-versioning) has everything that needs to be versioned. This means each iteration of the prompt is self-contained, carrying with it all the operational settings necessary for its execution and ensuring quality control across versions.
+The computed field `titles_in_quotes` illustrates co-location in that each [version of the prompt](/blog/prompt-versioning) has everything that needs to be versioned. This means each iteration of the prompt is self-contained, carrying with it all the operational settings necessary for its execution and ensuring quality control across versions.
 
 Mirascope also abstracts away the complexities of prompt formatting, allowing you to focus on the content of prompts rather than getting into the weeds of how they’re constructed and displayed.
 
@@ -370,7 +370,7 @@ Auto-GPT’s documentation is available on its website, and its source code (lar
 
 [AgentGPT](https://agentgpt.reworkd.ai/) allows users to create and deploy autonomous AI agents directly in the browser. Agents typically take a single line of input (a goal), and execute multiple steps to reach the goal.
 
-The agent chains calls to LLMs and is designed to understand objectives, implement strategies, and deliver results without human intervention. You can interact with AgentGTP via its homepage using a browser, or you can install it locally via CLI. The project also makes available [prompting templates](https://mirascope.com/blog/langchain-prompt-template), which it imports from LangChain.
+The agent chains calls to LLMs and is designed to understand objectives, implement strategies, and deliver results without human intervention. You can interact with AgentGTP via its homepage using a browser, or you can install it locally via CLI. The project also makes available [prompting templates](/blog/langchain-prompt-template), which it imports from LangChain.
 
 AgentGPT offers a homepage where you can test the service, as well as a GitHub repo from where you can download the code (mostly in Typescript).
 

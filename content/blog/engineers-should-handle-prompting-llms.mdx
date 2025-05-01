@@ -29,7 +29,7 @@ Our view on prompting started as we were using an early version of the OpenAI SD
 Back then we didn’t have the benefit of any useful helper libraries, so we wrote all the API code ourselves. This amounted to writing lots of boilerplate to accomplish what seemed like simple tasks. For example, automatically extracting the model configuration (such as constraints) from just the name of the features in a given dataset. This required many prompt iterations and it was a pain to evaluate them.
 
 It was around that time that we began asking ourselves: why aren’t there better [developer tools in the prompt engineering
-space](https://mirascope.com/blog/prompt-engineering-tools)? Is it because people are bringing experimental stuff into production too quickly? Or simply because the space is so new?
+space](/blog/prompt-engineering-tools)? Is it because people are bringing experimental stuff into production too quickly? Or simply because the space is so new?
 
 The more we worked to develop our LLM applications, the more it was clear that from a software engineer's perspective, the **separation of prompt management from the calls was fundamentally flawed.** It made the actual engineering slow, cumbersome and arguably more error prone. It was almost as if current tools weren't built around developer best practices but rather around Jupyter notebook best practices (if there even is such a thing).
 
@@ -382,7 +382,7 @@ response = recommend_book("fantasy")
 print(response.content)
 ```
 
-We also made sure that Mirascope works well with or integrates directly with tools such as Logfire, OpenTelemetry, HyperDX, Langfuse, and more for easily tracking machine learning experiments and visualizing data as well as improving prompt effectiveness through automated refinement and testing. All together these tools work together with Mirascope as [an alternative to LangChain](https://mirascope.com/blog/langchain-alternatives).
+We also made sure that Mirascope works well with or integrates directly with tools such as Logfire, OpenTelemetry, HyperDX, Langfuse, and more for easily tracking machine learning experiments and visualizing data as well as improving prompt effectiveness through automated refinement and testing. All together these tools work together with Mirascope as [an alternative to LangChain](/blog/langchain-alternatives).
 
 Beyond OpenAI, Mirascope supports currently these [other LLM providers](https://mirascope.com/learn/calls):
 

@@ -32,7 +32,7 @@ Three of the most popular frameworks today are open source and handle a variety 
 
 When implemented correctly, frameworks have the adaptability to handle the intricacies around operations and workflows to ensure a good user experience. And at best they should be intuitive to set up and allow developers to iterate quickly.
 
-We find, however, that [modern frameworks are quite complex](https://mirascope.com/blog/llamaindex-vs-langchain) (and are often an ecosystem in themselves), at least partly because:
+We find, however, that [modern frameworks are quite complex](/blog/llamaindex-vs-langchain) (and are often an ecosystem in themselves), at least partly because:
 
 - Some of their abstractions seem to reinvent the wheel for things you’d normally use vanilla Python for.
 - Their inner workings can be opaque and hard to figure out, especially for debugging purposes.
@@ -55,9 +55,9 @@ Tasks are organized and managed as part of workflow execution within LLM applica
 
 #### Prompt Engineering
 
-An example of such a task is the [development of prompts](https://mirascope.com/blog/llamaindex-vs-langchain), which serve as the primary interface for interacting with the model.
+An example of such a task is the [development of prompts](/blog/llamaindex-vs-langchain), which serve as the primary interface for interacting with the model.
 
-To get the best responses, prompts should [contain clear instructions](https://mirascope.com/blog/prompt-engineering-best-practices) as shown in the example code below, which generates a prompt for recommending movies based on recently watched titles:
+To get the best responses, prompts should [contain clear instructions](/blog/prompt-engineering-best-practices) as shown in the example code below, which generates a prompt for recommending movies based on recently watched titles:
 
 ```python
 from mirascope.core import openai, prompt_template
@@ -80,11 +80,11 @@ This uses Mirascope's [`prompt_template`](https://mirascope.com/learn/prompts) d
 
 The above code also illustrates our principle of colocation, where everything impacting the quality of a call is colocated and versioned together. This can be seen in the computed field `titles_in_quotes` computed within the prompt function.
 
-This approach to colocation emerged from our frustrations around working with both [LangChain](https://mirascope.com/blog/langchain-runnables) and the OpenAI SDK, where LLM calls and their parameters are separately managed. Making changes to one part of the code, like updating the model specification, often required efforts to track those changes in other parts.
+This approach to colocation emerged from our frustrations around working with both [LangChain](/blog/langchain-runnables) and the OpenAI SDK, where LLM calls and their parameters are separately managed. Making changes to one part of the code, like updating the model specification, often required efforts to track those changes in other parts.
 
 #### Tools (Function Calling)
 
-Frameworks also support [tools (or function calling)](https://mirascope.com/blog/openai-function-calling) to autonomously execute tasks like checking stock prices and classifying spam. This makes them agents working on your behalf, with the ability to choose which functions or external services to use.
+Frameworks also support [tools (or function calling)](/blog/openai-function-calling) to autonomously execute tasks like checking stock prices and classifying spam. This makes them agents working on your behalf, with the ability to choose which functions or external services to use.
 
 For example, prompting an LLM with flight information will return a call to a function that checks the status of flights.
 
@@ -189,7 +189,7 @@ Extracting details in this way allows you to parse large documents, articles, or
 
 Workflow integration embeds tools, technologies, or processes into existing operational systems and workflows to improve efficiency, consistency, and productivity.
 
-This includes maintaining [version control of prompts](https://mirascope.com/blog/prompt-versioning) and AI models and ensuring smooth transitions between different model providers.
+This includes maintaining [version control of prompts](/blog/prompt-versioning) and AI models and ensuring smooth transitions between different model providers.
 
 #### Changing Model Providers
 
@@ -241,9 +241,9 @@ This is because the Mirascope allows us to use the `run` or `run_async` method t
 
 #### Prompt Management
 
-A prompt management system maintains [consistency in prompting](https://mirascope.com/blog/langchain-prompt-template) while helping you iterate and experiment more productively. It also integrates with CI/CD pipelines while promoting collaboration and automates change tracking.
+A prompt management system maintains [consistency in prompting](/blog/langchain-prompt-template) while helping you iterate and experiment more productively. It also integrates with CI/CD pipelines while promoting collaboration and automates change tracking.
 
-An example of prompt management is [Lilypad](https://mirascope.com/blog/prompt-versioning), which versions and traces all prompts automatically so you don't have to worry about it and can instead focus on iterating and improving your prompts.
+An example of prompt management is [Lilypad](/blog/prompt-versioning), which versions and traces all prompts automatically so you don't have to worry about it and can instead focus on iterating and improving your prompts.
 
 ```plaintext
 |
@@ -396,11 +396,11 @@ Since Tenacity's `retry` is a decorator, you can use it with any Mirascope `call
 
 Performance optimization is about making sure applications run efficiently, with a focus on reducing latency, managing computational resources, and ensuring quick and accurate LLM responses.
 
-[Frameworks like LangChain](https://mirascope.com/blog/langchain-alternatives) generally offer strategies for this, such as parallel processing, caching frequently accessed data, efficient memory management, and asynchronous operations to improve responsiveness and throughput.
+[Frameworks like LangChain](/blog/langchain-alternatives) generally offer strategies for this, such as parallel processing, caching frequently accessed data, efficient memory management, and asynchronous operations to improve responsiveness and throughput.
 
 Async streaming is an example of performance optimization that we’ve previously discussed above, and other examples include LLM call chaining and high-level wrappers for model APIs, described below.
 
-[Chaining LLM calls using computed fields](https://mirascope.com/blog/prompt-chaining) can be an optimization strategy as this enables using the `@functools.lru_cache` decorator to cache the output of each call in the chain so it only has to be made once:
+[Chaining LLM calls using computed fields](/blog/prompt-chaining) can be an optimization strategy as this enables using the `@functools.lru_cache` decorator to cache the output of each call in the chain so it only has to be made once:
 
 ```python
 from functools import lru_cache
@@ -456,6 +456,6 @@ Besides offering a range of utilities and [integrations](https://mirascope.com/i
 
 ## Achieve Orchestration with Mirascope
 
-Designed according to [software development best practices](https://mirascope.com/blog/engineers-should-handle-prompting-llms), Mirascope offers tools that handle the complexity of LLM orchestration for building production-grade LLM apps. Our library supports data integration and lets you code in the Python you normally code in, ensuring a smooth integration with your existing projects.
+Designed according to [software development best practices](/blog/engineers-should-handle-prompting-llms), Mirascope offers tools that handle the complexity of LLM orchestration for building production-grade LLM apps. Our library supports data integration and lets you code in the Python you normally code in, ensuring a smooth integration with your existing projects.
 
 Want to learn more? You can find more Mirascope code samples both on our [documentation site](https://mirascope.com) and on our [GitHub page](https://github.com/mirascope/mirascope).

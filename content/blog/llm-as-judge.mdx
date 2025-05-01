@@ -25,7 +25,7 @@ Below, we describe how LLM judges work, the steps required to set up an LLM as a
 
 LLM judges work through a series of steps where you:
 
-1. Create a prompt containing the context, instructions, and [evaluation criteria](https://mirascope.com/blog/llm-evaluation/) to guide the LLM’s judgment.  
+1. Create a prompt containing the context, instructions, and [evaluation criteria](/blog/llm-evaluation/) to guide the LLM’s judgment.  
 2. Provide content for the LLM judge to evaluate, such as responses, translations, or paired comparisons (depending on the task).  
 3. Analyze the judge’s output to make sure it aligns with the evaluation objectives.
 
@@ -49,7 +49,7 @@ Below are three main ways in which models make evaluations:
 
 Here the LLM judge scores a single answer based on desired properties of good or bad outputs. 
 
-Responses are evaluated independently, without comparing them to others, and rely on predefined evaluation criteria like accuracy, clarity, relevance, and comprehensiveness, which should be outlined in the [prompt](https://mirascope.com/blog/llm-prompt/).
+Responses are evaluated independently, without comparing them to others, and rely on predefined evaluation criteria like accuracy, clarity, relevance, and comprehensiveness, which should be outlined in the [prompt](/blog/llm-prompt/).
 
 This method scales well compared to pairwise comparisons (described below), because it evaluates each output independently, without needing to compare every output to others.
 
@@ -177,7 +177,7 @@ Doing “an eval of your eval” helps to better understand the reasoning behind
 Strategies for evaluating outputs of judges include:
 
 * Keeping humans in the loop by providing continuous feedback and review, and measuring the agreement rate between them.  
-* [Prompting](https://mirascope.com/blog/advanced-prompt-engineering/) the model to provide explanations or critiques alongside its judgments to get insights into the LLM's reasoning process.  
+* [Prompting](/blog/advanced-prompt-engineering/) the model to provide explanations or critiques alongside its judgments to get insights into the LLM's reasoning process.  
 * Creating test sets that include a wide range of question and answer types, potential edge cases, and varying levels of quality to assess the LLM’s ability to judge different inputs and to generalize new examples.
 
 You can also use insights from the judge’s outputs to (in turn) improve prompt design, address biases, and ensure better alignment with human preferences.
@@ -234,7 +234,7 @@ Besides biases, a number of other issues can be present:
 
 Ways to mitigate these:
 
-* [Fine-tune](https://mirascope.com/blog/prompt-engineering-vs-fine-tuning/) judges on specific datasets to improve their accuracy.  
+* [Fine-tune](/blog/prompt-engineering-vs-fine-tuning/) judges on specific datasets to improve their accuracy.  
 * Use panels of judges to aggregate their judgments to reduce the impact of individual model biases.  
 * Establish clearer evaluation frameworks with standardized criteria, structured prompts, and tailored benchmarks.
 
@@ -248,7 +248,7 @@ This example lists the evaluation of each judge separately, but we could average
 
 Also in the example we use Mirascope and Pydantic to prompt the judges and enforce an evaluation schema (including a score and reasoning explanation) to maintain consistent evaluations across different judges, as well as for reliable error handling.
 
-Mirascope in particular follows a “use-when-you-need” design philosophy that lets you choose modules off the shelf and easily slot these into existing workflows, **rather than having to adopt [larger abstractions](https://mirascope.com/blog/langchain-runnables/) wholesale and cope with their lack of transparency**, as other [frameworks](https://mirascope.com/blog/llm-frameworks/) might encourage you to do.
+Mirascope in particular follows a “use-when-you-need” design philosophy that lets you choose modules off the shelf and easily slot these into existing workflows, **rather than having to adopt [larger abstractions](/blog/langchain-runnables/) wholesale and cope with their lack of transparency**, as other [frameworks](/blog/llm-frameworks/) might encourage you to do.
 
 The example below is from the Mirascope docs about [evaluations](https://mirascope.com/learn/evals/#panel-of-judges).
 
@@ -277,7 +277,7 @@ Mirascope’s response model uses `Eval` to validate and structure LLM responses
 
 ### 2. Create an Evaluation Prompt
 
-We use a Mirascope prompt decorator to define a [reusable, parameterized template](https://mirascope.com/blog/langchain-prompt-template/) for evaluating the helpfulness of a given text:
+We use a Mirascope prompt decorator to define a [reusable, parameterized template](/blog/langchain-prompt-template/) for evaluating the helpfulness of a given text:
 
 ```python
 @prompt_template()
@@ -305,7 +305,7 @@ def evaluate_helpfulness(text: str) -> str:
     )
 ```
 
-The [prompt instruction](https://mirascope.com/blog/prompt-engineering-best-practices/) defines what “helpfulness” means and provides scoring criteria. It also inserts the user-provided `text` using `f-string` formatting.
+The [prompt instruction](/blog/prompt-engineering-best-practices/) defines what “helpfulness” means and provides scoring criteria. It also inserts the user-provided `text` using `f-string` formatting.
 
 ### 3. Define Judges and Use Them to Evaluate
 
@@ -347,7 +347,7 @@ for evaluation in evaluations:
 
 ```
 
-Each LLM call uses a Mirascope **response model** to [structure](https://mirascope.com/blog/langchain-structured-output/) and validate the language model’s output, ensuring it conforms to the specified fields and types defined in `Eval`. This provides high-quality responses for downstream processing, such as using the output for another [prompt](https://mirascope.com/blog/prompt-engineering-examples/).
+Each LLM call uses a Mirascope **response model** to [structure](/blog/langchain-structured-output/) and validate the language model’s output, ensuring it conforms to the specified fields and types defined in `Eval`. This provides high-quality responses for downstream processing, such as using the output for another [prompt](/blog/prompt-engineering-examples/).
 
 Mirascope also ensures that structured responses are properly typed for IDE integration, which is invaluable during development for things like autocomplete:
 
@@ -355,6 +355,6 @@ Mirascope also ensures that structured responses are properly typed for IDE inte
 
 ## Scale Your Evaluation Process with Confidence
 
-Mirascope lets you scale and optimize LLM-as-a-judge evaluations with minimal overhead and maximum flexibility. You can build [LLM-driven applications](https://mirascope.com/blog/llm-applications/) with our Python library offering simple, provider-agnostic tooling.
+Mirascope lets you scale and optimize LLM-as-a-judge evaluations with minimal overhead and maximum flexibility. You can build [LLM-driven applications](/blog/llm-applications/) with our Python library offering simple, provider-agnostic tooling.
 
 Want to learn more about how Mirascope can help you simplify and scale the evaluation process? You can find Mirascope code samples both in our [documentation](https://mirascope.com/WELCOME) and on [GitHub](https://github.com/mirascope/mirascope/).

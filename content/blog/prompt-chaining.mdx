@@ -265,7 +265,7 @@ print(rewrite_iteratively(original_text=original_text))
 
 Many frameworks offer dedicated chaining functionality, such as LangChain Expression Language (LCEL), which is a declarative language for composing chains.
 
-As its name suggests, [LangChain](https://mirascope.com/blog/langchain-alternatives) was created with chaining in mind and offers specialized classes and abstractions for accomplishing sequences of LLM calls.
+As its name suggests, [LangChain](/blog/langchain-alternatives) was created with chaining in mind and offers specialized classes and abstractions for accomplishing sequences of LLM calls.
 
 You typically assemble chains in LCEL using its pipe operator (`|`), along with classes like `Runnable` and `SequentialChain`. LCEL chains generally have this format:
 
@@ -279,7 +279,7 @@ But when building more complex chains, we found it challenging to debug errors a
 
 In particular, we found `RunnablePassthrough`, an object that forwards input data without changes through a chain, to be unnecessary and to actually hinder building complex prompts with parallel sub chains. It’s more of an afterthought to solve a problem that LangChain itself created with LCEL. If you do things in a Pythonic way like Mirascope, you don’t need additional classes or structures to pass information through a chain-you simply always have access to it like you should.
 
-Due to the complexity of [working with such frameworks](https://mirascope.com/blog/engineers-should-handle-prompting-llms) we designed Mirascope so you can build pipelines using the Python syntax you already know, rather than having to learn new structures.
+Due to the complexity of [working with such frameworks](/blog/engineers-should-handle-prompting-llms) we designed Mirascope so you can build pipelines using the Python syntax you already know, rather than having to learn new structures.
 
 Mirascope lets you build prompt chains using either Python properties or functions, as explained below.
 
@@ -949,7 +949,7 @@ You should balance these considerations when deciding whether to leverage prompt
 
 ## Best Practices for Prompt Chaining
 
-Good prompt chaining practices share a lot with best [prompt engineering](https://mirascope.com/blog/prompt-engineering-tools) practices. Here are some recommendations for developing effective prompt chains when using AI models:
+Good prompt chaining practices share a lot with best [prompt engineering](/blog/prompt-engineering-tools) practices. Here are some recommendations for developing effective prompt chains when using AI models:
 
 ### Keep Your Prompts Focused and Specific
 
