@@ -96,7 +96,7 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ children }) => {
 
       {/* Sidebar content */}
       <div
-        className={`fixed top-[var(--header-height)] h-[calc(100vh-var(--header-height))] pt-6 transition-all duration-300 ease-in-out ${
+        className={`fixed top-[var(--header-height)] h-[calc(100vh-var(--header-height))] transition-all duration-300 ease-in-out ${
           sidebarExpanded
             ? "w-64 opacity-100"
             : isSmallScreen

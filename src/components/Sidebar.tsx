@@ -461,7 +461,7 @@ const Sidebar = ({ config, headerContent, footerContent }: SidebarProps) => {
   const activeSection = matchingSections.length > 0 ? matchingSections[0].slug : undefined;
 
   return (
-    <aside className="h-full overflow-hidden pt-6">
+    <aside className="h-full overflow-hidden">
       {/* Custom header content if provided */}
       {headerContent && <div className="mb-5">{headerContent}</div>}
 

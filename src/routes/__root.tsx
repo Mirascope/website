@@ -73,7 +73,10 @@ export const Route = createRootRoute({
           <Header />
 
           {/* Content container with padding to account for fixed header */}
-          <div className="mx-auto w-full max-w-7xl flex-grow pt-24">
+          <div
+            className="mx-auto w-full max-w-7xl flex-grow"
+            style={{ paddingTop: "var(--header-height)" }}
+          >
             <FunModeProvider>
               <main className="flex-grow">
                 <Outlet />

@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import {
   NavigationMenu,
@@ -59,6 +59,23 @@ export default function Header() {
   // State to track scroll position
   const [scrolled, setScrolled] = useState(false);
 
+  // Set the appropriate header height CSS variable based on page type
+  useEffect(() => {
+    if (isDocsPage || isDevPage) {
+      document.documentElement.style.setProperty(
+        "--header-height",
+        "var(--header-height-with-selector)"
+      );
+    } else {
+      document.documentElement.style.setProperty("--header-height", "var(--header-height-base)");
+    }
+
+    return () => {
+      // Reset to default when component unmounts
+      document.documentElement.style.setProperty("--header-height", "var(--header-height-base)");
+    };
+  }, [isDocsPage, isDevPage]);
+
   // Effect to handle scroll position
   useEffect(() => {
     const handleScroll = () => {
@@ -78,7 +95,7 @@ export default function Header() {
   return (
     <header
       className={cn(
-        "fixed top-0 right-0 left-0 z-50 flex w-full flex-col items-center justify-center px-4 py-2 sm:px-6",
+        "fixed top-0 right-0 left-0 z-50 mb-2 flex w-full flex-col items-center justify-center px-4 py-2 sm:px-6",
         isLandingPage
           ? "landing-page-text-shadow bg-transparent text-white"
           : "bg-background text-foreground",
@@ -188,7 +205,7 @@ export default function Header() {
 
       {/* Product selectors for docs and dev pages */}
       {currentProduct && (isDocsPage || isDevPage) && (
-        <div className="mx-auto flex w-full max-w-7xl pt-1">
+        <div className="mx-auto flex w-full max-w-7xl py-3">
           {isDocsPage && <DocsProductSelector currentProduct={currentProduct} />}
           {isDevPage && <DevProductSelector currentProduct={currentProduct} />}
         </div>
