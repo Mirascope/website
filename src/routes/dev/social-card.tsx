@@ -21,7 +21,7 @@ export const Route = createFileRoute("/dev/social-card")({
   pendingComponent: () => {
     return (
       <DevLayout devPages={[]}>
-        <div className="container py-8">
+        <div className="container">
           <LoadingContent spinnerClassName="h-12 w-12" fullHeight={false} />
         </div>
       </DevLayout>
@@ -92,7 +92,7 @@ function SocialCardPreview() {
 
   return (
     <DevLayout devPages={devPages}>
-      <div className="container py-8">
+      <div className="container">
         <h1 className="mb-6 text-3xl font-bold">Social Card Preview</h1>
 
         <p className="mb-6 text-gray-600">

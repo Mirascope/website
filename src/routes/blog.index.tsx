@@ -29,9 +29,9 @@ export const Route = createFileRoute("/blog/")({
 
   // Configure loading state
   pendingComponent: () => (
-    <div className="flex justify-center pt-6">
+    <div className="flex justify-center">
       <div className="mx-auto flex w-full max-w-[1800px] px-4">
-        <div className="min-w-0 flex-1 py-6">
+        <div className="min-w-0 flex-1">
           <div className="mx-auto max-w-5xl">
             <div className="mb-8 text-center">
               <h1 className="mb-4 text-center text-4xl font-bold">Blog</h1>
@@ -81,7 +81,7 @@ function BlogPage() {
   };
 
   return (
-    <div className="flex justify-center pt-6">
+    <div className="flex justify-center">
       <SEOMeta
         title="Blog"
         description="The latest news, updates, and insights about Mirascope and LLM application development."
@@ -89,7 +89,7 @@ function BlogPage() {
         type="website"
       />
       <div className="mx-auto flex w-full max-w-[1800px] px-4">
-        <div className="min-w-0 flex-1 py-6">
+        <div className="min-w-0 flex-1">
           <div className="mx-auto max-w-5xl">
             <div className="mb-8 text-center">
               <h1 className="mb-4 text-center text-4xl font-bold">Blog</h1>

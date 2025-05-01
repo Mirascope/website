@@ -45,8 +45,8 @@ const TocSidebar: React.FC<TocSidebarProps> = ({ document }) => {
 
   return (
     <div className="hidden w-56 flex-shrink-0 lg:block">
-      <div className="fixed top-[60px] max-h-[calc(100vh-60px)] w-56 overflow-y-auto">
-        <div className="px-4 pt-12">
+      <div className="fixed top-[var(--header-height)] max-h-[calc(100vh-var(--header-height))] w-56 overflow-y-auto">
+        <div className="px-4">
           <div className="mb-4 flex flex-col gap-3">
             {document && (
               <Button

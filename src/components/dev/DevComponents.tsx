@@ -21,8 +21,6 @@ import {
 } from "../ui/pagination";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
-import { useRouter, useRouterState } from "@tanstack/react-router";
-import type { ProductName } from "@/src/lib/content/spec";
 
 // Color theme display component from style-test.tsx
 export interface ColorThemeDisplayProps {
@@ -687,83 +685,10 @@ export const ThemeColorCombinations: React.FC = () => {
   );
 };
 
-// Session storage key for dev product preference
-const DEV_PRODUCT_STORAGE_KEY = "devProductPreference";
-
-// ProductSelector - allows switching between product themes
-export const ProductSelector: React.FC = () => {
-  const routerState = useRouterState();
-  const router = useRouter();
-  const path = routerState.location.pathname;
-  const devRoute = routerState.matches.find(
-    (match: { routeId: string }) => match.routeId === "/dev"
-  );
-
-  // Get product from search params if available
-  const searchProduct = devRoute
-    ? (devRoute.search as { product?: ProductName }).product
-    : undefined;
-
-  // Function to read from session storage
-  const readFromStorage = React.useCallback(() => {
-    if (typeof sessionStorage !== "undefined") {
-      return sessionStorage.getItem(DEV_PRODUCT_STORAGE_KEY) as ProductName | null;
-    }
-    return null;
-  }, []);
-
-  // Re-read from storage whenever the URL changes
-  const sessionProduct = React.useMemo(() => {
-    return readFromStorage();
-  }, [readFromStorage, path]);
-
-  // Determine which product is currently active
-  // Priority: 1. Search params 2. Session storage 3. Default
-  const currentProduct = searchProduct || sessionProduct || "mirascope";
-
-  // Navigate to set search params - the parent route component will handle saving to session storage
-  const handleProductChange = (newProduct: ProductName) => {
-    router.navigate({
-      to: path,
-      search: (prev: Record<string, unknown>) => ({ ...prev, product: newProduct }),
-      replace: true,
-    });
-  };
-
-  return (
-    <div className="bg-card bg-background fixed top-25 right-4 z-50 flex items-center space-x-2 rounded-md border p-2 shadow-sm">
-      <span className="text-sm font-medium">Product:</span>
-      <div className="flex space-x-2">
-        <button
-          className={`rounded-md px-3 py-1 text-sm ${
-            currentProduct === "mirascope"
-              ? "bg-primary text-primary-foreground"
-              : "bg-muted text-muted-foreground hover:text-foreground"
-          }`}
-          onClick={() => handleProductChange("mirascope")}
-        >
-          Mirascope
-        </button>
-        <button
-          className={`rounded-md px-3 py-1 text-sm ${
-            currentProduct === "lilypad"
-              ? "bg-primary text-primary-foreground"
-              : "bg-muted text-muted-foreground hover:text-foreground"
-          }`}
-          onClick={() => handleProductChange("lilypad")}
-        >
-          Lilypad
-        </button>
-      </div>
-    </div>
-  );
-};
-
 // Export all dev components
 export const devComponents = {
   ColorThemeDisplay,
   ShadCnThemeDisplay,
   ThemeColorCombinations,
-  ProductSelector,
   DevPagesList,
 };
