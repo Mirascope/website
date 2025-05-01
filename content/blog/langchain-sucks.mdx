@@ -143,7 +143,7 @@ While these might offer convenience and a quick start for certain projects, they
 
 Mirascope takes a more explicit, and obvious approach to chaining, relying on existing structures already defined in Python.
 
-Here, you can [chain LLM calls](https://mirascope.com/learn/chaining) using either **computed fields** (that cache results) or **functions** (that pass outputs directly as inputs to subsequent calls). We generally recommend using computed fields for most use cases since it gives you the ability to cache and reuse outputs, so you can make less calls and economize on computing resources.
+Here, you can [chain LLM calls](/docs/mirascope/learn/chaining) using either **computed fields** (that cache results) or **functions** (that pass outputs directly as inputs to subsequent calls). We generally recommend using computed fields for most use cases since it gives you the ability to cache and reuse outputs, so you can make less calls and economize on computing resources.
 
 Here’s an example of computed fields where `explain_attraction` first calls `recommend_attraction` once and injects the result into the prompt template as a computed field:
 

@@ -292,7 +292,7 @@ Our structured output tools are also tightly integrated with Pydantic, unlike in
 
 ### Output Parsing in Mirascope
 
-In Mirascope you write [output parsers](https://mirascope.com/learn/output_parsers) as Python functions that work together with **call decorators**, which you can add to any function to turn it into an LLM API call. Call decorators let you easily switch between models or compare different outputs, since our decorators work with a [growing list of providers](https://mirascope.com/learn/calls).
+In Mirascope you write [output parsers](/docs/mirascope/learn/output_parsers) as Python functions that work together with **call decorators**, which you can add to any function to turn it into an LLM API call. Call decorators let you easily switch between models or compare different outputs, since our decorators work with a [growing list of providers](/docs/mirascope/learn/calls).
 
 Like LangChain, we support OpenAI’s JSON mode and [structured outputs](https://openai.com/index/introducing-structured-outputs-in-the-api/) (for both JSON schema and tools).
 
@@ -387,7 +387,7 @@ Below, we describe a few of the most convenient settings available for response 
 
 #### Returning Outputs in Valid JSON
 
-Setting `json_mode=True` in the call decorator will apply [JSON mode](https://mirascope.com/learn/json_mode/) - if it’s supported by your LLM - rendering the outputs as valid JSON: ‍
+Setting `json_mode=True` in the call decorator will apply [JSON mode](/docs/mirascope/learn/json_mode/) - if it’s supported by your LLM - rendering the outputs as valid JSON: ‍
 
 ```python
 import json

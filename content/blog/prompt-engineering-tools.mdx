@@ -38,7 +38,7 @@ Back when we started working with the OpenAI SDK, we found that complex prompts 
 
 It became important for us to catch basic errors before they reached the LLM, just as you’d expect in any standard software development workflow.
 
-In [Mirascope](https://mirascope.com), the [`prompt_template`](https://mirascope.com/learn/prompts) decorator enables writing prompts and Python functions, which enables using Pydantic's [`validate_call`](https://docs.pydantic.dev/latest/concepts/validation_decorator/) decorator for automatic data validation to ensure the prompt's inputs are well formed and correspond to those defined by the prompt. This contributes to the overall quality of the prompt and lessens the chance of errors silently going into the LLM.
+In [Mirascope](https://mirascope.com), the [`prompt_template`](/docs/mirascope/learn/prompts) decorator enables writing prompts and Python functions, which enables using Pydantic's [`validate_call`](https://docs.pydantic.dev/latest/concepts/validation_decorator/) decorator for automatic data validation to ensure the prompt's inputs are well formed and correspond to those defined by the prompt. This contributes to the overall quality of the prompt and lessens the chance of errors silently going into the LLM.
 
 Mirascope offers inline documentation and linting for your editor to ensure the quality of your code. Two examples are shown below.
 
@@ -237,7 +237,7 @@ Being able to use convenience wrappers and integrations for working with other l
 
 When working with the OpenAI API, the Mirascope `call` method returns an `OpenAICallResponse` class instance, which is a convenience wrapper encapsulating the response (i.e., the `ChatCompletion` class in `openai` that extends `BaseCallResponse`) from the OpenAI API, making it easier to work with by providing a simpler interface.
 
-Each commented line of the code below shows the equivalent path to access the same information directly from a [`ChatCompletion` object](https://mirascope.com/learn/calls/#provider-specific-response-details) if you were not using the wrapper:
+Each commented line of the code below shows the equivalent path to access the same information directly from a [`ChatCompletion` object](/docs/mirascope/learn/calls/#provider-specific-response-details) if you were not using the wrapper:
 
 ```python
 from mirascope.core.openai import OpenAICallResponse
@@ -250,7 +250,7 @@ response.content     # original.choices[0].message.content
 
 ```
 
-Mirascope also supports interactions with other LLMs besides OpenAI to refine the execution of your calls. Currently, [the following models](https://mirascope.com/learn/calls) (and any providers using their APIs) are supported:
+Mirascope also supports interactions with other LLMs besides OpenAI to refine the execution of your calls. Currently, [the following models](/docs/mirascope/learn/calls) (and any providers using their APIs) are supported:
 
 - OpenAI
 - Anthropic
@@ -280,7 +280,7 @@ The conversational outputs of LLMs are valuable but can be difficult to action o
 
 Extracting structured data from these unstructured outputs allows you to feed these as inputs to other processes and workflows in turn, making that information more useful and actionable..
 
-Mirascope supports [extraction](https://mirascope.com/learn/response_models) by setting the `response_model` flag in the decorator, which takes a Pydantic `BaseModel` as a schema and takes advantage of function calling and JSON mode with LLMs to generate structured output.
+Mirascope supports [extraction](/docs/mirascope/learn/response_models) by setting the `response_model` flag in the decorator, which takes a Pydantic `BaseModel` as a schema and takes advantage of function calling and JSON mode with LLMs to generate structured output.
 
 In the example below, a call with `response_model` set to `TaskDetails` gets task details like due date, priority, and description from a user's natural language input:
 
@@ -356,7 +356,7 @@ LLMs can deliver impressive results with their conversational outputs, but relyi
 - Without access to real-time data or external databases through tools, LLMs may generate outdated or inaccurate information. This increases the risk of incorrect answers, potentially eroding trust.
 - Tasks that involve data retrieval, processing, or manipulation would become cumbersome. Developers would have to implement separate AI systems to handle these tasks outside the LLM, leading to complexity and fragmented system architectures.
 
-To overcome these challenges, Mirascope provides a number of ways [to use tools](https://mirascope.com/learn/tools) in your LLM workflows.
+To overcome these challenges, Mirascope provides a number of ways [to use tools](/docs/mirascope/learn/tools) in your LLM workflows.
 
 For example, the `tool` property is used to attach a tool to a `BaseTool` extension like `OpenAITool`. It comes with the method `call()`, which lets you call the original function with the arguments returned by the model. The example below uses functions as-is with no additional work, automatically generating the tool, attaching the function, and passing along its docstring under-the-hood for you:
 
@@ -388,7 +388,7 @@ print(tool.call())  # runs `format_book` with `title` and `author` args
 
 Mirascope supports a number of docstrings, such as Google-, ReST-, Numpydoc-, and Epydoc-style docstrings.
 
-Otherwise, Mirascope lets you define your own `BaseTool`, when the function you want has an insufficient or nonexistent docstring. You can find further use cases for using tools, and code samples, in our [overview documentation](https://mirascope.com/learn/tools).
+Otherwise, Mirascope lets you define your own `BaseTool`, when the function you want has an insufficient or nonexistent docstring. You can find further use cases for using tools, and code samples, in our [overview documentation](/docs/mirascope/learn/tools).
 
 ```python
 from pydantic import Field
