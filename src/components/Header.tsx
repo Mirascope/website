@@ -206,7 +206,7 @@ export default function Header() {
 
       {/* Product links for docs pages */}
       {isDocsPage && currentProduct && (
-        <div className="flex w-full justify-center pt-1">
+        <div className="mx-auto flex w-full max-w-7xl pt-1">
           <div className="flex space-x-8">
             {currentProduct === "mirascope" ? (
               <ProductTitle product="mirascope" />
