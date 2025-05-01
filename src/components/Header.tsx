@@ -103,6 +103,7 @@ export default function Header() {
         scrolled && !isLandingPage ? "border-border border-b shadow-sm" : "",
         scrolled && isLandingPage ? "bg-foreground/80 backdrop-blur-sm" : ""
       )}
+      style={{ height: "var(--header-height)" }}
     >
       <nav className="mx-auto flex w-full max-w-7xl flex-row items-center justify-between">
         <Link
