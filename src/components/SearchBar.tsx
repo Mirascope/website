@@ -9,9 +9,10 @@ import { environment } from "@/src/lib/content/environment";
 interface SearchResultProps {
   result: SearchResultItem;
   onSelect: () => void;
+  isSelected?: boolean;
 }
 
-function SearchResult({ result, onSelect }: SearchResultProps) {
+function SearchResult({ result, onSelect, isSelected = false }: SearchResultProps) {
   // Get development mode from environment
   const isDev = environment.isDev();
 
@@ -23,7 +24,10 @@ function SearchResult({ result, onSelect }: SearchResultProps) {
     <Link
       to={result.url}
       onClick={onSelect}
-      className="hover:bg-accent/50 border-border/40 flex border-t px-5 py-4 text-sm transition-colors first:border-0"
+      className={cn(
+        "border-border/40 flex border-t px-5 py-4 text-sm transition-colors first:border-0",
+        isSelected ? "bg-accent/50" : "hover:bg-accent/50"
+      )}
     >
       <div className="min-w-0 flex-1">
         <div className="mb-2 flex items-center justify-between">
@@ -67,16 +71,22 @@ const MAX_DISPLAYED_RESULTS = 20;
 interface SearchResultListProps {
   results: SearchResultItem[];
   onResultSelect: () => void;
+  selectedIndex: number;
 }
 
-function SearchResultList({ results, onResultSelect }: SearchResultListProps) {
+function SearchResultList({ results, onResultSelect, selectedIndex }: SearchResultListProps) {
   // Only display up to MAX_DISPLAYED_RESULTS
   const displayedResults = results.slice(0, MAX_DISPLAYED_RESULTS);
 
   return (
     <div>
       {displayedResults.map((result, idx) => (
-        <SearchResult key={`${result.url}-${idx}`} result={result} onSelect={onResultSelect} />
+        <SearchResult
+          key={`${result.url}-${idx}`}
+          result={result}
+          onSelect={onResultSelect}
+          isSelected={idx === selectedIndex}
+        />
       ))}
       {results.length > MAX_DISPLAYED_RESULTS && (
         <div className="text-muted-foreground border-border/40 border-t px-4 py-2 text-center text-xs">
@@ -175,6 +185,7 @@ interface SearchResultsContainerProps {
   resultsRef: React.RefObject<HTMLDivElement | null>;
   onResultSelect: () => void;
   isLandingPage?: boolean;
+  selectedIndex: number;
 }
 
 function SearchResultsContainer({
@@ -188,6 +199,7 @@ function SearchResultsContainer({
   resultsRef,
   onResultSelect,
   isLandingPage = false,
+  selectedIndex,
 }: SearchResultsContainerProps) {
   // Use a fixed state derived from isOpen with some delayed rendering logic
   const [isReallyVisible, setIsReallyVisible] = useState(false);
@@ -256,7 +268,11 @@ function SearchResultsContainer({
     if (hasResults) {
       return (
         <div className="max-h-[calc(100vh-200px)] overflow-y-auto">
-          <SearchResultList results={results} onResultSelect={onResultSelect} />
+          <SearchResultList
+            results={results}
+            onResultSelect={onResultSelect}
+            selectedIndex={selectedIndex}
+          />
         </div>
       );
     }
@@ -302,6 +318,7 @@ export default function SearchBar({ onOpenChange, isLandingPage = false }: Searc
   const [isLoading, setIsLoading] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState("");
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
@@ -342,11 +359,41 @@ export default function SearchBar({ onOpenChange, isLandingPage = false }: Searc
         e.preventDefault();
         setIsOpen(true);
       }
+
+      // Only handle arrow keys when search is open and we have results
+      if (isOpen && results.length > 0) {
+        // Navigate down with down arrow
+        if (e.key === "ArrowDown") {
+          e.preventDefault();
+          setSelectedIndex((prevIndex) =>
+            prevIndex < Math.min(results.length - 1, MAX_DISPLAYED_RESULTS - 1)
+              ? prevIndex + 1
+              : prevIndex
+          );
+        }
+
+        // Navigate up with up arrow
+        if (e.key === "ArrowUp") {
+          e.preventDefault();
+          setSelectedIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : prevIndex));
+        }
+
+        // Select item with Enter key
+        if (e.key === "Enter" && selectedIndex >= 0 && selectedIndex < results.length) {
+          e.preventDefault();
+          // Let the result selection be handled by the Link component
+          // by programmatically clicking the selected result item
+          const resultElements = resultsRef.current?.querySelectorAll("a");
+          if (resultElements && resultElements[selectedIndex]) {
+            resultElements[selectedIndex].click();
+          }
+        }
+      }
     };
 
     window.addEventListener("keydown", handleKeyDown as any);
     return () => window.removeEventListener("keydown", handleKeyDown as any);
-  }, []);
+  }, [isOpen, results, selectedIndex]);
 
   // Close on click outside
   useEffect(() => {
@@ -409,7 +456,7 @@ export default function SearchBar({ onOpenChange, isLandingPage = false }: Searc
     };
   }, [query, isPagefindLoaded, searchService]);
 
-  // Handle result selection
+  // Handle result selection - closes the search interface
   const handleResultSelect = () => {
     setIsOpen(false);
     setQuery("");
@@ -439,6 +486,11 @@ export default function SearchBar({ onOpenChange, isLandingPage = false }: Searc
     }
   };
 
+  // When new search results arrive, reset the selected index
+  useEffect(() => {
+    setSelectedIndex(0);
+  }, [results]);
+
   return (
     <div className="relative" ref={searchContainerRef}>
       <SearchInput
@@ -461,6 +513,7 @@ export default function SearchBar({ onOpenChange, isLandingPage = false }: Searc
         resultsRef={resultsRef}
         onResultSelect={handleResultSelect}
         isLandingPage={isLandingPage}
+        selectedIndex={selectedIndex}
       />
     </div>
   );
