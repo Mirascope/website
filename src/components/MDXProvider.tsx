@@ -1,5 +1,6 @@
 import React from "react";
 import { MDXProvider } from "@mdx-js/react";
+import { Link } from "@tanstack/react-router";
 import {
   InstallSnippet,
   CodeSnippet,
@@ -148,9 +149,25 @@ export const components = {
     );
   },
   p: (props: React.ComponentPropsWithoutRef<"p">) => <p className="my-3" {...props} />,
-  a: (props: React.ComponentPropsWithoutRef<"a">) => (
-    <a className="text-primary no-underline hover:underline" {...props} />
-  ),
+  a: (props: React.ComponentPropsWithoutRef<"a">) => {
+    // Check if the link is internal
+    const { href, ...rest } = props;
+    if (
+      href &&
+      (href.startsWith("/") ||
+        (href !== "#" &&
+          !href.startsWith("http") &&
+          !href.startsWith("https") &&
+          !href.startsWith("mailto:") &&
+          !href.startsWith("tel:")))
+    ) {
+      // It's an internal link, use Link from TanStack Router
+      return <Link to={href} className="text-primary no-underline hover:underline" {...rest} />;
+    }
+
+    // Use regular <a> for external links or anchor links
+    return <a className="text-primary no-underline hover:underline" {...props} />;
+  },
   ul: (props: React.ComponentPropsWithoutRef<"ul">) => (
     <ul className="my-4 list-disc pl-5" {...props} />
   ),
