@@ -93,7 +93,7 @@ export default function ThemeSwitcher() {
       <DropdownMenuTrigger asChild>
         <button
           className={cn(
-            "focus:ring-primary mr-2 rounded-md p-2 transition-colors focus:ring-2 focus:outline-none",
+            "focus:ring-primary mr-2 cursor-pointer rounded-md p-2 transition-colors focus:ring-2 focus:outline-none",
             isLandingPage ? "nav-icon-landing" : "nav-text-regular"
           )}
           aria-label="Select theme"
