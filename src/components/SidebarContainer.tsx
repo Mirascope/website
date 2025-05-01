@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
-import DocsSidebar from "@/src/components/docs/core/DocsSidebar";
-import { type ProductName } from "@/src/lib/content/spec";
 
 interface SidebarContainerProps {
-  product: ProductName;
+  children: React.ReactNode;
 }
 
 /**
- * SidebarContainer - Manages the responsive sidebar for documentation pages
+ * SidebarContainer - Manages the responsive sidebar for any page type
  *
  * Handles sidebar state (expanded/collapsed) based on screen size and
- * provides toggle functionality
+ * provides toggle functionality. Accepts any content as children.
  */
-const SidebarContainer: React.FC<SidebarContainerProps> = ({ product }) => {
+const SidebarContainer: React.FC<SidebarContainerProps> = ({ children }) => {
   // Track if we're at a small screen breakpoint
   const [isSmallScreen, setIsSmallScreen] = useState(() => {
     if (typeof window !== "undefined") {
@@ -131,9 +129,7 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ product }) => {
           </div>
         )}
 
-        <div className="h-full overflow-y-auto">
-          <DocsSidebar product={product} />
-        </div>
+        <div className="h-full overflow-y-auto">{children}</div>
       </div>
     </div>
   );
