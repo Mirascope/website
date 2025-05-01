@@ -17,20 +17,22 @@ const FeatureRow = ({
   feature,
   free,
   pro,
+  team,
 }: {
   feature: string;
   free: string | boolean;
   pro: string | boolean;
+  team: string | boolean;
 }) => {
-  // If both tiers have the exact same value (and it's not a boolean)
-  const sameNonBoolean = free === pro && typeof free === "string" && free !== "";
+  // If all tiers have the exact same value (and it's not a boolean)
+  const allSameNonBoolean = free === pro && pro === team && typeof free === "string" && free !== "";
 
   return (
-    <div className="border-border grid min-h-[48px] grid-cols-3 items-center gap-4 border-b py-3">
+    <div className="border-border grid min-h-[48px] grid-cols-4 items-center gap-4 border-b py-3">
       <div className="text-foreground text-lg font-medium">{feature}</div>
 
-      {sameNonBoolean ? (
-        <div className="col-span-2 text-center text-lg whitespace-pre-line">{free}</div>
+      {allSameNonBoolean ? (
+        <div className="col-span-3 text-center text-lg whitespace-pre-line">{free}</div>
       ) : (
         <>
           <div className="text-center">
@@ -66,6 +68,24 @@ const FeatureRow = ({
               </div>
             ) : (
               <span className="text-foreground text-lg whitespace-pre-line">{pro}</span>
+            )}
+          </div>
+
+          <div className="text-center">
+            {typeof team === "boolean" ? (
+              <div className="flex justify-center">
+                {team ? (
+                  <div className="bg-primary/30 rounded-full p-1">
+                    <Check size={16} className="text-primary" />
+                  </div>
+                ) : (
+                  <div className="bg-muted rounded-full p-1">
+                    <X size={16} className="text-muted-foreground" />
+                  </div>
+                )}
+              </div>
+            ) : (
+              <span className="text-foreground text-lg whitespace-pre-line">{team}</span>
             )}
           </div>
         </>
@@ -109,7 +129,12 @@ const PricingTier = ({
 const FeatureComparisonTable = ({
   features,
 }: {
-  features: Array<{ feature: string; free: string | boolean; pro: string | boolean }>;
+  features: Array<{
+    feature: string;
+    free: string | boolean;
+    pro: string | boolean;
+    team: string | boolean;
+  }>;
 }) => (
   <div className="bg-background border-border overflow-hidden rounded-lg border shadow-sm">
     <div className="bg-accent border-border border-b px-4 py-5 sm:px-6">
@@ -117,15 +142,22 @@ const FeatureComparisonTable = ({
     </div>
     <div className="bg-background overflow-x-auto px-4 py-5 sm:p-6">
       {/* Table header */}
-      <div className="border-border grid grid-cols-3 gap-4 border-b pb-4">
+      <div className="border-border grid grid-cols-4 gap-4 border-b pb-4">
         <div className="text-muted-foreground text-lg font-medium">Feature</div>
         <div className="text-muted-foreground text-center text-lg font-medium">Free</div>
         <div className="text-muted-foreground text-center text-lg font-medium">Pro</div>
+        <div className="text-muted-foreground text-center text-lg font-medium">Team</div>
       </div>
 
       {/* Table rows */}
       {features.map((feat, i) => (
-        <FeatureRow key={i} feature={feat.feature} free={feat.free} pro={feat.pro} />
+        <FeatureRow
+          key={i}
+          feature={feat.feature}
+          free={feat.free}
+          pro={feat.pro}
+          team={feat.team}
+        />
       ))}
     </div>
   </div>
@@ -134,36 +166,39 @@ const FeatureComparisonTable = ({
 function PricingPage() {
   // Cloud hosted features
   const cloudHostedFeatures = [
-    { feature: "Projects", free: "Unlimited", pro: "Unlimited" },
-    { feature: "Users", free: "1", pro: "5" },
+    { feature: "Projects", free: "Unlimited", pro: "Unlimited", team: "Unlimited" },
+    { feature: "Users", free: "1", pro: "5", team: "10" },
     {
       feature: "Tracing",
       free: "30k spans / month",
-      pro: "$0.0001 / span\n(first 100k free)",
+      pro: "100k spans / month (thereafter $1 per 10k)",
+      team: "100k spans / month (thereafter $1 per 10k)",
     },
-    { feature: "Data Retention", free: "30 days", pro: "90 days" },
-    { feature: "Versioned Functions", free: true, pro: true },
-    { feature: "Playground", free: true, pro: true },
-    { feature: "Comparisons", free: true, pro: true },
-    { feature: "Annotations", free: true, pro: true },
-    { feature: "Support (Community)", free: true, pro: true },
-    { feature: "Support (Chat / Email)", free: false, pro: true },
-    { feature: "API Rate Limits", free: "10 / minute", pro: "100 / minute" },
+    { feature: "Data Retention", free: "30 days", pro: "90 days", team: "90 days" },
+    { feature: "Versioned Functions", free: true, pro: true, team: true },
+    { feature: "Playground", free: true, pro: true, team: true },
+    { feature: "Comparisons", free: true, pro: true, team: true },
+    { feature: "Annotations", free: true, pro: true, team: true },
+    { feature: "Support (Community)", free: true, pro: true, team: true },
+    { feature: "Support (Chat / Email)", free: false, pro: true, team: true },
+    { feature: "Support (Private Slack)", free: false, pro: false, team: true },
+    { feature: "API Rate Limits", free: "10 / minute", pro: "100 / minute", team: "100 / minute" },
   ];
 
   // Self-hosted features
   const selfHostedFeatures = [
-    { feature: "Projects", free: "Unlimited", pro: "Unlimited" },
-    { feature: "Users", free: "1", pro: "As licensed" },
-    { feature: "Tracing", free: "No limits", pro: "No limits" },
-    { feature: "Data Retention", free: "No limits", pro: "No limits" },
-    { feature: "Versioned Functions", free: true, pro: true },
-    { feature: "Playground", free: false, pro: true },
-    { feature: "Comparisons", free: false, pro: true },
-    { feature: "Annotations", free: false, pro: true },
-    { feature: "Support (Community)", free: true, pro: true },
-    { feature: "Support (Chat / Email)", free: false, pro: true },
-    { feature: "API Rate Limits", free: "No limits", pro: "No limits" },
+    { feature: "Projects", free: "Unlimited", pro: "Unlimited", team: "Unlimited" },
+    { feature: "Users", free: "1", pro: "As licensed", team: "As licensed" },
+    { feature: "Tracing", free: "No limits", pro: "No limits", team: "No limits" },
+    { feature: "Data Retention", free: "No limits", pro: "No limits", team: "No limits" },
+    { feature: "Versioned Functions", free: true, pro: true, team: true },
+    { feature: "Playground", free: false, pro: true, team: true },
+    { feature: "Comparisons", free: false, pro: true, team: true },
+    { feature: "Annotations", free: false, pro: true, team: true },
+    { feature: "Support (Community)", free: true, pro: true, team: true },
+    { feature: "Support (Chat / Email)", free: false, pro: true, team: true },
+    { feature: "Support (Private Slack)", free: false, pro: false, team: true },
+    { feature: "API Rate Limits", free: "No limits", pro: "No limits", team: "No limits" },
   ];
 
   // Beta notice content for tooltips
@@ -216,7 +251,7 @@ function PricingPage() {
 
             {/* Hosted By Us Tab Content */}
             <TabsContent value="hosted">
-              <div className="mb-10 grid gap-8 md:grid-cols-2">
+              <div className="mb-10 grid gap-8 md:grid-cols-3">
                 <PricingTier
                   name="Free"
                   price="$0"
@@ -253,6 +288,37 @@ function PricingPage() {
                     </ButtonLink>
                   </div>
                 </div>
+                <div className="bg-background border-border overflow-hidden rounded-lg border shadow-sm">
+                  <div className="bg-background px-6 py-8">
+                    <div className="mb-2 flex items-center gap-2">
+                      <h3 className="text-foreground text-xl font-semibold">Team</h3>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <Info size={16} className="text-primary cursor-pointer" />
+                        </TooltipTrigger>
+                        <TooltipContent
+                          side="right"
+                          className="bg-popover text-primary border-primary/20 w-96 border p-4"
+                        >
+                          {betaNoticeContent}
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                    <p className="text-muted-foreground mb-5">
+                      For larger teams requiring dedicated support
+                    </p>
+                    <div className="mb-6">
+                      <span className="text-3xl font-bold">TBD</span>
+                    </div>
+                    <ButtonLink
+                      href="mailto:sales@mirascope.com"
+                      variant="outline"
+                      className="w-full"
+                    >
+                      Contact Us
+                    </ButtonLink>
+                  </div>
+                </div>
               </div>
 
               {/* Feature comparison table */}
@@ -261,7 +327,7 @@ function PricingPage() {
 
             {/* Self Hosting Tab Content */}
             <TabsContent value="selfhosted">
-              <div className="mb-10 grid gap-8 md:grid-cols-2">
+              <div className="mb-10 grid gap-8 md:grid-cols-3">
                 <PricingTier
                   name="Free"
                   price="$0"
@@ -286,6 +352,37 @@ function PricingPage() {
                       </Tooltip>
                     </div>
                     <p className="text-muted-foreground mb-5">For teams with more advanced needs</p>
+                    <div className="mb-6">
+                      <span className="text-3xl font-bold">TBD</span>
+                    </div>
+                    <ButtonLink
+                      href="mailto:sales@mirascope.com"
+                      variant="outline"
+                      className="w-full"
+                    >
+                      Request License
+                    </ButtonLink>
+                  </div>
+                </div>
+                <div className="bg-background border-border overflow-hidden rounded-lg border shadow-sm">
+                  <div className="bg-background px-6 py-8">
+                    <div className="mb-2 flex items-center gap-2">
+                      <h3 className="text-foreground text-xl font-semibold">Team</h3>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <Info size={16} className="text-primary cursor-pointer" />
+                        </TooltipTrigger>
+                        <TooltipContent
+                          side="right"
+                          className="bg-popover text-primary border-primary/20 w-96 border p-4"
+                        >
+                          {betaNoticeContent}
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                    <p className="text-muted-foreground mb-5">
+                      For larger teams requiring dedicated support
+                    </p>
                     <div className="mb-6">
                       <span className="text-3xl font-bold">TBD</span>
                     </div>
