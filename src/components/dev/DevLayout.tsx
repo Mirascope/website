@@ -22,14 +22,10 @@ const DevLayout: React.FC<DevLayoutProps> = ({ children, devPages }) => {
     </SidebarContainer>
   );
 
-  // Main content - expanded to use full width
-  const mainContent = <div className="min-w-0 flex-1 px-8">{children}</div>;
+  // Main content - add max-width constraint to prevent pushing sidebar
+  const mainContent = <div className="max-w-5xl min-w-0 flex-1 px-8">{children}</div>;
 
-  return (
-    <div className="flex justify-center pt-0">
-      <BaseLayout leftSidebar={leftSidebar} mainContent={mainContent} />
-    </div>
-  );
+  return <BaseLayout leftSidebar={leftSidebar} mainContent={mainContent} />;
 };
 
 export default DevLayout;
