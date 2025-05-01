@@ -190,7 +190,7 @@ function BlogPostPage() {
             <div className="fixed top-[96px] h-[calc(100vh-96px)] w-56 overflow-hidden">
               <div className="flex h-full flex-col">
                 {/* Fixed header section with Copy as Markdown button */}
-                <div className="bg-background mb-4 flex flex-col gap-3 px-4 pt-6">
+                <div className="bg-background mb-4 flex flex-col gap-3 px-4">
                   <Button
                     variant="outline"
                     size="sm"
