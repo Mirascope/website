@@ -122,7 +122,7 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
       {/* Buttons - positioned based on block size */}
       <div
         className={cn(
-          "absolute z-10 opacity-0 transition-opacity group-hover:opacity-100",
+          "absolute z-10 opacity-0 transition-opacity group-hover:opacity-100 max-sm:opacity-80 sm:opacity-0",
           isSmallBlock ? "top-1/2 right-3 flex -translate-y-1/2 space-x-1" : "top-3 right-3"
         )}
       >
@@ -182,7 +182,7 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
 
       {/* Fun mode button in bottom right for normal sized blocks */}
       {!isSmallBlock && (
-        <div className="absolute right-3 bottom-3 z-10 opacity-0 transition-opacity group-hover:opacity-100">
+        <div className="absolute right-3 bottom-3 z-10 opacity-0 transition-opacity group-hover:opacity-100 max-sm:opacity-80 sm:opacity-0">
           <button
             className="bg-background hover:bg-muted relative cursor-pointer rounded-md border p-1.5"
             onClick={toggleFunMode}
