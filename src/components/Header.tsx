@@ -217,7 +217,7 @@ export default function Header() {
 
       {/* Product selectors for docs and dev pages */}
       {currentProduct && (isDocsPage || isDevPage) && (
-        <div className="mx-auto flex w-full max-w-7xl py-3">
+        <div className="mx-auto flex w-full max-w-7xl pt-5 pb-1">
           {isDocsPage && <DocsProductSelector currentProduct={currentProduct} />}
           {isDevPage && <DevProductSelector currentProduct={currentProduct} />}
         </div>
