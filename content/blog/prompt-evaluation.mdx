@@ -19,7 +19,7 @@ When evaluating prompts, you should:
    Also, language models can carry biases from their training data, influencing responses in ways that weren’t intended.
 2. **Implement a process to evaluate prompts against these criteria**. This often involves using frameworks or automated tools for repetitive tasks like scoring outputs or ranking responses, while reserving more subtle aspects like detecting hallucinations or addressing culturally sensitive contexts for human oversight.
 
-In this article, we show you different ways to evaluate prompts and share practical techniques and insights based on real-world applications. Along the way, we’ll also examine how [Lilypad](https://lilypad.so/docs) helps structure this evaluation process, making it easier to iterate, compare, and optimize prompts at scale.
+In this article, we show you different ways to evaluate prompts and share practical techniques and insights based on real-world applications. Along the way, we’ll also examine how [Lilypad](/docs/lilypad) helps structure this evaluation process, making it easier to iterate, compare, and optimize prompts at scale.
 
 Further down, we also share best practices for prompt evaluation and example evaluations using [Mirascope](https://github.com/mirascope/mirascope), our lightweight toolkit for building with LLMs.
 
@@ -67,7 +67,7 @@ Each tool offers unique features to address different aspects of prompt evaluati
 
 ### Lilypad
 
-[Lilypad](https://lilypad.so/docs) allows you to automatically version, trace, and manage prompts (generations) by simply adding the Python decorator `@lilypad.generation` to your LLM functions.  
+[Lilypad](/docs/lilypad) allows you to automatically version, trace, and manage prompts (generations) by simply adding the Python decorator `@lilypad.generation` to your LLM functions.  
 
 It recognizes the non-deterministic nature of LLM outputs and treats prompts and everything else that goes into generating the output as optimization problems rather than as one-time configurations that don't adapt to real-world performance.
 
@@ -608,7 +608,7 @@ We’d even argue that refining a prompt to produce an acceptable output is more
 
 Systematically versioning prompts and refining evaluation criteria helps establish reproducible outcomes and maintain consistent benchmarks across your optimization workflow.
 
-[Lilypad](https://lilypad.so/docs) automatically versions and traces all prompt changes to support experiments and collaboration, allowing you to identify what worked and what didn’t. This includes:
+[Lilypad](/docs/lilypad) automatically versions and traces all prompt changes to support experiments and collaboration, allowing you to identify what worked and what didn’t. This includes:
 
 * Automating experimentation and detecting regressions, such as A/B testing of prompt variations  
 * Historically comparing the effectiveness of different prompts, via Lilypad’s traceability  
