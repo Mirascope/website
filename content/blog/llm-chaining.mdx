@@ -14,12 +14,12 @@ Chaining lets applications do things like work with multiple files, refine conte
 * They only remember what’s been said in a given conversation but not outside of it, unless you store the memory or state externally.  
 * They still generally only output their answers as text (e.g., prose, JSON, SQL code). But what if your application needs very specific outputs like a validated CSV file, flow chart, or knowledge graph?
 
-This is why LLM chains are useful: they let you build sophisticated applications like [LLM agents](https://mirascope.com/blog/llm-agents/) and retrieval augmented generation (RAG) systems that typically include:
+This is why LLM chains are useful: they let you build sophisticated applications like [LLM agents](/blog/llm-agents/) and retrieval augmented generation (RAG) systems that typically include:
 
 * An input processing step, like preparing and formatting data that’ll be sent to the LLM - which often involves a prompt template.  
 * APIs enabling interaction with both LLMs and external services and applications.  
 * Language model output processing, such as parsing, validating, and formatting.  
-* Data retrieval from external data sources, such as fetching relevant embeddings from a vector database to enhance contextual understanding in [LangChain RAG](https://mirascope.com/blog/langchain-rag/) applications.
+* Data retrieval from external data sources, such as fetching relevant embeddings from a vector database to enhance contextual understanding in [LangChain RAG](/blog/langchain-rag/) applications.
 
 **But putting together an LLM chain isn’t always straightforward**, which is why orchestration frameworks like LangChain and LlamaIndex exist, though these have their own inefficiencies that we’ll discuss later on.
 
@@ -37,7 +37,7 @@ This in turn allows the language model to refine its understanding progressively
 
 So rather than sending all the information at once and hoping for the best, the chain you design should break the prompt or task down into subtasks that in turn guide the model’s reasoning through intermediate steps.
 
-For instance, this allows applications such as [LLM as a judge](https://mirascope.com/blog/llm-as-judge/) to iteratively refine or validate responses based on predefined evaluation criteria.
+For instance, this allows applications such as [LLM as a judge](/blog/llm-as-judge/) to iteratively refine or validate responses based on predefined evaluation criteria.
 
 While most people think of prompt chaining as a simple linear sequence of LLM calls (with the output of one being fed as input to the next) there are other ways of chaining as we see below:
 
@@ -92,7 +92,7 @@ Sometimes this can be more efficient than other chaining techniques by reducing 
 * Different aspects of a task can be processed independently, like a financial analysis tool running separate LLM calls for balance sheet evaluation and competitive analysis before merging insights.  
 * You need to generate multiple outputs based on the same input, such as in synthetic data generation for training AI models, where variations of data samples are created in parallel to improve model generalization and robustness.
 
-(See our guide on [synthetic data generation](https://mirascope.com/blog/synthetic-data-generation/).)
+(See our guide on [synthetic data generation](/blog/synthetic-data-generation/).)
 
 For example, parallel chains are good for:
 
@@ -169,7 +169,7 @@ It’s generally useful for:
 
 In customer support, a chatbot might troubleshoot an internet connectivity issue by first asking if the router is powered on, then branching into different solutions depending on whether the user confirms or denies connectivity, and finally escalating to a technician if the problem remains unresolved.
 
-*(See our article on [how to make a chatbot](https://mirascope.com/blog/how-to-make-a-chatbot/).)*
+*(See our article on [how to make a chatbot](/blog/how-to-make-a-chatbot/).)*
 
 Below we implement a conditional prompt that determines whether a trend is emerging or declining, then analyzes this.
 

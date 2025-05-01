@@ -15,7 +15,7 @@ It also contrasts with other techniques like semantic search, which retrieves re
 
 RAG helps reduce the risk of hallucination and offers benefits in fields where accuracy, timeliness, and specialized knowledge are highly valued, such as healthcare, science, legal, and others.
 
-As an alternative to RAG you can [fine-tune a model](https://mirascope.com/blog/prompt-engineering-vs-fine-tuning/) to internalize domain-specific knowledge, which can result in faster and more consistent responses - as long as those tasks have specialized, fixed requirements - **but it’s generally a time consuming and potentially expensive process**.
+As an alternative to RAG you can [fine-tune a model](/blog/prompt-engineering-vs-fine-tuning/) to internalize domain-specific knowledge, which can result in faster and more consistent responses - as long as those tasks have specialized, fixed requirements - **but it’s generally a time consuming and potentially expensive process**.
 
 Also, the model’s knowledge is static, meaning you’ll need to fine-tune the model again to update it.
 
@@ -27,13 +27,13 @@ For the tutorial we use LlamaIndex for data ingestion and storage, and also Mira
 
 ## How Does RAG Work?
 
-To send the right information (or “context”) to the LLM along with your query, you need to set up a pipeline that [orchestrates data flows](https://mirascope.com/blog/llm-orchestration/) for data ingestion, preprocessing, storage, retrieval, and response generation.
+To send the right information (or “context”) to the LLM along with your query, you need to set up a pipeline that [orchestrates data flows](/blog/llm-orchestration/) for data ingestion, preprocessing, storage, retrieval, and response generation.
 
 In this section, we describe the broad steps of such a pipeline but keep in mind it’s very generalized since RAG implementations can vary heavily according to project requirements.
 
 For instance:
 
-* Some applications (like an internal knowledge application for an insurance company) might work with proprietary documents, making confidentiality and user access controls important - so the [pipeline](https://mirascope.com/blog/llm-pipeline/) might include authentication measures, access permissions, and audit trails for secure and compliant retrieval.  
+* Some applications (like an internal knowledge application for an insurance company) might work with proprietary documents, making confidentiality and user access controls important - so the [pipeline](/blog/llm-pipeline/) might include authentication measures, access permissions, and audit trails for secure and compliant retrieval.  
 * Others, such as specialized domains like medicine or biotech, might use ontologies to organize and retrieve information from structured databases, or undergo strict quality checks (such as automated checks to ensure compliance with industry standards) before being sent to the LLM as context.
 
 Below, we describe a generic RAG setup in three phases:
@@ -48,7 +48,7 @@ Below, we describe a generic RAG setup in three phases:
 
 Depending on your needs, RAG can involve ingestion of both *unstructured* data like documents (e.g., PDFs, presentations, webpages, and call transcripts), images, and video recordings, and *structured* information like databases, logs, and spreadsheets.
 
-During ingestion, documents are parsed for their useful content (e.g., headers are extracted from documents, content is extracted from HTML pages). [Frameworks](https://mirascope.com/blog/llm-frameworks/) like LlamaIndex and LangChain offer specialized loader classes for different types of documents and structured data types.
+During ingestion, documents are parsed for their useful content (e.g., headers are extracted from documents, content is extracted from HTML pages). [Frameworks](/blog/llm-frameworks/) like LlamaIndex and LangChain offer specialized loader classes for different types of documents and structured data types.
 
 Data is next segmented into manageable chunks using text-splitting software. The size of these chunks, which are generally split according to a predetermined number of tokens or characters, has an impact on retrieval efficiency and often involves certain trade-offs.
 
@@ -98,7 +98,7 @@ These answers needed to be professional and follow company guidelines, which was
 
 The company now uses RAG to both encode customer questions and use similarity searches to compare these against entries in their product database. The system retrieves the relevant entries and forwards these, along with the original question, to the LLM for a personalized response.
 
-It uses two popular frameworks: LlamaIndex for preprocessing product catalog details and [LangChain](https://mirascope.com/blog/langchain-rag/) for overall data orchestration from query processing to sending the response back to the customer.
+It uses two popular frameworks: LlamaIndex for preprocessing product catalog details and [LangChain](/blog/langchain-rag/) for overall data orchestration from query processing to sending the response back to the customer.
 
 ### Routing Support Calls
 
@@ -120,7 +120,7 @@ The system supports multiple languages and runs 24/7.
 
 A company can use RAG as an internal onboarding chatbot that consolidates training materials scattered across internal wikis, shared drives, and manuals to reduce the time that trainers spend on repetitive Q&A.
 
-Such materials can be organized as a [knowledge graph](https://mirascope.com/blog/how-to-build-a-knowledge-graph/) - whose nodes are stored in a vector database as embeddings, and retrieved via semantic search - allowing the system to deeply understand the relationship between nodes and the context of the query.
+Such materials can be organized as a [knowledge graph](/blog/how-to-build-a-knowledge-graph/) - whose nodes are stored in a vector database as embeddings, and retrieved via semantic search - allowing the system to deeply understand the relationship between nodes and the context of the query.
 
 The grounding of RAG-generated responses in authoritative documents minimizes bias and provides consistent, reliable guidance. Moreover, the system’s knowledge base can be continuously refreshed to remain up to date according to the changing needs of the organization.
 
@@ -133,11 +133,11 @@ Below, we build an example RAG system that answers questions about Alan Turing�
 We’ll use two libraries for our implementation:
 
 * LlamaIndex for preprocessing and information retrieval  
-* Mirascope for simplifying [prompt engineering](https://mirascope.com/blog/advanced-prompt-engineering/) and handling the response
+* Mirascope for simplifying [prompt engineering](/blog/advanced-prompt-engineering/) and handling the response
 
-LlamaIndex is a framework designed to handle large datasets and provides [tools](https://mirascope.com/blog/llm-tools/) for loading and preprocessing documents from a variety of data sources. It also converts these into embeddings for storage and indexing.
+LlamaIndex is a framework designed to handle large datasets and provides [tools](/blog/llm-tools/) for loading and preprocessing documents from a variety of data sources. It also converts these into embeddings for storage and indexing.
 
-Mirascope is a library for interacting with language models in plain Python that provides developer-agnostic tools to optimize prompts, manage state, and [validate outputs](https://mirascope.com/blog/langchain-structured-output/).
+Mirascope is a library for interacting with language models in plain Python that provides developer-agnostic tools to optimize prompts, manage state, and [validate outputs](/blog/langchain-structured-output/).
 
 In the steps below, we use LlamaIndex to ingest, preprocess, and store Turing’s scientific papers, as well as to instantiate a retriever object to find relevant papers for our queries.
 
@@ -177,7 +177,7 @@ Here, `SimpleDirectoryReader` loads an entire subdirectory containing PDFs (this
 
 We next use `VectorStoreIndex` to build a searchable index of the retrieved documents we’ve loaded by splitting them into chunks and preprocessing them (via `from_documents`).
 
-Once these chunks (or “nodes” as [LlamaIndex](https://mirascope.com/blog/llamaindex-vs-langchain/) refers to them) are created, `VectorStoreIndex` uses a default embedding model to vectorize and store these in memory. (You can also use a separate vector store such as Pinecone.)
+Once these chunks (or “nodes” as [LlamaIndex](/blog/llamaindex-vs-langchain/) refers to them) are created, `VectorStoreIndex` uses a default embedding model to vectorize and store these in memory. (You can also use a separate vector store such as Pinecone.)
 
 Lastly, we instantiate a retriever object to fetch relevant content given a user query using `.from_retriever`.
 
@@ -212,14 +212,14 @@ The `ask_alan_turing` function:
 
 * Receives a query string and our retriever object, and returns a dictionary containing `excerpts` from the set of scientific papers.  
 * Calls `retriever.retrieve(query)` to search the vector store for the most semantically relevant excerpts of Turing’s papers that relate to the user’s query.  
-* Fetches and processes excerpts at runtime (to insert in the [prompt template](https://mirascope.com/blog/langchain-prompt-template/)) via `OpenAIDynamicConfig` and computed fields.
+* Fetches and processes excerpts at runtime (to insert in the [prompt template](/blog/langchain-prompt-template/)) via `OpenAIDynamicConfig` and computed fields.
 
 We add two Mirascope decorators to turn the function into an LLM API call:
 
 * The `openai.call` decorator makes calls more readable by turning any Python function into an LLM call and is provider agnostic: we could’ve instead written, e.g., `anthropic.call`, `google.call` or any of a number of others, with minimal code adjustments.
 * Mirascope’s `prompt_template` decorator enables defining the prompt as a template that instructs the model to respond as if it’s Alan Turing and injects a list of the retrieved excerpts.
 
-Both of these decorators, when added to any function, illustrate the best practice of colocation of prompts and calls, which makes the code eminently more readable as the logic for preparing input data, [building prompts](https://mirascope.com/blog/llm-prompt/), and LLM invocation is centralized in a single place.
+Both of these decorators, when added to any function, illustrate the best practice of colocation of prompts and calls, which makes the code eminently more readable as the logic for preparing input data, [building prompts](/blog/llm-prompt/), and LLM invocation is centralized in a single place.
 
 ### 3. Generate a Response from the Query
 
@@ -242,6 +242,6 @@ The code captures the user’s query and calls `ask_alan_turing`, which retrieve
 
 ## Optimize Your RAG Pipeline
 
-Take the complexity out of implementing retrieval augmented generation with Mirascope’s native Python-based library. It lets you use RAG in your question-answering systems, allowing you to build smarter, more data-aware [LLM applications](https://mirascope.com/blog/llm-applications/) that answer questions with accuracy at scale.
+Take the complexity out of implementing retrieval augmented generation with Mirascope’s native Python-based library. It lets you use RAG in your question-answering systems, allowing you to build smarter, more data-aware [LLM applications](/blog/llm-applications/) that answer questions with accuracy at scale.
 
 Want to learn more? You can find more Mirascope code samples both on our [website](https://mirascope.com/WELCOME) and on our [GitHub page](https://github.com/mirascope/mirascope).

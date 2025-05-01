@@ -28,7 +28,7 @@ Tools for building language model applications allow developers to leverage the 
 
 ![Mirascope homepage: LLM abstractions that aren't obstructions](/assets/blog/langchain-alternatives/mirascope_homepage_screenshot.png)
 
-‍[Mirascope](https://mirascope.com) is a lightweight Python toolkit for developing LLM applications that gives you building blocks rather than a framework for setting up [prompt engineering workflows](https://mirascope.com/blog/prompt-engineering-best-practices). We purposefully designed Mirascope with simplicity and reliability in mind, and developing with Mirascope feels like you're simply writing the Python code you already know.
+‍[Mirascope](https://mirascope.com) is a lightweight Python toolkit for developing LLM applications that gives you building blocks rather than a framework for setting up [prompt engineering workflows](/blog/prompt-engineering-best-practices). We purposefully designed Mirascope with simplicity and reliability in mind, and developing with Mirascope feels like you're simply writing the Python code you already know.
 
 While we understand the potential of working with LLMs, **we also know firsthand the struggles of building LLM applications that are production grade.** Some modern development frameworks don’t make this any easier and make you code, for instance, in verbose and repetitive ways.
 
@@ -90,9 +90,9 @@ One of the major challenges we’ve had with prompting was the lack of centraliz
 
 This didn't just apply to the API call, but also to relevant parameters like model configuration, making it difficult to manage changes and ensure consistency across large codebases.
 
-We believe that all components that can affect the quality of a model call to an LLM - like prompt formatting, arguments, original responses from your model provider, and more, [should all live together in one place](https://mirascope.com/blog/engineers-should-handle-prompting-llms). This gives you a clear view of your call structure and allows for easier customization, leading to more efficient debugging and refinement.
+We believe that all components that can affect the quality of a model call to an LLM - like prompt formatting, arguments, original responses from your model provider, and more, [should all live together in one place](/blog/engineers-should-handle-prompting-llms). This gives you a clear view of your call structure and allows for easier customization, leading to more efficient debugging and refinement.
 
-Mirascope colocates calls and makes these the central organizing unit of the prompt, including [versioning](https://mirascope.com/blog/prompt-versioning) and testing. This ensures your code is clean and easily maintainable.
+Mirascope colocates calls and makes these the central organizing unit of the prompt, including [versioning](/blog/prompt-versioning) and testing. This ensures your code is clean and easily maintainable.
 
 Below is an example of how we centralize and manage information for all calls:
 
@@ -253,9 +253,9 @@ Mirascope currently supports [extracting built-in types](https://mirascope.com/l
 
 [LangChain](https://www.langchain.com/) is an open-source framework for developing LLM-powered applications. Available in both Python and JavaScript-based libraries, LangChain provides support for a wide range of pre-trained models, which allows you to leverage existing AI models like GPT-4 or Llama while easily integrating your proprietary data.
 
-With LangChain, you can easily connect and query LLMs from your code through its APIs. The framework provides [predefined templates](https://mirascope.com/blog/langchain-prompt-template) and utilities for processing different data formats (e.g., PDF, HTML, and CSV) to prepare these for LLM consumption. Its chaining and agent features allow you to combine transformer language models with other components like retrieval systems and planners to build more intelligent and sophisticated applications.
+With LangChain, you can easily connect and query LLMs from your code through its APIs. The framework provides [predefined templates](/blog/langchain-prompt-template) and utilities for processing different data formats (e.g., PDF, HTML, and CSV) to prepare these for LLM consumption. Its chaining and agent features allow you to combine transformer language models with other components like retrieval systems and planners to build more intelligent and sophisticated applications.
 
-‍[LangChain](https://mirascope.com/blog/llamaindex-vs-langchain) also integrates with platforms like Microsoft Azure, GCP, and more, achieving impressive benchmarks in performance and efficiency.
+‍[LangChain](/blog/llamaindex-vs-langchain) also integrates with platforms like Microsoft Azure, GCP, and more, achieving impressive benchmarks in performance and efficiency.
 
 For more information, you can read about LangChain on its website, documentation site, and GitHub page.
 
@@ -396,7 +396,7 @@ CrewAI has a website with documentation to learn more, as well as a repository o
 
 The customizable and conversable agents support diverse conversation patterns, giving you flexibility regarding autonomy levels, the number of agents involved, and the topology of how agents interact.
 
-Besides multi-agent collaboration, AutoGen also provides enhanced capabilities when working with LLM inference. This includes handy utilities like API unification, caching, error handling, context programming, and more. For a broader range of LLM agent tools, check out our detailed article on [LangChain alternatives](https://mirascope.com/blog/langchain-alternatives).
+Besides multi-agent collaboration, AutoGen also provides enhanced capabilities when working with LLM inference. This includes handy utilities like API unification, caching, error handling, context programming, and more. For a broader range of LLM agent tools, check out our detailed article on [LangChain alternatives](/blog/langchain-alternatives).
 
 Additionally, more information on AutoGen is available on AutoGen's GitHub page.
 

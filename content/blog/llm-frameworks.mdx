@@ -12,13 +12,13 @@ LLM frameworks provide tools and libraries for building and scaling language mod
 Frameworks: 
 
 * Offer prompt engineering and quality assurance tools for accurate and relevant responses.  
-* Provide pre-built modules for common tasks like data preprocessing, model [fine-tuning](https://mirascope.com/blog/prompt-engineering-vs-fine-tuning/), and response generation.
+* Provide pre-built modules for common tasks like data preprocessing, model [fine-tuning](/blog/prompt-engineering-vs-fine-tuning/), and response generation.
 * Make it easy to integrate with other tools and platforms like Hugging Face Transformers, TensorFlow, or PyTorch without having to deal with complex APIs.   
 * Orchestrate workflows to manage complex, multi-step processes like input validation, output formatting, and more. 
 
 **In general, these frameworks *should* simplify tasks that would otherwise require lots of manual coding and multiple iterations**. 
 
-But [modern frameworks](https://mirascope.com/blog/llamaindex-vs-langchain/) (like LangChain) impose their own unique abstractions, requiring you to do things their way. This not only feels limiting but also makes development and maintenance harder than it needs to be.
+But [modern frameworks](/blog/llamaindex-vs-langchain/) (like LangChain) impose their own unique abstractions, requiring you to do things their way. This not only feels limiting but also makes development and maintenance harder than it needs to be.
 
 **For this reason, we developed [Mirascope](https://github.com/mirascope/mirascope) - a lightweight Python toolkit that provides building blocks for developing LLM-powered applications without unnecessary constraints.**
 
@@ -32,7 +32,7 @@ Below, we’ve curated a list of the top LLM frameworks and highlighted the stre
 
 ## LLM Application Development Frameworks
 
-These frameworks offer [tools](https://mirascope.com/blog/llm-tools/) and libraries that simplify and scale the process of building, testing, and deploying LLM-based applications.
+These frameworks offer [tools](/blog/llm-tools/) and libraries that simplify and scale the process of building, testing, and deploying LLM-based applications.
 
 Below are some of the most effective frameworks that facilitate this process. 
 
@@ -54,7 +54,7 @@ Mirascope lets you scale projects efficiently and rapidly while maintaining full
 
 This entire approach provides an intuitive, transparent coding experience, giving you clear insight into what’s happening under the hood.
 
-This is in contrast to LangChain, whose elaborate abstractions like [runnables](https://mirascope.com/blog/langchain-runnables) (consisting of Python callables wrapped in LangChain Expression Language, or LCEL) obscure their underlying logic.
+This is in contrast to LangChain, whose elaborate abstractions like [runnables](/blog/langchain-runnables) (consisting of Python callables wrapped in LangChain Expression Language, or LCEL) obscure their underlying logic.
 
 Take a complex workflow like chaining, for example. When looking at how frameworks like LangChain do this, you might not realize that it can be done in native Python.
 
@@ -182,17 +182,17 @@ Although both code samples above aren’t especially complex, they illustrate ho
 
 You can pick and choose which of Mirascope's modules you want to use in your existing workflows whenever and wherever you need them like any standard Python function. 
 
-The above snippet shows how you can build a RAG pipeline using [LangChain](https://mirascope.com/blog/langchain-sucks/)'s `retriever` object for retrieving the relevant documents from the Chroma vector store but use Mirascope for writing the `overview` function instead of a LangChain chain for formatting your prompt and making the LLM call.
+The above snippet shows how you can build a RAG pipeline using [LangChain](/blog/langchain-sucks/)'s `retriever` object for retrieving the relevant documents from the Chroma vector store but use Mirascope for writing the `overview` function instead of a LangChain chain for formatting your prompt and making the LLM call.
 
 #### A Convenient Approach to LLM Calling 
 
-Mirascope’s [call decorator](https://mirascope.com/docs/learn/calls/) (e.g., `@openai.call()`) converts regular Python functions into [prompts](https://mirascope.com/blog/advanced-prompt-engineering/) by turning the function signature and return statement into an API request.
+Mirascope’s [call decorator](https://mirascope.com/docs/learn/calls/) (e.g., `@openai.call()`) converts regular Python functions into [prompts](/blog/advanced-prompt-engineering/) by turning the function signature and return statement into an API request.
 
 This automates prompt formatting, model selection, and response parsing, while ensuring type safety and smooth integration with various LLM providers.
 
 It basically allows you to focus on your application's logic without worrying about the complexities of API interactions, allowing for quicker development and easier maintenance.
 
-It also [colocates your calls with your prompts](https://mirascope.com/blog/engineers-should-handle-prompting-llms) to avoid separating them in your codebase, thus improving your code’s readability and maintainability.
+It also [colocates your calls with your prompts](/blog/engineers-should-handle-prompting-llms) to avoid separating them in your codebase, thus improving your code’s readability and maintainability.
 
 Another feature of Mirascope’s call decorator is its consistent interface across different LLM providers like OpenAI, Anthropic, Mistral, and more. 
 
@@ -218,7 +218,7 @@ response = recommend_recipe("french")
 print(response.content)
 ```
 
-You can reuse the same [prompt logic](https://mirascope.com/blog/llm-prompt/) across different model providers.
+You can reuse the same [prompt logic](/blog/llm-prompt/) across different model providers.
 
 While Mirascope’s call decorators make your life easier, when it comes to integrating various LLM providers, the library also provides functionality allowing you to dynamically configure LLM behavior in real time based on given input arguments.
 
@@ -314,11 +314,11 @@ print(response.priority)  # Output: high
 
 When `extract_task` is called, Mirascope uses the `TaskDetails` model to parse the LLM's output, making `due_date` and `priority` accessible as attributes of the `response` object.
 
-While response models ensure that your [outputs](https://mirascope.com/blog/langchain-structured-output/) are well structured and validated, handling unexpected errors is equally important to making your code robust. 
+While response models ensure that your [outputs](/blog/langchain-structured-output/) are well structured and validated, handling unexpected errors is equally important to making your code robust. 
 
 To further improve reliability, you can beef up error handling by using third-party libraries like [Tenacity](https://tenacity.readthedocs.io/en/latest/#) to automatically retry failed requests.
 
-One effective way of using Tenacity is to incorporate previous validation errors into subsequent [prompts](https://mirascope.com/blog/prompt-engineering-examples/) to guide the model to refine its responses using context-driven adjustments.
+One effective way of using Tenacity is to incorporate previous validation errors into subsequent [prompts](/blog/prompt-engineering-examples/) to guide the model to refine its responses using context-driven adjustments.
 
 This approach allows the LLM to improve its accuracy based on past outputs by leveraging a form of few-shot learning. Also, by automating validation through structured response models, you ensure that outputs conform to the expected format.
 
@@ -396,15 +396,15 @@ A `FactCheck` class is first defined to validate whether text contains factual e
 
 To handle errors more efficiently, the `correct_factual_errors` function uses Tenacity's `@retry` decorator, retrying failed requests up to three times and collecting errors with `collect_errors`. 
 
-The `previous_errors` field includes past validation errors as contextual information in [subsequent prompts](https://mirascope.com/blog/prompt-engineering-best-practices/), allowing the model to leverage insights from prior outputs to refine its responses - similar to how few-shot learning uses examples to guide the model.
+The `previous_errors` field includes past validation errors as contextual information in [subsequent prompts](/blog/prompt-engineering-best-practices/), allowing the model to leverage insights from prior outputs to refine its responses - similar to how few-shot learning uses examples to guide the model.
 
 ### LangChain 
 
 ![LangChain Homepage](/assets/blog/llm-frameworks/langchain-homepage.png)
 
-[LangChain](https://www.langchain.com/) is an open-source framework built for developing [applications](https://mirascope.com/blog/llm-applications/) that rely on language models. Available as both Python and JavaScript libraries, it offers an environment where you can orchestrate LLM-based pipelines with various data sources and workflows. 
+[LangChain](https://www.langchain.com/) is an open-source framework built for developing [applications](/blog/llm-applications/) that rely on language models. Available as both Python and JavaScript libraries, it offers an environment where you can orchestrate LLM-based pipelines with various data sources and workflows. 
 
-As the name suggests, LangChain centers around [chaining steps](https://mirascope.com/blog/prompt-chaining/) needed to sequence multiple calls to an LLM, allowing for complex interactions and iterative processing that build upon previous responses. 
+As the name suggests, LangChain centers around [chaining steps](/blog/prompt-chaining/) needed to sequence multiple calls to an LLM, allowing for complex interactions and iterative processing that build upon previous responses. 
 
 LangChain integrates with various LLM providers and third-party services. Key tools include:
 
@@ -418,7 +418,7 @@ For more information, you can read about LangChain on its website, documentation
 
 ![Dify Homepage](/assets/blog/llm-frameworks/dify-homepage.png)
 
-[Dify](https://github.com/langgenius/dify?tab=readme-ov-file) is an open-source platform designed to simplify the development of LLM applications. With an intuitive interface, Dify lets developers build, test, and deploy AI workflows efficiently. It offers a range of features, including RAG pipelines, model management, and tools for creating [intelligent agents](https://mirascope.com/blog/openai-function-calling/).
+[Dify](https://github.com/langgenius/dify?tab=readme-ov-file) is an open-source platform designed to simplify the development of LLM applications. With an intuitive interface, Dify lets developers build, test, and deploy AI workflows efficiently. It offers a range of features, including RAG pipelines, model management, and tools for creating [intelligent agents](/blog/openai-function-calling/).
 
 Dify integrates with models from popular providers like OpenAI, Hugging Face, and Cohere, allowing developers to choose the best models for their applications. It includes observability tools for real-time monitoring and performance analysis - essential for optimizing and scaling AI applications.
 
@@ -444,7 +444,7 @@ LlamaIndex has a website that features its documentation for both Python and Typ
 
 ![Haystack Homepage](/assets/blog/llm-frameworks/haystack-homepage.png)
 
-[Haystack](https://haystack.deepset.ai/) is an end-to-end framework for building NLP applications using large language models. With Haystack, you can create question-answering systems, conversational agents, and other applications by linking LLMs, vector databases, and related components through [configurable pipelines](https://mirascope.com/blog/llm-pipeline/).
+[Haystack](https://haystack.deepset.ai/) is an end-to-end framework for building NLP applications using large language models. With Haystack, you can create question-answering systems, conversational agents, and other applications by linking LLMs, vector databases, and related components through [configurable pipelines](/blog/llm-pipeline/).
 
 The framework supports both pre-built models and fine-tuning, so you can either leverage off-the-shelf models from providers like OpenAI, Cohere, or Hugging Face or adapt models to meet specific needs. 
 
@@ -470,7 +470,7 @@ Created by the team behind Prefect, Mavin has a website with documentation and a
 
 ## Workflow Orchestration Frameworks
 
-Workflow [orchestration frameworks](https://mirascope.com/blog/llm-orchestration/) manage and coordinate interactions to improve the performance and effectiveness of LLM-powered applications. 
+Workflow [orchestration frameworks](/blog/llm-orchestration/) manage and coordinate interactions to improve the performance and effectiveness of LLM-powered applications. 
 
 ### Orkes 
 
@@ -492,7 +492,7 @@ Orkes has a documentation site and GitHub page where you can explore its source 
 
 With ControlFlow AI, you can assign specialized agents to specific tasks, each equipped with unique instructions, tools, and even different LLMs like OpenAI and Anthropic. This detailed control lets you fine-tune tasks individually, balancing autonomy with direction across your projects without disrupting the overall workflow.
 
-ControlFlow AI integrates easily with existing tech stacks and is compatible with most [LangChain](https://mirascope.com/blog/langchain-alternatives/)-supported LLMs. By leveraging Prefect 3.0, its orchestration and observability features, the framework improves AI capabilities with Prefect’s reliable orchestration and observability.
+ControlFlow AI integrates easily with existing tech stacks and is compatible with most [LangChain](/blog/langchain-alternatives/)-supported LLMs. By leveraging Prefect 3.0, its orchestration and observability features, the framework improves AI capabilities with Prefect’s reliable orchestration and observability.
 
 For more details, the ControlFlow AI website provides extensive documentation, along with a GitHub repository where you can explore its source code and features.
 
