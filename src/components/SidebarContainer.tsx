@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
-import DocsSidebar from "@/src/components/docs/core/DocsSidebar";
-import { type ProductName } from "@/src/lib/content/spec";
 
 interface SidebarContainerProps {
-  product: ProductName;
+  children: React.ReactNode;
 }
 
 /**
- * SidebarContainer - Manages the responsive sidebar for documentation pages
+ * SidebarContainer - Manages the responsive sidebar for any page type
  *
  * Handles sidebar state (expanded/collapsed) based on screen size and
- * provides toggle functionality
+ * provides toggle functionality. Accepts any content as children.
  */
-const SidebarContainer: React.FC<SidebarContainerProps> = ({ product }) => {
+const SidebarContainer: React.FC<SidebarContainerProps> = ({ children }) => {
   // Track if we're at a small screen breakpoint
   const [isSmallScreen, setIsSmallScreen] = useState(() => {
     if (typeof window !== "undefined") {
@@ -73,7 +71,7 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ product }) => {
     >
       {/* Collapsed sidebar toggle button (show only when collapsed on small screens) */}
       {isSmallScreen && !sidebarExpanded && (
-        <div className="fixed top-[110px] z-20">
+        <div className="fixed top-[calc(var(--header-height)+50px)] z-20">
           <button
             onClick={toggleSidebar}
             className="bg-background border-border hover:bg-muted flex h-6 w-6 items-center justify-center rounded border"
@@ -98,7 +96,7 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ product }) => {
 
       {/* Sidebar content */}
       <div
-        className={`fixed top-[60px] h-[calc(100vh-60px)] pt-6 transition-all duration-300 ease-in-out ${
+        className={`fixed top-[var(--header-height)] h-[calc(100vh-var(--header-height))] transition-all duration-300 ease-in-out ${
           sidebarExpanded
             ? "w-64 opacity-100"
             : isSmallScreen
@@ -131,9 +129,7 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ product }) => {
           </div>
         )}
 
-        <div className="h-full overflow-y-auto">
-          <DocsSidebar product={product} />
-        </div>
+        <div className="h-full overflow-y-auto">{children}</div>
       </div>
     </div>
   );

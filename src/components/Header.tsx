@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import {
   NavigationMenu,
@@ -15,6 +15,7 @@ import Logo from "@/src/components/Logo";
 import ThemeSwitcher from "@/src/components/ThemeSwitcher";
 import GitHubRepoButton from "@/src/components/GitHubRepoButton";
 import SearchBar from "@/src/components/SearchBar";
+import { DocsProductSelector, DevProductSelector } from "@/src/components/ProductSelectors";
 
 // Reusable navigation link component
 interface NavLinkProps {
@@ -49,8 +50,31 @@ export default function Header() {
   const router = useRouterState();
   const isLandingPage = router.location.pathname === "/";
 
+  // Determine page type and get the product
+  const path = router.location.pathname;
+  const isDocsPage = path.startsWith("/docs/");
+  const isDevPage = path.startsWith("/dev");
+  const currentProduct = isDocsPage || isDevPage ? getProductFromPath(path) : null;
+
   // State to track scroll position
   const [scrolled, setScrolled] = useState(false);
+
+  // Set the appropriate header height CSS variable based on page type
+  useEffect(() => {
+    if (isDocsPage || isDevPage) {
+      document.documentElement.style.setProperty(
+        "--header-height",
+        "var(--header-height-with-selector)"
+      );
+    } else {
+      document.documentElement.style.setProperty("--header-height", "var(--header-height-base)");
+    }
+
+    return () => {
+      // Reset to default when component unmounts
+      document.documentElement.style.setProperty("--header-height", "var(--header-height-base)");
+    };
+  }, [isDocsPage, isDevPage]);
 
   // Effect to handle scroll position
   useEffect(() => {
@@ -71,7 +95,7 @@ export default function Header() {
   return (
     <header
       className={cn(
-        "fixed top-0 right-0 left-0 z-50 flex w-full items-center justify-center px-4 py-6 sm:px-6",
+        "fixed top-0 right-0 left-0 z-50 mb-2 flex w-full flex-col items-center justify-center px-4 py-2 sm:px-6",
         isLandingPage
           ? "landing-page-text-shadow bg-transparent text-white"
           : "bg-background text-foreground",
@@ -123,7 +147,13 @@ export default function Header() {
                       <NavigationMenuLink asChild>
                         <Link
                           to={getProductRoute("mirascope")}
-                          className="bg-background hover:bg-mirascope-purple/20 block space-y-1.5 rounded-md p-4 transition-colors"
+                          className={cn(
+                            "bg-background block space-y-1.5 rounded-md p-4 transition-colors",
+                            "hover:bg-mirascope-purple/20 focus:bg-mirascope-purple/20",
+                            "active:bg-mirascope-purple/60 active:scale-[0.98]",
+                            "data-[active=true]:bg-mirascope-purple/50 data-[active=true]:hover:bg-mirascope-purple/60",
+                            "data-[active=true]:focus:bg-mirascope-purple/60"
+                          )}
                         >
                           <div className="text-mirascope-purple text-xl font-medium">Mirascope</div>
                           <p className="text-foreground text-base">
@@ -136,7 +166,13 @@ export default function Header() {
                       <NavigationMenuLink asChild>
                         <Link
                           to={getProductRoute("lilypad")}
-                          className="bg-background hover:bg-lilypad-green/20 block space-y-1.5 rounded-md p-4 transition-colors"
+                          className={cn(
+                            "bg-background block space-y-1.5 rounded-md p-4 transition-colors",
+                            "hover:bg-lilypad-green/20 focus:bg-lilypad-green/20",
+                            "active:bg-lilypad-green/60 active:scale-[0.98]",
+                            "data-[active=true]:bg-lilypad-green/50 data-[active=true]:hover:bg-lilypad-green/60",
+                            "data-[active=true]:focus:bg-lilypad-green/60"
+                          )}
                         >
                           <div className="text-lilypad-green text-xl font-medium">Lilypad</div>
                           <p className="text-foreground text-base">
@@ -179,6 +215,14 @@ export default function Header() {
         </div>
       </nav>
 
+      {/* Product selectors for docs and dev pages */}
+      {currentProduct && (isDocsPage || isDevPage) && (
+        <div className="mx-auto flex w-full max-w-7xl pt-5 pb-1">
+          {isDocsPage && <DocsProductSelector currentProduct={currentProduct} />}
+          {isDevPage && <DevProductSelector currentProduct={currentProduct} />}
+        </div>
+      )}
+
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="text-foreground bg-background absolute top-full right-4 z-50 mt-2 max-w-xs rounded-lg p-6 shadow-lg [text-shadow:none] md:hidden">
@@ -186,7 +230,7 @@ export default function Header() {
             <div className="my-2 text-xl font-medium">Docs</div>
             <Link
               to={getProductRoute("mirascope")}
-              className="bg-background text-primary hover:bg-muted rounded-md p-3 font-medium transition-colors"
+              className="bg-background text-mirascope-purple hover:bg-muted rounded-md p-3 font-medium transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               Mirascope

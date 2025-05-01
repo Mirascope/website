@@ -5,6 +5,7 @@ import useProviderSelection from "@/src/lib/hooks/useProviderSelection";
 import { ProviderContextProvider } from "@/src/components/docs";
 import TocSidebar from "./TocSidebar";
 import MainContent from "./MainContent";
+import DocsSidebar from "./DocsSidebar";
 import SEOMeta from "@/src/components/SEOMeta";
 import type { DocContent, ProductName } from "@/src/lib/content";
 
@@ -27,7 +28,11 @@ const DocsPage: React.FC<DocsPageProps> = ({ document }) => {
   const [selectedProvider, handleProviderChange] = useProviderSelection();
 
   // Left sidebar content
-  const leftSidebar = <SidebarContainer product={product as ProductName} />;
+  const leftSidebar = (
+    <SidebarContainer>
+      <DocsSidebar product={product as ProductName} />
+    </SidebarContainer>
+  );
 
   // Right sidebar content (TOC)
   const rightSidebar = <TocSidebar document={document} />;

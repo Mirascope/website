@@ -10,7 +10,7 @@ export const Route = createFileRoute("/dev/")({
   pendingComponent: () => {
     return (
       <DevLayout devPages={[]}>
-        <div className="container py-8">
+        <div className="container">
           <LoadingContent spinnerClassName="h-12 w-12" fullHeight={false} />
         </div>
       </DevLayout>
@@ -33,7 +33,7 @@ function DevIndexPage() {
 
   return (
     <DevLayout devPages={devPages}>
-      <div className="container py-8">
+      <div className="container">
         <h1 className="mb-6 text-3xl font-bold">Developer Tools</h1>
 
         <p className="mb-6">

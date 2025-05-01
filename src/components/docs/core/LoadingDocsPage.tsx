@@ -15,8 +15,14 @@ interface LoadingDocsPageProps {
  * Shows a loading spinner in place of the main content while maintaining the sidebar structure
  */
 const LoadingDocsPage: React.FC<LoadingDocsPageProps> = ({ product }) => {
-  // Left sidebar content
-  const leftSidebar = <SidebarContainer product={product} />;
+  // Left sidebar content with loading placeholder
+  const leftSidebar = (
+    <SidebarContainer>
+      <div className="px-4 py-2">
+        <div className="bg-muted h-6 w-48 animate-pulse rounded-md"></div>
+      </div>
+    </SidebarContainer>
+  );
 
   // Main content (loading spinner)
   const mainContent = <LoadingContent fullHeight={true} />;

@@ -22,7 +22,7 @@ export const Route = createFileRoute("/dev/audit-metadata")({
   pendingComponent: () => {
     return (
       <DevLayout devPages={[]}>
-        <div className="container py-8">
+        <div className="container">
           <LoadingContent spinnerClassName="h-12 w-12" fullHeight={false} />
         </div>
       </DevLayout>
@@ -150,7 +150,7 @@ function AuditMetadata() {
 
   return (
     <DevLayout devPages={devPages}>
-      <div className="container py-8">{content()}</div>
+      <div className="container">{content()}</div>
     </DevLayout>
   );
 }
