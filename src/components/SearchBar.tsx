@@ -121,7 +121,7 @@ function SearchInput({
       }
       onClick={onFocus}
     >
-      <div className="relative flex h-full items-center">
+      <div className="relative flex h-full items-center overflow-visible">
         <SearchIcon
           size={16}
           className={cn(
@@ -135,12 +135,13 @@ function SearchInput({
           type="text"
           placeholder="Search..."
           className={cn(
-            "h-full cursor-pointer bg-transparent text-sm transition-all duration-500 outline-none",
+            "cursor-pointer overflow-visible bg-transparent py-0 text-sm leading-normal transition-all duration-500 outline-none",
             isLandingPage
               ? "text-white placeholder:text-white/90"
               : "text-foreground placeholder:text-foreground",
             isOpen ? "w-full pr-9 pl-10 opacity-100" : "w-28 pr-3 pl-10 opacity-80"
           )}
+          style={{ height: "auto", minHeight: "100%" }}
           value={query}
           onChange={(e) => onChange(e.target.value)}
           onFocus={onFocus}
