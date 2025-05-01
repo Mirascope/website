@@ -30,7 +30,7 @@ export const Route = createFileRoute("/blog/")({
   // Configure loading state
   pendingComponent: () => (
     <div className="flex justify-center">
-      <div className="mx-auto flex w-full max-w-[1800px] px-4">
+      <div className="mx-auto flex w-full max-w-[1800px] px-4 pt-6">
         <div className="min-w-0 flex-1">
           <div className="mx-auto max-w-5xl">
             <div className="mb-8 text-center">
@@ -88,7 +88,7 @@ function BlogPage() {
         url="/blog"
         type="website"
       />
-      <div className="mx-auto flex w-full max-w-[1800px] px-4">
+      <div className="mx-auto flex w-full max-w-[1800px] px-4 pt-6">
         <div className="min-w-0 flex-1">
           <div className="mx-auto max-w-5xl">
             <div className="mb-8 text-center">
