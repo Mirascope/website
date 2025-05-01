@@ -1,5 +1,7 @@
 import React from "react";
 import DevSidebar from "./DevSidebar";
+import BaseLayout from "@/src/components/BaseLayout";
+import SidebarContainer from "@/src/components/SidebarContainer";
 import type { DevMeta } from "@/src/lib/content";
 import { ProductSelector } from "./DevComponents";
 
@@ -11,12 +13,15 @@ interface DevLayoutProps {
 /**
  * DevLayout - Layout component for developer tools section
  *
- * Provides a consistent layout for all dev tool pages without the 60px top padding
- * that's present in the main BaseLayout component
+ * Provides a consistent layout for all dev tool pages with responsive sidebar
  */
 const DevLayout: React.FC<DevLayoutProps> = ({ children, devPages }) => {
-  // Sidebar content
-  const leftSidebar = <DevSidebar devPages={devPages} />;
+  // Sidebar content with responsive container
+  const leftSidebar = (
+    <SidebarContainer>
+      <DevSidebar devPages={devPages} />
+    </SidebarContainer>
+  );
 
   // Main content - expanded to use full width
   const mainContent = <div className="min-w-0 flex-1 px-8">{children}</div>;
@@ -24,13 +29,7 @@ const DevLayout: React.FC<DevLayoutProps> = ({ children, devPages }) => {
   return (
     <div className="flex justify-center pt-0">
       <ProductSelector />
-      <div className="mx-auto flex w-full max-w-7xl">
-        {/* Left sidebar */}
-        {leftSidebar}
-
-        {/* Main content area */}
-        {mainContent}
-      </div>
+      <BaseLayout leftSidebar={leftSidebar} mainContent={mainContent} />
     </div>
   );
 };
