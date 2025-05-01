@@ -64,7 +64,7 @@ We describe and show examples of each of these points below.
 
 #### Simplify and Collaborate on Prompt Management
 
-One way Mirascope makes your life easier is that it organizes prompts as [self-contained functions](https://mirascope.com/learn/prompts) that can live in their own directories. This centralizes internal prompt logic and improves clarity and maintainability:
+One way Mirascope makes your life easier is that it organizes prompts as [self-contained functions](/docs/mirascope/learn/prompts) that can live in their own directories. This centralizes internal prompt logic and improves clarity and maintainability:
 
 ```python
 from mirascope.core import BaseDynamicConfig, prompt_template
@@ -266,7 +266,7 @@ print(greetings_prompt("William Bakst"))
 
 **Streamline API Interactions with LLM Call Decorators:**
 
-In addition to writing prompt templates as Python functions, Mirascope provides [call decorators](https://mirascope.com/learn/calls) to simplify making LLM API calls and reduce unnecessary boilerplate. We want to make it as easy as possible to incorporate LLM functionalities into your applications.
+In addition to writing prompt templates as Python functions, Mirascope provides [call decorators](/docs/mirascope/learn/calls) to simplify making LLM API calls and reduce unnecessary boilerplate. We want to make it as easy as possible to incorporate LLM functionalities into your applications.
 
 For example, simply wrapping a Mirascope prompt template with the `openai.call` decorator turns the function into an actual call to the OpenAI API, which returns the **`OpenAICallResponse`** convenience wrapper:
 
