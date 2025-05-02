@@ -201,8 +201,9 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Mobile controls: Theme Switcher + Menu Button */}
-        <div className="flex items-center gap-1 md:hidden">
+        {/* Mobile controls: Search + Theme Switcher + Menu Button */}
+        <div className="flex items-center gap-2 md:hidden">
+          <SearchBar onOpenChange={setIsSearchOpen} isLandingPage={isLandingPage} />
           <ThemeSwitcher />
           <button
             className={cn("p-2", isLandingPage ? "text-white" : "text-foreground")}
