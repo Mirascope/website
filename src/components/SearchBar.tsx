@@ -122,7 +122,9 @@ function SearchInput({
         isLandingPage
           ? "border-white/30 bg-white/10 hover:bg-white/20"
           : "border-border bg-background/20 hover:bg-primary/10 hover:border-primary/80",
-        isOpen ? "w-80 md:w-[32rem]" : "w-36" // Wider default size with text, much wider when expanded
+        isOpen
+          ? "w-80 md:w-[32rem]" // Wider when expanded
+          : "w-9 lg:w-36" // Icon-only on small screens, wider on lg screens
       )}
       style={
         isLandingPage
@@ -135,8 +137,9 @@ function SearchInput({
         <SearchIcon
           size={16}
           className={cn(
-            "absolute left-3 transition-all duration-500",
-            isLandingPage ? "nav-icon-landing" : "nav-icon-regular"
+            "transition-all duration-500",
+            isLandingPage ? "nav-icon-landing" : "nav-icon-regular",
+            isOpen ? "absolute left-3" : "mx-auto lg:absolute lg:left-3" // Center icon when collapsed on small screens
           )}
         />
         <input
@@ -149,7 +152,9 @@ function SearchInput({
             isLandingPage
               ? "text-white placeholder:text-white/90"
               : "text-foreground placeholder:text-foreground",
-            isOpen ? "w-full pr-9 pl-10 opacity-100" : "w-28 pr-3 pl-10 opacity-80"
+            isOpen
+              ? "w-full pr-9 pl-10 opacity-100" // Full width when open
+              : "w-0 opacity-0 lg:w-28 lg:pr-3 lg:pl-10 lg:opacity-80" // Hide text on small screens, show on lg
           )}
           style={{ height: "auto", minHeight: "100%" }}
           value={query}
@@ -220,8 +225,9 @@ function SearchResultsContainer({
   return (
     <div
       className={cn(
-        "search-results absolute top-full right-0 z-50 mt-2 w-screen max-w-[32rem] overflow-hidden rounded-lg shadow-2xl [text-shadow:none] md:left-0",
-        "bg-background border-border border transition-opacity duration-300"
+        "search-results absolute top-full z-50 mt-2 w-screen max-w-[32rem] overflow-hidden rounded-lg shadow-2xl [text-shadow:none]",
+        "bg-background border-border border transition-opacity duration-300",
+        "right-0 lg:right-auto lg:left-0" // Position from right on small screens, from left on large screens
       )}
       style={{
         opacity: isReallyVisible ? 1 : 0,
@@ -492,7 +498,7 @@ export default function SearchBar({ onOpenChange, isLandingPage = false }: Searc
   }, [results]);
 
   return (
-    <div className="relative" ref={searchContainerRef}>
+    <div className="relative flex justify-end lg:justify-start" ref={searchContainerRef}>
       <SearchInput
         query={query}
         onChange={setQuery}
