@@ -9,7 +9,7 @@ author: "William Bakst"
 
 Prompt evaluation measures how effectively a prompt guides an LLM to generate responses that satisfy the goals of a task or application.
 
-Unlike [LLM evaluation](https://mirascope.com/blog/llm-evaluation/), which assesses a model's overall performance across various tasks (its general strength), **prompt evaluation zooms in on the prompt itself** - judging how well a particular prompt is structured to produce your desired output - be it in customer support, content generation, or other use cases.
+Unlike [LLM evaluation](/blog/llm-evaluation/), which assesses a model's overall performance across various tasks (its general strength), **prompt evaluation zooms in on the prompt itself** - judging how well a particular prompt is structured to produce your desired output - be it in customer support, content generation, or other use cases.
 
 This is important because a poorly designed prompt can lead to unclear, irrelevant, or inaccurate responses, resulting in outputs that fail to meet the intended objectives.
 
@@ -19,7 +19,7 @@ When evaluating prompts, you should:
    Also, language models can carry biases from their training data, influencing responses in ways that weren’t intended.
 2. **Implement a process to evaluate prompts against these criteria**. This often involves using frameworks or automated tools for repetitive tasks like scoring outputs or ranking responses, while reserving more subtle aspects like detecting hallucinations or addressing culturally sensitive contexts for human oversight.
 
-In this article, we show you different ways to evaluate prompts and share practical techniques and insights based on real-world applications. Along the way, we’ll also examine how [Lilypad](https://lilypad.so/docs) helps structure this evaluation process, making it easier to iterate, compare, and optimize prompts at scale.
+In this article, we show you different ways to evaluate prompts and share practical techniques and insights based on real-world applications. Along the way, we’ll also examine how [Lilypad](/docs/lilypad) helps structure this evaluation process, making it easier to iterate, compare, and optimize prompts at scale.
 
 Further down, we also share best practices for prompt evaluation and example evaluations using [Mirascope](https://github.com/mirascope/mirascope), our lightweight toolkit for building with LLMs.
 
@@ -67,7 +67,7 @@ Each tool offers unique features to address different aspects of prompt evaluati
 
 ### Lilypad
 
-[Lilypad](https://lilypad.so/docs) allows you to automatically version, trace, and manage prompts (generations) by simply adding the Python decorator `@lilypad.generation` to your LLM functions.  
+[Lilypad](/docs/lilypad) allows you to automatically version, trace, and manage prompts (generations) by simply adding the Python decorator `@lilypad.generation` to your LLM functions.  
 
 It recognizes the non-deterministic nature of LLM outputs and treats prompts and everything else that goes into generating the output as optimization problems rather than as one-time configurations that don't adapt to real-world performance.
 
@@ -246,7 +246,7 @@ In this case, an evaluator might annotate missing details and suggest refining t
 
 A possible prompt adjustment could be *"Describe the role of photosynthesis in plant growth, explaining the steps of the process and why they are important for the plant’s survival.”*
 
-That said, some teams also experiment with an [LLM-as-a-judge](https://mirascope.com/blog/llm-as-judge/) approach, where a separate LLM model is used to review and score outputs based on predefined criteria. While this technique can reduce manual workloads, it’s still prone to the inherent biases and limitations of AI. Human oversight remains essential to validate the results and mitigate risks like hallucination or bias. Otherwise, who is judging the judge?
+That said, some teams also experiment with an [LLM-as-a-judge](/blog/llm-as-judge/) approach, where a separate LLM model is used to review and score outputs based on predefined criteria. While this technique can reduce manual workloads, it’s still prone to the inherent biases and limitations of AI. Human oversight remains essential to validate the results and mitigate risks like hallucination or bias. Otherwise, who is judging the judge?
 
 We’re currently working on a system with Lilypad to help teams escape this potential infinite judging loop and build automated evaluations and data flywheels more easily.
 
@@ -307,9 +307,9 @@ This compares the semantic similarity between generated outputs and reference te
 
 To effectively do this, it converts text data into vector representations such as term frequency-inverse document frequency (TF-IDF) vectors or embeddings from pre-trained models like BERT or GPT, and measures the cosine of the angle between them to assess how similar they are in terms of their orientation.
 
-Cosine similarity is extensively used in RAG (e.g., [LangChain RAG](https://mirascope.com/blog/langchain-rag/)) applications to retrieve content from a vector store that’s semantically relevant to a user’s query, before sending this as additional context (together with the query) to the language model.
+Cosine similarity is extensively used in RAG (e.g., [LangChain RAG](/blog/langchain-rag/)) applications to retrieve content from a vector store that’s semantically relevant to a user’s query, before sending this as additional context (together with the query) to the language model.
 
-(Read also about how we build a [RAG LLM example](https://mirascope.com/blog/rag-llm-example/).)
+(Read also about how we build a [RAG LLM example](/blog/rag-llm-example/).)
 
 Below, we use [scikit-learn](https://scikit-learn.org/stable/) to transform text prompts into TF-IDF vectors, capturing the importance of each word relative to the input:  
 
@@ -340,7 +340,7 @@ A result close to 1.0 indicates high similarity, while a result of 0 indicates l
 
 A/B testing involves presenting different prompts to users or reviewers and analyzing which version produces better results. This method is especially useful for optimizing prompts in real-world applications, as it directly measures user engagement and satisfaction.
 
-If you need to explore a wide variety of scenarios, [synthetic data generation](https://mirascope.com/blog/synthetic-data-generation/) can help seed your tests with realistic but artificially created user inputs. This ensures you have sufficient coverage in early tests before actual user traffic ramps up.
+If you need to explore a wide variety of scenarios, [synthetic data generation](/blog/synthetic-data-generation/) can help seed your tests with realistic but artificially created user inputs. This ensures you have sufficient coverage in early tests before actual user traffic ramps up.
 
 Below we have a function that simulates sending a customer service request and returns a response time and satisfaction score. We also include logic to collect and analyze these metrics:
 
@@ -442,7 +442,7 @@ Context-specific metrics are tailored evaluation criteria used to assess prompts
 
 This is useful for prompts designed to extract specific information, ensuring relevant details are identified while minimizing false positives.
 
-In structured extraction tasks, a knowledge graph can further enhance precision and recall by providing a well-defined set of relationships for the system to reference, reducing ambiguity and improving the completeness of retrieved information. (Read our guide on [how to build a knowledge graph](https://mirascope.com/blog/how-to-build-a-knowledge-graph/) for more details.)
+In structured extraction tasks, a knowledge graph can further enhance precision and recall by providing a well-defined set of relationships for the system to reference, reducing ambiguity and improving the completeness of retrieved information. (Read our guide on [how to build a knowledge graph](/blog/how-to-build-a-knowledge-graph/) for more details.)
 
 Below is example code for evaluating prompts using precision and recall. These metrics are calculated using the scikit-learn library:
 
@@ -568,7 +568,7 @@ You can collect this feedback in different ways including structured surveys, op
 
 For instance, many LLM-powered tools, including ChatGPT, feature a thumbs-up/down button that allows users to rate the quality of a response.
 
-This is especially useful in [LLM applications](https://mirascope.com/blog/llm-applications/) requiring high engagement or trust, such as customer support or education, where user satisfaction is directly tied to the success of the system.  
+This is especially useful in [LLM applications](/blog/llm-applications/) requiring high engagement or trust, such as customer support or education, where user satisfaction is directly tied to the success of the system.  
 
 That said, using this method alone may not provide a comprehensive assessment, but combining it with more targeted methods (such as prompt A/B testing) should provide a more reliable and well-rounded evaluation process.
 
@@ -584,7 +584,7 @@ Use-case-specific prompt evals provide this missing layer of insight. By combini
 
 For example, in an AI-driven legal chatbot, output relevance (a standard metric) could be measured using similarity scores, but domain-specific accuracy (a use-case-specific evaluation) would ensure that the generated response aligns with actual legal guidelines and terminologies.
 
-(For more information and a tutorial on chatbots, see our article on [How to make a chatbot](https://mirascope.com/blog/how-to-make-a-chatbot/).)
+(For more information and a tutorial on chatbots, see our article on [How to make a chatbot](/blog/how-to-make-a-chatbot/).)
 
 ### Iterate Through Testing
 
@@ -608,7 +608,7 @@ We’d even argue that refining a prompt to produce an acceptable output is more
 
 Systematically versioning prompts and refining evaluation criteria helps establish reproducible outcomes and maintain consistent benchmarks across your optimization workflow.
 
-[Lilypad](https://lilypad.so/docs) automatically versions and traces all prompt changes to support experiments and collaboration, allowing you to identify what worked and what didn’t. This includes:
+[Lilypad](/docs/lilypad) automatically versions and traces all prompt changes to support experiments and collaboration, allowing you to identify what worked and what didn’t. This includes:
 
 * Automating experimentation and detecting regressions, such as A/B testing of prompt variations  
 * Historically comparing the effectiveness of different prompts, via Lilypad’s traceability  
@@ -619,9 +619,9 @@ Systematically versioning prompts and refining evaluation criteria helps establi
 
 Mirascope’s flexible and modular architecture lets you pick and choose what to integrate into your existing workflow without imposing opinionated ways of working.
 
-This especially means not having to deal with the overhead of complex abstractions found in more comprehensive [LLM frameworks](https://mirascope.com/blog/llm-frameworks/).
+This especially means not having to deal with the overhead of complex abstractions found in more comprehensive [LLM frameworks](/blog/llm-frameworks/).
 
-Our toolkit follows developer best practices by making the LLM call the [central primitive](https://mirascope.com/blog/engineers-should-handle-prompting-llms/?h=why+cod) around which everything, including the prompt, is versioned. This cuts down on boilerplate and prevents drift, and better ensures your prompts are type-safe and effectively versioned.
+Our toolkit follows developer best practices by making the LLM call the [central primitive](/blog/engineers-should-handle-prompting-llms/?h=why+cod) around which everything, including the prompt, is versioned. This cuts down on boilerplate and prevents drift, and better ensures your prompts are type-safe and effectively versioned.
 
 Below, we walk you through an example of evaluating prompts for an LLM  hiring assistant. The goal is to ensure the prompts guide the assistant in producing accurate, unbiased responses tailored to specific job roles.
 
@@ -790,4 +790,4 @@ As you see above, the test example helps confirm that the evaluation logic works
 
 Ready to build smarter, more effective prompts? Mirascope lets you write custom evaluation criteria for AI applications using the Python you already know, and slots readily into existing developer workflows, making it easy to get started.
 
-You can find more Mirascope [evaluation tutorials](https://mirascope.com/tutorials/evals/evaluating_web_search_agent/) both on our [documentation site](https://mirascope.com/) and our [GitHub page](https://github.com/mirascope/mirascope).
+You can find more Mirascope [evaluation tutorials](/docs/mirascope/guides/evals/evaluating_web_search_agent/) both on our [documentation site](/docs/mirascope) and our [GitHub page](https://github.com/mirascope/mirascope).

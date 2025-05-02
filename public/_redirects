@@ -9,8 +9,11 @@
 /CONTRIBUTING         /docs/mirascope/getting-started/contributing 301
 /learn                /docs/mirascope/learn              301
 
-# Learn section redirects - these use splats to handle variable paths
-/learn/*              /docs/mirascope/learn/:splat       301
+# Section redirects - these use splats to handle variable paths
+/learn/*              /docs/mirascope/learn/:splat        301
+/tutorials/*          /docs/mirascope/guides/:splat       301
+/integrations/*       /docs/mirascope/integrations/:splat 301
+
 
 # Old blog paths
 /post/*               /blog/:splat                       301

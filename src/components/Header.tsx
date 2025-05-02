@@ -99,8 +99,7 @@ export default function Header() {
         isLandingPage
           ? "landing-page-text-shadow bg-transparent text-white"
           : "bg-background text-foreground",
-        scrolled && !isLandingPage ? "border-border border-b shadow-sm" : "",
-        scrolled && isLandingPage ? "bg-foreground/80 backdrop-blur-sm" : ""
+        scrolled && !isLandingPage ? "border-border border-b shadow-sm" : ""
       )}
     >
       <nav className="mx-auto flex w-full max-w-7xl flex-row items-center justify-between">
