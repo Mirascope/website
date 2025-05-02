@@ -1,25 +1,22 @@
 #!/usr/bin/env python3
-# Example 4: Provider-Agnostic
+# Example 4: Functional, Modular Design
 # Generated for provider: anthropic
-# Source: content/doc/mirascope/getting-started/why.mdx:154
+# Source: content/doc/mirascope/getting-started/why.mdx:143
 # This file is auto-generated; any edits should be made in the source file
 
-from mirascope.core import anthropic, openai, prompt_template
+from mirascope import llm
 
 
-@prompt_template()
-def recommend_book_prompt(genre: str) -> str:
-    return f"Recommend a {genre} book"
+@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest")
+def summarize(text: str) -> str: # [!code highlight]
+    return f"Summarize this text: {text}"
 
 
-# OpenAI
-openai_model = "gpt-4o-mini"
-openai_recommend_book = openai.call(openai_model)(recommend_book_prompt)
-openai_response = openai_recommend_book("fantasy")
-print(openai_response.content)
+@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest")
+def summarize_and_translate(text: str, language: str) -> str:
+    summary = summarize(text) # [!code highlight]
+    return f"Translate this text to {language}: {summary.content}" # [!code highlight]
 
-# Anthropic
-anthropic_model = "claude-3-5-sonnet-20240620"
-anthropic_recommend_book = anthropic.call(anthropic_model)(recommend_book_prompt)
-anthropic_response = anthropic_recommend_book("fantasy")
-print(anthropic_response.content)
+
+response = summarize_and_translate("Long English text here...", "french") # [!code highlight]
+print(response.content)
