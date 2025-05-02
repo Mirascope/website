@@ -41,10 +41,11 @@ export default function CookieBanner() {
       aria-labelledby="cookie-title"
       aria-describedby="cookie-description"
       className={cn(
-        "fixed bottom-18 left-4 z-50 w-[180px] rounded-lg border p-3 shadow-lg backdrop-blur-sm",
+        "fixed bottom-18 left-4 z-50 w-[180px] rounded-lg p-3 shadow-lg backdrop-blur-sm",
         "xs:bottom-18 sm:bottom-12 sm:left-4 md:left-4 lg:left-4 xl:bottom-12 2xl:bottom-4",
-        "border-border",
-        isLandingPage ? "bg-background/40" : "bg-background/80"
+        isLandingPage
+          ? "bg-background/40 landing-page-box-shadow"
+          : "border-border bg-background/80 border"
       )}
       tabIndex={-1}
     >
