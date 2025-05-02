@@ -12,5 +12,8 @@
 # Learn section redirects - these use splats to handle variable paths
 /learn/*              /docs/mirascope/learn/:splat       301
 
+# Tutorials / guides
+/tutorials/*          /docs/mirascope/guides/*           301
+
 # Old blog paths
 /post/*               /blog/:splat                       301
