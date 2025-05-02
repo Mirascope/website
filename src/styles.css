@@ -403,6 +403,10 @@ h6 code {
   font-size: 1.1rem !important;
 }
 
+.handwriting-enabled kbd {
+  font-family: "Williams Handwriting", cursive !important;
+}
+
 /* Font class for handwriting - used in handwriting mode */
 .font-handwriting {
   font-family: "Williams Handwriting", cursive !important;
