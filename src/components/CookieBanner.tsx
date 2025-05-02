@@ -63,8 +63,8 @@ export default function CookieBanner() {
             className={cn(
               "rounded-md px-2 py-1 text-sm font-medium transition-colors focus:ring-2 focus:outline-none",
               "font-handwriting text-muted-foreground",
-              "hover:bg-accent focus:ring-ring",
-              isLandingPage ? "bg-muted/70" : "bg-muted"
+              "hover:bg-accent focus:ring-ring cursor-pointer",
+              isLandingPage ? "bg-muted/60" : "bg-muted"
             )}
           >
             Reject
@@ -75,8 +75,8 @@ export default function CookieBanner() {
             className={cn(
               "rounded-md px-2 py-1 text-sm font-medium transition-colors focus:ring-2 focus:outline-none",
               "font-handwriting text-primary-foreground",
-              "hover:bg-primary/90 focus:ring-ring",
-              isLandingPage ? "bg-primary/70" : "bg-primary"
+              "hover:bg-primary/90 focus:ring-ring cursor-pointer",
+              isLandingPage ? "bg-primary/80" : "bg-primary"
             )}
           >
             Accept
