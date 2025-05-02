@@ -57,7 +57,7 @@ The choice of technique below depends on your use case, your data’s characteri
 
 For instance, if you’re working with simple datasets having well-defined statistical distributions, you might use a statistical distribution or rule-based generation technique to create the data.
 
-But for [complex applications](https://mirascope.com/blog/llm-applications/) requiring high realism, such as image generation or natural language processing, more advanced techniques like deep learning models or LLMs would be preferred.
+But for [complex applications](/blog/llm-applications/) requiring high realism, such as image generation or natural language processing, more advanced techniques like deep learning models or LLMs would be preferred.
 
 ### 1. Statistical Distribution
 
@@ -124,7 +124,7 @@ These effects can be quite real, for instance, when a hiring algorithm trained o
 
 ### Capturing Domain-Specific Knowledge
 
-While the usual methods for generating synthetic data produce datasets that are statistically accurate, they often lack the detailed complexities and domain-specific [knowledge](https://mirascope.com/blog/how-to-build-a-knowledge-graph/) needed to represent real-world scenarios effectively.
+While the usual methods for generating synthetic data produce datasets that are statistically accurate, they often lack the detailed complexities and domain-specific [knowledge](/blog/how-to-build-a-knowledge-graph/) needed to represent real-world scenarios effectively.
 
 In healthcare, for example, synthetic patient data must reflect medical realities, like accurate disease progression or treatment outcomes, which can’t be captured by traditional methods like statistical modeling or pre-defined rules.
 
@@ -134,11 +134,11 @@ Plus, evaluating the quality and relevance of the data further complicates the p
 
 As we’ve seen, language models are great at learning and representing complex patterns from vast amounts of data.
 
-Below, we walk you through [an example](https://mirascope.com/tutorials/more_advanced/generating_synthetic_data/) of using OpenAI's GPT-4o-mini to create ecommerce data on home appliances, including attributes like name, price, and inventory.
+Below, we walk you through [an example](/docs/mirascope/guides/more_advanced/generating_synthetic_data/) of using OpenAI's GPT-4o-mini to create ecommerce data on home appliances, including attributes like name, price, and inventory.
 
 The main libraries we’ll use are:
 
-* Mirascope for [prompting](https://mirascope.com/blog/advanced-prompt-engineering/), output parsing, and reliable validation  
+* Mirascope for [prompting](/blog/advanced-prompt-engineering/), output parsing, and reliable validation  
 * Pydantic for defining and validating the schema used for synthetic data generation  
 * Pandas DataFrames for managing the generated data
 
@@ -217,13 +217,13 @@ In the code above, `generate_df_data` specifies how the language model should ge
 
 The `@prompt_template` decorator provides formatting instructions for the LLM, and the call decorator `@openai_call` defines both the language model to use and the formatting of the output return type via a `response_model`, which is specified by the Pydantic `BaseModel` we defined earlier.
 
-Mirascope’s call decorators easily turn any Python function into a prompt and ensure [colocation](https://mirascope.com/blog/engineers-should-handle-prompting-llms/) of both prompts and their calls.
+Mirascope’s call decorators easily turn any Python function into a prompt and ensure [colocation](/blog/engineers-should-handle-prompting-llms/) of both prompts and their calls.
 
-Colocation simplifies development by keeping the logic, structure, and [prompt](https://mirascope.com/blog/llm-prompt/) content all in one place, improving readability, maintainability, and reducing context-switching for developers.
+Colocation simplifies development by keeping the logic, structure, and [prompt](/blog/llm-prompt/) content all in one place, improving readability, maintainability, and reducing context-switching for developers.
 
-This differs from practices encouraged by other major [LLM frameworks](https://mirascope.com/blog/llm-frameworks/) that don’t promote colocation, with the effect that prompts, logic, and configuration can get scattered around the codebase, leading to greater challenges in debugging, testing, and iterating on functionality.
+This differs from practices encouraged by other major [LLM frameworks](/blog/llm-frameworks/) that don’t promote colocation, with the effect that prompts, logic, and configuration can get scattered around the codebase, leading to greater challenges in debugging, testing, and iterating on functionality.
 
-Mirascope’s call decorators are also model agnostic, requiring minimal code changes for switching LLM providers (our library interfaces with [many popular providers](https://mirascope.com/WELCOME/)).
+Mirascope’s call decorators are also model agnostic, requiring minimal code changes for switching LLM providers (our library interfaces with [many popular providers](/docs/mirascope/)).
 
 Mirascope’s `response_model` parameter lets you take full advantage of Pydantic’s type annotations, which integrate features like autocomplete, type hints, and linting directly in your IDE.
 
@@ -270,7 +270,7 @@ print(df)
 
 ### Add Constraints to the DataFame
 
-Besides imposing constraints for precise validation (as we did with `DataFrameGenerator`, by extending Pydantic’s `BasePrompt` class), we can also use [prompt](https://mirascope.com/blog/prompt-engineering-examples/) constraints to allow for natural language-defined rules.
+Besides imposing constraints for precise validation (as we did with `DataFrameGenerator`, by extending Pydantic’s `BasePrompt` class), we can also use [prompt](/blog/prompt-engineering-examples/) constraints to allow for natural language-defined rules.
 
 Below, we adjust our prompt slightly by specifying that generated data for TVs follow these conditions:
 
@@ -325,9 +325,9 @@ A synthetic dataset should ensure realism, relevance, and anonymization. Below a
 
 Once synthetic data is generated, it’s important to ensure that it aligns with domain-specific relationships and expectations, such as pricing rules or attribute dependencies.
 
-In the last section, our [prompts](https://mirascope.com/blog/prompt-engineering-best-practices/) guided the model to generate outputs that specified TV price and size, aligning with domain-specific constraints.
+In the last section, our [prompts](/blog/prompt-engineering-best-practices/) guided the model to generate outputs that specified TV price and size, aligning with domain-specific constraints.
 
-We also [validated generated outputs](https://mirascope.com/blog/llm-evaluation/) by using Pydantic schemas, which enforce strict adherence to the defined structure, types, and constraints.
+We also [validated generated outputs](/blog/llm-evaluation/) by using Pydantic schemas, which enforce strict adherence to the defined structure, types, and constraints.
 
 ### 2. Balance Realism and Diversity
 
@@ -349,4 +349,4 @@ Mirascope lets you leverage native Python and generative AI to create artificial
 
 Its rigorous and structured data validation ensures the generated data is reliable and free from private or identifiable information, making it safe and compliant for use in downstream applications.
 
-Want to learn more? You can find Mirascope code samples both on our [documentation site](https://mirascope.com/) and the [GitHub repository](https://github.com/mirascope/mirascope).
+Want to learn more? You can find Mirascope code samples both on our [documentation site](/docs/mirascope) and the [GitHub repository](https://github.com/mirascope/mirascope).

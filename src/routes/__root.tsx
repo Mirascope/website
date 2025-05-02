@@ -63,11 +63,12 @@ export const Route = createRootRoute({
           <link rel="manifest" href="/manifest.json" />
         </head>
 
+        {/* Fixed background for landing page */}
+        {isLandingPage && <div className="watercolor-bg"></div>}
+
         <div
           data-product={getProductFromPath(path)}
-          className={`flex min-h-screen flex-col px-4 sm:px-6 ${
-            isLandingPage ? "bg-watercolor-flipped" : ""
-          } handwriting-enabled`}
+          className="handwriting-enabled flex min-h-screen flex-col px-4 sm:px-6"
         >
           {/* Header is fixed, so it's outside the content flow */}
           <Header />

@@ -65,34 +65,6 @@ const guidesMeta: SectionSpec = {
       ],
     },
     {
-      slug: "evals",
-      label: "Evals",
-      children: [
-        {
-          slug: "evaluating-documentation-agent",
-          label: "Evaluating Documentation Agent",
-        },
-        {
-          slug: "evaluating-web-search-agent",
-          label: "Evaluating Web Search Agent with LLM",
-        },
-        {
-          slug: "evaluating-sql-agent",
-          label: "Evaluating Generating SQL with LLM",
-        },
-      ],
-    },
-    {
-      slug: "langgraph-vs-mirascope",
-      label: "Langgraph Vs Mirascope",
-      children: [
-        {
-          slug: "quickstart",
-          label: "LangGraph Quickstart using Mirascope",
-        },
-      ],
-    },
-    {
       slug: "more-advanced",
       label: "More Advanced",
       children: [
@@ -179,104 +151,148 @@ const guidesMeta: SectionSpec = {
       label: "Prompt Engineering",
       children: [
         {
-          slug: "chain-of-verification",
-          label: "Chain of Verification: Enhancing LLM Accuracy through Self-Verification",
+          slug: "text-based",
+          label: "Text Based",
+          children: [
+            {
+              slug: "self-ask",
+              label: "Self-Ask",
+            },
+            {
+              slug: "plan-and-solve",
+              label: "Plan and Solve",
+            },
+            {
+              slug: "contrastive-chain-of-thought",
+              label: "Contrastive Chain of Thought",
+            },
+            {
+              slug: "tabular-chain-of-thought",
+              label: "Tabular Chain of Thought",
+            },
+            {
+              slug: "chain-of-thought",
+              label: "Chain of Thought",
+            },
+            {
+              slug: "thread-of-thought",
+              label: "Thread of Thought",
+            },
+            {
+              slug: "rereading",
+              label: "Rereading",
+            },
+            {
+              slug: "emotion-prompting",
+              label: "Emotion Prompting",
+            },
+
+            {
+              slug: "rephrase-and-respond",
+              label: "Rephrase and Respond",
+            },
+            {
+              slug: "common-phrases",
+              label: "Common Phrases (Prompt Mining)",
+            },
+            {
+              slug: "role-prompting",
+              label: "Role Prompting",
+            },
+          ],
         },
         {
-          slug: "decomposed-prompting",
-          label: "Decomposed Prompting: Enhancing LLM Problem-Solving with Tool-Based Subproblems",
+          slug: "chaining-based",
+          label: "Chaining Based",
+          children: [
+            {
+              slug: "self-refine",
+              label: "Self-Refine: Enhancing LLM Outputs Through Iterative Self-Improvement",
+            },
+            {
+              slug: "self-consistency",
+              label: "Self-Consistency: Enhancing LLM Reasoning with Multiple Outputs",
+            },
+            {
+              slug: "reverse-chain-of-thought",
+              label: "Reverse Chain of Thought",
+            },
+            {
+              slug: "prompt-paraphrasing",
+              label:
+                "Prompt Paraphrasing: Generating Diverse Prompts for LLM Testing and Evaluation",
+            },
+            {
+              slug: "mixture-of-reasoning",
+              label: "Mixture of Reasoning: Enhancing LLM Performance with Multiple Techniques",
+            },
+            {
+              slug: "demonstration-ensembling",
+              label: "Demonstration Ensembling: Enhancing LLM Responses with Aggregated Examples",
+            },
+            {
+              slug: "chain-of-verification",
+              label: "Chain of Verification: Enhancing LLM Accuracy through Self-Verification",
+            },
+            {
+              slug: "least-to-most",
+              label: "Least to Most",
+            },
+            {
+              slug: "diverse",
+              label: "DiVeRSe: Enhancing LLM Reasoning with Prompt Variations",
+            },
+
+            {
+              slug: "decomposed-prompting",
+              label:
+                "Decomposed Prompting: Enhancing LLM Problem-Solving with Tool-Based Subproblems",
+            },
+            {
+              slug: "system-to-attention",
+              label: "System to Attention (S2A): Enhancing LLM Focus with Query Filtering",
+            },
+            {
+              slug: "step-back",
+              label: "Step-back Prompting: Enhancing LLM Reasoning with High-Level Questions",
+            },
+            {
+              slug: "skeleton-of-thought",
+              label: "Skeleton of Thought: Enhancing LLM Response Speed",
+            },
+            {
+              slug: "sim-to-m",
+              label: "Sim to M: Enhancing LLM Reasoning with Perspective-Taking",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      slug: "evals",
+      label: "Evaluations",
+      children: [
+        {
+          slug: "evaluating-documentation-agent",
+          label: "Evaluating Documentation Agent",
         },
         {
-          slug: "demonstration-ensembling",
-          label: "Demonstration Ensembling: Enhancing LLM Responses with Aggregated Examples",
+          slug: "evaluating-web-search-agent",
+          label: "Evaluating Web Search Agent with LLM",
         },
         {
-          slug: "diverse",
-          label: "DiVeRSe: Enhancing LLM Reasoning with Prompt Variations",
+          slug: "evaluating-sql-agent",
+          label: "Evaluating Generating SQL with LLM",
         },
+      ],
+    },
+    {
+      slug: "langgraph-vs-mirascope",
+      label: "Langgraph Vs Mirascope",
+      children: [
         {
-          slug: "mixture-of-reasoning",
-          label: "Mixture of Reasoning: Enhancing LLM Performance with Multiple Techniques",
-        },
-        {
-          slug: "prompt-paraphrasing",
-          label: "Prompt Paraphrasing: Generating Diverse Prompts for LLM Testing and Evaluation",
-        },
-        {
-          slug: "self-consistency",
-          label: "Self-Consistency: Enhancing LLM Reasoning with Multiple Outputs",
-        },
-        {
-          slug: "self-refine",
-          label: "Self-Refine: Enhancing LLM Outputs Through Iterative Self-Improvement",
-        },
-        {
-          slug: "sim-to-m",
-          label: "Sim to M: Enhancing LLM Reasoning with Perspective-Taking",
-        },
-        {
-          slug: "skeleton-of-thought",
-          label: "Skeleton of Thought: Enhancing LLM Response Speed",
-        },
-        {
-          slug: "step-back",
-          label: "Step-back Prompting: Enhancing LLM Reasoning with High-Level Questions",
-        },
-        {
-          slug: "system-to-attention",
-          label: "System to Attention (S2A): Enhancing LLM Focus with Query Filtering",
-        },
-        {
-          slug: "chain-of-thought",
-          label: "Chain of Thought",
-        },
-        {
-          slug: "common-phrases",
-          label: "Common Phrases (Prompt Mining)",
-        },
-        {
-          slug: "contrastive-chain-of-thought",
-          label: "Contrastive Chain of Thought",
-        },
-        {
-          slug: "emotion-prompting",
-          label: "Emotion Prompting",
-        },
-        {
-          slug: "plan-and-solve",
-          label: "Plan and Solve",
-        },
-        {
-          slug: "rephrase-and-respond",
-          label: "Rephrase and Respond",
-        },
-        {
-          slug: "rereading",
-          label: "Rereading",
-        },
-        {
-          slug: "self-ask",
-          label: "Self-Ask",
-        },
-        {
-          slug: "thread-of-thought",
-          label: "Thread of Thought",
-        },
-        {
-          slug: "least-to-most",
-          label: "Least to Most",
-        },
-        {
-          slug: "reverse-chain-of-thought",
-          label: "Reverse Chain of Thought",
-        },
-        {
-          slug: "role-prompting",
-          label: "Role Prompting",
-        },
-        {
-          slug: "tabular-chain-of-thought",
-          label: "Tabular Chain of Thought",
+          slug: "quickstart",
+          label: "LangGraph Quickstart using Mirascope",
         },
       ],
     },

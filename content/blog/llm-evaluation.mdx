@@ -160,7 +160,7 @@ print(f"Recall: {recall:.2f}, Precision: {precision:.2f}")
 
 LLMs are natural candidates for the subtle and subjective evaluations required by language tasks like creativity, tone, and content analysis, which are hard to assess with fixed or rules-based criteria. 
 
-When using models to assess the quality of LLM outputs, it’s all in the prompt (so to speak) and so we recommend you follow [best prompt engineering practices](https://mirascope.com/blog/prompt-engineering-best-practices) to ensure consistent, thorough, and interpretable evaluations:
+When using models to assess the quality of LLM outputs, it’s all in the prompt (so to speak) and so we recommend you follow [best prompt engineering practices](/blog/prompt-engineering-best-practices) to ensure consistent, thorough, and interpretable evaluations:
 
 * Write prompts that clearly define evaluation criteria  
 * Provide a detailed scale or rubric  
@@ -312,7 +312,7 @@ for evaluation in evaluations:
 
 ### Mirascope Evaluation Guide
 
-See our [documentation](https://mirascope.com/learn/evals/) for rich examples and techniques to help you write evaluations for a range of LLM-driven applications.
+See our [documentation](/docs/mirascope/learn/evals/) for rich examples and techniques to help you write evaluations for a range of LLM-driven applications.
 
 ## 6 Best Practices for Evaluating Language Models
 
@@ -324,7 +324,7 @@ Just as no one metric is perfect for evaluating a model, you shouldn’t rely on
 
 While LLM-based evaluations (like LLM as judge) are great for assessing subjective aspects, such as tone or creativity, they can nevertheless miss the mark when you need to evaluate for factual correctness or exact word matching.
 
-Hardcoded evaluations, on the other hand, are highly reliable for verifying objective details, like specific keywords or format adherence. By combining these approaches, you capture both the nuanced and objective aspects of performance, allowing for a more holistic evaluation of model strengths and weaknesses across various [LLM applications](https://mirascope.com/blog/llm-applications).
+Hardcoded evaluations, on the other hand, are highly reliable for verifying objective details, like specific keywords or format adherence. By combining these approaches, you capture both the nuanced and objective aspects of performance, allowing for a more holistic evaluation of model strengths and weaknesses across various [LLM applications](/blog/llm-applications).
 
 ### 2. Establish a Baseline Early On
 
@@ -338,7 +338,7 @@ We've found that LLMs can also generate fairly high-quality synthetic data to ge
 
 Evaluation isn’t a one-time process; it requires continuous iteration to stay in a useful state given evolving goals and language models.
 
-As new use cases emerge or as the model is fine-tuned, you should regularly revisit your criteria and prompts used for evaluations. Analyze results from past evaluations to identify areas where the evaluation method may be lacking, and adjust the [prompts](https://mirascope.com/blog/llm-prompt) and scoring rubrics accordingly.
+As new use cases emerge or as the model is fine-tuned, you should regularly revisit your criteria and prompts used for evaluations. Analyze results from past evaluations to identify areas where the evaluation method may be lacking, and adjust the [prompts](/blog/llm-prompt) and scoring rubrics accordingly.
 
 ### 4. Maintain Context Awareness in Evals
 
@@ -350,7 +350,7 @@ You should design evaluation methods to account for specific circumstances surro
 
 We highly recommend versioning your evaluation prompts and criteria to understand how changes affect your eval results over time. 
 
-By tracking different [versions of prompts](https://mirascope.com/blog/prompt-versioning), criteria, and scoring rubrics, you can analyze how modifications to the evaluation setup impact performance metrics. This ensures transparency and helps pinpoint what changes contributed to improvements - or regressions - in the model’s performance.
+By tracking different [versions of prompts](/blog/prompt-versioning), criteria, and scoring rubrics, you can analyze how modifications to the evaluation setup impact performance metrics. This ensures transparency and helps pinpoint what changes contributed to improvements - or regressions - in the model’s performance.
 
 ### 6. Use Diverse Test Sets
 
@@ -360,6 +360,6 @@ On the other hand, testing with a narrow or overly specific set of inputs can re
 
 ## Take Control of Your AI’s Evaluations and Performance
 
-Mirascope supports comprehensive, scalable evaluations throughout your [pipeline](https://mirascope.com/blog/llm-pipeline), helping ensure your model performs reliably across diverse scenarios, while reducing bias and delivering consistent, high-quality outputs. Start refining your evaluation process to drive better outcomes for your AI initiatives.
+Mirascope supports comprehensive, scalable evaluations throughout your [pipeline](/blog/llm-pipeline), helping ensure your model performs reliably across diverse scenarios, while reducing bias and delivering consistent, high-quality outputs. Start refining your evaluation process to drive better outcomes for your AI initiatives.
 
-Want to explore more LLM evaluation techniques? You can find Mirascope code samples both on our [documentation site](https://mirascope.com/WELCOME) and our [GitHub repository](https://github.com/mirascope/mirascope).
+Want to explore more LLM evaluation techniques? You can find Mirascope code samples both on our [documentation site](/docs/mirascope) and our [GitHub repository](https://github.com/mirascope/mirascope).

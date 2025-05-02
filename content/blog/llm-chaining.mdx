@@ -14,18 +14,18 @@ Chaining lets applications do things like work with multiple files, refine conte
 * They only remember what’s been said in a given conversation but not outside of it, unless you store the memory or state externally.  
 * They still generally only output their answers as text (e.g., prose, JSON, SQL code). But what if your application needs very specific outputs like a validated CSV file, flow chart, or knowledge graph?
 
-This is why LLM chains are useful: they let you build sophisticated applications like [LLM agents](https://mirascope.com/blog/llm-agents/) and retrieval augmented generation (RAG) systems that typically include:
+This is why LLM chains are useful: they let you build sophisticated applications like [LLM agents](/blog/llm-agents/) and retrieval augmented generation (RAG) systems that typically include:
 
 * An input processing step, like preparing and formatting data that’ll be sent to the LLM - which often involves a prompt template.  
 * APIs enabling interaction with both LLMs and external services and applications.  
 * Language model output processing, such as parsing, validating, and formatting.  
-* Data retrieval from external data sources, such as fetching relevant embeddings from a vector database to enhance contextual understanding in [LangChain RAG](https://mirascope.com/blog/langchain-rag/) applications.
+* Data retrieval from external data sources, such as fetching relevant embeddings from a vector database to enhance contextual understanding in [LangChain RAG](/blog/langchain-rag/) applications.
 
 **But putting together an LLM chain isn’t always straightforward**, which is why orchestration frameworks like LangChain and LlamaIndex exist, though these have their own inefficiencies that we’ll discuss later on.
 
 It’s for that reason we designed [Mirascope](https://github.com/mirascope/mirascope), our developer-friendly, pythonic toolkit, to overcome shortcomings of modern frameworks.
 
-Mirascope works together with [Lilypad](https://lilypad.so/docs), our open source prompt observability platform that allows software developers to version, trace, and optimize language model calls, treating these as non-deterministic functions.
+Mirascope works together with [Lilypad](/docs/lilypad), our open source prompt observability platform that allows software developers to version, trace, and optimize language model calls, treating these as non-deterministic functions.
 
 Below, we dive into techniques for chaining and discuss what to look for in an LLM chaining framework.
 
@@ -37,7 +37,7 @@ This in turn allows the language model to refine its understanding progressively
 
 So rather than sending all the information at once and hoping for the best, the chain you design should break the prompt or task down into subtasks that in turn guide the model’s reasoning through intermediate steps.
 
-For instance, this allows applications such as [LLM as a judge](https://mirascope.com/blog/llm-as-judge/) to iteratively refine or validate responses based on predefined evaluation criteria.
+For instance, this allows applications such as [LLM as a judge](/blog/llm-as-judge/) to iteratively refine or validate responses based on predefined evaluation criteria.
 
 While most people think of prompt chaining as a simple linear sequence of LLM calls (with the output of one being fed as input to the next) there are other ways of chaining as we see below:
 
@@ -92,7 +92,7 @@ Sometimes this can be more efficient than other chaining techniques by reducing 
 * Different aspects of a task can be processed independently, like a financial analysis tool running separate LLM calls for balance sheet evaluation and competitive analysis before merging insights.  
 * You need to generate multiple outputs based on the same input, such as in synthetic data generation for training AI models, where variations of data samples are created in parallel to improve model generalization and robustness.
 
-(See our guide on [synthetic data generation](https://mirascope.com/blog/synthetic-data-generation/).)
+(See our guide on [synthetic data generation](/blog/synthetic-data-generation/).)
 
 For example, parallel chains are good for:
 
@@ -169,7 +169,7 @@ It’s generally useful for:
 
 In customer support, a chatbot might troubleshoot an internet connectivity issue by first asking if the router is powered on, then branching into different solutions depending on whether the user confirms or denies connectivity, and finally escalating to a technician if the problem remains unresolved.
 
-*(See our article on [how to make a chatbot](https://mirascope.com/blog/how-to-make-a-chatbot/).)*
+*(See our article on [how to make a chatbot](/blog/how-to-make-a-chatbot/).)*
 
 Below we implement a conditional prompt that determines whether a trend is emerging or declining, then analyzes this.
 
@@ -657,7 +657,7 @@ We believe version control should be as effortless as possible and run in the ba
 
 In the end, prompt engineering can be seen as the optimization of non-deterministic functions (LLM calls) through structured experimentation. You need to continuously tweak parameters (in this case, prompts and function bodies) and measure their impact​, since outputs can be random and inconsistent.
 
-To keep track of all this, we developed [Lilypad](https://lilypad.so/docs), an open source prompt engineering framework that automatically versions and traces LLM calls when you simply add the `@lilypad.generation` decorator, ensuring that evaluations are systematic and reproducible:
+To keep track of all this, we developed [Lilypad](/docs/lilypad), an open source prompt engineering framework that automatically versions and traces LLM calls when you simply add the `@lilypad.generation` decorator, ensuring that evaluations are systematic and reproducible:
 
 ```python {6}
 import lilypad
@@ -693,7 +693,7 @@ The Lilypad Playground allows non-technical users, such as domain experts, to in
 
 Just as avoiding dependency on a framework’s update cycle - like waiting for LangChain to update when the OpenAI SDK changes - allows you to adopt improvements without delay, avoiding vendor lock-in gives you the ability to switch between LLM providers without extensive code rewriting.
 
-Mirascope’s [`llm.call` decorator](https://mirascope.com/learn/calls/) allows you to quickly change providers in LLM calls by specifying the provider name in the argument list. This flexibility ensures that your application remains adaptable, allowing you to switch to a different model endpoint as needed.
+Mirascope’s [`llm.call` decorator](/docs/mirascope/learn/calls/) allows you to quickly change providers in LLM calls by specifying the provider name in the argument list. This flexibility ensures that your application remains adaptable, allowing you to switch to a different model endpoint as needed.
 
 Also, Mirascope's native Python interface lets you integrate models and functionality that may not yet be supported natively by Mirascope, either through provider-specific decorators or by using the provider’s SDK/API directly. This means you can seamlessly mix and match different LLMs - including the latest releases from providers like OpenAI - without being restricted by framework limitations.
 
@@ -790,4 +790,4 @@ It also shows autosuggestions:
 
 Mirascope’s lightweight Python toolkit lets you build scalable AI-powered chains while giving you the freedom to use only the components you need - no rigid frameworks, just modular flexibility.
 
-You can easily get started by exploring our examples and guides on both our [documentation pages](https://mirascope.com/WELCOME/) and on [GitHub](https://github.com/mirascope/mirascope/).
+You can easily get started by exploring our examples and guides on both our [documentation pages](/docs/mirascope/) and on [GitHub](https://github.com/mirascope/mirascope/).

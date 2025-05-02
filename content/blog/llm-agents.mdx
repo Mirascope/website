@@ -21,7 +21,7 @@ For instance, a standalone LLM can handle a simple query like, *“*Explain the 
 
 An LLM agent, on the other hand, could gather inputs like your goals, fitness level, and available times, then use external tools to make API calls and generate a tailored exercise plan that's integrated directly into your calendar.
 
-LLM agents are useful for different [real-world applications](https://mirascope.com/blog/llm-applications/) such as:
+LLM agents are useful for different [real-world applications](/blog/llm-applications/) such as:
 
 * Addressing customer support queries and deciding to pass on complex cases to human agents.
 * Debugging, optimizing, and generating code for developers.  
@@ -29,7 +29,7 @@ LLM agents are useful for different [real-world applications](https://mirascope.
 
 Agents themselves are LLM-based applications that can solve real-world problems requiring more than just pure pre-trained natural language understanding. For example, an LLM agent may be directly integrated into an enterprise's private data in order to provide highly tailored and company-specific outcomes.
 
-You can build agents using [modern orchestration frameworks](https://mirascope.com/blog/llamaindex-vs-langchain/) but many users find the unique abstractions of systems like LangChain hard to work with, requiring you to do things their way.
+You can build agents using [modern orchestration frameworks](/blog/llamaindex-vs-langchain/) but many users find the unique abstractions of systems like LangChain hard to work with, requiring you to do things their way.
 
 For this reason, we designed [Mirascope](https://github.com/mirascope/mirascope) - a user-friendly Python toolkit that lets you build LLM agents directly in native Python using lightweight modules that you can slot into existing workflows.
 
@@ -37,7 +37,7 @@ In this article, we explain how LLM agents work, their core components and use c
 
 ## Components of an LLM Agent
 
-[LLM agents](https://mirascope.com/learn/agents/?h=agents) are built around four key parts that work together to enable reasoning, planning, and execution.
+[LLM agents](/docs/mirascope/learn/agents/?h=agents) are built around four key parts that work together to enable reasoning, planning, and execution.
 
 These components include:
 
@@ -62,7 +62,7 @@ Planning refers to the process where the agent figures out the steps needed to c
 
 For instance, if the agent is built for customer support, it might plan by first identifying the user’s question, then retrieving the necessary information, and finally generating a helpful response.
 
-Popular techniques like [Chain-of-thought (CoT)](https://mirascope.com/tutorials/prompt_engineering/text_based/chain_of_thought/) and Tree-of-thought (ToT) prompting or decision trees can help structure this process - enabling the agent to think through problems step by step, especially when dealing with complex multi-step tasks.  
+Popular techniques like [Chain-of-thought (CoT)](/docs/mirascope/guides/prompt_engineering/text_based/chain_of_thought/) and Tree-of-thought (ToT) prompting or decision trees can help structure this process - enabling the agent to think through problems step by step, especially when dealing with complex multi-step tasks.  
 
 It can also use feedback mechanisms allowing the agent to iteratively refine its execution plan based on past actions and observations.
 
@@ -105,19 +105,19 @@ Orchestration frameworks offer the structure and pre-built components to help yo
 
 In particular, they ease the integration of tools that allow agents to interact with external environments and do tasks. As discussed above, tools can include APIs for search engines, code interpreters, databases, and other external resources.
 
-Below are some of the most notable examples of [frameworks](https://mirascope.com/blog/llm-frameworks/):
+Below are some of the most notable examples of [frameworks](/blog/llm-frameworks/):
 
 ### Mirascope
 
-Mirascope lets you build autonomous or semi-autonomous systems that handle tasks, make decisions, and interact with users to integrate with tools, manage state, and even bring [humans into the loop](https://mirascope.com/learn/agents/) when needed.
+Mirascope lets you build autonomous or semi-autonomous systems that handle tasks, make decisions, and interact with users to integrate with tools, manage state, and even bring [humans into the loop](/docs/mirascope/learn/agents/) when needed.
 
 Mirascope provides several key benefits, such as:
 
 #### LLM Development in Native Python
 
-Mirascope uses familiar Python constructs and avoids homegrown abstractions that other [frameworks](https://mirascope.com/blog/llamaindex-vs-langchain/#llamaindex-vs-langchain-vs-mirascope-an-in-depth-comparison) sometimes introduce. This allows developers with Python experience to start building right away without having to master new abstractions.
+Mirascope uses familiar Python constructs and avoids homegrown abstractions that other [frameworks](/blog/llamaindex-vs-langchain/#llamaindex-vs-langchain-vs-mirascope-an-in-depth-comparison) sometimes introduce. This allows developers with Python experience to start building right away without having to master new abstractions.
 
-An example of such an abstraction is the [runnable](https://mirascope.com/blog/langchain-runnables/) in LangChain, which, though useful for creating and invoking custom chains,  often masks the underlying logic of how it works, making it harder for you to customize and debug.
+An example of such an abstraction is the [runnable](/blog/langchain-runnables/) in LangChain, which, though useful for creating and invoking custom chains,  often masks the underlying logic of how it works, making it harder for you to customize and debug.
 
 Mirascope, in contrast, lets you manage chain execution with Python’s computed fields, which allows you to define and sequence the logic explicitly while offering greater control and transparency in execution.
 
@@ -157,7 +157,7 @@ if tool := response.tool:
 
 ```
 
-If the function doesn’t contain a docstring or can’t be changed for some reason (like if it’s third-party code) then you can use Mirascope’s [`BaseTool` class](https://mirascope.com/learn/tools/#__tabbed_2_1) to define the tool.
+If the function doesn’t contain a docstring or can’t be changed for some reason (like if it’s third-party code) then you can use Mirascope’s [`BaseTool` class](/docs/mirascope/learn/tools/#__tabbed_2_1) to define the tool.
 
 Below, we specify the `GetCityPopulation` class to be a tool with a defined argument:
 
@@ -199,11 +199,11 @@ if tool := response.tool:
 
 Tool definitions in both examples are automatically generated at runtime.
 
-Mirascope also embraces developer best practices like [colocation](https://mirascope.com/blog/engineers-should-handle-prompting-llms/), where function calls and their parameters - such as prompts, model parameters, and other configuration details are kept together within a single workflow.
+Mirascope also embraces developer best practices like [colocation](/blog/engineers-should-handle-prompting-llms/), where function calls and their parameters - such as prompts, model parameters, and other configuration details are kept together within a single workflow.
 
 You can see this in the code example above, where the `@openai.call` decorator encapsulates parameters such as the model name (`"gpt-4o-mini"`) and tool definitions (`tools=[GetCityPopulation]`) within the context of the `city_population` call.
 
-Our prompt management tool [Lilypad](https://lilypad.so/docs) automatically versions and traces every LLM function call to ensure code readability and maintainability and to facilitate testing.
+Our prompt management tool [Lilypad](/docs/lilypad) automatically versions and traces every LLM function call to ensure code readability and maintainability and to facilitate testing.
 
 For instance, you can version an LLM call simply by adding the `generation` decorator to ensure that any call the function makes is traced against the version:
 
@@ -238,7 +238,7 @@ Mirascope makes defining, structuring, and validating outputs easier with its `r
 
 Response models handle output validation outside of runtime and add type safety under the hood, allowing you to catch errors earlier in development.
 
-In this example, we define the expected structure of the language model’s response (`Movie`) and add this as a response model in the LLM call to enforce its structure in order to more easily validate the model’s [output](https://mirascope.com/blog/langchain-structured-output/):
+In this example, we define the expected structure of the language model’s response (`Movie`) and add this as a response model in the LLM call to enforce its structure in order to more easily validate the model’s [output](/blog/langchain-structured-output/):
 
 ```python
 from mirascope.core import openai
@@ -295,7 +295,7 @@ It provides abstractions for tasks, processes, and collaboration, allowing devel
 
 The framework also includes memory management features to help agents build on past interactions and function more cohesively over time.
 
-Additionally, CrewAI integrates with various LLMs, including [LangChain’s ecosystem](https://mirascope.com/blog/langchain-sucks/). This means you can leverage LangChain’s tools and resources alongside CrewAI to enhance your agent workflows.
+Additionally, CrewAI integrates with various LLMs, including [LangChain’s ecosystem](/blog/langchain-sucks/). This means you can leverage LangChain’s tools and resources alongside CrewAI to enhance your agent workflows.
 
 ## 5 Limitations of LLM Agents
 
@@ -317,7 +317,7 @@ LLM agents rely heavily on the data they were trained on. If the training data i
 
 Likewise, if the training data lacks sufficient examples for a specific domain, the agent may struggle to provide accurate or nuanced responses in that area.
 
-You can address some of these issues by [fine-tuning](https://mirascope.com/blog/prompt-engineering-vs-fine-tuning/) the model for specific tasks or combining it with RAG systems to fetch more relevant, up-to-date information.
+You can address some of these issues by [fine-tuning](/blog/prompt-engineering-vs-fine-tuning/) the model for specific tasks or combining it with RAG systems to fetch more relevant, up-to-date information.
 
 However, the overall quality and balance of the training data remain important to the agent’s performance.
 
@@ -333,9 +333,9 @@ One way to ease this limitation is by breaking tasks into smaller subtasks and s
 
 ### Dependence on Good Prompts
 
-The effectiveness of an LLM agent depends heavily on how well it’s [prompted](https://mirascope.com/blog/prompt-engineering-best-practices/). If a prompt lacks detail, structure, or specificity, the agent may produce responses that fail to address the intended goal.
+The effectiveness of an LLM agent depends heavily on how well it’s [prompted](/blog/prompt-engineering-best-practices/). If a prompt lacks detail, structure, or specificity, the agent may produce responses that fail to address the intended goal.
 
-Since agents don’t possess inherent reasoning capabilities to interpret or refine unclear instructions, users have to invest effort and care in [creating precise and well-thought-out prompts](https://mirascope.com/blog/prompt-engineering-examples/).
+Since agents don’t possess inherent reasoning capabilities to interpret or refine unclear instructions, users have to invest effort and care in [creating precise and well-thought-out prompts](/blog/prompt-engineering-examples/).
 
 ### Difficulty Adapting to Different Roles
 
@@ -351,11 +351,11 @@ Below we use an open-source model (Llama 3.1 8B) to build a local chatbot that o
 
 We’ll use Mirascope for prompting and LlamaIndex for embedding, retrieval, and reranking.
 
-A typical [LLM pipeline](https://mirascope.com/blog/llm-pipeline/) uses retrieved data or documents to answer queries but here we’re adding an agent to decide on whether retrieval is needed in the first place.
+A typical [LLM pipeline](/blog/llm-pipeline/) uses retrieved data or documents to answer queries but here we’re adding an agent to decide on whether retrieval is needed in the first place.
 
 That means if our agent (here a chatbot) believes it already has enough context or can handle a request in another way, it might skip retrieval entirely.
 
-You can find more details about the code below in our [tutorial library](https://mirascope.com/tutorials/agents/local_chat_with_codebase/).
+You can find more details about the code below in our [tutorial library](/docs/mirascope/guides/agents/local_chat_with_codebase/).
 
 **Prerequisites**:
 
@@ -598,7 +598,7 @@ Output:
 (Assistant): Our standard plan includes 15 days of paid vacation per year. ...
 ```
 
-Although we’ve included only one tool (`get_documents`), adding [multiple tools](https://mirascope.com/blog/openai-function-calling/) (e.g., a search function, a calculator, or an API call to other LLMs or agents) would let your agent choose the best action to perform before finalizing its answer.
+Although we’ve included only one tool (`get_documents`), adding [multiple tools](/blog/openai-function-calling/) (e.g., a search function, a calculator, or an API call to other LLMs or agents) would let your agent choose the best action to perform before finalizing its answer.
 
 ## Build Your Agentic Systems Using Mirascope
 
@@ -606,4 +606,4 @@ Mirascope’s modular and Python-first design simplifies the process of building
 
 It integrates with your existing projects and lets you enhance your applications by leveraging other libraries' functionality as needed.
 
-Want to learn more? You can find Mirascope code samples both on our [documentation site](https://mirascope.com/WELCOME) and on our [GitHub page](https://github.com/mirascope/mirascope).
+Want to learn more? You can find Mirascope code samples both on our [documentation site](/docs/mirascope) and on our [GitHub page](https://github.com/mirascope/mirascope).
