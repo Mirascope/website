@@ -38,7 +38,7 @@ Back when we started working with the OpenAI SDK, we found that complex prompts 
 
 It became important for us to catch basic errors before they reached the LLM, just as you’d expect in any standard software development workflow.
 
-In [Mirascope](https://mirascope.com), the [`prompt_template`](/docs/mirascope/learn/prompts) decorator enables writing prompts and Python functions, which enables using Pydantic's [`validate_call`](https://docs.pydantic.dev/latest/concepts/validation_decorator/) decorator for automatic data validation to ensure the prompt's inputs are well formed and correspond to those defined by the prompt. This contributes to the overall quality of the prompt and lessens the chance of errors silently going into the LLM.
+In [Mirascope](/docs/mirascope), the [`prompt_template`](/docs/mirascope/learn/prompts) decorator enables writing prompts and Python functions, which enables using Pydantic's [`validate_call`](https://docs.pydantic.dev/latest/concepts/validation_decorator/) decorator for automatic data validation to ensure the prompt's inputs are well formed and correspond to those defined by the prompt. This contributes to the overall quality of the prompt and lessens the chance of errors silently going into the LLM.
 
 Mirascope offers inline documentation and linting for your editor to ensure the quality of your code. Two examples are shown below.
 
@@ -411,7 +411,7 @@ class FormatBook(BaseTool):
 def recommend_book(genre: str): ...
 ```
 
-*If you want to give Mirascope a try, you can get started with our source code on [GitHub](https://github.com/mirascope/mirascope/). You can find our documentation (and more code samples) on our [documentation site](https://mirascope.com) as well.*‍
+*If you want to give Mirascope a try, you can get started with our source code on [GitHub](https://github.com/mirascope/mirascope/). You can find our documentation (and more code samples) on our [docs](/docs/mirascope) as well.*‍
 
 ## 2. Guidance-Best for Tailoring Prompts via Advanced Constraints
 
@@ -551,4 +551,4 @@ Promptmetheus supports real-time collaboration for teams and device synchronizat
 
 You can find more information about Promptmetheus’ features on its website.
 
-Want to learn more? You can find Mirascope’s code samples mentioned in this article on both our [documentation site](https://mirascope.com) and on [GitHub](https://github.com/mirascope/mirascope/).
+Want to learn more? You can find Mirascope’s code samples mentioned in this article on both our [docs](/docs/mirascope) and on [GitHub](https://github.com/mirascope/mirascope/).
