@@ -1,31 +1,25 @@
 import { useState, useEffect, useRef } from "react";
+import { useRouterState } from "@tanstack/react-router";
 import { isBrowser } from "../lib/services/analytics";
 import analyticsManager from "../lib/services/analytics";
+import { cn } from "../lib/utils";
 
 export default function CookieBanner() {
   const [isVisible, setIsVisible] = useState(false);
   const bannerRef = useRef<HTMLDivElement>(null);
+  const router = useRouterState();
+  const isLandingPage = router.location.pathname === "/";
 
   useEffect(() => {
     // Only run in browser environment
     if (!isBrowser) return;
-
-    // Add escape key handler
-    const handleEscapeKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isVisible) {
-        handleReject();
-      }
-    };
 
     // Check if user has already made a choice
     const consent = analyticsManager.getConsent();
     if (consent === "unknown") {
       setIsVisible(true);
     }
-
-    window.addEventListener("keydown", handleEscapeKey);
-    return () => window.removeEventListener("keydown", handleEscapeKey);
-  }, [isVisible]);
+  }, []);
 
   const handleAccept = () => {
     analyticsManager.updateConsent("accepted");
@@ -46,7 +40,12 @@ export default function CookieBanner() {
       role="alertdialog"
       aria-labelledby="cookie-title"
       aria-describedby="cookie-description"
-      className="xs:bottom-18 bg-background/80 border-primary fixed bottom-18 left-4 z-50 w-[180px] rounded-lg border p-3 shadow-lg backdrop-blur-sm sm:bottom-12 sm:left-4 md:left-4 lg:left-4 xl:bottom-12 2xl:bottom-4"
+      className={cn(
+        "fixed bottom-18 left-4 z-50 w-[180px] rounded-lg border p-3 shadow-lg backdrop-blur-sm",
+        "xs:bottom-18 sm:bottom-12 sm:left-4 md:left-4 lg:left-4 xl:bottom-12 2xl:bottom-4",
+        "border-border",
+        isLandingPage ? "bg-background/40" : "bg-background/80"
+      )}
       tabIndex={-1}
     >
       <div className="flex flex-col gap-2">
@@ -60,14 +59,24 @@ export default function CookieBanner() {
           <button
             onClick={handleReject}
             aria-label="Reject cookies"
-            className="font-handwriting text-muted-foreground bg-muted hover:bg-accent focus:ring-ring rounded-md px-2 py-1 text-sm font-medium transition-colors focus:ring-2 focus:outline-none"
+            className={cn(
+              "rounded-md px-2 py-1 text-sm font-medium transition-colors focus:ring-2 focus:outline-none",
+              "font-handwriting text-muted-foreground",
+              "hover:bg-accent focus:ring-ring",
+              isLandingPage ? "bg-muted/70" : "bg-muted"
+            )}
           >
             Reject
           </button>
           <button
             onClick={handleAccept}
             aria-label="Accept cookies"
-            className="font-handwriting text-primary-foreground bg-primary hover:bg-primary/90 focus:ring-ring rounded-md px-2 py-1 text-sm font-medium transition-colors focus:ring-2 focus:outline-none"
+            className={cn(
+              "rounded-md px-2 py-1 text-sm font-medium transition-colors focus:ring-2 focus:outline-none",
+              "font-handwriting text-primary-foreground",
+              "hover:bg-primary/90 focus:ring-ring",
+              isLandingPage ? "bg-primary/70" : "bg-primary"
+            )}
           >
             Accept
           </button>
