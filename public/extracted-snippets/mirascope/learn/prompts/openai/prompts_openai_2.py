@@ -7,9 +7,9 @@
 from mirascope import prompt_template
 
 
-@prompt_template("Recommend a {genre} book")
-def recommend_book_prompt(genre: str): ...
+@prompt_template("Recommend a {genre} book") # [!code highlight]
+def recommend_book_prompt(genre: str): ... # [!code highlight]
 
 
 print(recommend_book_prompt("fantasy"))
-# Output: [BaseMessageParam(role='user', content='Recommend a fantasy book')]
+# Output: [BaseMessageParam(role='user', content='Recommend a fantasy book')] # [!code highlight]

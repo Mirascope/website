@@ -10,25 +10,26 @@ from mirascope import prompt_template
 @prompt_template(
     """
     Book themes:
-    {themes:text}
+    {themes:text} # [!code highlight]
 
     Character analysis:
-    {characters:texts}
+    {characters:texts} # [!code highlight]
     """
 )
 def analyze_book(themes: str, characters: list[str]): ...
 
 
 prompt = analyze_book(
-    themes="redemption, power, friendship",
-    characters=[
-        "Name: Frodo, Role: Protagonist",
-        "Name: Gandalf, Role: Mentor",
-    ],
+    themes="redemption, power, friendship", # [!code highlight]
+    characters=[ # [!code highlight]
+        "Name: Frodo, Role: Protagonist", # [!code highlight]
+        "Name: Gandalf, Role: Mentor", # [!code highlight]
+    ], # [!code highlight]
 )
 
 print(prompt[0].content)
 # Output:
+# [!code highlight:8]
 # [
 #     TextPart(type="text", text="Book themes:"),
 #     TextPart(type="text", text="redemption, power, friendship"),
