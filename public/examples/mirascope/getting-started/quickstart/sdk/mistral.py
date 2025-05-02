@@ -18,6 +18,7 @@ def extract_book(text: str) -> Book:
     completion = client.chat.complete(
         model="mistral-large-latest",
         messages=[{"role": "user", "content": f"Extract {text}"}],
+         # [!code highlight:27]
         tools=[
             {
                 "function": {
@@ -48,4 +49,4 @@ def extract_book(text: str) -> Book:
 
 book = extract_book("The Name of the Wind by Patrick Rothfuss")
 print(book)
-# Output: title='The Name of the Wind' author='Patrick Rothfuss'
+# Output: title='The Name of the Wind' author='Patrick Rothfuss' # [!code highlight]

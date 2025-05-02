@@ -15,11 +15,11 @@ class Book(BaseModel):
     author: str
 
 
-@llm.call(provider="openai", model="gpt-4o-mini", response_model=Book)
+@llm.call(provider="openai", model="gpt-4o-mini", response_model=Book) # [!code highlight]
 @prompt_template("Extract {text}")
 def extract_book(text: str): ...
 
 
-book: Book = extract_book("The Name of the Wind by Patrick Rothfuss")
+book: Book = extract_book("The Name of the Wind by Patrick Rothfuss") # [!code highlight]
 print(book)
-# Output: title='The Name of the Wind' author='Patrick Rothfuss'
+# Output: title='The Name of the Wind' author='Patrick Rothfuss' # [!code highlight]
