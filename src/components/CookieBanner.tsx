@@ -41,10 +41,11 @@ export default function CookieBanner() {
       aria-labelledby="cookie-title"
       aria-describedby="cookie-description"
       className={cn(
-        "fixed bottom-18 left-4 z-50 w-[180px] rounded-lg border p-3 shadow-lg backdrop-blur-sm",
+        "fixed bottom-18 left-4 z-50 w-[180px] rounded-lg p-3 shadow-lg backdrop-blur-sm",
         "xs:bottom-18 sm:bottom-12 sm:left-4 md:left-4 lg:left-4 xl:bottom-12 2xl:bottom-4",
-        "border-border",
-        isLandingPage ? "bg-background/40" : "bg-background/80"
+        isLandingPage
+          ? "bg-background/40 landing-page-box-shadow"
+          : "border-border bg-background/80 border"
       )}
       tabIndex={-1}
     >
@@ -62,8 +63,8 @@ export default function CookieBanner() {
             className={cn(
               "rounded-md px-2 py-1 text-sm font-medium transition-colors focus:ring-2 focus:outline-none",
               "font-handwriting text-muted-foreground",
-              "hover:bg-accent focus:ring-ring",
-              isLandingPage ? "bg-muted/70" : "bg-muted"
+              "hover:bg-accent focus:ring-ring cursor-pointer",
+              isLandingPage ? "bg-muted/60" : "bg-muted"
             )}
           >
             Reject
@@ -74,8 +75,8 @@ export default function CookieBanner() {
             className={cn(
               "rounded-md px-2 py-1 text-sm font-medium transition-colors focus:ring-2 focus:outline-none",
               "font-handwriting text-primary-foreground",
-              "hover:bg-primary/90 focus:ring-ring",
-              isLandingPage ? "bg-primary/70" : "bg-primary"
+              "hover:bg-primary/90 focus:ring-ring cursor-pointer",
+              isLandingPage ? "bg-primary/80" : "bg-primary"
             )}
           >
             Accept

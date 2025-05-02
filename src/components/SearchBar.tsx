@@ -118,10 +118,10 @@ function SearchInput({
   return (
     <div
       className={cn(
-        "h-9 rounded-full border transition-all duration-500",
+        "h-9 rounded-full transition-all duration-500",
         isLandingPage
-          ? "border-white/30 bg-white/10 hover:bg-white/20"
-          : "border-border bg-background/20 hover:bg-primary/10 hover:border-primary/80",
+          ? "border-0 bg-white/10 hover:bg-white/20"
+          : "border-border bg-background/20 hover:bg-primary/10 hover:border-primary/80 border",
         isOpen
           ? "w-80 md:w-[32rem]" // Wider when expanded
           : "w-9 lg:w-36" // Icon-only on small screens, wider on lg screens
@@ -165,9 +165,7 @@ function SearchInput({
           <kbd
             className={cn(
               "font-small absolute top-1/2 right-3 hidden h-5 -translate-y-1/2 items-center gap-1 rounded border px-1.5 font-mono text-[10px] opacity-80 lg:flex",
-              isLandingPage
-                ? "border-white/30 bg-white/10 text-white"
-                : "border-border bg-muted text-foreground"
+              isLandingPage ? "bg-white/10 text-white" : "border-border bg-muted text-foreground"
             )}
           >
             <span className="text-xs">⌘</span>K
