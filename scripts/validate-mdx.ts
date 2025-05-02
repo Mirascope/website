@@ -2,6 +2,20 @@ import fs from "fs";
 import path from "path";
 import { parseFrontmatter, processMDXContent, type ContentType } from "@/src/lib/content";
 
+// Define the validation result type
+interface ValidationError {
+  type: string;
+  message: string;
+  line?: number;
+  column?: number;
+  context?: string;
+}
+
+interface ValidationResult {
+  isValid: boolean;
+  errors: ValidationError[];
+}
+
 // Define content locations
 interface ContentLocation {
   dir: string;
@@ -37,20 +51,82 @@ const contentLocations: ContentLocation[] = [
 ];
 
 /**
- * Validate MDX file directly against our MDX processor
+ * Validate MDX content with the MDX processor
+ */
+async function validateMDXSyntax(
+  content: string,
+  path: string,
+  contentType: ContentType
+): Promise<ValidationResult> {
+  try {
+    // Use our shared MDX processor which will throw errors if invalid
+    await processMDXContent(content, contentType, { path });
+    return { isValid: true, errors: [] };
+  } catch (error) {
+    return {
+      isValid: false,
+      errors: [
+        {
+          type: "mdx-syntax",
+          message: error instanceof Error ? error.message : String(error),
+        },
+      ],
+    };
+  }
+}
+
+/**
+ * Validate for absolute Mirascope URLs that should be relative
+ * @param content - The content to validate
+ * @param path - The file path (used to determine if exceptions should apply)
+ * @param contentType - The type of content being validated
+ */
+function validateAbsoluteUrls(content: string, contentType?: ContentType): ValidationResult {
+  const errors: ValidationError[] = [];
+  const lines = content.split("\n");
+  const urlPattern = /https:\/\/mirascope\.com[^"\s)]*/g;
+
+  // Skip validation for policy documents that need absolute URLs
+  if (contentType === "policy") {
+    return { isValid: true, errors: [] };
+  }
+
+  for (let i = 0; i < lines.length; i++) {
+    const matches = lines[i].match(urlPattern);
+    if (matches) {
+      for (const match of matches) {
+        errors.push({
+          type: "absolute-url",
+          message: `Absolute Mirascope URL found: "${match}". Use relative URLs instead.`,
+          line: i + 1,
+          context: lines[i].trim(),
+        });
+      }
+    }
+  }
+
+  return { isValid: errors.length === 0, errors };
+}
+
+/**
+ * Run all validators on MDX content
  */
 async function validateMDXContent(
   content: string,
   path: string,
   contentType: ContentType
-): Promise<boolean> {
-  try {
-    // Use our shared MDX processor which will throw errors if invalid
-    await processMDXContent(content, contentType, { path });
-    return true;
-  } catch (error) {
-    return false;
-  }
+): Promise<ValidationResult> {
+  // Run all validators
+  const syntaxResult = await validateMDXSyntax(content, path, contentType);
+  const urlsResult = validateAbsoluteUrls(content, contentType);
+
+  // Merge all results
+  const allErrors = [...syntaxResult.errors, ...urlsResult.errors];
+
+  return {
+    isValid: allErrors.length === 0,
+    errors: allErrors,
+  };
 }
 
 /**
@@ -62,8 +138,8 @@ async function validateDirectory(
   relativePath = "",
   basePath?: string,
   recursive = false
-): Promise<{ count: number; errors: { file: string; content: string }[] }> {
-  const errors: { file: string; content: string }[] = [];
+): Promise<{ count: number; errors: { file: string; validationErrors: ValidationError[] }[] }> {
+  const errors: { file: string; validationErrors: ValidationError[] }[] = [];
   let count = 0;
   const validateAllFiles = !basePath;
 
@@ -115,14 +191,14 @@ async function validateDirectory(
       // Extract frontmatter to validate just the content
       const { content } = parseFrontmatter(fileContent);
 
-      const isValid = await validateMDXContent(content, itemPath, contentType);
-      if (isValid) {
+      const validationResult = await validateMDXContent(content, itemPath, contentType);
+      if (validationResult.isValid) {
         process.stdout.write(".");
       } else {
         process.stdout.write("X");
         errors.push({
           file: `${path.relative(process.cwd(), itemPath)}`,
-          content,
+          validationErrors: validationResult.errors,
         });
       }
     }
@@ -136,7 +212,7 @@ async function validateDirectory(
  */
 async function validateMDX(basePath?: string): Promise<void> {
   // Keep track of errors
-  const errors: { file: string; content: string }[] = [];
+  const errors: { file: string; validationErrors: ValidationError[] }[] = [];
 
   // Determine if we're validating a specific path or everything
   const validateAllFiles = !basePath;
@@ -178,15 +254,40 @@ async function validateMDX(basePath?: string): Promise<void> {
     console.error(`\n❌ Found ${errors.length} MDX files with errors:`);
 
     for (let i = 0; i < errors.length; i++) {
-      const { file, content } = errors[i];
-      console.error(`\n❌ Error ${i + 1}/${errors.length} in file: ${file}`);
+      const { file, validationErrors } = errors[i];
+      console.error(`\n❌ File ${i + 1}/${errors.length}: ${file}`);
 
-      try {
-        // Try to compile the MDX to get the detailed error message
-        const { serialize } = await import("next-mdx-remote/serialize");
-        await serialize(content);
-      } catch (error) {
-        console.error(error);
+      // Group errors by type
+      const syntaxErrors = validationErrors.filter((e) => e.type === "mdx-syntax");
+      const urlErrors = validationErrors.filter((e) => e.type === "absolute-url");
+
+      // Display absolute URL errors first since they're more specific
+      if (urlErrors.length > 0) {
+        console.error(`\n  Found ${urlErrors.length} absolute URL issues:`);
+        for (const err of urlErrors) {
+          console.error(`  → Line ${err.line}: ${err.message}`);
+          if (err.context) {
+            console.error(`    Context: ${err.context}`);
+          }
+        }
+      }
+
+      // Then display MDX syntax errors if any
+      if (syntaxErrors.length > 0) {
+        console.error(`\n  Found ${syntaxErrors.length} MDX syntax issues:`);
+        for (const err of syntaxErrors) {
+          console.error(`  → ${err.message}`);
+        }
+
+        // Try to compile the MDX to get more detailed error messages
+        try {
+          const fileContent = fs.readFileSync(path.join(rootDir, file), "utf-8");
+          const { content } = parseFrontmatter(fileContent);
+          const { serialize } = await import("next-mdx-remote/serialize");
+          await serialize(content);
+        } catch (error) {
+          console.error(error);
+        }
       }
 
       console.error("\n---\n");
@@ -226,19 +327,42 @@ async function validateSingleFile(filepath: string): Promise<boolean> {
       }
     }
 
-    const isValid = await validateMDXContent(content, filepath, contentType);
-    if (isValid) {
+    const validationResult = await validateMDXContent(content, filepath, contentType);
+    if (validationResult.isValid) {
       console.log(`✅ Valid MDX: ${filepath}`);
       return true;
     } else {
       console.error(`❌ Invalid MDX: ${filepath}`);
 
-      try {
-        // Try to compile the MDX to get the detailed error message
-        const { serialize } = await import("next-mdx-remote/serialize");
-        await serialize(content);
-      } catch (error) {
-        console.error(error);
+      // Group errors by type
+      const syntaxErrors = validationResult.errors.filter((e) => e.type === "mdx-syntax");
+      const urlErrors = validationResult.errors.filter((e) => e.type === "absolute-url");
+
+      // Display absolute URL errors first since they're more specific
+      if (urlErrors.length > 0) {
+        console.error(`\n  Found ${urlErrors.length} absolute URL issues:`);
+        for (const err of urlErrors) {
+          console.error(`  → Line ${err.line}: ${err.message}`);
+          if (err.context) {
+            console.error(`    Context: ${err.context}`);
+          }
+        }
+      }
+
+      // Then display MDX syntax errors if any
+      if (syntaxErrors.length > 0) {
+        console.error(`\n  Found ${syntaxErrors.length} MDX syntax issues:`);
+        for (const err of syntaxErrors) {
+          console.error(`  → ${err.message}`);
+        }
+
+        try {
+          // Try to compile the MDX to get the detailed error message
+          const { serialize } = await import("next-mdx-remote/serialize");
+          await serialize(content);
+        } catch (error) {
+          console.error(error);
+        }
       }
 
       return false;
