@@ -9,10 +9,13 @@ interface LogoProps {
   imgClassName?: string;
   containerClassName?: string;
   background?: boolean;
+  showLilypad?: boolean;
 }
 
 /**
  * Reusable Logo component with customizable size and text display
+ * Can toggle between Mirascope and Lilypad logos with the showLilypad prop
+ * The text always displays "Mirascope" as it's the company brand
  */
 const Logo: React.FC<LogoProps> = ({
   size = "medium",
@@ -22,6 +25,7 @@ const Logo: React.FC<LogoProps> = ({
   imgClassName,
   containerClassName,
   background = false,
+  showLilypad = false,
 }) => {
   // Size mappings for the logo
   const sizeMap = {
@@ -57,11 +61,16 @@ const Logo: React.FC<LogoProps> = ({
 
   const selectedSize = sizeMap[size];
 
+  // Choose logo based on showLilypad flag
+  const logoPath = showLilypad
+    ? "/assets/branding/lilypad-logo.svg"
+    : "/assets/branding/mirascope-logo.svg";
+
   const logoContent = (
     <div className={cn("flex flex-row items-center justify-center", containerClassName)}>
       <div className={cn(selectedSize.spacing, imgClassName)}>
         <img
-          src="/assets/branding/logo.webp"
+          src={logoPath}
           alt="Mirascope Frog Logo"
           className={cn(selectedSize.img, imgClassName)}
         />
