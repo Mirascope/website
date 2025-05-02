@@ -23,6 +23,7 @@ function LandingPage() {
               size="large"
               withText={true}
               background={true}
+              showLilypad={false}
               textClassName="text-4xl sm:text-5xl md:text-6xl"
               className="px-8 py-5"
             />
