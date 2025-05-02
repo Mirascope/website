@@ -17,6 +17,7 @@ def extract_book(text: str) -> Book:
     response = client.models.generate_content(
         model="gemini-2.0-flash",
         contents={"parts": [{"text": f"Extract {text}"}]},
+        # [!code highlight:42]
         config={
             "tools": [
                 Tool(
@@ -62,4 +63,4 @@ def extract_book(text: str) -> Book:
 
 book = extract_book("The Name of the Wind by Patrick Rothfuss")
 print(book)
-# Output: title='The Name of the Wind' author='Patrick Rothfuss'
+# Output: title='The Name of the Wind' author='Patrick Rothfuss' # [!code highlight]
