@@ -110,6 +110,7 @@ export default function Header() {
           <Logo
             size="small"
             withText={true}
+            showLilypad={currentProduct === "lilypad"}
             textClassName={cn(isLandingPage ? "text-white" : "text-mirascope-purple")}
           />
         </Link>
