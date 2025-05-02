@@ -954,128 +954,128 @@
     "title": "Text Translation | Mirascope",
     "description": "Build advanced language translation systems. This guide demonstrates techniques for improving translation quality through parametrization and multi-provider approaches."
   },
-  "/docs/mirascope/guides/prompt-engineering/chain-of-thought": {
-    "route": "/docs/mirascope/guides/prompt-engineering/chain-of-thought",
-    "title": "Chain of Thought | Mirascope",
-    "description": "Implement chain-of-thought prompting to improve LLM reasoning. This guide demonstrates how to structure prompts that encourage step-by-step problem solving."
-  },
-  "/docs/mirascope/guides/prompt-engineering/chain-of-verification": {
-    "route": "/docs/mirascope/guides/prompt-engineering/chain-of-verification",
+  "/docs/mirascope/guides/prompt-engineering/chaining-based/chain-of-verification": {
+    "route": "/docs/mirascope/guides/prompt-engineering/chaining-based/chain-of-verification",
     "title": "Chain of Verification: Enhancing LLM Accuracy through Self-Verification | Mirascope",
     "description": "Implement Chain of Verification to improve LLM accuracy by generating verification questions about initial responses and answering them systematically"
   },
-  "/docs/mirascope/guides/prompt-engineering/common-phrases": {
-    "route": "/docs/mirascope/guides/prompt-engineering/common-phrases",
-    "title": "Common Phrases (Prompt Mining) | Mirascope",
-    "description": "Discover how using domain-specific terminology and common phrases can significantly improve LLM responses through Prompt Mining techniques."
-  },
-  "/docs/mirascope/guides/prompt-engineering/contrastive-chain-of-thought": {
-    "route": "/docs/mirascope/guides/prompt-engineering/contrastive-chain-of-thought",
-    "title": "Contrastive Chain of Thought | Mirascope",
-    "description": "Learn to apply Contrastive Chain of Thought by providing both correct and incorrect reasoning examples to improve LLM problem-solving"
-  },
-  "/docs/mirascope/guides/prompt-engineering/decomposed-prompting": {
-    "route": "/docs/mirascope/guides/prompt-engineering/decomposed-prompting",
+  "/docs/mirascope/guides/prompt-engineering/chaining-based/decomposed-prompting": {
+    "route": "/docs/mirascope/guides/prompt-engineering/chaining-based/decomposed-prompting",
     "title": "Decomposed Prompting: Enhancing LLM Problem-Solving with Tool-Based Subproblems | Mirascope",
     "description": "Explore Decomposed Prompting (DECOMP), a technique that breaks down complex problems into smaller subproblems and utilizes tools to solve each step, enhancing an LLM's problem-solving capabilities."
   },
-  "/docs/mirascope/guides/prompt-engineering/demonstration-ensembling": {
-    "route": "/docs/mirascope/guides/prompt-engineering/demonstration-ensembling",
+  "/docs/mirascope/guides/prompt-engineering/chaining-based/demonstration-ensembling": {
+    "route": "/docs/mirascope/guides/prompt-engineering/chaining-based/demonstration-ensembling",
     "title": "Demonstration Ensembling: Enhancing LLM Responses with Aggregated Examples | Mirascope",
     "description": "Improve LLM responses by implementing Demonstration Ensembling to combine outputs from multiple random subsets of examples"
   },
-  "/docs/mirascope/guides/prompt-engineering/diverse": {
-    "route": "/docs/mirascope/guides/prompt-engineering/diverse",
+  "/docs/mirascope/guides/prompt-engineering/chaining-based/diverse": {
+    "route": "/docs/mirascope/guides/prompt-engineering/chaining-based/diverse",
     "title": "DiVeRSe: Enhancing LLM Reasoning with Prompt Variations | Mirascope",
     "description": "Implement the DiVeRSe technique to improve LLM reasoning by generating multiple prompt variations of the same question for better accuracy"
   },
-  "/docs/mirascope/guides/prompt-engineering/emotion-prompting": {
-    "route": "/docs/mirascope/guides/prompt-engineering/emotion-prompting",
-    "title": "Emotion Prompting | Mirascope",
-    "description": "Enhance LLM responses by adding emotionally significant phrases to prompts to increase engagement and improve output quality"
-  },
-  "/docs/mirascope/guides/prompt-engineering/least-to-most": {
-    "route": "/docs/mirascope/guides/prompt-engineering/least-to-most",
+  "/docs/mirascope/guides/prompt-engineering/chaining-based/least-to-most": {
+    "route": "/docs/mirascope/guides/prompt-engineering/chaining-based/least-to-most",
     "title": "Least to Most: Enhancing LLM Reasoning with Subproblem Decomposition | Mirascope",
     "description": "Learn to implement the Least to Most technique, which enhances LLM reasoning by breaking down complex problems into smaller, more manageable subproblems for improved accuracy."
   },
-  "/docs/mirascope/guides/prompt-engineering/mixture-of-reasoning": {
-    "route": "/docs/mirascope/guides/prompt-engineering/mixture-of-reasoning",
+  "/docs/mirascope/guides/prompt-engineering/chaining-based/mixture-of-reasoning": {
+    "route": "/docs/mirascope/guides/prompt-engineering/chaining-based/mixture-of-reasoning",
     "title": "Mixture of Reasoning: Enhancing LLM Performance with Multiple Techniques | Mirascope",
     "description": "Learn how to implement Mixture of Reasoning, a technique that combines multiple prompt engineering approaches to improve LLM performance across a variety of tasks."
   },
-  "/docs/mirascope/guides/prompt-engineering/plan-and-solve": {
-    "route": "/docs/mirascope/guides/prompt-engineering/plan-and-solve",
-    "title": "Plan and Solve | Mirascope",
-    "description": "Implement the Plan and Solve technique, a variation of Chain of Thought prompting that improves reasoning by first understanding the problem, devising a plan, and then solving step by step."
-  },
-  "/docs/mirascope/guides/prompt-engineering/prompt-paraphrasing": {
-    "route": "/docs/mirascope/guides/prompt-engineering/prompt-paraphrasing",
+  "/docs/mirascope/guides/prompt-engineering/chaining-based/prompt-paraphrasing": {
+    "route": "/docs/mirascope/guides/prompt-engineering/chaining-based/prompt-paraphrasing",
     "title": "Prompt Paraphrasing: Generating Diverse Prompts for LLM Testing and Evaluation | Mirascope",
     "description": "Explore Prompt Paraphrasing, a technique for creating ensembles of prompt variations through translation and back-translation to test and evaluate LLM performance across different phrasings."
   },
-  "/docs/mirascope/guides/prompt-engineering/rephrase-and-respond": {
-    "route": "/docs/mirascope/guides/prompt-engineering/rephrase-and-respond",
-    "title": "Rephrase and Respond | Mirascope",
-    "description": "Learn to implement the Rephrase and Respond technique to improve LLM comprehension by having models rephrase questions before answering them"
-  },
-  "/docs/mirascope/guides/prompt-engineering/rereading": {
-    "route": "/docs/mirascope/guides/prompt-engineering/rereading",
-    "title": "Rereading | Mirascope",
-    "description": "Explore the Rereading technique that improves LLM performance by asking the model to reread a question, particularly effective for older models across various reasoning tasks."
-  },
-  "/docs/mirascope/guides/prompt-engineering/reverse-chain-of-thought": {
-    "route": "/docs/mirascope/guides/prompt-engineering/reverse-chain-of-thought",
+  "/docs/mirascope/guides/prompt-engineering/chaining-based/reverse-chain-of-thought": {
+    "route": "/docs/mirascope/guides/prompt-engineering/chaining-based/reverse-chain-of-thought",
     "title": "Reverse Chain of Thought: Enhancing LLM Reasoning with Self-Reflection | Mirascope",
     "description": "Implement Reverse Chain of Thought, a technique that enhances LLM reasoning by encouraging the model to reflect on and correct its own thought process through query reconstruction and comparison."
   },
-  "/docs/mirascope/guides/prompt-engineering/role-prompting": {
-    "route": "/docs/mirascope/guides/prompt-engineering/role-prompting",
-    "title": "Role Prompting | Mirascope",
-    "description": "Implement role-based prompting to improve LLM responses. This guide demonstrates how assigning roles affects response style and quality."
-  },
-  "/docs/mirascope/guides/prompt-engineering/self-ask": {
-    "route": "/docs/mirascope/guides/prompt-engineering/self-ask",
-    "title": "Self-Ask | Mirascope",
-    "description": "Learn how to implement the Self-Ask technique with LLMs to enhance reasoning capabilities by teaching models to ask and answer their own follow-up questions"
-  },
-  "/docs/mirascope/guides/prompt-engineering/self-consistency": {
-    "route": "/docs/mirascope/guides/prompt-engineering/self-consistency",
+  "/docs/mirascope/guides/prompt-engineering/chaining-based/self-consistency": {
+    "route": "/docs/mirascope/guides/prompt-engineering/chaining-based/self-consistency",
     "title": "Self-Consistency: Enhancing LLM Reasoning with Multiple Outputs | Mirascope",
     "description": "Implement the Self-Consistency technique, which enhances LLM reasoning by generating multiple Chain of Thought responses and selecting the most common answer for improved accuracy."
   },
-  "/docs/mirascope/guides/prompt-engineering/self-refine": {
-    "route": "/docs/mirascope/guides/prompt-engineering/self-refine",
+  "/docs/mirascope/guides/prompt-engineering/chaining-based/self-refine": {
+    "route": "/docs/mirascope/guides/prompt-engineering/chaining-based/self-refine",
     "title": "Self-Refine: Enhancing LLM Outputs Through Iterative Self-Improvement | Mirascope",
     "description": "Learn how to implement Self-Refine to improve LLM outputs by using iterative feedback and refinement cycles to enhance responses"
   },
-  "/docs/mirascope/guides/prompt-engineering/sim-to-m": {
-    "route": "/docs/mirascope/guides/prompt-engineering/sim-to-m",
+  "/docs/mirascope/guides/prompt-engineering/chaining-based/sim-to-m": {
+    "route": "/docs/mirascope/guides/prompt-engineering/chaining-based/sim-to-m",
     "title": "Sim to M: Enhancing LLM Reasoning with Perspective-Taking | Mirascope",
     "description": "Master the Sim to M technique to improve LLM reasoning by simulating different perspectives in complex scenarios involving multiple viewpoints"
   },
-  "/docs/mirascope/guides/prompt-engineering/skeleton-of-thought": {
-    "route": "/docs/mirascope/guides/prompt-engineering/skeleton-of-thought",
+  "/docs/mirascope/guides/prompt-engineering/chaining-based/skeleton-of-thought": {
+    "route": "/docs/mirascope/guides/prompt-engineering/chaining-based/skeleton-of-thought",
     "title": "Skeleton of Thought: Enhancing LLM Response Speed | Mirascope",
     "description": "Speed up LLM responses with the Skeleton of Thought technique by creating initial outlines and expanding individual points in parallel"
   },
-  "/docs/mirascope/guides/prompt-engineering/step-back": {
-    "route": "/docs/mirascope/guides/prompt-engineering/step-back",
+  "/docs/mirascope/guides/prompt-engineering/chaining-based/step-back": {
+    "route": "/docs/mirascope/guides/prompt-engineering/chaining-based/step-back",
     "title": "Step-back Prompting: Enhancing LLM Reasoning with High-Level Questions | Mirascope",
     "description": "Learn to implement Step-back prompting, a technique that improves LLM reasoning by asking a high-level question about relevant concepts before addressing the original query."
   },
-  "/docs/mirascope/guides/prompt-engineering/system-to-attention": {
-    "route": "/docs/mirascope/guides/prompt-engineering/system-to-attention",
+  "/docs/mirascope/guides/prompt-engineering/chaining-based/system-to-attention": {
+    "route": "/docs/mirascope/guides/prompt-engineering/chaining-based/system-to-attention",
     "title": "System to Attention (S2A): Enhancing LLM Focus with Query Filtering | Mirascope",
     "description": "Implement System to Attention (S2A) technique to filter irrelevant information from queries for more accurate and focused LLM responses"
   },
-  "/docs/mirascope/guides/prompt-engineering/tabular-chain-of-thought": {
-    "route": "/docs/mirascope/guides/prompt-engineering/tabular-chain-of-thought",
+  "/docs/mirascope/guides/prompt-engineering/text-based/chain-of-thought": {
+    "route": "/docs/mirascope/guides/prompt-engineering/text-based/chain-of-thought",
+    "title": "Chain of Thought | Mirascope",
+    "description": "Implement chain-of-thought prompting to improve LLM reasoning. This guide demonstrates how to structure prompts that encourage step-by-step problem solving."
+  },
+  "/docs/mirascope/guides/prompt-engineering/text-based/common-phrases": {
+    "route": "/docs/mirascope/guides/prompt-engineering/text-based/common-phrases",
+    "title": "Common Phrases (Prompt Mining) | Mirascope",
+    "description": "Discover how using domain-specific terminology and common phrases can significantly improve LLM responses through Prompt Mining techniques."
+  },
+  "/docs/mirascope/guides/prompt-engineering/text-based/contrastive-chain-of-thought": {
+    "route": "/docs/mirascope/guides/prompt-engineering/text-based/contrastive-chain-of-thought",
+    "title": "Contrastive Chain of Thought | Mirascope",
+    "description": "Learn to apply Contrastive Chain of Thought by providing both correct and incorrect reasoning examples to improve LLM problem-solving"
+  },
+  "/docs/mirascope/guides/prompt-engineering/text-based/emotion-prompting": {
+    "route": "/docs/mirascope/guides/prompt-engineering/text-based/emotion-prompting",
+    "title": "Emotion Prompting | Mirascope",
+    "description": "Enhance LLM responses by adding emotionally significant phrases to prompts to increase engagement and improve output quality"
+  },
+  "/docs/mirascope/guides/prompt-engineering/text-based/plan-and-solve": {
+    "route": "/docs/mirascope/guides/prompt-engineering/text-based/plan-and-solve",
+    "title": "Plan and Solve | Mirascope",
+    "description": "Implement the Plan and Solve technique, a variation of Chain of Thought prompting that improves reasoning by first understanding the problem, devising a plan, and then solving step by step."
+  },
+  "/docs/mirascope/guides/prompt-engineering/text-based/rephrase-and-respond": {
+    "route": "/docs/mirascope/guides/prompt-engineering/text-based/rephrase-and-respond",
+    "title": "Rephrase and Respond | Mirascope",
+    "description": "Learn to implement the Rephrase and Respond technique to improve LLM comprehension by having models rephrase questions before answering them"
+  },
+  "/docs/mirascope/guides/prompt-engineering/text-based/rereading": {
+    "route": "/docs/mirascope/guides/prompt-engineering/text-based/rereading",
+    "title": "Rereading | Mirascope",
+    "description": "Explore the Rereading technique that improves LLM performance by asking the model to reread a question, particularly effective for older models across various reasoning tasks."
+  },
+  "/docs/mirascope/guides/prompt-engineering/text-based/role-prompting": {
+    "route": "/docs/mirascope/guides/prompt-engineering/text-based/role-prompting",
+    "title": "Role Prompting | Mirascope",
+    "description": "Implement role-based prompting to improve LLM responses. This guide demonstrates how assigning roles affects response style and quality."
+  },
+  "/docs/mirascope/guides/prompt-engineering/text-based/self-ask": {
+    "route": "/docs/mirascope/guides/prompt-engineering/text-based/self-ask",
+    "title": "Self-Ask | Mirascope",
+    "description": "Learn how to implement the Self-Ask technique with LLMs to enhance reasoning capabilities by teaching models to ask and answer their own follow-up questions"
+  },
+  "/docs/mirascope/guides/prompt-engineering/text-based/tabular-chain-of-thought": {
+    "route": "/docs/mirascope/guides/prompt-engineering/text-based/tabular-chain-of-thought",
     "title": "Tabular Chain of Thought | Mirascope",
     "description": "Implement the Tabular Chain of Thought technique to structure LLM reasoning in a table format for improved problem-solving accuracy"
   },
-  "/docs/mirascope/guides/prompt-engineering/thread-of-thought": {
-    "route": "/docs/mirascope/guides/prompt-engineering/thread-of-thought",
+  "/docs/mirascope/guides/prompt-engineering/text-based/thread-of-thought": {
+    "route": "/docs/mirascope/guides/prompt-engineering/text-based/thread-of-thought",
     "title": "Thread of Thought | Mirascope",
     "description": "Explore Thread of Thought (THoT), an extension of Chain of Thought that provides a structured approach for LLMs to analyze information step-by-step, particularly effective for tasks with large context."
   },
