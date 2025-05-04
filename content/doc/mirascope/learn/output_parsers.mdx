@@ -21,7 +21,7 @@ Output Parsers are functions that take the call response object as input and ret
 
 Let's take a look at a basic example:
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="Shorthand">
 ```python
 from mirascope import llm
@@ -32,13 +32,13 @@ def parse_recommendation(response: llm.CallResponse) -> tuple[str, str]:
     return (title, author)
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", output_parser=parse_recommendation)
+@llm.call(provider="$PROVIDER", model="$MODEL", output_parser=parse_recommendation) # [!code highlight]
 def recommend_book(genre: str) -> str:
     return f"Recommend a {genre} book. Output only Title by Author"
 
 
 print(recommend_book("fantasy"))
-# Output: ('"The Name of the Wind"', 'Patrick Rothfuss')
+# Output: ('"The Name of the Wind"', 'Patrick Rothfuss') # [!code highlight]
 ```
 </Tab>
 <Tab value="Template">
@@ -51,13 +51,13 @@ def parse_recommendation(response: llm.CallResponse) -> tuple[str, str]:
     return (title, author)
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", output_parser=parse_recommendation)
+@llm.call(provider="$PROVIDER", model="$MODEL", output_parser=parse_recommendation) # [!code highlight]
 @prompt_template("Recommend a {genre} book. Output only Title by Author")
 def recommend_book(genre: str): ...
 
 
 print(recommend_book("fantasy"))
-# Output: ('"The Name of the Wind"', 'Patrick Rothfuss')
+# Output: ('"The Name of the Wind"', 'Patrick Rothfuss') # [!code highlight]
 ```
 </Tab>
 </TabbedSection>
@@ -77,18 +77,18 @@ from mirascope import llm, prompt_template
 
 
 def parse_cot(response: llm.CallResponse) -> str:
-    pattern = r"<thinking>.*?</thinking>.*?<o>(.*?)</o>"
+    pattern = r"<thinking>.*?</thinking>.*?<o>(.*?)</o>" # [!code highlight]
     match = re.search(pattern, response.content, re.DOTALL)
     if not match:
         return response.content
     return match.group(1).strip()
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", output_parser=parse_cot)
+@llm.call(provider="$PROVIDER", model="$MODEL", output_parser=parse_cot) # [!code highlight]
 @prompt_template(
     """
-    First, output your thought process in <thinking> tags.
-    Then, provide your final output in <o> tags.
+    First, output your thought process in <thinking> tags. # [!code highlight]
+    Then, provide your final output in <o> tags. # [!code highlight]
 
     Question: {question}
     """
@@ -115,7 +115,7 @@ class Book(BaseModel):
     year: int
     summary: str
 
-
+# [!code highlight:16]
 def parse_book_xml(response: llm.CallResponse) -> Book | None:
     try:
         root = ET.fromstring(response.content)
@@ -133,10 +133,11 @@ def parse_book_xml(response: llm.CallResponse) -> Book | None:
         return None
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", output_parser=parse_book_xml)
+@llm.call(provider="$PROVIDER", model="$MODEL", output_parser=parse_book_xml) # [!code highlight]
 @prompt_template(
     """
     Recommend a {genre} book. Provide the information in the following XML format:
+    # [!code highlight:7]
     <book>
         <title>Book Title</title>
         <author>Author Name</author>
@@ -168,14 +169,14 @@ from mirascope import llm
 
 
 def only_json(response: llm.CallResponse) -> str:
-    json_start = response.content.index("{")
-    json_end = response.content.rfind("}")
-    return response.content[json_start : json_end + 1]
+    json_start = response.content.index("{") # [!code highlight]
+    json_end = response.content.rfind("}") # [!code highlight]
+    return response.content[json_start : json_end + 1] # [!code highlight]
 
 
-@llm.call(
-    provider="$PROVIDER", model="$MODEL", json_mode=True, output_parser=only_json
-)
+@llm.call( # [!code highlight]
+    provider="$PROVIDER", model="$MODEL", json_mode=True, output_parser=only_json # [!code highlight]
+) # [!code highlight]
 def json_extraction(text: str, fields: list[str]) -> str:
     return f"Extract {fields} from the following text: {text}"
 

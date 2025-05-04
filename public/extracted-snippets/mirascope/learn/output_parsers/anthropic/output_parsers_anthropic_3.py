@@ -10,18 +10,18 @@ from mirascope import llm, prompt_template
 
 
 def parse_cot(response: llm.CallResponse) -> str:
-    pattern = r"<thinking>.*?</thinking>.*?<o>(.*?)</o>"
+    pattern = r"<thinking>.*?</thinking>.*?<o>(.*?)</o>" # [!code highlight]
     match = re.search(pattern, response.content, re.DOTALL)
     if not match:
         return response.content
     return match.group(1).strip()
 
 
-@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest", output_parser=parse_cot)
+@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest", output_parser=parse_cot) # [!code highlight]
 @prompt_template(
     """
-    First, output your thought process in <thinking> tags.
-    Then, provide your final output in <o> tags.
+    First, output your thought process in <thinking> tags. # [!code highlight]
+    Then, provide your final output in <o> tags. # [!code highlight]
 
     Question: {question}
     """

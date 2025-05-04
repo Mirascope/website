@@ -11,7 +11,7 @@ description: Learn how to request structured JSON outputs from LLMs with Mirasco
 
 JSON Mode is a feature in Mirascope that allows you to request structured JSON output from Large Language Models (LLMs). This mode is particularly useful when you need to extract structured information from the model's responses, making it easier to parse and use the data in your applications.
 
-<Info title="Not all providers have an official JSON Mode" collapsible={true} defaultOpen={false}>
+<Warning title="Not all providers have an official JSON Mode" collapsible={true} defaultOpen={false}>
   For providers with explicit support, Mirascope uses the native JSON Mode feature of the API. For providers without explicit support (e.g. Anthropic), Mirascope implements a pseudo JSON Mode by instructing the model in the prompt to output JSON.
 
   <div className="overflow-x-auto">
@@ -74,13 +74,13 @@ JSON Mode is a feature in Mirascope that allows you to request structured JSON o
   </div>
 
   If you'd prefer not to have any internal updates made to your prompt, you can always set JSON mode yourself through `call_params` rather than using the `json_mode` argument, which provides provider-agnostic support but is certainly not required to use JSON mode.
-</Info>
+</Warning>
 
 ## Basic Usage and Syntax
 
 Let's take a look at a basic example using JSON Mode:
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="Shorthand">
 ```python
 import json
@@ -88,14 +88,14 @@ import json
 from mirascope import llm
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", json_mode=True)
-def get_book_info(book_title: str) -> str:
+@llm.call(provider="$PROVIDER", model="$MODEL", json_mode=True) # [!code highlight]
+def get_book_info(book_title: str) -> str: # [!code highlight]
     return f"Provide the author and genre of {book_title}"
 
 
 response = get_book_info("The Name of the Wind")
 print(json.loads(response.content))
-# Output: {'author': 'Patrick Rothfuss', 'genre': 'Fantasy'}
+# Output: {'author': 'Patrick Rothfuss', 'genre': 'Fantasy'} # [!code highlight]
 ```
 </Tab>
 <Tab value="Template">
@@ -105,14 +105,14 @@ import json
 from mirascope import llm, prompt_template
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", json_mode=True)
-@prompt_template("Provide the author and genre of {book_title}")
+@llm.call(provider="$PROVIDER", model="$MODEL", json_mode=True) # [!code highlight]
+@prompt_template("Provide the author and genre of {book_title}") # [!code highlight]
 def get_book_info(book_title: str): ...
 
 
 response = get_book_info("The Name of the Wind")
 print(json.loads(response.content))
-# Output: {'author': 'Patrick Rothfuss', 'genre': 'Fantasy'}
+# Output: {'author': 'Patrick Rothfuss', 'genre': 'Fantasy'} # [!code highlight]
 ```
 </Tab>
 </TabbedSection>
@@ -127,7 +127,7 @@ In this example we
 
 While JSON Mode can significantly improve the structure of model outputs, it's important to note that it's far from infallible. LLMs often produce invalid JSON or deviate from the expected structure, so it's crucial to implement proper error handling and validation in your code:
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="Shorthand">
 ```python
 import json
@@ -140,10 +140,10 @@ def get_book_info(book_title: str) -> str:
     return f"Provide the author and genre of {book_title}"
 
 
-try:
+try: # [!code highlight]
     response = get_book_info("The Name of the Wind")
     print(json.loads(response.content))
-except json.JSONDecodeError:
+except json.JSONDecodeError: # [!code highlight]
     print("The model produced invalid JSON")
 ```
 </Tab>
@@ -159,16 +159,16 @@ from mirascope import llm, prompt_template
 def get_book_info(book_title: str): ...
 
 
-try:
+try: # [!code highlight]
     response = get_book_info("The Name of the Wind")
     print(json.loads(response.content))
-except json.JSONDecodeError:
+except json.JSONDecodeError: # [!code highlight]
     print("The model produced invalid JSON")
 ```
 </Tab>
 </TabbedSection>
 
-<Warning>
+<Warning title="Beyond JSON Validation">
   While this example catches errors for invalid JSON, there's always a chance that the LLM returns valid JSON that doesn't conform to your expected schema (such as missing fields or incorrect types).
 
   For more robust validation, we recommend using [Response Models](/docs/mirascope/learn/response_models) for easier structuring and validation of LLM outputs.
