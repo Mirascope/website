@@ -36,14 +36,14 @@ class Book(BaseModel):
     author: str
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", response_model=Book)
+@llm.call(provider="$PROVIDER", model="$MODEL", response_model=Book) # [!code highlight]
 def extract_book(text: str) -> str:
     return f"Extract {text}"
 
 
 book = extract_book("The Name of the Wind by Patrick Rothfuss")
 print(book)
-# Output: title='The Name of the Wind' author='Patrick Rothfuss'
+# Output: title='The Name of the Wind' author='Patrick Rothfuss' # [!code highlight]
 ```
 </Tab>
 <Tab value="Template">
@@ -59,19 +59,19 @@ class Book(BaseModel):
     author: str
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", response_model=Book)
+@llm.call(provider="$PROVIDER", model="$MODEL", response_model=Book) # [!code highlight]
 @prompt_template("Extract {text}")
 def extract_book(text: str): ...
 
 
 book = extract_book("The Name of the Wind by Patrick Rothfuss")
 print(book)
-# Output: title='The Name of the Wind' author='Patrick Rothfuss'
+# Output: title='The Name of the Wind' author='Patrick Rothfuss' # [!code highlight]
 ```
 </Tab>
 </TabbedSection>
 
-<Info title="Official SDK" collapsible={true}>
+<Info title="Official SDK" collapsible={true} defaultOpen={false}>
 <ProviderCodeBlock examplePath="mirascope/learn/response_models/basic_usage/official_sdk"/>
 </Info>
 
@@ -110,9 +110,9 @@ book = extract_book("The Name of the Wind by Patrick Rothfuss")
 print(book)
 # Output: title='The Name of the Wind' author='Patrick Rothfuss'
 
-response = book._response  # pyright: ignore[reportAttributeAccessIssue]
-print(response.model_dump())
-# > {'metadata': {}, 'response': {'id': ...}, ...}
+response = book._response  # pyright: ignore[reportAttributeAccessIssue] # [!code highlight]
+print(response.model_dump()) # [!code highlight]
+# > {'metadata': {}, 'response': {'id': ...}, ...} # [!code highlight]
 ```
 </Tab>
 <Tab value="Template">
@@ -137,9 +137,9 @@ book = extract_book("The Name of the Wind by Patrick Rothfuss")
 print(book)
 # Output: title='The Name of the Wind' author='Patrick Rothfuss'
 
-response = book._response  # pyright: ignore[reportAttributeAccessIssue]
-print(response.model_dump())
-# > {'metadata': {}, 'response': {'id': ...}, ...}
+response = book._response  # pyright: ignore[reportAttributeAccessIssue] # [!code highlight]
+print(response.model_dump()) # [!code highlight]
+# > {'metadata': {}, 'response': {'id': ...}, ...} # [!code highlight]
 ```
 </Tab>
 </TabbedSection>
@@ -148,13 +148,13 @@ print(response.model_dump())
 
 For cases where you want to extract just a single built-in type, Mirascope provides a shorthand:
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="Shorthand">
 ```python
 from mirascope import llm
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", response_model=list[str])
+@llm.call(provider="$PROVIDER", model="$MODEL", response_model=list[str]) # [!code highlight]
 def extract_book(texts: list[str]) -> str:
     return f"Extract book titles from {texts}"
 
@@ -166,7 +166,7 @@ book = extract_book(
     ]
 )
 print(book)
-# Output: ["The Name of the Wind", "Mistborn: The Final Empire"]
+# Output: ["The Name of the Wind", "Mistborn: The Final Empire"] # [!code highlight]
 ```
 </Tab>
 <Tab value="Template">
@@ -174,7 +174,7 @@ print(book)
 from mirascope import llm, prompt_template
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", response_model=list[str])
+@llm.call(provider="$PROVIDER", model="$MODEL", response_model=list[str]) # [!code highlight]
 @prompt_template("Extract book titles from {texts}")
 def extract_book(texts: list[str]): ...
 
@@ -186,7 +186,7 @@ book = extract_book(
     ]
 )
 print(book)
-# Output: ["The Name of the Wind", "Mistborn: The Final Empire"]
+# Output: ["The Name of the Wind", "Mistborn: The Final Empire"] # [!code highlight]
 ```
 </Tab>
 </TabbedSection>
@@ -346,25 +346,25 @@ While `response_model` significantly improves output structure and validation, i
 
 Let's take a look at an example where we want to validate that all fields are uppercase:
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="Shorthand">
 ```python
-from typing import Annotated
+from typing import Annotated # [!code highlight]
 
 from mirascope import llm
-from pydantic import AfterValidator, BaseModel, ValidationError
+from pydantic import AfterValidator, BaseModel, ValidationError # [!code highlight]
 
 
-def validate_upper(v: str) -> str:
-    assert v.isupper(), "Field must be uppercase"
-    return v
+def validate_upper(v: str) -> str: # [!code highlight]
+    assert v.isupper(), "Field must be uppercase" # [!code highlight]
+    return v # [!code highlight]
 
 
 class Book(BaseModel):
     """An extracted book."""
 
-    title: Annotated[str, AfterValidator(validate_upper)]
-    author: Annotated[str, AfterValidator(validate_upper)]
+    title: Annotated[str, AfterValidator(validate_upper)] # [!code highlight]
+    author: Annotated[str, AfterValidator(validate_upper)] # [!code highlight]
 
 
 @llm.call(provider="$PROVIDER", model="$MODEL", response_model=Book)
@@ -372,11 +372,11 @@ def extract_book(text: str) -> str:
     return f"Extract {text}"
 
 
-try:
+try: # [!code highlight]
     book = extract_book("The Name of the Wind by Patrick Rothfuss")
     print(book)
     # Output: title='The Name of the Wind' author='Patrick Rothfuss'
-except ValidationError as e:
+except ValidationError as e: # [!code highlight]
     print(f"Error: {str(e)}")
     # Error: 2 validation errors for Book
     # title
@@ -389,10 +389,10 @@ except ValidationError as e:
 </Tab>
 <Tab value="Template">
 ```python
-from typing import Annotated
+from typing import Annotated # [!code highlight]
 
 from mirascope import llm, prompt_template
-from pydantic import AfterValidator, BaseModel, ValidationError
+from pydantic import AfterValidator, BaseModel, ValidationError # [!code highlight]
 
 
 def validate_upper(v: str) -> str:
@@ -403,8 +403,8 @@ def validate_upper(v: str) -> str:
 class Book(BaseModel):
     """An extracted book."""
 
-    title: Annotated[str, AfterValidator(validate_upper)]
-    author: Annotated[str, AfterValidator(validate_upper)]
+    title: Annotated[str, AfterValidator(validate_upper)] # [!code highlight]
+    author: Annotated[str, AfterValidator(validate_upper)] # [!code highlight]
 
 
 @llm.call(provider="$PROVIDER", model="$MODEL", response_model=Book)
@@ -412,11 +412,11 @@ class Book(BaseModel):
 def extract_book(text: str): ...
 
 
-try:
+try: # [!code highlight]
     book = extract_book("The Name of the Wind by Patrick Rothfuss")
     print(book)
     # Output: title='The Name of the Wind' author='Patrick Rothfuss'
-except ValidationError as e:
+except ValidationError as e: # [!code highlight]
     print(f"Error: {str(e)}")
     # Error: 2 validation errors for Book
     # title
@@ -437,7 +437,7 @@ We highly recommend taking a look at our section on [retries](/docs/mirascope/le
 
 In case of a `ValidationError`, you can access the original response for debugging:
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="Shorthand">
 ```python
 from typing import Annotated
@@ -466,11 +466,10 @@ def extract_book(text: str) -> str:
 try:
     book = extract_book("The Name of the Wind by Patrick Rothfuss")
     print(book)
-except ValidationError as e:
-    print(f"Error: {str(e)}")
-    response = e._response  # pyright: ignore[reportAttributeAccessIssue]
-    print(response.model_dump())
-    # > {'metadata': {}, 'response': {'id': ...}, ...}
+except ValidationError as e: # [!code highlight]
+    response = e._response  # pyright: ignore[reportAttributeAccessIssue] # [!code highlight]
+    print(response.model_dump()) # [!code highlight]
+    # > {'metadata': {}, 'response': {'id': ...}, ...} # [!code highlight]
 ```
 </Tab>
 <Tab value="Template">
@@ -502,10 +501,9 @@ try:
     book = extract_book("The Name of the Wind by Patrick Rothfuss")
     print(book)
 except ValidationError as e:
-    print(f"Error: {str(e)}")
-    response = e._response  # pyright: ignore[reportAttributeAccessIssue]
-    print(response.model_dump())
-    # > {'metadata': {}, 'response': {'id': ...}, ...}
+    response = e._response  # pyright: ignore[reportAttributeAccessIssue] # [!code highlight]
+    print(response.model_dump()) # [!code highlight]
+    # > {'metadata': {}, 'response': {'id': ...}, ...} # [!code highlight]
 ```
 </Tab>
 </TabbedSection>
@@ -516,7 +514,7 @@ This allows you to gracefully handle errors as well as inspect the original LLM 
 
 By default, `response_model` uses [Tools](/docs/mirascope/learn/tools) under the hood. You can instead use [JSON Mode](/docs/mirascope/learn/json_mode) in conjunction with `response_model` by setting `json_mode=True`:
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="Shorthand">
 ```python
 from mirascope import llm
@@ -530,7 +528,7 @@ class Book(BaseModel):
     author: str
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", response_model=Book, json_mode=True)
+@llm.call(provider="$PROVIDER", model="$MODEL", response_model=Book, json_mode=True) # [!code highlight]
 def extract_book(text: str) -> str:
     return f"Extract {text}"
 
@@ -553,7 +551,7 @@ class Book(BaseModel):
     author: str
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", response_model=Book, json_mode=True)
+@llm.call(provider="$PROVIDER", model="$MODEL", response_model=Book, json_mode=True) # [!code highlight]
 @prompt_template("Extract {text}")
 def extract_book(text: str): ...
 
@@ -571,7 +569,7 @@ Adding few-shot examples to your response model can improve results by demonstra
 
 We take advantage of Pydantic's [`Field`](https://docs.pydantic.dev/latest/concepts/fields/) and [`ConfigDict`](https://docs.pydantic.dev/latest/concepts/config/) to add these examples to response models:
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="Shorthand">
 ```python
 from mirascope import llm
@@ -579,14 +577,14 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class Book(BaseModel):
-    title: str = Field(..., examples=["THE NAME OF THE WIND"])
-    author: str = Field(..., examples=["Rothfuss, Patrick"])
+    title: str = Field(..., examples=["THE NAME OF THE WIND"]) # [!code highlight]
+    author: str = Field(..., examples=["Rothfuss, Patrick"]) # [!code highlight]
 
     model_config = ConfigDict(
         json_schema_extra={
-            "examples": [
-                {"title": "THE NAME OF THE WIND", "author": "Rothfuss, Patrick"}
-            ]
+            "examples": [ # [!code highlight]
+                {"title": "THE NAME OF THE WIND", "author": "Rothfuss, Patrick"} # [!code highlight]
+            ] # [!code highlight]
         }
     )
 
@@ -608,14 +606,14 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class Book(BaseModel):
-    title: str = Field(..., examples=["THE NAME OF THE WIND"])
-    author: str = Field(..., examples=["Rothfuss, Patrick"])
+    title: str = Field(..., examples=["THE NAME OF THE WIND"]) # [!code highlight]
+    author: str = Field(..., examples=["Rothfuss, Patrick"]) # [!code highlight]
 
     model_config = ConfigDict(
         json_schema_extra={
-            "examples": [
-                {"title": "THE NAME OF THE WIND", "author": "Rothfuss, Patrick"}
-            ]
+            "examples": [ # [!code highlight]
+                {"title": "THE NAME OF THE WIND", "author": "Rothfuss, Patrick"} # [!code highlight]
+            ] # [!code highlight]
         }
     )
 
@@ -627,7 +625,7 @@ def extract_book(text: str): ...
 
 book = extract_book("The Way of Kings by Brandon Sanderson")
 print(book)
-# Output: title='THE WAY OF KINGS' author='Sanderson, Brandon'
+# Output: title='THE WAY OF KINGS' author='Sanderson, Brandon' # [!code highlight]
 ```
 </Tab>
 </TabbedSection>
@@ -636,7 +634,7 @@ print(book)
 
 If you set `stream=True` when `response_model` is set, your LLM call will return an `Iterable` where each item will be a partial version of your response model representing the current state of the streamed information. The final model returned by the iterator will be the full response model.
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="Shorthand">
 ```python
 from mirascope import llm
@@ -648,14 +646,14 @@ class Book(BaseModel):
     author: str
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", response_model=Book, stream=True)
+@llm.call(provider="$PROVIDER", model="$MODEL", response_model=Book, stream=True) # [!code highlight]
 def extract_book(text: str) -> str:
     return f"Extract {text}"
 
 
 book_stream = extract_book("The Name of the Wind by Patrick Rothfuss")
-for partial_book in book_stream:
-    print(partial_book)
+for partial_book in book_stream: # [!code highlight]
+    print(partial_book) # [!code highlight]
 # Output:
 # title=None author=None
 # title='' author=None
@@ -682,14 +680,14 @@ class Book(BaseModel):
     author: str
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", response_model=Book, stream=True)
+@llm.call(provider="$PROVIDER", model="$MODEL", response_model=Book, stream=True) # [!code highlight]
 @prompt_template("Extract {text}")
 def extract_book(text: str): ...
 
 
 book_stream = extract_book("The Name of the Wind by Patrick Rothfuss")
-for partial_book in book_stream:
-    print(partial_book)
+for partial_book in book_stream: # [!code highlight]
+    print(partial_book) # [!code highlight]
 # Output:
 # title=None author=None
 # title='' author=None
@@ -715,7 +713,7 @@ You can also use the `stream` property to access the `BaseStream` instance and [
 
 Fields annotated with `FromCallArgs` will be populated with the corresponding argument from the function call rather than expecting it from the LLM's response. This enables seamless validation of LLM outputs against function inputs:
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="Shorthand">
 ```python
 from typing import Annotated
@@ -732,7 +730,7 @@ class Book(BaseModel):
 
 
 class Books(BaseModel):
-    texts: Annotated[list[str], FromCallArgs()]
+    texts: Annotated[list[str], FromCallArgs()] # [!code highlight]
     books: list[Book]
 
     @model_validator(mode="after")
@@ -743,7 +741,7 @@ class Books(BaseModel):
 
 
 @llm.call(provider="$PROVIDER", model="$MODEL", response_model=Books)
-def extract_books(texts: list[str]) -> str:
+def extract_books(texts: list[str]) -> str: # [!code highlight]
     return f"Extract the books from these texts: {texts}"
 
 
@@ -779,7 +777,7 @@ class Book(BaseModel):
 
 
 class Books(BaseModel):
-    texts: Annotated[list[str], FromCallArgs()]
+    texts: Annotated[list[str], FromCallArgs()] # [!code highlight]
     books: list[Book]
 
     @model_validator(mode="after")
@@ -791,7 +789,7 @@ class Books(BaseModel):
 
 @llm.call(provider="$PROVIDER", model="$MODEL", response_model=Books)
 @prompt_template("Extract the books from these texts: {texts}")
-def extract_books(texts: list[str]): ...
+def extract_books(texts: list[str]): ... # [!code highlight]
 
 
 texts = [

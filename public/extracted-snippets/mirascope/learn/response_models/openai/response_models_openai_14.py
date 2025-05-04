@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 14: Few-Shot Examples
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/response_models.mdx:605
+# Source: content/doc/mirascope/learn/response_models.mdx:603
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm, prompt_template
@@ -9,14 +9,14 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class Book(BaseModel):
-    title: str = Field(..., examples=["THE NAME OF THE WIND"])
-    author: str = Field(..., examples=["Rothfuss, Patrick"])
+    title: str = Field(..., examples=["THE NAME OF THE WIND"]) # [!code highlight]
+    author: str = Field(..., examples=["Rothfuss, Patrick"]) # [!code highlight]
 
     model_config = ConfigDict(
         json_schema_extra={
-            "examples": [
-                {"title": "THE NAME OF THE WIND", "author": "Rothfuss, Patrick"}
-            ]
+            "examples": [ # [!code highlight]
+                {"title": "THE NAME OF THE WIND", "author": "Rothfuss, Patrick"} # [!code highlight]
+            ] # [!code highlight]
         }
     )
 
@@ -28,4 +28,4 @@ def extract_book(text: str): ...
 
 book = extract_book("The Way of Kings by Brandon Sanderson")
 print(book)
-# Output: title='THE WAY OF KINGS' author='Sanderson, Brandon'
+# Output: title='THE WAY OF KINGS' author='Sanderson, Brandon' # [!code highlight]

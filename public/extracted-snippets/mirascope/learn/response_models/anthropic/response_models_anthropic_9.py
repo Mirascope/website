@@ -30,8 +30,7 @@ def extract_book(text: str) -> str:
 try:
     book = extract_book("The Name of the Wind by Patrick Rothfuss")
     print(book)
-except ValidationError as e:
-    print(f"Error: {str(e)}")
-    response = e._response  # pyright: ignore[reportAttributeAccessIssue]
-    print(response.model_dump())
-    # > {'metadata': {}, 'response': {'id': ...}, ...}
+except ValidationError as e: # [!code highlight]
+    response = e._response  # pyright: ignore[reportAttributeAccessIssue] # [!code highlight]
+    print(response.model_dump()) # [!code highlight]
+    # > {'metadata': {}, 'response': {'id': ...}, ...} # [!code highlight]
