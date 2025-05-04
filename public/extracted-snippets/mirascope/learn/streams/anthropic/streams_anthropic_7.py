@@ -14,5 +14,5 @@ def recommend_book(genre: str) -> str:
 
 stream = recommend_book("fantasy")
 for chunk, _ in stream:
-    print(f"Original chunk: {chunk.chunk}")
+    print(f"Original chunk: {chunk.chunk}") # [!code highlight]
     print(chunk.content, end="", flush=True)

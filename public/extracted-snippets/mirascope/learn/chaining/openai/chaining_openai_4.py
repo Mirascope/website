@@ -9,14 +9,14 @@ from mirascope import BaseDynamicConfig, llm, prompt_template
 
 @llm.call(provider="openai", model="gpt-4o-mini")
 @prompt_template("Summarize this text: {text}")
-def summarize(text: str): ...
+def summarize(text: str): ... # [!code highlight]
 
 
 @llm.call(provider="openai", model="gpt-4o-mini")
-@prompt_template("Translate this text to {language}: {summary}")
+@prompt_template("Translate this text to {language}: {summary}") # [!code highlight]
 def summarize_and_translate(text: str, language: str) -> BaseDynamicConfig:
-    return {"computed_fields": {"summary": summarize(text)}}
+    return {"computed_fields": {"summary": summarize(text)}} # [!code highlight]
 
 
 response = summarize_and_translate("Long English text here...", "french")
-print(response.content)
+print(response.content) # [!code highlight]
