@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 6: Hardcoded Evaluation Criteria
 # Generated for provider: anthropic
-# Source: content/doc/mirascope/learn/evals.mdx:294
+# Source: content/doc/mirascope/learn/evals.mdx:296
 # This file is auto-generated; any edits should be made in the source file
 
 def calculate_recall_precision(output: str, expected: str) -> tuple[float, float]:
@@ -10,8 +10,8 @@ def calculate_recall_precision(output: str, expected: str) -> tuple[float, float
 
     common_words = output_words.intersection(expected_words)
 
-    recall = len(common_words) / len(expected_words) if expected_words else 0
-    precision = len(common_words) / len(output_words) if output_words else 0
+    recall = len(common_words) / len(expected_words) if expected_words else 0 # [!code highlight]
+    precision = len(common_words) / len(output_words) if output_words else 0 # [!code highlight]
 
     return recall, precision
 

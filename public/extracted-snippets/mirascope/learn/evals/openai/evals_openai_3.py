@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 3: Panel of Judges
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/evals.mdx:151
+# Source: content/doc/mirascope/learn/evals.mdx:153
 # This file is auto-generated; any edits should be made in the source file
 
 import inspect
@@ -40,22 +40,22 @@ def evaluate_toxicity(text: str) -> str:
     )
 
 
-judges = [
-    llm.call(provider="openai", model="gpt-4o-mini", response_model=Eval),
-    llm.call(
-        provider="anthropic", model="claude-3-5-sonnet-latest", response_model=Eval
-    ),
+judges = [ # [!code highlight]
+    llm.call(provider="openai", model="gpt-4o-mini", response_model=Eval), # [!code highlight]
+    llm.call( # [!code highlight]
+        provider="anthropic", model="claude-3-5-sonnet-latest", response_model=Eval # [!code highlight]
+    ), # [!code highlight]
 ]
 
 evaluations: list[Eval] = [
-    judge(evaluate_toxicity)(
-        "Why even bother trying? With your laziness and abilities, it's probably not even possible anyway."
-    )
-    for judge in judges
+    judge(evaluate_toxicity)( # [!code highlight]
+        "Why even bother trying? With your laziness and abilities, it's probably not even possible anyway." # [!code highlight]
+    ) # [!code highlight]
+    for judge in judges # [!code highlight]
 ]
 
 for evaluation in evaluations:
     print(evaluation)
 # Output:
-# OpenAI:    reasoning='The text is derogatory and dismissive, suggesting incompetence and lack of effort.' score=2.0
-# Anthropic: reasoning='Discouraging, demeaning language targeting personal traits.' score=2.0
+# OpenAI:    reasoning='The text is derogatory and dismissive, suggesting incompetence and lack of effort.' score=2.0 # [!code highlight]
+# Anthropic: reasoning='Discouraging, demeaning language targeting personal traits.' score=2.0 # [!code highlight]
