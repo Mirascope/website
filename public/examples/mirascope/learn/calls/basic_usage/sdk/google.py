@@ -4,6 +4,7 @@ client = Client()
 
 
 def recommend_book(genre: str) -> str:
+    # [!code highlight:6]
     generation = client.models.generate_content(
         model="gemini-2.0-flash",
         contents={"role": "user", "parts": [{"text": f"Recommend a {genre} book"}]},  # pyright: ignore [reportArgumentType]

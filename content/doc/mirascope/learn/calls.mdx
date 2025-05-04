@@ -31,9 +31,9 @@ Let's take a look at a basic example using Mirascope vs. official provider SDKs:
 from mirascope import llm
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL")
+@llm.call(provider="$PROVIDER", model="$MODEL") # [!code highlight]
 def recommend_book(genre: str) -> str:
-    return f"Recommend a {genre} book"
+    return f"Recommend a {genre} book" # [!code highlight]
 
 
 response: llm.CallResponse = recommend_book("fantasy")
@@ -45,8 +45,8 @@ print(response.content)
 from mirascope import llm, prompt_template
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL")
-@prompt_template("Recommend a {genre} book")
+@llm.call(provider="$PROVIDER", model="$MODEL") # [!code highlight]
+@prompt_template("Recommend a {genre} book") # [!code highlight]
 def recommend_book(genre: str): ...
 
 
@@ -87,20 +87,20 @@ When overriding with a specific `provider`, you must specify the `model` paramet
 from mirascope import llm
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL")
-def recommend_book(genre: str) -> str:
-    return f"Recommend a {genre} book"
+@llm.call(provider="$PROVIDER", model="$MODEL") # [!code highlight]
+def recommend_book(genre: str) -> str: # [!code highlight]
+    return f"Recommend a {genre} book" # [!code highlight]
 
 
 response: llm.CallResponse = recommend_book("fantasy")
 print(response.content)
 
-override_response = llm.override(
-    recommend_book,
-    provider="$OTHER_PROVIDER",
-    model="$OTHER_MODEL",
-    call_params={"temperature": 0.7},
-)("fantasy")
+override_response = llm.override( # [!code highlight]
+    recommend_book, # [!code highlight]
+    provider="$OTHER_PROVIDER", # [!code highlight]
+    model="$OTHER_MODEL", # [!code highlight]
+    call_params={"temperature": 0.7}, # [!code highlight]
+)("fantasy") # [!code highlight]
 
 print(override_response.content)
 ```
@@ -111,20 +111,20 @@ from mirascope import llm
 from mirascope.core import prompt_template
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL")
-@prompt_template("Recommend a {genre} book")
-def recommend_book(genre: str): ...
+@llm.call(provider="$PROVIDER", model="$MODEL") # [!code highlight]
+@prompt_template("Recommend a {genre} book") # [!code highlight]
+def recommend_book(genre: str): ... # [!code highlight]
 
 
 response = recommend_book("fantasy")
 print(response.content)
 
-override_response = llm.override(
-    recommend_book,
-    provider="$OTHER_PROVIDER",
-    model="$OTHER_MODEL",
-    call_params={"temperature": 0.7},
-)("fantasy")
+override_response = llm.override( # [!code highlight]
+    recommend_book, # [!code highlight]
+    provider="$OTHER_PROVIDER", # [!code highlight]
+    model="$OTHER_MODEL", # [!code highlight]
+    call_params={"temperature": 0.7}, # [!code highlight]
+)("fantasy") # [!code highlight]
 
 print(override_response.content)
 ```
@@ -294,7 +294,7 @@ Since `call_params` is just a `TypedDict`, you can always include any additional
 from mirascope import llm
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", call_params={"max_tokens": 512})
+@llm.call(provider="$PROVIDER", model="$MODEL", call_params={"max_tokens": 512}) # [!code highlight]
 def recommend_book(genre: str) -> str:
     return f"Recommend a {genre} book"
 
@@ -308,7 +308,7 @@ print(response.content)
 from mirascope import llm, prompt_template
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", call_params={"max_tokens": 512})
+@llm.call(provider="$PROVIDER", model="$MODEL", call_params={"max_tokens": 512}) # [!code highlight]
 @prompt_template("Recommend a {genre} book")
 def recommend_book(genre: str): ...
 
@@ -336,8 +336,8 @@ from mirascope import BaseDynamicConfig, Messages, llm
 @llm.call(provider="$PROVIDER", model="$MODEL")
 def recommend_book(genre: str) -> BaseDynamicConfig:
     return {
-        "messages": [Messages.User(f"Recommend a {genre} book")],
-        "call_params": {"max_tokens": 512},
+        "messages": [Messages.User(f"Recommend a {genre} book")], # [!code highlight]
+        "call_params": {"max_tokens": 512}, # [!code highlight]
         "metadata": {"tags": {"version:0001"}},
     }
 
@@ -352,10 +352,10 @@ from mirascope import BaseDynamicConfig, llm, prompt_template
 
 
 @llm.call(provider="$PROVIDER", model="$MODEL")
-@prompt_template("Recommend a {genre} book")
+@prompt_template("Recommend a {genre} book") # [!code highlight]
 def recommend_book(genre: str) -> BaseDynamicConfig:
     return {
-        "call_params": {"max_tokens": 512},
+        "call_params": {"max_tokens": 512}, # [!code highlight]
         "metadata": {"tags": {"version:0001"}},
     }
 
@@ -377,9 +377,9 @@ from mirascope import BaseDynamicConfig, Messages, llm
 @llm.call(provider="$PROVIDER", model="$MODEL")
 def recommend_book(genre: str) -> BaseDynamicConfig:
     return {
-        "messages": [Messages.User(f"Recommend a {genre} book")],
+        "messages": [Messages.User(f"Recommend a {genre} book")], # [!code highlight]
         "call_params": {"max_tokens": 512},
-        "metadata": {"tags": {"version:0001"}},
+        "metadata": {"tags": {"version:0001"}}, # [!code highlight]
     }
 
 
@@ -393,11 +393,11 @@ from mirascope import BaseDynamicConfig, llm, prompt_template
 
 
 @llm.call(provider="$PROVIDER", model="$MODEL")
-@prompt_template("Recommend a {genre} book")
+@prompt_template("Recommend a {genre} book") # [!code highlight]
 def recommend_book(genre: str) -> BaseDynamicConfig:
     return {
         "call_params": {"max_tokens": 512},
-        "metadata": {"tags": {"version:0001"}},
+        "metadata": {"tags": {"version:0001"}}, # [!code highlight]
     }
 
 
@@ -421,7 +421,7 @@ While Mirascope provides a consistent interface across different LLM providers, 
 
 When using the provider modules, you'll receive a provider-specific `BaseCallResponse` object, which may have extra properties. Regardless, you can always access the full, provider-specific response object as `response.response`.
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="Shorthand">
 <ProviderCodeBlock 
   examplePath="mirascope/learn/calls/provider_specific/basic_usage/shorthand"
@@ -447,7 +447,7 @@ When using the provider modules, you'll receive a provider-specific `BaseCallRes
 When using provider-specific calls, you can also always return the original message types for that provider. To do so, simply return the provider-specific dynamic config:
 
 <ProviderCodeBlock 
-  examplePath="mirascope/learn/calls/provider_specific/custom_messages/sdk"
+  examplePath="mirascope/learn/calls/provider_specific/custom_messages"
   collapsible={false}
   headerText="Provider-Specific Messages"
 />
@@ -520,10 +520,10 @@ def recommend_book(genre: str) -> str:
 
 
 try:
-    response: llm.CallResponse = recommend_book("fantasy")
+    response: llm.CallResponse = recommend_book("fantasy") # [!code highlight]
     print(response.content)
 except Exception as e:
-    print(f"Error: {str(e)}")
+    print(f"Error: {str(e)}") # [!code highlight]
 ```
 </Tab>
 <Tab value="Template">
@@ -537,10 +537,10 @@ def recommend_book(genre: str): ...
 
 
 try:
-    response: llm.CallResponse = recommend_book("fantasy")
+    response: llm.CallResponse = recommend_book("fantasy") # [!code highlight]
     print(response.content)
 except Exception as e:
-    print(f"Error: {str(e)}")
+    print(f"Error: {str(e)}") # [!code highlight]
 ```
 </Tab>
 </TabbedSection>

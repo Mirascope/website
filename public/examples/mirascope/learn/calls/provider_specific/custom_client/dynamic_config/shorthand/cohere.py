@@ -1,4 +1,4 @@
-from cohere import Client
+from cohere import Client # [!code highlight]
 from mirascope.core import cohere, Messages
 
 
@@ -6,5 +6,5 @@ from mirascope.core import cohere, Messages
 def recommend_book(genre: str) -> cohere.CohereDynamicConfig:
     return {
         "messages": [Messages.User(f"Recommend a {genre} book")],
-        "client": Client(),
+        "client": Client(), # [!code highlight]
     }

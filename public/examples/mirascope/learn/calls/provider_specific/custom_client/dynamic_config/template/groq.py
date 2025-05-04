@@ -1,4 +1,4 @@
-from groq import Groq
+from groq import Groq # [!code highlight]
 from mirascope.core import groq, prompt_template
 
 
@@ -6,5 +6,5 @@ from mirascope.core import groq, prompt_template
 @prompt_template("Recommend a {genre} book")
 def recommend_book(genre: str) -> groq.GroqDynamicConfig:
     return {
-        "client": Groq(),
+        "client": Groq(), # [!code highlight]
     }

@@ -7,19 +7,19 @@
 from mirascope import llm
 
 
-@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest")
-def recommend_book(genre: str) -> str:
-    return f"Recommend a {genre} book"
+@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest") # [!code highlight]
+def recommend_book(genre: str) -> str: # [!code highlight]
+    return f"Recommend a {genre} book" # [!code highlight]
 
 
 response: llm.CallResponse = recommend_book("fantasy")
 print(response.content)
 
-override_response = llm.override(
-    recommend_book,
-    provider="openai",
-    model="gpt-4o-mini",
-    call_params={"temperature": 0.7},
-)("fantasy")
+override_response = llm.override( # [!code highlight]
+    recommend_book, # [!code highlight]
+    provider="openai", # [!code highlight]
+    model="gpt-4o-mini", # [!code highlight]
+    call_params={"temperature": 0.7}, # [!code highlight]
+)("fantasy") # [!code highlight]
 
 print(override_response.content)

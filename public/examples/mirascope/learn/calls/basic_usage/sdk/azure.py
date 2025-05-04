@@ -8,6 +8,7 @@ client = ChatCompletionsClient(
 
 
 def recommend_book(genre: str) -> str:
+    # [!code highlight:9]
     completion = client.complete(
         model="gpt-4o-mini",
         messages=[

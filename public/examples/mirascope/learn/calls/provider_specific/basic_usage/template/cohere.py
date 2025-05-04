@@ -1,6 +1,6 @@
 from mirascope.core import cohere, prompt_template
 
-
+# [!code highlight:4]
 @cohere.call("command-r-plus")
 @prompt_template("Recommend a {genre} book")
 def recommend_book(genre: str): ...

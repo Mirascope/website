@@ -7,8 +7,8 @@
 from mirascope import llm, prompt_template
 
 
-@llm.call(provider="openai", model="gpt-4o-mini")
-@prompt_template("Recommend a {genre} book")
+@llm.call(provider="openai", model="gpt-4o-mini") # [!code highlight]
+@prompt_template("Recommend a {genre} book") # [!code highlight]
 def recommend_book(genre: str): ...
 
 
