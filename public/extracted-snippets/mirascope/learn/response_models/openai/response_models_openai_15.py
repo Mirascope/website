@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 15: Streaming Response Models
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/response_models.mdx:641
+# Source: content/doc/mirascope/learn/response_models.mdx:639
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm
@@ -13,14 +13,14 @@ class Book(BaseModel):
     author: str
 
 
-@llm.call(provider="openai", model="gpt-4o-mini", response_model=Book, stream=True)
+@llm.call(provider="openai", model="gpt-4o-mini", response_model=Book, stream=True) # [!code highlight]
 def extract_book(text: str) -> str:
     return f"Extract {text}"
 
 
 book_stream = extract_book("The Name of the Wind by Patrick Rothfuss")
-for partial_book in book_stream:
-    print(partial_book)
+for partial_book in book_stream: # [!code highlight]
+    print(partial_book) # [!code highlight]
 # Output:
 # title=None author=None
 # title='' author=None

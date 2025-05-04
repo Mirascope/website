@@ -23,6 +23,7 @@ def extract_book(text: str) -> Book:
     completion = client.complete(
         model="gpt-4o-mini",
         messages=[ChatRequestMessage({"role": "user", "content": f"Extract {text}"})],
+        # [!code highlight:22]
         tools=[
             ChatCompletionsToolDefinition(
                 function=FunctionDefinition(
@@ -48,4 +49,4 @@ def extract_book(text: str) -> Book:
 
 book = extract_book("The Name of the Wind by Patrick Rothfuss")
 print(book)
-# Output: title='The Name of the Wind' author='Patrick Rothfuss'
+# Output: title='The Name of the Wind' author='Patrick Rothfuss' # [!code highlight]

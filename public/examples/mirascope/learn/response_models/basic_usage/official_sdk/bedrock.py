@@ -15,6 +15,7 @@ class Book(BaseModel):
 
 def extract_book(text: str) -> Book:
     messages = [{"role": "user", "content": [{"text": f"Extract {text}"}]}]
+    # [!code highlight:34]
     tool_config = {
         "tools": [
             {
@@ -52,4 +53,4 @@ def extract_book(text: str) -> Book:
 
 book = extract_book("The Name of the Wind by Patrick Rothfuss")
 print(book)
-# Output: title='The Name of the Wind' author='Patrick Rothfuss'
+# Output: title='The Name of the Wind' author='Patrick Rothfuss' # [!code highlight]
