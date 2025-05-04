@@ -12,10 +12,10 @@ def parse_recommendation(response: llm.CallResponse) -> tuple[str, str]:
     return (title, author)
 
 
-@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest", output_parser=parse_recommendation)
+@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest", output_parser=parse_recommendation) # [!code highlight]
 @prompt_template("Recommend a {genre} book. Output only Title by Author")
 def recommend_book(genre: str): ...
 
 
 print(recommend_book("fantasy"))
-# Output: ('"The Name of the Wind"', 'Patrick Rothfuss')
+# Output: ('"The Name of the Wind"', 'Patrick Rothfuss') # [!code highlight]

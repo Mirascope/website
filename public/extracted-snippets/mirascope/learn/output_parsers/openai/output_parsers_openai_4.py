@@ -16,7 +16,7 @@ class Book(BaseModel):
     year: int
     summary: str
 
-
+# [!code highlight:16]
 def parse_book_xml(response: llm.CallResponse) -> Book | None:
     try:
         root = ET.fromstring(response.content)
@@ -34,10 +34,11 @@ def parse_book_xml(response: llm.CallResponse) -> Book | None:
         return None
 
 
-@llm.call(provider="openai", model="gpt-4o-mini", output_parser=parse_book_xml)
+@llm.call(provider="openai", model="gpt-4o-mini", output_parser=parse_book_xml) # [!code highlight]
 @prompt_template(
     """
     Recommend a {genre} book. Provide the information in the following XML format:
+    # [!code highlight:7]
     <book>
         <title>Book Title</title>
         <author>Author Name</author>
