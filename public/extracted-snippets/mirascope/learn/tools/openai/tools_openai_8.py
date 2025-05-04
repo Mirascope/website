@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 8: Accessing Original Tool Call
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/tools.mdx:325
+# Source: content/doc/mirascope/learn/tools.mdx:321
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm, prompt_template
@@ -30,6 +30,6 @@ response = identify_author("The Name of the Wind")
 if tool := response.tool:
     print(tool.call())
     # Output: Patrick Rothfuss
-    print(f"Original tool call: {tool.tool_call}")
+    print(f"Original tool call: {tool.tool_call}") # [!code highlight]
 else:
     print(response.content)

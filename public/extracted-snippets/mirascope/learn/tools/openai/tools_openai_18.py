@@ -26,7 +26,7 @@ class GetBookAuthor(BaseTool):
     provider="openai",
     model="gpt-4o-mini",
     tools=[GetBookAuthor],
-    stream={"partial_tools": True},
+    stream={"partial_tools": True}, # [!code highlight]
 )
 @prompt_template("Who wrote {books}?")
 def identify_authors(books: list[str]): ...
@@ -34,7 +34,7 @@ def identify_authors(books: list[str]): ...
 
 stream = identify_authors(["The Name of the Wind", "Mistborn: The Final Empire"])
 for chunk, tool in stream:
-    if tool:
+    if tool: # [!code highlight]
         if tool.delta is not None:  # partial tool
             print(tool.delta)
         else:

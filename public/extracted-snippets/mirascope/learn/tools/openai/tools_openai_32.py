@@ -17,14 +17,14 @@ def get_book_author(
         Field(
             ...,
             description="The title of the book.",
-            examples=["The Name of the Wind"],
+            examples=["The Name of the Wind"], # [!code highlight]
         ),
     ],
 ) -> str:
     """Returns the author of the book with the given title
 
-    Example:
-        {"title": "The Name of the Wind"}
+    Example: # [!code highlight]
+        {"title": "The Name of the Wind"} # [!code highlight]
 
     Args:
         title: The title of the book.

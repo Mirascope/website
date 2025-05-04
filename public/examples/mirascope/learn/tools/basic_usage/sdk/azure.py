@@ -13,6 +13,7 @@ client = ChatCompletionsClient(
 )
 
 
+# [!code highlight:8]
 def get_book_author(title: str) -> str:
     if title == "The Name of the Wind":
         return "Patrick Rothfuss"
@@ -28,6 +29,7 @@ def identify_author(book: str) -> str:
         messages=[
             ChatRequestMessage({"role": "user", "content": f"Who wrote {book}?"})
         ],
+        # [!code highlight:14]
         tools=[
             ChatCompletionsToolDefinition(
                 function=FunctionDefinition(
@@ -42,6 +44,7 @@ def identify_author(book: str) -> str:
             )
         ],
     )
+    # [!code highlight:4]
     if tool_calls := completion.choices[0].message.tool_calls:
         if tool_calls[0].function.name == "get_book_author":
             return get_book_author(**json.loads(tool_calls[0].function.arguments))
