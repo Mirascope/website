@@ -9,13 +9,13 @@ from pydantic import BaseModel
 
 
 class Librarian(BaseModel):
-    history: list[BaseMessageParam] = []
+    history: list[BaseMessageParam] = [] # [!code highlight]
 
     @llm.call(provider="openai", model="gpt-4o-mini")
     def _call(self, query: str) -> Messages.Type:
         return [
             Messages.System("You are a librarian"),
-            *self.history,
+            *self.history, # [!code highlight]
             Messages.User(query),
         ]
 
@@ -27,10 +27,10 @@ class Librarian(BaseModel):
             print("(Assistant): ", end="", flush=True)
             response = self._call(query)
             print(response.content)
-            self.history += [
-                Messages.User(query),
-                response.message_param,
-            ]
+            self.history += [ # [!code highlight]
+                Messages.User(query), # [!code highlight]
+                response.message_param, # [!code highlight]
+            ] # [!code highlight]
 
 
 Librarian().run()
