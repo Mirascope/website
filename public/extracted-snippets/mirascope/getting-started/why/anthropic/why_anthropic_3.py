@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 3: Functional, Modular Design
 # Generated for provider: anthropic
-# Source: content/doc/mirascope/getting-started/why.mdx:123
+# Source: content/doc/mirascope/getting-started/why.mdx:121
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm

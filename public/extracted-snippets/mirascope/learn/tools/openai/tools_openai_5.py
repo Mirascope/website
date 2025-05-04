@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 5: Accessing Original Tool Call
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/tools.mdx:223
+# Source: content/doc/mirascope/learn/tools.mdx:220
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import BaseTool, llm
