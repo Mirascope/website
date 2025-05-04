@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 5: Provider-Agnostic When Wanted, Specific When Needed
 # Generated for provider: anthropic
-# Source: content/doc/mirascope/getting-started/why.mdx:174
+# Source: content/doc/mirascope/getting-started/why.mdx:172
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope.core import anthropic, openai

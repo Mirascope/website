@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 11: JSON Mode
 # Generated for provider: anthropic
-# Source: content/doc/mirascope/learn/response_models.mdx:523
+# Source: content/doc/mirascope/learn/response_models.mdx:521
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm

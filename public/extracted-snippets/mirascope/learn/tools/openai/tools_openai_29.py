@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 29: Few-Shot Examples
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/tools.mdx:1381
+# Source: content/doc/mirascope/learn/tools.mdx:1378
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import BaseTool, llm

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 27: Validation and Error Handling
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/tools.mdx:1276
+# Source: content/doc/mirascope/learn/tools.mdx:1273
 # This file is auto-generated; any edits should be made in the source file
 
 from typing import Annotated

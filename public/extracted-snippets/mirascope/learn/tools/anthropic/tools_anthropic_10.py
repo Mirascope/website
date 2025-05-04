@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 10: Parallel Tool Calls
 # Generated for provider: anthropic
-# Source: content/doc/mirascope/learn/tools.mdx:554
+# Source: content/doc/mirascope/learn/tools.mdx:551
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import BaseTool, llm, prompt_template
