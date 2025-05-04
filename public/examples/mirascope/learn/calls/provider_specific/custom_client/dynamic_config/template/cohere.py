@@ -1,4 +1,4 @@
-from cohere import Client
+from cohere import Client # [!code highlight]
 from mirascope.core import cohere, prompt_template
 
 
@@ -6,5 +6,5 @@ from mirascope.core import cohere, prompt_template
 @prompt_template("Recommend a {genre} book")
 def recommend_book(genre: str) -> cohere.CohereDynamicConfig:
     return {
-        "client": Client(),
+        "client": Client(), # [!code highlight]
     }

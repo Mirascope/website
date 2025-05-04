@@ -8,19 +8,19 @@ from mirascope import llm
 from mirascope.core import prompt_template
 
 
-@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest")
-@prompt_template("Recommend a {genre} book")
-def recommend_book(genre: str): ...
+@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest") # [!code highlight]
+@prompt_template("Recommend a {genre} book") # [!code highlight]
+def recommend_book(genre: str): ... # [!code highlight]
 
 
 response = recommend_book("fantasy")
 print(response.content)
 
-override_response = llm.override(
-    recommend_book,
-    provider="openai",
-    model="gpt-4o-mini",
-    call_params={"temperature": 0.7},
-)("fantasy")
+override_response = llm.override( # [!code highlight]
+    recommend_book, # [!code highlight]
+    provider="openai", # [!code highlight]
+    model="gpt-4o-mini", # [!code highlight]
+    call_params={"temperature": 0.7}, # [!code highlight]
+)("fantasy") # [!code highlight]
 
 print(override_response.content)

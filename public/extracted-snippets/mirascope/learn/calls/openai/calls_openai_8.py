@@ -8,10 +8,10 @@ from mirascope import BaseDynamicConfig, llm, prompt_template
 
 
 @llm.call(provider="openai", model="gpt-4o-mini")
-@prompt_template("Recommend a {genre} book")
+@prompt_template("Recommend a {genre} book") # [!code highlight]
 def recommend_book(genre: str) -> BaseDynamicConfig:
     return {
-        "call_params": {"max_tokens": 512},
+        "call_params": {"max_tokens": 512}, # [!code highlight]
         "metadata": {"tags": {"version:0001"}},
     }
 

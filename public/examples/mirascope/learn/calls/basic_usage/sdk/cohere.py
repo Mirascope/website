@@ -4,6 +4,7 @@ client = Client()
 
 
 def recommend_book(genre: str) -> str:
+    # [!code highlight:6]
     response = client.chat(
         model="command-r-plus",
         message=f"Recommend a {genre} book",

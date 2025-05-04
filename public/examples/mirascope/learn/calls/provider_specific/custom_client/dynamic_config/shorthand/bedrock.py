@@ -1,4 +1,4 @@
-import boto3
+import boto3 # [!code highlight]
 from mirascope.core import Messages, bedrock
 
 
@@ -6,5 +6,5 @@ from mirascope.core import Messages, bedrock
 def recommend_book(genre: str) -> bedrock.BedrockDynamicConfig:
     return {
         "messages": [Messages.User(f"Recommend a {genre} book")],
-        "client": boto3.client("bedrock-runtime"),
+        "client": boto3.client("bedrock-runtime"), # [!code highlight]
     }

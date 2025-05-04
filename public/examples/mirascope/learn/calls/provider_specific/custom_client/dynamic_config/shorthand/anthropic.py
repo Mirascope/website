@@ -1,4 +1,4 @@
-from anthropic import Anthropic
+from anthropic import Anthropic # [!code highlight]
 from mirascope.core import Messages, anthropic
 
 
@@ -6,5 +6,5 @@ from mirascope.core import Messages, anthropic
 def recommend_book(genre: str) -> anthropic.AnthropicDynamicConfig:
     return {
         "messages": [Messages.User(f"Recommend a {genre} book")],
-        "client": Anthropic(),
+        "client": Anthropic(), # [!code highlight]
     }

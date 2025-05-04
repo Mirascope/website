@@ -13,7 +13,7 @@ def recommend_book(genre: str) -> str:
 
 
 try:
-    response: llm.CallResponse = recommend_book("fantasy")
+    response: llm.CallResponse = recommend_book("fantasy") # [!code highlight]
     print(response.content)
 except Exception as e:
-    print(f"Error: {str(e)}")
+    print(f"Error: {str(e)}") # [!code highlight]

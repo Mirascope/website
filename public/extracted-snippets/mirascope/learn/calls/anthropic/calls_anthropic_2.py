@@ -7,8 +7,8 @@
 from mirascope import llm, prompt_template
 
 
-@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest")
-@prompt_template("Recommend a {genre} book")
+@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest") # [!code highlight]
+@prompt_template("Recommend a {genre} book") # [!code highlight]
 def recommend_book(genre: str): ...
 
 
