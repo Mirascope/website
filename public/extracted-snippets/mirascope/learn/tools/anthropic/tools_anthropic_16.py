@@ -21,14 +21,14 @@ def get_book_author(title: str) -> str:
         return "Unknown"
 
 
-@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest", tools=[get_book_author], stream=True)
+@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest", tools=[get_book_author], stream=True) # [!code highlight]
 @prompt_template("Who wrote {books}?")
 def identify_authors(books: list[str]): ...
 
 
 stream = identify_authors(["The Name of the Wind", "Mistborn: The Final Empire"])
-for chunk, tool in stream:
-    if tool:
-        print(tool.call())
+for chunk, tool in stream: # [!code highlight]
+    if tool: # [!code highlight]
+        print(tool.call()) # [!code highlight]
     else:
         print(chunk.content, end="", flush=True)

@@ -22,12 +22,12 @@ class GetBookAuthor(BaseTool):
 @llm.call(provider="openai", model="gpt-4o-mini", tools=[GetBookAuthor])
 @prompt_template(
     """
-    MESSAGES: {history}
+    MESSAGES: {history} # [!code highlight]
     USER: {query}
     """
 )
 def identify_author(book: str, history: list[BaseMessageParam]) -> BaseDynamicConfig:
-    return {"computed_fields": {"query": f"Who wrote {book}" if book else ""}}
+    return {"computed_fields": {"query": f"Who wrote {book}" if book else ""}} # [!code highlight]
 
 
 history = []
@@ -36,7 +36,7 @@ history += [response.user_message_param, response.message_param]
 while tool := response.tool:
     tools_and_outputs = [(tool, tool.call())]
     history += response.tool_message_params(tools_and_outputs)
-    response = identify_author("", history)
-    history.append(response.message_param)
-print(response.content)
+    response = identify_author("", history) # [!code highlight]
+    history.append(response.message_param) # [!code highlight]
+print(response.content) # [!code highlight]
 # Output: The Name of the Wind was written by Patrick Rothfuss.

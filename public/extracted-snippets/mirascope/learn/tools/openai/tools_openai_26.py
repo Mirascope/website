@@ -18,7 +18,7 @@ def is_upper(v: str) -> str:
 class GetBookAuthor(BaseTool):
     """Returns the author of the book with the given title."""
 
-    title: Annotated[str, AfterValidator(is_upper)] = Field(
+    title: Annotated[str, AfterValidator(is_upper)] = Field( # [!code highlight]
         ..., description="The title of the book."
     )
 
@@ -37,12 +37,12 @@ def identify_author(book: str): ...
 
 
 response = identify_author("The Name of the Wind")
-try:
+try: # [!code highlight]
     if tool := response.tool:
         print(tool.call())
     else:
         print(response.content)
-except ValidationError as e:
+except ValidationError as e: # [!code highlight]
     print(e)
     # > 1 validation error for GetBookAuthor
     #   title

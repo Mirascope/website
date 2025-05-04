@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 12: Parallel Tool Calls
 # Generated for provider: anthropic
-# Source: content/doc/mirascope/learn/tools.mdx:620
+# Source: content/doc/mirascope/learn/tools.mdx:619
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm, prompt_template
@@ -26,6 +26,7 @@ def get_book_author(title: str) -> str:
 def identify_authors(books: list[str]): ...
 
 
+# [!code highlight:5]
 response = identify_authors(["The Name of the Wind", "Mistborn: The Final Empire"])
 if tools := response.tools:
     for tool in tools:

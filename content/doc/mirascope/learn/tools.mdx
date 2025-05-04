@@ -34,9 +34,9 @@ Mirascope enables defining tools in a provider-agnostic way, which can be used a
 
 ## Basic Usage and Syntax
 
-<Info title="API Documentation" collapsible={true} defaultOpen={false}>
+<Note title="API Documentation" collapsible={true} defaultOpen={false}>
   [`mirascope.llm.tool`](/docs/mirascope/api)
-</Info>
+</Note>
 
 There are two ways of defining tools in Mirascope: `BaseTool` and functions.
 
@@ -53,7 +53,7 @@ Let's take a look at a basic example of each:
 from mirascope import BaseTool, llm
 from pydantic import Field
 
-
+# [!code highlight:13]
 class GetBookAuthor(BaseTool):
     """Returns the author of the book with the given title."""
 
@@ -68,16 +68,15 @@ class GetBookAuthor(BaseTool):
             return "Unknown"
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", tools=[GetBookAuthor])
+@llm.call(provider="$PROVIDER", model="$MODEL", tools=[GetBookAuthor]) # [!code highlight]
 def identify_author(book: str) -> str:
     return f"Who wrote {book}?"
 
 
 response = identify_author("The Name of the Wind")
-if tool := response.tool:
-    print(tool.call())
-    # Output: Patrick Rothfuss
-    print(f"Original tool call: {tool.tool_call}")
+if tool := response.tool: # [!code highlight]
+    print(tool.call()) # [!code highlight]
+    # Output: Patrick Rothfuss # [!code highlight]
 else:
     print(response.content)
 ```
@@ -87,7 +86,7 @@ else:
 from mirascope import BaseTool, llm, prompt_template
 from pydantic import Field
 
-
+# [!code highlight:13]
 class GetBookAuthor(BaseTool):
     """Returns the author of the book with the given title."""
 
@@ -102,16 +101,15 @@ class GetBookAuthor(BaseTool):
             return "Unknown"
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", tools=[GetBookAuthor])
+@llm.call(provider="$PROVIDER", model="$MODEL", tools=[GetBookAuthor]) # [!code highlight]
 @prompt_template("Who wrote {book}?")
 def identify_author(book: str): ...
 
 
 response = identify_author("The Name of the Wind")
-if tool := response.tool:
-    print(tool.call())
-    # Output: Patrick Rothfuss
-    print(f"Original tool call: {tool.tool_call}")
+if tool := response.tool: # [!code highlight]
+    print(tool.call()) # [!code highlight]
+    # Output: Patrick Rothfuss # [!code highlight]
 else:
     print(response.content)
 ```
@@ -124,7 +122,7 @@ else:
 ```python
 from mirascope import llm
 
-
+# [!code highlight:13]
 def get_book_author(title: str) -> str:
     """Returns the author of the book with the given title
 
@@ -139,16 +137,15 @@ def get_book_author(title: str) -> str:
         return "Unknown"
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", tools=[get_book_author])
+@llm.call(provider="$PROVIDER", model="$MODEL", tools=[get_book_author]) # [!code highlight]
 def identify_author(book: str) -> str:
     return f"Who wrote {book}?"
 
 
 response = identify_author("The Name of the Wind")
-if tool := response.tool:
-    print(tool.call())
-    # Output: Patrick Rothfuss
-    print(f"Original tool call: {tool.tool_call}")
+if tool := response.tool: # [!code highlight]
+    print(tool.call()) # [!code highlight]
+    # Output: Patrick Rothfuss # [!code highlight]
 else:
     print(response.content)
 ```
@@ -157,7 +154,7 @@ else:
 ```python
 from mirascope import llm, prompt_template
 
-
+# [!code highlight:13]
 def get_book_author(title: str) -> str:
     """Returns the author of the book with the given title
 
@@ -172,16 +169,15 @@ def get_book_author(title: str) -> str:
         return "Unknown"
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", tools=[get_book_author])
+@llm.call(provider="$PROVIDER", model="$MODEL", tools=[get_book_author]) # [!code highlight]
 @prompt_template("Who wrote {book}?")
 def identify_author(book: str): ...
 
 
 response = identify_author("The Name of the Wind")
-if tool := response.tool:
-    print(tool.call())
-    # Output: Patrick Rothfuss
-    print(f"Original tool call: {tool.tool_call}")
+if tool := response.tool: # [!code highlight]
+    print(tool.call()) # [!code highlight]
+    # Output: Patrick Rothfuss # [!code highlight]
 else:
     print(response.content)
 ```
@@ -213,7 +209,7 @@ For the purposes of this example we are showing just a single tool call. General
 
 The `BaseTool` instances have a `tool_call` property for accessing the original LLM tool call.
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="BaseTool">
 <TabbedSection>
 <Tab value="Shorthand">
@@ -245,7 +241,7 @@ response = identify_author("The Name of the Wind")
 if tool := response.tool:
     print(tool.call())
     # Output: Patrick Rothfuss
-    print(f"Original tool call: {tool.tool_call}")
+    print(f"Original tool call: {tool.tool_call}") # [!code highlight]
 else:
     print(response.content)
 ```
@@ -279,7 +275,7 @@ response = identify_author("The Name of the Wind")
 if tool := response.tool:
     print(tool.call())
     # Output: Patrick Rothfuss
-    print(f"Original tool call: {tool.tool_call}")
+    print(f"Original tool call: {tool.tool_call}") # [!code highlight]
 else:
     print(response.content)
 ```
@@ -316,7 +312,7 @@ response = identify_author("The Name of the Wind")
 if tool := response.tool:
     print(tool.call())
     # Output: Patrick Rothfuss
-    print(f"Original tool call: {tool.tool_call}")
+    print(f"Original tool call: {tool.tool_call}") # [!code highlight]
 else:
     print(response.content)
 ```
@@ -349,7 +345,7 @@ response = identify_author("The Name of the Wind")
 if tool := response.tool:
     print(tool.call())
     # Output: Patrick Rothfuss
-    print(f"Original tool call: {tool.tool_call}")
+    print(f"Original tool call: {tool.tool_call}") # [!code highlight]
 else:
     print(response.content)
 ```
@@ -511,7 +507,7 @@ Consider provider-specific capabilities when working with advanced type structur
 
 In certain cases the LLM will ask to call multiple tools in the same response. Mirascope makes calling all such tools simple:
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="BaseTool">
 <TabbedSection>
 <Tab value="Shorthand">
@@ -539,6 +535,7 @@ def identify_authors(books: list[str]) -> str:
     return f"Who wrote {books}?"
 
 
+# [!code highlight:5]
 response = identify_authors(["The Name of the Wind", "Mistborn: The Final Empire"])
 if tools := response.tools:
     for tool in tools:
@@ -572,6 +569,7 @@ class GetBookAuthor(BaseTool):
 def identify_authors(books: list[str]): ...
 
 
+# [!code highlight:5]
 response = identify_authors(["The Name of the Wind", "Mistborn: The Final Empire"])
 if tools := response.tools:
     for tool in tools:
@@ -608,6 +606,7 @@ def identify_authors(books: list[str]) -> str:
     return f"Who wrote {books}?"
 
 
+# [!code highlight:5]
 response = identify_authors(["The Name of the Wind", "Mistborn: The Final Empire"])
 if tools := response.tools:
     for tool in tools:
@@ -640,6 +639,7 @@ def get_book_author(title: str) -> str:
 def identify_authors(books: list[str]): ...
 
 
+# [!code highlight:5]
 response = identify_authors(["The Name of the Wind", "Mistborn: The Final Empire"])
 if tools := response.tools:
     for tool in tools:
@@ -658,7 +658,7 @@ If your tool calls are I/O-bound, it's often worth writing [async tools](/docs/m
 
 Mirascope supports streaming responses with tools, which is useful for long-running tasks or real-time updates:
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="BaseTool">
 <TabbedSection>
 <Tab value="Shorthand">
@@ -681,15 +681,15 @@ class GetBookAuthor(BaseTool):
             return "Unknown"
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", tools=[GetBookAuthor], stream=True)
+@llm.call(provider="$PROVIDER", model="$MODEL", tools=[GetBookAuthor], stream=True) # [!code highlight]
 def identify_authors(books: list[str]) -> str:
     return f"Who wrote {books}?"
 
 
 stream = identify_authors(["The Name of the Wind", "Mistborn: The Final Empire"])
-for chunk, tool in stream:
-    if tool:
-        print(tool.call())
+for chunk, tool in stream: # [!code highlight]
+    if tool: # [!code highlight]
+        print(tool.call()) # [!code highlight]
     else:
         print(chunk.content, end="", flush=True)
 ```
@@ -714,15 +714,15 @@ class GetBookAuthor(BaseTool):
             return "Unknown"
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", tools=[GetBookAuthor], stream=True)
+@llm.call(provider="$PROVIDER", model="$MODEL", tools=[GetBookAuthor], stream=True) # [!code highlight]
 @prompt_template("Who wrote {books}?")
 def identify_authors(books: list[str]): ...
 
 
 stream = identify_authors(["The Name of the Wind", "Mistborn: The Final Empire"])
-for chunk, tool in stream:
-    if tool:
-        print(tool.call())
+for chunk, tool in stream: # [!code highlight]
+    if tool: # [!code highlight]
+        print(tool.call()) # [!code highlight]
     else:
         print(chunk.content, end="", flush=True)
 ```
@@ -750,15 +750,15 @@ def get_book_author(title: str) -> str:
         return "Unknown"
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", tools=[get_book_author], stream=True)
+@llm.call(provider="$PROVIDER", model="$MODEL", tools=[get_book_author], stream=True) # [!code highlight]
 def identify_authors(books: list[str]) -> str:
     return f"Who wrote {books}?"
 
 
 stream = identify_authors(["The Name of the Wind", "Mistborn: The Final Empire"])
-for chunk, tool in stream:
-    if tool:
-        print(tool.call())
+for chunk, tool in stream: # [!code highlight]
+    if tool: # [!code highlight]
+        print(tool.call()) # [!code highlight]
     else:
         print(chunk.content, end="", flush=True)
 ```
@@ -782,15 +782,15 @@ def get_book_author(title: str) -> str:
         return "Unknown"
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", tools=[get_book_author], stream=True)
+@llm.call(provider="$PROVIDER", model="$MODEL", tools=[get_book_author], stream=True) # [!code highlight]
 @prompt_template("Who wrote {books}?")
 def identify_authors(books: list[str]): ...
 
 
 stream = identify_authors(["The Name of the Wind", "Mistborn: The Final Empire"])
-for chunk, tool in stream:
-    if tool:
-        print(tool.call())
+for chunk, tool in stream: # [!code highlight]
+    if tool: # [!code highlight]
+        print(tool.call()) # [!code highlight]
     else:
         print(chunk.content, end="", flush=True)
 ```
@@ -813,7 +813,7 @@ for chunk, tool in stream:
 
 You can also stream intermediate partial tools and their deltas (rather than just the fully constructed tool) by setting `stream={"partial_tools": True}`:
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="BaseTool">
 <TabbedSection>
 <Tab value="Shorthand">
@@ -840,7 +840,7 @@ class GetBookAuthor(BaseTool):
     provider="$PROVIDER",
     model="$MODEL",
     tools=[GetBookAuthor],
-    stream={"partial_tools": True},
+    stream={"partial_tools": True}, # [!code highlight]
 )
 def identify_authors(books: list[str]) -> str:
     return f"Who wrote {books}?"
@@ -848,7 +848,7 @@ def identify_authors(books: list[str]) -> str:
 
 stream = identify_authors(["The Name of the Wind", "Mistborn: The Final Empire"])
 for chunk, tool in stream:
-    if tool:
+    if tool: # [!code highlight]
         if tool.delta is not None:  # partial tool
             print(tool.delta)
         else:
@@ -881,7 +881,7 @@ class GetBookAuthor(BaseTool):
     provider="$PROVIDER",
     model="$MODEL",
     tools=[GetBookAuthor],
-    stream={"partial_tools": True},
+    stream={"partial_tools": True}, # [!code highlight]
 )
 @prompt_template("Who wrote {books}?")
 def identify_authors(books: list[str]): ...
@@ -889,7 +889,7 @@ def identify_authors(books: list[str]): ...
 
 stream = identify_authors(["The Name of the Wind", "Mistborn: The Final Empire"])
 for chunk, tool in stream:
-    if tool:
+    if tool: # [!code highlight]
         if tool.delta is not None:  # partial tool
             print(tool.delta)
         else:
@@ -925,7 +925,7 @@ def get_book_author(title: str) -> str:
     provider="$PROVIDER",
     model="$MODEL",
     tools=[get_book_author],
-    stream={"partial_tools": True},
+    stream={"partial_tools": True}, # [!code highlight]
 )
 def identify_authors(books: list[str]) -> str:
     return f"Who wrote {books}?"
@@ -933,7 +933,7 @@ def identify_authors(books: list[str]) -> str:
 
 stream = identify_authors(["The Name of the Wind", "Mistborn: The Final Empire"])
 for chunk, tool in stream:
-    if tool:
+    if tool: # [!code highlight]
         if tool.delta is not None:  # partial tool
             print(tool.delta)
         else:
@@ -965,7 +965,7 @@ def get_book_author(title: str) -> str:
     provider="$PROVIDER",
     model="$MODEL",
     tools=[get_book_author],
-    stream={"partial_tools": True},
+    stream={"partial_tools": True}, # [!code highlight]
 )
 @prompt_template("Who wrote {books}?")
 def identify_authors(books: list[str]): ...
@@ -973,7 +973,7 @@ def identify_authors(books: list[str]): ...
 
 stream = identify_authors(["The Name of the Wind", "Mistborn: The Final Empire"])
 for chunk, tool in stream:
-    if tool:
+    if tool: # [!code highlight]
         if tool.delta is not None:  # partial tool
             print(tool.delta)
         else:
@@ -996,7 +996,7 @@ Generally the next step after the LLM returns a tool call is for you to call the
 
 Let's take a look at a basic example of this:
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="BaseTool">
 <TabbedSection>
 <Tab value="Shorthand">
@@ -1018,9 +1018,9 @@ class GetBookAuthor(BaseTool):
 
 @llm.call(provider="$PROVIDER", model="$MODEL", tools=[GetBookAuthor])
 def identify_author(book: str, history: list[BaseMessageParam]) -> Messages.Type:
-    messages = [*history]
+    messages = [*history] # [!code highlight]
     if book:
-        messages.append(Messages.User(f"Who wrote {book}?"))
+        messages.append(Messages.User(f"Who wrote {book}?")) # [!code highlight]
     return messages
 
 
@@ -1030,9 +1030,9 @@ history += [response.user_message_param, response.message_param]
 while tool := response.tool:
     tools_and_outputs = [(tool, tool.call())]
     history += response.tool_message_params(tools_and_outputs)
-    response = identify_author("", history)
-    history.append(response.message_param)
-print(response.content)
+    response = identify_author("", history) # [!code highlight]
+    history.append(response.message_param) # [!code highlight]
+print(response.content) # [!code highlight]
 # Output: The Name of the Wind was written by Patrick Rothfuss.
 ```
 </Tab>
@@ -1056,12 +1056,12 @@ class GetBookAuthor(BaseTool):
 @llm.call(provider="$PROVIDER", model="$MODEL", tools=[GetBookAuthor])
 @prompt_template(
     """
-    MESSAGES: {history}
+    MESSAGES: {history} # [!code highlight]
     USER: {query}
     """
 )
 def identify_author(book: str, history: list[BaseMessageParam]) -> BaseDynamicConfig:
-    return {"computed_fields": {"query": f"Who wrote {book}" if book else ""}}
+    return {"computed_fields": {"query": f"Who wrote {book}" if book else ""}} # [!code highlight]
 
 
 history = []
@@ -1070,9 +1070,9 @@ history += [response.user_message_param, response.message_param]
 while tool := response.tool:
     tools_and_outputs = [(tool, tool.call())]
     history += response.tool_message_params(tools_and_outputs)
-    response = identify_author("", history)
-    history.append(response.message_param)
-print(response.content)
+    response = identify_author("", history) # [!code highlight]
+    history.append(response.message_param) # [!code highlight]
+print(response.content) # [!code highlight]
 # Output: The Name of the Wind was written by Patrick Rothfuss.
 ```
 </Tab>
@@ -1096,9 +1096,9 @@ def get_book_author(title: str) -> str:
 
 @llm.call(provider="$PROVIDER", model="$MODEL", tools=[get_book_author])
 def identify_author(book: str, history: list[BaseMessageParam]) -> Messages.Type:
-    messages = [*history]
+    messages = [*history] # [!code highlight]
     if book:
-        messages.append(Messages.User(f"Who wrote {book}?"))
+        messages.append(Messages.User(f"Who wrote {book}?")) # [!code highlight]
     return messages
 
 
@@ -1108,9 +1108,9 @@ history += [response.user_message_param, response.message_param]
 while tool := response.tool:
     tools_and_outputs = [(tool, tool.call())]
     history += response.tool_message_params(tools_and_outputs)
-    response = identify_author("", history)
-    history.append(response.message_param)
-print(response.content)
+    response = identify_author("", history) # [!code highlight]
+    history.append(response.message_param) # [!code highlight]
+print(response.content) # [!code highlight]
 # Output: The Name of the Wind was written by Patrick Rothfuss.
 ```
 </Tab>
@@ -1131,12 +1131,12 @@ def get_book_author(title: str) -> str:
 @llm.call(provider="$PROVIDER", model="$MODEL", tools=[get_book_author])
 @prompt_template(
     """
-    MESSAGES: {history}
+    MESSAGES: {history} # [!code highlight]
     USER: {query}
     """
 )
 def identify_author(book: str, history: list[BaseMessageParam]) -> BaseDynamicConfig:
-    return {"computed_fields": {"query": f"Who wrote {book}" if book else ""}}
+    return {"computed_fields": {"query": f"Who wrote {book}" if book else ""}} # [!code highlight]
 
 
 history = []
@@ -1145,9 +1145,9 @@ history += [response.user_message_param, response.message_param]
 while tool := response.tool:
     tools_and_outputs = [(tool, tool.call())]
     history += response.tool_message_params(tools_and_outputs)
-    response = identify_author("", history)
-    history.append(response.message_param)
-print(response.content)
+    response = identify_author("", history) # [!code highlight]
+    history.append(response.message_param) # [!code highlight]
+print(response.content) # [!code highlight]
 # Output: The Name of the Wind was written by Patrick Rothfuss.
 ```
 </Tab>
@@ -1166,7 +1166,7 @@ In this example we:
 
 Since `BaseTool` is a subclass of Pydantic's [`BaseModel`](https://docs.pydantic.dev/latest/usage/models/), they are validated on construction, so it's important that you handle potential `ValidationError`'s for building more robust applications:
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="BaseTool">
 <TabbedSection>
 <Tab value="Shorthand">
@@ -1185,7 +1185,7 @@ def is_upper(v: str) -> str:
 class GetBookAuthor(BaseTool):
     """Returns the author of the book with the given title."""
 
-    title: Annotated[str, AfterValidator(is_upper)] = Field(
+    title: Annotated[str, AfterValidator(is_upper)] = Field( # [!code highlight]
         ..., description="The title of the book."
     )
 
@@ -1204,12 +1204,12 @@ def identify_author(book: str) -> str:
 
 
 response = identify_author("The Name of the Wind")
-try:
+try: # [!code highlight]
     if tool := response.tool:
         print(tool.call())
     else:
         print(response.content)
-except ValidationError as e:
+except ValidationError as e: # [!code highlight]
     print(e)
     # > 1 validation error for GetBookAuthor
     #   title
@@ -1233,7 +1233,7 @@ def is_upper(v: str) -> str:
 class GetBookAuthor(BaseTool):
     """Returns the author of the book with the given title."""
 
-    title: Annotated[str, AfterValidator(is_upper)] = Field(
+    title: Annotated[str, AfterValidator(is_upper)] = Field( # [!code highlight]
         ..., description="The title of the book."
     )
 
@@ -1252,12 +1252,12 @@ def identify_author(book: str): ...
 
 
 response = identify_author("The Name of the Wind")
-try:
+try: # [!code highlight]
     if tool := response.tool:
         print(tool.call())
     else:
         print(response.content)
-except ValidationError as e:
+except ValidationError as e: # [!code highlight]
     print(e)
     # > 1 validation error for GetBookAuthor
     #   title
@@ -1282,7 +1282,7 @@ def is_upper(v: str) -> str:
     return v
 
 
-def get_book_author(title: Annotated[str, AfterValidator(is_upper)]) -> str:
+def get_book_author(title: Annotated[str, AfterValidator(is_upper)]) -> str: # [!code highlight]
     """Returns the author of the book with the given title
 
     Args:
@@ -1302,12 +1302,12 @@ def identify_author(book: str) -> str:
 
 
 response = identify_author("The Name of the Wind")
-try:
+try: # [!code highlight]
     if tool := response.tool:
         print(tool.call())
     else:
         print(response.content)
-except ValidationError as e:
+except ValidationError as e: # [!code highlight]
     print(e)
     # > 1 validation error for GetBookAuthor
     #   title
@@ -1328,7 +1328,7 @@ def is_upper(v: str) -> str:
     return v
 
 
-def get_book_author(title: Annotated[str, AfterValidator(is_upper)]) -> str:
+def get_book_author(title: Annotated[str, AfterValidator(is_upper)]) -> str: # [!code highlight]
     """Returns the author of the book with the given title
 
     Args:
@@ -1348,12 +1348,12 @@ def identify_author(book: str): ...
 
 
 response = identify_author("The Name of the Wind")
-try:
+try: # [!code highlight]
     if tool := response.tool:
         print(tool.call())
     else:
         print(response.content)
-except ValidationError as e:
+except ValidationError as e: # [!code highlight]
     print(e)
     # > 1 validation error for GetBookAuthor
     #   title
@@ -1371,7 +1371,7 @@ In this example we've added additional validation, but it's important that you s
 
 Just like with [Response Models](/docs/mirascope/learn/response_models#few-shot-examples), you can add few-shot examples to your tools:
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="BaseTool">
 <TabbedSection>
 <Tab value="Shorthand">
@@ -1386,11 +1386,11 @@ class GetBookAuthor(BaseTool):
     title: str = Field(
         ...,
         description="The title of the book.",
-        examples=["The Name of the Wind"],
+        examples=["The Name of the Wind"], # [!code highlight]
     )
 
     model_config = ConfigDict(
-        json_schema_extra={"examples": [{"title": "The Name of the Wind"}]}
+        json_schema_extra={"examples": [{"title": "The Name of the Wind"}]} # [!code highlight]
     )
 
     def call(self) -> str:
@@ -1426,11 +1426,11 @@ class GetBookAuthor(BaseTool):
     title: str = Field(
         ...,
         description="The title of the book.",
-        examples=["The Name of the Wind"],
+        examples=["The Name of the Wind"], # [!code highlight]
     )
 
     model_config = ConfigDict(
-        json_schema_extra={"examples": [{"title": "The Name of the Wind"}]}
+        json_schema_extra={"examples": [{"title": "The Name of the Wind"}]} # [!code highlight]
     )
 
     def call(self) -> str:
@@ -1473,14 +1473,14 @@ def get_book_author(
         Field(
             ...,
             description="The title of the book.",
-            examples=["The Name of the Wind"],
+            examples=["The Name of the Wind"], # [!code highlight]
         ),
     ],
 ) -> str:
     """Returns the author of the book with the given title
 
-    Example:
-        {"title": "The Name of the Wind"}
+    Example: # [!code highlight]
+        {"title": "The Name of the Wind"} # [!code highlight]
 
     Args:
         title: The title of the book.
@@ -1520,14 +1520,14 @@ def get_book_author(
         Field(
             ...,
             description="The title of the book.",
-            examples=["The Name of the Wind"],
+            examples=["The Name of the Wind"], # [!code highlight]
         ),
     ],
 ) -> str:
     """Returns the author of the book with the given title
 
-    Example:
-        {"title": "The Name of the Wind"}
+    Example: # [!code highlight]
+        {"title": "The Name of the Wind"} # [!code highlight]
 
     Args:
         title: The title of the book.
@@ -1575,7 +1575,7 @@ The `BaseToolKit` class enables:
 - Dynamic tool definitions.
     - This can be useful for generating tool definitions that are dependent on some input or state. For example, you may want to update the description of tools based on an argument of the call being made.
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="Shorthand">
 ```python
 from mirascope import (
@@ -1587,16 +1587,16 @@ from mirascope import (
 from mirascope.core import toolkit_tool
 
 
-class BookTools(BaseToolKit):
-    __namespace__ = "book_tools"
+class BookTools(BaseToolKit): # [!code highlight]
+    __namespace__ = "book_tools" # [!code highlight]
 
-    reading_level: str
+    reading_level: str # [!code highlight]
 
-    @toolkit_tool
+    @toolkit_tool # [!code highlight]
     def suggest_author(self, author: str) -> str:
         """Suggests an author for the user to read based on their reading level.
 
-        User reading level: {self.reading_level}
+        User reading level: {self.reading_level} # [!code highlight]
         Author you suggest must be appropriate for the user's reading level.
         """
         return f"I would suggest you read some books by {author}"
@@ -1604,22 +1604,22 @@ class BookTools(BaseToolKit):
 
 @llm.call(provider="$PROVIDER", model="$MODEL")
 def recommend_author(genre: str, reading_level: str) -> BaseDynamicConfig:
-    toolkit = BookTools(reading_level=reading_level)
+    toolkit = BookTools(reading_level=reading_level) # [!code highlight]
     return {
-        "tools": toolkit.create_tools(),
+        "tools": toolkit.create_tools(), # [!code highlight]
         "messages": [Messages.User(f"What {genre} author should I read?")],
     }
 
 
-response = recommend_author("fantasy", "beginner")
+response = recommend_author("fantasy", "beginner") # [!code highlight]
 if tool := response.tool:
     print(tool.call())
-    # Output: I would suggest you read some books by J.K. Rowling
+    # Output: I would suggest you read some books by J.K. Rowling # [!code highlight]
 
-response = recommend_author("fantasy", "advanced")
+response = recommend_author("fantasy", "advanced") # [!code highlight]
 if tool := response.tool:
     print(tool.call())
-    # Output: I would suggest you read some books by Brandon Sanderson
+    # Output: I would suggest you read some books by Brandon Sanderson # [!code highlight]
 ```
 </Tab>
 <Tab value="Template">
@@ -1633,16 +1633,16 @@ from mirascope import (
 from mirascope.core import toolkit_tool
 
 
-class BookTools(BaseToolKit):
-    __namespace__ = "book_tools"
+class BookTools(BaseToolKit): # [!code highlight]
+    __namespace__ = "book_tools" # [!code highlight]
 
-    reading_level: str
+    reading_level: str # [!code highlight]
 
-    @toolkit_tool
+    @toolkit_tool # [!code highlight]
     def suggest_author(self, author: str) -> str:
         """Suggests an author for the user to read based on their reading level.
 
-        User reading level: {self.reading_level}
+        User reading level: {self.reading_level} # [!code highlight]
         Author you suggest must be appropriate for the user's reading level.
         """
         return f"I would suggest you read some books by {author}"
@@ -1651,20 +1651,20 @@ class BookTools(BaseToolKit):
 @llm.call(provider="$PROVIDER", model="$MODEL")
 @prompt_template("What {genre} author should I read?")
 def recommend_author(genre: str, reading_level: str) -> BaseDynamicConfig:
-    toolkit = BookTools(reading_level=reading_level)
-    return {"tools": toolkit.create_tools()}
+    toolkit = BookTools(reading_level=reading_level) # [!code highlight]
+    return {"tools": toolkit.create_tools()} # [!code highlight]
 
 
 
-response = recommend_author("fantasy", "beginner")
+response = recommend_author("fantasy", "beginner") # [!code highlight]
 if tool := response.tool:
     print(tool.call())
-    # Output: I would suggest you read some books by J.K. Rowling
+    # Output: I would suggest you read some books by J.K. Rowling # [!code highlight]
 
-response = recommend_author("fantasy", "advanced")
+response = recommend_author("fantasy", "advanced") # [!code highlight]
 if tool := response.tool:
     print(tool.call())
-    # Output: I would suggest you read some books by Brandon Sanderson
+    # Output: I would suggest you read some books by Brandon Sanderson # [!code highlight]
 ```
 </Tab>
 </TabbedSection>
@@ -1760,10 +1760,10 @@ Example using DuckDuckGoSearch:
 <Tab value="Shorthand">
 ```python
 from mirascope import llm
-from mirascope.tools import DuckDuckGoSearch
+from mirascope.tools import DuckDuckGoSearch # [!code highlight]
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", tools=[DuckDuckGoSearch])
+@llm.call(provider="$PROVIDER", model="$MODEL", tools=[DuckDuckGoSearch]) # [!code highlight]
 def research(genre: str) -> str:
     return f"Recommend a {genre} book and summarize the story"
 
@@ -1776,10 +1776,10 @@ if tool := response.tool:
 <Tab value="Template">
 ```python
 from mirascope import llm, prompt_template
-from mirascope.tools import DuckDuckGoSearch
+from mirascope.tools import DuckDuckGoSearch # [!code highlight]
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", tools=[DuckDuckGoSearch])
+@llm.call(provider="$PROVIDER", model="$MODEL", tools=[DuckDuckGoSearch]) # [!code highlight]
 @prompt_template("Recommend a {genre} book and summarize the story")
 def research(genre: str): ...
 
@@ -1796,14 +1796,13 @@ if tool := response.tool:
 <Tab value="Shorthand">
 ```python
 from mirascope import llm
-from mirascope.tools import DuckDuckGoSearch
+from mirascope.tools import DuckDuckGoSearch, DuckDuckGoSearchConfig # [!code highlight]
+
+config = DuckDuckGoSearchConfig(max_results_per_query=5) # [!code highlight]
+CustomSearch = DuckDuckGoSearch.from_config(config) # [!code highlight]
 
 
-@llm.call(
-    provider="$PROVIDER",
-    model="$MODEL",
-    tools=[DuckDuckGoSearch],
-)
+@llm.call(provider="$PROVIDER", model="$MODEL", tools=[CustomSearch]) # [!code highlight]
 def research(genre: str) -> str:
     return f"Recommend a {genre} book and summarize the story"
 
@@ -1816,14 +1815,13 @@ if tool := response.tool:
 <Tab value="Template">
 ```python
 from mirascope import llm, prompt_template
-from mirascope.tools import DuckDuckGoSearch
+from mirascope.tools import DuckDuckGoSearch, DuckDuckGoSearchConfig # [!code highlight]
+
+config = DuckDuckGoSearchConfig(max_results_per_query=5) # [!code highlight]
+CustomSearch = DuckDuckGoSearch.from_config(config) # [!code highlight]
 
 
-@llm.call(
-    provider="$PROVIDER",
-    model="$MODEL",
-    tools=[DuckDuckGoSearch],
-)
+@llm.call(provider="$PROVIDER", model="$MODEL", tools=[CustomSearch]) # [!code highlight]
 @prompt_template("Recommend a {genre} book and summarize the story")
 def research(genre: str): ...
 
@@ -1876,25 +1874,25 @@ if tool := response.tool:
 
 Example using FileSystemToolKit:
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="Shorthand">
 ```python
 from pathlib import Path
 
 from mirascope import BaseDynamicConfig, Messages, llm
-from mirascope.tools import FileSystemToolKit
+from mirascope.tools import FileSystemToolKit # [!code highlight]
 
 
 @llm.call(provider="$PROVIDER", model="$MODEL")
 def write_blog_post(topic: str, output_file: Path) -> BaseDynamicConfig:
-    toolkit = FileSystemToolKit(base_directory=output_file.parent)
+    toolkit = FileSystemToolKit(base_directory=output_file.parent) # [!code highlight]
     return {
         "messages": [
             Messages.User(
                 content=f"Write a blog post about '{topic}' as a '{output_file.name}'."
             )
         ],
-        "tools": toolkit.create_tools(),
+        "tools": toolkit.create_tools(), # [!code highlight]
     }
 
 
@@ -1909,20 +1907,20 @@ if tool := response.tool:
 from pathlib import Path
 
 from mirascope import BaseDynamicConfig, Messages, llm, prompt_template
-from mirascope.tools import FileSystemToolKit
+from mirascope.tools import FileSystemToolKit # [!code highlight]
 
 
 @llm.call(provider="$PROVIDER", model="$MODEL")
 @prompt_template("Write a blog post about '{topic}' as a '{output_file.name}'.")
 def write_blog_post(topic: str, output_file: Path) -> BaseDynamicConfig:
-    toolkit = FileSystemToolKit(base_directory=output_file.parent)
+    toolkit = FileSystemToolKit(base_directory=output_file.parent) # [!code highlight]
     return {
         "messages": [
             Messages.User(
                 content="Write a blog post about '{topic}' as a '{output_file.name}'."
             )
         ],
-        "tools": toolkit.create_tools(),
+        "tools": toolkit.create_tools(), # [!code highlight]
     }
 
 

@@ -13,16 +13,16 @@ from mirascope import (
 from mirascope.core import toolkit_tool
 
 
-class BookTools(BaseToolKit):
-    __namespace__ = "book_tools"
+class BookTools(BaseToolKit): # [!code highlight]
+    __namespace__ = "book_tools" # [!code highlight]
 
-    reading_level: str
+    reading_level: str # [!code highlight]
 
-    @toolkit_tool
+    @toolkit_tool # [!code highlight]
     def suggest_author(self, author: str) -> str:
         """Suggests an author for the user to read based on their reading level.
 
-        User reading level: {self.reading_level}
+        User reading level: {self.reading_level} # [!code highlight]
         Author you suggest must be appropriate for the user's reading level.
         """
         return f"I would suggest you read some books by {author}"
@@ -31,17 +31,17 @@ class BookTools(BaseToolKit):
 @llm.call(provider="anthropic", model="claude-3-5-sonnet-latest")
 @prompt_template("What {genre} author should I read?")
 def recommend_author(genre: str, reading_level: str) -> BaseDynamicConfig:
-    toolkit = BookTools(reading_level=reading_level)
-    return {"tools": toolkit.create_tools()}
+    toolkit = BookTools(reading_level=reading_level) # [!code highlight]
+    return {"tools": toolkit.create_tools()} # [!code highlight]
 
 
 
-response = recommend_author("fantasy", "beginner")
+response = recommend_author("fantasy", "beginner") # [!code highlight]
 if tool := response.tool:
     print(tool.call())
-    # Output: I would suggest you read some books by J.K. Rowling
+    # Output: I would suggest you read some books by J.K. Rowling # [!code highlight]
 
-response = recommend_author("fantasy", "advanced")
+response = recommend_author("fantasy", "advanced") # [!code highlight]
 if tool := response.tool:
     print(tool.call())
-    # Output: I would suggest you read some books by Brandon Sanderson
+    # Output: I would suggest you read some books by Brandon Sanderson # [!code highlight]
