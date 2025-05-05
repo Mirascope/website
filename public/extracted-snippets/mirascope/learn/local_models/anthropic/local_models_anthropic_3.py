@@ -8,13 +8,13 @@ from mirascope.core import openai
 from openai import OpenAI
 from pydantic import BaseModel
 
-custom_client = OpenAI(
-    base_url="http://localhost:11434/v1",  # your ollama endpoint
-    api_key="ollama",  # required by openai, but unused
-)
+custom_client = OpenAI( # [!code highlight]
+    base_url="http://localhost:11434/v1",  # your ollama endpoint # [!code highlight]
+    api_key="ollama",  # required by openai, but unused # [!code highlight]
+) # [!code highlight]
 
 
-@openai.call("llama3.2", client=custom_client)
+@openai.call("llama3.2", client=custom_client) # [!code highlight]
 def recommend_book(genre: str) -> str:
     return f"Recommend a {genre} book"
 
@@ -29,7 +29,7 @@ class Book(BaseModel):
     author: str
 
 
-@openai.call("llama3.2", response_model=Book, client=custom_client)
+@openai.call("llama3.2", response_model=Book, client=custom_client) # [!code highlight]
 def extract_book(text: str) -> str:
     return f"Extract {text}"
 
