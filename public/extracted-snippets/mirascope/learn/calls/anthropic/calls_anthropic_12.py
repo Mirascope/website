@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 12: Error Handling
 # Generated for provider: anthropic
-# Source: content/doc/mirascope/learn/calls.mdx:530
+# Source: content/doc/mirascope/learn/calls.mdx:496
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm, prompt_template
@@ -13,7 +13,7 @@ def recommend_book(genre: str): ...
 
 
 try:
-    response: llm.CallResponse = recommend_book("fantasy")
+    response: llm.CallResponse = recommend_book("fantasy") # [!code highlight]
     print(response.content)
 except Exception as e:
-    print(f"Error: {str(e)}")
+    print(f"Error: {str(e)}") # [!code highlight]

@@ -6,7 +6,7 @@ from vertexai.generative_models import Content, Part
 def recommend_book(genre: str) -> vertex.VertexDynamicConfig:
     return {
         "messages": [
-            Content(role="user", parts=[Part.from_text(f"Recommend a {genre} book")])
+            Content(role="user", parts=[Part.from_text(f"Recommend a {genre} book")]) # [!code highlight]
         ]
     }
 

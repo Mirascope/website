@@ -14,7 +14,7 @@ from mirascope.core import anthropic
     "claude-3-5-sonnet-20240620",
     call_params={
         "max_tokens": 1024,
-        "extra_headers": {"anthropic-beta": "prompt-caching-2024-07-31"},
+        "extra_headers": {"anthropic-beta": "prompt-caching-2024-07-31"}, # [!code highlight]
     },
 )
 def analyze_book(query: str, book: str) -> Messages.Type:
@@ -28,7 +28,7 @@ def analyze_book(query: str, book: str) -> Messages.Type:
                             
             Here is the book in it's entirety: {book}
             """),
-                CacheControlPart(type="cache_control", cache_type="ephemeral"),
+                CacheControlPart(type="cache_control", cache_type="ephemeral"), # [!code highlight]
             ]
         ),
         Messages.User(query),

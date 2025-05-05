@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 24: Lists
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/prompts.mdx:755
+# Source: content/doc/mirascope/learn/prompts.mdx:756
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import TextPart, prompt_template
@@ -10,25 +10,26 @@ from mirascope import TextPart, prompt_template
 @prompt_template(
     """
     Book themes:
-    {themes:text}
+    {themes:text} # [!code highlight]
 
     Character analysis:
-    {characters:texts}
+    {characters:texts} # [!code highlight]
     """
 )
 def analyze_book(themes: TextPart, characters: list[TextPart]): ...
 
 
 prompt = analyze_book(
-    themes=TextPart(type="text", text="redemption, power, friendship"),
-    characters=[
-        TextPart(type="text", text="Name: Frodo, Role: Protagonist"),
-        TextPart(type="text", text="Name: Gandalf, Role: Mentor"),
-    ],
+    themes=TextPart(type="text", text="redemption, power, friendship"), # [!code highlight]
+    characters=[ # [!code highlight]
+        TextPart(type="text", text="Name: Frodo, Role: Protagonist"), # [!code highlight]
+        TextPart(type="text", text="Name: Gandalf, Role: Mentor"), # [!code highlight]
+    ], # [!code highlight]
 )
 
 print(prompt[0].content)
 # Output:
+# [!code highlight:8]
 # [
 #     TextPart(type="text", text="Book themes:"),
 #     TextPart(type="text", text="redemption, power, friendship"),

@@ -1,6 +1,6 @@
 from mirascope.core import bedrock, prompt_template
 
-
+# [!code highlight:4]
 @bedrock.call("amazon.nova-lite-v1:0")
 @prompt_template("Recommend a {genre} book")
 def recommend_book(genre: str): ...

@@ -5,12 +5,12 @@
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm, prompt_template
-from mirascope.integrations.otel import configure, with_otel
+from mirascope.integrations.otel import configure, with_otel # [!code highlight]
 
-configure()
+configure() # [!code highlight]
 
 
-@with_otel()
+@with_otel() # [!code highlight]
 @llm.call(provider="openai", model="gpt-4o-mini")
 @prompt_template("Recommend a {genre} book")
 def recommend_book(genre: str): ...

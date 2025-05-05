@@ -1,25 +1,25 @@
 #!/usr/bin/env python3
 # Example 7: Validation and Error Handling
 # Generated for provider: anthropic
-# Source: content/doc/mirascope/learn/response_models.mdx:353
+# Source: content/doc/mirascope/learn/response_models.mdx:351
 # This file is auto-generated; any edits should be made in the source file
 
-from typing import Annotated
+from typing import Annotated # [!code highlight]
 
 from mirascope import llm
-from pydantic import AfterValidator, BaseModel, ValidationError
+from pydantic import AfterValidator, BaseModel, ValidationError # [!code highlight]
 
 
-def validate_upper(v: str) -> str:
-    assert v.isupper(), "Field must be uppercase"
-    return v
+def validate_upper(v: str) -> str: # [!code highlight]
+    assert v.isupper(), "Field must be uppercase" # [!code highlight]
+    return v # [!code highlight]
 
 
 class Book(BaseModel):
     """An extracted book."""
 
-    title: Annotated[str, AfterValidator(validate_upper)]
-    author: Annotated[str, AfterValidator(validate_upper)]
+    title: Annotated[str, AfterValidator(validate_upper)] # [!code highlight]
+    author: Annotated[str, AfterValidator(validate_upper)] # [!code highlight]
 
 
 @llm.call(provider="anthropic", model="claude-3-5-sonnet-latest", response_model=Book)
@@ -27,11 +27,11 @@ def extract_book(text: str) -> str:
     return f"Extract {text}"
 
 
-try:
+try: # [!code highlight]
     book = extract_book("The Name of the Wind by Patrick Rothfuss")
     print(book)
     # Output: title='The Name of the Wind' author='Patrick Rothfuss'
-except ValidationError as e:
+except ValidationError as e: # [!code highlight]
     print(f"Error: {str(e)}")
     # Error: 2 validation errors for Book
     # title

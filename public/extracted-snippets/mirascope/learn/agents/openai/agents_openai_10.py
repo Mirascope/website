@@ -32,7 +32,7 @@ class Librarian(BaseModel):
         """Returns the list of books available in the library."""
         return json.dumps([book.model_dump() for book in self.library])
 
-    @llm.call(provider="openai", model="gpt-4o-mini", stream=True)
+    @llm.call(provider="openai", model="gpt-4o-mini", stream=True) # [!code highlight]
     @prompt_template(
         """
         SYSTEM: You are a librarian
@@ -40,24 +40,24 @@ class Librarian(BaseModel):
         USER: {query}
         """
     )
-    def _stream(self, query: str) -> BaseDynamicConfig:
+    def _stream(self, query: str) -> BaseDynamicConfig: # [!code highlight]
         return {"tools": [self._available_books]}
 
     def _step(self, query: str) -> None:
         if query:
             self.history.append(Messages.User(query))
-        stream = self._stream(query)
-        tools_and_outputs = []
-        for chunk, tool in stream:
-            if tool:
-                print(f"[Calling Tool '{tool._name()}' with args {tool.args}]")
-                tools_and_outputs.append((tool, tool.call()))
-            else:
-                print(chunk.content, end="", flush=True)
-        self.history.append(stream.message_param)
-        if tools_and_outputs:
-            self.history += stream.tool_message_params(tools_and_outputs)
-            self._step("")
+        stream = self._stream(query) # [!code highlight]
+        tools_and_outputs = [] # [!code highlight]
+        for chunk, tool in stream: # [!code highlight]
+            if tool: # [!code highlight]
+                print(f"[Calling Tool '{tool._name()}' with args {tool.args}]") # [!code highlight]
+                tools_and_outputs.append((tool, tool.call())) # [!code highlight]
+            else: # [!code highlight]
+                print(chunk.content, end="", flush=True) # [!code highlight]
+        self.history.append(stream.message_param) # [!code highlight]
+        if tools_and_outputs: # [!code highlight]
+            self.history += stream.tool_message_params(tools_and_outputs) # [!code highlight]
+            self._step("") # [!code highlight]
 
     def run(self) -> None:
         while True:

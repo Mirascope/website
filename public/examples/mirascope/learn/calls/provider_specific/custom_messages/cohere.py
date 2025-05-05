@@ -4,7 +4,7 @@ from mirascope.core import cohere
 
 @cohere.call("command-r-plus")
 def recommend_book(genre: str) -> cohere.CohereDynamicConfig:
-    return {"messages": [ChatMessage(role="user", message=f"Recommend a {genre} book")]}  # pyright: ignore [reportCallIssue, reportReturnType]
+    return {"messages": [ChatMessage(role="user", message=f"Recommend a {genre} book")]}  # pyright: ignore [reportCallIssue, reportReturnType] # [!code highlight]
 
 
 response: cohere.CohereCallResponse = recommend_book("fantasy")

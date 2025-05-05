@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 29: Few-Shot Examples
 # Generated for provider: anthropic
-# Source: content/doc/mirascope/learn/tools.mdx:1381
+# Source: content/doc/mirascope/learn/tools.mdx:1378
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import BaseTool, llm
@@ -14,11 +14,11 @@ class GetBookAuthor(BaseTool):
     title: str = Field(
         ...,
         description="The title of the book.",
-        examples=["The Name of the Wind"],
+        examples=["The Name of the Wind"], # [!code highlight]
     )
 
     model_config = ConfigDict(
-        json_schema_extra={"examples": [{"title": "The Name of the Wind"}]}
+        json_schema_extra={"examples": [{"title": "The Name of the Wind"}]} # [!code highlight]
     )
 
     def call(self) -> str:

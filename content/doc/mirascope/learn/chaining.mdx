@@ -23,24 +23,24 @@ Before diving into Mirascope's implementation, let's understand what chaining me
 
 Mirascope is designed to be Pythonic. Since calls are defined as functions, chaining them together is as simple as chaining the function calls as you would normally:
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="Shorthand">
 ```python
 from mirascope import llm
 
 
 @llm.call(provider="$PROVIDER", model="$MODEL")
-def summarize(text: str) -> str:
+def summarize(text: str) -> str: # [!code highlight]
     return f"Summarize this text: {text}"
 
 
 @llm.call(provider="$PROVIDER", model="$MODEL")
-def translate(text: str, language: str) -> str:
+def translate(text: str, language: str) -> str: # [!code highlight]
     return f"Translate this text to {language}: {text}"
 
 
-summary = summarize("Long English text here...")
-translation = translate(summary.content, "french")
+summary = summarize("Long English text here...") # [!code highlight]
+translation = translate(summary.content, "french") # [!code highlight]
 print(translation.content)
 ```
 </Tab>
@@ -51,16 +51,16 @@ from mirascope import llm, prompt_template
 
 @llm.call(provider="$PROVIDER", model="$MODEL")
 @prompt_template("Summarize this text: {text}")
-def summarize(text: str): ...
+def summarize(text: str): ... # [!code highlight]
 
 
 @llm.call(provider="$PROVIDER", model="$MODEL")
 @prompt_template("Translate this text to {language}: {text}")
-def translate(text: str, language: str): ...
+def translate(text: str, language: str): ... # [!code highlight]
 
 
-summary = summarize("Long English text here...")
-translation = translate(summary.content, "french")
+summary = summarize("Long English text here...") # [!code highlight]
+translation = translate(summary.content, "french") # [!code highlight]
 print(translation.content)
 ```
 </Tab>
@@ -72,25 +72,25 @@ One benefit of this approach is that you can chain your calls together any which
 
 In some cases you'll want to prompt engineer an entire chain rather than just chaining together individual calls. You can do this simply by calling the subchain inside the function body of the parent:
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="Shorthand">
 ```python
 from mirascope import llm
 
 
 @llm.call(provider="$PROVIDER", model="$MODEL")
-def summarize(text: str) -> str:
+def summarize(text: str) -> str: # [!code highlight]
     return f"Summarize this text: {text}"
 
 
 @llm.call(provider="$PROVIDER", model="$MODEL")
 def summarize_and_translate(text: str, language: str) -> str:
-    summary = summarize(text)
-    return f"Translate this text to {language}: {summary.content}"
+    summary = summarize(text) # [!code highlight]
+    return f"Translate this text to {language}: {summary.content}" # [!code highlight]
 
 
 response = summarize_and_translate("Long English text here...", "french")
-print(response.content)
+print(response.content) # [!code highlight]
 ```
 </Tab>
 <Tab value="Template">
@@ -100,17 +100,17 @@ from mirascope import BaseDynamicConfig, llm, prompt_template
 
 @llm.call(provider="$PROVIDER", model="$MODEL")
 @prompt_template("Summarize this text: {text}")
-def summarize(text: str): ...
+def summarize(text: str): ... # [!code highlight]
 
 
 @llm.call(provider="$PROVIDER", model="$MODEL")
-@prompt_template("Translate this text to {language}: {summary}")
+@prompt_template("Translate this text to {language}: {summary}") # [!code highlight]
 def summarize_and_translate(text: str, language: str) -> BaseDynamicConfig:
-    return {"computed_fields": {"summary": summarize(text)}}
+    return {"computed_fields": {"summary": summarize(text)}} # [!code highlight]
 
 
 response = summarize_and_translate("Long English text here...", "french")
-print(response.content)
+print(response.content) # [!code highlight]
 ```
 </Tab>
 </TabbedSection>
@@ -120,7 +120,7 @@ We recommend using nested chains for better observability when using tracing too
 <Info title="Improved tracing through computed fields" collapsible={true} defaultOpen={false}>
   If you use computed fields in your nested chains, you can always access the computed field in the response. This provides improved tracing for your chains from a single call.
 
-  <TabbedSection showLogo={true}>
+  <TabbedSection>
   <Tab value="Shorthand">
 ```python
 from mirascope import BaseDynamicConfig, Messages, llm
@@ -181,7 +181,7 @@ There are many different ways to chain calls together, often resulting in breakd
 
 Here are a few examples:
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="Conditional">
 ```python
 from enum import Enum

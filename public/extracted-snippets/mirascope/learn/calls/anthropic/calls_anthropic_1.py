@@ -7,9 +7,9 @@
 from mirascope import llm
 
 
-@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest")
+@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest") # [!code highlight]
 def recommend_book(genre: str) -> str:
-    return f"Recommend a {genre} book"
+    return f"Recommend a {genre} book" # [!code highlight]
 
 
 response: llm.CallResponse = recommend_book("fantasy")

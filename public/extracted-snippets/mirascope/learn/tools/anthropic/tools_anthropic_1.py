@@ -7,7 +7,7 @@
 from mirascope import BaseTool, llm
 from pydantic import Field
 
-
+# [!code highlight:13]
 class GetBookAuthor(BaseTool):
     """Returns the author of the book with the given title."""
 
@@ -22,15 +22,14 @@ class GetBookAuthor(BaseTool):
             return "Unknown"
 
 
-@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest", tools=[GetBookAuthor])
+@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest", tools=[GetBookAuthor]) # [!code highlight]
 def identify_author(book: str) -> str:
     return f"Who wrote {book}?"
 
 
 response = identify_author("The Name of the Wind")
-if tool := response.tool:
-    print(tool.call())
-    # Output: Patrick Rothfuss
-    print(f"Original tool call: {tool.tool_call}")
+if tool := response.tool: # [!code highlight]
+    print(tool.call()) # [!code highlight]
+    # Output: Patrick Rothfuss # [!code highlight]
 else:
     print(response.content)

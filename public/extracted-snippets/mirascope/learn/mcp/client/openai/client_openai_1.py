@@ -12,15 +12,15 @@ from mirascope.mcp import stdio_client
 
 server_file = Path(__file__).parent / "server.py"
 
-server_params = StdioServerParameters(
-    command="uv",
-    args=["run", "python", str(server_file)],
-    env=None,
-)
+server_params = StdioServerParameters( # [!code highlight]
+    command="uv", # [!code highlight]
+    args=["run", "python", str(server_file)], # [!code highlight]
+    env=None, # [!code highlight]
+) # [!code highlight]
 
 
 async def main() -> None:
-    async with stdio_client(server_params) as client:
+    async with stdio_client(server_params) as client: # [!code highlight]
         prompts = await client.list_prompts()
         print(prompts[0])
 

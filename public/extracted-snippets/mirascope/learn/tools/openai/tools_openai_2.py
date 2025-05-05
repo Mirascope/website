@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # Example 2: Basic Usage and Syntax
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/tools.mdx:86
+# Source: content/doc/mirascope/learn/tools.mdx:85
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import BaseTool, llm, prompt_template
 from pydantic import Field
 
-
+# [!code highlight:13]
 class GetBookAuthor(BaseTool):
     """Returns the author of the book with the given title."""
 
@@ -22,15 +22,14 @@ class GetBookAuthor(BaseTool):
             return "Unknown"
 
 
-@llm.call(provider="openai", model="gpt-4o-mini", tools=[GetBookAuthor])
+@llm.call(provider="openai", model="gpt-4o-mini", tools=[GetBookAuthor]) # [!code highlight]
 @prompt_template("Who wrote {book}?")
 def identify_author(book: str): ...
 
 
 response = identify_author("The Name of the Wind")
-if tool := response.tool:
-    print(tool.call())
-    # Output: Patrick Rothfuss
-    print(f"Original tool call: {tool.tool_call}")
+if tool := response.tool: # [!code highlight]
+    print(tool.call()) # [!code highlight]
+    # Output: Patrick Rothfuss # [!code highlight]
 else:
     print(response.content)

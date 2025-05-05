@@ -1,4 +1,4 @@
-from cohere import AsyncClient
+from cohere import AsyncClient # [!code highlight]
 from mirascope.core import cohere, Messages
 
 
@@ -6,5 +6,5 @@ from mirascope.core import cohere, Messages
 async def recommend_book(genre: str) -> cohere.AsyncCohereDynamicConfig:
     return {
         "messages": [Messages.User(f"Recommend a {genre} book")],
-        "client": AsyncClient(),
+        "client": AsyncClient(), # [!code highlight]
     }

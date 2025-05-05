@@ -11,7 +11,7 @@ from pydantic import BaseModel
 class Librarian(BaseModel):
     history: list[BaseMessageParam] = []
 
-    @llm.call(provider="anthropic", model="claude-3-5-sonnet-latest")
+    @llm.call(provider="anthropic", model="claude-3-5-sonnet-latest") # [!code highlight]
     @prompt_template(
         """
         SYSTEM: You are a librarian
@@ -31,7 +31,7 @@ class Librarian(BaseModel):
             if query in ["exit", "quit"]:
                 break
             print("(Assistant): ", end="", flush=True)
-            response = llm.override(self._call, provider=provider, model=model)(query)
+            response = llm.override(self._call, provider=provider, model=model)(query) # [!code highlight]
             print(response.content)
             self.history += [
                 response.user_message_param,

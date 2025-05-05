@@ -2,6 +2,7 @@ from litellm import completion
 
 
 def recommend_book(genre: str) -> str:
+    # [!code highlight:6]
     response = completion(
         model="gpt-4o-mini",
         messages=[{"role": "user", "content": f"Recommend a {genre} book"}],

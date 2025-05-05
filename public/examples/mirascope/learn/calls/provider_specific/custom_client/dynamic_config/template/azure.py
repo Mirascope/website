@@ -1,5 +1,5 @@
-from azure.ai.inference import ChatCompletionsClient
-from azure.core.credentials import AzureKeyCredential
+from azure.ai.inference import ChatCompletionsClient # [!code highlight]
+from azure.core.credentials import AzureKeyCredential # [!code highlight]
 from mirascope.core import azure, prompt_template
 
 
@@ -7,7 +7,7 @@ from mirascope.core import azure, prompt_template
 @prompt_template("Recommend a {genre} book")
 def recommend_book(genre: str) -> azure.AzureDynamicConfig:
     return {
-        "client": ChatCompletionsClient(
-            endpoint="your-endpoint", credential=AzureKeyCredential("your-credentials")
-        ),
+        "client": ChatCompletionsClient( # [!code highlight]
+            endpoint="your-endpoint", credential=AzureKeyCredential("your-credentials") # [!code highlight]
+        ), # [!code highlight]
     }

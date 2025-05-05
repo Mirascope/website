@@ -1,4 +1,4 @@
-from google.genai import Client
+from google.genai import Client # [!code highlight]
 from mirascope.core import google, prompt_template
 
 
@@ -6,7 +6,7 @@ from mirascope.core import google, prompt_template
 @prompt_template("Recommend a {genre} book")
 def recommend_book(genre: str) -> google.GoogleDynamicConfig:
     return {
-        "client": Client(
-            vertexai=True, project="your-project-id", location="us-central1"
-        ),
+        "client": Client( # [!code highlight]
+            vertexai=True, project="your-project-id", location="us-central1" # [!code highlight]
+        ), # [!code highlight]
     }

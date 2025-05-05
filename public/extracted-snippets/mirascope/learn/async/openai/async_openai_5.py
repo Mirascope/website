@@ -9,14 +9,14 @@ import asyncio
 from mirascope import llm
 
 
-@llm.call(provider="openai", model="gpt-4o-mini", stream=True)
-async def recommend_book(genre: str) -> str:
+@llm.call(provider="openai", model="gpt-4o-mini", stream=True) # [!code highlight]
+async def recommend_book(genre: str) -> str: # [!code highlight]
     return f"Recommend a {genre} book"
 
 
 async def main():
-    stream = await recommend_book("fantasy")
-    async for chunk, _ in stream:
+    stream = await recommend_book("fantasy") # [!code highlight]
+    async for chunk, _ in stream: # [!code highlight]
         print(chunk.content, end="", flush=True)
 
 

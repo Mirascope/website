@@ -1,4 +1,4 @@
-from groq import AsyncGroq
+from groq import AsyncGroq # [!code highlight]
 from mirascope.core import groq, Messages
 
 
@@ -6,5 +6,5 @@ from mirascope.core import groq, Messages
 async def recommend_book(genre: str) -> groq.AsyncGroqDynamicConfig:
     return {
         "messages": [Messages.User(f"Recommend a {genre} book")],
-        "client": AsyncGroq(),
+        "client": AsyncGroq(), # [!code highlight]
     }

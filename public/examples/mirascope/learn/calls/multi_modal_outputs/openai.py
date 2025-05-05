@@ -10,8 +10,8 @@ from mirascope.core import openai
 @openai.call(
     "gpt-4o-audio-preview",
     call_params={
-        "audio": {"voice": "alloy", "format": "wav"},
-        "modalities": ["text", "audio"],
+        "audio": {"voice": "alloy", "format": "wav"}, # [!code highlight]
+        "modalities": ["text", "audio"], # [!code highlight]
     },
 )
 def recommend_book(genre: str) -> str:
@@ -20,9 +20,9 @@ def recommend_book(genre: str) -> str:
 
 response = recommend_book(genre="fantasy")
 
-print(response.audio_transcript)
+print(response.audio_transcript) # [!code highlight]
 
-if audio := response.audio:
+if audio := response.audio: # [!code highlight]
     audio_io = io.BytesIO(audio)
 
     with wave.open(audio_io, "rb") as f:

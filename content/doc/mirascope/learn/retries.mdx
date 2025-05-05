@@ -26,13 +26,13 @@ Let's take a look at a basic Mirascope call that retries with exponential back-o
 
 ```python
 from mirascope import llm
-from tenacity import retry, stop_after_attempt, wait_exponential
+from tenacity import retry, stop_after_attempt, wait_exponential # [!code highlight]
 
 
-@retry(
-    stop=stop_after_attempt(3),
-    wait=wait_exponential(multiplier=1, min=4, max=10),
-)
+@retry( # [!code highlight]
+    stop=stop_after_attempt(3), # [!code highlight]
+    wait=wait_exponential(multiplier=1, min=4, max=10), # [!code highlight]
+) # [!code highlight]
 @llm.call(provider="$PROVIDER", model="$MODEL")
 def recommend_book(genre: str) -> str:
     return f"Recommend a {genre} book"
@@ -46,13 +46,13 @@ print(recommend_book("fantasy"))
 
 ```python
 from mirascope import llm, prompt_template
-from tenacity import retry, stop_after_attempt, wait_exponential
+from tenacity import retry, stop_after_attempt, wait_exponential # [!code highlight]
 
 
-@retry(
-    stop=stop_after_attempt(3),
-    wait=wait_exponential(multiplier=1, min=4, max=10),
-)
+@retry( # [!code highlight]
+    stop=stop_after_attempt(3), # [!code highlight]
+    wait=wait_exponential(multiplier=1, min=4, max=10), # [!code highlight]
+) # [!code highlight]
 @llm.call(provider="$PROVIDER", model="$MODEL")
 @prompt_template("Recommend a {genre} book")
 def recommend_book(genre: str): ...
@@ -79,7 +79,7 @@ Instead, you need to wrap your call and add retries to this wrapper:
 
 ```python
 from mirascope import llm
-from tenacity import retry, stop_after_attempt, wait_exponential
+from tenacity import retry, stop_after_attempt, wait_exponential # [!code highlight]
 
 
 @llm.call(provider="$PROVIDER", model="$MODEL", stream=True)
@@ -87,10 +87,10 @@ def recommend_book(genre: str) -> str:
     return f"Recommend a {genre} book"
 
 
-@retry(
-    stop=stop_after_attempt(3),
-    wait=wait_exponential(multiplier=1, min=4, max=10),
-)
+@retry( # [!code highlight]
+    stop=stop_after_attempt(3), # [!code highlight]
+    wait=wait_exponential(multiplier=1, min=4, max=10), # [!code highlight]
+) # [!code highlight]
 def stream():
     for chunk, _ in recommend_book("fantasy"):
         print(chunk.content, end="", flush=True)
@@ -112,10 +112,10 @@ from tenacity import retry, stop_after_attempt, wait_exponential
 def recommend_book(genre: str): ...
 
 
-@retry(
-    stop=stop_after_attempt(3),
-    wait=wait_exponential(multiplier=1, min=4, max=10),
-)
+@retry( # [!code highlight]
+    stop=stop_after_attempt(3), # [!code highlight]
+    wait=wait_exponential(multiplier=1, min=4, max=10), # [!code highlight]
+) # [!code highlight]
 def stream():
     for chunk, _ in recommend_book("fantasy"):
         print(chunk.content, end="", flush=True)
@@ -155,10 +155,10 @@ def identify_author(book: str) -> str:
     return f"Who wrote {book}?"
 
 
-@retry(
-    stop=stop_after_attempt(3),
-    wait=wait_exponential(multiplier=1, min=4, max=10),
-)
+@retry( # [!code highlight]
+    stop=stop_after_attempt(3), # [!code highlight]
+    wait=wait_exponential(multiplier=1, min=4, max=10), # [!code highlight]
+) # [!code highlight]
 def run():
     response = identify_author("The Name of the Wind")
     if tool := response.tool:
@@ -193,10 +193,10 @@ def get_book_author(title: str) -> str:
 def identify_author(book: str): ...
 
 
-@retry(
-    stop=stop_after_attempt(3),
-    wait=wait_exponential(multiplier=1, min=4, max=10),
-)
+@retry( # [!code highlight]
+    stop=stop_after_attempt(3), # [!code highlight]
+    wait=wait_exponential(multiplier=1, min=4, max=10), # [!code highlight]
+) # [!code highlight]
 def run():
     response = identify_author("The Name of the Wind")
     if tool := response.tool:
@@ -227,7 +227,7 @@ To make it easier to make such updates, Mirascope provides a `collect_errors` ha
 from typing import Annotated
 
 from mirascope import llm
-from mirascope.retries.tenacity import collect_errors
+from mirascope.retries.tenacity import collect_errors # [!code highlight]
 from pydantic import AfterValidator, ValidationError
 from tenacity import retry, stop_after_attempt
 
@@ -237,13 +237,13 @@ def is_upper(v: str) -> str:
     return v
 
 
-@retry(stop=stop_after_attempt(3), after=collect_errors(ValidationError))
+@retry(stop=stop_after_attempt(3), after=collect_errors(ValidationError)) # [!code highlight]
 @llm.call(
     provider="$PROVIDER",
     model="$MODEL",
     response_model=Annotated[str, AfterValidator(is_upper)],  # pyright: ignore [reportArgumentType, reportCallIssue]
 )
-def identify_author(book: str, *, errors: list[ValidationError] | None = None) -> str:
+def identify_author(book: str, *, errors: list[ValidationError] | None = None) -> str: # [!code highlight]
     previous_errors = None
     if errors:
         print(previous_errors)
@@ -267,7 +267,7 @@ print(author)
 from typing import Annotated
 
 from mirascope import BaseDynamicConfig, llm, prompt_template
-from mirascope.retries.tenacity import collect_errors
+from mirascope.retries.tenacity import collect_errors # [!code highlight]
 from pydantic import AfterValidator, ValidationError
 from tenacity import retry, stop_after_attempt
 
@@ -277,7 +277,7 @@ def is_upper(v: str) -> str:
     return v
 
 
-@retry(stop=stop_after_attempt(3), after=collect_errors(ValidationError))
+@retry(stop=stop_after_attempt(3), after=collect_errors(ValidationError)) # [!code highlight]
 @llm.call(
     provider="$PROVIDER",
     model="$MODEL",
@@ -291,7 +291,7 @@ def is_upper(v: str) -> str:
     """
 )
 def identify_author(
-    book: str, *, errors: list[ValidationError] | None = None
+    book: str, *, errors: list[ValidationError] | None = None # [!code highlight]
 ) -> BaseDynamicConfig:
     previous_errors = None
     if errors:
@@ -329,31 +329,31 @@ For example, we may want to attempt the call with Anthropic in the event that we
 from anthropic import RateLimitError as AnthropicRateLimitError
 from mirascope import llm
 from mirascope.retries import FallbackError, fallback
-from $PROVIDER import RateLimitError as OpenAIRateLimitError
+from openai import RateLimitError as OpenAIRateLimitError
 
 
-@fallback(
-    OpenAIRateLimitError,
-    [
-        {
-            "catch": AnthropicRateLimitError,
-            "provider": "anthropic",
-            "model": "claude-3-5-sonnet-latest",
-        }
-    ],
-)
-@llm.call("$PROVIDER", "$MODEL")
+@fallback( # [!code highlight]
+    OpenAIRateLimitError, # [!code highlight]
+    [ # [!code highlight]
+        { # [!code highlight]
+            "catch": AnthropicRateLimitError, # [!code highlight]
+            "provider": "anthropic", # [!code highlight]
+            "model": "claude-3-5-sonnet-latest", # [!code highlight]
+        } # [!code highlight]
+    ], # [!code highlight]
+) # [!code highlight]
+@llm.call("openai", "gpt-4o-mini")
 def answer_question(question: str) -> str:
     return f"Answer this question: {question}"
 
 
 try:
     response = answer_question("What is the meaning of life?")
-    if caught := getattr(response, "_caught", None):
+    if caught := getattr(response, "_caught", None): # [!code highlight]
         print(f"Exception caught: {caught}")
     print("### Response ###")
     print(response.content)
-except FallbackError as e:
+except FallbackError as e: # [!code highlight]
     print(e)
 ```
 
@@ -367,28 +367,28 @@ from mirascope.retries import FallbackError, fallback
 from $PROVIDER import RateLimitError as OpenAIRateLimitError
 
 
-@fallback(
-    OpenAIRateLimitError,
-    [
-        {
-            "catch": AnthropicRateLimitError,
-            "provider": "anthropic",
-            "model": "claude-3-5-sonnet-latest",
-        }
-    ],
-)
-@llm.call("$PROVIDER", "$MODEL")
+@fallback( # [!code highlight]
+    OpenAIRateLimitError, # [!code highlight]
+    [ # [!code highlight]
+        { # [!code highlight]
+            "catch": AnthropicRateLimitError, # [!code highlight]
+            "provider": "anthropic", # [!code highlight]
+            "model": "claude-3-5-sonnet-latest", # [!code highlight]
+        } # [!code highlight]
+    ], # [!code highlight]
+) # [!code highlight]
+@llm.call("openai", "gpt-4o-mini")
 @prompt_template("Answer this question: {question}")
 def answer_question(question: str): ...
 
 
 try:
     response = answer_question("What is the meaning of life?")
-    if caught := getattr(response, "_caught", None):
+    if caught := getattr(response, "_caught", None): # [!code highlight]
         print(f"Exception caught: {caught}")
     print("### Response ###")
     print(response.content)
-except FallbackError as e:
+except FallbackError as e: # [!code highlight]
     print(e)
 ```
 
@@ -420,22 +420,22 @@ from tenacity import (
 )
 
 
-@fallback(
-    RetryError,
-    [
-        {
-            "catch": RetryError,
-            "provider": "anthropic",
-            "model": "claude-3-5-sonnet-latest",
-        }
-    ],
-)
-@retry(
-    retry=retry_if_exception_type((OpenAIRateLimitError, AnthropicRateLimitError)),
-    stop=stop_after_attempt(3),
-    wait=wait_exponential(multiplier=1, min=4, max=10),
-)
-@llm.call("$PROVIDER", "$MODEL")
+@fallback( # [!code highlight]
+    RetryError, # [!code highlight]
+    [ # [!code highlight]
+        { # [!code highlight]
+            "catch": RetryError, # [!code highlight]
+            "provider": "anthropic", # [!code highlight]
+            "model": "claude-3-5-sonnet-latest", # [!code highlight]
+        } # [!code highlight]
+    ], # [!code highlight]
+) # [!code highlight]
+@retry( # [!code highlight]
+    retry=retry_if_exception_type((OpenAIRateLimitError, AnthropicRateLimitError)), # [!code highlight]
+    stop=stop_after_attempt(3), # [!code highlight]
+    wait=wait_exponential(multiplier=1, min=4, max=10), # [!code highlight]
+) # [!code highlight]
+@llm.call(provider="openai", model="gpt-4o-mini")
 def answer_question(question: str) -> str:
     return f"Answer this question: {question}"
 
@@ -467,22 +467,22 @@ from tenacity import (
 )
 
 
-@fallback(
-    RetryError,
-    [
-        {
-            "catch": RetryError,
-            "provider": "anthropic",
-            "model": "claude-3-5-sonnet-latest",
-        }
-    ],
-)
-@retry(
-    retry=retry_if_exception_type((OpenAIRateLimitError, AnthropicRateLimitError)),
-    stop=stop_after_attempt(3),
-    wait=wait_exponential(multiplier=1, min=4, max=10),
-)
-@llm.call("$PROVIDER", "$MODEL")
+@fallback( # [!code highlight]
+    RetryError, # [!code highlight]
+    [ # [!code highlight]
+        { # [!code highlight]
+            "catch": RetryError, # [!code highlight]
+            "provider": "anthropic", # [!code highlight]
+            "model": "claude-3-5-sonnet-latest", # [!code highlight]
+        } # [!code highlight]
+    ], # [!code highlight]
+) # [!code highlight]
+@retry( # [!code highlight]
+    retry=retry_if_exception_type((OpenAIRateLimitError, AnthropicRateLimitError)), # [!code highlight]
+    stop=stop_after_attempt(3), # [!code highlight]
+    wait=wait_exponential(multiplier=1, min=4, max=10), # [!code highlight]
+) # [!code highlight]
+@llm.call(provider="openai", model="gpt-4o-mini")
 @prompt_template("Answer this question: {question}")
 def answer_question(question: str): ...
 
@@ -496,6 +496,5 @@ try:
 except FallbackError as e:
     print(e)
 ```
-
 </Tab>
 </TabbedSection>

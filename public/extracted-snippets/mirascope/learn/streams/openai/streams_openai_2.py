@@ -7,14 +7,14 @@
 from mirascope import llm, prompt_template
 
 
-@llm.call(provider="openai", model="gpt-4o-mini", stream=True)
+@llm.call(provider="openai", model="gpt-4o-mini", stream=True) # [!code highlight]
 @prompt_template("Recommend a {genre} book")
 def recommend_book(genre: str): ...
 
 
-stream = recommend_book("fantasy")
-for chunk, _ in stream:
-    print(chunk.content, end="", flush=True)
+stream = recommend_book("fantasy") # [!code highlight]
+for chunk, _ in stream: # [!code highlight]
+    print(chunk.content, end="", flush=True) # [!code highlight]
 
 print(f"Content: {stream.content}")
 

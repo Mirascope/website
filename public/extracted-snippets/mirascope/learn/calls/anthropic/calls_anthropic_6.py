@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # Example 6: Common Parameters Across Providers
 # Generated for provider: anthropic
-# Source: content/doc/mirascope/learn/calls.mdx:307
+# Source: content/doc/mirascope/learn/calls.mdx:301
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm, prompt_template
 
 
-@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest", call_params={"max_tokens": 512})
+@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest", call_params={"max_tokens": 512}) # [!code highlight]
 @prompt_template("Recommend a {genre} book")
 def recommend_book(genre: str): ...
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 11: JSON Mode
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/response_models.mdx:523
+# Source: content/doc/mirascope/learn/response_models.mdx:519
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm
@@ -15,7 +15,7 @@ class Book(BaseModel):
     author: str
 
 
-@llm.call(provider="openai", model="gpt-4o-mini", response_model=Book, json_mode=True)
+@llm.call(provider="openai", model="gpt-4o-mini", response_model=Book, json_mode=True) # [!code highlight]
 def extract_book(text: str) -> str:
     return f"Extract {text}"
 

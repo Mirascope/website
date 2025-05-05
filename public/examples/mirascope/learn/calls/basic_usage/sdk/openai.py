@@ -4,6 +4,7 @@ client = OpenAI()
 
 
 def recommend_book(genre: str) -> str:
+    # [!code highlight:6]
     completion = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[{"role": "user", "content": f"Recommend a {genre} book"}],

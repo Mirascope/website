@@ -9,11 +9,11 @@ import json
 from mirascope import llm
 
 
-@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest", json_mode=True)
-def get_book_info(book_title: str) -> str:
+@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest", json_mode=True) # [!code highlight]
+def get_book_info(book_title: str) -> str: # [!code highlight]
     return f"Provide the author and genre of {book_title}"
 
 
 response = get_book_info("The Name of the Wind")
 print(json.loads(response.content))
-# Output: {'author': 'Patrick Rothfuss', 'genre': 'Fantasy'}
+# Output: {'author': 'Patrick Rothfuss', 'genre': 'Fantasy'} # [!code highlight]

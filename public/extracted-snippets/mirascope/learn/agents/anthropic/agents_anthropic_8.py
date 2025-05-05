@@ -17,13 +17,13 @@ from pydantic import BaseModel
 class Librarian(BaseModel):
     history: list[BaseMessageParam] = []
 
-    def _ask_for_help(self, question: str) -> str:
-        """Asks for help from an expert."""
-        print("[Assistant Needs Help]")
-        print(f"[QUESTION]: {question}")
-        answer = input("[ANSWER]: ")
-        print("[End Help]")
-        return answer
+    def _ask_for_help(self, question: str) -> str: # [!code highlight]
+        """Asks for help from an expert.""" # [!code highlight]
+        print("[Assistant Needs Help]") # [!code highlight]
+        print(f"[QUESTION]: {question}") # [!code highlight]
+        answer = input("[ANSWER]: ") # [!code highlight]
+        print("[End Help]") # [!code highlight]
+        return answer # [!code highlight]
 
     @llm.call(provider="anthropic", model="claude-3-5-sonnet-latest")
     @prompt_template(
@@ -34,7 +34,7 @@ class Librarian(BaseModel):
         """
     )
     def _call(self, query: str) -> BaseDynamicConfig:
-        return {"tools": [self._ask_for_help]}
+        return {"tools": [self._ask_for_help]} # [!code highlight]
 
     def _step(self, query: str) -> str:
         if query:
