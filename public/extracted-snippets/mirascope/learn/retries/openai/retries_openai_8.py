@@ -7,7 +7,7 @@
 from typing import Annotated
 
 from mirascope import BaseDynamicConfig, llm, prompt_template
-from mirascope.retries.tenacity import collect_errors
+from mirascope.retries.tenacity import collect_errors # [!code highlight]
 from pydantic import AfterValidator, ValidationError
 from tenacity import retry, stop_after_attempt
 
@@ -17,7 +17,7 @@ def is_upper(v: str) -> str:
     return v
 
 
-@retry(stop=stop_after_attempt(3), after=collect_errors(ValidationError))
+@retry(stop=stop_after_attempt(3), after=collect_errors(ValidationError)) # [!code highlight]
 @llm.call(
     provider="openai",
     model="gpt-4o-mini",
@@ -31,7 +31,7 @@ def is_upper(v: str) -> str:
     """
 )
 def identify_author(
-    book: str, *, errors: list[ValidationError] | None = None
+    book: str, *, errors: list[ValidationError] | None = None # [!code highlight]
 ) -> BaseDynamicConfig:
     previous_errors = None
     if errors:

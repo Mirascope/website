@@ -4,6 +4,7 @@ client = Groq()
 
 
 def recommend_book(genre: str) -> str:
+    # [!code highlight:6]
     completion = client.chat.completions.create(
         model="llama-3.1-70b-versatile",
         messages=[{"role": "user", "content": f"Recommend a {genre} book"}],

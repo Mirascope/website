@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 11: Error Handling
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/calls.mdx:513
+# Source: content/doc/mirascope/learn/calls.mdx:479
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm
@@ -13,7 +13,7 @@ def recommend_book(genre: str) -> str:
 
 
 try:
-    response: llm.CallResponse = recommend_book("fantasy")
+    response: llm.CallResponse = recommend_book("fantasy") # [!code highlight]
     print(response.content)
 except Exception as e:
-    print(f"Error: {str(e)}")
+    print(f"Error: {str(e)}") # [!code highlight]

@@ -1,26 +1,26 @@
 #!/usr/bin/env python3
 # Example 40: Pre-Made ToolKits
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/tools.mdx:1911
+# Source: content/doc/mirascope/learn/tools.mdx:1906
 # This file is auto-generated; any edits should be made in the source file
 
 from pathlib import Path
 
 from mirascope import BaseDynamicConfig, Messages, llm, prompt_template
-from mirascope.tools import FileSystemToolKit
+from mirascope.tools import FileSystemToolKit # [!code highlight]
 
 
 @llm.call(provider="openai", model="gpt-4o-mini")
 @prompt_template("Write a blog post about '{topic}' as a '{output_file.name}'.")
 def write_blog_post(topic: str, output_file: Path) -> BaseDynamicConfig:
-    toolkit = FileSystemToolKit(base_directory=output_file.parent)
+    toolkit = FileSystemToolKit(base_directory=output_file.parent) # [!code highlight]
     return {
         "messages": [
             Messages.User(
                 content="Write a blog post about '{topic}' as a '{output_file.name}'."
             )
         ],
-        "tools": toolkit.create_tools(),
+        "tools": toolkit.create_tools(), # [!code highlight]
     }
 
 

@@ -32,6 +32,7 @@ Streaming is a powerful feature when using LLMs that allows you to process chunk
             App-->>User: Display Chunk
         end
     ```
+</Info>
 
 This approach offers several benefits:
 
@@ -40,30 +41,29 @@ This approach offers several benefits:
 3. **Incremental processing**: Applications can process and act on partial results as they arrive.
 4. **Efficient resource use**: Memory usage can be optimized by processing chunks instead of storing the entire response.
 5. **Early termination**: If the desired information is found early in the response, processing can be stopped without waiting for the full generation.
-</Info>
 
-<Info title="API Documentation" collapsible={true} defaultOpen={false}>
+<Note title="API Documentation" collapsible={true} defaultOpen={false}>
     [`mirascope.core.base.stream`](/docs/mirascope/api)
-</Info>
+</Note>
 
 ## Basic Usage and Syntax
 
 To use streaming, simply set the `stream` parameter to `True` in your [`call`](/docs/mirascope/learn/calls) decorator:
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="Shorthand">
 ```python
 from mirascope import llm
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", stream=True)
+@llm.call(provider="$PROVIDER", model="$MODEL", stream=True) # [!code highlight]
 def recommend_book(genre: str) -> str:
     return f"Recommend a {genre} book"
 
 
-stream = recommend_book("fantasy")
-for chunk, _ in stream:
-    print(chunk.content, end="", flush=True)
+stream = recommend_book("fantasy") # [!code highlight]
+for chunk, _ in stream: # [!code highlight]
+    print(chunk.content, end="", flush=True) # [!code highlight]
 ```
 </Tab>
 <Tab value="Template">
@@ -71,14 +71,14 @@ for chunk, _ in stream:
 from mirascope import llm, prompt_template
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", stream=True)
+@llm.call(provider="$PROVIDER", model="$MODEL", stream=True) # [!code highlight]
 @prompt_template("Recommend a {genre} book")
 def recommend_book(genre: str): ...
 
 
-stream = recommend_book("fantasy")
-for chunk, _ in stream:
-    print(chunk.content, end="", flush=True)
+stream = recommend_book("fantasy") # [!code highlight]
+for chunk, _ in stream: # [!code highlight]
+    print(chunk.content, end="", flush=True) # [!code highlight]
 
 print(f"Content: {stream.content}")
 
@@ -127,7 +127,7 @@ All `BaseCallResponseChunk` objects share these common properties:
 
 Once exhausted, all `BaseStream` objects share the [same common properties and methods as `BaseCallResponse`](/docs/mirascope/learn/calls#common-response-properties-and-methods), except for `usage`, `tools`, `tool`, and `__str__`.
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="Shorthand">
 ```python
 from mirascope import llm
@@ -142,7 +142,7 @@ stream = recommend_book("fantasy")
 for chunk, _ in stream:
     print(chunk.content, end="", flush=True)
 
-print(f"Content: {stream.content}")
+print(f"Content: {stream.content}") # [!code highlight]
 ```
 </Tab>
 <Tab value="Template">
@@ -159,14 +159,14 @@ stream = recommend_book("fantasy")
 for chunk, _ in stream:
     print(chunk.content, end="", flush=True)
 
-print(f"Content: {stream.content}")
+print(f"Content: {stream.content}") # [!code highlight]
 ```
 </Tab>
 </TabbedSection>
 
 You can access the additional missing properties by using the method `construct_call_response` to reconstruct a provider-specific `BaseCallResponse` instance:
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="Shorthand">
 ```python
 from mirascope import llm
@@ -183,8 +183,8 @@ for chunk, _ in stream:
 
 print(f"Content: {stream.content}")
 
-call_response = stream.construct_call_response()
-print(f"Usage: {call_response.usage}")
+call_response = stream.construct_call_response() # [!code highlight]
+print(f"Usage: {call_response.usage}") # [!code highlight]
 ```
 </Tab>
 <Tab value="Template">
@@ -203,8 +203,8 @@ for chunk, _ in stream:
 
 print(f"Content: {stream.content}")
 
-call_response = stream.construct_call_response()
-print(f"Usage: {call_response.usage}")
+call_response = stream.construct_call_response() # [!code highlight]
+print(f"Usage: {call_response.usage}") # [!code highlight]
 ```
 </Tab>
 </TabbedSection>
@@ -217,7 +217,7 @@ print(f"Usage: {call_response.usage}")
 
 While Mirascope provides a consistent interface, you can always access the full, provider-specific response object if needed. This is available through the `chunk` property of the `BaseCallResponseChunk` object:
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="Shorthand">
 ```python
 from mirascope import llm
@@ -230,7 +230,7 @@ def recommend_book(genre: str) -> str:
 
 stream = recommend_book("fantasy")
 for chunk, _ in stream:
-    print(f"Original chunk: {chunk.chunk}")
+    print(f"Original chunk: {chunk.chunk}") # [!code highlight]
     print(chunk.content, end="", flush=True)
 ```
 </Tab>
@@ -246,7 +246,7 @@ def recommend_book(genre: str): ...
 
 stream = recommend_book("fantasy")
 for chunk, _ in stream:
-    print(f"Original chunk: {chunk.chunk}")
+    print(f"Original chunk: {chunk.chunk}") # [!code highlight]
     print(chunk.content, end="", flush=True)
 ```
 </Tab>
@@ -329,11 +329,7 @@ While most LLM providers focus on text streaming, some providers support streami
 
 For providers that support audio outputs, you can stream both text and audio responses simultaneously:
 
-<ProviderCodeBlock 
-  examplePath="mirascope/learn/streams/multi_modal_outputs"
-  collapsible={false}
-  headerText="Multi-Modal Outputs Example"
-/>
+<ProviderCodeBlock examplePath="mirascope/learn/streams/multi_modal_outputs"/>
 
 Each stream chunk provides access to:
 
@@ -360,11 +356,7 @@ This allows you to process both text and audio streams concurrently. Since audio
 
 Error handling in streams is similar to standard non-streaming calls. However, it's important to note that errors may occur during iteration rather than at the initial function call:
 
-<ProviderCodeBlock 
-  examplePath="mirascope/learn/streams/error_handling"
-  collapsible={false}
-  headerText="Error Handling Example"
-/>
+<ProviderCodeBlock examplePath="mirascope/learn/streams/error_handling"/>
 
 In these examples we show provider-specific error handling, though you can also catch generic exceptions.
 

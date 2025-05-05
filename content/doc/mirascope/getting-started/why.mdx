@@ -71,14 +71,14 @@ class Book(BaseModel):
     author: str
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", response_model=Book)
+@llm.call(provider="$PROVIDER", model="$MODEL", response_model=Book) # [!code highlight]
 def extract_book(text: str) -> str:
     return f"Extract {text}"
 
 
 book: Book = extract_book("The Name of the Wind by Patrick Rothfuss")
 print(book)
-# Output: title='The Name of the Wind' author='Patrick Rothfuss'
+# Output: title='The Name of the Wind' author='Patrick Rothfuss' # [!code highlight]
 ```
 </Tab>
 <Tab value="Template">
@@ -92,31 +92,72 @@ class Book(BaseModel):
     author: str
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", response_model=Book)
+@llm.call(provider="$PROVIDER", model="$MODEL", response_model=Book) # [!code highlight]
 @prompt_template("Extract {text}")
 def extract_book(text: str): ...
 
 
 book: Book = extract_book("The Name of the Wind by Patrick Rothfuss")
 print(book)
-# Output: title='The Name of the Wind' author='Patrick Rothfuss'
+# Output: title='The Name of the Wind' author='Patrick Rothfuss' # [!code highlight]
 ```
 </Tab>
 </TabbedSection>
 
 #### Provider SDK Equivalent
 
-<ProviderCodeBlock 
-  examplePath="mirascope/getting-started/quickstart/sdk"
-  collapsible={false}
-  headerText="Official SDK"
-/>
+<Info title="Official SDK" collapsible={false}>
+<ProviderCodeBlock examplePath="mirascope/getting-started/quickstart/sdk" />
+</Info>
 
 Reducing this boilerplate becomes increasingly important as the number and complexity of your calls grows beyond a single basic example. Furthermore, the Mirascope interface works across all of our various supported providers, so you don't need to learn the intricacies of each provider to use them the same way.
 
 ### Functional, Modular Design
 
 Mirascope's functional approach promotes modularity and reusability. You can easily compose and chain LLM calls, creating complex workflows with simple, readable code.
+
+<TabbedSection>
+<Tab value="Separate Calls">
+```python
+from mirascope import llm
+
+
+@llm.call(provider="$PROVIDER", model="$MODEL")
+def summarize(text: str) -> str: # [!code highlight]
+    return f"Summarize this text: {text}"
+
+
+@llm.call(provider="$PROVIDER", model="$MODEL")
+def translate(text: str, language: str) -> str: # [!code highlight]
+    return f"Translate this text to {language}: {text}"
+
+
+summary = summarize("Long English text here...") # [!code highlight]
+translation = translate(summary.content, "french") # [!code highlight]
+print(translation.content)
+```
+</Tab>
+<Tab value="Nested Calls">
+```python
+from mirascope import llm
+
+
+@llm.call(provider="$PROVIDER", model="$MODEL")
+def summarize(text: str) -> str: # [!code highlight]
+    return f"Summarize this text: {text}"
+
+
+@llm.call(provider="$PROVIDER", model="$MODEL")
+def summarize_and_translate(text: str, language: str) -> str:
+    summary = summarize(text) # [!code highlight]
+    return f"Translate this text to {language}: {summary.content}" # [!code highlight]
+
+
+response = summarize_and_translate("Long English text here...", "french") # [!code highlight]
+print(response.content)
+```
+</Tab>
+</TabbedSection>
 
 The goal of our design approach is to remain **Pythonic** so you can **build your way**.
 
@@ -126,52 +167,53 @@ We understand the desire for easily switching between various LLM providers. We 
 
 By implementing our LLM API call functionality as decorators, Mirascope makes implementing any and all of these paths straightforward and easy:
 
-#### Provider-Specific
-
+<TabbedSection>
+<Tab value="Provider Specific">
 ```python
 from mirascope.core import anthropic, openai
 
 
-@openai.call("gpt-4o-mini")
-def openai_recommend_book(genre: str) -> str:
+@openai.call("gpt-4o-mini") # [!code highlight]
+def openai_recommend_book(genre: str) -> str: # [!code highlight]
     return f"Recommend a {genre} book"
 
 
-@anthropic.call("claude-3-5-sonnet-20240620")
-def anthropic_recommend_book(genre: str) -> str:
+@anthropic.call("claude-3-5-sonnet-latest") # [!code highlight]
+def anthropic_recommend_book(genre: str) -> str: # [!code highlight]
     return f"Recommend a {genre} book"
 
 
-openai_response = openai_recommend_book("fantasy")
+openai_response = openai_recommend_book("fantasy") # [!code highlight]
 print(openai_response.content)
 
-anthropic_response = anthropic_recommend_book("fantasy")
+anthropic_response = anthropic_recommend_book("fantasy") # [!code highlight]
 print(anthropic_response.content)
 ```
-
-#### Provider-Agnostic
-
+</Tab>
+<Tab value="Provider Agnostic">
 ```python
 from mirascope.core import anthropic, openai, prompt_template
 
 
-@prompt_template()
-def recommend_book_prompt(genre: str) -> str:
+@prompt_template() # [!code highlight]
+def recommend_book_prompt(genre: str) -> str: # [!code highlight]
     return f"Recommend a {genre} book"
 
 
 # OpenAI
 openai_model = "gpt-4o-mini"
-openai_recommend_book = openai.call(openai_model)(recommend_book_prompt)
-openai_response = openai_recommend_book("fantasy")
+openai_recommend_book = openai.call(openai_model)(recommend_book_prompt) # [!code highlight]
+openai_response = openai_recommend_book("fantasy") # [!code highlight]
 print(openai_response.content)
 
 # Anthropic
-anthropic_model = "claude-3-5-sonnet-20240620"
-anthropic_recommend_book = anthropic.call(anthropic_model)(recommend_book_prompt)
-anthropic_response = anthropic_recommend_book("fantasy")
+anthropic_model = "claude-3-5-sonnet-latest"
+anthropic_recommend_book = anthropic.call(anthropic_model)(recommend_book_prompt) # [!code highlight]
+anthropic_response = anthropic_recommend_book("fantasy") # [!code highlight]
 print(anthropic_response.content)
 ```
+</Tab>
+</TabbedSection>
 
 ### Type Hints & Editor Support
 

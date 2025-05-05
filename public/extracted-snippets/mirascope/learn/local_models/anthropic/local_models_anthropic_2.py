@@ -8,7 +8,7 @@ from mirascope import llm
 from pydantic import BaseModel
 
 
-@llm.call("vllm", "llama3.2")
+@llm.call("vllm", "llama3.2") # [!code highlight]
 def recommend_book(genre: str) -> str:
     return f"Recommend a {genre} book"
 
@@ -23,7 +23,7 @@ class Book(BaseModel):
     author: str
 
 
-@llm.call("vllm", "llama3.2", response_model=Book)
+@llm.call("vllm", "llama3.2", response_model=Book) # [!code highlight]
 def extract_book(text: str) -> str:
     return f"Extract {text}"
 

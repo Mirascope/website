@@ -16,6 +16,7 @@ def extract_book(text: str) -> Book:
         model="claude-3-5-sonnet-latest",
         max_tokens=1024,
         messages=[{"role": "user", "content": f"Extract {text}"}],
+        # [!code highlight:21]
         tools=[
             {
                 "name": "Book",
@@ -40,4 +41,4 @@ def extract_book(text: str) -> Book:
 
 book = extract_book("The Name of the Wind by Patrick Rothfuss")
 print(book)
-# Output: title='The Name of the Wind' author='Patrick Rothfuss'
+# Output: title='The Name of the Wind' author='Patrick Rothfuss' # [!code highlight]

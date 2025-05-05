@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # Example 5: Hardcoded Evaluation Criteria
 # Generated for provider: anthropic
-# Source: content/doc/mirascope/learn/evals.mdx:281
+# Source: content/doc/mirascope/learn/evals.mdx:283
 # This file is auto-generated; any edits should be made in the source file
 
 def exact_match_eval(output: str, expected: list[str]) -> bool:
-    return all(phrase in output for phrase in expected)
+    return all(phrase in output for phrase in expected) # [!code highlight]
 
 
 # Example usage

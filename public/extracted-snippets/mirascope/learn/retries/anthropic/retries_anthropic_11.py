@@ -17,22 +17,22 @@ from tenacity import (
 )
 
 
-@fallback(
-    RetryError,
-    [
-        {
-            "catch": RetryError,
-            "provider": "anthropic",
-            "model": "claude-3-5-sonnet-latest",
-        }
-    ],
-)
-@retry(
-    retry=retry_if_exception_type((OpenAIRateLimitError, AnthropicRateLimitError)),
-    stop=stop_after_attempt(3),
-    wait=wait_exponential(multiplier=1, min=4, max=10),
-)
-@llm.call("anthropic", "claude-3-5-sonnet-latest")
+@fallback( # [!code highlight]
+    RetryError, # [!code highlight]
+    [ # [!code highlight]
+        { # [!code highlight]
+            "catch": RetryError, # [!code highlight]
+            "provider": "anthropic", # [!code highlight]
+            "model": "claude-3-5-sonnet-latest", # [!code highlight]
+        } # [!code highlight]
+    ], # [!code highlight]
+) # [!code highlight]
+@retry( # [!code highlight]
+    retry=retry_if_exception_type((OpenAIRateLimitError, AnthropicRateLimitError)), # [!code highlight]
+    stop=stop_after_attempt(3), # [!code highlight]
+    wait=wait_exponential(multiplier=1, min=4, max=10), # [!code highlight]
+) # [!code highlight]
+@llm.call(provider="openai", model="gpt-4o-mini")
 def answer_question(question: str) -> str:
     return f"Answer this question: {question}"
 

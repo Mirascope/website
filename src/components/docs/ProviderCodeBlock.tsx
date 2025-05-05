@@ -2,15 +2,11 @@ import { useEffect, useState } from "react";
 import { LoadingContent } from "@/src/components/docs";
 import { useProvider } from "./ProviderContext";
 import { CodeBlock } from "../CodeBlock";
-import { Info } from "./Callout";
-import { Wrench } from "lucide-react";
 
 interface ProviderCodeBlockProps {
   examplePath: string; // Path relative to public/examples
   language?: string;
   className?: string;
-  collapsible?: boolean;
-  headerText?: string;
 }
 
 /**
@@ -21,8 +17,6 @@ export function ProviderCodeBlock({
   examplePath,
   language = "python",
   className = "",
-  collapsible = false,
-  headerText = "",
 }: ProviderCodeBlockProps) {
   // Get the currently selected provider
   const { provider } = useProvider();
@@ -46,13 +40,9 @@ export function ProviderCodeBlock({
           if (response.ok) {
             const text = await response.text();
 
-            // Validate it's actual code and not an HTML error page
-            if (
-              text.trim().startsWith("<!DOCTYPE html>") ||
-              text.trim().startsWith("<html") ||
-              text.includes("<head>")
-            ) {
-              console.warn(`Got HTML instead of Python for ${provider}:`, text.substring(0, 100));
+            // If we get html back, it's likely a disguised 404 (returning index content)
+            if (text.trim().startsWith("<!DOCTYPE html>")) {
+              throw new Error(`Expected python code for ${provider}, got html`);
             } else {
               newCodeMap[provider] = text;
             }
@@ -84,24 +74,15 @@ export function ProviderCodeBlock({
   // Find the code for the current provider
   const currentProviderCode = codeMap[provider];
 
-  // If we don't have code for the current provider, show an empty code block
-  const codeToDisplay = currentProviderCode || "// No example available for this provider yet";
-
   // Display the code with the Info callout component
   return (
-    <Info
-      title={headerText || "Official SDK"}
-      collapsible={collapsible}
-      defaultOpen={!collapsible}
-      className={className}
-      customIcon={<Wrench className="h-3 w-3" />}
-    >
+    <>
       {!currentProviderCode && (
         <div className="bg-destructive/20 text-destructive mb-2 px-4 py-2 text-sm">
           Example for {provider} not available yet.
         </div>
       )}
-      <CodeBlock code={codeToDisplay} language={language} />
-    </Info>
+      {currentProviderCode && <CodeBlock code={currentProviderCode} language={language} />}
+    </>
   );
 }

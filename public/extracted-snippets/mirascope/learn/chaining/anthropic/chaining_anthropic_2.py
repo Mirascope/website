@@ -9,14 +9,14 @@ from mirascope import llm, prompt_template
 
 @llm.call(provider="anthropic", model="claude-3-5-sonnet-latest")
 @prompt_template("Summarize this text: {text}")
-def summarize(text: str): ...
+def summarize(text: str): ... # [!code highlight]
 
 
 @llm.call(provider="anthropic", model="claude-3-5-sonnet-latest")
 @prompt_template("Translate this text to {language}: {text}")
-def translate(text: str, language: str): ...
+def translate(text: str, language: str): ... # [!code highlight]
 
 
-summary = summarize("Long English text here...")
-translation = translate(summary.content, "french")
+summary = summarize("Long English text here...") # [!code highlight]
+translation = translate(summary.content, "french") # [!code highlight]
 print(translation.content)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 10: Accessing Original Call Response On Error
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/response_models.mdx:479
+# Source: content/doc/mirascope/learn/response_models.mdx:476
 # This file is auto-generated; any edits should be made in the source file
 
 from typing import Annotated
@@ -31,7 +31,6 @@ try:
     book = extract_book("The Name of the Wind by Patrick Rothfuss")
     print(book)
 except ValidationError as e:
-    print(f"Error: {str(e)}")
-    response = e._response  # pyright: ignore[reportAttributeAccessIssue]
-    print(response.model_dump())
-    # > {'metadata': {}, 'response': {'id': ...}, ...}
+    response = e._response  # pyright: ignore[reportAttributeAccessIssue] # [!code highlight]
+    print(response.model_dump()) # [!code highlight]
+    # > {'metadata': {}, 'response': {'id': ...}, ...} # [!code highlight]

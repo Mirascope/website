@@ -19,10 +19,10 @@ You can then use the `with_hyperdx` decorator to automatically log calls:
 <Tab value="Shorthand">
 ```python
 from mirascope import llm
-from mirascope.integrations.otel import with_hyperdx
+from mirascope.integrations.otel import with_hyperdx # [!code highlight]
 
 
-@with_hyperdx()
+@with_hyperdx() # [!code highlight]
 @llm.call(provider="$PROVIDER", model="$MODEL")
 def recommend_book(genre: str) -> str:
     return f"Recommend a {genre} book."
@@ -35,10 +35,10 @@ print(recommend_book("fantasy"))
 <Tab value="Template">
 ```python
 from mirascope import llm, prompt_template
-from mirascope.integrations.otel import with_hyperdx
+from mirascope.integrations.otel import with_hyperdx # [!code highlight]
 
 
-@with_hyperdx()
+@with_hyperdx() # [!code highlight]
 @llm.call(provider="$PROVIDER", model="$MODEL")
 @prompt_template("Recommend a {genre} book")
 def recommend_book(genre: str): ...
@@ -50,12 +50,4 @@ print(recommend_book("fantasy"))
 </Tab>
 </TabbedSection>
 
-This will give you:
-
-* A trace around the `recommend_book` function that captures details about the prompt, inputs, and outputs
-* Structured logging of LLM calls
-* Token usage and cost metrics
-
-<Callout type="note" title="Handling streams">
-  When logging streams, the span will not be logged until the stream has been exhausted. This is a function of how streaming works.
-</Callout>
+This decorator is a simple wrapper on top of our [OpenTelemetry integration](/docs/mirascope/integrations/otel).

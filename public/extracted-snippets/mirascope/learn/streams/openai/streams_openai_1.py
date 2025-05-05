@@ -7,11 +7,11 @@
 from mirascope import llm
 
 
-@llm.call(provider="openai", model="gpt-4o-mini", stream=True)
+@llm.call(provider="openai", model="gpt-4o-mini", stream=True) # [!code highlight]
 def recommend_book(genre: str) -> str:
     return f"Recommend a {genre} book"
 
 
-stream = recommend_book("fantasy")
-for chunk, _ in stream:
-    print(chunk.content, end="", flush=True)
+stream = recommend_book("fantasy") # [!code highlight]
+for chunk, _ in stream: # [!code highlight]
+    print(chunk.content, end="", flush=True) # [!code highlight]

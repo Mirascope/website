@@ -21,15 +21,15 @@ class Librarian(BaseModel):
 
     def run(
         self,
-        provider: llm.Provider,
-        model: str,
+        provider: llm.Provider, # [!code highlight]
+        model: str, # [!code highlight]
     ) -> None:
         while True:
             query = input("(User): ")
             if query in ["exit", "quit"]:
                 break
             print("(Assistant): ", end="", flush=True)
-            response = llm.override(self._call, provider=provider, model=model)(query)
+            response = llm.override(self._call, provider=provider, model=model)(query) # [!code highlight]
             print(response.content)
             self.history += [
                 response.user_message_param,

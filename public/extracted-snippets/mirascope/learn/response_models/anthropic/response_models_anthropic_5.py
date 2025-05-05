@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # Example 5: Built-In Types
 # Generated for provider: anthropic
-# Source: content/doc/mirascope/learn/response_models.mdx:155
+# Source: content/doc/mirascope/learn/response_models.mdx:153
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm
 
 
-@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest", response_model=list[str])
+@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest", response_model=list[str]) # [!code highlight]
 def extract_book(texts: list[str]) -> str:
     return f"Extract book titles from {texts}"
 
@@ -19,4 +19,4 @@ book = extract_book(
     ]
 )
 print(book)
-# Output: ["The Name of the Wind", "Mistborn: The Final Empire"]
+# Output: ["The Name of the Wind", "Mistborn: The Final Empire"] # [!code highlight]

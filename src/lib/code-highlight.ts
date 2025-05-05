@@ -127,19 +127,26 @@ export async function highlightCode(code: string, language: string = "text", met
   try {
     // Process the code with meta information for line highlighting
     const processedCode = processCodeWithMetaHighlighting(code.trim(), meta, language);
+    // Use the v1 matching algorithm to ensure we highlight bare comment lines
+    // See: https://github.com/shikijs/shiki/issues/1006
+    // Note: If ever migrating to the v3 algorithm, it will create an off-by-one
+    // issue with every block like this: # [!code highlight:21]
+    // (The line counting behavior in v1 is weird with comments, which is the
+    // motivation for the v3 algorithm.) So change with care.
+    const transformer = () => transformerNotationHighlight({ matchAlgorithm: "v1" });
 
     // Generate HTML for both light and dark themes
     // Using direct codeToHtml call from shiki
     const lightThemeHtml = await codeToHtml(processedCode, {
       lang: language || "text",
       theme: "github-light", // Use original theme
-      transformers: [transformerNotationHighlight()],
+      transformers: [transformer()],
     });
 
     const darkThemeHtml = await codeToHtml(processedCode, {
       lang: language || "text",
       theme: "github-dark-default", // Use original theme
-      transformers: [transformerNotationHighlight()],
+      transformers: [transformer()],
     });
 
     // Return both versions for theme switching

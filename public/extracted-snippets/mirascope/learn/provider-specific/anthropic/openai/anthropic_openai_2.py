@@ -12,7 +12,7 @@ from mirascope.core import anthropic
     "claude-3-5-sonnet-20240620",
     call_params={
         "max_tokens": 1024,
-        "extra_headers": {"anthropic-beta": "prompt-caching-2024-07-31"},
+        "extra_headers": {"anthropic-beta": "prompt-caching-2024-07-31"}, # [!code highlight]
     },
 )
 @prompt_template(
@@ -23,7 +23,7 @@ from mirascope.core import anthropic
 
     Here is the book in it's entirety: {book}
 
-    {:cache_control}
+    {:cache_control} # [!code highlight]
 
     USER: {query}
     """

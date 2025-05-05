@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 19: Streaming Partial Tools
 # Generated for provider: anthropic
-# Source: content/doc/mirascope/learn/tools.mdx:909
+# Source: content/doc/mirascope/learn/tools.mdx:906
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm
@@ -25,7 +25,7 @@ def get_book_author(title: str) -> str:
     provider="anthropic",
     model="claude-3-5-sonnet-latest",
     tools=[get_book_author],
-    stream={"partial_tools": True},
+    stream={"partial_tools": True}, # [!code highlight]
 )
 def identify_authors(books: list[str]) -> str:
     return f"Who wrote {books}?"
@@ -33,7 +33,7 @@ def identify_authors(books: list[str]) -> str:
 
 stream = identify_authors(["The Name of the Wind", "Mistborn: The Final Empire"])
 for chunk, tool in stream:
-    if tool:
+    if tool: # [!code highlight]
         if tool.delta is not None:  # partial tool
             print(tool.delta)
         else:

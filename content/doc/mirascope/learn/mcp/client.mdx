@@ -24,15 +24,15 @@ from mirascope.mcp import stdio_client
 
 server_file = Path(__file__).parent / "server.py"
 
-server_params = StdioServerParameters(
-    command="uv",
-    args=["run", "python", str(server_file)],
-    env=None,
-)
+server_params = StdioServerParameters( # [!code highlight]
+    command="uv", # [!code highlight]
+    args=["run", "python", str(server_file)], # [!code highlight]
+    env=None, # [!code highlight]
+) # [!code highlight]
 
 
 async def main() -> None:
-    async with stdio_client(server_params) as client:
+    async with stdio_client(server_params) as client: # [!code highlight]
         prompts = await client.list_prompts()
         print(prompts[0])
 
@@ -55,17 +55,17 @@ This example demonstrates:
 To connect to an MCP server, use the `stdio_client` context manager with appropriate server parameters:
 
 ```python-no-extract
-server_file = Path(__file__).parent / "server.py"
+server_file = Path(__file__).parent / "server.py" # [!code highlight]
 
-server_params = StdioServerParameters(
-    command="uv",
-    args=["run", "python", str(server_file)],
-    env=None,
-)
+server_params = StdioServerParameters( # [!code highlight]
+    command="uv", # [!code highlight]
+    args=["run", "python", str(server_file)], # [!code highlight]
+    env=None, # [!code highlight]
+) # [!code highlight]
 
 
 async def main() -> None:
-    async with stdio_client(server_params) as client:
+    async with stdio_client(server_params) as client: # [!code highlight]
         prompts = await client.list_prompts()
         print(prompts[0])
 
@@ -81,7 +81,7 @@ You can also use the `sse_client` instead to connect to an MCP server side event
 from mirascope.mcp import sse_client
 
 
-async with sse_client("http://localhost:8000") as client:
+async with sse_client("http://localhost:8000") as client: # [!code highlight]
     prompts = await client.list_prompts()
     print(prompts[0])
 ```
@@ -127,20 +127,20 @@ If the resource is text, it will be converted into a `TextPart` instance. Otherw
 Tools from the server can be used with Mirascope's standard call decorators:
 
 ```python-no-extract
-        tools = await client.list_tools()
+        tools = await client.list_tools() # [!code highlight]
 
         @llm.call(
             provider="$PROVIDER",
             model="$MODEL",
-            tools=tools,
+            tools=tools, # [!code highlight]
         )
         def recommend_book(genre: str) -> str:
             return f"Recommend a {genre} book"
 
-        if tool := recommend_book("fantasy").tool:
-            call_result = await tool.call()
-            print(call_result)
-            # ['The Name of the Wind by Patrick Rothfuss']
+        if tool := recommend_book("fantasy").tool: # [!code highlight]
+            call_result = await tool.call() # [!code highlight]
+            print(call_result) # [!code highlight]
+            # ['The Name of the Wind by Patrick Rothfuss'] # [!code highlight]
 ```
 
 The client automatically converts server tools into Mirascope-compatible tool types that can be used with any provider's call decorator.

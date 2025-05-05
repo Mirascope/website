@@ -165,8 +165,8 @@ const docsSection: SectionSpec = {
 
       children: [
         {
-          slug: "langfuse",
-          label: "Langfuse",
+          slug: "otel",
+          label: "OpenTelemetry",
           hasExtractableSnippets: true,
         },
         {
@@ -180,8 +180,8 @@ const docsSection: SectionSpec = {
           hasExtractableSnippets: true,
         },
         {
-          slug: "otel",
-          label: "OpenTelemetry",
+          slug: "langfuse",
+          label: "Langfuse",
           hasExtractableSnippets: true,
         },
       ],

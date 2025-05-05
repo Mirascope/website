@@ -3,6 +3,7 @@ import json
 from litellm import completion
 
 
+# [!code highlight:8]
 def get_book_author(title: str) -> str:
     if title == "The Name of the Wind":
         return "Patrick Rothfuss"
@@ -16,6 +17,7 @@ def identify_author(book: str) -> str:
     response = completion(
         model="gpt-4o-mini",
         messages=[{"role": "user", "content": f"Who wrote {book}"}],
+        # [!code highlight:15]
         tools=[
             {
                 "function": {
@@ -31,6 +33,7 @@ def identify_author(book: str) -> str:
             }
         ],
     )
+    # [!code highlight:4]
     if tool_calls := response.choices[0].message.tool_calls:  # pyright: ignore [reportAttributeAccessIssue]
         if tool_calls[0].function.name == "get_book_author":
             return get_book_author(**json.loads(tool_calls[0].function.arguments))

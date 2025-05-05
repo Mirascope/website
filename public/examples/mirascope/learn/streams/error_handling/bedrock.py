@@ -1,4 +1,4 @@
-from mirascope.core import bedrock
+from mirascope.core import bedrock # [!code highlight]
 from botocore.exceptions import ClientError
 
 
@@ -7,8 +7,8 @@ def recommend_book(genre: str) -> str:
     return f"Recommend a {genre} book"
 
 
-try:
+try: # [!code highlight]
     for chunk, _ in recommend_book("fantasy"):
         print(chunk.content, end="", flush=True)
-except ClientError as e:
+except ClientError as e: # [!code highlight]
     print(f"Error: {str(e)}")

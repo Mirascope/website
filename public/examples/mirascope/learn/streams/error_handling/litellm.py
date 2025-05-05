@@ -1,4 +1,4 @@
-from litellm.exceptions import BadRequestError
+from litellm.exceptions import BadRequestError # [!code highlight]
 from mirascope.core import litellm
 
 
@@ -7,8 +7,8 @@ def recommend_book(genre: str) -> str:
     return f"Recommend a {genre} book"
 
 
-try:
+try: # [!code highlight]
     for chunk, _ in recommend_book("fantasy"):
         print(chunk.content, end="", flush=True)
-except BadRequestError as e:
+except BadRequestError as e: # [!code highlight]
     print(f"Error: {str(e)}")

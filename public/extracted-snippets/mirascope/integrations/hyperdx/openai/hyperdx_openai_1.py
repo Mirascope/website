@@ -5,10 +5,10 @@
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm
-from mirascope.integrations.otel import with_hyperdx
+from mirascope.integrations.otel import with_hyperdx # [!code highlight]
 
 
-@with_hyperdx()
+@with_hyperdx() # [!code highlight]
 @llm.call(provider="openai", model="gpt-4o-mini")
 def recommend_book(genre: str) -> str:
     return f"Recommend a {genre} book."

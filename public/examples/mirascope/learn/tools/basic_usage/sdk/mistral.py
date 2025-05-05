@@ -7,6 +7,7 @@ from mistralai import Mistral
 client = Mistral(api_key=os.environ["MISTRAL_API_KEY"])
 
 
+# [!code highlight:8]
 def get_book_author(title: str) -> str:
     if title == "The Name of the Wind":
         return "Patrick Rothfuss"
@@ -20,6 +21,7 @@ def identify_author(book: str) -> str | None:
     completion = client.chat.complete(
         model="mistral-large-latest",
         messages=[{"role": "user", "content": f"Who wrote {book}?"}],
+        # [!code highlight:15]
         tools=[
             {
                 "function": {
@@ -35,6 +37,7 @@ def identify_author(book: str) -> str | None:
             }
         ],
     )
+    # [!code highlight:8]
     if not completion or not completion.choices:
         return None
     if tool_calls := completion.choices[0].message.tool_calls:

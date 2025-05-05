@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 # Example 10: Metadata
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/calls.mdx:391
+# Source: content/doc/mirascope/learn/calls.mdx:385
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import BaseDynamicConfig, llm, prompt_template
 
 
 @llm.call(provider="openai", model="gpt-4o-mini")
-@prompt_template("Recommend a {genre} book")
+@prompt_template("Recommend a {genre} book") # [!code highlight]
 def recommend_book(genre: str) -> BaseDynamicConfig:
     return {
         "call_params": {"max_tokens": 512},
-        "metadata": {"tags": {"version:0001"}},
+        "metadata": {"tags": {"version:0001"}}, # [!code highlight]
     }
 
 

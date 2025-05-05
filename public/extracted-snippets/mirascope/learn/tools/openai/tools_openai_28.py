@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 28: Validation and Error Handling
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/tools.mdx:1322
+# Source: content/doc/mirascope/learn/tools.mdx:1319
 # This file is auto-generated; any edits should be made in the source file
 
 from typing import Annotated
@@ -15,7 +15,7 @@ def is_upper(v: str) -> str:
     return v
 
 
-def get_book_author(title: Annotated[str, AfterValidator(is_upper)]) -> str:
+def get_book_author(title: Annotated[str, AfterValidator(is_upper)]) -> str: # [!code highlight]
     """Returns the author of the book with the given title
 
     Args:
@@ -35,12 +35,12 @@ def identify_author(book: str): ...
 
 
 response = identify_author("The Name of the Wind")
-try:
+try: # [!code highlight]
     if tool := response.tool:
         print(tool.call())
     else:
         print(response.content)
-except ValidationError as e:
+except ValidationError as e: # [!code highlight]
     print(e)
     # > 1 validation error for GetBookAuthor
     #   title

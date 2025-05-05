@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 17: Streaming Partial Tools
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/tools.mdx:823
+# Source: content/doc/mirascope/learn/tools.mdx:820
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import BaseTool, llm
@@ -26,7 +26,7 @@ class GetBookAuthor(BaseTool):
     provider="openai",
     model="gpt-4o-mini",
     tools=[GetBookAuthor],
-    stream={"partial_tools": True},
+    stream={"partial_tools": True}, # [!code highlight]
 )
 def identify_authors(books: list[str]) -> str:
     return f"Who wrote {books}?"
@@ -34,7 +34,7 @@ def identify_authors(books: list[str]) -> str:
 
 stream = identify_authors(["The Name of the Wind", "Mistborn: The Final Empire"])
 for chunk, tool in stream:
-    if tool:
+    if tool: # [!code highlight]
         if tool.delta is not None:  # partial tool
             print(tool.delta)
         else:

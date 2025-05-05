@@ -1,5 +1,5 @@
-from azure.ai.inference.aio import ChatCompletionsClient as AsyncChatCompletionsClient
-from azure.core.credentials import AzureKeyCredential
+from azure.ai.inference.aio import ChatCompletionsClient as AsyncChatCompletionsClient # [!code highlight]
+from azure.core.credentials import AzureKeyCredential # [!code highlight]
 from mirascope.core import azure, Messages
 
 
@@ -7,7 +7,7 @@ from mirascope.core import azure, Messages
 async def recommend_book(genre: str) -> azure.AsyncAzureDynamicConfig:
     return {
         "messages": [Messages.User(f"Recommend a {genre} book")],
-        "client": AsyncChatCompletionsClient(
-            endpoint="your-endpoint", credential=AzureKeyCredential("your-credentials")
-        ),
+        "client": AsyncChatCompletionsClient( # [!code highlight]
+            endpoint="your-endpoint", credential=AzureKeyCredential("your-credentials") # [!code highlight]
+        ), # [!code highlight]
     }

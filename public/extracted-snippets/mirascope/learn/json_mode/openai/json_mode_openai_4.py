@@ -14,8 +14,8 @@ from mirascope import llm, prompt_template
 def get_book_info(book_title: str): ...
 
 
-try:
+try: # [!code highlight]
     response = get_book_info("The Name of the Wind")
     print(json.loads(response.content))
-except json.JSONDecodeError:
+except json.JSONDecodeError: # [!code highlight]
     print("The model produced invalid JSON")

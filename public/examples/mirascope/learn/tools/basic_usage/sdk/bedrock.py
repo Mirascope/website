@@ -4,6 +4,7 @@ import boto3
 bedrock_client = boto3.client(service_name="bedrock-runtime")
 
 
+# [!code highlight:8]
 def get_book_author(title: str) -> str:
     if title == "The Name of the Wind":
         return "Patrick Rothfuss"
@@ -16,6 +17,7 @@ def get_book_author(title: str) -> str:
 def identify_author(book: str) -> str:
     messages = [{"role": "user", "content": [{"text": f"Who wrote {book}?"}]}]
     tool_config = {
+        # [!code highlight:21]
         "tools": [
             {
                 "toolSpec": {
@@ -47,6 +49,7 @@ def identify_author(book: str) -> str:
     messages.append(output_message)
     stop_reason = response["stopReason"]
 
+    # [!code highlight:8]
     if stop_reason == "tool_use":
         tool_requests = output_message["content"]
         for tool_request in tool_requests:

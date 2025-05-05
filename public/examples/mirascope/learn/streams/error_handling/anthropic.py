@@ -1,4 +1,4 @@
-from anthropic import AnthropicError
+from anthropic import AnthropicError # [!code highlight]
 from mirascope.core import Messages, anthropic
 
 
@@ -7,8 +7,8 @@ def recommend_book(genre: str) -> Messages.Type:
     return Messages.User(f"Recommend a {genre} book")
 
 
-try:
+try: # [!code highlight]
     for chunk, _ in recommend_book("fantasy"):
         print(chunk.content, end="", flush=True)
-except AnthropicError as e:
+except AnthropicError as e: # [!code highlight]
     print(f"Error: {str(e)}")

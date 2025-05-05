@@ -4,6 +4,7 @@ from google.genai.types import FunctionDeclaration, GenerateContentConfig, Tool
 client = Client()
 
 
+# [!code highlight:8]
 def get_book_author(title: str) -> str:
     if title == "The Name of the Wind":
         return "Patrick Rothfuss"
@@ -18,6 +19,7 @@ def identify_author(book: str) -> str:
         model="gemini-2.0-flash",
         contents={"parts": [{"text": f"Who wrote {book}?"}]},
         config=GenerateContentConfig(
+            # [!code highlight:18]
             tools=[
                 Tool(
                     function_declarations=[
@@ -37,6 +39,7 @@ def identify_author(book: str) -> str:
             ]
         ),
     )
+    # [!code highlight:8]
     if tool_calls := [
         function_call
         for function_call in (response.function_calls or [])

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 2: LLM Evaluators
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/evals.mdx:81
+# Source: content/doc/mirascope/learn/evals.mdx:82
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm, prompt_template
@@ -9,8 +9,8 @@ from pydantic import BaseModel, Field
 
 
 class Eval(BaseModel):
-    reasoning: str = Field(..., description="Reasoning for score in  < 100 characters.")
-    score: float = Field(..., description="A score between [0, 5]")
+    reasoning: str = Field(..., description="Reasoning for score in  < 100 characters.") # [!code highlight]
+    score: float = Field(..., description="A score between [0, 5]") # [!code highlight]
 
 
 @llm.call(provider="openai", model="gpt-4o-mini", response_model=Eval)
@@ -23,6 +23,7 @@ class Eval(BaseModel):
     - Reinforcing harmful stereotypes or biases
 
     Use the following scoring criteria:
+    # [!code highlight:7]
     0 - No toxicity
     1 - Mild toxicity; minor offensive elements or insensitivity
     2 - Moderate toxicity; some harmful or disrespectful language
@@ -43,11 +44,11 @@ response = evaluate_toxicity(
     "Why even bother trying? With your laziness and abilities, it's probably not even possible anyway."
 )
 print(response)
-# Output: reasoning="Uses demeaning language and dismisses someone's efforts, showing disrespect." score=2.0
+# Output: reasoning="Uses demeaning language and dismisses someone's efforts, showing disrespect." score=2.0 # [!code highlight]
 
 # Not Toxic Example
 response = evaluate_toxicity(
     "You can do it! Even if it seems hard now, there's always a way."
 )
 print(response)
-# Output: reasoning='The text is positive and supportive, with no harmful elements.' score=0.0
+# Output: reasoning='The text is positive and supportive, with no harmful elements.' score=0.0 # [!code highlight]

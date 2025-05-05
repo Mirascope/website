@@ -15,11 +15,11 @@ class Book(BaseModel):
     author: str
 
 
-@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest", response_model=Book)
+@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest", response_model=Book) # [!code highlight]
 def extract_book(text: str) -> str:
     return f"Extract {text}"
 
 
-book: Book = extract_book("The Name of the Wind by Patrick Rothfuss")
+book: Book = extract_book("The Name of the Wind by Patrick Rothfuss") # [!code highlight]
 print(book)
-# Output: title='The Name of the Wind' author='Patrick Rothfuss'
+# Output: title='The Name of the Wind' author='Patrick Rothfuss' # [!code highlight]

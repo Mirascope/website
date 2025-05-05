@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 12: JSON Mode
 # Generated for provider: anthropic
-# Source: content/doc/mirascope/learn/response_models.mdx:546
+# Source: content/doc/mirascope/learn/response_models.mdx:542
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm, prompt_template
@@ -15,7 +15,7 @@ class Book(BaseModel):
     author: str
 
 
-@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest", response_model=Book, json_mode=True)
+@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest", response_model=Book, json_mode=True) # [!code highlight]
 @prompt_template("Extract {text}")
 def extract_book(text: str): ...
 

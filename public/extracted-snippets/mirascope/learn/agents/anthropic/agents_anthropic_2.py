@@ -9,13 +9,13 @@ from pydantic import BaseModel
 
 
 class Librarian(BaseModel):
-    history: list[BaseMessageParam] = []
+    history: list[BaseMessageParam] = [] # [!code highlight]
 
     @llm.call(provider="anthropic", model="claude-3-5-sonnet-latest")
     @prompt_template(
         """
         SYSTEM: You are a librarian
-        MESSAGES: {self.history}
+        MESSAGES: {self.history} # [!code highlight]
         USER: {query}
         """
     )
@@ -29,10 +29,10 @@ class Librarian(BaseModel):
             print("(Assistant): ", end="", flush=True)
             response = self._call(query)
             print(response.content)
-            self.history += [
-                Messages.User(query),
-                response.message_param,
-            ]
+            self.history += [ # [!code highlight]
+                Messages.User(query), # [!code highlight]
+                response.message_param, # [!code highlight]
+            ] # [!code highlight]
 
 
 Librarian().run()

@@ -25,13 +25,13 @@ First, let's look at a basic example:
 from mirascope import prompt_template
 
 
-@prompt_template()
-def recommend_book_prompt(genre: str) -> str:
-    return f"Recommend a {genre} book"
+@prompt_template() # [!code highlight]
+def recommend_book_prompt(genre: str) -> str: # [!code highlight]
+    return f"Recommend a {genre} book" # [!code highlight]
 
 
 print(recommend_book_prompt("fantasy"))
-# Output: [BaseMessageParam(role='user', content='Recommend a fantasy book')]
+# Output: [BaseMessageParam(role='user', content='Recommend a fantasy book')] # [!code highlight]
 ```
 </Tab>
 <Tab value="Template">
@@ -39,12 +39,12 @@ print(recommend_book_prompt("fantasy"))
 from mirascope import prompt_template
 
 
-@prompt_template("Recommend a {genre} book")
-def recommend_book_prompt(genre: str): ...
+@prompt_template("Recommend a {genre} book") # [!code highlight]
+def recommend_book_prompt(genre: str): ... # [!code highlight]
 
 
 print(recommend_book_prompt("fantasy"))
-# Output: [BaseMessageParam(role='user', content='Recommend a fantasy book')]
+# Output: [BaseMessageParam(role='user', content='Recommend a fantasy book')] # [!code highlight]
 ```
 </Tab>
 </TabbedSection>
@@ -78,15 +78,15 @@ from mirascope import Messages, prompt_template
 @prompt_template()
 def recommend_book_prompt(genre: str) -> Messages.Type:
     return [
-        Messages.System("You are a librarian"),
-        Messages.User(f"Recommend a {genre} book"),
+        Messages.System("You are a librarian"), # [!code highlight]
+        Messages.User(f"Recommend a {genre} book"), # [!code highlight]
     ]
 
 
 print(recommend_book_prompt("fantasy"))
 # Output: [
-#   BaseMessageParam(role='system', content='You are a librarian'),
-#   BaseMessageParam(role='user', content='Recommend a fantasy book'),
+#   BaseMessageParam(role='system', content='You are a librarian'), # [!code highlight]
+#   BaseMessageParam(role='user', content='Recommend a fantasy book'), # [!code highlight]
 # ]
 ```
 </Tab>
@@ -97,8 +97,8 @@ from mirascope import prompt_template
 
 @prompt_template(
     """
-    SYSTEM: You are a librarian
-    USER: Recommend a {genre} book
+    SYSTEM: You are a librarian # [!code highlight]
+    USER: Recommend a {genre} book # [!code highlight]
     """
 )
 def recommend_book_prompt(genre: str): ...
@@ -106,8 +106,8 @@ def recommend_book_prompt(genre: str): ...
 
 print(recommend_book_prompt("fantasy"))
 # Output: [
-#   BaseMessageParam(role='system', content='You are a librarian'),
-#   BaseMessageParam(role='user', content='Recommend a fantasy book'),
+#   BaseMessageParam(role='system', content='You are a librarian'), # [!code highlight]
+#   BaseMessageParam(role='user', content='Recommend a fantasy book'), # [!code highlight]
 # ]
 ```
 </Tab>
@@ -138,14 +138,14 @@ from mirascope import prompt_template
 def recommend_book_prompt(genre: str) -> str:
     return inspect.cleandoc(
         f"""
-        Recommend a {genre} book.
-        Output in the format Title by Author.
+        Recommend a {genre} book. # [!code highlight]
+        Output in the format Title by Author. # [!code highlight]
         """
     )
 
 
 print(recommend_book_prompt("fantasy"))
-# Output: [BaseMessageParam(role='user', content='Recommend a fantasy book.\nOutput in the format Title by Author.')]
+# Output: [BaseMessageParam(role='user', content='Recommend a fantasy book.\nOutput in the format Title by Author.')] # [!code highlight]
 ```
 </Tab>
 <Tab value="Template">
@@ -155,16 +155,15 @@ from mirascope import prompt_template
 
 @prompt_template(
     """
-    USER:
-    Recommend a {genre} book.
-    Output in the format Title by Author.
+    Recommend a {genre} book. # [!code highlight]
+    Output in the format Title by Author. # [!code highlight]
     """
 )
 def recommend_book_prompt(genre: str): ...
 
 
 print(recommend_book_prompt("fantasy"))
-# Output: [BaseMessageParam(role='user', content='Recommend a fantasy book.\nOutput in the format Title by Author.')]
+# Output: [BaseMessageParam(role='user', content='Recommend a fantasy book.\nOutput in the format Title by Author.')] # [!code highlight]
 ```
 </Tab>
 </TabbedSection>
@@ -280,7 +279,7 @@ from PIL import Image
 
 @prompt_template()
 def recommend_book_prompt(previous_book: Image.Image) -> list:
-    return ["I just read this book:", previous_book, "What should I read next?"]
+    return ["I just read this book:", previous_book, "What should I read next?"] # [!code highlight]
 
 
 with Image.open("path/to/image.jpg") as image:
@@ -289,9 +288,9 @@ with Image.open("path/to/image.jpg") as image:
 #   BaseMessageParam(
 #     role='user',
 #     content=[
-#       ContentPartParam(type='text', text='I just read this book:'),
-#       ContentPartParam(type='image', image=<PIL.JpegImagePlugin.JpegImageFile image mode=RGB size=1000x1000>),
-#       ContentPartParam(type='text', text='What should I read next?')
+#       ContentPartParam(type='text', text='I just read this book:'), # [!code highlight]
+#       ContentPartParam(type='image', image=<PIL.JpegImagePlugin.JpegImageFile image mode=RGB size=1000x1000>), # [!code highlight]
+#       ContentPartParam(type='text', text='What should I read next?') # [!code highlight]
 #     ]
 #   )
 # ]
@@ -304,7 +303,7 @@ from PIL import Image
 
 
 @prompt_template(
-    "I just read this book: {previous_book:image} What should I read next?"
+    "I just read this book: {previous_book:image} What should I read next?" # [!code highlight]
 )
 def recommend_book_prompt(previous_book: Image.Image): ...
 
@@ -315,9 +314,9 @@ with Image.open("path/to/image.jpg") as image:
 #   BaseMessageParam(
 #     role='user',
 #     content=[
-#       ContentPartParam(type='text', text='I just read this book:'),
-#       ContentPartParam(type='image', image=<PIL.JpegImagePlugin.JpegImageFile image mode=RGB size=1000x1000>),
-#       ContentPartParam(type='text', text='What should I read next?')
+#       ContentPartParam(type='text', text='I just read this book:'), # [!code highlight]
+#       ContentPartParam(type='image', image=<PIL.JpegImagePlugin.JpegImageFile image mode=RGB size=1000x1000>), # [!code highlight]
+#       ContentPartParam(type='text', text='What should I read next?') # [!code highlight]
 #     ]
 #   )
 # ]
@@ -346,7 +345,7 @@ from pydub import AudioSegment
 
 @prompt_template()
 def identify_book_prompt(audio_wave: AudioSegment) -> Messages.Type:
-    return ["Here's an audio book snippet:", audio_wave, "What book is this?"]
+    return ["Here's an audio book snippet:", audio_wave, "What book is this?"] # [!code highlight]
 
 
 with open("....", "rb") as audio:
@@ -355,9 +354,9 @@ with open("....", "rb") as audio:
 #     BaseMessageParam(
 #         role="user",
 #         content=[
-#             TextPart(type="text", text="Here's an audio book snippet:"),
-#             AudioPart(type='audio', media_type='audio/wav', audio=b'...'),
-#             TextPart(type="text", text="What book is this?"),
+#             TextPart(type="text", text="Here's an audio book snippet:"), # [!code highlight]
+#             AudioPart(type='audio', media_type='audio/wav', audio=b'...'), # [!code highlight]
+#             TextPart(type="text", text="What book is this?"), # [!code highlight]
 #         ],
 #     )
 # ]
@@ -368,7 +367,7 @@ with open("....", "rb") as audio:
 from mirascope import prompt_template
 
 
-@prompt_template("Here's an audio book snippet: {audio_wave:audio} What book is this?")
+@prompt_template("Here's an audio book snippet: {audio_wave:audio} What book is this?") # [!code highlight]
 def identify_book_prompt(audio_wave: bytes): ...
 
 
@@ -377,9 +376,9 @@ print(identify_book_prompt(b"..."))
 #     BaseMessageParam(
 #         role="user",
 #         content=[
-#             TextPart(type="text", text="Here's an audio book snippet:"),
-#             AudioPart(type='audio', media_type='audio/wav', audio=b'...'),
-#             TextPart(type="text", text="What book is this?"),
+#             TextPart(type="text", text="Here's an audio book snippet:"), # [!code highlight]
+#             AudioPart(type='audio', media_type='audio/wav', audio=b'...'), # [!code highlight]
+#             TextPart(type="text", text="What book is this?"), # [!code highlight]
 #         ],
 #     )
 # ]
@@ -397,7 +396,7 @@ from mirascope import Messages, prompt_template
 
 @prompt_template()
 def identify_book_prompt(audio_wave: wave.Wave_read) -> Messages.Type:
-    return ["Here's an audio book snippet:", audio_wave, "What book is this?"]
+    return ["Here's an audio book snippet:", audio_wave, "What book is this?"] # [!code highlight]
 
 
 with open("....", "rb") as f, wave.open(f, "rb") as audio:
@@ -406,9 +405,9 @@ with open("....", "rb") as f, wave.open(f, "rb") as audio:
 #     BaseMessageParam(
 #         role="user",
 #         content=[
-#             TextPart(type="text", text="Here's an audio book snippet:"),
-#             AudioPart(type='audio', media_type='audio/wav', audio=b'...'),
-#             TextPart(type="text", text="What book is this?"),
+#             TextPart(type="text", text="Here's an audio book snippet:"), # [!code highlight]
+#             AudioPart(type='audio', media_type='audio/wav', audio=b'...'), # [!code highlight]
+#             TextPart(type="text", text="What book is this?"), # [!code highlight]
 #         ],
 #     )
 # ]
@@ -418,7 +417,7 @@ with open("....", "rb") as f, wave.open(f, "rb") as audio:
 <Tab value="Template">
 ```python
 from mirascope import prompt_template
-@prompt_template("Here's an audio book snippet: {audio_wave:audio} What book is this?")
+@prompt_template("Here's an audio book snippet: {audio_wave:audio} What book is this?") # [!code highlight]
 def identify_book_prompt(audio_wave: bytes): ...
 
 
@@ -427,9 +426,9 @@ print(identify_book_prompt(b"..."))
 #     BaseMessageParam(
 #         role="user",
 #         content=[
-#             TextPart(type="text", text="Here's an audio book snippet:"),
-#             AudioPart(type='audio', media_type='audio/wav', audio=b'...'),
-#             TextPart(type="text", text="What book is this?"),
+#             TextPart(type="text", text="Here's an audio book snippet:"), # [!code highlight]
+#             AudioPart(type='audio', media_type='audio/wav', audio=b'...'), # [!code highlight]
+#             TextPart(type="text", text="What book is this?"), # [!code highlight]
 #         ],
 #     )
 # ]
@@ -458,13 +457,13 @@ from mirascope import DocumentPart, Messages, prompt_template
 def recommend_book_prompt(previous_book_pdf: bytes) -> Messages.Type:
     return Messages.User(
         [
-            "I just read this book:",
-            DocumentPart(
-                type="document",
-                media_type="application/pdf",
-                document=previous_book_pdf,
-            ),
-            "What should I read next?",
+            "I just read this book:", # [!code highlight]
+            DocumentPart( # [!code highlight]
+                type="document", # [!code highlight]
+                media_type="application/pdf", # [!code highlight]
+                document=previous_book_pdf, # [!code highlight]
+            ), # [!code highlight]
+            "What should I read next?", # [!code highlight]
         ]
     )
 
@@ -474,9 +473,9 @@ print(recommend_book_prompt(b"..."))
 #     BaseMessageParam(
 #         role="user",
 #         content=[
-#             TextPart(type="text", text="I just read this book:"),
-#             DocumentPart(type='document', media_type='application/pdf', document=b'...'),
-#             TextPart(type="text", text="What should I read next?"),
+#             TextPart(type="text", text="I just read this book:"), # [!code highlight]
+#             DocumentPart(type='document', media_type='application/pdf', document=b'...'), # [!code highlight]
+#             TextPart(type="text", text="What should I read next?"), # [!code highlight]
 #         ],
 #     )
 # ]
@@ -488,7 +487,7 @@ from mirascope import prompt_template
 
 
 @prompt_template(
-    "I just read this book: {previous_book:document} What should I read next?"
+    "I just read this book: {previous_book:document} What should I read next?" # [!code highlight]
 )
 def recommend_book_prompt(previous_book: bytes): ...
 
@@ -498,9 +497,9 @@ print(recommend_book_prompt(b"..."))
 #     BaseMessageParam(
 #         role="user",
 #         content=[
-#             TextPart(type="text", text="I just read this book:"),
-#             DocumentPart(type='document', media_type='application/pdf', document=b'...'),
-#             TextPart(type="text", text="What should I read next?"),
+#             TextPart(type="text", text="I just read this book:"), # [!code highlight]
+#             DocumentPart(type='document', media_type='application/pdf', document=b'...'), # [!code highlight]
+#             TextPart(type="text", text="What should I read next?"), # [!code highlight]
 #         ],
 #     )
 # ]
@@ -538,7 +537,7 @@ from mirascope import BaseMessageParam, Messages, prompt_template
 
 @prompt_template()
 def chatbot(query: str, history: list[BaseMessageParam]) -> list[BaseMessageParam]:
-    return [Messages.System("You are a librarian"), *history, Messages.User(query)]
+    return [Messages.System("You are a librarian"), *history, Messages.User(query)] # [!code highlight]
 
 
 history = [
@@ -547,10 +546,10 @@ history = [
 ]
 print(chatbot("fantasy", history))
 # Output: [
-#     BaseMessageParam(role="system", content="You are a librarian"),
-#     BaseMessageParam(role="user", content="Recommend a book"),
-#     BaseMessageParam(role="assistant", content="What genre do you like?"),
-#     BaseMessageParam(role="user", content="fantasy"),
+#     BaseMessageParam(role="system", content="You are a librarian"), # [!code highlight]
+#     BaseMessageParam(role="user", content="Recommend a book"), # [!code highlight]
+#     BaseMessageParam(role="assistant", content="What genre do you like?"), # [!code highlight]
+#     BaseMessageParam(role="user", content="fantasy"), # [!code highlight]
 # ]
 ```
 </Tab>
@@ -561,24 +560,24 @@ from mirascope import BaseMessageParam, Messages, prompt_template
 
 @prompt_template(
     """
-    SYSTEM: You are a librarian
-    MESSAGES: {history}
-    USER: {query}
+    SYSTEM: You are a librarian # [!code highlight]
+    MESSAGES: {history} # [!code highlight]
+    USER: {query} # [!code highlight]
     """
 )
 def chatbot(query: str, history: list[BaseMessageParam]): ...
 
 
 history = [
-    Messages.User("Recommend a book"),
-    Messages.Assistant("What genre do you like?"),
+    Messages.User("Recommend a book"), # [!code highlight]
+    Messages.Assistant("What genre do you like?"), # [!code highlight]
 ]
 print(chatbot("fantasy", history))
 # Output: [
-#     BaseMessageParam(role="system", content="You are a librarian"),
-#     BaseMessageParam(role="user", content="Recommend a book"),
-#     BaseMessageParam(role="assistant", content="What genre do you like?"),
-#     BaseMessageParam(role="user", content="fantasy"),
+#     BaseMessageParam(role="system", content="You are a librarian"), # [!code highlight]
+#     BaseMessageParam(role="user", content="Recommend a book"), # [!code highlight]
+#     BaseMessageParam(role="assistant", content="What genre do you like?"), # [!code highlight]
+#     BaseMessageParam(role="user", content="fantasy"), # [!code highlight]
 # ]
 ```
 </Tab>
@@ -602,12 +601,12 @@ class Book(BaseModel):
 
 @prompt_template()
 def recommend_book_prompt(book: Book) -> str:
-    return f"I read {book.title} by {book.author}. What should I read next?"
+    return f"I read {book.title} by {book.author}. What should I read next?" # [!code highlight]
 
 
 book = Book(title="The Name of the Wind", author="Patrick Rothfuss")
 print(recommend_book_prompt(book))
-# Output: [BaseMessageParam(role='user', content='I read The Name of the Wind by Patrick Rothfuss. What should I read next?')]
+# Output: [BaseMessageParam(role='user', content='I read The Name of the Wind by Patrick Rothfuss. What should I read next?')] # [!code highlight]
 ```
 </Tab>
 <Tab value="Template">
@@ -621,13 +620,13 @@ class Book(BaseModel):
     author: str
 
 
-@prompt_template("I read {book.title} by {book.author}. What should I read next?")
+@prompt_template("I read {book.title} by {book.author}. What should I read next?") # [!code highlight]
 def recommend_book_prompt(book: Book): ...
 
 
 book = Book(title="The Name of the Wind", author="Patrick Rothfuss")
 print(recommend_book_prompt(book))
-# Output: [BaseMessageParam(role='user', content='I read The Name of the Wind by Patrick Rothfuss. What should I read next?')]
+# Output: [BaseMessageParam(role='user', content='I read The Name of the Wind by Patrick Rothfuss. What should I read next?')] # [!code highlight]
 ```
 </Tab>
 </TabbedSection>
@@ -646,11 +645,11 @@ from mirascope import prompt_template
 
 @prompt_template()
 def recommend_book(genre: str, price: float) -> str:
-    return f"Recommend a {genre} book under ${price:.2f}"
+    return f"Recommend a {genre} book under ${price:.2f}" # [!code highlight]
 
 
 print(recommend_book("fantasy", 12.3456))
-# Output: [BaseMessageParam(role='user', content='Recommend a fantasy book under $12.35')]
+# Output: [BaseMessageParam(role='user', content='Recommend a fantasy book under $12.35')] # [!code highlight]
 ```
 </Tab>
 <Tab value="Template">
@@ -658,12 +657,12 @@ print(recommend_book("fantasy", 12.3456))
 from mirascope import prompt_template
 
 
-@prompt_template("Recommend a {genre} book under ${price:.2f}")
+@prompt_template("Recommend a {genre} book under ${price:.2f}") # [!code highlight]
 def recommend_book(genre: str, price: float): ...
 
 
 print(recommend_book("fantasy", 12.3456))
-# Output: [BaseMessageParam(role='user', content='Recommend a fantasy book under $12.35')]
+# Output: [BaseMessageParam(role='user', content='Recommend a fantasy book under $12.35')] # [!code highlight]
 ```
 </Tab>
 </TabbedSection>
@@ -683,25 +682,26 @@ from mirascope import prompt_template
 @prompt_template(
     """
     Book themes:
-    {themes:list}
+    {themes:list} # [!code highlight]
 
     Character analysis:
-    {characters:lists}
+    {characters:lists} # [!code highlight]
     """
 )
 def analyze_book(themes: list[str], characters: list[list[str]]): ...
 
 
 prompt = analyze_book(
-    themes=["redemption", "power", "friendship"],
-    characters=[
-        ["Name: Frodo", "Role: Protagonist"],
-        ["Name: Gandalf", "Role: Mentor"],
-    ],
+    themes=["redemption", "power", "friendship"], # [!code highlight]
+    characters=[ # [!code highlight]
+        ["Name: Frodo", "Role: Protagonist"], # [!code highlight]
+        ["Name: Gandalf", "Role: Mentor"], # [!code highlight]
+    ], # [!code highlight]
 )
 
 print(prompt[0].content)
 # Output:
+# [!code highlight:12]
 # Book themes:
 # redemption
 # power
@@ -723,25 +723,26 @@ from mirascope import prompt_template
 @prompt_template(
     """
     Book themes:
-    {themes:text}
+    {themes:text} # [!code highlight]
 
     Character analysis:
-    {characters:texts}
+    {characters:texts} # [!code highlight]
     """
 )
 def analyze_book(themes: str, characters: list[str]): ...
 
 
 prompt = analyze_book(
-    themes="redemption, power, friendship",
-    characters=[
-        "Name: Frodo, Role: Protagonist",
-        "Name: Gandalf, Role: Mentor",
-    ],
+    themes="redemption, power, friendship", # [!code highlight]
+    characters=[ # [!code highlight]
+        "Name: Frodo, Role: Protagonist", # [!code highlight]
+        "Name: Gandalf, Role: Mentor", # [!code highlight]
+    ], # [!code highlight]
 )
 
 print(prompt[0].content)
 # Output:
+# [!code highlight:8]
 # [
 #     TextPart(type="text", text="Book themes:"),
 #     TextPart(type="text", text="redemption, power, friendship"),
@@ -759,25 +760,26 @@ from mirascope import TextPart, prompt_template
 @prompt_template(
     """
     Book themes:
-    {themes:text}
+    {themes:text} # [!code highlight]
 
     Character analysis:
-    {characters:texts}
+    {characters:texts} # [!code highlight]
     """
 )
 def analyze_book(themes: TextPart, characters: list[TextPart]): ...
 
 
 prompt = analyze_book(
-    themes=TextPart(type="text", text="redemption, power, friendship"),
-    characters=[
-        TextPart(type="text", text="Name: Frodo, Role: Protagonist"),
-        TextPart(type="text", text="Name: Gandalf, Role: Mentor"),
-    ],
+    themes=TextPart(type="text", text="redemption, power, friendship"), # [!code highlight]
+    characters=[ # [!code highlight]
+        TextPart(type="text", text="Name: Frodo, Role: Protagonist"), # [!code highlight]
+        TextPart(type="text", text="Name: Gandalf, Role: Mentor"), # [!code highlight]
+    ], # [!code highlight]
 )
 
 print(prompt[0].content)
 # Output:
+# [!code highlight:8]
 # [
 #     TextPart(type="text", text="Book themes:"),
 #     TextPart(type="text", text="redemption, power, friendship"),
@@ -801,18 +803,18 @@ from mirascope import BaseDynamicConfig, Messages, prompt_template
 
 @prompt_template()
 def recommend_book_prompt(genre: str) -> BaseDynamicConfig:
-    uppercase_genre = genre.upper()
-    messages = [Messages.User(f"Recommend a {uppercase_genre} book")]
+    uppercase_genre = genre.upper() # [!code highlight]
+    messages = [Messages.User(f"Recommend a {uppercase_genre} book")] # [!code highlight]
     return {
-        "messages": messages,
-        "computed_fields": {"uppercase_genre": uppercase_genre},
+        "messages": messages, # [!code highlight]
+        "computed_fields": {"uppercase_genre": uppercase_genre}, # [!code highlight]
     }
 
 
 print(recommend_book_prompt("fantasy"))
 # Output: {
-#     "messages": [BaseMessageParam(role="user", content="Recommend a FANTASY book")],
-#     "computed_fields": {"uppercase_genre": "FANTASY"},
+#     "messages": [BaseMessageParam(role="user", content="Recommend a FANTASY book")], # [!code highlight]
+#     "computed_fields": {"uppercase_genre": "FANTASY"}, # [!code highlight]
 # }
 ```
 </Tab>
@@ -821,16 +823,16 @@ print(recommend_book_prompt("fantasy"))
 from mirascope import BaseDynamicConfig, prompt_template
 
 
-@prompt_template("Recommend a {uppercase_genre} book")
+@prompt_template("Recommend a {uppercase_genre} book") # [!code highlight]
 def recommend_book_prompt(genre: str) -> BaseDynamicConfig:
-    uppercase_genre = genre.upper()
+    uppercase_genre = genre.upper() # [!code highlight]
     return {
-        "computed_fields": {"uppercase_genre": uppercase_genre},
+        "computed_fields": {"uppercase_genre": uppercase_genre}, # [!code highlight]
     }
 
 
 print(recommend_book_prompt("fantasy"))
-# Output: [BaseMessageParam(role='user', content='Recommend a FANTASY book')]
+# Output: [BaseMessageParam(role='user', content='Recommend a FANTASY book')] # [!code highlight]
 ```
 </Tab>
 </TabbedSection>

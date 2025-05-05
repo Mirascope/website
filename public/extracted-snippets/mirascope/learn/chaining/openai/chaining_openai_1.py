@@ -8,15 +8,15 @@ from mirascope import llm
 
 
 @llm.call(provider="openai", model="gpt-4o-mini")
-def summarize(text: str) -> str:
+def summarize(text: str) -> str: # [!code highlight]
     return f"Summarize this text: {text}"
 
 
 @llm.call(provider="openai", model="gpt-4o-mini")
-def translate(text: str, language: str) -> str:
+def translate(text: str, language: str) -> str: # [!code highlight]
     return f"Translate this text to {language}: {text}"
 
 
-summary = summarize("Long English text here...")
-translation = translate(summary.content, "french")
+summary = summarize("Long English text here...") # [!code highlight]
+translation = translate(summary.content, "french") # [!code highlight]
 print(translation.content)

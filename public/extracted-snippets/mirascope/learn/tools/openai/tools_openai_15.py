@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 15: Streaming Tools
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/tools.mdx:738
+# Source: content/doc/mirascope/learn/tools.mdx:735
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm
@@ -21,14 +21,14 @@ def get_book_author(title: str) -> str:
         return "Unknown"
 
 
-@llm.call(provider="openai", model="gpt-4o-mini", tools=[get_book_author], stream=True)
+@llm.call(provider="openai", model="gpt-4o-mini", tools=[get_book_author], stream=True) # [!code highlight]
 def identify_authors(books: list[str]) -> str:
     return f"Who wrote {books}?"
 
 
 stream = identify_authors(["The Name of the Wind", "Mistborn: The Final Empire"])
-for chunk, tool in stream:
-    if tool:
-        print(tool.call())
+for chunk, tool in stream: # [!code highlight]
+    if tool: # [!code highlight]
+        print(tool.call()) # [!code highlight]
     else:
         print(chunk.content, end="", flush=True)

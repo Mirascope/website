@@ -18,12 +18,12 @@ You can then use the `with_logfire` decorator to automatically log calls:
 <TabbedSection>
 <Tab value="Shorthand">
 ```python
-import logfire
+import logfire # [!code highlight]
 from mirascope import llm
-from mirascope.integrations.logfire import with_logfire
+from mirascope.integrations.logfire import with_logfire # [!code highlight]
 from pydantic import BaseModel
 
-logfire.configure()
+logfire.configure() # [!code highlight]
 
 
 class Book(BaseModel):
@@ -31,7 +31,7 @@ class Book(BaseModel):
     author: str
 
 
-@with_logfire()
+@with_logfire() # [!code highlight]
 @llm.call(provider="$PROVIDER", model="$MODEL", response_model=Book)
 def recommend_book(genre: str) -> str:
     return f"Recommend a {genre} book."
@@ -43,12 +43,12 @@ print(recommend_book("fantasy"))
 </Tab>
 <Tab value="Template">
 ```python
-import logfire
+import logfire # [!code highlight]
 from mirascope import llm, prompt_template
-from mirascope.integrations.logfire import with_logfire
+from mirascope.integrations.logfire import with_logfire # [!code highlight]
 from pydantic import BaseModel
 
-logfire.configure()
+logfire.configure() # [!code highlight]
 
 
 class Book(BaseModel):
@@ -56,7 +56,7 @@ class Book(BaseModel):
     author: str
 
 
-@with_logfire()
+@with_logfire() # [!code highlight]
 @llm.call(provider="$PROVIDER", model="$MODEL", response_model=Book)
 @prompt_template("Recommend a {genre} book")
 def recommend_book(genre: str): ...
@@ -74,6 +74,10 @@ This will give you:
 * Structured logging of prompt templates, inputs, and outputs
 * Token usage and context details
 
-<Callout type="note" title="Handling streams">
+<Info defaultOpen={false} collapsible={true} title="Example log">
+  ![logfire-log](/assets/docs/logfire-response-model.png)
+</Info>
+
+<Note defaultOpen={false} collapsible={true} title="Handling streams">
   When logging streams, the span will not be logged until the stream has been exhausted. This is a function of how streaming works.
-</Callout>
+</Note>

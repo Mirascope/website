@@ -10,12 +10,12 @@ from mirascope import llm
 
 
 @llm.call(provider="openai", model="gpt-4o-mini")
-async def recommend_book(genre: str) -> str:
+async def recommend_book(genre: str) -> str: # [!code highlight]
     return f"Recommend a {genre} book"
 
 
 async def main():
-    response = await recommend_book("fantasy")
+    response = await recommend_book("fantasy") # [!code highlight]
     print(response.content)
 
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 9: Parallel Tool Calls
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/tools.mdx:521
+# Source: content/doc/mirascope/learn/tools.mdx:514
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import BaseTool, llm
@@ -27,6 +27,7 @@ def identify_authors(books: list[str]) -> str:
     return f"Who wrote {books}?"
 
 
+# [!code highlight:5]
 response = identify_authors(["The Name of the Wind", "Mistborn: The Final Empire"])
 if tools := response.tools:
     for tool in tools:

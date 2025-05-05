@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 7: Accessing Original Tool Call
 # Generated for provider: anthropic
-# Source: content/doc/mirascope/learn/tools.mdx:295
+# Source: content/doc/mirascope/learn/tools.mdx:288
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm
@@ -30,6 +30,6 @@ response = identify_author("The Name of the Wind")
 if tool := response.tool:
     print(tool.call())
     # Output: Patrick Rothfuss
-    print(f"Original tool call: {tool.tool_call}")
+    print(f"Original tool call: {tool.tool_call}") # [!code highlight]
 else:
     print(response.content)

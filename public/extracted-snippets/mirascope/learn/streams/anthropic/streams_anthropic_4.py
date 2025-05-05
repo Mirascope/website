@@ -16,4 +16,4 @@ stream = recommend_book("fantasy")
 for chunk, _ in stream:
     print(chunk.content, end="", flush=True)
 
-print(f"Content: {stream.content}")
+print(f"Content: {stream.content}") # [!code highlight]

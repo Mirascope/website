@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 18: FromCallArgs
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/response_models.mdx:769
+# Source: content/doc/mirascope/learn/response_models.mdx:765
 # This file is auto-generated; any edits should be made in the source file
 
 from typing import Annotated
@@ -18,7 +18,7 @@ class Book(BaseModel):
 
 
 class Books(BaseModel):
-    texts: Annotated[list[str], FromCallArgs()]
+    texts: Annotated[list[str], FromCallArgs()] # [!code highlight]
     books: list[Book]
 
     @model_validator(mode="after")
@@ -30,7 +30,7 @@ class Books(BaseModel):
 
 @llm.call(provider="openai", model="gpt-4o-mini", response_model=Books)
 @prompt_template("Extract the books from these texts: {texts}")
-def extract_books(texts: list[str]): ...
+def extract_books(texts: list[str]): ... # [!code highlight]
 
 
 texts = [

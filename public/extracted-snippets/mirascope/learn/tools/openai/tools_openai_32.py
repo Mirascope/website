@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 32: Few-Shot Examples
 # Generated for provider: openai
-# Source: content/doc/mirascope/learn/tools.mdx:1512
+# Source: content/doc/mirascope/learn/tools.mdx:1509
 # This file is auto-generated; any edits should be made in the source file
 
 from typing import Annotated
@@ -17,14 +17,14 @@ def get_book_author(
         Field(
             ...,
             description="The title of the book.",
-            examples=["The Name of the Wind"],
+            examples=["The Name of the Wind"], # [!code highlight]
         ),
     ],
 ) -> str:
     """Returns the author of the book with the given title
 
-    Example:
-        {"title": "The Name of the Wind"}
+    Example: # [!code highlight]
+        {"title": "The Name of the Wind"} # [!code highlight]
 
     Args:
         title: The title of the book.

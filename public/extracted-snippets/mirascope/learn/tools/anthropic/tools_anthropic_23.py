@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 23: Tool Message Parameters
 # Generated for provider: anthropic
-# Source: content/doc/mirascope/learn/tools.mdx:1087
+# Source: content/doc/mirascope/learn/tools.mdx:1084
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import BaseMessageParam, Messages, llm
@@ -18,9 +18,9 @@ def get_book_author(title: str) -> str:
 
 @llm.call(provider="anthropic", model="claude-3-5-sonnet-latest", tools=[get_book_author])
 def identify_author(book: str, history: list[BaseMessageParam]) -> Messages.Type:
-    messages = [*history]
+    messages = [*history] # [!code highlight]
     if book:
-        messages.append(Messages.User(f"Who wrote {book}?"))
+        messages.append(Messages.User(f"Who wrote {book}?")) # [!code highlight]
     return messages
 
 
@@ -30,7 +30,7 @@ history += [response.user_message_param, response.message_param]
 while tool := response.tool:
     tools_and_outputs = [(tool, tool.call())]
     history += response.tool_message_params(tools_and_outputs)
-    response = identify_author("", history)
-    history.append(response.message_param)
-print(response.content)
+    response = identify_author("", history) # [!code highlight]
+    history.append(response.message_param) # [!code highlight]
+print(response.content) # [!code highlight]
 # Output: The Name of the Wind was written by Patrick Rothfuss.

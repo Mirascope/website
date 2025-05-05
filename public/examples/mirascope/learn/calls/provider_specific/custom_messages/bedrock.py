@@ -5,7 +5,7 @@ from mirascope.core import bedrock
 def recommend_book(genre: str) -> bedrock.BedrockDynamicConfig:
     return {
         "messages": [
-            {"role": "user", "content": [{"text": f"Recommend a {genre} book"}]}
+            {"role": "user", "content": [{"text": f"Recommend a {genre} book"}]} # [!code highlight]
         ]
     }
 
