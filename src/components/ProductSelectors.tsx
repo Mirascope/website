@@ -27,7 +27,7 @@ const ProductLink = ({ product }: { product: ProductName }) => {
  */
 export function DocsProductSelector({ currentProduct }: { currentProduct: ProductName }) {
   return (
-    <div className="flex space-x-6 px-1">
+    <div className="flex space-x-4 px-1">
       {currentProduct === "mirascope" ? (
         <ProductTitle product="mirascope" />
       ) : (
