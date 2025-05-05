@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, type KeyboardEvent } from "react";
-import { Search as SearchIcon, Command } from "lucide-react";
+import { Search as SearchIcon } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/src/lib/utils";
 import { getSearchService, type SearchResultItem } from "@/src/lib/services/search";
@@ -298,8 +298,9 @@ function SearchFooter() {
   return (
     <div className="border-border bg-muted/40 text-muted-foreground flex items-center justify-between border-t p-2 text-xs">
       <div className="flex items-center gap-2 px-2">
-        <Command size={12} />
-        <kbd className="border-border rounded border px-1.5 py-0.5 text-[10px]">K</kbd>
+        <kbd className="border-border rounded border px-1.5 py-0.5 text-[10px]">
+          <span className="text-xss">⌘</span>K
+        </kbd>
         <span>to search</span>
       </div>
       <div className="flex items-center gap-2 px-2">
