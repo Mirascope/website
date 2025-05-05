@@ -10,9 +10,11 @@ interface SearchResultProps {
   result: SearchResultItem;
   onSelect: () => void;
   isSelected?: boolean;
+  index: number;
+  onHover: (index: number) => void;
 }
 
-function SearchResult({ result, onSelect, isSelected = false }: SearchResultProps) {
+function SearchResult({ result, onSelect, isSelected = false, index, onHover }: SearchResultProps) {
   // Get development mode from environment
   const isDev = environment.isDev();
 
@@ -24,9 +26,11 @@ function SearchResult({ result, onSelect, isSelected = false }: SearchResultProp
     <Link
       to={result.url}
       onClick={onSelect}
+      onMouseEnter={() => onHover(index)}
+      onMouseMove={() => onHover(index)}
       className={cn(
         "border-border/40 flex border-t px-5 py-4 text-sm transition-colors first:border-0",
-        isSelected ? "bg-accent/50" : "hover:bg-accent/50"
+        isSelected ? "bg-accent/50" : ""
       )}
     >
       <div className="min-w-0 flex-1">
@@ -72,9 +76,15 @@ interface SearchResultListProps {
   results: SearchResultItem[];
   onResultSelect: () => void;
   selectedIndex: number;
+  onHover: (index: number) => void;
 }
 
-function SearchResultList({ results, onResultSelect, selectedIndex }: SearchResultListProps) {
+function SearchResultList({
+  results,
+  onResultSelect,
+  selectedIndex,
+  onHover,
+}: SearchResultListProps) {
   // Only display up to MAX_DISPLAYED_RESULTS
   const displayedResults = results.slice(0, MAX_DISPLAYED_RESULTS);
 
@@ -86,6 +96,8 @@ function SearchResultList({ results, onResultSelect, selectedIndex }: SearchResu
           result={result}
           onSelect={onResultSelect}
           isSelected={idx === selectedIndex}
+          index={idx}
+          onHover={onHover}
         />
       ))}
       {results.length > MAX_DISPLAYED_RESULTS && (
@@ -189,6 +201,7 @@ interface SearchResultsContainerProps {
   onResultSelect: () => void;
   isLandingPage?: boolean;
   selectedIndex: number;
+  setSelectedIndex: (index: number) => void;
 }
 
 function SearchResultsContainer({
@@ -203,6 +216,7 @@ function SearchResultsContainer({
   onResultSelect,
   isLandingPage = false,
   selectedIndex,
+  setSelectedIndex,
 }: SearchResultsContainerProps) {
   // Use a fixed state derived from isOpen with some delayed rendering logic
   const [isReallyVisible, setIsReallyVisible] = useState(false);
@@ -276,6 +290,7 @@ function SearchResultsContainer({
             results={results}
             onResultSelect={onResultSelect}
             selectedIndex={selectedIndex}
+            onHover={setSelectedIndex}
           />
         </div>
       );
@@ -519,6 +534,7 @@ export default function SearchBar({ onOpenChange, isLandingPage = false }: Searc
         onResultSelect={handleResultSelect}
         isLandingPage={isLandingPage}
         selectedIndex={selectedIndex}
+        setSelectedIndex={setSelectedIndex}
       />
     </div>
   );
