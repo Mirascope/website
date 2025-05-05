@@ -60,6 +60,16 @@ function DevIndexPage() {
             </p>
           </div>
 
+          <div className="rounded-lg border p-6 shadow-sm">
+            <a href="/dev/layout-test" className="hover:underline">
+              <h2 className="text-primary mb-2 text-xl font-semibold">Layout Test</h2>
+            </a>
+            <p className="mb-4">
+              Test and visualize the AppLayout component with highlighted sections for debugging
+              layout issues.
+            </p>
+          </div>
+
           {/* Style test pages section */}
           {devPages.length > 0 && (
             <>

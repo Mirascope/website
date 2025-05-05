@@ -1,7 +1,6 @@
 import React from "react";
 import DevSidebar from "./DevSidebar";
-import BaseLayout from "@/src/components/BaseLayout";
-import SidebarContainer from "@/src/components/SidebarContainer";
+import AppLayout from "@/src/components/AppLayout";
 import type { DevMeta } from "@/src/lib/content";
 
 interface DevLayoutProps {
@@ -15,17 +14,17 @@ interface DevLayoutProps {
  * Provides a consistent layout for all dev tool pages with responsive sidebar
  */
 const DevLayout: React.FC<DevLayoutProps> = ({ children, devPages }) => {
-  // Sidebar content with responsive container
-  const leftSidebar = (
-    <SidebarContainer>
-      <DevSidebar devPages={devPages} />
-    </SidebarContainer>
+  return (
+    <AppLayout>
+      <AppLayout.LeftSidebar>
+        <DevSidebar devPages={devPages} />
+      </AppLayout.LeftSidebar>
+
+      <AppLayout.Content>
+        <div className="max-w-5xl px-8">{children}</div>
+      </AppLayout.Content>
+    </AppLayout>
   );
-
-  // Main content - add max-width constraint to prevent pushing sidebar
-  const mainContent = <div className="max-w-5xl min-w-0 flex-1 px-8">{children}</div>;
-
-  return <BaseLayout leftSidebar={leftSidebar} mainContent={mainContent} />;
 };
 
 export default DevLayout;

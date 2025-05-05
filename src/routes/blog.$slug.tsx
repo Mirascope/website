@@ -6,6 +6,18 @@ import { ButtonLink } from "@/src/components/ui/button-link";
 import { ChevronLeft, Clipboard, Check } from "lucide-react";
 import { MDXRenderer } from "@/src/components/MDXRenderer";
 
+import { LoadingContent } from "@/src/components/docs";
+import ContentErrorHandler from "@/src/components/ContentErrorHandler";
+import TableOfContents from "@/src/components/TableOfContents";
+import SEOMeta from "@/src/components/SEOMeta";
+import PagefindMeta from "@/src/components/PagefindMeta";
+import { cn } from "@/src/lib/utils";
+import { getBlogContent } from "@/src/lib/content";
+import analyticsManager from "@/src/lib/services/analytics";
+import type { BlogContent } from "@/src/lib/content";
+import { environment } from "@/src/lib/content/environment";
+import AppLayout from "@/src/components/AppLayout";
+
 // Reusable component for "Back to Blog" button
 function BackToBlogLink() {
   return (
@@ -28,34 +40,23 @@ function BlogLayout({
   rightSidebar?: ReactNode;
   children?: ReactNode;
 }) {
-  // Left sidebar with Back to Blog button
-  const leftSidebar = (
-    <SidebarContainer>
-      <div className="py-6 pr-10">
-        <BackToBlogLink />
-      </div>
-    </SidebarContainer>
-  );
-
   return (
     <>
       {children}
-      <BaseLayout leftSidebar={leftSidebar} mainContent={mainContent} rightSidebar={rightSidebar} />
+      <AppLayout>
+        <AppLayout.LeftSidebar>
+          <div className="pr-10">
+            <BackToBlogLink />
+          </div>
+        </AppLayout.LeftSidebar>
+
+        <AppLayout.Content>{mainContent}</AppLayout.Content>
+
+        {rightSidebar && <AppLayout.RightSidebar>{rightSidebar}</AppLayout.RightSidebar>}
+      </AppLayout>
     </>
   );
 }
-import { LoadingContent } from "@/src/components/docs";
-import ContentErrorHandler from "@/src/components/ContentErrorHandler";
-import TableOfContents from "@/src/components/TableOfContents";
-import SEOMeta from "@/src/components/SEOMeta";
-import PagefindMeta from "@/src/components/PagefindMeta";
-import { cn } from "@/src/lib/utils";
-import { getBlogContent } from "@/src/lib/content";
-import analyticsManager from "@/src/lib/services/analytics";
-import type { BlogContent } from "@/src/lib/content";
-import { environment } from "@/src/lib/content/environment";
-import BaseLayout from "@/src/components/BaseLayout";
-import SidebarContainer from "@/src/components/SidebarContainer";
 
 /**
  * Blog content loader that directly calls getBlogContent
@@ -165,7 +166,7 @@ function BlogPostPage() {
 
   // Main content
   const mainContent = (
-    <div className="min-w-0 flex-1 py-6">
+    <div className="min-w-0 flex-1">
       <div className="mx-auto max-w-5xl">
         <div className="mb-6">
           <h1 className="mb-4 text-2xl font-semibold sm:text-3xl md:text-4xl">{title}</h1>
@@ -289,37 +290,33 @@ function BlogPostPage() {
 
   // Right sidebar (ToC)
   const rightSidebar = (
-    <div className="hidden w-56 flex-shrink-0 lg:block">
-      <div className="fixed top-[96px] h-[calc(100vh-96px)] w-56 overflow-hidden">
-        <div className="flex h-full flex-col">
-          <div className="bg-background mb-4 flex flex-col gap-3 px-4">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={copyContentAsMarkdown}
-              disabled={isCopied}
-              className="w-full"
-            >
-              {isCopied ? (
-                <>
-                  <Check className="mr-1 h-4 w-4" />
-                  Copied!
-                </>
-              ) : (
-                <>
-                  <Clipboard className="mr-1 h-4 w-4" />
-                  Copy as Markdown
-                </>
-              )}
-            </Button>
+    <div className="flex h-full flex-col">
+      <div className="bg-background mb-4 flex flex-col gap-3 px-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={copyContentAsMarkdown}
+          disabled={isCopied}
+          className="w-full"
+        >
+          {isCopied ? (
+            <>
+              <Check className="mr-1 h-4 w-4" />
+              Copied!
+            </>
+          ) : (
+            <>
+              <Clipboard className="mr-1 h-4 w-4" />
+              Copy as Markdown
+            </>
+          )}
+        </Button>
 
-            <h4 className="text-muted-foreground mt-3 text-sm font-medium">On this page</h4>
-          </div>
+        <h4 className="text-muted-foreground mt-3 text-sm font-medium">On this page</h4>
+      </div>
 
-          <div className="flex-grow overflow-y-auto pr-4 pb-6 pl-4">
-            <TableOfContents contentId="blog-content" path={path} />
-          </div>
-        </div>
+      <div className="flex-grow overflow-y-auto pr-4 pb-6 pl-4">
+        <TableOfContents contentId="blog-content" path={path} />
       </div>
     </div>
   );
