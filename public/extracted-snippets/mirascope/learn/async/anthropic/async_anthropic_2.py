@@ -11,11 +11,11 @@ from mirascope import llm, prompt_template
 
 @llm.call(provider="anthropic", model="claude-3-5-sonnet-latest")
 @prompt_template("Recommend a {genre} book")
-async def recommend_book(genre: str): ...
+async def recommend_book(genre: str): ... # [!code highlight]
 
 
 async def main():
-    response = await recommend_book("fantasy")
+    response = await recommend_book("fantasy") # [!code highlight]
     print(response.content)
 
 

@@ -1,4 +1,4 @@
-from cohere import AsyncClient
+from cohere import AsyncClient # [!code highlight]
 from mirascope.core import cohere, prompt_template
 
 
@@ -6,5 +6,5 @@ from mirascope.core import cohere, prompt_template
 @prompt_template("Recommend a {genre} book")
 async def recommend_book(genre: str) -> cohere.AsyncCohereDynamicConfig:
     return {
-        "client": AsyncClient(),
+        "client": AsyncClient(), # [!code highlight]
     }
