@@ -32,6 +32,11 @@ function createDevSidebarConfig(devPages: DevMeta[]): SidebarConfig {
       label: "Social Card Preview",
       routePath: "/dev/social-card",
     },
+    "layout-test": {
+      slug: "layout-test",
+      label: "Layout Test",
+      routePath: "/dev/layout-test",
+    },
   };
 
   // Create style test items from MDX pages
