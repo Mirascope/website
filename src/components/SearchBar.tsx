@@ -313,8 +313,9 @@ function SearchFooter() {
   return (
     <div className="border-border bg-muted/40 text-muted-foreground flex items-center justify-between border-t p-2 text-xs">
       <div className="flex items-center gap-2 px-2">
-        <kbd className="border-border rounded border px-1.5 py-0.5 text-[10px]">
-          <span className="text-xss">⌘</span>K
+        <kbd className="border-border rounded border px-1.5 py-0.5 text-[12px]">
+          <span className="pr-1 text-xs">⌘</span>
+          <span>K</span>
         </kbd>
         <span>to search</span>
       </div>
