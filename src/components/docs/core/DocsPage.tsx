@@ -39,7 +39,7 @@ const DocsPage: React.FC<DocsPageProps> = ({ document }) => {
         onProviderChange={handleProviderChange}
       >
         <AppLayout>
-          <AppLayout.LeftSidebar>
+          <AppLayout.LeftSidebar className="pt-1">
             <DocsSidebar product={product as ProductName} />
           </AppLayout.LeftSidebar>
 
@@ -47,7 +47,7 @@ const DocsPage: React.FC<DocsPageProps> = ({ document }) => {
             <MainContent document={document} />
           </AppLayout.Content>
 
-          <AppLayout.RightSidebar>
+          <AppLayout.RightSidebar className="pt-1">
             <TocSidebar document={document} />
           </AppLayout.RightSidebar>
         </AppLayout>
