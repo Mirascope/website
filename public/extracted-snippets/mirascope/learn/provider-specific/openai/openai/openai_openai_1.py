@@ -12,7 +12,7 @@ class FormatBook(BaseTool):
     title: str
     author: str
 
-    tool_config = OpenAIToolConfig(strict=True)
+    tool_config = OpenAIToolConfig(strict=True) # [!code highlight]
 
     def call(self) -> str:
         return f"{self.title} by {self.author}"
