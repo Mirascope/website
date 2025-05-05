@@ -50,12 +50,4 @@ print(recommend_book("fantasy"))
 </Tab>
 </TabbedSection>
 
-This will give you:
-
-* A trace around the `recommend_book` function that captures details about the prompt, inputs, and outputs
-* Structured logging of LLM calls
-* Token usage and cost metrics
-
-<Callout type="note" title="Handling streams">
-  When logging streams, the span will not be logged until the stream has been exhausted. This is a function of how streaming works.
-</Callout>
+This decorator is a simple wrapper on top of our [OpenTelemetry integration](/docs/mirascope/integrations/otel).
