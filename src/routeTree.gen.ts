@@ -24,6 +24,7 @@ import { Route as TermsUseImport } from './routes/terms/use'
 import { Route as TermsServiceImport } from './routes/terms/service'
 import { Route as DocsSplatImport } from './routes/docs.$'
 import { Route as DevSocialCardImport } from './routes/dev/social-card'
+import { Route as DevLayoutTestImport } from './routes/dev/layout-test'
 import { Route as DevAuditMetadataImport } from './routes/dev/audit-metadata'
 import { Route as DevSlugImport } from './routes/dev.$slug'
 import { Route as BlogSlugImport } from './routes/blog.$slug'
@@ -108,6 +109,12 @@ const DevSocialCardRoute = DevSocialCardImport.update({
   getParentRoute: () => DevRoute,
 } as any)
 
+const DevLayoutTestRoute = DevLayoutTestImport.update({
+  id: '/layout-test',
+  path: '/layout-test',
+  getParentRoute: () => DevRoute,
+} as any)
+
 const DevAuditMetadataRoute = DevAuditMetadataImport.update({
   id: '/audit-metadata',
   path: '/audit-metadata',
@@ -186,6 +193,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DevAuditMetadataImport
       parentRoute: typeof DevImport
     }
+    '/dev/layout-test': {
+      id: '/dev/layout-test'
+      path: '/layout-test'
+      fullPath: '/dev/layout-test'
+      preLoaderRoute: typeof DevLayoutTestImport
+      parentRoute: typeof DevImport
+    }
     '/dev/social-card': {
       id: '/dev/social-card'
       path: '/social-card'
@@ -250,6 +264,7 @@ declare module '@tanstack/react-router' {
 interface DevRouteChildren {
   DevSlugRoute: typeof DevSlugRoute
   DevAuditMetadataRoute: typeof DevAuditMetadataRoute
+  DevLayoutTestRoute: typeof DevLayoutTestRoute
   DevSocialCardRoute: typeof DevSocialCardRoute
   DevIndexRoute: typeof DevIndexRoute
 }
@@ -257,6 +272,7 @@ interface DevRouteChildren {
 const DevRouteChildren: DevRouteChildren = {
   DevSlugRoute: DevSlugRoute,
   DevAuditMetadataRoute: DevAuditMetadataRoute,
+  DevLayoutTestRoute: DevLayoutTestRoute,
   DevSocialCardRoute: DevSocialCardRoute,
   DevIndexRoute: DevIndexRoute,
 }
@@ -272,6 +288,7 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/dev/$slug': typeof DevSlugRoute
   '/dev/audit-metadata': typeof DevAuditMetadataRoute
+  '/dev/layout-test': typeof DevLayoutTestRoute
   '/dev/social-card': typeof DevSocialCardRoute
   '/docs/$': typeof DocsSplatRoute
   '/terms/service': typeof TermsServiceRoute
@@ -290,6 +307,7 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/dev/$slug': typeof DevSlugRoute
   '/dev/audit-metadata': typeof DevAuditMetadataRoute
+  '/dev/layout-test': typeof DevLayoutTestRoute
   '/dev/social-card': typeof DevSocialCardRoute
   '/docs/$': typeof DocsSplatRoute
   '/terms/service': typeof TermsServiceRoute
@@ -310,6 +328,7 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/dev/$slug': typeof DevSlugRoute
   '/dev/audit-metadata': typeof DevAuditMetadataRoute
+  '/dev/layout-test': typeof DevLayoutTestRoute
   '/dev/social-card': typeof DevSocialCardRoute
   '/docs/$': typeof DocsSplatRoute
   '/terms/service': typeof TermsServiceRoute
@@ -331,6 +350,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/dev/$slug'
     | '/dev/audit-metadata'
+    | '/dev/layout-test'
     | '/dev/social-card'
     | '/docs/$'
     | '/terms/service'
@@ -348,6 +368,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/dev/$slug'
     | '/dev/audit-metadata'
+    | '/dev/layout-test'
     | '/dev/social-card'
     | '/docs/$'
     | '/terms/service'
@@ -366,6 +387,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/dev/$slug'
     | '/dev/audit-metadata'
+    | '/dev/layout-test'
     | '/dev/social-card'
     | '/docs/$'
     | '/terms/service'
@@ -442,6 +464,7 @@ export const routeTree = rootRoute
       "children": [
         "/dev/$slug",
         "/dev/audit-metadata",
+        "/dev/layout-test",
         "/dev/social-card",
         "/dev/"
       ]
@@ -461,6 +484,10 @@ export const routeTree = rootRoute
     },
     "/dev/audit-metadata": {
       "filePath": "dev/audit-metadata.tsx",
+      "parent": "/dev"
+    },
+    "/dev/layout-test": {
+      "filePath": "dev/layout-test.tsx",
       "parent": "/dev"
     },
     "/dev/social-card": {

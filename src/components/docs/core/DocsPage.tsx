@@ -1,6 +1,5 @@
 import React from "react";
-import BaseLayout from "@/src/components/BaseLayout";
-import SidebarContainer from "@/src/components/SidebarContainer";
+import AppLayout from "@/src/components/AppLayout";
 import useProviderSelection from "@/src/lib/hooks/useProviderSelection";
 import { ProviderContextProvider } from "@/src/components/docs";
 import TocSidebar from "./TocSidebar";
@@ -27,19 +26,6 @@ const DocsPage: React.FC<DocsPageProps> = ({ document }) => {
   // Use custom hooks for state management
   const [selectedProvider, handleProviderChange] = useProviderSelection();
 
-  // Left sidebar content
-  const leftSidebar = (
-    <SidebarContainer>
-      <DocsSidebar product={product as ProductName} />
-    </SidebarContainer>
-  );
-
-  // Right sidebar content (TOC)
-  const rightSidebar = <TocSidebar document={document} />;
-
-  // Main content
-  const mainContent = <MainContent document={document} />;
-
   return (
     <>
       <SEOMeta
@@ -52,11 +38,19 @@ const DocsPage: React.FC<DocsPageProps> = ({ document }) => {
         defaultProvider={selectedProvider}
         onProviderChange={handleProviderChange}
       >
-        <BaseLayout
-          leftSidebar={leftSidebar}
-          mainContent={mainContent}
-          rightSidebar={rightSidebar}
-        />
+        <AppLayout>
+          <AppLayout.LeftSidebar>
+            <DocsSidebar product={product as ProductName} />
+          </AppLayout.LeftSidebar>
+
+          <AppLayout.Content>
+            <MainContent document={document} />
+          </AppLayout.Content>
+
+          <AppLayout.RightSidebar>
+            <TocSidebar document={document} />
+          </AppLayout.RightSidebar>
+        </AppLayout>
       </ProviderContextProvider>
     </>
   );
