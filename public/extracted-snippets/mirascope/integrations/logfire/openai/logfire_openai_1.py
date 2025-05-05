@@ -4,12 +4,12 @@
 # Source: content/doc/mirascope/integrations/logfire.mdx:20
 # This file is auto-generated; any edits should be made in the source file
 
-import logfire
+import logfire # [!code highlight]
 from mirascope import llm
-from mirascope.integrations.logfire import with_logfire
+from mirascope.integrations.logfire import with_logfire # [!code highlight]
 from pydantic import BaseModel
 
-logfire.configure()
+logfire.configure() # [!code highlight]
 
 
 class Book(BaseModel):
@@ -17,7 +17,7 @@ class Book(BaseModel):
     author: str
 
 
-@with_logfire()
+@with_logfire() # [!code highlight]
 @llm.call(provider="openai", model="gpt-4o-mini", response_model=Book)
 def recommend_book(genre: str) -> str:
     return f"Recommend a {genre} book."

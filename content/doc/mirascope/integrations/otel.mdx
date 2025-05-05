@@ -19,12 +19,12 @@ You can then use the `with_otel` decorator to automatically create spans for LLM
 <Tab value="Shorthand">
 ```python
 from mirascope import llm
-from mirascope.integrations.otel import configure, with_otel
+from mirascope.integrations.otel import configure, with_otel # [!code highlight]
 
-configure()
+configure() # [!code highlight]
 
 
-@with_otel()
+@with_otel() # [!code highlight]
 @llm.call(provider="$PROVIDER", model="$MODEL")
 def recommend_book(genre: str) -> str:
     return f"Recommend a {genre} book."
@@ -37,12 +37,12 @@ print(recommend_book("fantasy"))
 <Tab value="Template">
 ```python
 from mirascope import llm, prompt_template
-from mirascope.integrations.otel import configure, with_otel
+from mirascope.integrations.otel import configure, with_otel # [!code highlight]
 
-configure()
+configure() # [!code highlight]
 
 
-@with_otel()
+@with_otel() # [!code highlight]
 @llm.call(provider="$PROVIDER", model="$MODEL")
 @prompt_template("Recommend a {genre} book")
 def recommend_book(genre: str): ...
@@ -60,6 +60,7 @@ This will give you:
 * Distributed tracing for LLM calls integrated with your existing OpenTelemetry setup
 * Metrics for token usage and response time
 
-<Callout type="note" title="Handling streams">
+<Note defaultOpen={false} collapsible={true} title="Handling streams">
   When logging streams, the span will not be logged until the stream has been exhausted. This is a function of how streaming works.
-</Callout>
+</Note>
+
