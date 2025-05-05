@@ -4,12 +4,9 @@ import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { useEffect } from "react";
 import { getProductFromPath } from "../lib/utils";
 
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import CookieBanner from "../components/CookieBanner";
-import { DevToolsButton } from "../components/dev";
-import analyticsManager from "../lib/services/analytics";
-import { FunModeProvider } from "../components/FunModeContext";
+import { Header, Footer, CookieBanner, DevToolsButton } from "@/src/components/routes/root";
+import analyticsManager from "@/src/lib/services/analytics";
+import { FunModeProvider } from "@/src/components";
 
 export const Route = createRootRoute({
   beforeLoad: ({ location }) => {

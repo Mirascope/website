@@ -1,10 +1,8 @@
 import { createFileRoute, Link, useLoaderData } from "@tanstack/react-router";
 import { useState } from "react";
 import { type BlogMeta, getAllBlogMeta } from "@/src/lib/content";
-import SEOMeta from "@/src/components/SEOMeta";
-import { LoadingContent } from "@/src/components/docs";
+import { SEOMeta, LoadingContent, ContentErrorHandler } from "@/src/components";
 import { environment } from "@/src/lib/content/environment";
-import ContentErrorHandler from "@/src/components/ContentErrorHandler";
 
 // Posts per page
 const POSTS_PER_PAGE = 4;

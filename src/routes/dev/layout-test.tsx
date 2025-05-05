@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import AppLayout from "@/src/components/AppLayout";
+import { AppLayout } from "@/src/components";
 
 /**
  * Test component for visualizing AppLayout behavior

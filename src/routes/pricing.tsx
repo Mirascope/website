@@ -4,7 +4,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/src/components/ui/ta
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/src/components/ui/tooltip";
 import { ButtonLink } from "@/src/components/ui/button-link";
 import { cn } from "@/src/lib/utils";
-import SEOMeta from "@/src/components/SEOMeta";
+import { SEOMeta } from "@/src/components";
 import { environment } from "@/src/lib/content/environment";
 
 export const Route = createFileRoute("/pricing")({
