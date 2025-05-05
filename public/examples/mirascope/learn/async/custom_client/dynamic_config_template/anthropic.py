@@ -1,4 +1,4 @@
-from anthropic import AsyncAnthropic
+from anthropic import AsyncAnthropic # [!code highlight]
 from mirascope.core import anthropic, prompt_template
 
 
@@ -6,5 +6,5 @@ from mirascope.core import anthropic, prompt_template
 @prompt_template("Recommend a {genre} book")
 async def recommend_book(genre: str) -> anthropic.AsyncAnthropicDynamicConfig:
     return {
-        "client": AsyncAnthropic(),
+        "client": AsyncAnthropic(), # [!code highlight]
     }

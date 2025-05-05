@@ -49,7 +49,7 @@ If you haven't already, we recommend first reading the section on [Calls](/docs/
 
 To use async in Mirascope, simply define the function as async and use the `await` keyword when calling it. Here's a basic example:
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="Shorthand">
 ```python
 import asyncio
@@ -58,12 +58,12 @@ from mirascope import llm
 
 
 @llm.call(provider="$PROVIDER", model="$MODEL")
-async def recommend_book(genre: str) -> str:
+async def recommend_book(genre: str) -> str: # [!code highlight]
     return f"Recommend a {genre} book"
 
 
 async def main():
-    response = await recommend_book("fantasy")
+    response = await recommend_book("fantasy") # [!code highlight]
     print(response.content)
 
 
@@ -79,11 +79,11 @@ from mirascope import llm, prompt_template
 
 @llm.call(provider="$PROVIDER", model="$MODEL")
 @prompt_template("Recommend a {genre} book")
-async def recommend_book(genre: str): ...
+async def recommend_book(genre: str): ... # [!code highlight]
 
 
 async def main():
-    response = await recommend_book("fantasy")
+    response = await recommend_book("fantasy") # [!code highlight]
     print(response.content)
 
 
@@ -102,7 +102,7 @@ In this example we:
 
 One of the main benefits of asynchronous programming is the ability to run multiple operations concurrently. Here's an example of making parallel async calls:
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="Shorthand">
 ```python
 import asyncio
@@ -111,14 +111,14 @@ from mirascope import llm
 
 
 @llm.call(provider="$PROVIDER", model="$MODEL")
-async def recommend_book(genre: str) -> str:
+async def recommend_book(genre: str) -> str: # [!code highlight]
     return f"Recommend a {genre} book"
 
 
 async def main():
     genres = ["fantasy", "scifi", "mystery"]
-    tasks = [recommend_book(genre) for genre in genres]
-    results = await asyncio.gather(*tasks)
+    tasks = [recommend_book(genre) for genre in genres] # [!code highlight]
+    results = await asyncio.gather(*tasks) # [!code highlight]
 
     for genre, response in zip(genres, results):
         print(f"({genre}):\n{response.content}\n")
@@ -136,13 +136,13 @@ from mirascope import llm, prompt_template
 
 @llm.call(provider="$PROVIDER", model="$MODEL")
 @prompt_template("Recommend a {genre} book")
-async def recommend_book(genre: str): ...
+async def recommend_book(genre: str): ... # [!code highlight]
 
 
 async def main():
     genres = ["fantasy", "scifi", "mystery"]
-    tasks = [recommend_book(genre) for genre in genres]
-    results = await asyncio.gather(*tasks)
+    tasks = [recommend_book(genre) for genre in genres] # [!code highlight]
+    results = await asyncio.gather(*tasks) # [!code highlight]
 
     for genre, response in zip(genres, results):
         print(f"({genre}):\n{response.content}\n")
@@ -163,7 +163,7 @@ If you haven't already, we recommend first reading the section on [Streams](/doc
 
 Streaming with async works similarly to synchronous streaming, but you use `async for` instead of a regular `for` loop:
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="Shorthand">
 ```python
 import asyncio
@@ -171,14 +171,14 @@ import asyncio
 from mirascope import llm
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", stream=True)
-async def recommend_book(genre: str) -> str:
+@llm.call(provider="$PROVIDER", model="$MODEL", stream=True) # [!code highlight]
+async def recommend_book(genre: str) -> str: # [!code highlight]
     return f"Recommend a {genre} book"
 
 
 async def main():
-    stream = await recommend_book("fantasy")
-    async for chunk, _ in stream:
+    stream = await recommend_book("fantasy") # [!code highlight]
+    async for chunk, _ in stream: # [!code highlight]
         print(chunk.content, end="", flush=True)
 
 
@@ -192,14 +192,14 @@ import asyncio
 from mirascope import llm, prompt_template
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", stream=True)
+@llm.call(provider="$PROVIDER", model="$MODEL", stream=True) # [!code highlight]
 @prompt_template("Recommend a {genre} book")
-async def recommend_book(genre: str): ...
+async def recommend_book(genre: str): ... # [!code highlight]
 
 
 async def main():
-    stream = await recommend_book("fantasy")
-    async for chunk, _ in stream:
+    stream = await recommend_book("fantasy") # [!code highlight]
+    async for chunk, _ in stream: # [!code highlight]
         print(chunk.content, end="", flush=True)
 
 
@@ -216,7 +216,7 @@ If you haven't already, we recommend first reading the section on [Tools](/docs/
 
 When using tools asynchronously, you can make the `call` method of a tool async:
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="Shorthand">
 ```python
 import asyncio
@@ -228,22 +228,22 @@ class FormatBook(BaseTool):
     title: str
     author: str
 
-    async def call(self) -> str:
+    async def call(self) -> str: # [!code highlight]
         # Simulating an async API call
         await asyncio.sleep(1)
         return f"{self.title} by {self.author}"
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", tools=[FormatBook])
-async def recommend_book(genre: str) -> str:
+@llm.call(provider="$PROVIDER", model="$MODEL", tools=[FormatBook]) # [!code highlight]
+async def recommend_book(genre: str) -> str: # [!code highlight]
     return f"Recommend a {genre} book"
 
 
 async def main():
     response = await recommend_book("fantasy")
     if tool := response.tool:
-        if isinstance(tool, FormatBook):
-            output = await tool.call()
+        if isinstance(tool, FormatBook): # [!code highlight]
+            output = await tool.call() # [!code highlight]
             print(output)
     else:
         print(response.content)
@@ -263,13 +263,13 @@ class FormatBook(BaseTool):
     title: str
     author: str
 
-    async def call(self) -> str:
+    async def call(self) -> str: # [!code highlight]
         # Simulating an async API call
         await asyncio.sleep(1)
         return f"{self.title} by {self.author}"
 
 
-@llm.call(provider="$PROVIDER", model="$MODEL", tools=[FormatBook])
+@llm.call(provider="$PROVIDER", model="$MODEL", tools=[FormatBook]) # [!code highlight]
 @prompt_template("Recommend a {genre} book")
 async def recommend_book(genre: str): ...
 
@@ -277,8 +277,8 @@ async def recommend_book(genre: str): ...
 async def main():
     response = await recommend_book("fantasy")
     if tool := response.tool:
-        if isinstance(tool, FormatBook):
-            output = await tool.call()
+        if isinstance(tool, FormatBook): # [!code highlight]
+            output = await tool.call() # [!code highlight]
             print(output)
     else:
         print(response.content)
@@ -297,7 +297,7 @@ When using custom clients with async calls, it's crucial to use the asynchronous
 
 ### Decorator Parameter
 
-<TabbedSection showLogo={true}>
+<TabbedSection>
 <Tab value="Shorthand">
 <ProviderCodeBlock examplePath="mirascope/learn/async/custom_client/decorator"/>
 </Tab>

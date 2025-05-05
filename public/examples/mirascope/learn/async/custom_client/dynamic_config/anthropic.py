@@ -1,4 +1,4 @@
-from anthropic import AsyncAnthropic
+from anthropic import AsyncAnthropic # [!code highlight]
 from mirascope.core import anthropic, Messages
 
 
@@ -6,5 +6,5 @@ from mirascope.core import anthropic, Messages
 async def recommend_book(genre: str) -> anthropic.AsyncAnthropicDynamicConfig:
     return {
         "messages": [Messages.User(f"Recommend a {genre} book")],
-        "client": AsyncAnthropic(),
+        "client": AsyncAnthropic(), # [!code highlight]
     }
