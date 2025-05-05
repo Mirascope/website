@@ -19,10 +19,10 @@ You can then use the `with_hyperdx` decorator to automatically log calls:
 <Tab value="Shorthand">
 ```python
 from mirascope import llm
-from mirascope.integrations.otel import with_hyperdx
+from mirascope.integrations.otel import with_hyperdx # [!code highlight]
 
 
-@with_hyperdx()
+@with_hyperdx() # [!code highlight]
 @llm.call(provider="$PROVIDER", model="$MODEL")
 def recommend_book(genre: str) -> str:
     return f"Recommend a {genre} book."
@@ -35,10 +35,10 @@ print(recommend_book("fantasy"))
 <Tab value="Template">
 ```python
 from mirascope import llm, prompt_template
-from mirascope.integrations.otel import with_hyperdx
+from mirascope.integrations.otel import with_hyperdx # [!code highlight]
 
 
-@with_hyperdx()
+@with_hyperdx() # [!code highlight]
 @llm.call(provider="$PROVIDER", model="$MODEL")
 @prompt_template("Recommend a {genre} book")
 def recommend_book(genre: str): ...
