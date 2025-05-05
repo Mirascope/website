@@ -44,7 +44,7 @@ function BlogLayout({
     <>
       {children}
       <AppLayout>
-        <AppLayout.LeftSidebar>
+        <AppLayout.LeftSidebar className="pt-1">
           <div className="pr-10">
             <BackToBlogLink />
           </div>
@@ -52,7 +52,9 @@ function BlogLayout({
 
         <AppLayout.Content>{mainContent}</AppLayout.Content>
 
-        {rightSidebar && <AppLayout.RightSidebar>{rightSidebar}</AppLayout.RightSidebar>}
+        {rightSidebar && (
+          <AppLayout.RightSidebar className="pt-1">{rightSidebar}</AppLayout.RightSidebar>
+        )}
       </AppLayout>
     </>
   );
