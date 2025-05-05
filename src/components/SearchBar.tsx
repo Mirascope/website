@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, type KeyboardEvent } from "react";
-import { Search as SearchIcon, Command } from "lucide-react";
+import { Search as SearchIcon } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/src/lib/utils";
 import { getSearchService, type SearchResultItem } from "@/src/lib/services/search";
@@ -10,9 +10,11 @@ interface SearchResultProps {
   result: SearchResultItem;
   onSelect: () => void;
   isSelected?: boolean;
+  index: number;
+  onHover: (index: number) => void;
 }
 
-function SearchResult({ result, onSelect, isSelected = false }: SearchResultProps) {
+function SearchResult({ result, onSelect, isSelected = false, index, onHover }: SearchResultProps) {
   // Get development mode from environment
   const isDev = environment.isDev();
 
@@ -24,9 +26,11 @@ function SearchResult({ result, onSelect, isSelected = false }: SearchResultProp
     <Link
       to={result.url}
       onClick={onSelect}
+      onMouseEnter={() => onHover(index)}
+      onMouseMove={() => onHover(index)}
       className={cn(
         "border-border/40 flex border-t px-5 py-4 text-sm transition-colors first:border-0",
-        isSelected ? "bg-accent/50" : "hover:bg-accent/50"
+        isSelected ? "bg-accent/50" : ""
       )}
     >
       <div className="min-w-0 flex-1">
@@ -72,9 +76,15 @@ interface SearchResultListProps {
   results: SearchResultItem[];
   onResultSelect: () => void;
   selectedIndex: number;
+  onHover: (index: number) => void;
 }
 
-function SearchResultList({ results, onResultSelect, selectedIndex }: SearchResultListProps) {
+function SearchResultList({
+  results,
+  onResultSelect,
+  selectedIndex,
+  onHover,
+}: SearchResultListProps) {
   // Only display up to MAX_DISPLAYED_RESULTS
   const displayedResults = results.slice(0, MAX_DISPLAYED_RESULTS);
 
@@ -86,6 +96,8 @@ function SearchResultList({ results, onResultSelect, selectedIndex }: SearchResu
           result={result}
           onSelect={onResultSelect}
           isSelected={idx === selectedIndex}
+          index={idx}
+          onHover={onHover}
         />
       ))}
       {results.length > MAX_DISPLAYED_RESULTS && (
@@ -189,6 +201,7 @@ interface SearchResultsContainerProps {
   onResultSelect: () => void;
   isLandingPage?: boolean;
   selectedIndex: number;
+  setSelectedIndex: (index: number) => void;
 }
 
 function SearchResultsContainer({
@@ -203,6 +216,7 @@ function SearchResultsContainer({
   onResultSelect,
   isLandingPage = false,
   selectedIndex,
+  setSelectedIndex,
 }: SearchResultsContainerProps) {
   // Use a fixed state derived from isOpen with some delayed rendering logic
   const [isReallyVisible, setIsReallyVisible] = useState(false);
@@ -276,6 +290,7 @@ function SearchResultsContainer({
             results={results}
             onResultSelect={onResultSelect}
             selectedIndex={selectedIndex}
+            onHover={setSelectedIndex}
           />
         </div>
       );
@@ -298,8 +313,10 @@ function SearchFooter() {
   return (
     <div className="border-border bg-muted/40 text-muted-foreground flex items-center justify-between border-t p-2 text-xs">
       <div className="flex items-center gap-2 px-2">
-        <Command size={12} />
-        <kbd className="border-border rounded border px-1.5 py-0.5 text-[10px]">K</kbd>
+        <kbd className="border-border rounded border px-1.5 py-0.5 text-[12px]">
+          <span className="pr-1 text-xs">⌘</span>
+          <span>K</span>
+        </kbd>
         <span>to search</span>
       </div>
       <div className="flex items-center gap-2 px-2">
@@ -518,6 +535,7 @@ export default function SearchBar({ onOpenChange, isLandingPage = false }: Searc
         onResultSelect={handleResultSelect}
         isLandingPage={isLandingPage}
         selectedIndex={selectedIndex}
+        setSelectedIndex={setSelectedIndex}
       />
     </div>
   );

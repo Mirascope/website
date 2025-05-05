@@ -1,8 +1,49 @@
-import { createFileRoute, useParams, Link, useLoaderData } from "@tanstack/react-router";
+import { createFileRoute, useParams, useLoaderData } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
+import type { ReactNode } from "react";
 import { Button } from "@/src/components/ui/button";
+import { ButtonLink } from "@/src/components/ui/button-link";
 import { ChevronLeft, Clipboard, Check } from "lucide-react";
 import { MDXRenderer } from "@/src/components/MDXRenderer";
+
+// Reusable component for "Back to Blog" button
+function BackToBlogLink() {
+  return (
+    <div className="flex justify-end">
+      <ButtonLink href="/blog" variant="outline" size="sm">
+        <ChevronLeft className="mr-1 h-4 w-4" />
+        Back to Blog
+      </ButtonLink>
+    </div>
+  );
+}
+
+// Blog layout component for consistent layout across main, pending, and error states
+function BlogLayout({
+  mainContent,
+  rightSidebar,
+  children,
+}: {
+  mainContent: ReactNode;
+  rightSidebar?: ReactNode;
+  children?: ReactNode;
+}) {
+  // Left sidebar with Back to Blog button
+  const leftSidebar = (
+    <SidebarContainer>
+      <div className="py-6 pr-10">
+        <BackToBlogLink />
+      </div>
+    </SidebarContainer>
+  );
+
+  return (
+    <>
+      {children}
+      <BaseLayout leftSidebar={leftSidebar} mainContent={mainContent} rightSidebar={rightSidebar} />
+    </>
+  );
+}
 import { LoadingContent } from "@/src/components/docs";
 import ContentErrorHandler from "@/src/components/ContentErrorHandler";
 import TableOfContents from "@/src/components/TableOfContents";
@@ -36,24 +77,10 @@ export const Route = createFileRoute("/blog/$slug")({
 
   // Configure loading state
   pendingComponent: () => {
-    // Left sidebar with Back to Blog button
-    const leftSidebar = (
-      <SidebarContainer>
-        <div className="px-4 py-6">
-          <Link to="/blog" className="mb-6 inline-block">
-            <Button variant="outline" size="sm">
-              <ChevronLeft className="mr-1 h-4 w-4" />
-              Back to Blog
-            </Button>
-          </Link>
-        </div>
-      </SidebarContainer>
-    );
-
     // Main content - loading state
     const mainContent = <LoadingContent className="min-w-0 flex-1" fullHeight={true} />;
 
-    return <BaseLayout leftSidebar={leftSidebar} mainContent={mainContent} />;
+    return <BlogLayout mainContent={mainContent} />;
   },
 
   // Configure error handling
@@ -134,19 +161,7 @@ function BlogPostPage() {
   // Extract metadata for easier access
   const { title, date, readTime, author, lastUpdated, path } = post.meta;
 
-  // Left sidebar - includes "Back to Blog" button
-  const leftSidebar = (
-    <SidebarContainer>
-      <div className="px-4 py-6">
-        <Link to="/blog" className="mb-6 inline-block">
-          <Button variant="outline" size="sm">
-            <ChevronLeft className="mr-1 h-4 w-4" />
-            Back to Blog
-          </Button>
-        </Link>
-      </div>
-    </SidebarContainer>
-  );
+  // Left sidebar is now handled by BlogLayout
 
   // Main content
   const mainContent = (
@@ -310,7 +325,7 @@ function BlogPostPage() {
   );
 
   return (
-    <>
+    <BlogLayout mainContent={mainContent} rightSidebar={rightSidebar}>
       <SEOMeta
         title={post.meta.title}
         description={post.meta.description || post.mdx?.frontmatter?.excerpt}
@@ -323,8 +338,6 @@ function BlogPostPage() {
           author: post.meta.author,
         }}
       />
-
-      <BaseLayout leftSidebar={leftSidebar} mainContent={mainContent} rightSidebar={rightSidebar} />
-    </>
+    </BlogLayout>
   );
 }
