@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import Logo from "@/src/components/Logo";
-import SEOMeta from "@/src/components/SEOMeta";
+import { Logo, SEOMeta } from "@/src/components/";
 import { environment } from "@/src/lib/content/environment";
 import { useSunsetTime } from "@/src/lib/hooks/useSunsetTime";
 import { ButtonLink } from "@/src/components/ui/button-link";

@@ -1,8 +1,8 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
-import { DocsPage, LoadingDocsPage } from "@/src/components/docs";
+import { DocsPage, LoadingDocsPage } from "@/src/components/routes/docs";
 import { getDocContent, docRegistry } from "@/src/lib/content";
 import { environment } from "@/src/lib/content/environment";
-import ContentErrorHandler from "@/src/components/ContentErrorHandler";
+import { ContentErrorHandler } from "@/src/components";
 
 /**
  * Content loader that uses a reverse index from route paths to DocInfo

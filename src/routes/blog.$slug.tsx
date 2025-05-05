@@ -4,19 +4,19 @@ import type { ReactNode } from "react";
 import { Button } from "@/src/components/ui/button";
 import { ButtonLink } from "@/src/components/ui/button-link";
 import { ChevronLeft, Clipboard, Check } from "lucide-react";
-import { MDXRenderer } from "@/src/components/MDXRenderer";
+import { MDXRenderer } from "@/src/components/mdx/providers";
 
-import { LoadingContent } from "@/src/components/docs";
-import ContentErrorHandler from "@/src/components/ContentErrorHandler";
-import TableOfContents from "@/src/components/TableOfContents";
-import SEOMeta from "@/src/components/SEOMeta";
-import PagefindMeta from "@/src/components/PagefindMeta";
+import { LoadingContent } from "@/src/components/core/feedback";
+import { ContentErrorHandler } from "@/src/components/core/feedback";
+import { TableOfContents } from "@/src/components/core/navigation";
+import { SEOMeta } from "@/src/components/core/meta";
+import { PagefindMeta } from "@/src/components/core/meta";
 import { cn } from "@/src/lib/utils";
 import { getBlogContent } from "@/src/lib/content";
 import analyticsManager from "@/src/lib/services/analytics";
 import type { BlogContent } from "@/src/lib/content";
 import { environment } from "@/src/lib/content/environment";
-import AppLayout from "@/src/components/AppLayout";
+import { AppLayout } from "@/src/components/core/layout";
 
 // Reusable component for "Back to Blog" button
 function BackToBlogLink() {

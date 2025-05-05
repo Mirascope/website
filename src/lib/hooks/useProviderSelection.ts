@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { providers, type Provider } from "@/src/components/docs";
+import { providers, type Provider } from "@/src/config/providers";
 
 /**
  * Custom hook to manage provider selection with localStorage persistence
