@@ -59,11 +59,7 @@ export function InstallSnippet({ className = "" }: InstallSnippetProps) {
     <TabbedSection className={cn(className)}>
       {operatingSystems.map((os) => (
         <Tab key={os} value={os}>
-          <CodeBlock
-            code={generateCommand(os)}
-            language="bash"
-            className="m-0 border-0 bg-transparent p-0"
-          />
+          <CodeBlock code={generateCommand(os)} language="bash" />
         </Tab>
       ))}
     </TabbedSection>

@@ -90,8 +90,8 @@ export function Callout({
 
   // Content styling changes based on whether we have a header
   const contentClassName = cn(
-    showHeader ? "px-4 rounded-b-lg" : "px-3 rounded-lg",
-    customContentClassName ?? "py-2"
+    showHeader ? "rounded-b-lg" : "rounded-lg",
+    customContentClassName ?? "px-3 py-2"
   );
 
   return (
@@ -100,7 +100,7 @@ export function Callout({
       {showHeader && (
         <div
           className={cn(
-            "flex items-center gap-3 px-3 py-2",
+            "flex items-center gap-1 px-2 py-2",
             // Use rounded-lg when collapsed and collapsible, otherwise just round the top
             collapsible && !isOpen ? "rounded-lg" : "rounded-t-lg",
             // Only show the bottom border when the content is expanded
@@ -115,7 +115,7 @@ export function Callout({
           <div className={cn("flex h-6 w-6 items-center justify-center rounded-full", iconClass)}>
             {customIcon || <Icon className={cn("h-4 w-4")} />}
           </div>
-          <div className="flex-1 text-base font-semibold">{displayTitle}</div>
+          <div className="font-handwriting flex-1 text-base font-medium">{displayTitle}</div>
           {collapsible && (
             <div className="text-foreground">
               <ChevronDown
