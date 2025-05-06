@@ -74,7 +74,6 @@
   /* Utility */
   --color-border: oklch(0.25 0.04 286.033); /* Border color */
   --color-input: oklch(0.16 0.006 286.033); /* Input border color */
-  --color-ring: var(--color-mirascope-purple); /* Focus ring color */
 
   /* Chart colors */
   --color-chart-1: var(--color-indigo-400);
@@ -90,15 +89,7 @@
   --color-button-primary: var(--color-lilypad-green-dark);
   --color-primary: var(--color-lilypad-green);
 
-  --color-accent: oklch(0.82 0.1111 145.19);
-  --color-accent-foreground: oklch(0.1 0.2 282.8);
-
+  --color-accent: oklch(0.56 0.13 150);
   /* Utility */
   --color-ring: var(--color-lilypad-green);
-}
-
-/* Lilypad Dark Theme */
-.dark:has(div[data-product="lilypad"]) {
-  --color-accent: oklch(0.45 0.06 140);
-  --color-accent-foreground: var(--color-gray-200);
 }
