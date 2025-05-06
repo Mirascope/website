@@ -148,6 +148,37 @@ export async function renderRouteToString(
   // Render the app to a string
   const appHtml = renderToString(React.createElement(RouterProvider, { router }));
   console.error = originalError;
+
+  // Check for the React client rendering fallback error in the output
+  if (appHtml.includes("Switched to client rendering because the server rendering errored")) {
+    // Extract both the detailed error message and stack trace
+    const templateElement = appHtml.match(
+      /<template data-msg="([^"]*)"(?:\s+data-stck="([^"]*)")?[^>]*>/
+    );
+
+    let errorMessage =
+      "Fatal SSR error: React switched to client rendering fallback. This must be fixed before deployment.";
+
+    if (templateElement) {
+      // The error message is in capture group 1
+      if (templateElement[1]) {
+        const errorMsg = templateElement[1].replace(/\\n/g, "\n");
+        errorMessage += `\n\nDetailed error message:\n${errorMsg}`;
+      }
+
+      // The stack trace is in capture group 2
+      if (templateElement[2]) {
+        const stackTrace = templateElement[2].replace(/\\n/g, "\n");
+        errorMessage += `\n\nStack trace:\n${stackTrace}`;
+      }
+    } else {
+      errorMessage += "\n\nNo detailed error information available.";
+    }
+
+    console.error(errorMessage);
+    throw new Error(errorMessage);
+  }
+
   if (renderError.length > 0) {
     console.error("Error rendering app:", ...renderError);
     throw new Error("Error rendering: " + renderError.join(" "));
