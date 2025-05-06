@@ -1,11 +1,10 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { routeToFilename } from "../../lib/utils";
-import DevLayout from "@/src/components/dev/DevLayout";
+import DevLayout from "@/src/components/routes/dev/DevLayout";
 import { environment } from "@/src/lib/content/environment";
 import { getAllDevMeta } from "@/src/lib/content";
-import ContentErrorHandler from "@/src/components/ContentErrorHandler";
-import { LoadingContent } from "@/src/components/docs";
+import { LoadingContent, ContentErrorHandler } from "@/src/components";
 
 export const Route = createFileRoute("/dev/audit-metadata")({
   component: AuditMetadata,

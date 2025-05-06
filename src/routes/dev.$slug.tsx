@@ -1,10 +1,8 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
-import { LoadingContent } from "@/src/components/docs";
-import DevLayout from "@/src/components/dev/DevLayout";
-import { MDXRenderer } from "@/src/components/MDXRenderer";
+import DevLayout from "@/src/components/routes/dev/DevLayout";
+import { MDXRenderer, ContentErrorHandler, LoadingContent } from "@/src/components/";
 import { getDevContent } from "@/src/lib/content";
 import { environment } from "@/src/lib/content/environment";
-import ContentErrorHandler from "@/src/components/ContentErrorHandler";
 
 export const Route = createFileRoute("/dev/$slug")({
   component: DevContentPage,
