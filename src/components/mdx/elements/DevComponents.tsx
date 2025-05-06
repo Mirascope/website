@@ -410,63 +410,31 @@ export const ThemeColorCombinations: React.FC = () => {
         { name: "Default", textClass: "text-foreground" },
         { name: "Primary", textClass: "text-primary" },
         { name: "Secondary", textClass: "text-secondary" },
-        { name: "Muted", textClass: "text-muted-foreground" },
-        { name: "Accent", textClass: "text-accent-foreground" },
+        { name: "Accent", textClass: "text-accent" },
+        { name: "Muted-foreground", textClass: "text-muted-foreground" },
       ],
     },
     {
       title: "Card Content",
       background: "bg-card",
       combinations: [
-        { name: "Default", textClass: "text-card-foreground" },
+        { name: "Default", textClass: "text-foreground" },
         { name: "Primary", textClass: "text-primary" },
         { name: "Secondary", textClass: "text-secondary" },
-        { name: "Muted", textClass: "text-muted-foreground" },
-        { name: "Accent", textClass: "text-accent-foreground" },
+        { name: "Accent", textClass: "text-accent" },
+        { name: "Muted-foreground", textClass: "text-muted-foreground" },
       ],
     },
     {
       title: "Muted Content",
       background: "bg-muted",
       combinations: [
-        { name: "Default", textClass: "text-foreground" },
+        { name: "muted-foreground", textClass: "text-muted-foreground" },
+        { name: "foreground", textClass: "text-foreground" },
         { name: "Primary", textClass: "text-primary" },
         { name: "Secondary", textClass: "text-secondary" },
-        { name: "Muted", textClass: "text-muted-foreground" },
-        { name: "Accent", textClass: "text-accent-foreground" },
+        { name: "Accent", textClass: "text-accent" },
       ],
-    },
-    {
-      title: "Primary UI Elements",
-      background: "bg-primary",
-      combinations: [
-        { name: "Default", textClass: "text-primary-foreground" },
-        { name: "Foreground (not recommended)", textClass: "text-foreground" },
-        { name: "Muted (not recommended)", textClass: "text-muted-foreground" },
-      ],
-    },
-    {
-      title: "Secondary UI Elements",
-      background: "bg-secondary",
-      combinations: [
-        { name: "Default", textClass: "text-secondary-foreground" },
-        { name: "Foreground (not recommended)", textClass: "text-foreground" },
-        { name: "Muted (not recommended)", textClass: "text-muted-foreground" },
-      ],
-    },
-    {
-      title: "Accent UI Elements",
-      background: "bg-accent",
-      combinations: [
-        { name: "Default", textClass: "text-accent-foreground" },
-        { name: "Foreground (not recommended)", textClass: "text-foreground" },
-        { name: "Muted (not recommended)", textClass: "text-muted-foreground" },
-      ],
-    },
-    {
-      title: "Destructive UI Elements",
-      background: "bg-destructive",
-      combinations: [{ name: "Default", textClass: "text-destructive-foreground" }],
     },
     {
       title: "Popover Content",
@@ -477,6 +445,26 @@ export const ThemeColorCombinations: React.FC = () => {
         { name: "Secondary", textClass: "text-secondary" },
         { name: "Muted", textClass: "text-muted-foreground" },
       ],
+    },
+    {
+      title: "Primary UI Elements",
+      background: "bg-primary",
+      combinations: [{ name: "primary-foreground", textClass: "text-primary-foreground" }],
+    },
+    {
+      title: "Secondary UI Elements",
+      background: "bg-secondary",
+      combinations: [{ name: "secondary-foreground", textClass: "text-secondary-foreground" }],
+    },
+    {
+      title: "Accent UI Elements",
+      background: "bg-accent",
+      combinations: [{ name: "accent-foreground", textClass: "text-accent-foreground" }],
+    },
+    {
+      title: "Destructive UI Elements",
+      background: "bg-destructive",
+      combinations: [{ name: "Default", textClass: "text-destructive-foreground" }],
     },
   ];
 
