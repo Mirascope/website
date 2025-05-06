@@ -3,10 +3,10 @@
 /* Shared brand colors */
 @theme {
   /* Base brand colors */
-  --color-mirascope-purple: oklch(0.5854 0.2041 277.12); /* Mirascope purple */
-  --color-mirascope-purple-dark: oklch(0.5254 0.2041 277.12); /* Darker purple */
-  --color-lilypad-green: oklch(0.54 0.18 140); /* Vibrant lily pad green */
-  --color-lilypad-green-dark: oklch(0.44 0.14 140); /* Darker version of the lily pad green */
+  --color-mirascope-purple: #6366f1; /* Mirascope purple */
+  --color-mirascope-purple-dark: #5452dc; /* Darker purple */
+  --color-lilypad-green: #409b45; /* Vibrant lily pad green */
+  --color-lilypad-green-dark: #25562a; /* Darker version of the lily pad green */
 
   /* Default (Mirascope) theme colors */
 
@@ -27,7 +27,8 @@
   --color-muted: var(--color-gray-200);
   --color-muted-foreground: var(--color-gray-500);
 
-  --color-accent: oklch(0.65 0.185 277.93);
+  /* Mirascope purple at 60% opacity */
+  --color-accent: rgba(99, 102, 241, 0.6);
   --color-accent-foreground: var(--color-white);
 
   /* ShadCn UI extras */
@@ -63,6 +64,7 @@
 
   --color-muted: oklch(0.18 0.025 270);
   --color-muted-foreground: oklch(0.75 0.015 286.067);
+
   /* ShadCn UI extras */
   --color-card: oklch(0.11 0.005 285.823);
   --color-card-foreground: oklch(0.95 0 0);
@@ -89,7 +91,8 @@
   --color-button-primary: var(--color-lilypad-green-dark);
   --color-primary: var(--color-lilypad-green);
 
-  --color-accent: oklch(0.56 0.13 150);
+  --color-accent: rgba(64, 155, 69, 0.6); /* Lilypad green at 60 opacity */
+
   /* Utility */
   --color-ring: var(--color-lilypad-green);
 }

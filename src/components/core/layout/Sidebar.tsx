@@ -65,7 +65,7 @@ const SidebarLink = ({
   params?: Record<string, any>;
   children: React.ReactNode;
 }) => {
-  const activeClass = `bg-accent text-accent-foreground font-medium`;
+  const activeClass = `bg-primary text-primary-foreground font-medium`;
   const inactiveClass = `text-muted-foreground hover:bg-muted hover:text-muted-foreground`;
 
   return (
