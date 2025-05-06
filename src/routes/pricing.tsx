@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Check, Info, X } from "lucide-react";
+import { Check, X } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/src/components/ui/tabs";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/src/components/ui/tooltip";
 import { ButtonLink } from "@/src/components/ui/button-link";
 import { cn } from "@/src/lib/utils";
 import { SEOMeta } from "@/src/components";
@@ -101,16 +100,34 @@ const PricingTier = ({
   description,
   buttonText,
   buttonLink,
+  badge,
+  variant = "default",
 }: {
   name: string;
   price: string;
   description: string;
   buttonText: string;
   buttonLink: string;
+  badge?: "Open Beta" | "Closed Beta";
+  variant?: "default" | "outline";
 }) => (
   <div className="bg-background border-border overflow-hidden rounded-lg border shadow-sm">
     <div className={cn("bg-background px-6 py-8")}>
-      <h3 className={cn("text-foreground mb-2 text-xl font-semibold")}>{name}</h3>
+      <div className="mb-2 flex items-center gap-2">
+        <h3 className={cn("text-foreground text-xl font-semibold")}>{name}</h3>
+        {badge && (
+          <span
+            className={cn(
+              "rounded-md px-2 py-1 text-xs font-medium",
+              badge === "Open Beta"
+                ? "bg-primary/20 text-primary"
+                : "bg-muted text-muted-foreground"
+            )}
+          >
+            {badge}
+          </span>
+        )}
+      </div>
       <p className="text-muted-foreground mb-5">{description}</p>
       <div className="mb-6">
         <span className="text-foreground text-3xl font-bold">{price}</span>
@@ -118,7 +135,7 @@ const PricingTier = ({
           <span className="text-muted-foreground ml-1 text-sm">/ month</span>
         )}
       </div>
-      <ButtonLink href={buttonLink} className="w-full" variant="default">
+      <ButtonLink href={buttonLink} className="w-full" variant={variant}>
         {buttonText}
       </ButtonLink>
     </div>
@@ -201,25 +218,6 @@ function PricingPage() {
     { feature: "API Rate Limits", free: "No limits", pro: "No limits", team: "No limits" },
   ];
 
-  // Beta notice content for tooltips
-  const betaNoticeContent = (
-    <div className="font-handwriting">
-      <h3 className="text-primary mb-2 text-lg font-semibold">Open Beta Notice</h3>
-      <p className="mb-2 text-lg">
-        Lilypad is currently in an open beta, during which we will not be charging for the platform.
-        All users during this period will have free access to Pro features.
-      </p>
-      <p className="mb-2 text-lg">
-        Once we finalize our pricing and release the production stable version, we will give all
-        existing users a grace period during which they can continue to evaluate the platform to
-        determine if they would like to continue on a paid plan.
-      </p>
-      <p className="text-lg">
-        Licenses for self-hosting are available upon request during the beta.
-      </p>
-    </div>
-  );
-
   return (
     <>
       <SEOMeta
@@ -243,7 +241,7 @@ function PricingPage() {
           {/* Shadcn Tabs */}
           <Tabs defaultValue="hosted" className="mb-10 w-full">
             <div className="mb-8 flex justify-center">
-              <TabsList className="bg-muted px-2 py-6">
+              <TabsList className="bg-muted px-1 py-5">
                 <TabsTrigger value="hosted">Hosted By Us</TabsTrigger>
                 <TabsTrigger value="selfhosted">Self Hosting</TabsTrigger>
               </TabsList>
@@ -258,67 +256,26 @@ function PricingPage() {
                   description="For individuals just getting started"
                   buttonText="Get Started"
                   buttonLink="/docs/lilypad/"
+                  badge="Open Beta"
                 />
-                <div className="bg-background border-border overflow-hidden rounded-lg border shadow-sm">
-                  <div className="bg-background px-6 py-8">
-                    <div className="mb-2 flex items-center gap-2">
-                      <h3 className="text-foreground text-xl font-semibold">Pro</h3>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <Info size={16} className="text-primary cursor-pointer" />
-                        </TooltipTrigger>
-                        <TooltipContent
-                          side="right"
-                          className="bg-popover text-primary border-primary/20 w-96 border p-4"
-                        >
-                          {betaNoticeContent}
-                        </TooltipContent>
-                      </Tooltip>
-                    </div>
-                    <p className="text-muted-foreground mb-5">For teams with more advanced needs</p>
-                    <div className="mb-6">
-                      <span className="text-3xl font-bold">TBD</span>
-                    </div>
-                    <ButtonLink
-                      href="mailto:sales@mirascope.com"
-                      variant="outline"
-                      className="w-full"
-                    >
-                      Contact Us
-                    </ButtonLink>
-                  </div>
-                </div>
-                <div className="bg-background border-border overflow-hidden rounded-lg border shadow-sm">
-                  <div className="bg-background px-6 py-8">
-                    <div className="mb-2 flex items-center gap-2">
-                      <h3 className="text-foreground text-xl font-semibold">Team</h3>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <Info size={16} className="text-primary cursor-pointer" />
-                        </TooltipTrigger>
-                        <TooltipContent
-                          side="right"
-                          className="bg-popover text-primary border-primary/20 w-96 border p-4"
-                        >
-                          {betaNoticeContent}
-                        </TooltipContent>
-                      </Tooltip>
-                    </div>
-                    <p className="text-muted-foreground mb-5">
-                      For larger teams requiring dedicated support
-                    </p>
-                    <div className="mb-6">
-                      <span className="text-3xl font-bold">TBD</span>
-                    </div>
-                    <ButtonLink
-                      href="mailto:sales@mirascope.com"
-                      variant="outline"
-                      className="w-full"
-                    >
-                      Contact Us
-                    </ButtonLink>
-                  </div>
-                </div>
+                <PricingTier
+                  name="Pro"
+                  price="TBD"
+                  description="For teams with more advanced needs"
+                  buttonText="Contact Us"
+                  buttonLink="mailto:sales@mirascope.com"
+                  badge="Closed Beta"
+                  variant="outline"
+                />
+                <PricingTier
+                  name="Team"
+                  price="TBD"
+                  description="For larger teams requiring dedicated support"
+                  buttonText="Contact Us"
+                  buttonLink="mailto:sales@mirascope.com"
+                  badge="Closed Beta"
+                  variant="outline"
+                />
               </div>
 
               {/* Feature comparison table */}
@@ -334,67 +291,26 @@ function PricingPage() {
                   description="For individuals just getting started"
                   buttonText="Get Started"
                   buttonLink="/docs/lilypad/getting-started/self-hosting"
+                  badge="Open Beta"
                 />
-                <div className="bg-background border-border overflow-hidden rounded-lg border shadow-sm">
-                  <div className="bg-background px-6 py-8">
-                    <div className="mb-2 flex items-center gap-2">
-                      <h3 className="text-foreground text-xl font-semibold">Pro</h3>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <Info size={16} className="text-primary cursor-pointer" />
-                        </TooltipTrigger>
-                        <TooltipContent
-                          side="right"
-                          className="bg-popover text-primary border-primary/20 w-96 border p-4"
-                        >
-                          {betaNoticeContent}
-                        </TooltipContent>
-                      </Tooltip>
-                    </div>
-                    <p className="text-muted-foreground mb-5">For teams with more advanced needs</p>
-                    <div className="mb-6">
-                      <span className="text-3xl font-bold">TBD</span>
-                    </div>
-                    <ButtonLink
-                      href="mailto:sales@mirascope.com"
-                      variant="outline"
-                      className="w-full"
-                    >
-                      Request License
-                    </ButtonLink>
-                  </div>
-                </div>
-                <div className="bg-background border-border overflow-hidden rounded-lg border shadow-sm">
-                  <div className="bg-background px-6 py-8">
-                    <div className="mb-2 flex items-center gap-2">
-                      <h3 className="text-foreground text-xl font-semibold">Team</h3>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <Info size={16} className="text-primary cursor-pointer" />
-                        </TooltipTrigger>
-                        <TooltipContent
-                          side="right"
-                          className="bg-popover text-primary border-primary/20 w-96 border p-4"
-                        >
-                          {betaNoticeContent}
-                        </TooltipContent>
-                      </Tooltip>
-                    </div>
-                    <p className="text-muted-foreground mb-5">
-                      For larger teams requiring dedicated support
-                    </p>
-                    <div className="mb-6">
-                      <span className="text-3xl font-bold">TBD</span>
-                    </div>
-                    <ButtonLink
-                      href="mailto:sales@mirascope.com"
-                      variant="outline"
-                      className="w-full"
-                    >
-                      Request License
-                    </ButtonLink>
-                  </div>
-                </div>
+                <PricingTier
+                  name="Pro"
+                  price="TBD"
+                  description="For teams with more advanced needs"
+                  buttonText="Request License"
+                  buttonLink="mailto:sales@mirascope.com"
+                  badge="Closed Beta"
+                  variant="outline"
+                />
+                <PricingTier
+                  name="Team"
+                  price="TBD"
+                  description="For larger teams requiring dedicated support"
+                  buttonText="Request License"
+                  buttonLink="mailto:sales@mirascope.com"
+                  badge="Closed Beta"
+                  variant="outline"
+                />
               </div>
 
               {/* Feature comparison table */}
