@@ -128,23 +128,6 @@
   --color-border: var(--color-gray-200);
   --color-input: var(--color-gray-200);
   --color-ring: var(--color-lilypad-green);
-
-  /* Chart colors */
-  --color-chart-1: var(--color-emerald-500);
-  --color-chart-2: var(--color-cyan-500);
-  --color-chart-3: var(--color-blue-500);
-  --color-chart-4: var(--color-amber-500);
-  --color-chart-5: var(--color-orange-500);
-
-  /* Sidebar specific colors */
-  --color-sidebar-background: var(--color-gray-50);
-  --color-sidebar-foreground: var(--color-gray-700);
-  --color-sidebar-primary: var(--color-lilypad-green);
-  --color-sidebar-primary-foreground: oklch(0.985 0 0);
-  --color-sidebar-accent: var(--color-gray-100);
-  --color-sidebar-accent-foreground: var(--color-gray-900);
-  --color-sidebar-border: var(--color-gray-200);
-  --color-sidebar-ring: var(--color-lilypad-green);
 }
 
 /* Lilypad Dark Theme */
@@ -179,21 +162,4 @@
   --color-border: var(--color-gray-800);
   --color-input: var(--color-gray-800);
   --color-ring: var(--color-emerald-700);
-
-  /* Chart colors */
-  --color-chart-1: var(--color-emerald-400);
-  --color-chart-2: var(--color-cyan-400);
-  --color-chart-3: var(--color-blue-400);
-  --color-chart-4: var(--color-amber-400);
-  --color-chart-5: var(--color-orange-400);
-
-  /* Sidebar specific colors */
-  --color-sidebar-background: var(--color-gray-900);
-  --color-sidebar-foreground: var(--color-gray-200);
-  --color-sidebar-primary: var(--color-emerald-600);
-  --color-sidebar-primary-foreground: oklch(0.985 0 0);
-  --color-sidebar-accent: var(--color-gray-800);
-  --color-sidebar-accent-foreground: var(--color-gray-200);
-  --color-sidebar-border: var(--color-gray-800);
-  --color-sidebar-ring: var(--color-emerald-600);
 }
