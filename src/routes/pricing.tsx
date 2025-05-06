@@ -138,7 +138,7 @@ const FeatureComparisonTable = ({
 }) => (
   <div className="bg-background border-border overflow-hidden rounded-lg border shadow-sm">
     <div className="bg-accent border-border border-b px-4 py-5 sm:px-6">
-      <h3 className="text-foreground text-lg font-medium">Feature Comparison</h3>
+      <h3 className="text-accent-foreground text-lg font-medium">Feature Comparison</h3>
     </div>
     <div className="bg-background overflow-x-auto px-4 py-5 sm:p-6">
       {/* Table header */}
@@ -243,7 +243,7 @@ function PricingPage() {
           {/* Shadcn Tabs */}
           <Tabs defaultValue="hosted" className="mb-10 w-full">
             <div className="mb-8 flex justify-center">
-              <TabsList>
+              <TabsList className="bg-muted px-2 py-6">
                 <TabsTrigger value="hosted">Hosted By Us</TabsTrigger>
                 <TabsTrigger value="selfhosted">Self Hosting</TabsTrigger>
               </TabsList>
