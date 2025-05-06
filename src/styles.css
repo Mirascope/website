@@ -641,14 +641,6 @@ header button:not(.font-toggle-button),
   margin-bottom: 0 !important;
 }
 
-/* Code block styling */
-.code-block-wrapper {
-  position: relative;
-  margin: 0;
-  border-radius: 0.5rem;
-  overflow: hidden;
-}
-
 .shiki {
   margin: 0 !important;
   padding: 0.75rem !important;
