@@ -13,6 +13,7 @@ import {
   TabbedSection,
   Tab,
   MermaidDiagram,
+  Icon,
 } from "@/src/components/mdx/elements";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/src/components/ui/tabs";
 import { Button } from "@/src/components/ui/button";
@@ -22,8 +23,6 @@ import { Underline } from "./Underline";
 import { ProviderCodeWrapper } from "./ProviderCodeWrapper";
 import { ResponsiveImage } from "@/src/components/mdx/providers/ResponsiveImage";
 import { devComponents } from "@/src/components/mdx/elements/DevComponents";
-// Import all Lucide icons
-import * as Lucide from "lucide-react";
 
 // Helper function to generate heading ID from text
 const slugify = (text: string): string => {
@@ -80,6 +79,7 @@ export const components = {
   Info,
   Success,
   MermaidDiagram,
+  Icon,
 
   // UI Components
   Button,
@@ -89,15 +89,6 @@ export const components = {
   TabsTrigger,
   TabsContent,
   Logo,
-
-  // Individual Lucide icons as needed
-  // We can't expose the entire Lucide namespace due to MDX type constraints
-  LightbulbIcon: Lucide.Lightbulb,
-  UsersIcon: Lucide.Users,
-  GithubIcon: Lucide.Github,
-  StarIcon: Lucide.Star,
-  RocketIcon: Lucide.Rocket,
-  BookOpenIcon: Lucide.BookOpen,
 
   // Dev components
   ...devComponents,
