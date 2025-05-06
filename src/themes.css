@@ -58,10 +58,10 @@
   --color-foreground: oklch(0.95 0 0); /* Light text */
 
   /* Components */
-  --color-secondary: oklch(0.55 0.25 195); /* Darker teal than light-secondary */
-  --color-secondary-foreground: oklch(0.95 0 0);
+  --color-secondary: oklch(0.5 0.12 195); /* Darker teal than light-secondary */
+  --color-secondary-foreground: oklch(0.9 0 0); /* Light text for contrast */
 
-  --color-muted: oklch(0.18 0.006 286.033);
+  --color-muted: oklch(0.18 0.025 270);
   --color-muted-foreground: oklch(0.75 0.015 286.067);
 
   --color-accent: oklch(0.54 0.12 280.48);
@@ -72,13 +72,13 @@
   --color-card-foreground: oklch(0.95 0 0);
   --color-popover: oklch(0.11 0.005 285.823);
   --color-popover-foreground: oklch(0.95 0 0);
-  --color-destructive: oklch(0.55 0.18 48); /* Darker warm orange that complements purple */
+  --color-destructive: oklch(0.5 0.17 30); /* Darker coral-orange that works with green */
   --color-destructive-foreground: oklch(0.95 0 0);
 
   /* Utility */
-  --color-border: oklch(0.16 0.006 286.033); /* Border color */
+  --color-border: oklch(0.25 0.04 286.033); /* Border color */
   --color-input: oklch(0.16 0.006 286.033); /* Input border color */
-  --color-ring: oklch(0.35 0.017 285.786); /* Focus ring color */
+  --color-ring: var(--color-mirascope-purple); /* Focus ring color */
 
   /* Chart colors */
   --color-chart-1: var(--color-indigo-400);
@@ -103,34 +103,6 @@
 
 /* Lilypad Dark Theme */
 .dark:has(div[data-product="lilypad"]) {
-  /* Base */
-  --color-background: oklch(0.1 0.01 240);
-  --color-foreground: oklch(0.95 0 0);
-
-  /* Components */
-  --color-button-primary: var(--color-lilypad-green-dark);
-  --color-primary: var(--color-lilypad-green);
-  --color-primary-foreground: var(--color-foreground);
-
-  --color-secondary: oklch(0.5 0.12 180); /* Darker teal-blue that complements lilypad green */
-  --color-secondary-foreground: oklch(0.9 0 0); /* Light text for contrast */
-
-  --color-muted: var(--color-gray-800);
-  --color-muted-foreground: var(--color-gray-400);
-
   --color-accent: oklch(0.45 0.06 140);
   --color-accent-foreground: var(--color-gray-200);
-
-  /* ShadCn UI extras */
-  --color-card: oklch(0.15 0.05 140);
-  --color-card-foreground: oklch(0.95 0 0);
-  --color-popover: oklch(0.11 0.01 240);
-  --color-popover-foreground: oklch(0.95 0 0);
-  --color-destructive: oklch(0.5 0.17 30); /* Darker coral-orange that works with green */
-  --color-destructive-foreground: oklch(0.95 0 0);
-
-  /* Utility */
-  --color-border: var(--color-gray-800);
-  --color-input: var(--color-gray-800);
-  --color-ring: var(--color-emerald-700);
 }
