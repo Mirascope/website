@@ -816,7 +816,8 @@ mark,
 .mdx-content h3,
 .mdx-content h4,
 .mdx-content h5,
-.mdx-content h6 {
+.mdx-content h6,
+.mdx-content a {
   font-family: "Williams Handwriting", cursive !important;
 }
 
