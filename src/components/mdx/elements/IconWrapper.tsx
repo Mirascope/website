@@ -12,6 +12,14 @@ import {
   AlertTriangle,
   Heart,
   Check,
+  DollarSign,
+  Globe,
+  Bolt,
+  Search,
+  BarChart,
+  Edit,
+  FlaskConical,
+  Zap,
   // Add other icons as needed
 } from "lucide-react";
 
@@ -30,6 +38,15 @@ const ICONS: Record<string, any> = {
   "alert-triangle": AlertTriangle,
   heart: Heart,
   check: Check,
+  "dollar-sign": DollarSign,
+  globe: Globe,
+  bolt: Bolt,
+  search: Search,
+  "bar-chart": BarChart,
+  edit: Edit,
+  flask: FlaskConical,
+  "flask-conical": FlaskConical,
+  zap: Zap,
 };
 
 interface IconWrapperProps {
