@@ -21,6 +21,10 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
   const codeRef = useRef<HTMLDivElement>(null);
   const [isSmallBlock, setIsSmallBlock] = useState<boolean>(false);
 
+  // Base styles for code block container
+  const codeBlockBaseStyles =
+    "code-block-wrapper border-border relative m-0 mb-2 rounded-md overflow-hidden border p-0 text-sm";
+
   useEffect(() => {
     async function highlight() {
       setIsLoading(true);
@@ -100,9 +104,7 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
   // If loading, just show the code without syntax highlighting to maintain size
   if (isLoading) {
     return (
-      <div
-        className={`code-block-wrapper border-border relative m-0 overflow-hidden border p-0 text-sm ${className}`}
-      >
+      <div className={cn(codeBlockBaseStyles, className)}>
         <pre className="bg-button-primary m-0 p-4">
           <code className="opacity-0">{code}</code>
         </pre>
@@ -114,7 +116,8 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
     <div
       ref={codeRef}
       className={cn(
-        "code-block-wrapper group border-border relative m-0 overflow-hidden border p-0 text-sm",
+        codeBlockBaseStyles,
+        "group", // Enables group-hover functionality for button visibility
         funMode && "fun-mode",
         className
       )}
