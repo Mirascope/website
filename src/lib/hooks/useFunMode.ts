@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { FunModeContext } from "@/src/components/FunModeContext";
+import { FunModeContext } from "@/src/components";
 
 /**
  * Custom hook to access fun mode state from context
