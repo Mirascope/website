@@ -6,7 +6,11 @@ description: API documentation for mirascope.core.base.call_factory
 
 # mirascope.core.base.call_factory
 
-**Type:** Function
+<ApiType type="Function" />
+
+<ApiSignature>
+call_factory(TCallResponse: type[_BaseCallResponseT], TCallResponseChunk: type[_BaseCallResponseChunkT], TToolType: type[_BaseToolT], TStream: type[_BaseStreamT], default_call_params: BaseCallParams, setup_call: SameSyncAndAsyncClientSetupCall[_SameSyncAndAsyncClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT] | SetupCall[_SyncBaseClientT, _AsyncBaseClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT], get_json_output: GetJsonOutput[_BaseCallResponseT | _BaseCallResponseChunkT], handle_stream: HandleStream[_ResponseChunkT, _BaseCallResponseChunkT, _BaseToolT], handle_stream_async: HandleStreamAsync[_AsyncResponseChunkT, _BaseCallResponseChunkT, _BaseToolT])
+</ApiSignature>
 
 ## Description
 
@@ -31,5 +35,50 @@ Args:
         `BaseTool` instances, respectively.
     handle_stream_async: The same helper method as `handle_stream` except for
         handling asynchronous streaming.
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "TCallResponse",
+    "type": "type[_BaseCallResponseT]"
+  },
+  {
+    "name": "TCallResponseChunk",
+    "type": "type[_BaseCallResponseChunkT]"
+  },
+  {
+    "name": "TToolType",
+    "type": "type[_BaseToolT]"
+  },
+  {
+    "name": "TStream",
+    "type": "type[_BaseStreamT]"
+  },
+  {
+    "name": "default_call_params",
+    "type": "BaseCallParams"
+  },
+  {
+    "name": "setup_call",
+    "type": "SameSyncAndAsyncClientSetupCall[_SameSyncAndAsyncClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT] | SetupCall[_SyncBaseClientT, _AsyncBaseClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT]"
+  },
+  {
+    "name": "get_json_output",
+    "type": "GetJsonOutput[_BaseCallResponseT | _BaseCallResponseChunkT]"
+  },
+  {
+    "name": "handle_stream",
+    "type": "HandleStream[_ResponseChunkT, _BaseCallResponseChunkT, _BaseToolT]"
+  },
+  {
+    "name": "handle_stream_async",
+    "type": "HandleStreamAsync[_AsyncResponseChunkT, _BaseCallResponseChunkT, _BaseToolT]"
+  }
+]}
+/>
+
+<ReturnType
+  type="CallDecorator[_BaseCallResponseT, _BaseCallResponseChunkT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _BaseStreamT, _SyncBaseClientT, _AsyncBaseClientT, _SameSyncAndAsyncClientT]"
+/>
 
 

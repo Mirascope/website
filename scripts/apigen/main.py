@@ -99,7 +99,6 @@ def process_source(
         return True
     except Exception as e:
         print(f"Error processing {source_name}: {e}", file=sys.stderr)
-        raise e
         return False
 
 
