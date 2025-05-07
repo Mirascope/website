@@ -6,7 +6,11 @@ description: API documentation for mirascope.integrations.otel
 
 # mirascope.integrations.otel
 
-**Type:** Alias
+<ApiType type="Alias" />
+
+<ApiSignature>
+configure(processors: Sequence[SpanProcessor] | None = None)
+</ApiSignature>
 
 ## Description
 
@@ -19,8 +23,24 @@ Args:
 Returns:
     The configured tracer.
 
+<ParametersTable
+  parameters={[
+  {
+    "name": "processors",
+    "type": "Sequence[SpanProcessor] | None",
+    "description": "Optional[Sequence[SpanProcessor]]\nThe span processors to use, if None, a console exporter will be used.",
+    "default": "None"
+  }
+]}
+/>
 
-**Type:** Alias
+<ReturnType
+  type="Tracer"
+  description="The configured tracer."
+/>
+
+
+<ApiType type="Alias" />
 
 ## Description
 
@@ -48,8 +68,12 @@ def recommend_book(genre: str) -> str:
 print(recommend_book("fantasy"))
 ```
 
+<ReturnType
+  type="Callable[[Callable[_P, _R]], Callable[_P, _R]]"
+/>
 
-**Type:** Alias
+
+<ApiType type="Alias" />
 
 ## Description
 
@@ -78,5 +102,9 @@ def recommend_book(genre: str) -> str:
 
 print(recommend_book("fantasy"))
 ```
+
+<ReturnType
+  type="Callable[[Callable[_P, _R]], Callable[_P, _R]]"
+/>
 
 
