@@ -142,8 +142,8 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ children }) => {
           <button
             ref={closeBtnRef}
             onClick={toggleSidebar}
-            className={`bg-primary/90 text-primary-foreground fixed top-[calc(var(--header-height)-2.2rem)] left-3 z-80 flex items-center justify-center rounded-full shadow-sm ${
-              isPhoneScreen ? "h-10 w-10" : "h-9 w-9"
+            className={`bg-primary/90 text-primary-foreground fixed top-[calc(var(--header-height)-2.5rem)] left-2 z-80 flex items-center justify-center rounded-full shadow-sm ${
+              isPhoneScreen ? "h-9 w-9" : "h-9 w-9"
             }`}
             aria-label={sidebarExpanded ? "Close sidebar" : "Open sidebar"}
             aria-expanded={sidebarExpanded}
@@ -162,7 +162,7 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ children }) => {
           id="sidebar-content"
           className={`bg-background/95 fixed top-[var(--header-height)] h-[calc(100vh-var(--header-height))] backdrop-blur-sm transition-all duration-300 ease-in-out ${
             isPhoneScreen
-              ? "w-[calc(100vw-40px)] rounded-r-md" // Almost full width on phones, with slight margin
+              ? "w-[calc(100vw-20px)] rounded-r-md" // Almost full width on phones, with slight margin
               : isSmallScreen
                 ? "w-[85vw] max-w-xs rounded-r-md" // 85% width on tablets with rounded corner
                 : "w-64 rounded-r-md" // Fixed width on desktop
