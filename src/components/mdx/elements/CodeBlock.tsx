@@ -70,9 +70,6 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2000);
 
-    // Track code copy event
-    const pagePath = window.location.pathname;
-
     // Find position of this code block on the page
     let blockPosition = 0;
     if (codeRef.current) {
@@ -87,17 +84,17 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
 
     // Extract product from URL path if in docs section
     let product = "unknown";
+    const pagePath = window.location.pathname;
     const docsMatch = pagePath.match(/^\/doc\/([^/]+)/);
     if (docsMatch && docsMatch[1]) {
       product = docsMatch[1];
     }
 
-    analyticsManager.trackEvent("select_content", {
-      content_type: "code_snippet",
-      item_id: `${pagePath}#code-${blockPosition}`,
-      language: language || "text",
+    analyticsManager.trackCopyEvent({
+      contentType: "code_snippet",
+      itemId: `${pagePath}#code-${blockPosition}`,
       product: product,
-      page_path: pagePath,
+      language: language || "text",
     });
   };
 

@@ -269,6 +269,31 @@ export class AnalyticsManager {
   }
 
   /**
+   * Track a copy to clipboard event consistently across the site
+   */
+  trackCopyEvent({
+    contentType,
+    itemId,
+    product,
+    language,
+  }: {
+    contentType: "blog_markdown" | "document_markdown" | "code_snippet";
+    itemId: string;
+    product: string;
+    language?: string;
+  }): void {
+    const pagePath = window.location.pathname;
+
+    this.trackEvent("select_content", {
+      content_type: contentType,
+      item_id: itemId,
+      product: product,
+      page_path: pagePath,
+      ...(language && { language }),
+    });
+  }
+
+  /**
    * Report web vitals metrics
    */
   reportWebVital(metric: any): void {

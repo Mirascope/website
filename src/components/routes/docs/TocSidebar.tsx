@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { TableOfContents } from "@/src/components";
-import { Button } from "@/src/components/ui/button";
-import { Server, Clipboard, Check } from "lucide-react";
+import { Server } from "lucide-react";
 import { ProviderDropdown } from "@/src/components/mdx/providers";
 import { type DocContent } from "@/src/lib/content";
-import analyticsManager from "@/src/lib/services/analytics";
+import { CopyMarkdownButton } from "@/src/components/ui/copy-markdown-button";
 
 interface TocSidebarProps {
   document?: DocContent | null;
@@ -16,57 +15,17 @@ interface TocSidebarProps {
  * Displays provider selection dropdown and table of contents
  */
 const TocSidebar: React.FC<TocSidebarProps> = ({ document }) => {
-  const [isCopied, setIsCopied] = useState(false);
-
-  const copyContentAsMarkdown = () => {
-    if (document?.content) {
-      navigator.clipboard
-        .writeText(document.content)
-        .then(() => {
-          setIsCopied(true);
-          setTimeout(() => {
-            setIsCopied(false);
-          }, 2000);
-
-          const pagePath = window.location.pathname;
-          // Using GA4 standard "select_content" event with recommended parameters
-          analyticsManager.trackEvent("select_content", {
-            content_type: "document_markdown",
-            item_id: document.meta.path,
-            product: document.meta.product,
-            page_path: pagePath,
-          });
-        })
-        .catch((err) => {
-          console.error("Failed to copy content: ", err);
-        });
-    }
-  };
-
   return (
     <div className="flex h-full flex-col">
       <div className="px-4">
         <div className="mb-4 flex flex-col gap-3">
           {document && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={copyContentAsMarkdown}
-              disabled={isCopied}
-              className="w-full"
-            >
-              {isCopied ? (
-                <>
-                  <Check className="mr-1 h-4 w-4" />
-                  Copied!
-                </>
-              ) : (
-                <>
-                  <Clipboard className="mr-1 h-4 w-4" />
-                  Copy as Markdown
-                </>
-              )}
-            </Button>
+            <CopyMarkdownButton
+              content={document.content}
+              itemId={document.meta.path}
+              product={document.meta.product}
+              contentType="document_markdown"
+            />
           )}
 
           {/* Provider dropdown */}
