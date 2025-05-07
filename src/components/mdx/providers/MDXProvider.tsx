@@ -24,25 +24,7 @@ import { Underline } from "./Underline";
 import { ProviderCodeWrapper } from "./ProviderCodeWrapper";
 import { ResponsiveImage } from "@/src/components/mdx/providers/ResponsiveImage";
 import { devComponents } from "@/src/components/mdx/elements/DevComponents";
-
-// Helper function to generate heading ID from text
-const slugify = (text: string): string => {
-  // Handle special cases that might cause issues
-  if (!text) return "heading";
-
-  // Normalize Unicode characters
-  const normalized = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-
-  return (
-    normalized
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9]+/g, "-") // Replace any non-alphanumeric chars with hyphens
-      .replace(/(^-|-$)/g, "") // Remove leading/trailing hyphens
-      .replace(/--+/g, "-") || // Replace multiple hyphens with one
-    "heading"
-  ); // Default to 'heading' if nothing remains
-};
+import { slugify } from "@/src/lib/utils";
 
 // MDX-specific ButtonLink wrapper that bypasses type checking at the MDX boundary
 // and handles nested paragraph tags that MDX generates
