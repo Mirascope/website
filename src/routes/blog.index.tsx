@@ -113,7 +113,7 @@ function BlogPage() {
                       params={{ slug: post.slug }}
                       className="group block h-full cursor-pointer"
                     >
-                      <div className="bg-card border-border flex h-[320px] flex-col overflow-hidden rounded-lg border-1 shadow-sm transition-all duration-200 hover:shadow-lg">
+                      <div className="bg-background border-border flex h-[320px] flex-col overflow-hidden rounded-lg border-1 shadow-sm transition-all duration-200 hover:shadow-lg">
                         <div className="flex h-full flex-col p-6">
                           <div>
                             <h3 className="group-hover:text-primary mb-2 text-xl font-semibold transition-colors">
@@ -126,7 +126,7 @@ function BlogPage() {
                               {post.description}
                             </p>
                           </div>
-                          <span className="text-accent-foreground group-hover:text-primary mt-auto font-medium transition-colors">
+                          <span className="text-foreground group-hover:text-primary mt-auto font-medium transition-colors">
                             Read more
                           </span>
                         </div>
