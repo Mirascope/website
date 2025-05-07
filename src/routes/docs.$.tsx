@@ -3,6 +3,7 @@ import { DocsPage } from "@/src/components/routes/docs";
 import { getDocContent, docRegistry, type ProductName } from "@/src/lib/content";
 import { environment } from "@/src/lib/content/environment";
 import { ContentErrorHandler } from "@/src/components";
+import { getProductFromPath } from "@/src/lib/utils";
 
 /**
  * Content loader that uses a reverse index from route paths to DocInfo
@@ -38,10 +39,11 @@ export const Route = createFileRoute("/docs/$")({
   loader: contentPathLoader,
 
   // Configure loading state
-  pendingComponent: () => {
-    // We can't determine product from the URL during loading,
-    // so use a default placeholder (mirascope)
-    return <DocsPage isLoading product={"mirascope"} />;
+  pendingComponent: ({ params }) => {
+    // Determine product from the URL path during loading
+    const path = `/docs/${params._splat}`;
+    const product = getProductFromPath(path);
+    return <DocsPage isLoading product={product} />;
   },
 
   errorComponent: ({ error }) => {
