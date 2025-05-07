@@ -23,7 +23,7 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
 
   // Base styles for code block container
   const codeBlockBaseStyles =
-    "code-block-wrapper border-border relative m-0 mb-2 rounded-md overflow-hidden border p-0 text-sm";
+    "code-block-wrapper border-card relative m-0 mb-2 rounded-md overflow-hidden border p-0 text-sm";
 
   useEffect(() => {
     async function highlight() {
