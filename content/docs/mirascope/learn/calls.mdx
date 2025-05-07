@@ -17,9 +17,9 @@ We currently support [OpenAI](https://openai.com/), [Anthropic](https://www.anth
 
 If there are any providers we don't yet support that you'd like to see supported, let us know!
 
-<Info title="API Documentation" collapsible={true} defaultOpen={false}>
+<Callout type="api">
   [`mirascope.llm.call`](/docs/mirascope/api)
-</Info>
+</Callout>
 
 ## Basic Usage and Syntax
 
@@ -133,9 +133,9 @@ print(override_response.content)
 
 ### Common Response Properties and Methods
 
-<Info title="API Documentation" collapsible={true} defaultOpen={false}>
+<Callout type="api">
   [`mirascope.core.base.call_response`](/docs/mirascope/api)
-</Info>
+</Callout>
 
 All [`BaseCallResponse`](/docs/mirascope/api) objects share these common properties:
 
@@ -403,13 +403,13 @@ print(response.content)
 
 ## Provider-Specific Usage
 
-<Info title="API Documentation" collapsible={true} defaultOpen={false}>
+<Callout type="api">
   For details on provider-specific modules, see the API documentation for each provider:
   
   - [`mirascope.core.openai.call`](/docs/mirascope/api)
   - [`mirascope.core.anthropic.call`](/docs/mirascope/api)
   - And so on for each supported provider
-</Info>
+</Callout>
 
 While Mirascope provides a consistent interface across different LLM providers, you can also use provider-specific modules with refined typing for an individual provider.
 

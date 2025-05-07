@@ -5,10 +5,11 @@ import {
   CheckCircle,
   AlertTriangle,
   ChevronDown,
+  Terminal,
 } from "lucide-react";
 import { useState } from "react";
 
-type CalloutType = "note" | "warning" | "info" | "success";
+type CalloutType = "note" | "warning" | "info" | "success" | "api";
 
 interface CalloutProps {
   type: CalloutType;
@@ -54,6 +55,12 @@ const calloutStyles: Record<
     bgClass: "bg-secondary/10",
     Icon: CheckCircle,
   },
+  api: {
+    containerClass: "border-primary",
+    iconClass: "text-primary",
+    bgClass: "bg-primary/10",
+    Icon: Terminal,
+  },
 };
 
 export function Callout({
@@ -61,8 +68,8 @@ export function Callout({
   title,
   children,
   className,
-  collapsible = false,
-  defaultOpen = true,
+  collapsible = type === "api" ? true : false,
+  defaultOpen = type === "api" ? false : true,
   customIcon,
   contentClassName: customContentClassName,
 }: CalloutProps) {
@@ -83,7 +90,9 @@ export function Callout({
             ? "Info"
             : type === "success"
               ? "Success"
-              : "Mirascope"
+              : type === "api"
+                ? "API Documentation"
+                : "Mirascope"
       : "";
 
   const displayTitle = title || defaultTitle;
