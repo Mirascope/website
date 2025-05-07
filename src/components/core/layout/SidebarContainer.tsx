@@ -214,7 +214,7 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({
                 : "w-64 rounded-r-md" // Fixed width on desktop
           } ${
             isExpanded ? "translate-x-0" : "translate-x-[-110%]" /* Move completely out of view */
-          } border-border/40 z-50 overflow-hidden ${isPhoneScreen ? "" : "border-r"}`}
+          } border-border/40 z-40 overflow-hidden ${isPhoneScreen ? "" : "border-r"}`}
           style={{
             boxShadow: isExpanded && isSmallScreen ? "0 8px 16px rgba(0, 0, 0, 0.08)" : "none",
             transition: `transform ${isPhoneScreen ? "250ms" : "300ms"} ease-in-out, 
