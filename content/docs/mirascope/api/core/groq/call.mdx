@@ -16,7 +16,12 @@ call(model: str, stream: bool, tools: list[BaseTool | Callable], response_model:
 
 A decorator for calling the Groq API with a typed function.
 
-usage docs: learn/calls.md
+<Info title="Usage">
+
+[Calls](/docs/mirascope/learn/calls)
+
+</Info>
+
 
 This decorator is used to wrap a typed function that calls the Groq API. It parses
 the prompt template of the wrapped function as the messages array and templates the input
