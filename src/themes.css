@@ -32,7 +32,7 @@
   --color-accent-foreground: var(--color-white);
 
   /* ShadCn UI extras */
-  --color-card: oklch(0.995 0 0);
+  --color-card: rgba(84, 82, 220, 0.2);
   --color-card-foreground: oklch(0.1 0.2041 282.8);
   --color-popover: oklch(0.995 0 0);
   --color-popover-foreground: oklch(0.1 0.2041 282.8);
@@ -66,7 +66,6 @@
   --color-muted-foreground: oklch(0.75 0.015 286.067);
 
   /* ShadCn UI extras */
-  --color-card: oklch(0.11 0.005 285.823);
   --color-card-foreground: oklch(0.95 0 0);
   --color-popover: oklch(0.11 0.005 285.823);
   --color-popover-foreground: oklch(0.95 0 0);
@@ -92,6 +91,7 @@
   --color-primary: var(--color-lilypad-green);
 
   --color-accent: rgba(64, 155, 69, 0.6); /* Lilypad green at 60 opacity */
+  --color-card: rgba(37, 86, 42, 0.2);
 
   /* Utility */
   --color-ring: var(--color-lilypad-green);
