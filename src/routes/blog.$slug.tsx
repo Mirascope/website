@@ -11,7 +11,6 @@ import { ContentErrorHandler } from "@/src/components/core/feedback";
 import { TableOfContents } from "@/src/components/core/navigation";
 import { SEOMeta } from "@/src/components/core/meta";
 import { PagefindMeta } from "@/src/components/core/meta";
-import { cn } from "@/src/lib/utils";
 import { getBlogContent } from "@/src/lib/content";
 import analyticsManager from "@/src/lib/services/analytics";
 import type { BlogContent } from "@/src/lib/content";
@@ -53,7 +52,13 @@ function BlogLayout({
         <AppLayout.Content>{mainContent}</AppLayout.Content>
 
         {rightSidebar && (
-          <AppLayout.RightSidebar className="pt-1">{rightSidebar}</AppLayout.RightSidebar>
+          <AppLayout.RightSidebar
+            className="pt-1"
+            mobileCollapsible={true}
+            mobileTitle="Table of Contents"
+          >
+            {rightSidebar}
+          </AppLayout.RightSidebar>
         )}
       </AppLayout>
     </>
@@ -105,7 +110,6 @@ function BlogPostPage() {
   // Access the loaded content directly
   const post = useLoaderData({ from: "/blog/$slug", structuralSharing: false }) as BlogContent;
 
-  const [tocOpen, setTocOpen] = useState(false);
   const [ogImage, setOgImage] = useState<string | undefined>(undefined);
   const [isCopied, setIsCopied] = useState(false);
 
@@ -199,101 +203,13 @@ function BlogPostPage() {
           )}
         </div>
       </div>
-
-      {/* Mobile buttons for ToC */}
-      <div className="fixed right-6 bottom-6 z-40 flex flex-col gap-2 lg:hidden">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setTocOpen(!tocOpen)}
-          className={cn(
-            "h-12 w-12 rounded-full p-0 shadow-md",
-            tocOpen ? "bg-muted" : "bg-background"
-          )}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </Button>
-      </div>
-
-      {/* Mobile slide-in TOC panel */}
-      {tocOpen && (
-        <div
-          className="bg-foreground/50 fixed inset-0 z-30 lg:hidden"
-          onClick={() => setTocOpen(false)}
-        ></div>
-      )}
-      <div
-        className={`bg-background border-border fixed top-0 right-0 z-40 h-full w-72 border-l shadow-lg ${tocOpen ? "translate-x-0" : "translate-x-full"} transition-transform duration-300 ease-in-out lg:hidden`}
-      >
-        <div className="flex h-full flex-col">
-          <div className="border-border flex items-center justify-between border-b p-4">
-            <h3 className="font-medium">Table of Contents</h3>
-            <button onClick={() => setTocOpen(false)} className="hover:bg-muted rounded-md p-1">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
-          </div>
-
-          <div className="px-4 pt-4">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={copyContentAsMarkdown}
-              disabled={isCopied}
-              className="w-full"
-            >
-              {isCopied ? (
-                <>
-                  <Check className="mr-1 h-4 w-4" />
-                  Copied!
-                </>
-              ) : (
-                <>
-                  <Clipboard className="mr-1 h-4 w-4" />
-                  Copy as Markdown
-                </>
-              )}
-            </Button>
-          </div>
-
-          <div className="flex-grow overflow-y-auto px-4 py-4">
-            <TableOfContents contentId="blog-content" path={path} />
-          </div>
-        </div>
-      </div>
     </div>
   );
 
-  // Right sidebar (ToC)
-  const rightSidebar = (
+  // Right sidebar (ToC) - with Mobile TOC implementation
+  const rightSidebarContent = (
     <div className="flex h-full flex-col">
-      <div className="bg-background mb-4 flex flex-col gap-3 px-4">
+      <div className="px-4 pt-4 lg:pt-0">
         <Button
           variant="outline"
           size="sm"
@@ -324,7 +240,7 @@ function BlogPostPage() {
   );
 
   return (
-    <BlogLayout mainContent={mainContent} rightSidebar={rightSidebar}>
+    <BlogLayout mainContent={mainContent} rightSidebar={rightSidebarContent}>
       <SEOMeta
         title={post.meta.title}
         description={post.meta.description || post.mdx?.frontmatter?.excerpt}
