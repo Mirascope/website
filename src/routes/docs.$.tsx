@@ -1,6 +1,6 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
-import { DocsPage, LoadingDocsPage } from "@/src/components/routes/docs";
-import { getDocContent, docRegistry } from "@/src/lib/content";
+import { DocsPage } from "@/src/components/routes/docs";
+import { getDocContent, docRegistry, type ProductName } from "@/src/lib/content";
 import { environment } from "@/src/lib/content/environment";
 import { ContentErrorHandler } from "@/src/components";
 
@@ -41,7 +41,7 @@ export const Route = createFileRoute("/docs/$")({
   pendingComponent: () => {
     // We can't determine product from the URL during loading,
     // so use a default placeholder (mirascope)
-    return <LoadingDocsPage product={"mirascope"} />;
+    return <DocsPage isLoading product={"mirascope"} />;
   },
 
   errorComponent: ({ error }) => {
@@ -62,6 +62,9 @@ function DocsContentPage() {
     structuralSharing: false,
   });
 
+  // Extract product from document metadata
+  const product = document.meta.product as ProductName;
+
   // Use the shared DocsPage component
-  return <DocsPage document={document} />;
+  return <DocsPage document={document} product={product} />;
 }
