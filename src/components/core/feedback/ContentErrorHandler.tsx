@@ -22,7 +22,7 @@ const ContentErrorHandler: React.FC<ContentErrorHandlerProps> = ({ error, conten
       backTo: "/blog",
       backLabel: "Back to Blog",
     },
-    doc: {
+    docs: {
       title: isNotFound ? "Page Not Found" : "Error Loading Page",
       notFoundMessage: "The documentation page you're looking for doesn't exist or has been moved.",
       backTo: "/docs",

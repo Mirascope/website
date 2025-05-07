@@ -7,7 +7,7 @@
 
 import type { FullDocsSpec, DocInfo, ProductName, ProductSpec, SectionSpec, DocSpec } from "./spec";
 import { getDocsFromSpec, processDocSpec } from "./spec";
-import fullSpec from "@/content/doc/_meta";
+import fullSpec from "@/content/docs/_meta";
 
 /**
  * DocRegistry service - Singleton for efficient document information management

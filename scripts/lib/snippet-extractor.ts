@@ -178,9 +178,9 @@ export function processFile(
   } else {
     // Create examples under public/extracted-snippets directory to make them accessible
     // Structure: public/extracted-snippets/mirascope/getting-started/quickstart/openai/
-    // Get the relative path part after content/doc/
-    const relativePath = dirName.includes("content/doc/")
-      ? dirName.split("content/doc/")[1]
+    // Get the relative path part after content/docs/
+    const relativePath = dirName.includes("content/docs/")
+      ? dirName.split("content/docs/")[1]
       : path.basename(dirName);
 
     outputDir = path.join(

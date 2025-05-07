@@ -59,7 +59,7 @@ function findExtractableDocs(specificFilePath?: string): ExtractableDoc[] {
   for (const doc of allDocs) {
     if (doc.hasExtractableSnippets) {
       // Construct the file path from the document path
-      const filePath = path.join(CONTENT_ROOT, "doc", `${doc.path}.mdx`);
+      const filePath = path.join(CONTENT_ROOT, "docs", `${doc.path}.mdx`);
 
       // Resolve to absolute path for comparison
       const absoluteFilePath = path.resolve(filePath);
@@ -71,7 +71,7 @@ function findExtractableDocs(specificFilePath?: string): ExtractableDoc[] {
 
       if (fs.existsSync(filePath)) {
         // Extract the logical path from path
-        // This is the path without the leading /content/doc/ and trailing .mdx
+        // This is the path without the leading /content/docs/ and trailing .mdx
         const logicalPath = doc.path;
         extractableDocs.push({
           logicalPath,
@@ -83,7 +83,7 @@ function findExtractableDocs(specificFilePath?: string): ExtractableDoc[] {
       }
     } else if (absoluteTargetPath) {
       // Check if this is the specific target file but not marked extractable
-      const filePath = path.join(CONTENT_ROOT, "doc", `${doc.path}.mdx`);
+      const filePath = path.join(CONTENT_ROOT, "docs", `${doc.path}.mdx`);
 
       const absoluteFilePath = path.resolve(filePath);
 
@@ -322,10 +322,10 @@ function showHelp(): void {
     "  bun run scripts/update-snippets -- --check                        # Check all snippets"
   );
   console.log(
-    "  bun run scripts/update-snippets -- --path=content/doc/.../file.mdx   # Update specific file"
+    "  bun run scripts/update-snippets -- --path=content/docs/.../file.mdx   # Update specific file"
   );
   console.log(
-    "  bun run scripts/update-snippets -- --check --path=content/doc/...    # Check specific file"
+    "  bun run scripts/update-snippets -- --check --path=content/docs/...    # Check specific file"
   );
   process.exit(0);
 }

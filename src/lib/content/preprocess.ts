@@ -207,7 +207,7 @@ export class ContentPreprocessor {
       case "blog":
         return `/blog/${contentPath.slug}`;
 
-      case "doc":
+      case "docs":
         // Use the DocRegistry to get the pre-calculated routePath
         const docInfo = docRegistry.getDocInfoByPath(contentPath.subpath);
 
@@ -361,8 +361,8 @@ export class ContentPreprocessor {
         } as Partial<BlogMeta>;
         break;
 
-      case "doc":
-        // Extract product from path, assuming format: doc/product/...
+      case "docs":
+        // Extract product from path, assuming format: docs/product/...
         const pathParts = contentPath.subpath.split("/");
         const product = pathParts.length > 0 ? pathParts[0] : "";
 
@@ -431,7 +431,7 @@ export class ContentPreprocessor {
       case "blog":
         this.blogMetadata.push(metadata as BlogMeta);
         break;
-      case "doc":
+      case "docs":
         this.docMetadata.push(metadata as DocMeta);
         break;
       case "policy":
@@ -473,14 +473,14 @@ export class ContentPreprocessor {
       }
     }
 
-    // Write doc metadata
+    // Write docs metadata
     if (this.docMetadata.length > 0) {
       fs.writeFileSync(
-        path.join(this.metaDir, "doc", "index.json"),
+        path.join(this.metaDir, "docs", "index.json"),
         JSON.stringify(this.docMetadata)
       );
       if (this.verbose) {
-        console.log(`Created metadata index for doc with ${this.docMetadata.length} items`);
+        console.log(`Created metadata index for docs with ${this.docMetadata.length} items`);
       }
     }
 
@@ -538,13 +538,13 @@ export class ContentPreprocessor {
    */
   getMetadataByType(): {
     blog: BlogMeta[];
-    doc: DocMeta[];
+    docs: DocMeta[];
     policy: PolicyMeta[];
     dev: ContentMeta[];
   } {
     return {
       blog: this.blogMetadata,
-      doc: this.docMetadata,
+      docs: this.docMetadata,
       policy: this.policyMetadata,
       dev: this.devMetadata,
     };

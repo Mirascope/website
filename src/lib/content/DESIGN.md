@@ -22,7 +22,7 @@ This document outlines the architecture of the unified content system for handli
 
 A general overview:
 - All content is stored as MDX files with frontmatter. The MDX has access to custom components defined in MDXProvider.tsx.
-- Content is organized in the root `/content/` directory, subdivided by type (`content/doc`, `content/policy`, `content/blog`, `content/dev`).
+- Content is organized in the root `/content/` directory, subdivided by type (`content/docs`, `content/policy`, `content/blog`, `content/dev`).
 - Blog posts are automatically included in the blog index, but docs must be manually incorporated by editing the `_meta.ts` files which contain the doc content specification. This spec also defines the layout for docs in the sidebar.
 - At build time, all content is processed into JSON files with extracted metadata.
 
@@ -73,7 +73,7 @@ Defines the foundational types used throughout the content system:
 
 ```typescript
 // Core content type enum
-export type ContentType = "doc" | "blog" | "policy" | "dev";
+export type ContentType = "docs" | "blog" | "policy" | "dev";
 
 // Base metadata interface
 export interface ContentMeta {
@@ -138,7 +138,7 @@ export const environment = {
 Provides types and utilities for working with the structured documentation.
 
 This is used to set up the document structure in the sidebar layout of the docs sidebar.
-Doc content will only be included in the site if it is listed in the `content/doc/_meta.ts` file.
+Doc content will only be included in the site if it is listed in the `content/docs/_meta.ts` file.
 
 ```typescript
 // Types for document structure
@@ -272,7 +272,7 @@ You can audit the metadata and the OG images by turning on the dev server and na
 
 ### Adding a New Document to the Docs
 
-1. Create a new MDX file in the appropriate location in `content/doc/`
+1. Create a new MDX file in the appropriate location in `content/docs/`
 2. Include required frontmatter: title, description
 3. Add an entry for the document in the appropriate `_meta.ts` file
 4. If adding a new section, include it in the product's section array
