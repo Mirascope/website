@@ -1,6 +1,7 @@
 import React from "react";
 import { MDXProvider } from "@mdx-js/react";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { Link as LinkIcon } from "lucide-react";
 import {
   InstallSnippet,
   CodeSnippet,
@@ -23,25 +24,7 @@ import { Underline } from "./Underline";
 import { ProviderCodeWrapper } from "./ProviderCodeWrapper";
 import { ResponsiveImage } from "@/src/components/mdx/providers/ResponsiveImage";
 import { devComponents } from "@/src/components/mdx/elements/DevComponents";
-
-// Helper function to generate heading ID from text
-const slugify = (text: string): string => {
-  // Handle special cases that might cause issues
-  if (!text) return "heading";
-
-  // Normalize Unicode characters
-  const normalized = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-
-  return (
-    normalized
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9]+/g, "-") // Replace any non-alphanumeric chars with hyphens
-      .replace(/(^-|-$)/g, "") // Remove leading/trailing hyphens
-      .replace(/--+/g, "-") || // Replace multiple hyphens with one
-    "heading"
-  ); // Default to 'heading' if nothing remains
-};
+import { slugify } from "@/src/lib/utils";
 
 // MDX-specific ButtonLink wrapper that bypasses type checking at the MDX boundary
 // and handles nested paragraph tags that MDX generates
@@ -62,6 +45,37 @@ const MDXButtonLink = (props: React.ComponentProps<typeof ButtonLink>) => {
         return child;
       })}
     </ButtonLink>
+  );
+};
+
+// Heading anchor link component
+const HeadingAnchor = ({ id }: { id?: string }) => {
+  const navigate = useNavigate();
+
+  if (!id) return null;
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    // Prevent default browser behavior
+    e.preventDefault();
+
+    // Use TanStack Router's navigate to update the hash
+    // This leverages the router's built-in scroll restoration
+    navigate({
+      hash: id,
+      // Use replace to avoid adding to history stack
+      replace: true,
+    });
+  };
+
+  return (
+    <a
+      href={`#${id}`}
+      onClick={handleClick}
+      aria-label="Link to this heading"
+      className="heading-anchor text-muted-foreground hover:text-primary ml-2 opacity-0 transition-opacity group-hover:opacity-100"
+    >
+      <LinkIcon size={16} />
+    </a>
   );
 };
 
@@ -102,40 +116,65 @@ export const components = {
     // Generate an ID from the text content if not provided
     const id = props.id || (typeof children === "string" ? slugify(children) : undefined);
     return (
-      <h1 id={id} className="my-6 scroll-mt-28 text-3xl font-bold first:mt-0" {...props}>
+      <h1
+        id={id}
+        className="group my-6 flex scroll-mt-[120px] items-center text-3xl font-bold first:mt-0"
+        {...props}
+      >
         {children}
+        <HeadingAnchor id={id} />
       </h1>
     );
   },
   h2: ({ children, ...props }: React.ComponentPropsWithoutRef<"h2">) => {
     const id = props.id || (typeof children === "string" ? slugify(children) : undefined);
     return (
-      <h2 id={id} className="my-5 scroll-mt-28 text-2xl font-semibold" {...props}>
+      <h2
+        id={id}
+        className="group my-5 flex scroll-mt-[120px] items-center text-2xl font-semibold"
+        {...props}
+      >
         {children}
+        <HeadingAnchor id={id} />
       </h2>
     );
   },
   h3: ({ children, ...props }: React.ComponentPropsWithoutRef<"h3">) => {
     const id = props.id || (typeof children === "string" ? slugify(children) : undefined);
     return (
-      <h3 id={id} className="my-4 scroll-mt-28 text-xl font-medium" {...props}>
+      <h3
+        id={id}
+        className="group my-4 flex scroll-mt-[120px] items-center text-xl font-medium"
+        {...props}
+      >
         {children}
+        <HeadingAnchor id={id} />
       </h3>
     );
   },
   h4: ({ children, ...props }: React.ComponentPropsWithoutRef<"h4">) => {
     const id = props.id || (typeof children === "string" ? slugify(children) : undefined);
     return (
-      <h4 id={id} className="my-3 scroll-mt-28 text-lg font-medium" {...props}>
+      <h4
+        id={id}
+        className="group my-3 flex scroll-mt-[120px] items-center text-lg font-medium"
+        {...props}
+      >
         {children}
+        <HeadingAnchor id={id} />
       </h4>
     );
   },
   h5: ({ children, ...props }: React.ComponentPropsWithoutRef<"h5">) => {
     const id = props.id || (typeof children === "string" ? slugify(children) : undefined);
     return (
-      <h5 id={id} className="my-3 scroll-mt-28 text-base font-medium" {...props}>
+      <h5
+        id={id}
+        className="group my-3 flex scroll-mt-[120px] items-center text-base font-medium"
+        {...props}
+      >
         {children}
+        <HeadingAnchor id={id} />
       </h5>
     );
   },
@@ -325,7 +364,7 @@ interface MDXProviderWrapperProps {
 
 export function MDXProviderWrapper({ children }: MDXProviderWrapperProps) {
   return (
-    <div className="mdx-content">
+    <div className="mdx-content overflow-y-auto" id="mdx-container">
       <MDXProvider components={components}>{children}</MDXProvider>
     </div>
   );

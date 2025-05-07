@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Menu, X } from "lucide-react";
+import { ChevronRight, X } from "lucide-react";
 import { useRouter } from "@tanstack/react-router";
 
 interface SidebarContainerProps {
   children: React.ReactNode;
+  collapsible?: boolean;
+  isOpen?: boolean;
+  onToggle?: (open: boolean) => void;
 }
 
 /**
@@ -11,9 +14,18 @@ interface SidebarContainerProps {
  *
  * Handles sidebar state (expanded/collapsed) based on screen size and
  * provides toggle functionality. Accepts any content as children.
+ *
+ * When isOpen and onToggle are provided, the component becomes controlled
+ * and uses these props to manage state instead of internal state.
  */
-const SidebarContainer: React.FC<SidebarContainerProps> = ({ children }) => {
+const SidebarContainer: React.FC<SidebarContainerProps> = ({
+  children,
+  collapsible = true,
+  isOpen: controlledIsOpen,
+  onToggle,
+}) => {
   const router = useRouter();
+  const isControlled = controlledIsOpen !== undefined && onToggle !== undefined;
 
   // Track screen size breakpoints
   const [isSmallScreen, setIsSmallScreen] = useState(() => {
@@ -40,6 +52,9 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ children }) => {
     return true; // Default to expanded for SSR
   });
 
+  // Determine whether to use controlled or uncontrolled state
+  const isExpanded = isControlled ? controlledIsOpen : sidebarExpanded;
+
   // Update breakpoint state based on window resize
   useEffect(() => {
     const handleResize = () => {
@@ -54,10 +69,18 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ children }) => {
 
       if (!smallScreen) {
         // Auto-expand sidebar on large screens
-        setSidebarExpanded(true);
+        if (isControlled) {
+          onToggle(!smallScreen);
+        } else {
+          setSidebarExpanded(!smallScreen);
+        }
       } else if (!wasSmallScreen && smallScreen) {
         // Auto-collapse when crossing from large to small screen
-        setSidebarExpanded(false);
+        if (isControlled) {
+          onToggle(false);
+        } else {
+          setSidebarExpanded(false);
+        }
       }
     };
 
@@ -69,7 +92,7 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ children }) => {
 
     // Clean up
     return () => window.removeEventListener("resize", handleResize);
-  }, [isSmallScreen]);
+  }, [isSmallScreen, isControlled, onToggle]);
 
   // Ref for tracking previous expanded state for focus management
   const previouslyFocusedElementRef = useRef<HTMLElement | null>(null);
@@ -79,12 +102,17 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ children }) => {
   const toggleSidebar = () => {
     if (isSmallScreen) {
       // Save the currently focused element when opening
-      if (!sidebarExpanded) {
+      if (!isExpanded) {
         previouslyFocusedElementRef.current = document.activeElement as HTMLElement;
       }
 
-      const newExpandedState = !sidebarExpanded;
-      setSidebarExpanded(newExpandedState);
+      const newExpandedState = !isExpanded;
+
+      if (isControlled) {
+        onToggle(newExpandedState);
+      } else {
+        setSidebarExpanded(newExpandedState);
+      }
 
       // Manage body scroll lock
       if (newExpandedState) {
@@ -107,7 +135,7 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ children }) => {
   useEffect(() => {
     // Subscribe to route resolution events (when navigation is complete)
     const unsubscribe = router.subscribe("onResolved", () => {
-      if (isSmallScreen && sidebarExpanded) {
+      if (isSmallScreen && isExpanded) {
         toggleSidebar();
       }
     });
@@ -116,12 +144,12 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ children }) => {
     return () => {
       unsubscribe();
     };
-  }, [router, isSmallScreen, sidebarExpanded]);
+  }, [router, isSmallScreen, isExpanded]);
 
   // Handle Escape key to close sidebar
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && sidebarExpanded && isSmallScreen) {
+      if (event.key === "Escape" && isExpanded && isSmallScreen) {
         toggleSidebar();
       }
     };
@@ -130,7 +158,7 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ children }) => {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [sidebarExpanded, isSmallScreen]);
+  }, [isExpanded, isSmallScreen]);
 
   // Cleanup body overflow when component unmounts
   useEffect(() => {
@@ -147,7 +175,7 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ children }) => {
         {isSmallScreen && (
           <div
             className={`bg-background/30 fixed inset-0 backdrop-blur-sm transition-all duration-300 ${
-              sidebarExpanded ? "z-40 opacity-100" : "pointer-events-none -z-10 opacity-0"
+              isExpanded ? "z-40 opacity-100" : "pointer-events-none -z-10 opacity-0"
             }`}
             onClick={toggleSidebar}
             aria-hidden="true"
@@ -155,22 +183,22 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ children }) => {
           />
         )}
 
-        {/* Toggle button - switches between hamburger and X icons */}
-        {isSmallScreen && (
+        {/* Toggle button - switches between chevron and X icons */}
+        {isSmallScreen && collapsible && (
           <button
             ref={closeBtnRef}
             onClick={toggleSidebar}
-            className={`bg-primary/90 text-primary-foreground fixed top-[calc(var(--header-height)-2.5rem)] left-2 z-80 flex items-center justify-center rounded-full shadow-sm ${
+            className={`bg-accent/90 text-accent-foreground fixed top-[calc(var(--header-height)-2.5rem)] left-2 z-80 flex items-center justify-center rounded-full shadow-sm ${
               isPhoneScreen ? "h-9 w-9" : "h-9 w-9"
             }`}
-            aria-label={sidebarExpanded ? "Close sidebar" : "Open sidebar"}
-            aria-expanded={sidebarExpanded}
+            aria-label={isExpanded ? "Close sidebar" : "Open sidebar"}
+            aria-expanded={isExpanded}
             aria-controls="sidebar-content"
           >
-            {sidebarExpanded ? (
+            {isExpanded ? (
               <X size={isPhoneScreen ? 22 : 20} />
             ) : (
-              <Menu size={isPhoneScreen ? 22 : 20} />
+              <ChevronRight size={isPhoneScreen ? 22 : 20} />
             )}
           </button>
         )}
@@ -178,28 +206,26 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ children }) => {
         {/* Sidebar content panel */}
         <div
           id="sidebar-content"
-          className={`bg-background/95 fixed top-[var(--header-height)] h-[calc(100vh-var(--header-height))] backdrop-blur-sm transition-all duration-300 ease-in-out ${
+          className={`bg-background/95 fixed top-[var(--header-height)] h-[calc(100vh-var(--header-height))] backdrop-blur-sm transition-all duration-300 ease-in-out ${!collapsible && isSmallScreen ? "hidden" : ""} ${
             isPhoneScreen
               ? "w-[calc(100vw-20px)] rounded-r-md" // Almost full width on phones, with slight margin
               : isSmallScreen
                 ? "w-[85vw] max-w-xs rounded-r-md" // 85% width on tablets with rounded corner
                 : "w-64 rounded-r-md" // Fixed width on desktop
           } ${
-            sidebarExpanded
-              ? "translate-x-0"
-              : "translate-x-[-110%]" /* Move completely out of view */
-          } border-border/40 z-50 overflow-hidden ${isPhoneScreen ? "" : "border-r"}`}
+            isExpanded ? "translate-x-0" : "translate-x-[-110%]" /* Move completely out of view */
+          } border-border/40 z-40 overflow-hidden ${isPhoneScreen ? "" : "border-r"}`}
           style={{
-            boxShadow: sidebarExpanded && isSmallScreen ? "0 8px 16px rgba(0, 0, 0, 0.08)" : "none",
+            boxShadow: isExpanded && isSmallScreen ? "0 8px 16px rgba(0, 0, 0, 0.08)" : "none",
             transition: `transform ${isPhoneScreen ? "250ms" : "300ms"} ease-in-out, 
                         opacity 300ms ease-in-out`,
           }}
-          aria-hidden={!sidebarExpanded}
+          aria-hidden={!isExpanded}
           role="navigation"
         >
           <div className={`h-full overflow-y-auto ${isPhoneScreen ? "p-5" : "p-4"}`}>
             {/* Only render sidebar content when expanded on mobile or always on desktop */}
-            {(sidebarExpanded || !isSmallScreen) && children}
+            {(isExpanded || !isSmallScreen) && children}
           </div>
         </div>
       </div>

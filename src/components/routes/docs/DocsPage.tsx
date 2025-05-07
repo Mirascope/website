@@ -40,7 +40,7 @@ const DocsPage: React.FC<DocsPageProps> = ({ document, isLoading = false, produc
         onProviderChange={handleProviderChange}
       >
         <AppLayout>
-          <AppLayout.LeftSidebar className="pt-1">
+          <AppLayout.LeftSidebar className="pt-1" collapsible={true}>
             <DocsSidebar product={product} />
           </AppLayout.LeftSidebar>
 
@@ -52,7 +52,11 @@ const DocsPage: React.FC<DocsPageProps> = ({ document, isLoading = false, produc
             )}
           </AppLayout.Content>
 
-          <AppLayout.RightSidebar className={isLoading ? undefined : "pt-1"}>
+          <AppLayout.RightSidebar
+            className={isLoading ? undefined : "pt-1"}
+            mobileCollapsible={true}
+            mobileTitle="On this page"
+          >
             {isLoading ? (
               <div className="h-full">
                 <div className="bg-muted mx-4 mt-16 h-6 animate-pulse rounded-md"></div>

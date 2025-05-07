@@ -93,3 +93,28 @@ export function getProductFromPath(path: string): ProductName {
   // Default to mirascope for all other paths
   return "mirascope";
 }
+
+/**
+ * Converts text to a URL-friendly slug
+ * Used for generating heading IDs
+ *
+ * @param text Text to convert to a slug
+ * @returns URL-friendly slug
+ */
+export function slugify(text: string): string {
+  // Handle special cases that might cause issues
+  if (!text) return "heading";
+
+  // Normalize Unicode characters
+  const normalized = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+  return (
+    normalized
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, "-") // Replace any non-alphanumeric chars with hyphens
+      .replace(/(^-|-$)/g, "") // Remove leading/trailing hyphens
+      .replace(/--+/g, "-") || // Replace multiple hyphens with one
+    "heading"
+  ); // Default to 'heading' if nothing remains
+}
