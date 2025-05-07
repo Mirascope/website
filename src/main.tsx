@@ -40,6 +40,10 @@ const router = createRouter({
   scrollRestoration: true,
   defaultStructuralSharing: true,
   defaultPreloadStaleTime: 0,
+  // Configure scroll to top selectors to manage nested scrollable areas
+  scrollToTopSelectors: [
+    "#mdx-container", // Main MDX content container
+  ],
 });
 
 // Register the router instance for type safety
