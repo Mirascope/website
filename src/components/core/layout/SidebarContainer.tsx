@@ -12,12 +12,20 @@ interface SidebarContainerProps {
  * provides toggle functionality. Accepts any content as children.
  */
 const SidebarContainer: React.FC<SidebarContainerProps> = ({ children }) => {
-  // Track if we're at a small screen breakpoint
+  // Track screen size breakpoints
   const [isSmallScreen, setIsSmallScreen] = useState(() => {
     if (typeof window !== "undefined") {
       return window.innerWidth < 768; // md breakpoint is 768px in Tailwind
     }
     return false; // Default to large screen for SSR
+  });
+
+  // Additional breakpoint for extra small screens (phones)
+  const [isPhoneScreen, setIsPhoneScreen] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth < 480; // Extra small breakpoint for phones
+    }
+    return false; // Default to larger screen for SSR
   });
 
   // Sidebar expanded state - only collapsible at mobile/tablet breakpoint
@@ -32,11 +40,14 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ children }) => {
   // Update breakpoint state based on window resize
   useEffect(() => {
     const handleResize = () => {
-      const smallScreen = window.innerWidth < 768;
+      const windowWidth = window.innerWidth;
+      const smallScreen = windowWidth < 768;
+      const phoneScreen = windowWidth < 480;
       const wasSmallScreen = isSmallScreen;
 
-      // Update small screen state
+      // Update screen size states
       setIsSmallScreen(smallScreen);
+      setIsPhoneScreen(phoneScreen);
 
       if (!smallScreen) {
         // Auto-expand sidebar on large screens
@@ -131,32 +142,44 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ children }) => {
           <button
             ref={closeBtnRef}
             onClick={toggleSidebar}
-            className="bg-primary/90 text-primary-foreground fixed top-[calc(var(--header-height)-2.2rem)] left-3 z-80 flex h-9 w-9 items-center justify-center rounded-full shadow-sm"
+            className={`bg-primary/90 text-primary-foreground fixed top-[calc(var(--header-height)-2.2rem)] left-3 z-80 flex items-center justify-center rounded-full shadow-sm ${
+              isPhoneScreen ? "h-10 w-10" : "h-9 w-9"
+            }`}
             aria-label={sidebarExpanded ? "Close sidebar" : "Open sidebar"}
             aria-expanded={sidebarExpanded}
             aria-controls="sidebar-content"
           >
-            {sidebarExpanded ? <X size={20} /> : <Menu size={20} />}
+            {sidebarExpanded ? (
+              <X size={isPhoneScreen ? 22 : 20} />
+            ) : (
+              <Menu size={isPhoneScreen ? 22 : 20} />
+            )}
           </button>
         )}
 
         {/* Sidebar content panel */}
         <div
           id="sidebar-content"
-          className={`bg-background/95 fixed top-[var(--header-height)] h-[calc(100vh-var(--header-height))] rounded-md backdrop-blur-sm transition-transform duration-300 ease-in-out ${
-            isSmallScreen ? "w-[85vw] max-w-xs" : "w-64"
+          className={`bg-background/95 fixed top-[var(--header-height)] h-[calc(100vh-var(--header-height))] backdrop-blur-sm transition-all duration-300 ease-in-out ${
+            isPhoneScreen
+              ? "w-[calc(100vw-40px)] rounded-r-md" // Almost full width on phones, with slight margin
+              : isSmallScreen
+                ? "w-[85vw] max-w-xs rounded-r-md" // 85% width on tablets with rounded corner
+                : "w-64 rounded-r-md" // Fixed width on desktop
           } ${
             sidebarExpanded
               ? "translate-x-0"
               : "translate-x-[-110%]" /* Move completely out of view */
-          } border-border/40 z-50 overflow-hidden border-r`}
+          } border-border/40 z-50 overflow-hidden ${isPhoneScreen ? "" : "border-r"}`}
           style={{
             boxShadow: sidebarExpanded && isSmallScreen ? "0 8px 16px rgba(0, 0, 0, 0.08)" : "none",
+            transition: `transform ${isPhoneScreen ? "250ms" : "300ms"} ease-in-out, 
+                        opacity 300ms ease-in-out`,
           }}
           aria-hidden={!sidebarExpanded}
           role="navigation"
         >
-          <div className="h-full overflow-y-auto p-4">
+          <div className={`h-full overflow-y-auto ${isPhoneScreen ? "p-5" : "p-4"}`}>
             {/* Only render sidebar content when expanded on mobile or always on desktop */}
             {(sidebarExpanded || !isSmallScreen) && children}
           </div>
