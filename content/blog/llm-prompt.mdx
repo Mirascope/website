@@ -33,13 +33,38 @@ These tokens might be whole words, subwords, or even parts of words, depending o
 For instance, given the prompt “Explain why the sky is blue during the day,” the LLM might break it down into individual tokens:
 
 <div>
-<b>[<div style="background: #f8ff00; padding: 2px; display: inline;">“Explain”</div>, <div style="background: #efb5ac; padding: 2px; display: inline;">“why”</div>, <div style="background: #00ffff; padding: 2px; display: inline;">“the”</div>, <div style="background: #99c6ca; padding: 2px; display: inline;">“sky”</div>, <div style="background: #ec7662; padding: 2px; display: inline;">“is”</div>, <div style="background: #ffb42c; padding: 2px; display: inline;">“blue”</div>, <div style="background: #00ff1c; padding: 2px; display: inline;">“during”</div>, <div style="background: #c59100; padding: 2px; display: inline;">“the”</div>, <div style="background: #f0cedb; padding: 2px; display: inline;">“day”</div>]</b>
+<b>[
+    <div style={{background: "#f8ff00", padding: "2px", display: "inline"}}>“Explain”</div>, 
+    <div style={{background: "#efb5ac", padding: "2px", display: "inline"}}>“why”</div>, 
+    <div style={{background: "#00ffff", padding: "2px", display: "inline"}}>“the”</div>, 
+    <div style={{background: "#99c6ca", padding: "2px", display: "inline"}}>“sky”</div>, 
+    <div style={{background: "#ec7662", padding: "2px", display: "inline"}}>“is”</div>, 
+    <div style={{background: "#ffb42c", padding: "2px", display: "inline"}}>“blue”</div>, 
+    <div style={{background: "#00ff1c", padding: "2px", display: "inline"}}>“during”</div>, 
+    <div style={{background: "#c59100", padding: "2px", display: "inline"}}>“the”</div>, 
+    <div style={{background: "#f0cedb", padding: "2px", display: "inline"}}>“day”</div>
+    ]</b>
 </div>
 <br />
 
 Alternatively, with subword tokenization, the model might split the prompt into smaller units, like:
 <div>
-<b>[<div style="background: #f8ff00; padding: 2px; display: inline;">“Ex”</div>, <div style="background: #efb5ac; padding: 2px; display: inline;">“pla”</div>, <div style="background: #00ffff; padding: 2px; display: inline;">“in”</div>, <div style="background: #99c6ca; padding: 2px; display: inline;">“why”</div>, <div style="background: #ec7662; padding: 2px; display: inline;">“the”</div>, <div style="background: #ffb42c; padding: 2px; display: inline;">“sk”</div>, <div style="background: #00ff1c; padding: 2px; display: inline;">“y”</div>, <div style="background: #c59100; padding: 2px; display: inline;">“is”</div>, <div style="background: #f0cedb; padding: 2px; display: inline;">“bl”</div>, <div style="background: #FCE5CD; padding: 2px; display: inline;">“ue”</div>, <div style="background: #f8ff00; padding: 2px; display: inline;">“du”</div>, <div style="background: #D8EAD3; padding: 2px; display: inline;">“ring”</div>, <div style="background: #B7D7A8; padding: 2px; display: inline;">“the”</div>, <div style="background: #F1C233; padding: 2px; display: inline;">“day”</div>]</b>
+<b>[
+    <div style={{background: "#f8ff00", padding: "2px", display: "inline"}}>“Ex”</div>, 
+    <div style={{background: "#efb5ac", padding: "2px", display: "inline"}}>“pla”</div>, 
+    <div style={{background: "#00ffff", padding: "2px", display: "inline"}}>“in”</div>, 
+    <div style={{background: "#99c6ca", padding: "2px", display: "inline"}}>“why”</div>, 
+    <div style={{background: "#ec7662", padding: "2px", display: "inline"}}>“the”</div>, 
+    <div style={{background: "#ffb42c", padding: "2px", display: "inline"}}>“sk”</div>, 
+    <div style={{background: "#00ff1c", padding: "2px", display: "inline"}}>“y”</div>, 
+    <div style={{background: "#c59100", padding: "2px", display: "inline"}}>“is”</div>, 
+    <div style={{background: "#f0cedb", padding: "2px", display: "inline"}}>“bl”</div>, 
+    <div style={{background: "#FCE5CD", padding: "2px", display: "inline"}}>“ue”</div>, 
+    <div style={{background: "#f8ff00", padding: "2px", display: "inline"}}>“du”</div>, 
+    <div style={{background: "#D8EAD3", padding: "2px", display: "inline"}}>“ring”</div>, 
+    <div style={{background: "#B7D7A8", padding: "2px", display: "inline"}}>“the”</div>, 
+    <div style={{background: "#F1C233", padding: "2px", display: "inline"}}>“day”</div>
+    ]</b>
 </div>
 <br />
 

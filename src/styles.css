@@ -641,14 +641,6 @@ header button:not(.font-toggle-button),
   margin-bottom: 0 !important;
 }
 
-/* Code block styling */
-.code-block-wrapper {
-  position: relative;
-  margin: 0;
-  border-radius: 0.5rem;
-  overflow: hidden;
-}
-
 .shiki {
   margin: 0 !important;
   padding: 0.75rem !important;
@@ -821,7 +813,11 @@ mark,
 
 .mdx-content h1,
 .mdx-content h2,
-.mdx-content h3 {
+.mdx-content h3,
+.mdx-content h4,
+.mdx-content h5,
+.mdx-content h6,
+.mdx-content a {
   font-family: "Williams Handwriting", cursive !important;
 }
 

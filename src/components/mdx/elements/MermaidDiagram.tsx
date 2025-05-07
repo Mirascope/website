@@ -21,6 +21,9 @@ export function MermaidDiagram({ chart, className = "" }: MermaidDiagramProps) {
 
   // Determine which theme config to use based on current theme
   function getThemeConfig(): ThemeName {
+    if (typeof window === "undefined" || typeof document === "undefined") {
+      return "default"; // Server-side rendering, use default theme
+    }
     if (document.documentElement.classList.contains("dark")) {
       return "dark";
     } else if (document.documentElement.classList.contains("sunset")) {
