@@ -36,24 +36,6 @@ const lilypadSpec: ProductSpec = {
           ],
         },
         {
-          slug: "evaluation",
-          label: "Evaluation",
-          children: [
-            {
-              slug: "annotations",
-              label: "Annotations",
-            },
-            {
-              slug: "comparisons",
-              label: "Comparisons",
-            },
-            {
-              slug: "cost-and-latency-tracking",
-              label: "Cost & Latency Tracking",
-            },
-          ],
-        },
-        {
           slug: "observability",
           label: "Observability",
           children: [
@@ -72,6 +54,24 @@ const lilypadSpec: ProductSpec = {
             {
               slug: "versioning",
               label: "Versioning",
+            },
+          ],
+        },
+        {
+          slug: "evaluation",
+          label: "Evaluation",
+          children: [
+            {
+              slug: "annotations",
+              label: "Annotations",
+            },
+            {
+              slug: "comparisons",
+              label: "Comparisons",
+            },
+            {
+              slug: "cost-and-latency-tracking",
+              label: "Cost & Latency Tracking",
             },
           ],
         },
