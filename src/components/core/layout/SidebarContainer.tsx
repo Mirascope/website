@@ -64,11 +64,7 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ children }) => {
   };
 
   return (
-    <div
-      className={`flex flex-shrink-0 transition-all duration-300 ease-in-out ${
-        sidebarExpanded ? "w-64" : isSmallScreen ? "w-10" : "w-64"
-      }`}
-    >
+    <div className={`flex flex-shrink-0 ${isSmallScreen ? "w-0" : "w-64"}`}>
       {/* Collapsed sidebar toggle button (show only when collapsed on small screens) */}
       {isSmallScreen && !sidebarExpanded && (
         <div className="fixed top-[calc(var(--header-height)+50px)] z-20">
@@ -94,15 +90,22 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ children }) => {
         </div>
       )}
 
-      {/* Sidebar content */}
+      {/* Sidebar content - Only render children when visible or on desktop */}
       <div
-        className={`fixed top-[var(--header-height)] h-[calc(100vh-var(--header-height))] transition-all duration-300 ease-in-out ${
+        className={`bg-background fixed top-[var(--header-height)] h-[calc(100vh-var(--header-height))] transition-transform duration-300 ease-in-out ${
+          isSmallScreen ? "w-64" : "w-64"
+        } ${
           sidebarExpanded
-            ? "w-64 opacity-100"
-            : isSmallScreen
-              ? "w-0 overflow-hidden opacity-0"
-              : "w-64 opacity-100"
-        }`}
+            ? "translate-x-0"
+            : "translate-x-[-110%]" /* Move completely out of view */
+        } z-50 overflow-hidden border-r`}
+        style={{
+          boxShadow:
+            sidebarExpanded && isSmallScreen
+              ? "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
+              : "none",
+        }}
+        aria-hidden={!sidebarExpanded}
       >
         {/* Expanded sidebar toggle button (show only on small screens when expanded) */}
         {isSmallScreen && sidebarExpanded && (
@@ -129,7 +132,10 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ children }) => {
           </div>
         )}
 
-        <div className="h-full overflow-y-auto">{children}</div>
+        <div className="h-full overflow-y-auto">
+          {/* Only render sidebar content when expanded on mobile or always on desktop */}
+          {(sidebarExpanded || !isSmallScreen) && children}
+        </div>
       </div>
     </div>
   );
