@@ -28,8 +28,8 @@ export { docRegistry };
  * - Output directory: static/content/{type}
  * - Metadata file: static/content-meta/{type}/index.json
  */
-export type ContentType = "doc" | "blog" | "policy" | "dev";
-export const CONTENT_TYPES: ContentType[] = ["doc", "blog", "policy", "dev"];
+export type ContentType = "docs" | "blog" | "policy" | "dev";
+export const CONTENT_TYPES: ContentType[] = ["docs", "blog", "policy", "dev"];
 
 /**
  * Base metadata interface that all content types extend
@@ -338,7 +338,7 @@ export async function getAllBlogMeta(): Promise<BlogMeta[]> {
  * @returns The fully processed document content
  */
 export async function getDocContent(path: string): Promise<DocContent> {
-  return loadContent<DocMeta>(path, "doc");
+  return loadContent<DocMeta>(path, "docs");
 }
 
 /**
@@ -356,7 +356,7 @@ export function getAllDocInfo(): DocInfo[] {
  * @returns Array of document metadata objects
  */
 export async function getAllDocMeta(): Promise<DocMeta[]> {
-  return fetchJSON<DocMeta[]>("/static/content-meta/doc/index.json", "doc", "doc/index");
+  return fetchJSON<DocMeta[]>("/static/content-meta/docs/index.json", "docs", "docs/index");
 }
 
 /* ========== POLICY CONTENT OPERATIONS =========== */
