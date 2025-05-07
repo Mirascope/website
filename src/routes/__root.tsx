@@ -74,7 +74,7 @@ export const Route = createRootRoute({
 
         <div
           data-product={getProductFromPath(path)}
-          className="handwriting-enabled flex min-h-screen flex-col px-4 sm:px-6"
+          className="handwriting-enabled flex min-h-screen flex-col px-2"
         >
           {/* Header is fixed, so it's outside the content flow */}
           <Header />

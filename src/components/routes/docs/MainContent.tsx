@@ -16,7 +16,7 @@ const MainContent: React.FC<MainContentProps> = ({ document }) => {
   const pieces = path.split("/");
   const section = pieces.slice(0, 3).join("/");
   return (
-    <div className="px-4 lg:px-8">
+    <div className="px-2 lg:px-4">
       <div className="mx-auto w-full max-w-5xl">
         <div
           id="doc-content"
