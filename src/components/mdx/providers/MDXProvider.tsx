@@ -1,6 +1,7 @@
 import React from "react";
 import { MDXProvider } from "@mdx-js/react";
 import { Link } from "@tanstack/react-router";
+import { Link as LinkIcon } from "lucide-react";
 import {
   InstallSnippet,
   CodeSnippet,
@@ -65,6 +66,31 @@ const MDXButtonLink = (props: React.ComponentProps<typeof ButtonLink>) => {
   );
 };
 
+// Heading anchor link component
+const HeadingAnchor = ({ id }: { id?: string }) => {
+  if (!id) return null;
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    // Completely prevent default browser behavior
+    e.preventDefault();
+
+    if (typeof window !== "undefined") {
+      window.history.pushState({}, "", `#${id}`);
+    }
+  };
+
+  return (
+    <a
+      href={`#${id}`}
+      onClick={handleClick}
+      aria-label="Link to this heading"
+      className="heading-anchor text-muted-foreground hover:text-primary ml-2 opacity-0 transition-opacity group-hover:opacity-100"
+    >
+      <LinkIcon size={16} />
+    </a>
+  );
+};
+
 // Custom components that will be available in MDX files
 export const components = {
   // Custom components for docs
@@ -102,40 +128,65 @@ export const components = {
     // Generate an ID from the text content if not provided
     const id = props.id || (typeof children === "string" ? slugify(children) : undefined);
     return (
-      <h1 id={id} className="my-6 scroll-mt-28 text-3xl font-bold first:mt-0" {...props}>
+      <h1
+        id={id}
+        className="group my-6 flex scroll-mt-[120px] items-center text-3xl font-bold first:mt-0"
+        {...props}
+      >
         {children}
+        <HeadingAnchor id={id} />
       </h1>
     );
   },
   h2: ({ children, ...props }: React.ComponentPropsWithoutRef<"h2">) => {
     const id = props.id || (typeof children === "string" ? slugify(children) : undefined);
     return (
-      <h2 id={id} className="my-5 scroll-mt-28 text-2xl font-semibold" {...props}>
+      <h2
+        id={id}
+        className="group my-5 flex scroll-mt-[120px] items-center text-2xl font-semibold"
+        {...props}
+      >
         {children}
+        <HeadingAnchor id={id} />
       </h2>
     );
   },
   h3: ({ children, ...props }: React.ComponentPropsWithoutRef<"h3">) => {
     const id = props.id || (typeof children === "string" ? slugify(children) : undefined);
     return (
-      <h3 id={id} className="my-4 scroll-mt-28 text-xl font-medium" {...props}>
+      <h3
+        id={id}
+        className="group my-4 flex scroll-mt-[120px] items-center text-xl font-medium"
+        {...props}
+      >
         {children}
+        <HeadingAnchor id={id} />
       </h3>
     );
   },
   h4: ({ children, ...props }: React.ComponentPropsWithoutRef<"h4">) => {
     const id = props.id || (typeof children === "string" ? slugify(children) : undefined);
     return (
-      <h4 id={id} className="my-3 scroll-mt-28 text-lg font-medium" {...props}>
+      <h4
+        id={id}
+        className="group my-3 flex scroll-mt-[120px] items-center text-lg font-medium"
+        {...props}
+      >
         {children}
+        <HeadingAnchor id={id} />
       </h4>
     );
   },
   h5: ({ children, ...props }: React.ComponentPropsWithoutRef<"h5">) => {
     const id = props.id || (typeof children === "string" ? slugify(children) : undefined);
     return (
-      <h5 id={id} className="my-3 scroll-mt-28 text-base font-medium" {...props}>
+      <h5
+        id={id}
+        className="group my-3 flex scroll-mt-[120px] items-center text-base font-medium"
+        {...props}
+      >
         {children}
+        <HeadingAnchor id={id} />
       </h5>
     );
   },
