@@ -7,3 +7,9 @@
 - Test files should be placed parallel to the modules they test (foo.test.ts, not tests/foo.test.ts)
 - Import bun tests in test files
 - Don't run the dev server, since it hangs, just ask the user to test any changes
+
+## Style & Workflow Guidelines
+
+- When deleting code, DO NOT LEAVE A COMMENT BEHIND! Just delete the code cleanly.
+- When moving code, DO NOT create two copies of the file, either by using `cp` or by writing a new copy. Just use the `mv` command.
+- When refactoring code, STRONGLY AVOID creating deprecated code paths or littering the codebase with "many ways to do something". If refactoring a function with dependent internal callers, strongly prefer updating the callers rather than creating a deprecated version of the code. The codebase is small enough that such refactors can usually be done cleanly. Only create a deprecated code path if the human you are working with agrees that a clean replacement is infeasible.

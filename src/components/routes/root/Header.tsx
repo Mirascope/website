@@ -62,23 +62,6 @@ export default function Header() {
   // State to track scroll position
   const [scrolled, setScrolled] = useState(false);
 
-  // Set the appropriate header height CSS variable based on page type
-  useEffect(() => {
-    if (isDocsPage || isDevPage) {
-      document.documentElement.style.setProperty(
-        "--header-height",
-        "var(--header-height-with-selector)"
-      );
-    } else {
-      document.documentElement.style.setProperty("--header-height", "var(--header-height-base)");
-    }
-
-    return () => {
-      // Reset to default when component unmounts
-      document.documentElement.style.setProperty("--header-height", "var(--header-height-base)");
-    };
-  }, [isDocsPage, isDevPage]);
-
   // Effect to handle scroll position
   useEffect(() => {
     const handleScroll = () => {

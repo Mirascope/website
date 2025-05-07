@@ -75,6 +75,14 @@ export const Route = createRootRoute({
         <div
           data-product={getProductFromPath(path)}
           className="handwriting-enabled flex min-h-screen flex-col px-2"
+          style={
+            {
+              "--header-height":
+                path.startsWith("/docs/") || path.startsWith("/dev")
+                  ? "var(--header-height-with-selector)"
+                  : "var(--header-height-base)",
+            } as React.CSSProperties
+          }
         >
           {/* Header is fixed, so it's outside the content flow */}
           <Header />
