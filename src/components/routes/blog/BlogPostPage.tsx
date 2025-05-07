@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
-import { Button } from "@/src/components/ui/button";
 import { ButtonLink } from "@/src/components/ui/button-link";
-import { ChevronLeft, Clipboard, Check } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { MDXRenderer } from "@/src/components/mdx/providers";
+import { CopyMarkdownButton } from "@/src/components/ui/copy-markdown-button";
 
 import { LoadingContent } from "@/src/components/core/feedback";
 import { TableOfContents } from "@/src/components/core/navigation";
 import { SEOMeta } from "@/src/components/core/meta";
 import { PagefindMeta } from "@/src/components/core/meta";
-import analyticsManager from "@/src/lib/services/analytics";
 import type { BlogContent } from "@/src/lib/content";
 import { AppLayout } from "@/src/components/core/layout";
 
@@ -32,30 +31,6 @@ type BlogPostPageProps = {
 
 export function BlogPostPage({ post, slug, isLoading = false }: BlogPostPageProps) {
   const [ogImage, setOgImage] = useState<string | undefined>(undefined);
-  const [isCopied, setIsCopied] = useState(false);
-
-  // Copy post content as Markdown
-  const copyContentAsMarkdown = () => {
-    if (post.content) {
-      navigator.clipboard
-        .writeText(post.content)
-        .then(() => {
-          setIsCopied(true);
-          setTimeout(() => {
-            setIsCopied(false);
-          }, 2000);
-
-          analyticsManager.trackCopyEvent({
-            contentType: "blog_markdown",
-            itemId: slug,
-            product: "blog",
-          });
-        })
-        .catch((err) => {
-          console.error("Failed to copy content: ", err);
-        });
-    }
-  };
 
   // Find the first available image in the blog post directory
   useEffect(() => {
@@ -133,25 +108,12 @@ export function BlogPostPage({ post, slug, isLoading = false }: BlogPostPageProp
   ) : (
     <div className="flex h-full flex-col">
       <div className="px-4 pt-4 lg:pt-0">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={copyContentAsMarkdown}
-          disabled={isCopied}
-          className="w-full"
-        >
-          {isCopied ? (
-            <>
-              <Check className="mr-1 h-4 w-4" />
-              Copied!
-            </>
-          ) : (
-            <>
-              <Clipboard className="mr-1 h-4 w-4" />
-              Copy as Markdown
-            </>
-          )}
-        </Button>
+        <CopyMarkdownButton
+          content={post.content}
+          itemId={slug}
+          product="blog"
+          contentType="blog_markdown"
+        />
 
         <h4 className="text-muted-foreground mt-3 text-sm font-medium">On this page</h4>
       </div>
