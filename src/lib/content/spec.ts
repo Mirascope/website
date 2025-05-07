@@ -17,7 +17,7 @@ export interface DocInfo {
   path: string; // Doc-relative path for content loading (product/section/slug format, may include /index)
   routePath: string; // URL path with /docs/ prefix and index pages represented as trailing slashes
   slug: string;
-  type: "doc";
+  type: "docs";
   product: ProductName; // Product this doc belongs to
   hasExtractableSnippets: boolean; // Whether this doc has extractable snippets
   searchWeight: number; // Computed weight based on hierarchical position
@@ -105,7 +105,7 @@ export function processDocSpec(
       slug: docSpec.slug,
       path,
       routePath,
-      type: "doc",
+      type: "docs",
       product,
       hasExtractableSnippets: docSpec.hasExtractableSnippets || false,
       searchWeight: currentWeight,

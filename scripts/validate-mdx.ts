@@ -36,7 +36,7 @@ const contentLocations: ContentLocation[] = [
   },
   {
     dir: "content/doc",
-    type: "doc",
+    type: "docs",
     emoji: "📚",
     label: "documentation files",
     recursive: true,

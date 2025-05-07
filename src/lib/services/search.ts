@@ -310,7 +310,7 @@ export class PagefindSearchService implements SearchService {
     switch (meta.type) {
       case "blog":
         return "blog";
-      case "doc":
+      case "docs":
         // For docs, we want to show the full path up to the slug
         const docPath = meta.path.split("/").filter(Boolean);
 
@@ -358,7 +358,7 @@ export class PagefindSearchService implements SearchService {
         return 0.25;
       case "dev":
         return 0; // Effectively removes from results
-      case "doc":
+      case "docs":
         // For docs, use the searchWeight from DocMeta
         const docMeta = meta as DocMeta;
         return docMeta.searchWeight || 1.0;
