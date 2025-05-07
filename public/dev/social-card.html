@@ -94,12 +94,24 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     }
 
-    .logo-banner {
+    .combined-container {
       position: absolute;
-      top: 70px;
+      top: 50%;
       left: 50%;
-      transform: translateX(-50%);
+      transform: translate(-50%, -50%);
+      width: 100%;
+      max-width: 1000px;
+      text-align: center;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       z-index: 10;
+    }
+
+    .logo-banner {
+      position: relative;
+      margin-bottom: 40px;
     }
 
     .logo-inner {
@@ -128,26 +140,20 @@
     }
 
     .logo-img {
-      width: 50px;
-      height: 50px;
+      width: 48px;
       margin-right: 12px;
+      margin-bottom: 6px;
     }
 
     .logo-text {
       font-family: "Williams Handwriting", cursive;
       font-size: 52px;
       color: #6366f1;
+      margin-bottom: -6px;
     }
 
     .content {
-      position: absolute;
-      top: 210px;
-      left: 50%;
-      transform: translateX(-50%);
       width: 100%;
-      max-width: 1000px;
-      text-align: center;
-      padding: 0 20px;
     }
 
     .title {
@@ -184,20 +190,22 @@
 </head>
 <body>
   <div class="card-container">
-    <div class="logo-banner">
-      <div class="logo-inner">
-        <div class="logo-bg torn-paper-effect"></div>
-        <div class="logo-content">
-          <img src="/assets/branding/logo.png" alt="Mirascope Logo" class="logo-img">
-          <span class="logo-text">Mirascope</span>
+    <div class="combined-container">
+      <div class="logo-banner">
+        <div class="logo-inner">
+          <div class="logo-bg torn-paper-effect"></div>
+          <div class="logo-content">
+            <img src="/assets/branding/mirascope-logo.svg" alt="Mirascope Logo" class="logo-img">
+            <span class="logo-text">Mirascope</span>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="content">
-      <h1 id="title-element" class="title" style="font-size: 128px; line-height: 1.2;">
-        Your Title Goes Here
-      </h1>
+      <div class="content">
+        <h1 id="title-element" class="title" style="font-size: 128px; line-height: 1.2;">
+          Your Title Goes Here
+        </h1>
+      </div>
     </div>
   </div>
 

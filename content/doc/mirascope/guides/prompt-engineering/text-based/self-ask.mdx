@@ -146,14 +146,15 @@ response = self_ask(query=query, examples=[])
 print(response.content)
 ```
 
-    Are follow up questions needed here: Yes.  
-    Follow up: Which country is Jayantha Ketagoda from?  
-    Intermediate answer: Jayantha Ketagoda is from Sri Lanka.  
-    Follow up: When did Sri Lanka leave the British Empire?  
-    Intermediate answer: Sri Lanka gained independence from the British Empire on February 4, 1948.  
-    So the final answer is: February 4, 1948.
-    Jayantha Ketagoda was born in Sri Lanka, which was formerly known as Ceylon. Sri Lanka gained independence from the British Empire on February 4, 1948.
-
+```txt
+Are follow up questions needed here: Yes.  
+Follow up: Which country is Jayantha Ketagoda from?  
+Intermediate answer: Jayantha Ketagoda is from Sri Lanka.  
+Follow up: When did Sri Lanka leave the British Empire?  
+Intermediate answer: Sri Lanka gained independence from the British Empire on February 4, 1948.  
+So the final answer is: February 4, 1948.
+Jayantha Ketagoda was born in Sri Lanka, which was formerly known as Ceylon. Sri Lanka gained independence from the British Empire on February 4, 1948.
+```
 
 
 This basic implementation demonstrates how to use few-shot learning with Self-Ask. The `self_ask` function takes a query and a list of examples, then uses Mirascope's `OpenAIDynamicConfig` to inject the examples into the prompt.
@@ -290,13 +291,14 @@ response = dynamic_self_ask(query=query, examples=few_shot_examples, n=2)
 print(response.content)
 ```
 
-    Are follow up questions needed here: Yes.  
-    Follow up: Who invented the phonograph?  
-    Intermediate answer: Thomas Edison.  
-    Follow up: What language did Thomas Edison primarily speak?  
-    Intermediate answer: Thomas Edison primarily spoke English.  
-    So the final answer is: English.
-
+```txt
+Are follow up questions needed here: Yes.  
+Follow up: Who invented the phonograph?  
+Intermediate answer: Thomas Edison.  
+Follow up: What language did Thomas Edison primarily speak?  
+Intermediate answer: Thomas Edison primarily spoke English.  
+So the final answer is: English.
+```
 
 
 This enhanced version introduces the `select_relevant_examples` function, which uses TF-IDF vectorization and cosine similarity to find the most relevant examples for a given query. The `dynamic_self_ask` function then selects these relevant examples before including them in the prompt.
