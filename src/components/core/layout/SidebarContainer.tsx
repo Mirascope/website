@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Menu, X } from "lucide-react";
+import { ChevronRight, X } from "lucide-react";
 import { useRouter } from "@tanstack/react-router";
 
 interface SidebarContainerProps {
   children: React.ReactNode;
+  collapsible?: boolean;
 }
 
 /**
@@ -12,7 +13,7 @@ interface SidebarContainerProps {
  * Handles sidebar state (expanded/collapsed) based on screen size and
  * provides toggle functionality. Accepts any content as children.
  */
-const SidebarContainer: React.FC<SidebarContainerProps> = ({ children }) => {
+const SidebarContainer: React.FC<SidebarContainerProps> = ({ children, collapsible = true }) => {
   const router = useRouter();
 
   // Track screen size breakpoints
@@ -155,12 +156,12 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ children }) => {
           />
         )}
 
-        {/* Toggle button - switches between hamburger and X icons */}
-        {isSmallScreen && (
+        {/* Toggle button - switches between chevron and X icons */}
+        {isSmallScreen && collapsible && (
           <button
             ref={closeBtnRef}
             onClick={toggleSidebar}
-            className={`bg-primary/90 text-primary-foreground fixed top-[calc(var(--header-height)-2.5rem)] left-2 z-80 flex items-center justify-center rounded-full shadow-sm ${
+            className={`bg-accent/90 text-accent-foreground fixed top-[calc(var(--header-height)-2.5rem)] left-2 z-80 flex items-center justify-center rounded-full shadow-sm ${
               isPhoneScreen ? "h-9 w-9" : "h-9 w-9"
             }`}
             aria-label={sidebarExpanded ? "Close sidebar" : "Open sidebar"}
@@ -170,7 +171,7 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ children }) => {
             {sidebarExpanded ? (
               <X size={isPhoneScreen ? 22 : 20} />
             ) : (
-              <Menu size={isPhoneScreen ? 22 : 20} />
+              <ChevronRight size={isPhoneScreen ? 22 : 20} />
             )}
           </button>
         )}
@@ -178,7 +179,7 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ children }) => {
         {/* Sidebar content panel */}
         <div
           id="sidebar-content"
-          className={`bg-background/95 fixed top-[var(--header-height)] h-[calc(100vh-var(--header-height))] backdrop-blur-sm transition-all duration-300 ease-in-out ${
+          className={`bg-background/95 fixed top-[var(--header-height)] h-[calc(100vh-var(--header-height))] backdrop-blur-sm transition-all duration-300 ease-in-out ${!collapsible && isSmallScreen ? "hidden" : ""} ${
             isPhoneScreen
               ? "w-[calc(100vw-20px)] rounded-r-md" // Almost full width on phones, with slight margin
               : isSmallScreen

@@ -44,7 +44,7 @@ function BlogLayout({
     <>
       {children}
       <AppLayout>
-        <AppLayout.LeftSidebar className="pt-1">
+        <AppLayout.LeftSidebar className="pt-1" collapsible={false}>
           <div className="pr-10">
             <BackToBlogLink />
           </div>
@@ -168,7 +168,7 @@ function BlogPostPage() {
 
   // Main content
   const mainContent = (
-    <div className="min-w-0 flex-1">
+    <div className="min-w-0 flex-1 px-2">
       <div className="mx-auto max-w-5xl">
         <div className="mb-6">
           <h1 className="mb-4 text-2xl font-semibold sm:text-3xl md:text-4xl">{title}</h1>

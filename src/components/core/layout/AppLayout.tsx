@@ -30,6 +30,7 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
 interface SidebarProps {
   children: ReactNode;
   className?: string;
+  collapsible?: boolean;
 }
 
 /**
@@ -38,9 +39,9 @@ interface SidebarProps {
  * Uses SidebarContainer for responsive collapsing on small screens.
  * Sidebar content scrolls independently from main content.
  */
-AppLayout.LeftSidebar = ({ children, className }: SidebarProps) => {
+AppLayout.LeftSidebar = ({ children, className, collapsible = true }: SidebarProps) => {
   return (
-    <SidebarContainer>
+    <SidebarContainer collapsible={collapsible}>
       <div className={cn("h-full overflow-y-auto", className)}>{children}</div>
     </SidebarContainer>
   );

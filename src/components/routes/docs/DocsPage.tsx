@@ -40,7 +40,7 @@ const DocsPage: React.FC<DocsPageProps> = ({ document, isLoading = false, produc
         onProviderChange={handleProviderChange}
       >
         <AppLayout>
-          <AppLayout.LeftSidebar className="pt-1">
+          <AppLayout.LeftSidebar className="pt-1" collapsible={true}>
             <DocsSidebar product={product} />
           </AppLayout.LeftSidebar>
 
