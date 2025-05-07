@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Menu, X } from "lucide-react";
+import { useRouter } from "@tanstack/react-router";
 
 interface SidebarContainerProps {
   children: React.ReactNode;
@@ -12,6 +13,8 @@ interface SidebarContainerProps {
  * provides toggle functionality. Accepts any content as children.
  */
 const SidebarContainer: React.FC<SidebarContainerProps> = ({ children }) => {
+  const router = useRouter();
+
   // Track screen size breakpoints
   const [isSmallScreen, setIsSmallScreen] = useState(() => {
     if (typeof window !== "undefined") {
@@ -99,6 +102,21 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({ children }) => {
       }
     }
   };
+
+  // Listen for navigation changes to auto-close sidebar on mobile
+  useEffect(() => {
+    // Subscribe to route resolution events (when navigation is complete)
+    const unsubscribe = router.subscribe("onResolved", () => {
+      if (isSmallScreen && sidebarExpanded) {
+        toggleSidebar();
+      }
+    });
+
+    // Clean up subscription on unmount
+    return () => {
+      unsubscribe();
+    };
+  }, [router, isSmallScreen, sidebarExpanded]);
 
   // Handle Escape key to close sidebar
   useEffect(() => {
