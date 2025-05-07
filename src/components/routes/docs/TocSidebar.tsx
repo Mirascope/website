@@ -28,13 +28,10 @@ const TocSidebar: React.FC<TocSidebarProps> = ({ document }) => {
             setIsCopied(false);
           }, 2000);
 
-          const pagePath = window.location.pathname;
-          // Using GA4 standard "select_content" event with recommended parameters
-          analyticsManager.trackEvent("select_content", {
-            content_type: "document_markdown",
-            item_id: document.meta.path,
+          analyticsManager.trackCopyEvent({
+            contentType: "document_markdown",
+            itemId: document.meta.path,
             product: document.meta.product,
-            page_path: pagePath,
           });
         })
         .catch((err) => {

@@ -45,14 +45,10 @@ export function BlogPostPage({ post, slug, isLoading = false }: BlogPostPageProp
             setIsCopied(false);
           }, 2000);
 
-          const pagePath = window.location.pathname;
-
-          // Using GA4 standard "select_content" event with recommended parameters
-          analyticsManager.trackEvent("select_content", {
-            content_type: "blog_markdown",
-            item_id: slug,
+          analyticsManager.trackCopyEvent({
+            contentType: "blog_markdown",
+            itemId: slug,
             product: "blog",
-            page_path: pagePath,
           });
         })
         .catch((err) => {
