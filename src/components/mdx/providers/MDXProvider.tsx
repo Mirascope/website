@@ -1,6 +1,6 @@
 import React from "react";
 import { MDXProvider } from "@mdx-js/react";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Link as LinkIcon } from "lucide-react";
 import {
   InstallSnippet,
@@ -68,15 +68,21 @@ const MDXButtonLink = (props: React.ComponentProps<typeof ButtonLink>) => {
 
 // Heading anchor link component
 const HeadingAnchor = ({ id }: { id?: string }) => {
+  const navigate = useNavigate();
+
   if (!id) return null;
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    // Completely prevent default browser behavior
+    // Prevent default browser behavior
     e.preventDefault();
 
-    if (typeof window !== "undefined") {
-      window.history.pushState({}, "", `#${id}`);
-    }
+    // Use TanStack Router's navigate to update the hash
+    // This leverages the router's built-in scroll restoration
+    navigate({
+      hash: id,
+      // Use replace to avoid adding to history stack
+      replace: true,
+    });
   };
 
   return (
@@ -376,7 +382,7 @@ interface MDXProviderWrapperProps {
 
 export function MDXProviderWrapper({ children }: MDXProviderWrapperProps) {
   return (
-    <div className="mdx-content">
+    <div className="mdx-content overflow-y-auto" id="mdx-container">
       <MDXProvider components={components}>{children}</MDXProvider>
     </div>
   );
