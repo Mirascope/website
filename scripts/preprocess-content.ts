@@ -92,7 +92,7 @@ interface ViteDevServer {
 
 export function contentPreprocessPlugin(options = { verbose: true }) {
   // Get all content directories
-  const contentDirs = ["blog", "doc", "policy", "dev"].map((type) =>
+  const contentDirs = ["blog", "docs", "policy", "dev"].map((type) =>
     path.join(process.cwd(), "content", type)
   );
 

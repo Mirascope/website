@@ -46,14 +46,14 @@ API_SOURCES = {
         "repo": "https://github.com/Mirascope/mirascope.git",
         "package": "mirascope",
         "docs_path": "docs/api",
-        "target_path": "content/doc/mirascope/api",
+        "target_path": "content/docs/mirascope/api",
     },
     # Future configuration for lilypad-sdk would be added here
     # "lilypad-sdk": {
     #     "repo": "https://github.com/Mirascope/lilypad-sdk.git",
     #     "package": "lilypad_sdk",
     #     "docs_path": "docs/api",
-    #     "target_path": "content/doc/lilypad/api",
+    #     "target_path": "content/docs/lilypad/api",
     # },
 }
 

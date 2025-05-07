@@ -1,7 +1,7 @@
 """TypeScript meta.ts representation in Python.
 
 This module provides Python classes that mirror the TypeScript interfaces used in the
-`content/doc/_meta.ts` file for structuring documentation metadata.
+`content/docs/_meta.ts` file for structuring documentation metadata.
 """
 
 import re
@@ -170,7 +170,7 @@ def generate_meta_file_content(section: DocSection, export_name: str) -> str:
     content.append("")
 
     # Add imports
-    content.append('import type { DocSection } from "@/content/doc/_meta";')
+    content.append('import type { DocSection } from "@/content/docs/_meta";')
     content.append("")
 
     # Add the export declaration
