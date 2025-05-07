@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 5: Multi-Line Prompts
 # Generated for provider: anthropic
-# Source: content/docs/mirascope/learn/prompts.mdx:132
+# Source: content/docs/mirascope/learn/prompts.mdx:139
 # This file is auto-generated; any edits should be made in the source file
 
 import inspect

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 14: Document Inputs
 # Generated for provider: openai
-# Source: content/docs/mirascope/learn/prompts.mdx:452
+# Source: content/docs/mirascope/learn/prompts.mdx:459
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import DocumentPart, Messages, prompt_template

@@ -14,6 +14,7 @@ from pathlib import Path
 
 import tomli
 
+from scripts.apigen.config import ApiSourceConfig, ApiSourcesDict
 from scripts.apigen.documentation_generator import DocumentationGenerator
 
 
@@ -39,28 +40,32 @@ def get_mirascope_version(pyproject_path: Path) -> str:
     raise ValueError("Mirascope dependency not found in pyproject.toml")
 
 
+## Claude: Make a dataclass for the api source config
+
 # Configuration for API documentation sources
 # Maps repository/package to documentation target directory
-API_SOURCES = {
-    "mirascope": {
-        "repo": "https://github.com/Mirascope/mirascope.git",
-        "package": "mirascope",
-        "docs_path": "docs/api",
-        "target_path": "content/docs/mirascope/api",
-    },
+API_SOURCES: ApiSourcesDict = {
+    "mirascope": ApiSourceConfig(
+        repo="https://github.com/Mirascope/mirascope.git",
+        package="mirascope",
+        docs_path="docs/api",
+        content_subpath="docs/mirascope",
+        target_path="content/docs/mirascope/api",
+    ),
     # Future configuration for lilypad-sdk would be added here
-    # "lilypad-sdk": {
-    #     "repo": "https://github.com/Mirascope/lilypad-sdk.git",
-    #     "package": "lilypad_sdk",
-    #     "docs_path": "docs/api",
-    #     "target_path": "content/docs/lilypad/api",
-    # },
+    # "lilypad-sdk": ApiSourceConfig(
+    #     repo="https://github.com/Mirascope/lilypad-sdk.git",
+    #     package="lilypad_sdk",
+    #     docs_path="docs/api",
+    #     content_subpath="docs/lilypad",
+    #     target_path="content/docs/lilypad/api",
+    # ),
 }
 
 
 def process_source(
     source_name: str,
-    source_config: dict,
+    source_config: ApiSourceConfig,
     project_root: Path,
     only_file: str | None = None,
     with_meta: bool = False,
@@ -103,7 +108,7 @@ def process_source(
 
 
 def parse_qualified_path(
-    only_file: str, sources: dict[str, dict[str, str]]
+    only_file: str, sources: ApiSourcesDict
 ) -> tuple[str | None, str]:
     """Parse a qualified path like "mirascope:llm/call.mdx" into source and file parts.
 

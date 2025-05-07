@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 3: Message Roles
 # Generated for provider: anthropic
-# Source: content/docs/mirascope/learn/prompts.mdx:74
+# Source: content/docs/mirascope/learn/prompts.mdx:81
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import Messages, prompt_template

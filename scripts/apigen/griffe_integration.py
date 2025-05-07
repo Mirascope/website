@@ -13,6 +13,7 @@ from griffe import (
     Alias,
     Class,
     Docstring,
+    Extensions,
     Function,
     GriffeLoader,
     Module,
@@ -21,12 +22,20 @@ from griffe import (
     Parser,
 )
 
+from scripts.apigen.doclinks import UpdateDocstringsExtension
 
-def get_loader(source_repo_path: Path) -> GriffeLoader:
+
+def get_loader(
+    source_repo_path: Path,
+    content_dir: Path | None = None,
+    content_subpath: str | None = None,
+) -> GriffeLoader:
     """Create a configured Griffe loader.
 
     Args:
         source_repo_path: Path to the source repository
+        content_dir: Path to the content directory for the doclinks extension
+        content_subpath: Subpath (eg /docs/mirascope) for local link evaluation
 
     Returns:
         A configured GriffeLoader instance
@@ -36,7 +45,14 @@ def get_loader(source_repo_path: Path) -> GriffeLoader:
     parser = Parser("google")
 
     # Create loader with specified docstring parser
-    return GriffeLoader(docstring_parser=parser)
+    loader = GriffeLoader(docstring_parser=parser)
+
+    # Add the doclinks extension if content_dir is provided
+    if content_dir and content_subpath:
+        extensions = Extensions(UpdateDocstringsExtension(content_dir, content_subpath))
+        loader.extensions = extensions
+
+    return loader
 
 
 def process_directive(directive: str, module: Module) -> str:
