@@ -1,9 +1,9 @@
 import type { ReactNode } from "react";
-import { useState, createContext, useContext, useEffect, useRef } from "react";
+import { useState, createContext, useContext, useEffect } from "react";
 import { cn } from "@/src/lib/utils";
 import { Button } from "@/src/components/ui/button";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
-import { useRouter } from "@tanstack/react-router";
+import { useSidebar } from "./useSidebar";
 
 // Create a context to coordinate sidebar states
 type SidebarContextType = {
@@ -13,6 +13,8 @@ type SidebarContextType = {
   setRightSidebarOpen: (open: boolean) => void;
   isSmallScreen: boolean;
   isPhoneScreen: boolean;
+  toggleLeftSidebar: ReturnType<typeof useSidebar>;
+  toggleRightSidebar: ReturnType<typeof useSidebar>;
 };
 
 const SidebarContext = createContext<SidebarContextType>({
@@ -22,6 +24,24 @@ const SidebarContext = createContext<SidebarContextType>({
   setRightSidebarOpen: () => {},
   isSmallScreen: false,
   isPhoneScreen: false,
+  toggleLeftSidebar: {
+    isOpen: false,
+    setIsOpen: () => {},
+    toggle: () => {},
+    open: () => {},
+    close: () => {},
+    closeBtnRef: { current: null },
+    previouslyFocusedElementRef: { current: null },
+  },
+  toggleRightSidebar: {
+    isOpen: false,
+    setIsOpen: () => {},
+    toggle: () => {},
+    open: () => {},
+    close: () => {},
+    closeBtnRef: { current: null },
+    previouslyFocusedElementRef: { current: null },
+  },
 });
 
 /**
@@ -42,8 +62,6 @@ const SidebarContext = createContext<SidebarContextType>({
  * ```
  */
 const AppLayout = ({ children }: { children: ReactNode }) => {
-  const router = useRouter();
-
   // Track screen size breakpoints
   const [isSmallScreen, setIsSmallScreen] = useState(() => {
     if (typeof window !== "undefined") {
@@ -60,9 +78,23 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
     return false; // Default to larger screen for SSR
   });
 
-  // Initialize sidebar states based on screen size
-  const [leftSidebarOpen, setLeftSidebarOpen] = useState(!isSmallScreen);
-  const [rightSidebarOpen, setRightSidebarOpen] = useState(false);
+  // Create sidebar controllers with coordinated behavior
+  const leftSidebar = useSidebar({
+    initialOpen: true,
+    isSmallScreen,
+  });
+
+  const rightSidebar = useSidebar({
+    initialOpen: false,
+    isSmallScreen,
+    onOtherSidebarOpen: () => leftSidebar.close(),
+  });
+
+  // Simplified state hooks for API compatibility
+  const leftSidebarOpen = leftSidebar.isOpen;
+  const rightSidebarOpen = rightSidebar.isOpen;
+  const setLeftSidebarOpen = leftSidebar.setIsOpen;
+  const setRightSidebarOpen = rightSidebar.setIsOpen;
 
   // Update breakpoint state based on window resize
   useEffect(() => {
@@ -92,21 +124,7 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
 
     // Clean up
     return () => window.removeEventListener("resize", handleResize);
-  }, [isSmallScreen]);
-
-  // Listen for navigation changes to auto-close sidebars on mobile
-  useEffect(() => {
-    const unsubscribe = router.subscribe("onResolved", () => {
-      if (isSmallScreen) {
-        if (leftSidebarOpen) setLeftSidebarOpen(false);
-        if (rightSidebarOpen) setRightSidebarOpen(false);
-      }
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, [router, isSmallScreen, leftSidebarOpen, rightSidebarOpen]);
+  }, [isSmallScreen, setLeftSidebarOpen]);
 
   // Manage body scroll lock when sidebars are open on mobile
   useEffect(() => {
@@ -121,21 +139,6 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
     };
   }, [isSmallScreen, leftSidebarOpen, rightSidebarOpen]);
 
-  // Handle Escape key to close sidebars
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && isSmallScreen) {
-        if (leftSidebarOpen) setLeftSidebarOpen(false);
-        if (rightSidebarOpen) setRightSidebarOpen(false);
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isSmallScreen, leftSidebarOpen, rightSidebarOpen]);
-
   return (
     <SidebarContext.Provider
       value={{
@@ -145,6 +148,8 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
         setRightSidebarOpen,
         isSmallScreen,
         isPhoneScreen,
+        toggleLeftSidebar: leftSidebar,
+        toggleRightSidebar: rightSidebar,
       }}
     >
       <div className="flex justify-center">
@@ -166,45 +171,28 @@ interface RightSidebarProps extends SidebarProps {
 }
 
 /**
+ * Shared backdrop component for mobile sidebar overlays
+ */
+const SidebarBackdrop = ({ isOpen, onClick }: { isOpen: boolean; onClick: () => void }) => (
+  <div
+    className={`bg-background/30 fixed inset-0 backdrop-blur-sm transition-all duration-300 ${
+      isOpen ? "z-40 opacity-100" : "pointer-events-none -z-10 opacity-0"
+    }`}
+    onClick={onClick}
+    aria-hidden="true"
+    role="presentation"
+  />
+);
+
+/**
  * Left sidebar component with fixed positioning and collapsible behavior
  *
  * Handles responsive collapsing on small screens.
  * Sidebar content scrolls independently from main content.
  */
 AppLayout.LeftSidebar = ({ children, className, collapsible = true }: SidebarProps) => {
-  const { leftSidebarOpen, setLeftSidebarOpen, setRightSidebarOpen, isSmallScreen, isPhoneScreen } =
+  const { leftSidebarOpen, setLeftSidebarOpen, isSmallScreen, isPhoneScreen, toggleLeftSidebar } =
     useContext(SidebarContext);
-
-  const closeBtnRef = useRef<HTMLButtonElement>(null);
-  const previouslyFocusedElementRef = useRef<HTMLElement | null>(null);
-
-  const toggleLeftSidebar = () => {
-    // Save the currently focused element when opening
-    if (!leftSidebarOpen) {
-      previouslyFocusedElementRef.current = document.activeElement as HTMLElement;
-    }
-
-    const newState = !leftSidebarOpen;
-    setLeftSidebarOpen(newState);
-
-    // Close the right sidebar when opening the left sidebar
-    if (newState) {
-      setRightSidebarOpen(false);
-    }
-
-    // Manage focus
-    if (newState) {
-      // Focus the close button when sidebar opens
-      setTimeout(() => {
-        closeBtnRef.current?.focus();
-      }, 100);
-    } else {
-      // Restore focus when sidebar closes
-      setTimeout(() => {
-        previouslyFocusedElementRef.current?.focus();
-      }, 100);
-    }
-  };
 
   return (
     <>
@@ -212,21 +200,14 @@ AppLayout.LeftSidebar = ({ children, className, collapsible = true }: SidebarPro
       <div className={`flex flex-shrink-0 ${isSmallScreen ? "w-0" : "w-64"}`}>
         {/* Blurred backdrop - only visible on mobile when expanded */}
         {isSmallScreen && (
-          <div
-            className={`bg-background/30 fixed inset-0 backdrop-blur-sm transition-all duration-300 ${
-              leftSidebarOpen ? "z-40 opacity-100" : "pointer-events-none -z-10 opacity-0"
-            }`}
-            onClick={() => setLeftSidebarOpen(false)}
-            aria-hidden="true"
-            role="presentation"
-          />
+          <SidebarBackdrop isOpen={leftSidebarOpen} onClick={() => setLeftSidebarOpen(false)} />
         )}
 
         {/* Toggle button - only visible on small screens when collapsible */}
         {isSmallScreen && collapsible && (
           <button
-            ref={closeBtnRef}
-            onClick={toggleLeftSidebar}
+            ref={toggleLeftSidebar.closeBtnRef}
+            onClick={toggleLeftSidebar.toggle}
             className={`bg-accent/90 text-accent-foreground fixed top-[calc(var(--header-height)-2.5rem)] left-2 z-80 flex items-center justify-center rounded-full shadow-sm ${
               isPhoneScreen ? "h-9 w-9" : "h-9 w-9"
             }`}
@@ -300,39 +281,13 @@ AppLayout.RightSidebar = ({
   mobileCollapsible = false,
   mobileTitle = "Table of Contents",
 }: RightSidebarProps) => {
-  const { rightSidebarOpen, setRightSidebarOpen, leftSidebarOpen, setLeftSidebarOpen } =
-    useContext(SidebarContext);
-
-  const closeBtnRef = useRef<HTMLButtonElement>(null);
-  const previouslyFocusedElementRef = useRef<HTMLElement | null>(null);
-
-  const toggleRightSidebar = () => {
-    // Save the currently focused element when opening
-    if (!rightSidebarOpen) {
-      previouslyFocusedElementRef.current = document.activeElement as HTMLElement;
-    }
-
-    const newState = !rightSidebarOpen;
-    setRightSidebarOpen(newState);
-
-    // Close the left sidebar when opening the right sidebar
-    if (newState && leftSidebarOpen) {
-      setLeftSidebarOpen(false);
-    }
-
-    // Manage focus
-    if (newState) {
-      // Focus the close button when sidebar opens
-      setTimeout(() => {
-        closeBtnRef.current?.focus();
-      }, 100);
-    } else {
-      // Restore focus when sidebar closes
-      setTimeout(() => {
-        previouslyFocusedElementRef.current?.focus();
-      }, 100);
-    }
-  };
+  const {
+    rightSidebarOpen,
+    setRightSidebarOpen,
+    isSmallScreen,
+    leftSidebarOpen,
+    toggleRightSidebar,
+  } = useContext(SidebarContext);
 
   return (
     <>
@@ -364,24 +319,23 @@ AppLayout.RightSidebar = ({
             <Button
               variant="outline"
               size="icon"
-              onClick={toggleRightSidebar}
+              onClick={toggleRightSidebar.toggle}
               className={cn(
                 "h-10 w-10 rounded-full border-1 p-0 shadow-md",
                 rightSidebarOpen ? "bg-muted" : "bg-background"
               )}
+              ref={toggleRightSidebar.closeBtnRef}
+              aria-label={rightSidebarOpen ? "Close table of contents" : "Open table of contents"}
+              aria-expanded={rightSidebarOpen}
+              aria-controls="right-sidebar-content"
             >
               <ChevronLeft className="h-6 w-6" />
             </Button>
           </div>
 
           {/* Mobile backdrop overlay */}
-          {rightSidebarOpen && (
-            <div
-              className="bg-background/50 fixed inset-0 z-30 lg:hidden"
-              onClick={() => setRightSidebarOpen(false)}
-              aria-hidden="true"
-              role="presentation"
-            />
+          {isSmallScreen && (
+            <SidebarBackdrop isOpen={rightSidebarOpen} onClick={() => setRightSidebarOpen(false)} />
           )}
 
           {/* Mobile slide-in panel */}
@@ -395,7 +349,6 @@ AppLayout.RightSidebar = ({
               <div className="border-border m-1 flex items-center justify-between border-b p-4">
                 <h3 className="font-medium">{mobileTitle}</h3>
                 <button
-                  ref={closeBtnRef}
                   onClick={() => setRightSidebarOpen(false)}
                   className="hover:bg-muted rounded-md p-1"
                   aria-label="Close sidebar"
