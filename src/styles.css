@@ -9,7 +9,7 @@
   font-weight: normal;
   font-style: normal;
   font-display: swap;
-  descent-override: 10%;
+  descent-override: 7%;
 }
 
 @import "tailwindcss";
