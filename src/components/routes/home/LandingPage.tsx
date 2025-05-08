@@ -126,7 +126,7 @@ assert isinstance(book, Book)`;
           </h2>
           <div className="bg-background/60 mb-10 w-full max-w-3xl rounded-md">
             <ProviderContextProvider>
-              <ProviderTabbedSection>
+              <ProviderTabbedSection showLogo={true}>
                 <ProviderCodeWrapper code={codeExample} language="python" />
               </ProviderTabbedSection>
             </ProviderContextProvider>

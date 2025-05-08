@@ -124,20 +124,20 @@ export function ProviderTabbedSection({
       )}
 
       <Tabs value={activeProvider} onValueChange={handleProviderChange} className="w-full">
-        <div className="relative mb-2 px-1">
+        <div className="relative mb-0 px-1">
           {/* Left scroll button - always rendered but conditionally visible */}
           <button
             onClick={canScrollLeft ? scrollLeft : undefined}
-            className={`bg-background/60 absolute top-1/2 left-0 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full shadow-md backdrop-blur-sm transition-opacity duration-200 ${canScrollLeft ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
+            className={`bg-background/60 absolute top-1/2 left-0 z-10 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full shadow-md backdrop-blur-sm transition-opacity duration-200 ${canScrollLeft ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
             aria-label="Scroll tabs left"
             aria-hidden={!canScrollLeft}
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-3 w-3" />
           </button>
 
           <div
             ref={tabsListRef}
-            className="hide-scrollbar overflow-x-auto px-1 pb-2"
+            className="hide-scrollbar overflow-x-auto px-1 pb-0"
             onScroll={checkScrollability}
           >
             <TabsList className="inline-flex h-auto flex-nowrap gap-x-2 bg-transparent p-0">
@@ -152,11 +152,11 @@ export function ProviderTabbedSection({
           {/* Right scroll button - always rendered but conditionally visible */}
           <button
             onClick={canScrollRight ? scrollRight : undefined}
-            className={`bg-background/60 absolute top-1/2 right-0 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full shadow-md backdrop-blur-sm transition-opacity duration-200 ${canScrollRight ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
+            className={`bg-background/60 absolute top-1/2 right-0 z-10 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full shadow-md backdrop-blur-sm transition-opacity duration-200 ${canScrollRight ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
             aria-label="Scroll tabs right"
             aria-hidden={!canScrollRight}
           >
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight className="h-3 w-3" />
           </button>
         </div>
 
