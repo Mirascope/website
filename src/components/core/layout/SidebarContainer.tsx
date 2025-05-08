@@ -223,7 +223,7 @@ const SidebarContainer: React.FC<SidebarContainerProps> = ({
           aria-hidden={!isExpanded}
           role="navigation"
         >
-          <div className={`h-full overflow-y-auto ${isPhoneScreen ? "p-5" : "p-4"}`}>
+          <div className={`h-full overflow-y-auto ${isPhoneScreen ? "px-5" : "px-4"}`}>
             {/* Only render sidebar content when expanded on mobile or always on desktop */}
             {(isExpanded || !isSmallScreen) && children}
           </div>

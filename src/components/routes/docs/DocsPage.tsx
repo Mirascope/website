@@ -46,7 +46,7 @@ const DocsPage: React.FC<DocsPageProps> = ({ document, isLoading = false, produc
           </AppLayout.Content>
 
           <AppLayout.RightSidebar
-            className={isLoading ? undefined : "pt-1"}
+            className="pt-1"
             mobileCollapsible={true}
             mobileTitle="On this page"
           >
