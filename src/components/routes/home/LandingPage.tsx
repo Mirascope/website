@@ -7,6 +7,55 @@ import { ProviderTabbedSection } from "@/src/components/mdx/elements/ProviderTab
 import { ProviderCodeWrapper } from "@/src/components/mdx/providers/ProviderCodeWrapper";
 import { ProviderContextProvider } from "@/src/components/core/providers/ProviderContext";
 
+// Base component for responsive text lines
+const ResponsiveTextLine = ({
+  children,
+  size = "clamp(2.5rem, 8vw, 6rem)",
+  className = "",
+}: {
+  children: React.ReactNode;
+  size?: string;
+  className?: string;
+}) => (
+  <span
+    style={{ fontSize: size, lineHeight: "0.9" }}
+    className={`whitespace-normal sm:whitespace-nowrap ${className}`}
+  >
+    {children}
+  </span>
+);
+
+// Component for hero section text block
+const HeroTextBlock = ({ lines }: { lines: string[] }) => (
+  <div className="landing-page-text-shadow flex flex-col font-medium tracking-tight text-white">
+    {lines.map((line, index) => (
+      <ResponsiveTextLine
+        key={index}
+        className={`font-handwriting ${index < lines.length - 1 ? "mb-8" : ""}`}
+      >
+        {line}
+      </ResponsiveTextLine>
+    ))}
+  </div>
+);
+
+// Component for feature section headings
+const FeatureHeading = ({ lines }: { lines: string[] }) => (
+  <>
+    {lines.map((line, index) => (
+      <h2
+        key={index}
+        style={{ fontSize: "clamp(1.5rem, 5vw, 3rem)" }}
+        className={`landing-page-text-shadow text-center font-bold text-white ${
+          index < lines.length - 1 ? "mb-2" : "mb-8"
+        }`}
+      >
+        {line}
+      </h2>
+    ))}
+  </>
+);
+
 export function LandingPage() {
   useSunsetTime();
   const heroSectionRef = useRef<HTMLDivElement>(null);
@@ -79,20 +128,7 @@ assert isinstance(book, Book)`;
 
           {/* Hero text perfectly centered vertically in the viewport */}
           <div className="absolute inset-0 flex items-center justify-center px-4 text-center">
-            <div className="landing-page-text-shadow flex flex-col font-medium tracking-tight text-white">
-              <span
-                style={{ fontSize: "clamp(2.5rem, 8vw, 6rem)", lineHeight: "0.9" }}
-                className="font-handwriting mb-8 whitespace-normal sm:whitespace-nowrap"
-              >
-                The AI Engineer's
-              </span>
-              <span
-                style={{ fontSize: "clamp(2.5rem, 8vw, 6rem)", lineHeight: "0.9" }}
-                className="font-handwriting whitespace-normal sm:whitespace-nowrap"
-              >
-                Developer Stack
-              </span>
-            </div>
+            <HeroTextBlock lines={["The AI Engineer's", "Developer Stack"]} />
           </div>
 
           {/* Scroll indicator - fixed at bottom with animated visibility and landing page shadow */}
@@ -118,12 +154,7 @@ assert isinstance(book, Book)`;
           ref={featureSectionRef}
           className="flex min-h-screen flex-col items-center justify-center px-4 py-16"
         >
-          <h2 className="landing-page-text-shadow mb-2 text-center text-4xl font-bold text-white md:text-5xl">
-            LLM abstractions that
-          </h2>
-          <h2 className="landing-page-text-shadow mb-8 text-center text-4xl font-bold text-white md:text-5xl">
-            aren't obstructions
-          </h2>
+          <FeatureHeading lines={["LLM abstractions that", "aren't obstructions"]} />
           <div className="bg-background/60 mb-10 w-full max-w-3xl rounded-md">
             <ProviderContextProvider>
               <ProviderTabbedSection showLogo={true}>
