@@ -65,48 +65,69 @@ Returns:
   {
     "name": "model",
     "type": "str",
+    "module_context": "builtins",
+    "is_builtin": "true",
     "description": "The Anthropic model to use in the API call."
   },
   {
     "name": "stream",
     "type": "bool",
+    "module_context": "builtins",
+    "is_builtin": "true",
     "description": "Whether to stream the response from the API call."
   },
   {
     "name": "tools",
     "type": "list[BaseTool | Callable]",
+    "module_context": "builtins",
+    "is_builtin": "true",
     "description": "The tools to use in the Anthropic API call."
   },
   {
     "name": "response_model",
     "type": "BaseModel | BaseType",
+    "module_context": "mirascope.core.anthropic._call",
+    "is_builtin": "false",
     "description": "The response model into which the response\nshould be structured."
   },
   {
     "name": "output_parser",
     "type": "Callable[[AnthropicCallResponse | ResponseModelT], Any]",
+    "module_context": "typing",
+    "is_builtin": "true",
     "description": "A function\nfor parsing the call response whose value will be returned in place of the\noriginal call response."
   },
   {
     "name": "json_mode",
     "type": "bool",
+    "module_context": "builtins",
+    "is_builtin": "true",
     "description": "Whether to use JSON Mode."
   },
   {
     "name": "client",
     "type": "object",
+    "module_context": "mirascope.core.anthropic._call",
+    "is_builtin": "false",
     "description": "An optional custom client to use in place of the default client."
   },
   {
     "name": "call_params",
     "type": "AnthropicCallParams",
+    "module_context": "mirascope.core.anthropic.call_params",
+    "is_builtin": "false",
     "description": "The `AnthropicCallParams` call parameters to use\nin the API call."
   }
 ]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.anthropic._call"
 />
 
 <ReturnType
   type="Callable"
+  isBuiltin={false}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.anthropic._call"
   description="The decorator for turning a typed function into an Anthropic\nAPI call."
 />
 

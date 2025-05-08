@@ -40,45 +40,69 @@ Args:
   parameters={[
   {
     "name": "TCallResponse",
-    "type": "type[_BaseCallResponseT]"
+    "type": "type[_BaseCallResponseT]",
+    "module_context": "mirascope.core.base._call_factory",
+    "is_builtin": "false"
   },
   {
     "name": "TCallResponseChunk",
-    "type": "type[_BaseCallResponseChunkT]"
+    "type": "type[_BaseCallResponseChunkT]",
+    "module_context": "mirascope.core.base._call_factory",
+    "is_builtin": "false"
   },
   {
     "name": "TToolType",
-    "type": "type[_BaseToolT]"
+    "type": "type[_BaseToolT]",
+    "module_context": "mirascope.core.base._call_factory",
+    "is_builtin": "false"
   },
   {
     "name": "TStream",
-    "type": "type[_BaseStreamT]"
+    "type": "type[_BaseStreamT]",
+    "module_context": "mirascope.core.base._call_factory",
+    "is_builtin": "false"
   },
   {
     "name": "default_call_params",
-    "type": "BaseCallParams"
+    "type": "BaseCallParams",
+    "module_context": "mirascope.core.base.call_params",
+    "is_builtin": "false"
   },
   {
     "name": "setup_call",
-    "type": "SameSyncAndAsyncClientSetupCall[_SameSyncAndAsyncClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT] | SetupCall[_SyncBaseClientT, _AsyncBaseClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT]"
+    "type": "SameSyncAndAsyncClientSetupCall[_SameSyncAndAsyncClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT] | SetupCall[_SyncBaseClientT, _AsyncBaseClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT]",
+    "module_context": "mirascope.core.base._utils",
+    "is_builtin": "false"
   },
   {
     "name": "get_json_output",
-    "type": "GetJsonOutput[_BaseCallResponseT | _BaseCallResponseChunkT]"
+    "type": "GetJsonOutput[_BaseCallResponseT | _BaseCallResponseChunkT]",
+    "module_context": "mirascope.core.base._utils",
+    "is_builtin": "false"
   },
   {
     "name": "handle_stream",
-    "type": "HandleStream[_ResponseChunkT, _BaseCallResponseChunkT, _BaseToolT]"
+    "type": "HandleStream[_ResponseChunkT, _BaseCallResponseChunkT, _BaseToolT]",
+    "module_context": "mirascope.core.base._utils",
+    "is_builtin": "false"
   },
   {
     "name": "handle_stream_async",
-    "type": "HandleStreamAsync[_AsyncResponseChunkT, _BaseCallResponseChunkT, _BaseToolT]"
+    "type": "HandleStreamAsync[_AsyncResponseChunkT, _BaseCallResponseChunkT, _BaseToolT]",
+    "module_context": "mirascope.core.base._utils",
+    "is_builtin": "false"
   }
 ]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.base._call_factory"
 />
 
 <ReturnType
   type="CallDecorator[_BaseCallResponseT, _BaseCallResponseChunkT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _BaseStreamT, _SyncBaseClientT, _AsyncBaseClientT, _SameSyncAndAsyncClientT]"
+  moduleContext="mirascope.core.base._utils._protocols"
+  isBuiltin={false}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.base._call_factory"
 />
 
 
