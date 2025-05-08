@@ -869,3 +869,46 @@ mark,
 .hide-scrollbar::-webkit-scrollbar {
   display: none; /* Safari and Chrome */
 }
+
+/* Global scrollbar styling */
+:root {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-accent) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-accent);
+  border-radius: 6px;
+  max-width: 6px;
+  min-width: 6px;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Override hover behavior */
+::-webkit-scrollbar:hover {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-primary);
+  max-width: 6px;
+  min-width: 6px;
+}
+
+/* Extra styling to override browser defaults */
+* {
+  scrollbar-width: thin;
+}
