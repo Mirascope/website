@@ -253,7 +253,9 @@ h6 code {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100vh; /* Fallback */
+  height: 100dvh; /* Dynamic viewport height for iOS */
+  min-height: 100vh; /* Ensures it's at least as tall as viewport */
   background-image: url("/assets/backgrounds/light.webp");
   background-size: cover;
   background-position: center center;
@@ -264,18 +266,22 @@ h6 code {
   pointer-events: none;
   transition: background-image 0.2s ease-in-out;
   -webkit-transition: background-image 0.2s ease-in-out;
+  /* Add extra space to ensure coverage when scrolling */
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 /* Responsive backgrounds for smaller screens */
 @media (max-width: 1200px) {
   .watercolor-bg {
     background-image: url("/assets/backgrounds/light-medium.webp");
+    height: 100dvh; /* Ensure dynamic viewport height at this breakpoint */
   }
 }
 
 @media (max-width: 800px) {
   .watercolor-bg {
     background-image: url("/assets/backgrounds/light-small.webp");
+    height: 100dvh; /* Ensure dynamic viewport height at this breakpoint */
   }
 }
 
@@ -289,12 +295,14 @@ h6 code {
 @media (max-width: 1200px) {
   .dark .watercolor-bg {
     background-image: url("/assets/backgrounds/dark-medium.webp");
+    height: 100dvh; /* Ensure dynamic viewport height at this breakpoint */
   }
 }
 
 @media (max-width: 800px) {
   .dark .watercolor-bg {
     background-image: url("/assets/backgrounds/dark-small.webp");
+    height: 100dvh; /* Ensure dynamic viewport height at this breakpoint */
   }
 }
 
@@ -309,12 +317,14 @@ h6 code {
 @media (max-width: 1200px) {
   .sunset-time .watercolor-bg {
     background-image: url("/assets/backgrounds/sunset-medium.webp");
+    height: 100dvh; /* Ensure dynamic viewport height at this breakpoint */
   }
 }
 
 @media (max-width: 800px) {
   .sunset-time .watercolor-bg {
     background-image: url("/assets/backgrounds/sunset-small.webp");
+    height: 100dvh; /* Ensure dynamic viewport height at this breakpoint */
   }
 }
 
