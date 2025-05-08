@@ -202,14 +202,14 @@ assert isinstance(book, Book)`;
         lines={["LLM abstractions that", "aren't obstructions"]}
         element="h2"
         fontSize="clamp(1.5rem, 5vw, 3rem)"
-        className="mb-8 text-center text-white"
+        className="mb-6 text-center text-white"
         lineClassName="font-bold"
         lineSpacing="mb-2"
         textShadow={true}
         fadeOnScroll={true}
       />
       <div
-        className="bg-background/60 mb-10 w-full max-w-3xl rounded-md"
+        className="bg-background/60 mb-2 w-full max-w-3xl rounded-md"
         data-fade-on-scroll="true"
         style={{
           transition: "opacity 0.1s ease-out",
@@ -222,7 +222,7 @@ assert isinstance(book, Book)`;
         </ProviderContextProvider>
       </div>
 
-      <div className="mt-4 flex w-full max-w-3xl flex-col items-center justify-center gap-4 sm:flex-row">
+      <div className="mt-2 flex w-full max-w-3xl flex-col items-center justify-center gap-4 sm:flex-row">
         <ButtonLink
           href="/docs/mirascope"
           variant="default"
@@ -248,7 +248,7 @@ export function LandingPage() {
   useSunsetTime();
   // Initialize our global fade effect for elements with data-fade-on-scroll attribute
   useFadeOnScroll({
-    fadeDistance: 120, // Distance from top at which fading starts (in px)
+    fadeDistance: 100, // Distance from top at which fading starts (in px)
     fadeRange: 100, // Distance over which the fade occurs (in px)
   });
 
