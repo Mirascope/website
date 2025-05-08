@@ -303,7 +303,7 @@ answer_question("What is the capital of France?")
         </div>
 
         {/* Add the LilypadDemo component */}
-        <div className="mt-4" data-fade-on-scroll={true}>
+        <div className="mt-4">
           <LilypadDemo />
         </div>
       </div>
