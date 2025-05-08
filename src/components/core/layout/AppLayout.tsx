@@ -204,7 +204,7 @@ AppLayout.LeftSidebar = ({ children, className, collapsible = true }: SidebarPro
 
         {/* Toggle button - only visible on mobile when collapsible */}
         {collapsible && (
-          <div className="fixed top-[calc(var(--header-height)-2.5rem)] left-3 z-80 md:hidden">
+          <div className="fixed top-[calc(var(--header-height)-2.1rem)] left-4 z-80 md:hidden">
             <SidebarToggle
               isOpen={showAsX}
               onClick={handleToggleClick}
@@ -247,8 +247,8 @@ AppLayout.LeftSidebar = ({ children, className, collapsible = true }: SidebarPro
           aria-hidden={!isOpen && isMobileView()}
           role="navigation"
         >
-          {/* Padding is responsive via CSS */}
-          <div className="h-full overflow-y-auto px-4 sm:px-5">
+          {/* Padding is responsive via CSS - more padding on mobile to match right sidebar */}
+          <div className="h-full overflow-y-auto p-5 md:px-4 md:py-0">
             <div className={cn("h-full overflow-y-auto", className)}>{children}</div>
           </div>
         </div>
