@@ -57,19 +57,27 @@ assert isinstance(book, Book)`;
           className="relative h-screen"
           style={{ marginTop: "calc(var(--header-height-base) * -1)" }}
         >
-          <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center">
-            <div className="mb-6 flex justify-center sm:mb-8 md:mb-10">
-              <Logo
-                size="large"
-                withText={true}
-                background={true}
-                showLilypad={false}
-                textClassName="text-4xl sm:text-5xl md:text-6xl"
-                className="px-8 py-5"
-              />
-            </div>
+          {/* Logo positioned relative to the center */}
+          <div
+            className="absolute top-0 right-0 left-0 flex justify-center px-4"
+            style={{
+              top: "calc(50% - 170px - min(16vw, 120px))",
+              transform: "translateY(-50%)",
+            }}
+          >
+            <Logo
+              size="large"
+              withText={true}
+              background={true}
+              showLilypad={false}
+              textClassName="text-4xl sm:text-5xl md:text-6xl"
+              className="px-6 py-4 sm:px-8 sm:py-5"
+            />
+          </div>
 
-            <div className="landing-page-text-shadow mt-0 flex flex-col font-medium tracking-tight text-white">
+          {/* Hero text perfectly centered vertically in the viewport */}
+          <div className="absolute inset-0 flex items-center justify-center px-4 text-center">
+            <div className="landing-page-text-shadow flex flex-col font-medium tracking-tight text-white">
               <span
                 style={{ fontSize: "clamp(2.5rem, 8vw, 6rem)", lineHeight: "0.9" }}
                 className="font-handwriting mb-8 whitespace-normal sm:whitespace-nowrap"
