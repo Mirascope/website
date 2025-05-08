@@ -18,10 +18,12 @@ export function ProviderTabbedSection({
   children,
   className = "",
   showLogo = false,
+  customHeader = null,
 }: {
   children: React.ReactNode;
   className?: string;
   showLogo?: boolean;
+  customHeader?: React.ReactNode;
 }) {
   const { provider, setProvider } = useProvider();
   const [activeProvider, setActiveProvider] = useState<Provider>(provider);
@@ -117,11 +119,13 @@ export function ProviderTabbedSection({
         className
       )}
     >
-      {showLogo && (
+      {customHeader ? (
+        customHeader
+      ) : showLogo ? (
         <div className="flex items-center px-2 pb-2">
           <Logo size="micro" withText={true} />
         </div>
-      )}
+      ) : null}
 
       <Tabs value={activeProvider} onValueChange={handleProviderChange} className="w-full">
         <div className="relative mb-0 px-1">

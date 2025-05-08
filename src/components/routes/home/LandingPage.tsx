@@ -210,7 +210,22 @@ assert isinstance(book, Book)`;
       />
       <div className="bg-background/60 mb-2 w-full max-w-3xl rounded-md">
         <ProviderContextProvider>
-          <ProviderTabbedSection showLogo={true}>
+          <ProviderTabbedSection
+            customHeader={
+              <div className="flex items-center px-2 pb-2">
+                <div className="flex flex-row items-center justify-center">
+                  <div className="mr-1.5">
+                    <img
+                      src="/assets/branding/mirascope-logo.svg"
+                      alt="Mirascope Logo"
+                      className="h-4 w-auto"
+                    />
+                  </div>
+                  <h1 className="text-s font-handwriting text-mirascope-purple mb-0">Mirascope</h1>
+                </div>
+              </div>
+            }
+          >
             <ProviderCodeWrapper code={codeExample} language="python" />
           </ProviderTabbedSection>
         </ProviderContextProvider>
@@ -275,7 +290,22 @@ response = answer_question("What is the capital of France?")`;
       />
       <div className="bg-background/60 mb-2 w-full max-w-3xl rounded-md">
         <ProviderContextProvider>
-          <ProviderTabbedSection showLogo={true}>
+          <ProviderTabbedSection
+            customHeader={
+              <div className="flex items-center px-2 pb-2">
+                <div className="flex flex-row items-center justify-center">
+                  <div className="mr-1.5">
+                    <img
+                      src="/assets/branding/lilypad-logo.svg"
+                      alt="Lilypad Logo"
+                      className="h-4 w-auto"
+                    />
+                  </div>
+                  <h1 className="text-s font-handwriting text-lilypad-green mb-0">Lilypad</h1>
+                </div>
+              </div>
+            }
+          >
             <ProviderCodeWrapper code={codeExample} language="python" />
           </ProviderTabbedSection>
         </ProviderContextProvider>
