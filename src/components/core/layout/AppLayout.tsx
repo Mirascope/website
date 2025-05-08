@@ -173,6 +173,26 @@ AppLayout.LeftSidebar = ({ children, className, collapsible = true }: SidebarPro
   const { leftSidebar } = useContext(SidebarContext);
   const isOpen = leftSidebar.isOpen;
 
+  const { rightSidebar } = useContext(SidebarContext);
+  const rightSidebarIsOpen = rightSidebar.isOpen;
+
+  // Determine whether to show the left sidebar toggle as an X
+  // Show X if:
+  // 1. The left sidebar is open, OR
+  // 2. The right sidebar is open
+  const showAsX = isOpen || rightSidebarIsOpen;
+
+  // Determine what action to take when the toggle is clicked
+  const handleToggleClick = () => {
+    if (rightSidebarIsOpen) {
+      // If right sidebar is open, clicking the X should close it
+      rightSidebar.close();
+    } else {
+      // Otherwise, toggle the left sidebar as usual
+      leftSidebar.toggle();
+    }
+  };
+
   return (
     <>
       {/* Container div - fixed size on desktop (CSS-driven), zero width on mobile */}
@@ -186,11 +206,17 @@ AppLayout.LeftSidebar = ({ children, className, collapsible = true }: SidebarPro
         {collapsible && (
           <div className="fixed top-[calc(var(--header-height)-2.5rem)] left-3 z-80 md:hidden">
             <SidebarToggle
-              isOpen={isOpen}
-              onClick={leftSidebar.toggle}
+              isOpen={showAsX}
+              onClick={handleToggleClick}
               position="left"
-              ariaLabel={isOpen ? "Close sidebar" : "Open sidebar"}
-              ariaControls="left-sidebar-content"
+              ariaLabel={
+                showAsX
+                  ? rightSidebarIsOpen
+                    ? "Close right sidebar"
+                    : "Close sidebar"
+                  : "Open sidebar"
+              }
+              ariaControls={rightSidebarIsOpen ? "right-sidebar-content" : "left-sidebar-content"}
               buttonRef={leftSidebar.closeBtnRef}
             />
           </div>
@@ -257,6 +283,7 @@ AppLayout.RightSidebar = ({
 }: RightSidebarProps) => {
   const { leftSidebar, rightSidebar } = useContext(SidebarContext);
   const isOpen = rightSidebar.isOpen;
+  const leftIsOpen = leftSidebar.isOpen;
 
   return (
     <>
@@ -282,7 +309,7 @@ AppLayout.RightSidebar = ({
           <div
             className={cn(
               "fixed right-6 bottom-6 z-40 flex flex-col gap-2 lg:hidden",
-              leftSidebar.isOpen && "hidden"
+              leftIsOpen && "hidden"
             )}
           >
             <SidebarToggle
