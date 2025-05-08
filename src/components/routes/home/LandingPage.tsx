@@ -83,7 +83,7 @@ assert isinstance(book, Book)`;
 
           {/* Scroll indicator - fixed at bottom with animated visibility */}
           <div
-            className={`fixed right-0 bottom-8 left-0 z-10 flex justify-center transition-opacity duration-300 ${
+            className={`fixed right-0 bottom-16 left-0 z-10 flex justify-center transition-opacity duration-300 ${
               showScrollButton ? "opacity-100" : "pointer-events-none opacity-0"
             }`}
           >
@@ -119,7 +119,7 @@ assert isinstance(book, Book)`;
               size="lg"
               className="landing-page-box-shadow landing-page-box-shadow-hover w-full min-w-[220px] px-8 py-6 text-center text-lg font-medium sm:w-auto"
             >
-              <BookOpen className="size-6" aria-hidden="true" /> Mirascope documentation
+              <BookOpen className="size-6" aria-hidden="true" /> Mirascope Docs
             </ButtonLink>
             <ButtonLink
               href="https://join.slack.com/t/mirascope-community/shared_invite/zt-2ilqhvmki-FB6LWluInUCkkjYD3oSjNA"
@@ -127,7 +127,7 @@ assert isinstance(book, Book)`;
               size="lg"
               className="landing-page-box-shadow landing-page-box-shadow-hover w-full min-w-[220px] border-0 bg-white px-8 py-6 text-center text-lg font-medium text-black hover:bg-gray-100 hover:text-black sm:w-auto"
             >
-              <Users className="size-6" aria-hidden="true" /> Join the community
+              <Users className="size-6" aria-hidden="true" /> Join the Community
             </ButtonLink>
           </div>
         </div>
