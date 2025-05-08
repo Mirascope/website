@@ -1,38 +1,48 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "@tanstack/react-router";
 
+// Breakpoint definitions - matching Tailwind's defaults
+export const BREAKPOINTS = {
+  md: 768, // Medium breakpoint (tablet)
+  sm: 640, // Small breakpoint
+  lg: 1024, // Large breakpoint
+};
+
+// Shared media query strings
+export const MEDIA_QUERIES = {
+  mdAndUp: `(min-width: ${BREAKPOINTS.md}px)`,
+  mdAndDown: `(max-width: ${BREAKPOINTS.md - 1}px)`,
+};
+
+// Helper functions for responsive checks
+export const isMobileView = (): boolean => {
+  return typeof window !== "undefined" && window.matchMedia(MEDIA_QUERIES.mdAndDown).matches;
+};
+
+export const isDesktopView = (): boolean => {
+  return typeof window !== "undefined" && window.matchMedia(MEDIA_QUERIES.mdAndUp).matches;
+};
+
 export interface UseSidebarOptions {
   /**
-   * Whether to initialize the sidebar as open
-   * @default false
+   * Function to call when this sidebar opens (to close another one)
    */
-  initialOpen?: boolean;
+  onOpen?: () => void;
 
   /**
-   * Whether to close the sidebar when the route changes (typically used on mobile)
+   * Whether to close the sidebar when the route changes
    * @default true
    */
   closeOnRouteChange?: boolean;
-
-  /**
-   * Function to call when another sidebar opens (to close this one)
-   */
-  onOtherSidebarOpen?: () => void;
-
-  /**
-   * Whether the current viewport is a small screen
-   */
-  isSmallScreen: boolean;
 }
 
-export function useSidebar({
-  initialOpen = false,
-  closeOnRouteChange = true,
-  onOtherSidebarOpen,
-  isSmallScreen,
-}: UseSidebarOptions) {
-  // Track sidebar open state
-  const [isOpen, setIsOpen] = useState(initialOpen && !isSmallScreen);
+/**
+ * Simple hook for managing mobile sidebar state
+ * Desktop visibility is handled purely with CSS
+ */
+export function useSidebar({ onOpen, closeOnRouteChange = true }: UseSidebarOptions = {}) {
+  // Only tracks the mobile state - desktop visibility is CSS-driven
+  const [isOpen, setIsOpen] = useState(false);
 
   // Refs for focus management
   const closeBtnRef = useRef<HTMLButtonElement>(null);
@@ -46,7 +56,8 @@ export function useSidebar({
     if (!closeOnRouteChange) return;
 
     const unsubscribe = router.subscribe("onResolved", () => {
-      if (isSmallScreen && isOpen) {
+      // Always close on navigation, but only on mobile
+      if (isMobileView() && isOpen) {
         setIsOpen(false);
       }
     });
@@ -54,22 +65,22 @@ export function useSidebar({
     return () => {
       unsubscribe();
     };
-  }, [router, isSmallScreen, isOpen, closeOnRouteChange]);
+  }, [router, isOpen, closeOnRouteChange]);
 
   // Handle toggling with focus management
   const toggle = () => {
     // Save the currently focused element when opening
     if (!isOpen) {
       previouslyFocusedElementRef.current = document.activeElement as HTMLElement;
+
+      // Notify when opening
+      if (onOpen) {
+        onOpen();
+      }
     }
 
     const newState = !isOpen;
     setIsOpen(newState);
-
-    // Notify other sidebars when opening
-    if (newState && onOtherSidebarOpen) {
-      onOtherSidebarOpen();
-    }
 
     // Manage focus
     if (newState) {
@@ -91,13 +102,13 @@ export function useSidebar({
   };
 
   const close = () => {
-    if (isOpen) toggle();
+    if (isOpen) setIsOpen(false);
   };
 
-  // Auto-close on ESC key
+  // Auto-close on ESC key (mobile only)
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && isSmallScreen && isOpen) {
+      if (event.key === "Escape" && isOpen) {
         setIsOpen(false);
       }
     };
@@ -106,7 +117,7 @@ export function useSidebar({
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isSmallScreen, isOpen]);
+  }, [isOpen]);
 
   return {
     isOpen,
