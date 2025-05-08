@@ -20,6 +20,14 @@ interface ProviderContextType {
 
 const ProviderContext = createContext<ProviderContextType | undefined>(undefined);
 
+// Helper function to validate a provider string
+const validateProvider = (provider: string | null, defaultFallback: Provider): Provider => {
+  if (!provider || !providers.includes(provider as Provider)) {
+    return defaultFallback; // Default fallback if invalid
+  }
+  return provider as Provider;
+};
+
 // Provider component that wraps the content and provides the state
 export function ProviderContextProvider({
   children,
@@ -30,11 +38,25 @@ export function ProviderContextProvider({
   defaultProvider?: Provider;
   onProviderChange?: (provider: Provider) => void;
 }) {
-  const [provider, setProvider] = useState<Provider>(defaultProvider);
+  // Initialize Provider from localStorage if available
+  const [provider, setProvider] = useState<Provider>(() => {
+    if (typeof window !== "undefined") {
+      const savedProvider = localStorage.getItem("selectedProvider");
+      return validateProvider(savedProvider, defaultProvider);
+    }
+    return defaultProvider;
+  });
 
-  // Create a wrapper for setProvider that calls the callback when provided
+  // Create a wrapper for setProvider that calls the callback and updates localStorage
   const handleProviderChange = (newProvider: Provider) => {
     setProvider(newProvider);
+
+    // Save to localStorage
+    if (typeof window !== "undefined") {
+      localStorage.setItem("selectedProvider", newProvider);
+    }
+
+    // Call external callback if provided
     if (onProviderChange) {
       onProviderChange(newProvider);
     }

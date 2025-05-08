@@ -81,6 +81,7 @@ export const Route = createRootRoute({
                 path.startsWith("/docs/") || path.startsWith("/dev")
                   ? "var(--header-height-with-selector)"
                   : "var(--header-height-base)",
+              "--footer-height": "60px", // Add CSS variable for footer height
             } as React.CSSProperties
           }
         >
@@ -106,7 +107,7 @@ export const Route = createRootRoute({
 
         {/* Dev tools - only visible in development */}
         <TanStackRouterDevtools />
-        <DevToolsButton className="fixed right-4 bottom-4 z-50" />
+        <DevToolsButton className="fixed bottom-10 left-2 z-50" />
       </>
     );
   },

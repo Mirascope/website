@@ -4,7 +4,6 @@ import TocSidebar from "./TocSidebar";
 import MainContent from "./MainContent";
 import DocsSidebar from "./DocsSidebar";
 import type { DocContent, ProductName } from "@/src/lib/content";
-import useProviderSelection from "@/src/lib/hooks/useProviderSelection";
 
 type DocsPageProps = {
   document?: DocContent;
@@ -28,17 +27,11 @@ const DocsPage: React.FC<DocsPageProps> = ({ document, isLoading = false, produc
   const { title, path, description } = meta;
   const urlPath = path ? `/docs/${path}` : "";
 
-  // Use custom hooks for state management
-  const [selectedProvider, handleProviderChange] = useProviderSelection();
-
   return (
     <>
       <SEOMeta title={title} description={description} url={urlPath} product={product} />
 
-      <ProviderContextProvider
-        defaultProvider={selectedProvider}
-        onProviderChange={handleProviderChange}
-      >
+      <ProviderContextProvider>
         <AppLayout>
           <AppLayout.LeftSidebar className="pt-1" collapsible={true}>
             <DocsSidebar product={product} />
@@ -53,7 +46,7 @@ const DocsPage: React.FC<DocsPageProps> = ({ document, isLoading = false, produc
           </AppLayout.Content>
 
           <AppLayout.RightSidebar
-            className={isLoading ? undefined : "pt-1"}
+            className="pt-1"
             mobileCollapsible={true}
             mobileTitle="On this page"
           >
