@@ -8,6 +8,7 @@ import { useRef, useState, useEffect } from "react";
 import { ProviderTabbedSection } from "@/src/components/mdx/elements/ProviderTabbedSection";
 import { ProviderCodeWrapper } from "@/src/components/mdx/providers/ProviderCodeWrapper";
 import { ProviderContextProvider } from "@/src/components/core/providers/ProviderContext";
+import { LilypadDemo } from "./LilypadDemo";
 
 // Shared styling constants for logo and hero components
 // This ensures we maintain consistency and makes future updates easier
@@ -286,25 +287,32 @@ response = answer_question("What is the capital of France?")`;
         textShadow={true}
         fadeOnScroll={true}
       />
-      <div className="bg-background/60 mb-2 w-full max-w-3xl rounded-md">
-        <ProviderTabbedSection
-          customHeader={
-            <div className="flex items-center px-2 pb-2">
-              <div className="flex flex-row items-center justify-center">
-                <div className="mr-1.5">
-                  <img
-                    src="/assets/branding/lilypad-logo.svg"
-                    alt="Lilypad Logo"
-                    className="h-4 w-auto"
-                  />
+      <div className="mb-8 w-full max-w-3xl">
+        <div className="bg-background/60 mb-2 w-full rounded-md">
+          <ProviderTabbedSection
+            customHeader={
+              <div className="flex items-center px-2 pb-2">
+                <div className="flex flex-row items-center justify-center">
+                  <div className="mr-1.5">
+                    <img
+                      src="/assets/branding/lilypad-logo.svg"
+                      alt="Lilypad Logo"
+                      className="h-4 w-auto"
+                    />
+                  </div>
+                  <h1 className="text-s font-handwriting text-lilypad-green mb-0">Lilypad</h1>
                 </div>
-                <h1 className="text-s font-handwriting text-lilypad-green mb-0">Lilypad</h1>
               </div>
-            </div>
-          }
-        >
-          <ProviderCodeWrapper code={codeExample} language="python" />
-        </ProviderTabbedSection>
+            }
+          >
+            <ProviderCodeWrapper code={codeExample} language="python" />
+          </ProviderTabbedSection>
+        </div>
+
+        {/* Add the LilypadDemo component */}
+        <div className="mt-4" data-fade-on-scroll={true}>
+          <LilypadDemo />
+        </div>
       </div>
 
       <div className="mt-2 flex w-full max-w-3xl flex-col items-center justify-center gap-4 sm:flex-row">
