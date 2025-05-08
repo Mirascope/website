@@ -3,7 +3,7 @@ import { useSunsetTime } from "@/src/lib/hooks/useSunsetTime";
 import { useFadeOnScroll } from "@/src/lib/hooks/useFadeOnScroll";
 import { ButtonLink } from "@/src/components/ui/button-link";
 import { ResponsiveTextBlock } from "@/src/components/ui/responsive-text-block";
-import { BookOpen, Users, ChevronDown } from "lucide-react";
+import { BookOpen, Users, ChevronDown, Rocket } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import { ProviderTabbedSection } from "@/src/components/mdx/elements/ProviderTabbedSection";
 import { ProviderCodeWrapper } from "@/src/components/mdx/providers/ProviderCodeWrapper";
@@ -208,13 +208,7 @@ assert isinstance(book, Book)`;
         textShadow={true}
         fadeOnScroll={true}
       />
-      <div
-        className="bg-background/60 mb-2 w-full max-w-3xl rounded-md"
-        data-fade-on-scroll="true"
-        style={{
-          transition: "opacity 0.1s ease-out",
-        }}
-      >
+      <div className="bg-background/60 mb-2 w-full max-w-3xl rounded-md">
         <ProviderContextProvider>
           <ProviderTabbedSection showLogo={true}>
             <ProviderCodeWrapper code={codeExample} language="python" />
@@ -228,6 +222,7 @@ assert isinstance(book, Book)`;
           variant="default"
           size="lg"
           className="landing-page-box-shadow landing-page-box-shadow-hover w-full min-w-[220px] px-8 py-6 text-center text-lg font-medium sm:w-auto"
+          data-fade-on-scroll={true}
         >
           <BookOpen className="size-6" aria-hidden="true" /> Mirascope Docs
         </ButtonLink>
@@ -236,8 +231,72 @@ assert isinstance(book, Book)`;
           variant="outline"
           size="lg"
           className="landing-page-box-shadow landing-page-box-shadow-hover w-full min-w-[220px] border-0 bg-white px-8 py-6 text-center text-lg font-medium text-black hover:bg-gray-100 hover:text-black sm:w-auto"
+          data-fade-on-scroll={true}
         >
           <Users className="size-6" aria-hidden="true" /> Join the Community
+        </ButtonLink>
+      </div>
+    </div>
+  );
+};
+
+// Lilypad feature block component
+const LilypadBlock = () => {
+  const codeExample = `
+  import lilypad # [!code highlight]
+from mirascope import llm 
+
+lilypad.configure(auto_llm=True) # [!code highlight]
+
+@lilypad.trace(versioning="automatic") # [!code highlight]
+@llm.call(
+    provider="$PROVIDER", 
+    model="$MODEL", 
+)
+def answer_question(question: str) -> str:
+    return f"Answer this question in one word: {question}"
+
+response = answer_question("What is the capital of France?")`;
+
+  return (
+    <div
+      data-product="lilypad"
+      className="flex min-h-screen flex-col items-center justify-center px-4 py-16"
+    >
+      <ResponsiveTextBlock
+        lines={["Start building your data", "flywheel with one line of code"]}
+        element="h2"
+        fontSize="clamp(1.5rem, 5vw, 3rem)"
+        className="mb-6 text-center text-white"
+        lineClassName="font-bold"
+        lineSpacing="mb-2"
+        textShadow={true}
+        fadeOnScroll={true}
+      />
+      <div className="bg-background/60 mb-2 w-full max-w-3xl rounded-md">
+        <ProviderContextProvider>
+          <ProviderTabbedSection showLogo={true}>
+            <ProviderCodeWrapper code={codeExample} language="python" />
+          </ProviderTabbedSection>
+        </ProviderContextProvider>
+      </div>
+
+      <div className="mt-2 flex w-full max-w-3xl flex-col items-center justify-center gap-4 sm:flex-row">
+        <ButtonLink
+          href="/docs/lilypad"
+          variant="default"
+          size="lg"
+          className="landing-page-box-shadow landing-page-box-shadow-hover w-full min-w-[220px] px-8 py-6 text-center text-lg font-medium sm:w-auto"
+        >
+          <BookOpen className="size-6" aria-hidden="true" /> Lilypad Docs
+        </ButtonLink>
+        <ButtonLink
+          href="https://lilypad.so"
+          variant="outline"
+          size="lg"
+          className="landing-page-box-shadow landing-page-box-shadow-hover w-full min-w-[220px] border-0 bg-white px-8 py-6 text-center text-lg font-medium text-black hover:bg-gray-100 hover:text-black sm:w-auto"
+        >
+          <Rocket className="size-6" aria-hidden="true" /> Open Beta
         </ButtonLink>
       </div>
     </div>
@@ -254,6 +313,8 @@ export function LandingPage() {
 
   const heroSectionRef = useRef<HTMLDivElement>(null);
   const mirascopeSectionRef = useRef<HTMLDivElement>(null);
+  const lilypadSectionRef = useRef<HTMLDivElement>(null);
+
   const [showScrollButton, setShowScrollButton] = useState(true);
 
   // Function to scroll to mirascope section
@@ -289,6 +350,11 @@ export function LandingPage() {
         {/* Mirascope section */}
         <div ref={mirascopeSectionRef}>
           <MirascopeBlock />
+        </div>
+
+        {/* Lilypad section */}
+        <div ref={lilypadSectionRef}>
+          <LilypadBlock />
         </div>
       </div>
     </>
