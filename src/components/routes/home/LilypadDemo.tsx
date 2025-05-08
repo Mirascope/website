@@ -17,31 +17,31 @@ export function LilypadDemo() {
   const traces: Trace[] = [
     {
       id: "trace_1",
-      version: 6,
+      version: 2,
       status: "pass",
       timestamp: "2023-06-15, 3:27:37 PM",
-      input: "Answer this question: What is the capital of France?",
-      output: "The capital of France is Paris.",
+      input: "Answer in one word: What is the capital of France?",
+      output: "Paris",
     },
     {
       id: "trace_2",
-      version: 5,
-      status: "pass",
+      version: 2,
+      status: "fail",
       timestamp: "2023-06-15, 2:17:16 PM",
-      input: "Answer this question: What is the capital of Germany?",
+      input: "Answer in one word: What is the capital of Germany?",
       output: "The capital of Germany is Berlin.",
     },
     {
       id: "trace_3",
-      version: 4,
+      version: 2,
       status: "pass",
       timestamp: "2023-06-15, 2:22:23 PM",
-      input: "Answer this question: What is the capital of Italy?",
-      output: "The capital of Italy is Rome.",
+      input: "Answer in one word: What is the capital of Italy?",
+      output: "Rome",
     },
     {
       id: "trace_4",
-      version: 3,
+      version: 1,
       status: "fail",
       timestamp: "2023-06-15, 1:15:37 PM",
       input: "Answer this question: What is the capital of Spain?",
@@ -50,7 +50,7 @@ export function LilypadDemo() {
     },
     {
       id: "trace_5",
-      version: 2,
+      version: 1,
       status: "pass",
       timestamp: "2023-06-15, 1:01:43 PM",
       input: "Answer this question: What is the capital of Japan?",
@@ -74,7 +74,10 @@ export function LilypadDemo() {
             v{selectedTrace.version}
           </span>
         </div>
-        <span className="text-muted-foreground text-xs">Prompt Template</span>
+        <div className="flex flex-row items-center gap-1.5">
+          <img src="/assets/branding/lilypad-logo.svg" alt="Lilypad Logo" className="h-4 w-auto" />
+          <span className="text-s font-handwriting text-lilypad-green mb-0">Lilypad</span>
+        </div>
       </div>
 
       {/* Main content */}
@@ -97,7 +100,7 @@ export function LilypadDemo() {
                 {traces.map((trace) => (
                   <tr
                     key={trace.id}
-                    className={`hover:bg-muted/50 cursor-pointer ${selectedTraceId === trace.id ? "bg-muted/30" : ""}`}
+                    className={`cursor-pointer ${selectedTraceId === trace.id ? "hover:bg-accent/50 bg-accent/30" : "hover:bg-muted/30"}`}
                     onClick={() => setSelectedTraceId(trace.id)}
                   >
                     <td className="border-border/20 border-t px-4 py-2">{trace.version}</td>

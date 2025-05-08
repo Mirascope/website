@@ -257,20 +257,13 @@ assert isinstance(book, Book)`;
 // Lilypad feature block component
 const LilypadBlock = () => {
   const codeExample = `
-  import lilypad # [!code highlight]
-from mirascope import llm 
-
-lilypad.configure(auto_llm=True) # [!code highlight]
-
 @lilypad.trace(versioning="automatic") # [!code highlight]
-@llm.call(
-    provider="$PROVIDER", 
-    model="$MODEL", 
-)
+@llm.call(provider="$PROVIDER", model="$MODEL")
 def answer_question(question: str) -> str:
-    return f"Answer this question in one word: {question}"
+    return f"Answer in one word: {question}"
 
-response = answer_question("What is the capital of France?")`;
+answer_question("What is the capital of France?")
+`;
 
   return (
     <div
