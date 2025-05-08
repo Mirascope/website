@@ -51,9 +51,13 @@ assert isinstance(book, Book)`;
     <>
       <SEOMeta title="Home" description="The AI Engineer's Developer Stack" />
       <div className="flex w-full flex-col">
-        {/* Hero section */}
-        <div ref={heroSectionRef} className="relative h-screen">
-          <div className="absolute inset-0 flex flex-col items-center px-4 pt-16 text-center">
+        {/* Hero section - with negative margin to offset header */}
+        <div
+          ref={heroSectionRef}
+          className="relative h-screen"
+          style={{ marginTop: "calc(var(--header-height-base) * -1)" }}
+        >
+          <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center">
             <div className="mb-6 flex justify-center sm:mb-8 md:mb-10">
               <Logo
                 size="large"
