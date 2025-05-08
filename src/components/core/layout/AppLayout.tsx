@@ -3,7 +3,7 @@ import { useState, createContext, useContext } from "react";
 import { cn } from "@/src/lib/utils";
 import SidebarContainer from "./SidebarContainer";
 import { Button } from "@/src/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { ChevronLeft, X } from "lucide-react";
 
 // Create a context to coordinate sidebar states
 type SidebarContextType = {
@@ -162,14 +162,14 @@ AppLayout.RightSidebar = ({
           >
             <Button
               variant="outline"
-              size="sm"
+              size="icon"
               onClick={toggleRightSidebar}
               className={cn(
-                "h-12 w-12 rounded-full p-0 shadow-md",
+                "h-10 w-10 rounded-full border-1 p-0 shadow-md",
                 rightSidebarOpen ? "bg-muted" : "bg-background"
               )}
             >
-              <Menu className="h-5 w-5" />
+              <ChevronLeft className="h-6 w-6" />
             </Button>
           </div>
 
