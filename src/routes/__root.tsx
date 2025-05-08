@@ -106,7 +106,7 @@ export const Route = createRootRoute({
 
         {/* Dev tools - only visible in development */}
         <TanStackRouterDevtools />
-        <DevToolsButton className="fixed right-4 bottom-4 z-50" />
+        <DevToolsButton className="fixed bottom-10 left-2 z-50" />
       </>
     );
   },
