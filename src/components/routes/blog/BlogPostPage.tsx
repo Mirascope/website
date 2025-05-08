@@ -112,7 +112,7 @@ export function BlogPostPage({ post, slug, isLoading = false }: BlogPostPageProp
           contentType="blog_markdown"
         />
 
-        <h4 className="text-muted-foreground mt-3 text-sm font-medium">On this page</h4>
+        <h4 className="text-muted-foreground mt-3 mb-3 text-sm font-medium">On this page</h4>
       </div>
 
       <div className="flex-grow overflow-y-auto pr-4 pb-6 pl-4">
