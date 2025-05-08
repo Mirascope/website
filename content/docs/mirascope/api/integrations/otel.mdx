@@ -28,14 +28,22 @@ Returns:
   {
     "name": "processors",
     "type": "Sequence[SpanProcessor] | None",
+    "module_context": "collections.abc",
+    "is_builtin": "false",
     "description": "Optional[Sequence[SpanProcessor]]\nThe span processors to use, if None, a console exporter will be used.",
     "default": "None"
   }
 ]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.integrations.otel._utils"
 />
 
 <ReturnType
   type="Tracer"
+  moduleContext="opentelemetry.trace"
+  isBuiltin={false}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.integrations.otel._utils"
   description="The configured tracer."
 />
 
@@ -70,6 +78,10 @@ print(recommend_book("fantasy"))
 
 <ReturnType
   type="Callable[[Callable[_P, _R]], Callable[_P, _R]]"
+  moduleContext="collections.abc"
+  isBuiltin={false}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.integrations.otel._with_otel"
 />
 
 
@@ -105,6 +117,10 @@ print(recommend_book("fantasy"))
 
 <ReturnType
   type="Callable[[Callable[_P, _R]], Callable[_P, _R]]"
+  moduleContext="collections.abc"
+  isBuiltin={false}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.integrations.otel._with_hyperdx"
 />
 
 

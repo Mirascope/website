@@ -16,7 +16,12 @@ call(provider: Provider | LocalProvider, model: str, stream: bool, tools: list[B
 
 A decorator for making provider-agnostic LLM API calls with a typed function.
 
-usage docs: learn/calls.md
+<Info title="Usage">
+
+[Calls](/docs/mirascope/learn/calls)
+
+</Info>
+
 
 This decorator enables writing provider-agnostic code by wrapping a typed function 
 that can call any supported LLM provider's API. It parses the prompt template of 
@@ -63,53 +68,76 @@ Returns:
   {
     "name": "provider",
     "type": "Provider | LocalProvider",
+    "module_context": "mirascope.core.base.types",
+    "is_builtin": "false",
     "description": "The LLM provider to use\n(e.g., \"openai\", \"anthropic\")."
   },
   {
     "name": "model",
     "type": "str",
+    "module_context": "builtins",
+    "is_builtin": "true",
     "description": "The model to use for the specified provider (e.g., \"gpt-4o-mini\")."
   },
   {
     "name": "stream",
     "type": "bool",
+    "module_context": "builtins",
+    "is_builtin": "true",
     "description": "Whether to stream the response from the API call.  "
   },
   {
     "name": "tools",
     "type": "list[BaseTool | Callable]",
+    "module_context": "builtins",
+    "is_builtin": "true",
     "description": "The tools available for the LLM to use."
   },
   {
     "name": "response_model",
     "type": "BaseModel | BaseType",
+    "module_context": "pydantic",
+    "is_builtin": "false",
     "description": "The response model into which the response\nshould be structured."
   },
   {
     "name": "output_parser",
     "type": "Callable[[CallResponse | ResponseModelT], Any]",
+    "module_context": "collections.abc",
+    "is_builtin": "false",
     "description": "A function for\nparsing the call response whose value will be returned in place of the\noriginal call response."
   },
   {
     "name": "json_mode",
     "type": "bool",
+    "module_context": "builtins",
+    "is_builtin": "true",
     "description": "Whether to use JSON Mode."
   },
   {
     "name": "client",
     "type": "object",
+    "module_context": "mirascope.llm._call",
+    "is_builtin": "false",
     "description": "An optional custom client to use in place of the default client."
   },
   {
     "name": "call_params",
     "type": "CommonCallParams",
+    "module_context": "mirascope.core.base",
+    "is_builtin": "false",
     "description": "Provider-specific parameters to use in the API call."
   }
 ]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.llm._call"
 />
 
 <ReturnType
   type="Callable"
+  isBuiltin={false}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.llm._call"
   description="A decorator that transforms a typed function into a\nprovider-agnostic LLM API call that returns standardized response types\nregardless of the underlying provider used."
 />
 

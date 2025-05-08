@@ -12,6 +12,7 @@ dependencies = [
     "pydantic>=2.7.4,<3.0",
     "griffe>=1.7.2",
     "tomli>=2.2.1",
+    "pymdown-extensions>=10.5.0",
 ]
 
 [project.optional-dependencies]
