@@ -84,8 +84,8 @@
   --color-chart-5: var(--color-rose-400);
 }
 
-/* Lilypad Light Theme */
-:root:has(div[data-product="lilypad"]) {
+/* Lilypad Light Theme - Scoped Styling */
+[data-product="lilypad"] {
   /* Components */
   --color-button-primary: var(--color-lilypad-green-dark);
   --color-primary: var(--color-lilypad-green);

@@ -135,7 +135,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ contentId, path }) =>
                 heading.level === 6 && "pl-10",
                 activeId === heading.id
                   ? "border-primary text-primary font-medium"
-                  : "text-muted-foreground hover:bg-muted rounded-md border-transparent"
+                  : "text-muted-foreground hover:bg-muted border-transparent hover:rounded-md"
               )}
             >
               {heading.text}

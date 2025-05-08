@@ -1,31 +1,94 @@
 import type { ReactNode } from "react";
-import { useState, createContext, useContext } from "react";
+import { createContext, useContext, useEffect } from "react";
 import { cn } from "@/src/lib/utils";
-import SidebarContainer from "./SidebarContainer";
 import { Button } from "@/src/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, X, type LucideIcon } from "lucide-react";
+import { useSidebar, isMobileView } from "./useSidebar";
 
 // Create a context to coordinate sidebar states
 type SidebarContextType = {
-  leftSidebarOpen: boolean;
-  rightSidebarOpen: boolean;
-  setLeftSidebarOpen: (open: boolean) => void;
-  setRightSidebarOpen: (open: boolean) => void;
+  leftSidebar: ReturnType<typeof useSidebar>;
+  rightSidebar: ReturnType<typeof useSidebar>;
 };
 
 const SidebarContext = createContext<SidebarContextType>({
-  leftSidebarOpen: false,
-  rightSidebarOpen: false,
-  setLeftSidebarOpen: () => {},
-  setRightSidebarOpen: () => {},
+  leftSidebar: {
+    isOpen: false,
+    setIsOpen: () => {},
+    toggle: () => {},
+    open: () => {},
+    close: () => {},
+    closeBtnRef: { current: null },
+    previouslyFocusedElementRef: { current: null },
+  },
+  rightSidebar: {
+    isOpen: false,
+    setIsOpen: () => {},
+    toggle: () => {},
+    open: () => {},
+    close: () => {},
+    closeBtnRef: { current: null },
+    previouslyFocusedElementRef: { current: null },
+  },
 });
+
+/**
+ * Toggle button for controlling sidebars with consistent styling
+ */
+interface SidebarToggleProps {
+  isOpen: boolean;
+  onClick: () => void;
+  position: "left" | "right";
+  className?: string;
+  ariaLabel: string;
+  ariaControls: string;
+  buttonRef?: React.RefObject<HTMLButtonElement | null>;
+}
+
+const SidebarToggle = ({
+  isOpen,
+  onClick,
+  position,
+  className,
+  ariaLabel,
+  ariaControls,
+  buttonRef,
+}: SidebarToggleProps) => {
+  // Choose icon based on position and state
+  const getIcon = (): LucideIcon => {
+    if (isOpen) return X;
+    return position === "left" ? ChevronRight : ChevronLeft;
+  };
+
+  const Icon = getIcon();
+
+  return (
+    <Button
+      variant="outline"
+      size="icon"
+      onClick={onClick}
+      className={cn(
+        "rounded-full border-1 p-0 shadow-md",
+        "h-8 w-8",
+        isOpen ? "bg-muted" : "bg-background",
+        className
+      )}
+      ref={buttonRef}
+      aria-label={ariaLabel}
+      aria-expanded={isOpen}
+      aria-controls={ariaControls}
+    >
+      <Icon className="h-6 w-6" />
+    </Button>
+  );
+};
 
 /**
  * AppLayout - Comprehensive layout component with composable parts
  *
  * Provides a consistent page structure with main content area and
  * optional sidebars. Sidebars use fixed positioning for scrolling behavior.
- * Left sidebar uses SidebarContainer for responsive collapsing.
+ * Manages responsive behavior for both left and right sidebars.
  * Header spacing is handled by the root layout.
  *
  * Usage example:
@@ -38,16 +101,34 @@ const SidebarContext = createContext<SidebarContextType>({
  * ```
  */
 const AppLayout = ({ children }: { children: ReactNode }) => {
-  const [leftSidebarOpen, setLeftSidebarOpen] = useState(false);
-  const [rightSidebarOpen, setRightSidebarOpen] = useState(false);
+  // Create sidebar controllers with coordinated behavior
+  // The hook now handles only mobile behavior
+  const leftSidebar = useSidebar({
+    onOpen: () => rightSidebar.close(),
+  });
+
+  const rightSidebar = useSidebar({
+    onOpen: () => leftSidebar.close(),
+  });
+
+  // Manage body scroll lock when sidebars are open on mobile
+  useEffect(() => {
+    if (isMobileView() && (leftSidebar.isOpen || rightSidebar.isOpen)) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [leftSidebar.isOpen, rightSidebar.isOpen]);
 
   return (
     <SidebarContext.Provider
       value={{
-        leftSidebarOpen,
-        rightSidebarOpen,
-        setLeftSidebarOpen,
-        setRightSidebarOpen,
+        leftSidebar,
+        rightSidebar,
       }}
     >
       <div className="flex justify-center">
@@ -69,30 +150,112 @@ interface RightSidebarProps extends SidebarProps {
 }
 
 /**
+ * Shared backdrop component for mobile sidebar overlays
+ */
+const SidebarBackdrop = ({ isOpen, onClick }: { isOpen: boolean; onClick: () => void }) => (
+  <div
+    className={`bg-background/30 fixed inset-0 backdrop-blur-sm transition-all duration-300 ${
+      isOpen ? "z-40 opacity-100" : "pointer-events-none -z-10 opacity-0"
+    }`}
+    onClick={onClick}
+    aria-hidden="true"
+    role="presentation"
+  />
+);
+
+/**
  * Left sidebar component with fixed positioning and collapsible behavior
  *
- * Uses SidebarContainer for responsive collapsing on small screens.
+ * Handles responsive collapsing on small screens with CSS media queries.
  * Sidebar content scrolls independently from main content.
  */
 AppLayout.LeftSidebar = ({ children, className, collapsible = true }: SidebarProps) => {
-  const { leftSidebarOpen, setLeftSidebarOpen, setRightSidebarOpen } = useContext(SidebarContext);
+  const { leftSidebar } = useContext(SidebarContext);
+  const isOpen = leftSidebar.isOpen;
 
-  const handleLeftSidebarToggle = (open: boolean) => {
-    setLeftSidebarOpen(open);
-    // Close the right sidebar when opening the left sidebar
-    if (open) {
-      setRightSidebarOpen(false);
+  const { rightSidebar } = useContext(SidebarContext);
+  const rightSidebarIsOpen = rightSidebar.isOpen;
+
+  // Determine whether to show the left sidebar toggle as an X
+  // Show X if:
+  // 1. The left sidebar is open, OR
+  // 2. The right sidebar is open
+  const showAsX = isOpen || rightSidebarIsOpen;
+
+  // Determine what action to take when the toggle is clicked
+  const handleToggleClick = () => {
+    if (rightSidebarIsOpen) {
+      // If right sidebar is open, clicking the X should close it
+      rightSidebar.close();
+    } else {
+      // Otherwise, toggle the left sidebar as usual
+      leftSidebar.toggle();
     }
   };
 
   return (
-    <SidebarContainer
-      collapsible={collapsible}
-      isOpen={leftSidebarOpen}
-      onToggle={handleLeftSidebarToggle}
-    >
-      <div className={cn("h-full overflow-y-auto", className)}>{children}</div>
-    </SidebarContainer>
+    <>
+      {/* Container div - fixed size on desktop (CSS-driven), zero width on mobile */}
+      <div className="w-0 flex-shrink-0 md:w-64">
+        {/* Mobile backdrop - only visible when sidebar is open */}
+        <div className="md:hidden">
+          <SidebarBackdrop isOpen={isOpen} onClick={() => leftSidebar.close()} />
+        </div>
+
+        {/* Toggle button - only visible on mobile when collapsible */}
+        {collapsible && (
+          <div className="fixed top-[calc(var(--header-height)-2.1rem)] left-4 z-80 md:hidden">
+            <SidebarToggle
+              isOpen={showAsX}
+              onClick={handleToggleClick}
+              position="left"
+              ariaLabel={
+                showAsX
+                  ? rightSidebarIsOpen
+                    ? "Close right sidebar"
+                    : "Close sidebar"
+                  : "Open sidebar"
+              }
+              ariaControls={rightSidebarIsOpen ? "right-sidebar-content" : "left-sidebar-content"}
+              buttonRef={leftSidebar.closeBtnRef}
+            />
+          </div>
+        )}
+
+        {/* Sidebar content panel - always visible on desktop (via CSS), mobile-controlled */}
+        <div
+          id="left-sidebar-content"
+          className={cn(
+            // Base styles
+            "fixed top-[var(--header-height)] z-40 overflow-hidden",
+            // Update height to account for footer
+            "h-[calc(100vh-var(--header-height)-var(--footer-height,40px))]",
+            "bg-background/95 border-border/40 backdrop-blur-sm",
+            // Responsive behavior split between mobile/desktop
+            // Mobile: controlled by JS state via transform
+            "md:translate-x-0", // Always visible on desktop
+            !isOpen && "translate-x-[-110%] md:translate-x-0", // Hidden on mobile when closed
+            // Size and appearance
+            "w-[calc(100vw-20px)] max-w-xs sm:w-[85vw] md:w-64",
+            "rounded-r-md md:border-r",
+            // Always display on desktop, unless non-collapsible on mobile
+            !collapsible && "md:block",
+            // Animation
+            "transition-transform duration-300 ease-in-out"
+          )}
+          style={{
+            boxShadow: isOpen && isMobileView() ? "0 8px 16px rgba(0, 0, 0, 0.08)" : "none",
+          }}
+          aria-hidden={!isOpen && isMobileView()}
+          role="navigation"
+        >
+          {/* Padding is responsive via CSS - more padding on mobile to match right sidebar */}
+          <div className="h-full overflow-y-auto p-5 md:px-4 md:py-0">
+            <div className={cn("h-full overflow-y-auto", className)}>{children}</div>
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 
@@ -118,29 +281,20 @@ AppLayout.RightSidebar = ({
   children,
   className,
   mobileCollapsible = false,
-  mobileTitle = "Table of Contents",
 }: RightSidebarProps) => {
-  const { rightSidebarOpen, setRightSidebarOpen, leftSidebarOpen, setLeftSidebarOpen } =
-    useContext(SidebarContext);
-
-  const toggleRightSidebar = () => {
-    const newState = !rightSidebarOpen;
-    setRightSidebarOpen(newState);
-
-    // Close the left sidebar when opening the right sidebar
-    if (newState && leftSidebarOpen) {
-      setLeftSidebarOpen(false);
-    }
-  };
+  const { leftSidebar, rightSidebar } = useContext(SidebarContext);
+  const isOpen = rightSidebar.isOpen;
+  const leftIsOpen = leftSidebar.isOpen;
 
   return (
     <>
-      {/* Desktop version - always visible on large screens */}
+      {/* Desktop version - always visible on large screens via CSS */}
       <div className="hidden w-56 flex-shrink-0 lg:block">
         {children && (
           <div
             className={cn(
-              "fixed top-[var(--header-height)] h-[calc(100vh-var(--header-height))]",
+              "fixed top-[var(--header-height)]",
+              "h-[calc(100vh-var(--header-height)-var(--footer-height,40px))]",
               "w-56 max-w-[14rem] overflow-y-auto",
               className
             )}
@@ -153,49 +307,43 @@ AppLayout.RightSidebar = ({
       {/* Mobile version - only render if mobileCollapsible is true */}
       {mobileCollapsible && children && (
         <>
-          {/* Mobile toggle button - hidden when left sidebar is open */}
+          {/* Mobile toggle button - hidden when left sidebar is open or on large screens */}
           <div
             className={cn(
               "fixed right-6 bottom-6 z-40 flex flex-col gap-2 lg:hidden",
-              leftSidebarOpen ? "hidden" : ""
+              leftIsOpen && "hidden"
             )}
           >
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={toggleRightSidebar}
-              className={cn(
-                "h-12 w-12 rounded-full p-0 shadow-md",
-                rightSidebarOpen ? "bg-muted" : "bg-background"
-              )}
-            >
-              <Menu className="h-5 w-5" />
-            </Button>
+            <SidebarToggle
+              isOpen={isOpen}
+              onClick={rightSidebar.toggle}
+              position="right"
+              ariaLabel={isOpen ? "Close table of contents" : "Open table of contents"}
+              ariaControls="right-sidebar-content"
+              buttonRef={rightSidebar.closeBtnRef}
+            />
           </div>
 
           {/* Mobile backdrop overlay */}
-          {rightSidebarOpen && (
-            <div
-              className="bg-background/50 fixed inset-0 z-30 lg:hidden"
-              onClick={() => setRightSidebarOpen(false)}
-            ></div>
-          )}
+          <div className="lg:hidden">
+            <SidebarBackdrop isOpen={isOpen} onClick={() => rightSidebar.close()} />
+          </div>
 
           {/* Mobile slide-in panel */}
           <div
-            className={`bg-background border-border fixed top-[var(--header-height)] right-0 z-40 h-[calc(100vh-var(--header-height))] w-72 rounded-md border-l shadow-lg ${rightSidebarOpen ? "translate-x-0" : "translate-x-full"} transition-transform duration-300 ease-in-out lg:hidden`}
+            id="right-sidebar-content"
+            className={cn(
+              "bg-background border-border fixed top-[var(--header-height)] right-0 z-40",
+              "h-[calc(100vh-var(--header-height)-var(--footer-height,40px))] w-72 rounded-md border-l shadow-lg",
+              "transition-transform duration-300 ease-in-out lg:hidden",
+              isOpen ? "translate-x-0" : "translate-x-full"
+            )}
+            aria-hidden={!isOpen}
+            role="complementary"
           >
             <div className="flex h-full flex-col">
-              <div className="border-border m-1 flex items-center justify-between border-b p-4">
-                <h3 className="font-medium">{mobileTitle}</h3>
-                <button
-                  onClick={() => setRightSidebarOpen(false)}
-                  className="hover:bg-muted rounded-md p-1"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-              <div className="flex-grow overflow-y-auto px-4 py-4">{children}</div>
+              {/* Simple padding on top instead of the header bar with X button */}
+              <div className="flex-grow overflow-y-auto p-5">{children}</div>
             </div>
           </div>
         </>
