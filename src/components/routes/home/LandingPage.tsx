@@ -3,7 +3,9 @@ import { useSunsetTime } from "@/src/lib/hooks/useSunsetTime";
 import { ButtonLink } from "@/src/components/ui/button-link";
 import { BookOpen, Users, ChevronDown } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
-import { CodeBlock } from "@/src/components/mdx/elements/CodeBlock";
+import { ProviderTabbedSection } from "@/src/components/mdx/elements/ProviderTabbedSection";
+import { ProviderCodeWrapper } from "@/src/components/mdx/providers/ProviderCodeWrapper";
+import { ProviderContextProvider } from "@/src/components/core/providers/ProviderContext";
 
 export function LandingPage() {
   useSunsetTime();
@@ -39,7 +41,7 @@ class Book(BaseModel):
     title: str
     author: str
 
-@llm.call(provider="openai", model="gpt-4o-mini", response_model=Book) # [!code highlight]
+@llm.call(provider="$PROVIDER", model="$MODEL", response_model=Book) # [!code highlight]
 def extract_book(text: str) -> str:
     return f"Extract the book: {text}"
 
@@ -122,8 +124,12 @@ assert isinstance(book, Book)`;
           <h2 className="landing-page-text-shadow mb-8 text-center text-4xl font-bold text-white md:text-5xl">
             aren't obstructions
           </h2>
-          <div className="mb-10 w-full max-w-3xl">
-            <CodeBlock code={codeExample} language="python" />
+          <div className="bg-background/60 mb-10 w-full max-w-3xl rounded-md">
+            <ProviderContextProvider>
+              <ProviderTabbedSection>
+                <ProviderCodeWrapper code={codeExample} language="python" />
+              </ProviderTabbedSection>
+            </ProviderContextProvider>
           </div>
 
           <div className="mt-4 flex w-full max-w-3xl flex-col items-center justify-center gap-4 sm:flex-row">
