@@ -279,7 +279,6 @@ AppLayout.RightSidebar = ({
   children,
   className,
   mobileCollapsible = false,
-  mobileTitle = "Table of Contents",
 }: RightSidebarProps) => {
   const { leftSidebar, rightSidebar } = useContext(SidebarContext);
   const isOpen = rightSidebar.isOpen;
@@ -340,17 +339,8 @@ AppLayout.RightSidebar = ({
             role="complementary"
           >
             <div className="flex h-full flex-col">
-              <div className="border-border m-1 flex items-center justify-between border-b p-4">
-                <h3 className="font-medium">{mobileTitle}</h3>
-                <button
-                  onClick={() => rightSidebar.close()}
-                  className="hover:bg-muted rounded-md p-1"
-                  aria-label="Close sidebar"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-              <div className="flex-grow overflow-y-auto px-4 py-4">{children}</div>
+              {/* Simple padding on top instead of the header bar with X button */}
+              <div className="flex-grow overflow-y-auto p-5">{children}</div>
             </div>
           </div>
         </>
