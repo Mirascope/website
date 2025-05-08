@@ -8,7 +8,6 @@ interface LogoProps {
   textClassName?: string;
   imgClassName?: string;
   containerClassName?: string;
-  background?: boolean;
   showLilypad?: boolean;
 }
 
@@ -24,7 +23,6 @@ const Logo: React.FC<LogoProps> = ({
   textClassName,
   imgClassName,
   containerClassName,
-  background = false,
   showLilypad = false,
 }) => {
   // Size mappings for the logo
@@ -89,15 +87,6 @@ const Logo: React.FC<LogoProps> = ({
       )}
     </div>
   );
-
-  if (background) {
-    return (
-      <div className={cn("relative", className)}>
-        <div className="torn-paper-effect absolute inset-0 bg-white"></div>
-        <div className="relative z-10">{logoContent}</div>
-      </div>
-    );
-  }
 
   return <div className={className}>{logoContent}</div>;
 };
