@@ -209,26 +209,24 @@ assert isinstance(book, Book)`;
         fadeOnScroll={true}
       />
       <div className="bg-background/60 mb-2 w-full max-w-3xl rounded-md">
-        <ProviderContextProvider>
-          <ProviderTabbedSection
-            customHeader={
-              <div className="flex items-center px-2 pb-2">
-                <div className="flex flex-row items-center justify-center">
-                  <div className="mr-1.5">
-                    <img
-                      src="/assets/branding/mirascope-logo.svg"
-                      alt="Mirascope Logo"
-                      className="h-4 w-auto"
-                    />
-                  </div>
-                  <h1 className="text-s font-handwriting text-mirascope-purple mb-0">Mirascope</h1>
+        <ProviderTabbedSection
+          customHeader={
+            <div className="flex items-center px-2 pb-2">
+              <div className="flex flex-row items-center justify-center">
+                <div className="mr-1.5">
+                  <img
+                    src="/assets/branding/mirascope-logo.svg"
+                    alt="Mirascope Logo"
+                    className="h-4 w-auto"
+                  />
                 </div>
+                <h1 className="text-s font-handwriting text-mirascope-purple mb-0">Mirascope</h1>
               </div>
-            }
-          >
-            <ProviderCodeWrapper code={codeExample} language="python" />
-          </ProviderTabbedSection>
-        </ProviderContextProvider>
+            </div>
+          }
+        >
+          <ProviderCodeWrapper code={codeExample} language="python" />
+        </ProviderTabbedSection>
       </div>
 
       <div className="mt-2 flex w-full max-w-3xl flex-col items-center justify-center gap-4 sm:flex-row">
@@ -289,26 +287,24 @@ response = answer_question("What is the capital of France?")`;
         fadeOnScroll={true}
       />
       <div className="bg-background/60 mb-2 w-full max-w-3xl rounded-md">
-        <ProviderContextProvider>
-          <ProviderTabbedSection
-            customHeader={
-              <div className="flex items-center px-2 pb-2">
-                <div className="flex flex-row items-center justify-center">
-                  <div className="mr-1.5">
-                    <img
-                      src="/assets/branding/lilypad-logo.svg"
-                      alt="Lilypad Logo"
-                      className="h-4 w-auto"
-                    />
-                  </div>
-                  <h1 className="text-s font-handwriting text-lilypad-green mb-0">Lilypad</h1>
+        <ProviderTabbedSection
+          customHeader={
+            <div className="flex items-center px-2 pb-2">
+              <div className="flex flex-row items-center justify-center">
+                <div className="mr-1.5">
+                  <img
+                    src="/assets/branding/lilypad-logo.svg"
+                    alt="Lilypad Logo"
+                    className="h-4 w-auto"
+                  />
                 </div>
+                <h1 className="text-s font-handwriting text-lilypad-green mb-0">Lilypad</h1>
               </div>
-            }
-          >
-            <ProviderCodeWrapper code={codeExample} language="python" />
-          </ProviderTabbedSection>
-        </ProviderContextProvider>
+            </div>
+          }
+        >
+          <ProviderCodeWrapper code={codeExample} language="python" />
+        </ProviderTabbedSection>
       </div>
 
       <div className="mt-2 flex w-full max-w-3xl flex-col items-center justify-center gap-4 sm:flex-row">
@@ -371,22 +367,27 @@ export function LandingPage() {
   return (
     <>
       <SEOMeta title="Home" description="The AI Engineer's Developer Stack" />
-      <div className="flex w-full flex-col">
-        {/* Hero section */}
-        <div ref={heroSectionRef}>
-          <HeroBlock onScrollDown={scrollToMirascopeSection} showScrollButton={showScrollButton} />
-        </div>
+      <ProviderContextProvider>
+        <div className="flex w-full flex-col">
+          {/* Hero section */}
+          <div ref={heroSectionRef}>
+            <HeroBlock
+              onScrollDown={scrollToMirascopeSection}
+              showScrollButton={showScrollButton}
+            />
+          </div>
 
-        {/* Mirascope section */}
-        <div ref={mirascopeSectionRef}>
-          <MirascopeBlock />
-        </div>
+          {/* Mirascope section */}
+          <div ref={mirascopeSectionRef}>
+            <MirascopeBlock />
+          </div>
 
-        {/* Lilypad section */}
-        <div ref={lilypadSectionRef}>
-          <LilypadBlock />
+          {/* Lilypad section */}
+          <div ref={lilypadSectionRef}>
+            <LilypadBlock />
+          </div>
         </div>
-      </div>
+      </ProviderContextProvider>
     </>
   );
 }
