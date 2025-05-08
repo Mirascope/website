@@ -233,8 +233,31 @@ class DocumentationGenerator:
 
             # Load the module with doclinks extension
             loader = get_loader(self.repo_path, content_dir, content_subpath)
+
+            # Try to preload common external dependencies to improve alias resolution
+            common_dependencies = [
+                "pydantic",
+                "collections.abc",
+                "typing",
+                "opentelemetry",
+                "opentelemetry.trace",
+            ]
+            for dep in common_dependencies:
+                try:
+                    loader.load(dep)
+                    print(f"Preloaded {dep} for alias resolution")
+                except Exception as e:
+                    print(f"Info: {dep} preload skipped: {e}")
+
+            # Load the main module
             module = loader.load(self.config.package)
-            loader.resolve_aliases(external=True)
+
+            # Handle alias resolution errors gracefully
+            try:
+                loader.resolve_aliases(external=True)
+            except Exception as e:
+                print(f"Warning: Some aliases could not be resolved: {e}")
+                print("Documentation generation will continue despite this warning.")
 
             print(f"Loaded module {self.config.package}")
             return module
