@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { useState, createContext, useContext, useEffect } from "react";
 import { cn } from "@/src/lib/utils";
 import { Button } from "@/src/components/ui/button";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, X, type LucideIcon } from "lucide-react";
 import { useSidebar } from "./useSidebar";
 
 // Create a context to coordinate sidebar states
@@ -43,6 +43,58 @@ const SidebarContext = createContext<SidebarContextType>({
     previouslyFocusedElementRef: { current: null },
   },
 });
+
+/**
+ * Toggle button for controlling sidebars with consistent styling
+ */
+interface SidebarToggleProps {
+  isOpen: boolean;
+  onClick: () => void;
+  position: "left" | "right";
+  className?: string;
+  ariaLabel: string;
+  ariaControls: string;
+  buttonRef?: React.RefObject<HTMLButtonElement | null>;
+  isPhoneScreen?: boolean;
+}
+
+const SidebarToggle = ({
+  isOpen,
+  onClick,
+  position,
+  className,
+  ariaLabel,
+  ariaControls,
+  buttonRef,
+}: SidebarToggleProps) => {
+  // Choose icon based on position and state
+  const getIcon = (): LucideIcon => {
+    if (isOpen) return X;
+    return position === "left" ? ChevronRight : ChevronLeft;
+  };
+
+  const Icon = getIcon();
+
+  return (
+    <Button
+      variant="outline"
+      size="icon"
+      onClick={onClick}
+      className={cn(
+        "rounded-full border-1 p-0 shadow-md",
+        "h-8 w-8",
+        isOpen ? "bg-muted" : "bg-background",
+        className
+      )}
+      ref={buttonRef}
+      aria-label={ariaLabel}
+      aria-expanded={isOpen}
+      aria-controls={ariaControls}
+    >
+      <Icon className="h-6 w-6" />
+    </Button>
+  );
+};
 
 /**
  * AppLayout - Comprehensive layout component with composable parts
@@ -205,22 +257,16 @@ AppLayout.LeftSidebar = ({ children, className, collapsible = true }: SidebarPro
 
         {/* Toggle button - only visible on small screens when collapsible */}
         {isSmallScreen && collapsible && (
-          <button
-            ref={toggleLeftSidebar.closeBtnRef}
-            onClick={toggleLeftSidebar.toggle}
-            className={`bg-accent/90 text-accent-foreground fixed top-[calc(var(--header-height)-2.5rem)] left-2 z-80 flex items-center justify-center rounded-full shadow-sm ${
-              isPhoneScreen ? "h-9 w-9" : "h-9 w-9"
-            }`}
-            aria-label={leftSidebarOpen ? "Close sidebar" : "Open sidebar"}
-            aria-expanded={leftSidebarOpen}
-            aria-controls="left-sidebar-content"
-          >
-            {leftSidebarOpen ? (
-              <X size={isPhoneScreen ? 22 : 20} />
-            ) : (
-              <ChevronRight size={isPhoneScreen ? 22 : 20} />
-            )}
-          </button>
+          <div className="fixed top-[calc(var(--header-height)-2.5rem)] left-3 z-80">
+            <SidebarToggle
+              isOpen={leftSidebarOpen}
+              onClick={toggleLeftSidebar.toggle}
+              position="left"
+              ariaLabel={leftSidebarOpen ? "Close sidebar" : "Open sidebar"}
+              ariaControls="left-sidebar-content"
+              buttonRef={toggleLeftSidebar.closeBtnRef}
+            />
+          </div>
         )}
 
         {/* Sidebar content panel */}
@@ -316,21 +362,14 @@ AppLayout.RightSidebar = ({
               leftSidebarOpen ? "hidden" : ""
             )}
           >
-            <Button
-              variant="outline"
-              size="icon"
+            <SidebarToggle
+              isOpen={rightSidebarOpen}
               onClick={toggleRightSidebar.toggle}
-              className={cn(
-                "h-10 w-10 rounded-full border-1 p-0 shadow-md",
-                rightSidebarOpen ? "bg-muted" : "bg-background"
-              )}
-              ref={toggleRightSidebar.closeBtnRef}
-              aria-label={rightSidebarOpen ? "Close table of contents" : "Open table of contents"}
-              aria-expanded={rightSidebarOpen}
-              aria-controls="right-sidebar-content"
-            >
-              <ChevronLeft className="h-6 w-6" />
-            </Button>
+              position="right"
+              ariaLabel={rightSidebarOpen ? "Close table of contents" : "Open table of contents"}
+              ariaControls="right-sidebar-content"
+              buttonRef={toggleRightSidebar.closeBtnRef}
+            />
           </div>
 
           {/* Mobile backdrop overlay */}
