@@ -93,19 +93,21 @@ assert isinstance(book, Book)`;
             </div>
           </div>
 
-          {/* Scroll indicator - fixed at bottom with animated visibility */}
+          {/* Scroll indicator - fixed at bottom with animated visibility and landing page shadow */}
           <div
             className={`fixed right-0 bottom-16 left-0 z-10 flex justify-center transition-opacity duration-300 ${
               showScrollButton ? "opacity-100" : "pointer-events-none opacity-0"
             }`}
           >
-            <button
-              onClick={scrollToFeatureSection}
-              className="bg-primary bg-opacity-20 hover:bg-opacity-30 flex h-12 w-12 items-center justify-center rounded-full transition-all"
-              aria-label="Scroll to learn more"
-            >
-              <ChevronDown className="h-6 w-6 text-white" />
-            </button>
+            <div className="landing-page-box-shadow landing-page-box-shadow-hover relative h-12 w-12 overflow-hidden rounded-full">
+              <button
+                onClick={scrollToFeatureSection}
+                className="bg-primary/80 hover:bg-primary absolute inset-0 flex items-center justify-center border-0 transition-all"
+                aria-label="Scroll to learn more"
+              >
+                <ChevronDown className="h-6 w-6 text-white" />
+              </button>
+            </div>
           </div>
         </div>
 
