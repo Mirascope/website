@@ -1,5 +1,6 @@
 import { SEOMeta } from "@/src/components/";
 import { useSunsetTime } from "@/src/lib/hooks/useSunsetTime";
+import { useFadeOnScroll } from "@/src/lib/hooks/useFadeOnScroll";
 import { ButtonLink } from "@/src/components/ui/button-link";
 import { ResponsiveTextBlock } from "@/src/components/ui/responsive-text-block";
 import { BookOpen, Users, ChevronDown } from "lucide-react";
@@ -130,12 +131,16 @@ const HeroBlock = ({ onScrollDown, showScrollButton }: HeroBlockProps) => {
             marginTop: `calc(${logoStyles.centeringOffset} * -1)`,
           }}
         >
-          {/* Logo banner with spacing from shared styles */}
-          <div style={{ marginBottom: logoStyles.logoToHeroSpacing }}>
+          <div
+            data-fade-on-scroll="true"
+            style={{
+              marginBottom: logoStyles.logoToHeroSpacing,
+              transition: "opacity 0.1s ease-out",
+            }}
+          >
             <LogoBanner />
           </div>
 
-          {/* Hero text - this will be vertically centered in the viewport */}
           <div className="text-center">
             <ResponsiveTextBlock
               lines={["The AI Engineer's", "Developer Stack"]}
@@ -143,6 +148,7 @@ const HeroBlock = ({ onScrollDown, showScrollButton }: HeroBlockProps) => {
               className="flex flex-col font-medium tracking-tight text-white"
               lineClassName="font-handwriting"
               textShadow={true}
+              fadeOnScroll={true}
             />
           </div>
         </div>
@@ -200,8 +206,15 @@ assert isinstance(book, Book)`;
         lineClassName="font-bold"
         lineSpacing="mb-2"
         textShadow={true}
+        fadeOnScroll={true}
       />
-      <div className="bg-background/60 mb-10 w-full max-w-3xl rounded-md">
+      <div
+        className="bg-background/60 mb-10 w-full max-w-3xl rounded-md"
+        data-fade-on-scroll="true"
+        style={{
+          transition: "opacity 0.1s ease-out",
+        }}
+      >
         <ProviderContextProvider>
           <ProviderTabbedSection showLogo={true}>
             <ProviderCodeWrapper code={codeExample} language="python" />
@@ -233,6 +246,12 @@ assert isinstance(book, Book)`;
 
 export function LandingPage() {
   useSunsetTime();
+  // Initialize our global fade effect for elements with data-fade-on-scroll attribute
+  useFadeOnScroll({
+    fadeDistance: 120, // Distance from top at which fading starts (in px)
+    fadeRange: 100, // Distance over which the fade occurs (in px)
+  });
+
   const heroSectionRef = useRef<HTMLDivElement>(null);
   const mirascopeSectionRef = useRef<HTMLDivElement>(null);
   const [showScrollButton, setShowScrollButton] = useState(true);
