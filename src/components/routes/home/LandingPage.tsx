@@ -1,4 +1,4 @@
-import { Logo, SEOMeta } from "@/src/components/";
+import { SEOMeta } from "@/src/components/";
 import { useSunsetTime } from "@/src/lib/hooks/useSunsetTime";
 import { ButtonLink } from "@/src/components/ui/button-link";
 import { ResponsiveTextBlock } from "@/src/components/ui/responsive-text-block";
@@ -7,6 +7,47 @@ import { useRef, useState, useEffect } from "react";
 import { ProviderTabbedSection } from "@/src/components/mdx/elements/ProviderTabbedSection";
 import { ProviderCodeWrapper } from "@/src/components/mdx/providers/ProviderCodeWrapper";
 import { ProviderContextProvider } from "@/src/components/core/providers/ProviderContext";
+
+// Logo banner component with responsive sizing
+const LogoBanner = () => {
+  return (
+    <div
+      className="relative"
+      style={{
+        paddingInline: "clamp(1.5rem, 4vw, 2rem)",
+        paddingBlock: "clamp(0.75rem, 2vw, 1.5rem)",
+      }}
+    >
+      {/* Torn paper background effect */}
+      <div className="torn-paper-effect absolute inset-0 bg-white"></div>
+
+      {/* Logo content */}
+      <div className="relative z-10">
+        <div className="flex flex-row items-center justify-center">
+          {/* Logo image */}
+          <div style={{ marginRight: "clamp(0.75rem, 2vw, 1.5rem)" }}>
+            <img
+              src="/assets/branding/mirascope-logo.svg"
+              alt="Mirascope Frog Logo"
+              style={{ width: "clamp(3.5rem, 8vw, 5rem)", height: "auto" }}
+            />
+          </div>
+
+          {/* Logo text */}
+          <h1
+            style={{
+              fontSize: "clamp(2rem, 5vw, 4rem)",
+              marginBottom: 0,
+            }}
+            className="font-handwriting text-mirascope-purple"
+          >
+            Mirascope
+          </h1>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 // Hero block component with logo and text
 interface HeroBlockProps {
@@ -20,28 +61,30 @@ const HeroBlock = ({ onScrollDown, showScrollButton }: HeroBlockProps) => {
       className="relative h-screen"
       style={{ marginTop: "calc(var(--header-height-base) * -1)" }}
     >
-      {/* Combined logo and hero text container */}
+      {/* Container that centers the hero text in the viewport */}
       <div className="absolute inset-0 flex flex-col items-center justify-center px-4">
-        {/* Logo with responsive margin */}
-        <div style={{ marginBottom: "clamp(3rem, 10vh, 6rem)" }}>
-          <Logo
-            size="large"
-            withText={true}
-            background={true}
-            showLilypad={false}
-            textClassName="text-4xl sm:text-5xl md:text-6xl"
-            className="px-6 py-3 sm:px-8 sm:py-4"
-          />
-        </div>
+        {/* Content wrapper with negative margin to offset the logo height */}
+        <div
+          className="flex flex-col items-center"
+          style={{
+            /* Offset to center the text, accounting for half of logo + spacing */
+            marginTop: "clamp(-4rem, -15vh, -8rem)",
+          }}
+        >
+          {/* Logo banner with responsive spacing */}
+          <div style={{ marginBottom: "clamp(3rem, 10vh, 6rem)" }}>
+            <LogoBanner />
+          </div>
 
-        {/* Hero text */}
-        <div className="text-center">
-          <ResponsiveTextBlock
-            lines={["The AI Engineer's", "Developer Stack"]}
-            className="flex flex-col font-medium tracking-tight text-white"
-            lineClassName="font-handwriting"
-            textShadow={true}
-          />
+          {/* Hero text - this will be vertically centered in the viewport */}
+          <div className="text-center">
+            <ResponsiveTextBlock
+              lines={["The AI Engineer's", "Developer Stack"]}
+              className="flex flex-col font-medium tracking-tight text-white"
+              lineClassName="font-handwriting"
+              textShadow={true}
+            />
+          </div>
         </div>
       </div>
 
