@@ -66,7 +66,7 @@ export function BlogPostPage({ post, slug, isLoading = false }: BlogPostPageProp
   const mainContent = isLoading ? (
     <LoadingContent className="min-w-0 flex-1" fullHeight={true} />
   ) : (
-    <div className="min-w-0 flex-1 px-2">
+    <div className="min-w-0 flex-1 px-4">
       <div className="mx-auto max-w-5xl">
         <div className="mb-6">
           <h1 className="mb-4 text-2xl font-semibold sm:text-3xl md:text-4xl">{title}</h1>
@@ -79,10 +79,7 @@ export function BlogPostPage({ post, slug, isLoading = false }: BlogPostPageProp
             </p>
           )}
         </div>
-        <div
-          id="blog-content"
-          className="bg-background border-border blog-content rounded-xl border p-4 shadow-sm sm:p-6"
-        >
+        <div id="blog-content" className="bg-background blog-content">
           {post.mdx ? (
             <PagefindMeta
               title={post.meta.title}
