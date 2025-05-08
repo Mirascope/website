@@ -227,7 +227,9 @@ AppLayout.LeftSidebar = ({ children, className, collapsible = true }: SidebarPro
           id="left-sidebar-content"
           className={cn(
             // Base styles
-            "fixed top-[var(--header-height)] z-40 h-[calc(100vh-var(--header-height))] overflow-hidden",
+            "fixed top-[var(--header-height)] z-40 overflow-hidden",
+            // Update height to account for footer
+            "h-[calc(100vh-var(--header-height)-var(--footer-height,40px))]",
             "bg-background/95 border-border/40 backdrop-blur-sm",
             // Responsive behavior split between mobile/desktop
             // Mobile: controlled by JS state via transform
@@ -291,7 +293,8 @@ AppLayout.RightSidebar = ({
         {children && (
           <div
             className={cn(
-              "fixed top-[var(--header-height)] h-[calc(100vh-var(--header-height))]",
+              "fixed top-[var(--header-height)]",
+              "h-[calc(100vh-var(--header-height)-var(--footer-height,40px))]",
               "w-56 max-w-[14rem] overflow-y-auto",
               className
             )}
@@ -331,7 +334,7 @@ AppLayout.RightSidebar = ({
             id="right-sidebar-content"
             className={cn(
               "bg-background border-border fixed top-[var(--header-height)] right-0 z-40",
-              "h-[calc(100vh-var(--header-height))] w-72 rounded-md border-l shadow-lg",
+              "h-[calc(100vh-var(--header-height)-var(--footer-height,40px))] w-72 rounded-md border-l shadow-lg",
               "transition-transform duration-300 ease-in-out lg:hidden",
               isOpen ? "translate-x-0" : "translate-x-full"
             )}
