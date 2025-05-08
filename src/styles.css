@@ -873,7 +873,7 @@ mark,
 /* Global scrollbar styling */
 :root {
   scrollbar-width: thin;
-  scrollbar-color: var(--color-accent) transparent;
+  scrollbar-color: var(--color-muted) transparent;
 }
 
 ::-webkit-scrollbar {
@@ -886,7 +886,7 @@ mark,
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--color-accent);
+  background-color: var(--color-muted);
   border-radius: 6px;
   max-width: 6px;
   min-width: 6px;
