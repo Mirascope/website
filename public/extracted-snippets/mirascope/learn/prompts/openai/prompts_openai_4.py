@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 4: Message Roles
 # Generated for provider: openai
-# Source: content/docs/mirascope/learn/prompts.mdx:94
+# Source: content/docs/mirascope/learn/prompts.mdx:101
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import prompt_template

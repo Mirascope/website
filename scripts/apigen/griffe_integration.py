@@ -13,6 +13,7 @@ from griffe import (
     Alias,
     Class,
     Docstring,
+    Extensions,
     Function,
     GriffeLoader,
     Module,
@@ -21,12 +22,20 @@ from griffe import (
     Parser,
 )
 
+from scripts.apigen.doclinks import UpdateDocstringsExtension
 
-def get_loader(source_repo_path: Path) -> GriffeLoader:
+
+def get_loader(
+    source_repo_path: Path,
+    content_dir: Path | None = None,
+    content_subpath: str | None = None,
+) -> GriffeLoader:
     """Create a configured Griffe loader.
 
     Args:
         source_repo_path: Path to the source repository
+        content_dir: Path to the content directory for the doclinks extension
+        content_subpath: Subpath (eg /docs/mirascope) for local link evaluation
 
     Returns:
         A configured GriffeLoader instance
@@ -36,7 +45,14 @@ def get_loader(source_repo_path: Path) -> GriffeLoader:
     parser = Parser("google")
 
     # Create loader with specified docstring parser
-    return GriffeLoader(docstring_parser=parser)
+    loader = GriffeLoader(docstring_parser=parser)
+
+    # Add the doclinks extension if content_dir is provided
+    if content_dir and content_subpath:
+        extensions = Extensions(UpdateDocstringsExtension(content_dir, content_subpath))
+        loader.extensions = extensions
+
+    return loader
 
 
 def process_directive(directive: str, module: Module) -> str:
@@ -156,6 +172,95 @@ def format_signature_from_docstring(name: str, docstring: Docstring) -> str | No
     return None
 
 
+def get_type_origin(annotation, module: Module) -> dict:
+    """Find the origin module of a type annotation.
+
+    Args:
+        annotation: The type annotation to analyze
+        module: The module that contains the type annotation
+
+    Returns:
+        A dictionary with information about the type origin
+
+    """
+    type_origin = {
+        "module_path": module.path,
+        "is_internal": True,
+    }
+
+    # Extract the base type name (without generic parameters or union pipes)
+    base_type = str(annotation).split("[")[0].split("|")[0].strip()
+
+    # Check if it's a fully qualified name (contains dots)
+    if "." in base_type:
+        parts = base_type.split(".")
+        type_origin["module_path"] = ".".join(parts[:-1])
+        type_origin["is_internal"] = True
+        return type_origin
+
+    # For types that don't have dots, check if they're imported
+    if hasattr(module, "members"):
+        # Look through imported names in this module
+        for member_name, member in module.members.items():
+            if isinstance(member, Alias) and member_name == base_type:
+                # Found an import of this name
+                if hasattr(member, "target"):
+                    # Handle cases where the target might be None or from an external package
+                    # like Pydantic that we can't fully resolve
+                    if member.target:
+                        target_path = getattr(member.target, "path", "")
+                        if target_path:
+                            # This extracts the module path from the target path
+                            type_origin["module_path"] = ".".join(
+                                target_path.split(".")[:-1]
+                            )
+                            return type_origin
+                    else:
+                        # For external packages like Pydantic, we can infer from the module name
+                        # or use the current module context
+                        type_origin["module_path"] = module.path
+                        type_origin["is_internal"] = False
+                        return type_origin
+
+    # Common Python built-in types and modules
+    python_builtins = {
+        "str",
+        "int",
+        "float",
+        "bool",
+        "list",
+        "dict",
+        "tuple",
+        "set",
+        "None",
+        "Callable",
+        "Optional",
+        "Union",
+        "Any",
+        "List",
+        "Dict",
+        "Tuple",
+        "Set",
+        "Type",
+        "Generator",
+        "Iterable",
+        "Iterator",
+        "Sequence",
+        "Mapping",
+    }
+
+    if base_type in python_builtins:
+        type_origin["module_path"] = (
+            "builtins"
+            if base_type
+            in {"str", "int", "float", "bool", "list", "dict", "tuple", "set"}
+            else "typing"
+        )
+        type_origin["is_internal"] = False
+
+    return type_origin
+
+
 def extract_params_if_available(obj: Object | Alias) -> list[dict]:
     """Extract parameter information from a Griffe object if available.
 
@@ -170,6 +275,9 @@ def extract_params_if_available(obj: Object | Alias) -> list[dict]:
         A list of parameter dictionaries (empty list if none available)
 
     """
+    # Get the containing module for context
+    module = getattr(obj, "module", None)
+
     # First try with direct parameters (most reliable)
     if isinstance(obj, Function) and obj.parameters:
         params_data = []
@@ -179,6 +287,14 @@ def extract_params_if_available(obj: Object | Alias) -> list[dict]:
             # Add type annotation if available
             if param.annotation:
                 param_data["type"] = str(param.annotation)
+
+                # Add type origin information
+                if module:
+                    type_origin = get_type_origin(param.annotation, module)
+                    param_data["module_context"] = type_origin["module_path"]
+                    param_data["is_builtin"] = str(
+                        not type_origin["is_internal"]
+                    ).lower()
 
             # Add default value if available
             if param.default:
@@ -199,6 +315,16 @@ def extract_params_if_available(obj: Object | Alias) -> list[dict]:
                         # Add type annotation if available
                         if hasattr(param, "annotation") and param.annotation:
                             param_data["type"] = str(param.annotation)
+
+                            # Add type origin information if we have module context
+                            if module:
+                                type_origin = get_type_origin(param.annotation, module)
+                                param_data["module_context"] = type_origin[
+                                    "module_path"
+                                ]
+                                param_data["is_builtin"] = str(
+                                    not type_origin["is_internal"]
+                                ).lower()
 
                         # Add description if available
                         if hasattr(param, "description") and param.description:
@@ -229,6 +355,9 @@ def extract_return_info(obj: Object | Alias) -> dict:
     """
     return_info = {}
 
+    # Get the containing module for context
+    module = getattr(obj, "module", None)
+
     # Handle aliases - set a default type for aliases (decorators)
     if isinstance(obj, Alias):
         return_info["type"] = "Callable"
@@ -239,9 +368,23 @@ def extract_return_info(obj: Object | Alias) -> dict:
             if annotation:
                 return_info["type"] = str(annotation)
 
+                # Add type origin information
+                if module:
+                    type_origin = get_type_origin(annotation, module)
+                    return_info["module_context"] = type_origin["module_path"]
+                    return_info["is_builtin"] = str(
+                        not type_origin["is_internal"]
+                    ).lower()
+
     # Get type from function's return annotation (most reliable)
     elif isinstance(obj, Function) and hasattr(obj, "returns") and obj.returns:
         return_info["type"] = str(obj.returns)
+
+        # Add type origin information
+        if module:
+            type_origin = get_type_origin(obj.returns, module)
+            return_info["module_context"] = type_origin["module_path"]
+            return_info["is_builtin"] = str(not type_origin["is_internal"]).lower()
 
     # Try to get description from docstring's parsed sections
     if hasattr(obj, "docstring") and obj.docstring:
@@ -254,6 +397,17 @@ def extract_return_info(obj: Object | Alias) -> dict:
                         annotation = getattr(section, "annotation", None)
                         if annotation:
                             return_info["type"] = str(annotation)
+
+                            # Add type origin information if not already present
+                            if module and "module_context" not in return_info:
+                                type_origin = get_type_origin(annotation, module)
+                                return_info["module_context"] = type_origin[
+                                    "module_path"
+                                ]
+                                return_info["is_builtin"] = str(
+                                    not type_origin["is_internal"]
+                                ).lower()
+
                         # Or check if section has a value with annotation (for DocstringSectionReturns)
                         elif hasattr(section, "value"):
                             value_annotation = (
@@ -263,6 +417,18 @@ def extract_return_info(obj: Object | Alias) -> dict:
                             )
                             if value_annotation:
                                 return_info["type"] = str(value_annotation)
+
+                                # Add type origin information if not already present
+                                if module and "module_context" not in return_info:
+                                    type_origin = get_type_origin(
+                                        value_annotation, module
+                                    )
+                                    return_info["module_context"] = type_origin[
+                                        "module_path"
+                                    ]
+                                    return_info["is_builtin"] = str(
+                                        not type_origin["is_internal"]
+                                    ).lower()
 
                     # Add description if available
                     if hasattr(section, "value"):
@@ -313,6 +479,11 @@ def extract_return_info(obj: Object | Alias) -> dict:
                         and "decorator" in return_info["description"].lower()
                     ):
                         return_info["type"] = "Callable"
+
+                        # Add type origin information for Callable if not already present
+                        if module and "module_context" not in return_info:
+                            return_info["module_context"] = "typing"
+                            return_info["is_builtin"] = "true"
 
     # Always return the dictionary (might be empty)
     return return_info
@@ -387,6 +558,16 @@ def document_placeholder(obj: Object | Alias) -> str:
     """
     content: list[str] = []
 
+    # Determine the content subpath for this documentation
+    module = getattr(obj, "module", None)
+    module_path = getattr(module, "path", "")
+    content_subpath = "docs/mirascope"  # Default fallback
+
+    # Get the module's package (first part of the path)
+    package_name = module_path.split(".")[0] if module_path else ""
+    if package_name == "mirascope":
+        content_subpath = "docs/mirascope"
+
     # Add object type using a component with consistent typing
     obj_type = get_object_type(obj)
     content.append(f'<ApiType type="{obj_type}" />\n')
@@ -414,6 +595,8 @@ def document_placeholder(obj: Object | Alias) -> str:
         # In JSX, we need to wrap arrays with curly braces, not square brackets
         content.append("<ParametersTable")
         content.append(f"  parameters={{{params_json}}}")
+        content.append(f'  contentSubpath="{content_subpath}"')
+        content.append(f'  currentModule="{module_path}"')
         content.append("/>\n")
 
     # Extract return type and add ReturnType if available
@@ -421,13 +604,24 @@ def document_placeholder(obj: Object | Alias) -> str:
     if "type" in return_info:
         type_str = return_info.get("type", "")
         description = return_info.get("description", "")
+        module_context = return_info.get("module_context", "")
+        is_builtin = return_info.get("is_builtin", False)
 
         # Escape quotes in strings
         type_str = type_str.replace('"', '\\"')
+        if module_context:
+            module_context = module_context.replace('"', '\\"')
 
         # Format the component with proper line breaks and proper JSX syntax
         content.append("<ReturnType")
         content.append(f'  type="{type_str}"')
+
+        if module_context:
+            content.append(f'  moduleContext="{module_context}"')
+
+        content.append(f"  isBuiltin={{{str(is_builtin).lower()}}}")
+        content.append(f'  contentSubpath="{content_subpath}"')
+        content.append(f'  currentModule="{module_path}"')
 
         if description:
             # Properly escape newlines and quotes for JSX

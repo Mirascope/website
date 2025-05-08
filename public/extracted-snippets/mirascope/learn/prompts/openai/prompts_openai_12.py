@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 12: Audio Inputs
 # Generated for provider: openai
-# Source: content/docs/mirascope/learn/prompts.mdx:392
+# Source: content/docs/mirascope/learn/prompts.mdx:399
 # This file is auto-generated; any edits should be made in the source file
 
 import wave
