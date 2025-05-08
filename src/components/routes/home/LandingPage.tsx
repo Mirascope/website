@@ -8,14 +8,69 @@ import { ProviderTabbedSection } from "@/src/components/mdx/elements/ProviderTab
 import { ProviderCodeWrapper } from "@/src/components/mdx/providers/ProviderCodeWrapper";
 import { ProviderContextProvider } from "@/src/components/core/providers/ProviderContext";
 
+// Shared styling constants for logo and hero components
+// This ensures we maintain consistency and makes future updates easier
+const styleSystem = {
+  // Base dimensions for different components
+  logoFontSize: "clamp(1.75rem, 4.5vw, 3.5rem)", // Smaller than hero text
+  heroFontSize: "clamp(2.5rem, 8vw, 6rem)", // Larger than logo text
+  lineHeightMultiplier: 0.9,
+
+  // Spacing modifiers
+  paddingInlineMultiplier: 0.75,
+  paddingBlockMultiplier: 0.375,
+  logoImageSpacingMultiplier: 0.375,
+  logoToHeroSpacingMultiplier: 1,
+
+  // Fine-tuning adjustment for vertical centering (positive = move up)
+  centeringAdjustment: "0rem",
+};
+
+// Derived styles for logo component
+const logoStyles = {
+  // Base dimensions from style system
+  fontSize: styleSystem.logoFontSize,
+  lineHeightMultiplier: styleSystem.lineHeightMultiplier,
+
+  // Derived measurements
+  get lineHeight() {
+    return `calc(${this.fontSize} * ${this.lineHeightMultiplier})`;
+  },
+
+  // Calculated spacing values
+  get paddingInline() {
+    return `calc(${this.lineHeight} * ${styleSystem.paddingInlineMultiplier})`;
+  },
+  get paddingBlock() {
+    return `calc(${this.lineHeight} * ${styleSystem.paddingBlockMultiplier})`;
+  },
+  get totalPaddingBlock() {
+    return `calc(${this.lineHeight} * ${styleSystem.paddingBlockMultiplier} * 2)`;
+  },
+  get logoImageSpacing() {
+    return `calc(${this.lineHeight} * ${styleSystem.logoImageSpacingMultiplier})`;
+  },
+  get logoToHeroSpacing() {
+    return `calc(${this.lineHeight} * ${styleSystem.logoToHeroSpacingMultiplier})`;
+  },
+
+  // Centering calculation - uses values from both logo and hero
+  get centeringOffset() {
+    // Half of (logo height + total vertical padding + spacing to hero)
+    // Plus an additional adjustment for fine-tuning
+    return `calc(((${this.lineHeight} + ${this.totalPaddingBlock} + 3 * ${this.logoToHeroSpacing}) / 2) + ${styleSystem.centeringAdjustment})`;
+  },
+};
+
 // Logo banner component with responsive sizing
 const LogoBanner = () => {
   return (
     <div
       className="relative"
       style={{
-        paddingInline: "clamp(1.5rem, 4vw, 2rem)",
-        paddingBlock: "clamp(0.75rem, 2vw, 1.5rem)",
+        // Use the shared styles for consistent dimensions
+        paddingInline: logoStyles.paddingInline,
+        paddingBlock: logoStyles.paddingBlock,
       }}
     >
       {/* Torn paper background effect */}
@@ -25,19 +80,23 @@ const LogoBanner = () => {
       <div className="relative z-10">
         <div className="flex flex-row items-center justify-center">
           {/* Logo image */}
-          <div style={{ marginRight: "clamp(0.75rem, 2vw, 1.5rem)" }}>
+          <div style={{ marginRight: logoStyles.logoImageSpacing }}>
             <img
               src="/assets/branding/mirascope-logo.svg"
               alt="Mirascope Frog Logo"
-              style={{ width: "clamp(3.5rem, 8vw, 5rem)", height: "auto" }}
+              style={{
+                height: logoStyles.fontSize,
+                width: "auto",
+              }}
             />
           </div>
 
           {/* Logo text */}
           <h1
             style={{
-              fontSize: "clamp(2rem, 5vw, 4rem)",
+              fontSize: logoStyles.fontSize,
               marginBottom: 0,
+              lineHeight: logoStyles.lineHeightMultiplier,
             }}
             className="font-handwriting text-mirascope-purple"
           >
@@ -61,18 +120,18 @@ const HeroBlock = ({ onScrollDown, showScrollButton }: HeroBlockProps) => {
       className="relative h-screen"
       style={{ marginTop: "calc(var(--header-height-base) * -1)" }}
     >
-      {/* Container that centers the hero text in the viewport */}
+      {/* Container that centers the entire block in the viewport */}
       <div className="absolute inset-0 flex flex-col items-center justify-center px-4">
-        {/* Content wrapper with negative margin to offset the logo height */}
+        {/* Content wrapper with computed negative margin to center the hero text */}
         <div
           className="flex flex-col items-center"
           style={{
-            /* Offset to center the text, accounting for half of logo + spacing */
-            marginTop: "clamp(-4rem, -15vh, -8rem)",
+            /* Use the shared calculated offset to center the hero text */
+            marginTop: `calc(${logoStyles.centeringOffset} * -1)`,
           }}
         >
-          {/* Logo banner with responsive spacing */}
-          <div style={{ marginBottom: "clamp(3rem, 10vh, 6rem)" }}>
+          {/* Logo banner with spacing from shared styles */}
+          <div style={{ marginBottom: logoStyles.logoToHeroSpacing }}>
             <LogoBanner />
           </div>
 
@@ -80,6 +139,7 @@ const HeroBlock = ({ onScrollDown, showScrollButton }: HeroBlockProps) => {
           <div className="text-center">
             <ResponsiveTextBlock
               lines={["The AI Engineer's", "Developer Stack"]}
+              fontSize={styleSystem.heroFontSize}
               className="flex flex-col font-medium tracking-tight text-white"
               lineClassName="font-handwriting"
               textShadow={true}
