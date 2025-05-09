@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { CheckCircle2, XCircle } from "lucide-react";
+import { CodeBlock } from "@/src/components/mdx/elements/CodeBlock";
 
 type TraceLabel = "pass" | "fail";
 
@@ -75,26 +76,60 @@ export function LilypadDemo() {
   // Get the selected trace
   const selectedTrace = traces.find((trace) => trace.id === selectedTraceId) || traces[0];
 
+  // Generate code example based on selected trace version
+  const getCodeExample = (version: number) => {
+    const promptStyle =
+      version === 2
+        ? `return f"Answer in one word: {question}"`
+        : `return f"Answer this question: {question}"`;
+
+    return `import lilypad
+from mirascope import llm
+lilypad.configure(auto_llm=True)
+
+@lilypad.trace(versioning="automatic") # [!code highlight]
+@llm.call(provider="anthropic", model="claude-3-sonnet-20240229")
+def answer_question(question: str) -> str:
+    ${promptStyle}
+
+answer_question("What is the capital of France?")`;
+  };
+
   return (
     <div className="border-border/60 bg-background w-full max-w-3xl overflow-hidden rounded-lg border backdrop-blur-sm">
       {/* Header */}
-      <div className="border-border/60 flex items-center justify-between border-b px-4 py-2">
+      <div className="border-border/60 bg-card flex items-center justify-between border-b px-4 py-2">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium">answer_question</span>
-          <span className="bg-muted text-muted-foreground rounded-full px-2 py-0.5 text-xs">
+          <span className="bg-primary text-primary-foreground rounded-full px-2 py-0.5 text-xs">
             v{selectedTrace.version}
           </span>
         </div>
+        <div className="flex flex-row items-center gap-1.5">
+          <img src="/assets/branding/lilypad-logo.svg" alt="Lilypad Logo" className="h-4 w-auto" />
+          <span className="text-s font-handwriting text-lilypad-green mb-0">Lilypad</span>
+        </div>
       </div>
 
-      {/* Main content */}
+      {/* Code pane */}
+      <div className="border-border/60 border-b">
+        <div className="max-h-64 overflow-y-auto">
+          <CodeBlock
+            code={getCodeExample(selectedTrace.version)}
+            language="python"
+            className="rounded-none"
+          />
+        </div>
+      </div>
+
+      {/* Bottom panes - traces and messages */}
       <div className="flex flex-col md:flex-row">
         {/* Traces table - takes 60% width on larger screens */}
         <div className="border-border/60 border-r md:w-3/5">
           <div className="border-border/60 border-b px-4 py-2">
             <h3 className="text-sm font-medium">Traces</h3>
           </div>
-          <div className="max-h-80 overflow-y-auto">
+          <div className="max-h-64 overflow-y-auto">
             {/* Headers - Flexbox Row */}
             <div className="bg-muted/50 sticky top-0 flex w-full text-xs">
               <div className="text-muted-foreground w-[10%] flex-shrink-0 px-4 py-2 font-medium">
@@ -150,20 +185,28 @@ export function LilypadDemo() {
           <div className="border-border/60 border-b px-4 py-2">
             <h3 className="text-sm font-medium">Messages</h3>
           </div>
-          <div className="flex flex-col gap-2 overflow-y-auto p-2">
-            {/* User message card */}
-            <div className="bg-card/30 overflow-hidden rounded-lg">
-              <div className="px-4 pt-2">
-                <h4 className="text-s font-semibold">User</h4>
-                <p className="text-s py-2 break-words">{selectedTrace.input}</p>
+          <div className="flex max-h-64 flex-col gap-3 overflow-y-auto p-3">
+            {/* User message */}
+            <div className="bg-muted/20 rounded-lg p-3">
+              <div className="flex items-start">
+                <span className="bg-muted text-muted-foreground mr-2 rounded px-1.5 py-0.5 text-xs font-medium">
+                  User
+                </span>
+                <pre className="flex-1 pt-0.5 font-mono text-xs break-words whitespace-pre-wrap">
+                  <code>{selectedTrace.input}</code>
+                </pre>
               </div>
             </div>
 
-            {/* Assistant message card */}
-            <div className="bg-card/30 overflow-hidden rounded-lg">
-              <div className="px-4 py-2">
-                <h4 className="text-s font-semibold">Assistant</h4>
-                <p className="text-s py-2 break-words">{selectedTrace.output}</p>
+            {/* Assistant message */}
+            <div className="bg-muted/20 rounded-lg p-3">
+              <div className="flex items-start">
+                <span className="bg-primary/10 text-primary mr-2 rounded px-1.5 py-0.5 text-xs font-medium">
+                  AI
+                </span>
+                <pre className="flex-1 pt-0.5 font-mono text-xs break-words whitespace-pre-wrap">
+                  <code>{selectedTrace.output}</code>
+                </pre>
               </div>
             </div>
           </div>
