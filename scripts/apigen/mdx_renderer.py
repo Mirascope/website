@@ -7,7 +7,7 @@ with pre-processed data models rather than directly with Griffe objects.
 
 import json
 
-from scripts.apigen.models import ProcessedFunction
+from scripts.apigen.models import ProcessedAlias, ProcessedFunction
 from scripts.apigen.type_utils import parameters_to_dict_list
 
 # Default content subpath for documentation
@@ -51,6 +51,53 @@ def render_function(processed_func: ProcessedFunction) -> str:
                 processed_func.return_info, content_subpath, processed_func.module_path
             )
         )
+
+    return "\n".join(content)
+
+
+def render_alias(processed_alias: ProcessedAlias) -> str:
+    """Render a processed alias into MDX documentation.
+
+    Args:
+        processed_alias: The processed alias object to render
+
+    Returns:
+        MDX documentation string
+
+    """
+    content: list[str] = []
+    content_subpath = MODULE_CONTENT_SUBPATH
+
+    # Add object type using a component with consistent typing
+    content.append('<ApiType type="Alias" />\n')
+
+    # Add docstring if available
+    if processed_alias.docstring:
+        content.append("## Description\n")
+        content.append(processed_alias.docstring.strip())
+        content.append("")
+
+    # Add parameters table if available
+    if processed_alias.parameters:
+        content.extend(
+            format_parameters_table(
+                processed_alias.parameters, content_subpath, processed_alias.module_path
+            )
+        )
+
+    # Add return type if available
+    if processed_alias.return_info:
+        content.extend(
+            format_return_type_component(
+                processed_alias.return_info,
+                content_subpath,
+                processed_alias.module_path,
+            )
+        )
+
+    # Add what this is an alias to, if target path is available
+    if processed_alias.target_path:
+        content.append(f"\n**Alias to:** `{processed_alias.target_path}`")
 
     return "\n".join(content)
 
