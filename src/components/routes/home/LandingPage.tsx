@@ -1,6 +1,7 @@
 import { SEOMeta } from "@/src/components/";
 import { useSunsetTime } from "@/src/lib/hooks/useSunsetTime";
 import { useFadeOnScroll } from "@/src/lib/hooks/useFadeOnScroll";
+import { useGradientFadeOnScroll } from "@/src/lib/hooks/useGradientFadeOnScroll";
 import { ButtonLink } from "@/src/components/ui/button-link";
 import { ResponsiveTextBlock } from "@/src/components/ui/responsive-text-block";
 import { BookOpen, Users, ChevronDown, Rocket } from "lucide-react";
@@ -209,7 +210,7 @@ assert isinstance(book, Book)`;
         textShadow={true}
         fadeOnScroll={true}
       />
-      <div className="bg-background/60 mb-2 w-full max-w-3xl rounded-md">
+      <div data-gradient-fade={true} className="bg-background/60 mb-2 w-full max-w-3xl rounded-md">
         <ProviderTabbedSection
           customHeader={
             <div className="flex items-center px-2 pb-2">
@@ -280,7 +281,7 @@ answer_question("What is the capital of France?")
         textShadow={true}
         fadeOnScroll={true}
       />
-      <div className="mb-8 w-full max-w-3xl">
+      <div data-gradient-fade={true} className="mb-8 w-full max-w-3xl">
         <div className="bg-background/60 mb-2 w-full rounded-md">
           <ProviderTabbedSection
             customHeader={
@@ -337,6 +338,7 @@ export function LandingPage() {
     fadeDistance: 100, // Distance from top at which fading starts (in px)
     fadeRange: 100, // Distance over which the fade occurs (in px)
   });
+  useGradientFadeOnScroll({ fadeStartDistance: 120, fadeEndDistance: 0 });
 
   const heroSectionRef = useRef<HTMLDivElement>(null);
   const mirascopeSectionRef = useRef<HTMLDivElement>(null);
