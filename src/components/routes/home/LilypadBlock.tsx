@@ -34,7 +34,7 @@ answer_question("What is the capital of France?")
         lineSpacing="mb-2"
         textShadow={true}
       />
-      <div className="mb-8 w-full max-w-3xl">
+      <div className="mb-2 w-full max-w-3xl">
         <div className="bg-background/60 mb-2 w-full rounded-md">
           <ProviderTabbedSection
             customHeader={
@@ -53,12 +53,10 @@ answer_question("What is the capital of France?")
             }
           >
             <ProviderCodeWrapper code={codeExample} language="python" />
+            <div className="my-4">
+              <LilypadDemo />
+            </div>
           </ProviderTabbedSection>
-        </div>
-
-        {/* Add the LilypadDemo component */}
-        <div className="mt-4">
-          <LilypadDemo />
         </div>
       </div>
 
@@ -72,7 +70,7 @@ answer_question("What is the capital of France?")
           <BookOpen className="size-6" aria-hidden="true" /> Lilypad Docs
         </ButtonLink>
         <ButtonLink
-          href="https://lilypad.so"
+          href="/pricing"
           variant="outline"
           size="lg"
           className="landing-page-box-shadow landing-page-box-shadow-hover w-full min-w-[220px] border-0 bg-white px-8 py-6 text-center text-lg font-medium text-black hover:bg-gray-100 hover:text-black sm:w-auto"

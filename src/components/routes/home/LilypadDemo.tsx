@@ -19,42 +19,41 @@ export function LilypadDemo() {
       id: "trace_1",
       version: 2,
       status: "pass",
-      timestamp: "2023-06-15, 3:27:37 PM",
+      timestamp: "1 min ago",
       input: "Answer in one word: What is the capital of France?",
       output: "Paris",
     },
     {
       id: "trace_2",
       version: 2,
-      status: "fail",
-      timestamp: "2023-06-15, 2:17:16 PM",
-      input: "Answer in one word: What is the capital of Germany?",
-      output: "The capital of Germany is Berlin.",
+      status: "pass",
+      timestamp: "2 mins ago",
+      input: "Answer in one word: What is the capital of Italy?",
+      output: "Rome",
     },
     {
       id: "trace_3",
-      version: 2,
-      status: "pass",
-      timestamp: "2023-06-15, 2:22:23 PM",
-      input: "Answer in one word: What is the capital of Italy?",
-      output: "Rome",
+      version: 1,
+      status: "fail",
+      timestamp: "1 hr ago",
+      input: "Answer this question: What is the capital of Spain?",
+      output: "The capital of Spain is Madrid.",
     },
     {
       id: "trace_4",
       version: 1,
       status: "fail",
-      timestamp: "2023-06-15, 1:15:37 PM",
-      input: "Answer this question: What is the capital of Spain?",
-      output:
-        "The capital of Spain is Madrid, which is located in the center of the country on the Manzanares River.",
+      timestamp: "1 hr ago",
+      input: "Answer this question: What is the capital of Portugal?",
+      output: "The capital of Portugal is Lisbon.",
     },
     {
       id: "trace_5",
       version: 1,
       status: "pass",
-      timestamp: "2023-06-15, 1:01:43 PM",
+      timestamp: "1 hr ago",
       input: "Answer this question: What is the capital of Japan?",
-      output: "The capital of Japan is Tokyo.",
+      output: "Tokyo",
     },
   ];
 
@@ -74,10 +73,6 @@ export function LilypadDemo() {
             v{selectedTrace.version}
           </span>
         </div>
-        <div className="flex flex-row items-center gap-1.5">
-          <img src="/assets/branding/lilypad-logo.svg" alt="Lilypad Logo" className="h-4 w-auto" />
-          <span className="text-s font-handwriting text-lilypad-green mb-0">Lilypad</span>
-        </div>
       </div>
 
       {/* Main content */}
@@ -92,8 +87,8 @@ export function LilypadDemo() {
               <thead className="bg-muted/50 sticky top-0">
                 <tr>
                   <th className="text-muted-foreground px-4 py-2 font-medium">Version</th>
-                  <th className="text-muted-foreground px-4 py-2 font-medium">Status</th>
-                  <th className="text-muted-foreground px-4 py-2 font-medium">Timestamp</th>
+                  <th className="text-muted-foreground px-4 py-2 font-medium">Label</th>
+                  <th className="text-muted-foreground px-4 py-2 font-medium">Time</th>
                 </tr>
               </thead>
               <tbody>
