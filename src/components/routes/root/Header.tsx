@@ -12,7 +12,8 @@ import {
 import { cn, getProductFromPath } from "@/src/lib/utils";
 import { getProductRoute } from "@/src/lib/routes";
 import {
-  Logo,
+  MirascopeLogo,
+  LilypadLogo,
   GitHubRepoButton,
   DocsProductSelector,
   DevProductSelector,
@@ -57,7 +58,7 @@ export default function Header() {
   const path = router.location.pathname;
   const isDocsPage = path.startsWith("/docs/");
   const isDevPage = path.startsWith("/dev");
-  const currentProduct = isDocsPage || isDevPage ? getProductFromPath(path) : null;
+  const currentProduct = getProductFromPath(path);
 
   // State to track scroll position
   const [scrolled, setScrolled] = useState(false);
@@ -93,12 +94,20 @@ export default function Header() {
           to="/"
           className={cn("relative z-10 flex items-center", isLandingPage ? "invisible" : "visible")}
         >
-          <Logo
-            size="small"
-            withText={true}
-            showLilypad={currentProduct === "lilypad"}
-            textClassName={cn(isLandingPage ? "text-white" : "text-mirascope-purple")}
-          />
+          {currentProduct === "lilypad" ? (
+            <LilypadLogo
+              size="small"
+              withText={true}
+              showBeta={true}
+              textClassName={cn(isLandingPage ? "text-white" : "")}
+            />
+          ) : (
+            <MirascopeLogo
+              size="small"
+              withText={true}
+              textClassName={cn(isLandingPage ? "text-white" : "")}
+            />
+          )}
         </Link>
 
         {/* Desktop Navigation - Perfectly centered, but hidden during search */}
