@@ -7,7 +7,7 @@ with pre-processed data models rather than directly with Griffe objects.
 
 import json
 
-from scripts.apigen.models import ProcessedAlias, ProcessedFunction
+from scripts.apigen.models import ProcessedAlias, ProcessedClass, ProcessedFunction
 from scripts.apigen.type_utils import parameters_to_dict_list
 
 # Default content subpath for documentation
@@ -51,6 +51,47 @@ def render_function(processed_func: ProcessedFunction) -> str:
                 processed_func.return_info, content_subpath, processed_func.module_path
             )
         )
+
+    return "\n".join(content)
+
+
+def render_class(processed_class: ProcessedClass) -> str:
+    """Render a processed class into MDX documentation.
+
+    Args:
+        processed_class: The processed class object to render
+
+    Returns:
+        MDX documentation string
+
+    """
+    content: list[str] = []
+
+    # Add object type using a component with consistent typing
+    content.append('<ApiType type="Class" />\n')
+
+    # Add docstring if available
+    if processed_class.docstring:
+        content.append("## Description\n")
+        content.append(processed_class.docstring.strip())
+        content.append("")
+
+    # Add information about base classes
+    if processed_class.bases:
+        bases_str = ", ".join(processed_class.bases)
+        content.append(f"**Bases:** {bases_str}\n")
+
+    # Document attributes
+    if processed_class.attributes:
+        content.append("### Attributes\n")
+        content.append("| Name | Type | Description |")
+        content.append("| ---- | ---- | ----------- |")
+
+        for attr in processed_class.attributes:
+            attr_desc = attr.description or ""
+            content.append(f"| {attr.name} | {attr.type_info} | {attr_desc} |")
+
+        content.append("")
 
     return "\n".join(content)
 

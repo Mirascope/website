@@ -7,7 +7,7 @@ to create these models from Griffe objects.
 
 from dataclasses import dataclass
 
-from griffe import Alias, Function
+from griffe import Alias, Class, Function
 
 from scripts.apigen.return_extractor import extract_return_info
 from scripts.apigen.type_utils import (
@@ -15,6 +15,15 @@ from scripts.apigen.type_utils import (
     ReturnInfo,
     extract_params_if_available,
 )
+
+
+@dataclass
+class ProcessedAttribute:
+    """Represents a fully processed class attribute ready for rendering."""
+
+    name: str
+    type_info: str
+    description: str | None
 
 
 @dataclass
@@ -29,6 +38,21 @@ class ProcessedFunction:
     docstring: str | None
     parameters: list[ParameterInfo]
     return_info: ReturnInfo | None
+    module_path: str
+
+
+@dataclass
+class ProcessedClass:
+    """Represents a fully processed class ready for rendering.
+
+    This dataclass contains all the information needed to render
+    documentation for a class, extracted from Griffe objects.
+    """
+
+    name: str
+    docstring: str | None
+    bases: list[str]
+    attributes: list[ProcessedAttribute]
     module_path: str
 
 
@@ -86,6 +110,65 @@ def process_function(func_obj: Function) -> ProcessedFunction:
         docstring=docstring,
         parameters=params or [],
         return_info=return_info,
+        module_path=module_path,
+    )
+
+
+def process_class(class_obj: Class) -> ProcessedClass:
+    """Process a Class object into a ProcessedClass model.
+
+    Args:
+        class_obj: The Griffe Class object to process
+
+    Returns:
+        A ProcessedClass object containing all necessary information
+
+    """
+    # Get basic class information
+    name = getattr(class_obj, "name", "")
+
+    # Extract module path
+    module = getattr(class_obj, "module", None)
+    module_path = getattr(module, "path", "")
+
+    # Extract docstring
+    docstring = None
+    if (
+        hasattr(class_obj, "docstring")
+        and class_obj.docstring
+        and class_obj.docstring.value
+    ):
+        docstring = class_obj.docstring.value.strip()
+
+    # Extract base classes
+    bases = []
+    if hasattr(class_obj, "bases") and class_obj.bases:
+        bases = [str(base) for base in class_obj.bases]
+
+    # Extract attributes
+    attributes = []
+    if hasattr(class_obj, "members"):
+        for attr_name, attr in class_obj.members.items():
+            # Check if it's not a function and doesn't start with underscore
+            if not isinstance(attr, Function) and not attr_name.startswith("_"):
+                attr_type = getattr(attr, "annotation", "")
+                attr_desc = None
+                if hasattr(attr, "docstring") and attr.docstring:
+                    attr_desc = attr.docstring.value.strip()
+
+                processed_attr = ProcessedAttribute(
+                    name=attr_name,
+                    type_info=str(attr_type),
+                    description=attr_desc,
+                )
+                attributes.append(processed_attr)
+
+    # Create and return the processed class
+    return ProcessedClass(
+        name=name,
+        docstring=docstring,
+        bases=bases,
+        attributes=attributes,
         module_path=module_path,
     )
 

@@ -22,9 +22,10 @@ from griffe import (
 from scripts.apigen.doclinks import UpdateDocstringsExtension
 from scripts.apigen.mdx_renderer import (
     render_alias,
+    render_class,
     render_function,
 )
-from scripts.apigen.models import process_alias, process_function
+from scripts.apigen.models import process_alias, process_class, process_function
 
 # Default content subpath for documentation
 MODULE_CONTENT_SUBPATH = "docs/mirascope"
@@ -275,43 +276,11 @@ def document_class(class_obj: Class) -> str:
         MDX documentation with enhanced component usage
 
     """
-    content: list[str] = []
+    # Process the class into a structured model
+    processed_class = process_class(class_obj)
 
-    # Add object type using a component with consistent typing
-    content.append('<ApiType type="Class" />\n')
-
-    # Add docstring
-    content.extend(format_docstring_section(class_obj))
-
-    # Add information about base classes
-    if hasattr(class_obj, "bases") and class_obj.bases:
-        bases_str = ", ".join([str(base) for base in class_obj.bases])
-        content.append(f"**Bases:** {bases_str}\n")
-
-    # Document attributes
-    if hasattr(class_obj, "members"):
-        # Find all attributes (non-method members)
-        attributes = []
-        for attr_name, attr in class_obj.members.items():
-            # Check if it's not a function and doesn't start with underscore
-            if not isinstance(attr, Function) and not attr_name.startswith("_"):
-                attributes.append((attr_name, attr))
-
-        if attributes:
-            content.append("### Attributes\n")
-            content.append("| Name | Type | Description |")
-            content.append("| ---- | ---- | ----------- |")
-
-            for attr_name, attr in attributes:
-                attr_type = getattr(attr, "annotation", "")
-                attr_desc = ""
-                if hasattr(attr, "docstring") and attr.docstring:
-                    attr_desc = attr.docstring.value.strip()
-                content.append(f"| {attr_name} | {attr_type} | {attr_desc} |")
-
-            content.append("")
-
-    return "\n".join(content)
+    # Render the processed class to MDX
+    return render_class(processed_class)
 
 
 def document_alias(alias_obj: Alias) -> str:
