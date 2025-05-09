@@ -17,7 +17,8 @@ interface Trace {
   version: number;
   label: TraceLabel;
   timestamp: string;
-  input: string;
+  promptTemplate: string;
+  question: string;
   output: string;
   cost: number;
   tokens: number;
@@ -198,7 +199,8 @@ export function LilypadDemo() {
       version: 2,
       label: "pass",
       timestamp: "1 min ago",
-      input: "Answer in one word: What is the capital of France?",
+      promptTemplate: "Answer in one word: {question}",
+      question: "What is the capital of France?",
       output: "Paris",
       cost: 0.0012,
       tokens: 24,
@@ -208,7 +210,8 @@ export function LilypadDemo() {
       version: 2,
       label: "pass",
       timestamp: "2 mins ago",
-      input: "Answer in one word: What is the capital of Italy?",
+      promptTemplate: "Answer in one word: {question}",
+      question: "What is the capital of Italy?",
       output: "Rome",
       cost: 0.0011,
       tokens: 22,
@@ -218,7 +221,8 @@ export function LilypadDemo() {
       version: 1,
       label: "fail",
       timestamp: "1 hr ago",
-      input: "Answer this question: What is the capital of Spain?",
+      promptTemplate: "Answer this question: {question}",
+      question: "What is the capital of Spain?",
       output: "The capital of Spain is Madrid.",
       cost: 0.0018,
       tokens: 36,
@@ -228,7 +232,8 @@ export function LilypadDemo() {
       version: 1,
       label: "fail",
       timestamp: "1 hr ago",
-      input: "Answer this question: What is the capital of China?",
+      promptTemplate: "Answer this question: {question}",
+      question: "What is the capital of China?",
       output: "The capital of China is Beijing.",
       cost: 0.0019,
       tokens: 38,
@@ -238,7 +243,8 @@ export function LilypadDemo() {
       version: 1,
       label: "pass",
       timestamp: "1 hr ago",
-      input: "Answer this question: What is the capital of Japan?",
+      promptTemplate: "Answer this question: {question}",
+      question: "What is the capital of Japan?",
       output: "Tokyo",
       cost: 0.0015,
       tokens: 30,
@@ -251,13 +257,13 @@ export function LilypadDemo() {
   // Get the selected trace
   const selectedTrace = traces.find((trace) => trace.id === selectedTraceId) || traces[0];
 
-  // Generate code example based on selected trace version
-  const getCodeExample = (version: number) => {
-    const promptStyle =
-      version === 2
-        ? `return f"Answer in one word: {question}"`
-        : `return f"Answer this question: {question}"`;
+  // Format the input message from the template and question
+  const formatInputMessage = (trace: Trace) => {
+    return trace.promptTemplate.replace("{question}", trace.question);
+  };
 
+  // Generate code example based on selected trace
+  const getCodeExample = (trace: Trace) => {
     const preSubstitution = `import lilypad
 from mirascope import llm
 lilypad.configure(auto_llm=True)
@@ -265,9 +271,9 @@ lilypad.configure(auto_llm=True)
 @lilypad.trace(versioning="automatic") # [!code highlight]
 @llm.call(provider="$PROVIDER", model="$MODEL")
 def answer_question(question: str) -> str:
-    ${promptStyle} # [!code highlight]
+    return f"${trace.promptTemplate}" # [!code highlight]
 
-answer_question("What is the capital of France?")`;
+answer_question("${trace.question}")`;
     const { provider } = useProvider();
     return replaceProviderVariables(preSubstitution, provider);
   };
@@ -275,7 +281,7 @@ answer_question("What is the capital of France?")`;
   return (
     <div className="border-border/60 bg-background w-full max-w-3xl overflow-hidden rounded-lg border backdrop-blur-sm">
       <Header functionName="answer_question" version={selectedTrace.version} />
-      <CodePane code={getCodeExample(selectedTrace.version)} />
+      <CodePane code={getCodeExample(selectedTrace)} />
 
       <div className="flex flex-col md:flex-row">
         <TracesTable
@@ -283,7 +289,7 @@ answer_question("What is the capital of France?")`;
           selectedTraceId={selectedTraceId}
           onSelectTrace={setSelectedTraceId}
         />
-        <MessagesPane input={selectedTrace.input} output={selectedTrace.output} />
+        <MessagesPane input={formatInputMessage(selectedTrace)} output={selectedTrace.output} />
       </div>
     </div>
   );
