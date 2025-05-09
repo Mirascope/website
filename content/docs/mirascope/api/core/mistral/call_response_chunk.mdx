@@ -18,4 +18,31 @@ This module contains the `MistralCallResponseChunk` class.
 
 </Info>
 
+## Classes
+
+### MistralCallResponseChunk
+
+A convenience wrapper around the Mistral `ChatCompletionChunk` streamed chunks.
+
+When calling the Mistral API using a function decorated with `mistral_call` and
+`stream` set to `True`, the stream will contain `MistralResponseChunk` instances with
+properties that allow for more convenient access to commonly used attributes.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.mistral import mistral_call
+
+
+@mistral_call("mistral-large-latest", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+stream = recommend_book("fantasy")  # response is an `MistralStream`
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+```
+
 

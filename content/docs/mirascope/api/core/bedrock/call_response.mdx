@@ -18,4 +18,31 @@ This module contains the `BedrockCallResponse` class.
 
 </Info>
 
+## Classes
+
+### BedrockCallResponse
+
+A convenience wrapper around the Bedrock `ChatCompletion` response.
+
+When calling the Bedrock API using a function decorated with `bedrock_call`, the
+response will be an `BedrockCallResponse` instance with properties that allow for
+more convenience access to commonly used attributes.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.bedrock import bedrock_call
+
+
+@bedrock_call("anthropic.claude-3-haiku-20240307-v1:0")
+@prompt_template("Recommend a {genre} book")
+def recommend_book(genre: str):
+    ...
+
+
+response = recommend_book("fantasy")  # response is an `BedrockCallResponse` instance
+print(response.content)
+```
+
 

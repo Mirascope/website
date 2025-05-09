@@ -18,4 +18,33 @@ This module contains the `OpenAICallResponse` class.
 
 </Info>
 
+## Classes
+
+### ChatCompletionAudio
+
+
+### OpenAICallResponse
+
+A convenience wrapper around the OpenAI `ChatCompletion` response.
+
+When calling the OpenAI API using a function decorated with `openai_call`, the
+response will be an `OpenAICallResponse` instance with properties that allow for
+more convenience access to commonly used attributes.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.openai import openai_call
+
+
+@openai_call("gpt-4o")
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+response = recommend_book("fantasy")  # response is an `OpenAICallResponse` instance
+print(response.content)
+```
+
 

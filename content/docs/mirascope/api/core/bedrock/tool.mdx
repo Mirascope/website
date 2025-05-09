@@ -18,4 +18,39 @@ The `BedrockTool` class for easy tool usage with Bedrock LLM calls.
 
 </Info>
 
+## Classes
+
+### GenerateBedrockStrictToolJsonSchema
+
+
+### BedrockToolConfig
+
+A tool configuration for Bedrock-specific features.
+
+### BedrockTool
+
+A class for defining tools for Bedrock LLM calls.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.bedrock import bedrock_call
+
+
+def format_book(title: str, author: str) -> str:
+    return f"{title} by {author}"
+
+
+@bedrock_call("anthropic.claude-3-haiku-20240307-v1:0", tools=[format_book])
+@prompt_template("Recommend a {genre} book")
+def recommend_book(genre: str):
+    ...
+
+
+response = recommend_book("fantasy")
+if tool := response.tool:  # returns an `BedrockTool` instance
+    print(tool.call())
+```
+
 

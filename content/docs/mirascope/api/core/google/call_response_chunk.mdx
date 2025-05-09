@@ -18,4 +18,30 @@ This module contains the `GoogleCallResponseChunk` class.
 
 </Info>
 
+## Classes
+
+### GoogleCallResponseChunk
+
+A convenience wrapper around the Google API streamed response chunks.
+
+When calling the Google API using a function decorated with `google_call` and
+`stream` set to `True`, the stream will contain `GoogleCallResponseChunk` instances
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.google import google_call
+
+
+@google_call("google-1.5-flash", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+stream = recommend_book("fantasy")  # response is an `GoogleStream`
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+```
+
 

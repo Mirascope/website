@@ -18,4 +18,30 @@ This module contains the `AnthropicCallResponse` class.
 
 </Info>
 
+## Classes
+
+### AnthropicCallResponse
+
+A convenience wrapper around the Anthropic `Message` response.
+
+When calling the Anthropic API using a function decorated with `anthropic_call`, the
+response will be an `AnthropicCallResponse` instance with properties that allow for
+more convenience access to commonly used attributes.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.anthropic import anthropic_call
+
+
+@anthropic_call("claude-3-5-sonnet-20240620")
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+response = recommend_book("fantasy")  # response is an `AnthropicCallResponse` instance
+print(response.content)
+```
+
 

@@ -18,4 +18,29 @@ This module contains the `GroqCallResponse` class.
 
 </Info>
 
+## Classes
+
+### GroqCallResponse
+
+A convenience wrapper around the Groq `ChatCompletion` response.
+
+When calling the Groq API using a function decorated with `groq_call`, the
+response will be an `GroqCallResponse` instance with properties that allow for
+more convenience access to commonly used attributes.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.groq import groq_call
+
+
+@groq_call("llama-3.1-8b-instant")
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+response = recommend_book("fantasy")  # response is an `GroqCallResponse` instance
+print(response.content)
+```
+
 

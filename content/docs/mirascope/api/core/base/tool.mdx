@@ -18,4 +18,34 @@ This module defines the base class for tools used in LLM calls.
 
 </Info>
 
+## Classes
+
+### ToolConfig
+
+A base class for tool configurations.
+
+### GenerateJsonSchemaNoTitles
+
+
+### BaseTool
+
+A class for defining tools for LLM calls.
+
+Example:
+
+```python
+from mirascope.core import BaseTool
+from pydantic import Field
+
+
+class FormatBook(BaseTool):
+    """Returns a nicely formatted book recommendation."""
+
+    title: str = Field(..., description="The title of the book.")
+    author: str = Field(..., description="The author of the book.")
+
+    def call(self) -> str:
+        return f"{self.title} by {self.author}"
+```
+
 
