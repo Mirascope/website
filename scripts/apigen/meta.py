@@ -1,140 +1,120 @@
 """TypeScript meta.ts representation in Python.
 
 This module provides Python classes that mirror the TypeScript interfaces used in the
-`content/docs/_meta.ts` file for structuring documentation metadata.
+`src/lib/content/spec.ts` file for structuring documentation metadata.
 """
 
 import re
 from pathlib import Path
 from typing import Any
 
+# Constants
+SINGLE_NESTING_LEVEL = 2  # Path with format "parent/child" has 2 parts
 
-class DocMetaItem:
-    """Python representation of TypeScript DocMetaItem interface.
+
+class DocSpec:
+    """Python representation of TypeScript DocSpec interface.
 
     Attributes:
-        title: The title of the documentation item
+        slug: URL slug component (no slashes)
+        label: Display name in sidebar
+        children: Child items (if this is a folder)
         has_extractable_snippets: Flag to indicate the doc has code snippets to extract
-        items: Nested items for folder-like structure
+        weight: Search weight for this item (multiplicative with parent weights)
 
     """
 
     def __init__(
         self,
-        title: str,
+        slug: str,
+        label: str,
+        children: list["DocSpec"] | None = None,
         has_extractable_snippets: bool | None = None,
-        items: dict[str, "DocMetaItem"] | None = None,
+        weight: float | None = None,
     ) -> None:
-        """Initialize a DocMetaItem.
+        """Initialize a DocSpec.
 
         Args:
-            title: The title of the item
+            slug: URL slug component (no slashes)
+            label: Display name in sidebar
+            children: Child items (if this is a folder)
             has_extractable_snippets: Whether the item has extractable code snippets
-            items: Dictionary of nested items, if any
+            weight: Search weight for this item (multiplicative with parent weights)
 
         """
-        self.title = title
+        self.slug = slug
+        self.label = label
+        self.children = children
         self.has_extractable_snippets = has_extractable_snippets
-        self.items = items
+        self.weight = weight
 
     def to_dict(self) -> dict[str, Any]:
         """Convert to a dictionary for serialization to TypeScript."""
         result: dict[str, Any] = {
-            "title": self.title,
+            "slug": self.slug,
+            "label": self.label,
         }
+
+        if self.weight is not None:
+            result["weight"] = self.weight
 
         if self.has_extractable_snippets is not None:
             result["hasExtractableSnippets"] = self.has_extractable_snippets
 
-        if self.items is not None:
-            items_dict = {}
-            for key, item in self.items.items():
-                items_dict[key] = item.to_dict()
-            result["items"] = items_dict
+        if self.children is not None:
+            result["children"] = [child.to_dict() for child in self.children]
 
         return result
 
 
-class DocGroup:
-    """Python representation of TypeScript DocGroup interface.
+class SectionSpec:
+    """Python representation of TypeScript SectionSpec interface.
 
     Attributes:
-        title: The title of the group
-        items: Items within the group
-
-    """
-
-    def __init__(self, title: str, items: dict[str, DocMetaItem]) -> None:
-        """Initialize a DocGroup.
-
-        Args:
-            title: The title of the group
-            items: Dictionary of items in this group
-
-        """
-        self.title = title
-        self.items = items
-
-    def to_dict(self) -> dict[str, Any]:
-        """Convert to a dictionary for serialization to TypeScript."""
-        items_dict = {}
-        for key, item in self.items.items():
-            items_dict[key] = item.to_dict()
-
-        return {
-            "title": self.title,
-            "items": items_dict,
-        }
-
-
-class DocSection:
-    """Python representation of TypeScript DocSection interface.
-
-    Attributes:
-        title: The title of the section
-        items: Direct section items
-        groups: Grouped section items
+        slug: Section slug for URL
+        label: Display name
+        children: Items in this section
+        weight: Search weight for this section (multiplicative with product weight)
 
     """
 
     def __init__(
         self,
-        title: str,
-        items: dict[str, DocMetaItem] | None = None,
-        groups: dict[str, DocGroup] | None = None,
+        slug: str,
+        label: str,
+        children: list[DocSpec],
+        weight: float | None = None,
     ) -> None:
-        """Initialize a DocSection.
+        """Initialize a SectionSpec.
 
         Args:
-            title: The title of the section
-            items: Dictionary of items directly in this section
-            groups: Dictionary of groups in this section
+            slug: Section slug for URL
+            label: Display name
+            children: Items in this section
+            weight: Search weight for this section (multiplicative with product weight)
 
         """
-        self.title = title
-        self.items = items or {}
-        self.groups = groups
+        self.slug = slug
+        self.label = label
+        self.children = children
+        self.weight = weight
 
     def to_dict(self) -> dict[str, Any]:
         """Convert to a dictionary for serialization to TypeScript."""
         result: dict[str, Any] = {
-            "title": self.title,
-            "items": {},
+            "slug": self.slug,
+            "label": self.label,
         }
 
-        for key, item in self.items.items():
-            result["items"][key] = item.to_dict()
+        if self.weight is not None:
+            result["weight"] = self.weight
 
-        if self.groups is not None:
-            groups_dict = {}
-            for key, group in self.groups.items():
-                groups_dict[key] = group.to_dict()
-            result["groups"] = groups_dict
+        result["children"] = [child.to_dict() for child in self.children]
 
         return result
 
     def to_typescript(self) -> str:
-        """Convert the DocSection to TypeScript code."""
+        """Convert the SectionSpec to TypeScript code."""
         import json
 
         # Convert to dict then to JSON with indentation for readability
@@ -142,19 +122,19 @@ class DocSection:
         json_str = json.dumps(doc_dict, indent=2)
 
         # Fix boolean values (true/false instead of True/False)
-        json_str = json_str.replace("'true'", "true").replace("'false'", "false")
+        json_str = json_str.replace("True", "true").replace("False", "false")
 
         # Convert JSON keys without quotes to TypeScript style
-        json_str = re.sub(r"'(\w+)':", r"\1:", json_str)
+        json_str = re.sub(r'"(\w+)":', r"\1:", json_str)
 
         return json_str
 
 
-def generate_meta_file_content(section: DocSection, export_name: str) -> str:
+def generate_meta_file_content(section: SectionSpec, export_name: str) -> str:
     """Generate a complete TypeScript meta file content.
 
     Args:
-        section: The DocSection object to convert to TypeScript
+        section: The SectionSpec object to convert to TypeScript
         export_name: The name to use for the exported variable
 
     Returns:
@@ -170,12 +150,12 @@ def generate_meta_file_content(section: DocSection, export_name: str) -> str:
     content.append("")
 
     # Add imports
-    content.append('import type { DocSection } from "@/content/docs/_meta";')
+    content.append('import type { SectionSpec } from "@/src/lib/content/spec";')
     content.append("")
 
     # Add the export declaration
     content.append(
-        f"export const {export_name}: DocSection = {section.to_typescript()};"
+        f"export const {export_name}: SectionSpec = {section.to_typescript()};"
     )
     content.append("")
 
@@ -187,69 +167,99 @@ def generate_meta_file_content(section: DocSection, export_name: str) -> str:
 
 def generate_meta_from_organized_files(
     organized_files: dict[str, list[Path]],
-) -> DocSection:
-    """Generate a DocSection from organized files.
+    weight: float = 0.25,  # Default weight for API sections
+) -> SectionSpec:
+    """Generate a SectionSpec from organized files.
 
     Args:
         organized_files: A dictionary of files organized by directory
+        weight: Search weight for this section (default: 0.25)
 
     Returns:
-        A DocSection object representing the API structure
+        A SectionSpec object representing the API structure
 
     """
-    # Create a DocSection for the API
-    section_title = "API Reference"
+    # Create a SectionSpec for the API
+    section_slug = "api"
+    section_label = "API Reference"
+    children = []
 
     # Process files in the root directory
     root_files = organized_files.get("", [])
-    items = create_items(root_files)
+    root_items = create_doc_specs(root_files)
 
     # Add an index item if it doesn't exist
-    if "index" not in items:
+    if not any(item.slug == "index" for item in root_items):
         # Create a synthetic index item and put it first
-        synthetic_items = {"index": DocMetaItem(title="Overview")}
-        # Add the remaining items
-        synthetic_items.update(items)
-        items = synthetic_items
+        children.append(DocSpec(slug="index", label="Overview"))
 
-    # Process all subdirectories
-    subdirectories = [dir_name for dir_name in organized_files.keys() if dir_name != ""]
-    group_names = sorted({dir_name.split("/")[0] for dir_name in subdirectories})
-    groups = {name: create_group(name, organized_files) for name in group_names}
+    # Add the remaining root items
+    children.extend(root_items)
+
+    # Process all subdirectories as child DocSpecs
+    for dir_name, files in sorted(organized_files.items()):
+        if dir_name == "":
+            continue
+
+        # Skip items already processed at root level
+        if "/" not in dir_name:
+            child_specs = create_doc_specs(files)
+            if child_specs:
+                child = DocSpec(
+                    slug=dir_name, label=titleify(dir_name), children=child_specs
+                )
+                children.append(child)
+            continue
+
+        # Handle nested directories
+        parts = dir_name.split("/")
+        parent_slug = parts[0]
+
+        # Find the parent item in the children list
+        parent_item = next(
+            (item for item in children if item.slug == parent_slug), None
+        )
+        if parent_item is None:
+            # Create a new parent item if it doesn't exist
+            parent_item = DocSpec(
+                slug=parent_slug, label=titleify(parent_slug), children=[]
+            )
+            children.append(parent_item)
+
+        # Ensure parent has children list
+        if parent_item.children is None:
+            parent_item.children = []
+
+        # For simplicity, just handling one level of nesting
+        # For deeper nesting, a recursive approach would be needed
+        if len(parts) == SINGLE_NESTING_LEVEL:
+            child_slug = parts[1]
+            # Check if this child already exists
+            if not any(child.slug == child_slug for child in parent_item.children):
+                child_specs = create_doc_specs(files)
+                child = DocSpec(
+                    slug=child_slug,
+                    label=titleify(child_slug),
+                    children=child_specs if child_specs else None,
+                )
+                parent_item.children.append(child)
+
+    # Sort children alphabetically to ensure consistent output
+    for item in children:
+        if item.children:
+            item.children.sort(key=lambda x: x.slug)
+    children.sort(key=lambda x: x.slug)
+
+    # Make sure "index" is first
+    children.sort(key=lambda x: "0" if x.slug == "index" else x.slug)
 
     # Create the section with all content
-    return DocSection(
-        title=section_title,
-        items=items,
-        groups=groups,
+    return SectionSpec(
+        slug=section_slug,
+        label=section_label,
+        children=children,
+        weight=weight,
     )
-
-
-def create_group(group_name: str, organized_files: dict[str, list[Path]]) -> DocGroup:
-    """Create a DocGroup from organized files.
-
-    Args:
-        group_name: The name of the group
-        organized_files: A dictionary of files organized by directory
-
-    Returns:
-        A DocGroup object representing the API structure
-
-    """
-    group_files = organized_files.get(group_name, [])
-    items = create_items(group_files)
-    for dir_path, files in sorted(organized_files.items()):
-        if dir_path.startswith(group_name + "/"):
-            group_path = dir_path.removeprefix(group_name + "/")
-            folder = DocMetaItem(title=titleify(group_path))
-            folder.items = create_items(files)
-            if items.get(folder.title) is not None:
-                raise ValueError(
-                    f"Duplicate folder name '{folder.title}' in group '{group_name}'"
-                )
-            items[group_path] = folder
-
-    return DocGroup(title=titleify(group_name), items=items)
 
 
 def titleify(stem: str) -> str:
@@ -265,21 +275,26 @@ def titleify(stem: str) -> str:
     return stem.replace("_", " ").title()
 
 
-def create_items(items: list[Path]) -> dict[str, DocMetaItem]:
-    """Create a dictionary of DocMetaItem from a list of file paths.
+def create_doc_specs(files: list[Path]) -> list[DocSpec]:
+    """Create a list of DocSpec from a list of file paths.
 
     Args:
-        items: A list of file paths
+        files: A list of file paths
 
     Returns:
-        A dictionary of DocMetaItem objects
+        A list of DocSpec objects
 
     """
-    items_dict = {}
-    stems = sorted({item.stem for item in items})
+    result = []
+    stems = sorted({item.stem for item in files})
+
+    # Handle index files first
     if "index" in stems:
-        items_dict["index"] = DocMetaItem(title="Overview")
+        result.append(DocSpec(slug="index", label="Overview"))
         stems.remove("index")
+
+    # Add the rest of the files
     for stem in stems:
-        items_dict[stem] = DocMetaItem(title=titleify(stem))
-    return items_dict
+        result.append(DocSpec(slug=stem, label=titleify(stem)))
+
+    return result
