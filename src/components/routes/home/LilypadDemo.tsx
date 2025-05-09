@@ -145,29 +145,26 @@ export function LilypadDemo() {
           </div>
         </div>
 
-        {/* Input/Output panes - takes 40% width on larger screens */}
+        {/* Messages pane - takes 40% width on larger screens */}
         <div className="flex flex-col md:w-2/5">
-          {/* Input pane */}
-          <div className="border-border/60 border-t border-b md:border-t-0">
-            <div className="border-border/60 border-b px-4 py-2">
-              <h3 className="text-sm font-medium">Input</h3>
-            </div>
-            <div className="min-h-24 p-4 text-sm">
-              <pre className="font-mono text-xs break-words whitespace-pre-wrap">
-                <code>{selectedTrace.input}</code>
-              </pre>
-            </div>
+          <div className="border-border/60 border-b px-4 py-2">
+            <h3 className="text-sm font-medium">Messages</h3>
           </div>
-
-          {/* Output pane */}
-          <div>
-            <div className="border-border/60 border-b px-4 py-2">
-              <h3 className="text-sm font-medium">Output</h3>
+          <div className="flex flex-col gap-2 overflow-y-auto p-2">
+            {/* User message card */}
+            <div className="bg-card/30 overflow-hidden rounded-lg">
+              <div className="px-4 pt-2">
+                <h4 className="text-s font-semibold">User</h4>
+                <p className="text-s py-2 break-words">{selectedTrace.input}</p>
+              </div>
             </div>
-            <div className="min-h-24 p-4 text-sm">
-              <pre className="font-mono text-xs break-words whitespace-pre-wrap">
-                <code>{selectedTrace.output}</code>
-              </pre>
+
+            {/* Assistant message card */}
+            <div className="bg-card/30 overflow-hidden rounded-lg">
+              <div className="px-4 py-2">
+                <h4 className="text-s font-semibold">Assistant</h4>
+                <p className="text-s py-2 break-words">{selectedTrace.output}</p>
+              </div>
             </div>
           </div>
         </div>
