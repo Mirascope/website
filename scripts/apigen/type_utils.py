@@ -198,11 +198,10 @@ def extract_params_if_available(
             return params_data
 
     # Return empty list if no parameters found
-    return []
-
+    return []    
 
 def extract_return_info(
-    obj: Object | Alias, module: Module | None = None
+    obj: Object | Alias
 ) -> ReturnInfo | None:
     """Extract return type information from a Griffe object.
 
@@ -215,8 +214,8 @@ def extract_return_info(
 
     """
     # Get the containing module for context
-    if not module:
-        module = getattr(obj, "module", None)
+    module = obj.module
+    print(module)
 
     type_str = None
     description = None
@@ -298,45 +297,12 @@ def extract_return_info(
                                 description = str(description)
                             break
 
-        # If we still don't have return info, try to parse it from the raw docstring
-        if not description and hasattr(obj.docstring, "value"):
-            docstring_text = obj.docstring.value
-            if "Returns:" in docstring_text:
-                # Get the text after "Returns:"
-                returns_text = docstring_text.split("Returns:")[1].strip()
-                lines = returns_text.split("\n")
-
-                # Get the indentation of the first line to determine the paragraph
-                indent = len(lines[0]) - len(lines[0].lstrip()) if lines else 0
-
-                # Extract the description - stop at first line with less indentation
-                # or at first empty line
-                description_lines = []
-                for line in lines:
-                    if not line.strip():
-                        break
-                    if line.startswith(" " * indent) or not indent:
-                        description_lines.append(line.strip())
-                    else:
-                        break
-
-                if description_lines:
-                    # Join the lines and use as description
-                    description = " ".join(description_lines)
-
-                    # If no type but description mentions "decorator", set type to Callable
-                    if not type_str and "decorator" in description.lower():
-                        type_str = "Callable"
-
     # If we have the necessary information, create and return ReturnInfo
     if type_str:
         # Create default TypeInfo if not created yet
         if module:
             type_info = get_type_origin(type_str, module)
             return ReturnInfo(type_info=type_info, description=description)
-
-    # Return None if we couldn't extract the information
-    return None
 
 
 def parameter_info_to_dict(param: ParameterInfo) -> dict[str, str]:
