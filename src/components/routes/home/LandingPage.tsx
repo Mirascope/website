@@ -9,7 +9,7 @@ import { LilypadBlock } from "./LilypadBlock";
 
 export function LandingPage() {
   useSunsetTime();
-  useGradientFadeOnScroll({ fadeStartDistance: 120, fadeEndDistance: 0 });
+  useGradientFadeOnScroll({ fadeStartDistance: 100, fadeEndDistance: 10 });
 
   const heroSectionRef = useRef<HTMLDivElement>(null);
   const mirascopeSectionRef = useRef<HTMLDivElement>(null);
@@ -17,9 +17,26 @@ export function LandingPage() {
 
   const [showScrollButton, setShowScrollButton] = useState(true);
 
-  // Function to scroll to mirascope section
+  // Function to scroll to mirascope section with offset for better positioning
   const scrollToMirascopeSection = () => {
-    mirascopeSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (mirascopeSectionRef.current) {
+      const yOffset = -window.innerHeight * 0.05;
+      const element = mirascopeSectionRef.current;
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  };
+
+  // Function to scroll to lilypad section with offset for better positioning
+  const scrollToLilypadSection = () => {
+    if (lilypadSectionRef.current) {
+      const yOffset = -window.innerHeight * 0;
+      const element = lilypadSectionRef.current;
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
   };
 
   // Function to hide button when scrolled past the first section
@@ -52,12 +69,12 @@ export function LandingPage() {
           </div>
 
           {/* Mirascope section */}
-          <div data-gradient-fade={true} ref={mirascopeSectionRef}>
-            <MirascopeBlock />
+          <div data-gradient-fade={true} ref={mirascopeSectionRef} className="mb-24">
+            <MirascopeBlock onScrollDown={scrollToLilypadSection} />
           </div>
 
           {/* Lilypad section */}
-          <div data-gradient-fade={true} ref={lilypadSectionRef}>
+          <div data-gradient-fade={true} ref={lilypadSectionRef} className="mt-24">
             <LilypadBlock />
           </div>
         </div>

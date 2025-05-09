@@ -34,18 +34,18 @@ export const LilypadBlock = () => {
         <ButtonLink
           href="/docs/lilypad"
           variant="default"
-          size="lg"
-          className="landing-page-box-shadow landing-page-box-shadow-hover w-full min-w-[220px] px-8 py-6 text-center text-lg font-medium sm:w-auto"
+          size="default"
+          className="landing-page-box-shadow landing-page-box-shadow-hover w-full min-w-[200px] px-6 py-4 text-center font-medium sm:w-auto"
         >
-          <BookOpen className="size-6" aria-hidden="true" /> Lilypad Docs
+          <BookOpen className="size-5" aria-hidden="true" /> Lilypad Docs
         </ButtonLink>
         <ButtonLink
           href="/pricing"
           variant="outline"
-          size="lg"
-          className="landing-page-box-shadow landing-page-box-shadow-hover w-full min-w-[220px] border-0 bg-white px-8 py-6 text-center text-lg font-medium text-black hover:bg-gray-100 hover:text-black sm:w-auto"
+          size="default"
+          className="landing-page-box-shadow landing-page-box-shadow-hover w-full min-w-[200px] border-0 bg-white px-6 py-4 text-center font-medium text-black hover:bg-gray-100 hover:text-black sm:w-auto"
         >
-          <Rocket className="size-6" aria-hidden="true" /> Open Beta
+          <Rocket className="size-5" aria-hidden="true" /> Open Beta
         </ButtonLink>
       </div>
     </div>
