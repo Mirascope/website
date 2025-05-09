@@ -18,4 +18,14 @@ The `LiteLLMStream` class for convenience around streaming LLM calls.
 
 </Info>
 
+## Classes
+
+### LiteLLMStream
+
+A simple wrapper around `OpenAIStream`.
+
+Everything is the same except updates to the `construct_call_response` method and
+the `cost` property so that cost is properly calculated using LiteLLM's cost
+calculation method. This ensures cost calculation works for non-OpenAI models.
+
 

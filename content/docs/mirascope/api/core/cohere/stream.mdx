@@ -18,4 +18,27 @@ The `CohereStream` class for convenience around streaming LLM calls.
 
 </Info>
 
+## Classes
+
+### CohereStream
+
+A class for convenience around streaming Cohere LLM calls.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.cohere import cohere_call
+
+
+@cohere_call("command-r-plus", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+stream = recommend_book("fantasy")  # returns `CohereStream` instance
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+```
+
 

@@ -18,4 +18,31 @@ This module contains the `OpenAICallResponseChunk` class.
 
 </Info>
 
+## Classes
+
+### OpenAICallResponseChunk
+
+A convenience wrapper around the OpenAI `ChatCompletionChunk` streamed chunks.
+
+When calling the OpenAI API using a function decorated with `openai_call` and
+`stream` set to `True`, the stream will contain `OpenAIResponseChunk` instances with
+properties that allow for more convenient access to commonly used attributes.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.openai import openai_call
+
+
+@openai_call("gpt-4o-mini", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+stream = recommend_book("fantasy")  # response is an `OpenAIStream`
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+```
+
 

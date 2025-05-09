@@ -18,4 +18,27 @@ The `AzureStream` class for convenience around streaming LLM calls.
 
 </Info>
 
+## Classes
+
+### AzureStream
+
+A class for convenience around streaming Azure LLM calls.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.azure import azure_call
+
+
+@azure_call("gpt-4o-mini", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+stream = recommend_book("fantasy")  # returns `AzureStream` instance
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+```
+
 

@@ -18,4 +18,30 @@ This module contains the `CohereCallResponse` class.
 
 </Info>
 
+## Classes
+
+### CohereCallResponse
+
+A convenience wrapper around the Cohere `ChatCompletion` response.
+
+When calling the Cohere API using a function decorated with `cohere_call`, the
+response will be an `CohereCallResponse` instance with properties that allow for
+more convenience access to commonly used attributes.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.cohere import cohere_call
+
+
+@cohere_call("command-r-plus")
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+response = recommend_book("fantasy")  # response is an `CohereCallResponse` instance
+print(response.content)
+```
+
 

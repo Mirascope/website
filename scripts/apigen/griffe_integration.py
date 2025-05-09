@@ -55,6 +55,53 @@ def get_loader(
     return loader
 
 
+def process_directive_with_error_handling(directive: str, module: Module) -> str:
+    """Process an API directive with error handling for missing dependencies.
+
+    This wrapper catches errors during documentation generation, reports them,
+    and provides placeholder documentation, allowing the process to continue
+    even when dependencies are missing or other issues are encountered.
+
+    Args:
+        directive: The directive string (e.g., "::: mirascope.core.anthropic.call")
+        module: The pre-loaded Griffe module
+
+    Returns:
+        The generated documentation content or error placeholder
+
+    """
+    try:
+        return process_directive(directive, module)
+    except KeyError as e:
+        # Handle missing dependency issues (like opentelemetry not being available)
+        object_path = directive.replace("::: ", "")
+        missing_dep = str(e).strip("'")
+        print(
+            f"WARNING: Could not resolve dependency when processing {object_path}: {e}"
+        )
+
+        # Return basic placeholder documentation
+        return f"""
+## Missing Dependency Warning
+
+Documentation for `{object_path}` could not be fully generated because of a missing dependency: `{missing_dep}`.
+
+This is expected and safe to ignore for documentation generation purposes.
+"""
+    except Exception as e:
+        # Add general error handling to make API docs generation more robust
+        object_path = directive.replace("::: ", "")
+        print(f"WARNING: Error processing directive {object_path}: {e}")
+
+        return f"""
+## Error Processing Documentation
+
+An error occurred while generating documentation for `{object_path}`: {e!s}
+
+Please check that all required dependencies are installed.
+"""
+
+
 def process_directive(directive: str, module: Module) -> str:
     """Process an API directive and generate documentation.
 
@@ -560,6 +607,10 @@ def document_placeholder(obj: Object | Alias) -> str:
 
     # Determine the content subpath for this documentation
     module = getattr(obj, "module", None)
+    # If the object itself is a module, use that instead
+    if isinstance(obj, Module):
+        module = obj
+
     module_path = getattr(module, "path", "")
     content_subpath = "docs/mirascope"  # Default fallback
 
@@ -571,6 +622,101 @@ def document_placeholder(obj: Object | Alias) -> str:
     # Add object type using a component with consistent typing
     obj_type = get_object_type(obj)
     content.append(f'<ApiType type="{obj_type}" />\n')
+
+    # Special case for Module objects: look for classes inside them
+    if isinstance(obj, Module) and hasattr(obj, "members"):
+        # First handle the module's own docstring
+        if hasattr(obj, "docstring") and obj.docstring and obj.docstring.value:
+            content.append("## Description\n")
+            content.append(obj.docstring.value.strip())
+            content.append("")
+
+        # Look for classes within the module
+        classes = [
+            (name, member)
+            for name, member in obj.members.items()
+            if isinstance(member, Class)
+        ]
+
+        # If classes are found, document them
+        if classes:
+            if len(classes) == 1:
+                # If only one class and it has the same name as the last part of the module,
+                # assume it's the primary class for this module
+                class_name, class_obj = classes[0]
+                module_name_parts = module_path.split(".")
+                if module_name_parts and class_name.lower() == module_name_parts[-1]:
+                    # Document this as the primary class
+                    content.append(f"## Class {class_name}\n")
+
+                    # Add class docstring if available
+                    if (
+                        hasattr(class_obj, "docstring")
+                        and class_obj.docstring
+                        and class_obj.docstring.value
+                    ):
+                        content.append(class_obj.docstring.value.strip())
+                        content.append("")
+
+                    # Add information about base classes
+                    if hasattr(class_obj, "bases") and class_obj.bases:
+                        bases_str = ", ".join([str(base) for base in class_obj.bases])
+                        content.append(f"**Bases:** {bases_str}\n")
+
+                    # Document attributes
+                    if hasattr(class_obj, "members"):
+                        # Find all attributes (non-method members)
+                        attributes = []
+                        for attr_name, attr in class_obj.members.items():
+                            # Check if it's not a function and doesn't start with underscore
+                            # Griffe should represent methods as Function objects
+                            if not isinstance(
+                                attr, Function
+                            ) and not attr_name.startswith("_"):
+                                attributes.append((attr_name, attr))
+
+                        if attributes:
+                            content.append("### Attributes\n")
+                            content.append("| Name | Type | Description |")
+                            content.append("| ---- | ---- | ----------- |")
+
+                            for attr_name, attr in attributes:
+                                attr_type = getattr(attr, "annotation", "")
+                                attr_desc = ""
+                                if hasattr(attr, "docstring") and attr.docstring:
+                                    attr_desc = attr.docstring.value.strip()
+                                content.append(
+                                    f"| {attr_name} | {attr_type} | {attr_desc} |"
+                                )
+                else:
+                    # Document the class but not as prominently
+                    content.append("## Classes\n")
+                    for class_name, class_obj in classes:
+                        content.append(f"### {class_name}\n")
+                        if (
+                            hasattr(class_obj, "docstring")
+                            and class_obj.docstring
+                            and class_obj.docstring.value
+                        ):
+                            content.append(class_obj.docstring.value.strip())
+                        content.append("")
+            else:
+                # Multiple classes in the module, document all of them
+                content.append("## Classes\n")
+                for class_name, class_obj in classes:
+                    content.append(f"### {class_name}\n")
+                    if (
+                        hasattr(class_obj, "docstring")
+                        and class_obj.docstring
+                        and class_obj.docstring.value
+                    ):
+                        content.append(class_obj.docstring.value.strip())
+                    content.append("")
+
+        # Return the content for the module
+        return "\n".join(content)
+
+    # For non-module objects, continue with the regular documentation
 
     # Add enhanced signature using a component only if we can get a valid signature
     signature = format_signature(obj)

@@ -14,7 +14,10 @@ from pathlib import Path
 from typing import Any
 
 from scripts.apigen.config import ApiSourceConfig
-from scripts.apigen.griffe_integration import get_loader, process_directive
+from scripts.apigen.griffe_integration import (
+    get_loader,
+    process_directive_with_error_handling,
+)
 from scripts.apigen.meta import (
     generate_meta_file_content,
     generate_meta_from_organized_files,
@@ -112,16 +115,23 @@ class DocumentationGenerator:
         if not self.repo_path or not self.module:
             raise RuntimeError("Setup must be called before generating documentation")
 
-        src_path = self.repo_path / self.config.docs_path / file_path
-        target_path = (
-            self.project_root / self.config.target_path / file_path.with_suffix(".mdx")
-        )
+        try:
+            src_path = self.repo_path / self.config.docs_path / file_path
+            target_path = (
+                self.project_root
+                / self.config.target_path
+                / file_path.with_suffix(".mdx")
+            )
 
-        # Ensure target directory exists
-        target_path.parent.mkdir(exist_ok=True, parents=True)
+            # Ensure target directory exists
+            target_path.parent.mkdir(exist_ok=True, parents=True)
 
-        # Process file
-        self._process_file(src_path, target_path)
+            # Process file
+            self._process_file(src_path, target_path)
+        except Exception as e:
+            print(f"ERROR: Failed to process file {file_path}: {e}")
+            # Re-raise the exception to maintain the original behavior
+            raise
 
     def generate_selected(self, file_pattern: str, skip_meta: bool = True) -> None:
         """Generate documentation only for files matching the pattern.
@@ -301,7 +311,10 @@ class DocumentationGenerator:
             # Extract and process directives
             directives = self._extract_directives(content)
             for directive in directives:
-                doc_content = process_directive(directive, self.module)
+                # Use the error-handling wrapper version to provide better resilience
+                doc_content = process_directive_with_error_handling(
+                    directive, self.module
+                )
                 f.write(doc_content)
                 f.write("\n\n")
 
