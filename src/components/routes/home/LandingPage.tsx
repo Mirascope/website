@@ -1,342 +1,15 @@
 import { SEOMeta } from "@/src/components/";
 import { useSunsetTime } from "@/src/lib/hooks/useSunsetTime";
-import { useFadeOnScroll } from "@/src/lib/hooks/useFadeOnScroll";
-import { ButtonLink } from "@/src/components/ui/button-link";
-import { ResponsiveTextBlock } from "@/src/components/ui/responsive-text-block";
-import { BookOpen, Users, ChevronDown, Rocket } from "lucide-react";
+import { useGradientFadeOnScroll } from "@/src/lib/hooks/useGradientFadeOnScroll";
 import { useRef, useState, useEffect } from "react";
-import { ProviderTabbedSection } from "@/src/components/mdx/elements/ProviderTabbedSection";
-import { ProviderCodeWrapper } from "@/src/components/mdx/providers/ProviderCodeWrapper";
 import { ProviderContextProvider } from "@/src/components/core/providers/ProviderContext";
-import { LilypadDemo } from "./LilypadDemo";
-
-// Shared styling constants for logo and hero components
-// This ensures we maintain consistency and makes future updates easier
-const styleSystem = {
-  // Base dimensions for different components
-  logoFontSize: "clamp(1.75rem, 4.5vw, 3.5rem)", // Smaller than hero text
-  heroFontSize: "clamp(2.5rem, 8vw, 6rem)", // Larger than logo text
-  lineHeightMultiplier: 0.9,
-
-  // Spacing modifiers
-  paddingInlineMultiplier: 0.75,
-  paddingBlockMultiplier: 0.375,
-  logoImageSpacingMultiplier: 0.375,
-  logoToHeroSpacingMultiplier: 1,
-
-  // Fine-tuning adjustment for vertical centering (positive = move up)
-  centeringAdjustment: "0rem",
-};
-
-// Derived styles for logo component
-const logoStyles = {
-  // Base dimensions from style system
-  fontSize: styleSystem.logoFontSize,
-  lineHeightMultiplier: styleSystem.lineHeightMultiplier,
-
-  // Derived measurements
-  get lineHeight() {
-    return `calc(${this.fontSize} * ${this.lineHeightMultiplier})`;
-  },
-
-  // Calculated spacing values
-  get paddingInline() {
-    return `calc(${this.lineHeight} * ${styleSystem.paddingInlineMultiplier})`;
-  },
-  get paddingBlock() {
-    return `calc(${this.lineHeight} * ${styleSystem.paddingBlockMultiplier})`;
-  },
-  get totalPaddingBlock() {
-    return `calc(${this.lineHeight} * ${styleSystem.paddingBlockMultiplier} * 2)`;
-  },
-  get logoImageSpacing() {
-    return `calc(${this.lineHeight} * ${styleSystem.logoImageSpacingMultiplier})`;
-  },
-  get logoToHeroSpacing() {
-    return `calc(${this.lineHeight} * ${styleSystem.logoToHeroSpacingMultiplier})`;
-  },
-
-  // Centering calculation - uses values from both logo and hero
-  get centeringOffset() {
-    // Half of (logo height + total vertical padding + spacing to hero)
-    // Plus an additional adjustment for fine-tuning
-    return `calc(((${this.lineHeight} + ${this.totalPaddingBlock} + 3 * ${this.logoToHeroSpacing}) / 2) + ${styleSystem.centeringAdjustment})`;
-  },
-};
-
-// Logo banner component with responsive sizing
-const LogoBanner = () => {
-  return (
-    <div
-      className="relative"
-      style={{
-        // Use the shared styles for consistent dimensions
-        paddingInline: logoStyles.paddingInline,
-        paddingBlock: logoStyles.paddingBlock,
-      }}
-    >
-      {/* Torn paper background effect */}
-      <div className="torn-paper-effect absolute inset-0 bg-white"></div>
-
-      {/* Logo content */}
-      <div className="relative z-10">
-        <div className="flex flex-row items-center justify-center">
-          {/* Logo image */}
-          <div style={{ marginRight: logoStyles.logoImageSpacing }}>
-            <img
-              src="/assets/branding/mirascope-logo.svg"
-              alt="Mirascope Frog Logo"
-              style={{
-                height: logoStyles.fontSize,
-                width: "auto",
-              }}
-            />
-          </div>
-
-          {/* Logo text */}
-          <h1
-            style={{
-              fontSize: logoStyles.fontSize,
-              marginBottom: 0,
-              lineHeight: logoStyles.lineHeightMultiplier,
-            }}
-            className="font-handwriting text-mirascope-purple"
-          >
-            Mirascope
-          </h1>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Hero block component with logo and text
-interface HeroBlockProps {
-  onScrollDown: () => void;
-  showScrollButton: boolean;
-}
-
-const HeroBlock = ({ onScrollDown, showScrollButton }: HeroBlockProps) => {
-  return (
-    <div
-      className="relative h-screen"
-      style={{ marginTop: "calc(var(--header-height-base) * -1)" }}
-    >
-      {/* Container that centers the entire block in the viewport */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center px-4">
-        {/* Content wrapper with computed negative margin to center the hero text */}
-        <div
-          className="flex flex-col items-center"
-          style={{
-            /* Use the shared calculated offset to center the hero text */
-            marginTop: `calc(${logoStyles.centeringOffset} * -1)`,
-          }}
-        >
-          <div
-            data-fade-on-scroll="true"
-            style={{
-              marginBottom: logoStyles.logoToHeroSpacing,
-              transition: "opacity 0.1s ease-out",
-            }}
-          >
-            <LogoBanner />
-          </div>
-
-          <div className="text-center">
-            <ResponsiveTextBlock
-              lines={["The AI Engineer's", "Developer Stack"]}
-              fontSize={styleSystem.heroFontSize}
-              className="flex flex-col font-medium tracking-tight text-white"
-              lineClassName="font-handwriting"
-              textShadow={true}
-              fadeOnScroll={true}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Scroll indicator */}
-      <div
-        className={`fixed right-0 bottom-16 left-0 z-10 flex justify-center transition-opacity duration-300 ${
-          showScrollButton ? "opacity-100" : "pointer-events-none opacity-0"
-        }`}
-      >
-        <div className="landing-page-box-shadow landing-page-box-shadow-hover relative h-12 w-12 overflow-hidden rounded-full">
-          <button
-            onClick={onScrollDown}
-            className="bg-primary/80 hover:bg-primary absolute inset-0 flex items-center justify-center border-0 transition-all"
-            aria-label="Scroll to learn more"
-          >
-            <ChevronDown className="h-6 w-6 text-white" />
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Mirascope feature block component
-const MirascopeBlock = () => {
-  const codeExample = `from mirascope import llm # [!code highlight]
-from pydantic import BaseModel
-
-class Book(BaseModel):
-    title: str
-    author: str
-
-# [!code highlight:6]
-@llm.call(
-    provider="$PROVIDER", 
-    model="$MODEL", 
-    response_model=Book,
-)
-def extract_book(text: str) -> str:
-    return f"Extract the book: {text}"
-
-text = "The Name of the Wind by Patrick Rothfuss"
-book: Book = extract_book(text) # [!code highlight]
-assert isinstance(book, Book)`;
-
-  return (
-    <div className="flex min-h-screen flex-col items-center justify-center px-4 py-16">
-      <ResponsiveTextBlock
-        lines={["LLM abstractions that", "aren't obstructions"]}
-        element="h2"
-        fontSize="clamp(1.5rem, 5vw, 3rem)"
-        className="mb-6 text-center text-white"
-        lineClassName="font-bold"
-        lineSpacing="mb-2"
-        textShadow={true}
-        fadeOnScroll={true}
-      />
-      <div className="bg-background/60 mb-2 w-full max-w-3xl rounded-md">
-        <ProviderTabbedSection
-          customHeader={
-            <div className="flex items-center px-2 pb-2">
-              <div className="flex flex-row items-center justify-center">
-                <div className="mr-1.5">
-                  <img
-                    src="/assets/branding/mirascope-logo.svg"
-                    alt="Mirascope Logo"
-                    className="h-4 w-auto"
-                  />
-                </div>
-                <h1 className="text-s font-handwriting text-mirascope-purple mb-0">Mirascope</h1>
-              </div>
-            </div>
-          }
-        >
-          <ProviderCodeWrapper code={codeExample} language="python" />
-        </ProviderTabbedSection>
-      </div>
-
-      <div className="mt-2 flex w-full max-w-3xl flex-col items-center justify-center gap-4 sm:flex-row">
-        <ButtonLink
-          href="/docs/mirascope"
-          variant="default"
-          size="lg"
-          className="landing-page-box-shadow landing-page-box-shadow-hover w-full min-w-[220px] px-8 py-6 text-center text-lg font-medium sm:w-auto"
-          data-fade-on-scroll={true}
-        >
-          <BookOpen className="size-6" aria-hidden="true" /> Mirascope Docs
-        </ButtonLink>
-        <ButtonLink
-          href="https://join.slack.com/t/mirascope-community/shared_invite/zt-2ilqhvmki-FB6LWluInUCkkjYD3oSjNA"
-          variant="outline"
-          size="lg"
-          className="landing-page-box-shadow landing-page-box-shadow-hover w-full min-w-[220px] border-0 bg-white px-8 py-6 text-center text-lg font-medium text-black hover:bg-gray-100 hover:text-black sm:w-auto"
-          data-fade-on-scroll={true}
-        >
-          <Users className="size-6" aria-hidden="true" /> Join the Community
-        </ButtonLink>
-      </div>
-    </div>
-  );
-};
-
-// Lilypad feature block component
-const LilypadBlock = () => {
-  const codeExample = `
-@lilypad.trace(versioning="automatic") # [!code highlight]
-@llm.call(provider="$PROVIDER", model="$MODEL")
-def answer_question(question: str) -> str:
-    return f"Answer in one word: {question}"
-
-answer_question("What is the capital of France?")
-`;
-
-  return (
-    <div
-      data-product="lilypad"
-      className="flex min-h-screen flex-col items-center justify-center px-4 py-16"
-    >
-      <ResponsiveTextBlock
-        lines={["Start building your data", "flywheel with one line of code"]}
-        element="h2"
-        fontSize="clamp(1.5rem, 5vw, 3rem)"
-        className="mb-6 text-center text-white"
-        lineClassName="font-bold"
-        lineSpacing="mb-2"
-        textShadow={true}
-        fadeOnScroll={true}
-      />
-      <div className="mb-8 w-full max-w-3xl">
-        <div className="bg-background/60 mb-2 w-full rounded-md">
-          <ProviderTabbedSection
-            customHeader={
-              <div className="flex items-center px-2 pb-2">
-                <div className="flex flex-row items-center justify-center">
-                  <div className="mr-1.5">
-                    <img
-                      src="/assets/branding/lilypad-logo.svg"
-                      alt="Lilypad Logo"
-                      className="h-4 w-auto"
-                    />
-                  </div>
-                  <h1 className="text-s font-handwriting text-lilypad-green mb-0">Lilypad</h1>
-                </div>
-              </div>
-            }
-          >
-            <ProviderCodeWrapper code={codeExample} language="python" />
-          </ProviderTabbedSection>
-        </div>
-
-        {/* Add the LilypadDemo component */}
-        <div className="mt-4" data-fade-on-scroll={true}>
-          <LilypadDemo />
-        </div>
-      </div>
-
-      <div className="mt-2 flex w-full max-w-3xl flex-col items-center justify-center gap-4 sm:flex-row">
-        <ButtonLink
-          href="/docs/lilypad"
-          variant="default"
-          size="lg"
-          className="landing-page-box-shadow landing-page-box-shadow-hover w-full min-w-[220px] px-8 py-6 text-center text-lg font-medium sm:w-auto"
-        >
-          <BookOpen className="size-6" aria-hidden="true" /> Lilypad Docs
-        </ButtonLink>
-        <ButtonLink
-          href="https://lilypad.so"
-          variant="outline"
-          size="lg"
-          className="landing-page-box-shadow landing-page-box-shadow-hover w-full min-w-[220px] border-0 bg-white px-8 py-6 text-center text-lg font-medium text-black hover:bg-gray-100 hover:text-black sm:w-auto"
-        >
-          <Rocket className="size-6" aria-hidden="true" /> Open Beta
-        </ButtonLink>
-      </div>
-    </div>
-  );
-};
+import { HeroBlock } from "./HeroBlock";
+import { MirascopeBlock } from "./MirascopeBlock";
+import { LilypadBlock } from "./LilypadBlock";
 
 export function LandingPage() {
   useSunsetTime();
-  // Initialize our global fade effect for elements with data-fade-on-scroll attribute
-  useFadeOnScroll({
-    fadeDistance: 100, // Distance from top at which fading starts (in px)
-    fadeRange: 100, // Distance over which the fade occurs (in px)
-  });
+  useGradientFadeOnScroll({ fadeStartDistance: 100, fadeEndDistance: 10 });
 
   const heroSectionRef = useRef<HTMLDivElement>(null);
   const mirascopeSectionRef = useRef<HTMLDivElement>(null);
@@ -344,13 +17,85 @@ export function LandingPage() {
 
   const [showScrollButton, setShowScrollButton] = useState(true);
 
-  // Function to scroll to mirascope section
+  // Function to scroll to hero section (top of page)
+  const scrollToHeroSection = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    // Update URL hash without causing a jump
+    window.history.pushState(null, "", "#hero");
+  };
+
+  // Function to scroll to mirascope section with offset for better positioning
   const scrollToMirascopeSection = () => {
-    mirascopeSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (mirascopeSectionRef.current) {
+      const yOffset = -window.innerHeight * 0.05;
+      const element = mirascopeSectionRef.current;
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+      window.scrollTo({ top: y, behavior: "smooth" });
+
+      // Update URL hash without causing a jump
+      window.history.pushState(null, "", "#mirascope");
+    }
+  };
+
+  // Function to scroll to lilypad section with offset for better positioning
+  const scrollToLilypadSection = () => {
+    if (lilypadSectionRef.current) {
+      const yOffset = -window.innerHeight * 0.02;
+      const element = lilypadSectionRef.current;
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+      window.scrollTo({ top: y, behavior: "smooth" });
+
+      // Update URL hash without causing a jump
+      window.history.pushState(null, "", "#lilypad");
+    }
   };
 
   // Function to hide button when scrolled past the first section
+  // Handle hash navigation on page load
   useEffect(() => {
+    // Check if a hash is present in the URL
+    const hash = window.location.hash;
+    if (hash) {
+      // Remove the '#' character
+      const targetId = hash.substring(1);
+
+      // Delay to ensure everything is properly rendered
+      setTimeout(() => {
+        if (targetId === "mirascope") {
+          scrollToMirascopeSection();
+        } else if (targetId === "lilypad") {
+          scrollToLilypadSection();
+        } else if (targetId === "hero") {
+          scrollToHeroSection();
+        }
+      }, 300);
+    }
+
+    // Handle hash changes after page load
+    const handleHashChange = () => {
+      const currentHash = window.location.hash.substring(1);
+
+      if (currentHash === "mirascope") {
+        scrollToMirascopeSection();
+      } else if (currentHash === "lilypad") {
+        scrollToLilypadSection();
+      } else if (currentHash === "hero") {
+        scrollToHeroSection();
+      }
+    };
+
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
+
+  // Track scroll position and update URL hash accordingly
+  useEffect(() => {
+    // Debounce timeout to avoid excessive hash updates
+    let scrollTimeout: number | null = null;
+
     const handleScroll = () => {
       if (heroSectionRef.current) {
         const heroHeight = heroSectionRef.current.offsetHeight;
@@ -359,10 +104,43 @@ export function LandingPage() {
         // Hide button when scrolled past 40% of the hero section height
         setShowScrollButton(scrollPosition < heroHeight * 0.4);
       }
+
+      // Debounce the hash update to avoid excessive updates during scrolling
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+      }
+
+      scrollTimeout = window.setTimeout(() => {
+        const mirascopePosition = mirascopeSectionRef.current?.getBoundingClientRect().top || 0;
+        const lilypadPosition = lilypadSectionRef.current?.getBoundingClientRect().top || 0;
+
+        // Determine which section is currently most visible
+        if (lilypadPosition < window.innerHeight / 2 && lilypadSectionRef.current) {
+          // We're in the lilypad section
+          if (window.location.hash !== "#lilypad") {
+            window.history.pushState(null, "", "#lilypad");
+          }
+        } else if (mirascopePosition < window.innerHeight / 2 && mirascopeSectionRef.current) {
+          // We're in the mirascope section
+          if (window.location.hash !== "#mirascope") {
+            window.history.pushState(null, "", "#mirascope");
+          }
+        } else {
+          // We're in the hero section or above all sections
+          // Use a dedicated hash for hero section instead of removing hash completely
+          // This prevents TanStack Router from treating it as a new navigation
+          if (window.location.hash !== "#hero") {
+            window.history.pushState(null, "", "#hero");
+          }
+        }
+      }, 16); // 16ms debounce
     };
 
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (scrollTimeout) clearTimeout(scrollTimeout);
+    };
   }, []);
 
   return (
@@ -371,7 +149,7 @@ export function LandingPage() {
       <ProviderContextProvider>
         <div className="flex w-full flex-col">
           {/* Hero section */}
-          <div ref={heroSectionRef}>
+          <div data-gradient-fade={true} ref={heroSectionRef}>
             <HeroBlock
               onScrollDown={scrollToMirascopeSection}
               showScrollButton={showScrollButton}
@@ -379,13 +157,13 @@ export function LandingPage() {
           </div>
 
           {/* Mirascope section */}
-          <div ref={mirascopeSectionRef}>
-            <MirascopeBlock />
+          <div data-gradient-fade={true} ref={mirascopeSectionRef} className="mb-24">
+            <MirascopeBlock onScrollDown={scrollToLilypadSection} />
           </div>
 
           {/* Lilypad section */}
-          <div ref={lilypadSectionRef}>
-            <LilypadBlock />
+          <div data-gradient-fade={true} ref={lilypadSectionRef} className="mt-24">
+            <LilypadBlock onScrollToTop={scrollToHeroSection} />
           </div>
         </div>
       </ProviderContextProvider>

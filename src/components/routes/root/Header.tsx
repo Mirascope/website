@@ -162,7 +162,7 @@ export default function Header() {
                         >
                           <div className="text-lilypad-green text-xl font-medium">Lilypad</div>
                           <p className="text-foreground text-base">
-                            Start building your data flywheel in one line of code.
+                            Spin up your data flywheel with one line of code.
                           </p>
                         </Link>
                       </NavigationMenuLink>
