@@ -6,25 +6,24 @@ import { ProviderCodeWrapper } from "@/src/components/mdx/providers/ProviderCode
 
 // Mirascope feature block component
 export const MirascopeBlock = () => {
-  const codeExample = `from mirascope import llm # [!code highlight]
-  from pydantic import BaseModel
-  
-  class Book(BaseModel):
-      title: str
-      author: str
-  
-  # [!code highlight:6]
-  @llm.call(
-      provider="$PROVIDER", 
-      model="$MODEL", 
-      response_model=Book,
-  )
-  def extract_book(text: str) -> str:
-      return f"Extract the book: {text}"
-  
-  text = "The Name of the Wind by Patrick Rothfuss"
-  book: Book = extract_book(text) # [!code highlight]
-  assert isinstance(book, Book)`;
+  const codeExample = `from mirascope import llm
+from pydantic import BaseModel
+
+class Book(BaseModel):
+    title: str
+    author: str
+
+# [!code highlight:6]
+@llm.call(
+    provider="$PROVIDER", 
+    model="$MODEL", 
+    response_model=Book,
+)
+def extract_book(text: str) -> str:
+    return f"Extract the book: {text}"
+
+text = "The Name of the Wind by Patrick Rothfuss"
+book: Book = extract_book(text) # [!code highlight]`;
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-4 py-16">

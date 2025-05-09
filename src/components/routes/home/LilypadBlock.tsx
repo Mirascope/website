@@ -8,6 +8,10 @@ import { LilypadDemo } from "./LilypadDemo";
 // Lilypad feature block component
 export const LilypadBlock = () => {
   const codeExample = `
+import lilypad
+from mirascope import llm
+lilypad.configure(auto_llm=True)
+
 @lilypad.trace(versioning="automatic") # [!code highlight]
 @llm.call(provider="$PROVIDER", model="$MODEL")
 def answer_question(question: str) -> str:
