@@ -24,6 +24,36 @@ from griffe import (
 
 from scripts.apigen.doclinks import UpdateDocstringsExtension
 
+# Default content subpath for documentation
+MODULE_CONTENT_SUBPATH = "docs/mirascope"
+
+# Common Python built-in types and modules
+PYTHON_BUILTINS = {
+    "str",
+    "int",
+    "float",
+    "bool",
+    "list",
+    "dict",
+    "tuple",
+    "set",
+    "None",
+    "Callable",
+    "Optional",
+    "Union",
+    "Any",
+    "List",
+    "Dict",
+    "Tuple",
+    "Set",
+    "Type",
+    "Generator",
+    "Iterable",
+    "Iterator",
+    "Sequence",
+    "Mapping",
+}
+
 
 def get_loader(
     source_repo_path: Path,
@@ -269,34 +299,7 @@ def get_type_origin(annotation, module: Module) -> dict:
                         type_origin["is_internal"] = False
                         return type_origin
 
-    # Common Python built-in types and modules
-    python_builtins = {
-        "str",
-        "int",
-        "float",
-        "bool",
-        "list",
-        "dict",
-        "tuple",
-        "set",
-        "None",
-        "Callable",
-        "Optional",
-        "Union",
-        "Any",
-        "List",
-        "Dict",
-        "Tuple",
-        "Set",
-        "Type",
-        "Generator",
-        "Iterable",
-        "Iterator",
-        "Sequence",
-        "Mapping",
-    }
-
-    if base_type in python_builtins:
+    if base_type in PYTHON_BUILTINS:
         type_origin["module_path"] = (
             "builtins"
             if base_type
@@ -593,115 +596,90 @@ def get_object_type(obj: Object | Alias) -> str:
     return obj.__class__.__name__
 
 
-def document_placeholder(obj: Object | Alias) -> str:
-    """Generate documentation with enhanced component usage.
+def document_module(module_obj: Module) -> str:
+    """Generate documentation for a Module object.
 
     Args:
-        obj: The Griffe object
+        module_obj: The Module object to document
 
     Returns:
         MDX documentation with enhanced component usage
 
     """
     content: list[str] = []
-
-    # Determine the content subpath for this documentation
-    module = getattr(obj, "module", None)
-    # If the object itself is a module, use that instead
-    if isinstance(obj, Module):
-        module = obj
-
-    module_path = getattr(module, "path", "")
-    content_subpath = "docs/mirascope"  # Default fallback
-
-    # Get the module's package (first part of the path)
-    package_name = module_path.split(".")[0] if module_path else ""
-    if package_name == "mirascope":
-        content_subpath = "docs/mirascope"
+    module_path = getattr(module_obj, "path", "")
 
     # Add object type using a component with consistent typing
-    obj_type = get_object_type(obj)
-    content.append(f'<ApiType type="{obj_type}" />\n')
+    content.append('<ApiType type="Module" />\n')
 
-    # Special case for Module objects: look for classes inside them
-    if isinstance(obj, Module) and hasattr(obj, "members"):
-        # First handle the module's own docstring
-        if hasattr(obj, "docstring") and obj.docstring and obj.docstring.value:
-            content.append("## Description\n")
-            content.append(obj.docstring.value.strip())
-            content.append("")
+    # First handle the module's own docstring
+    if (
+        hasattr(module_obj, "docstring")
+        and module_obj.docstring
+        and module_obj.docstring.value
+    ):
+        content.append("## Description\n")
+        content.append(module_obj.docstring.value.strip())
+        content.append("")
 
-        # Look for classes within the module
-        classes = [
-            (name, member)
-            for name, member in obj.members.items()
-            if isinstance(member, Class)
-        ]
+    # Look for classes within the module
+    classes = [
+        (name, member)
+        for name, member in module_obj.members.items()
+        if isinstance(member, Class)
+    ]
 
-        # If classes are found, document them
-        if classes:
-            if len(classes) == 1:
-                # If only one class and it has the same name as the last part of the module,
-                # assume it's the primary class for this module
-                class_name, class_obj = classes[0]
-                module_name_parts = module_path.split(".")
-                if module_name_parts and class_name.lower() == module_name_parts[-1]:
-                    # Document this as the primary class
-                    content.append(f"## Class {class_name}\n")
+    # If classes are found, document them
+    if classes:
+        if len(classes) == 1:
+            # If only one class and it has the same name as the last part of the module,
+            # assume it's the primary class for this module
+            class_name, class_obj = classes[0]
+            module_name_parts = module_path.split(".")
+            if module_name_parts and class_name.lower() == module_name_parts[-1]:
+                # Document this as the primary class
+                content.append(f"## Class {class_name}\n")
 
-                    # Add class docstring if available
-                    if (
-                        hasattr(class_obj, "docstring")
-                        and class_obj.docstring
-                        and class_obj.docstring.value
-                    ):
-                        content.append(class_obj.docstring.value.strip())
-                        content.append("")
+                # Add class docstring if available
+                if (
+                    hasattr(class_obj, "docstring")
+                    and class_obj.docstring
+                    and class_obj.docstring.value
+                ):
+                    content.append(class_obj.docstring.value.strip())
+                    content.append("")
 
-                    # Add information about base classes
-                    if hasattr(class_obj, "bases") and class_obj.bases:
-                        bases_str = ", ".join([str(base) for base in class_obj.bases])
-                        content.append(f"**Bases:** {bases_str}\n")
+                # Add information about base classes
+                if hasattr(class_obj, "bases") and class_obj.bases:
+                    bases_str = ", ".join([str(base) for base in class_obj.bases])
+                    content.append(f"**Bases:** {bases_str}\n")
 
-                    # Document attributes
-                    if hasattr(class_obj, "members"):
-                        # Find all attributes (non-method members)
-                        attributes = []
-                        for attr_name, attr in class_obj.members.items():
-                            # Check if it's not a function and doesn't start with underscore
-                            # Griffe should represent methods as Function objects
-                            if not isinstance(
-                                attr, Function
-                            ) and not attr_name.startswith("_"):
-                                attributes.append((attr_name, attr))
-
-                        if attributes:
-                            content.append("### Attributes\n")
-                            content.append("| Name | Type | Description |")
-                            content.append("| ---- | ---- | ----------- |")
-
-                            for attr_name, attr in attributes:
-                                attr_type = getattr(attr, "annotation", "")
-                                attr_desc = ""
-                                if hasattr(attr, "docstring") and attr.docstring:
-                                    attr_desc = attr.docstring.value.strip()
-                                content.append(
-                                    f"| {attr_name} | {attr_type} | {attr_desc} |"
-                                )
-                else:
-                    # Document the class but not as prominently
-                    content.append("## Classes\n")
-                    for class_name, class_obj in classes:
-                        content.append(f"### {class_name}\n")
-                        if (
-                            hasattr(class_obj, "docstring")
-                            and class_obj.docstring
-                            and class_obj.docstring.value
+                # Document attributes
+                if hasattr(class_obj, "members"):
+                    # Find all attributes (non-method members)
+                    attributes = []
+                    for attr_name, attr in class_obj.members.items():
+                        # Check if it's not a function and doesn't start with underscore
+                        if not isinstance(attr, Function) and not attr_name.startswith(
+                            "_"
                         ):
-                            content.append(class_obj.docstring.value.strip())
-                        content.append("")
+                            attributes.append((attr_name, attr))
+
+                    if attributes:
+                        content.append("### Attributes\n")
+                        content.append("| Name | Type | Description |")
+                        content.append("| ---- | ---- | ----------- |")
+
+                        for attr_name, attr in attributes:
+                            attr_type = getattr(attr, "annotation", "")
+                            attr_desc = ""
+                            if hasattr(attr, "docstring") and attr.docstring:
+                                attr_desc = attr.docstring.value.strip()
+                            content.append(
+                                f"| {attr_name} | {attr_type} | {attr_desc} |"
+                            )
             else:
-                # Multiple classes in the module, document all of them
+                # Document the class but not as prominently
                 content.append("## Classes\n")
                 for class_name, class_obj in classes:
                     content.append(f"### {class_name}\n")
@@ -712,11 +690,46 @@ def document_placeholder(obj: Object | Alias) -> str:
                     ):
                         content.append(class_obj.docstring.value.strip())
                     content.append("")
+        else:
+            # Multiple classes in the module, document all of them
+            content.append("## Classes\n")
+            for class_name, class_obj in classes:
+                content.append(f"### {class_name}\n")
+                if (
+                    hasattr(class_obj, "docstring")
+                    and class_obj.docstring
+                    and class_obj.docstring.value
+                ):
+                    content.append(class_obj.docstring.value.strip())
+                content.append("")
 
-        # Return the content for the module
-        return "\n".join(content)
+    return "\n".join(content)
 
-    # For non-module objects, continue with the regular documentation
+
+def document_placeholder(obj: Object | Alias) -> str:
+    """Generate documentation with enhanced component usage.
+
+    Args:
+        obj: The Griffe object
+
+    Returns:
+        MDX documentation with enhanced component usage
+
+    """
+    # Special case for Module objects
+    if isinstance(obj, Module):
+        return document_module(obj)
+
+    content: list[str] = []
+
+    # Determine the content subpath for this documentation
+    module = getattr(obj, "module", None)
+    module_path = getattr(module, "path", "")
+    content_subpath = MODULE_CONTENT_SUBPATH
+
+    # Add object type using a component with consistent typing
+    obj_type = get_object_type(obj)
+    content.append(f'<ApiType type="{obj_type}" />\n')
 
     # Add enhanced signature using a component only if we can get a valid signature
     signature = format_signature(obj)
