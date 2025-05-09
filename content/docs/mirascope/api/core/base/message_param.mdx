@@ -24,6 +24,15 @@ Attributes:
     content: The content of the message
     tool_name: The name of the tool, if any
 
+**Bases:** BaseModel
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| role | str |  |
+| content | str | Sequence[TextPart | ImagePart | ImageURLPart | AudioPart | AudioURLPart | CacheControlPart | DocumentPart | ToolCallPart | ToolResultPart] |  |
+
 
 <ApiType type="Class" />
 
@@ -34,6 +43,15 @@ A content part for text.
 Attributes:
     type: Always "text"
     text: The text content
+
+**Bases:** BaseModel
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| type | Literal['text'] |  |
+| text | str |  |
 
 
 <ApiType type="Class" />
@@ -48,6 +66,17 @@ Attributes:
     image: The raw image bytes
     detail: (Optional) The detail to use for the image (supported by OpenAI)
 
+**Bases:** BaseModel
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| type | Literal['image'] |  |
+| media_type | str |  |
+| image | bytes |  |
+| detail | str | None |  |
+
 
 <ApiType type="Class" />
 
@@ -59,5 +88,15 @@ Attributes:
     type: Always "audio"
     media_type: The media type (e.g. audio/wav)
     audio: The raw audio bytes or base64 encoded audio data
+
+**Bases:** BaseModel
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| type | Literal['audio'] |  |
+| media_type | str |  |
+| audio | bytes | str |  |
 
 
