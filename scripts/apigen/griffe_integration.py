@@ -199,44 +199,11 @@ def document_module(module_obj: Module) -> str:
                 # Document this as the primary class
                 content.append(f"## Class {class_name}\n")
 
-                # Add class docstring if available
-                if (
-                    hasattr(class_obj, "docstring")
-                    and class_obj.docstring
-                    and class_obj.docstring.value
-                ):
-                    content.append(class_obj.docstring.value.strip())
-                    content.append("")
-
-                # Add information about base classes
-                if hasattr(class_obj, "bases") and class_obj.bases:
-                    bases_str = ", ".join([str(base) for base in class_obj.bases])
-                    content.append(f"**Bases:** {bases_str}\n")
-
-                # Document attributes
-                if hasattr(class_obj, "members"):
-                    # Find all attributes (non-method members)
-                    attributes = []
-                    for attr_name, attr in class_obj.members.items():
-                        # Check if it's not a function and doesn't start with underscore
-                        if not isinstance(attr, Function) and not attr_name.startswith(
-                            "_"
-                        ):
-                            attributes.append((attr_name, attr))
-
-                    if attributes:
-                        content.append("### Attributes\n")
-                        content.append("| Name | Type | Description |")
-                        content.append("| ---- | ---- | ----------- |")
-
-                        for attr_name, attr in attributes:
-                            attr_type = getattr(attr, "annotation", "")
-                            attr_desc = ""
-                            if hasattr(attr, "docstring") and attr.docstring:
-                                attr_desc = attr.docstring.value.strip()
-                            content.append(
-                                f"| {attr_name} | {attr_type} | {attr_desc} |"
-                            )
+                # Use document_class to generate class documentation
+                class_docs = document_class(class_obj)
+                # Split, remove the ApiType line, and join back
+                class_docs_lines = class_docs.split("\n")
+                content.append("\n".join(class_docs_lines))
             else:
                 # Document the class but not as prominently
                 content.append("## Classes\n")
