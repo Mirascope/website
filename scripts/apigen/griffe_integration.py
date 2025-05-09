@@ -20,11 +20,11 @@ from griffe import (
 )
 
 from scripts.apigen.doclinks import UpdateDocstringsExtension
+from scripts.apigen.return_extractor import extract_return_info
 from scripts.apigen.type_utils import (
     ParameterInfo,
     ReturnInfo,
     extract_params_if_available,
-    extract_return_info,
     parameters_to_dict_list,
 )
 
