@@ -3,6 +3,7 @@ import { CheckCircle2, XCircle } from "lucide-react";
 import { CodeBlock } from "@/src/components/mdx/elements/CodeBlock";
 import { useProvider } from "@/src/components/mdx/providers";
 import { replaceProviderVariables } from "@/src/config/providers";
+import { LilypadLogo } from "@/src/components/core/branding";
 
 // Types
 interface MessageCardProps {
@@ -81,11 +82,8 @@ function Header({ functionName, version }: HeaderProps) {
           v{version}
         </span>
       </div>
-      <div className="flex flex-row items-center gap-1.5">
-        <img src="/assets/branding/lilypad-logo.svg" alt="Lilypad Logo" className="h-4 w-auto" />
-        <span className="text-s font-handwriting text-lilypad-green mb-0 font-semibold">
-          Lilypad
-        </span>
+      <div className="flex flex-row items-center">
+        <LilypadLogo size="micro" withText={true} showBeta={true} />
       </div>
     </div>
   );

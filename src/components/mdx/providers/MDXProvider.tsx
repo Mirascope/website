@@ -20,7 +20,7 @@ import { ApiType, ApiSignature, ParametersTable, ReturnType } from "@/src/compon
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/src/components/ui/tabs";
 import { Button } from "@/src/components/ui/button";
 import { ButtonLink } from "@/src/components/ui/button-link";
-import { Logo } from "@/src/components/core/branding";
+import { Logo, MirascopeLogo, LilypadLogo } from "@/src/components/core/branding";
 import { Underline } from "./Underline";
 import { ProviderCodeWrapper } from "./ProviderCodeWrapper";
 import { ResponsiveImage } from "@/src/components/mdx/providers/ResponsiveImage";
@@ -110,6 +110,8 @@ export const components = {
   TabsTrigger,
   TabsContent,
   Logo,
+  MirascopeLogo,
+  LilypadLogo,
 
   // Dev components
   ...devComponents,
