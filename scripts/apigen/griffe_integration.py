@@ -172,7 +172,7 @@ def process_directive(directive: str, module: Module) -> str:
     elif isinstance(current_obj, Alias):
         return document_alias(current_obj)
     else:
-        return document_fallback(current_obj)
+        raise ValueError("Unsupported object type:", current_obj)
 
 
 def get_type_origin(annotation, module: Module) -> dict:
@@ -496,30 +496,6 @@ def format_signature(obj: Object | Alias) -> str | None:
         param_strs.append(param_str)
 
     return f"{name}({', '.join(param_strs)})"
-
-
-def get_object_type(obj: Object | Alias) -> str:
-    """Determine the actual object type in a reliable way.
-
-    Args:
-        obj: The Griffe object
-
-    Returns:
-        A string representing the object type
-
-    """
-    # Check if we're dealing with a specific type
-    if isinstance(obj, Function):
-        return "Function"
-    elif isinstance(obj, Class):
-        return "Class"
-    elif isinstance(obj, Module):
-        return "Module"
-    elif isinstance(obj, Alias):
-        return "Alias"
-
-    # Fallback to class name for other types (Method, etc.)
-    return obj.__class__.__name__
 
 
 def document_module(module_obj: Module) -> str:
@@ -864,49 +840,5 @@ def document_alias(alias_obj: Alias) -> str:
     if hasattr(alias_obj, "target") and alias_obj.target:
         target_path = getattr(alias_obj.target, "path", str(alias_obj.target))
         content.append(f"\n**Alias to:** `{target_path}`")
-
-    return "\n".join(content)
-
-
-def document_fallback(obj: Object | Alias) -> str:
-    """Generate documentation for objects that don't match main types.
-
-    Args:
-        obj: The Griffe object to document
-
-    Returns:
-        MDX documentation with basic information
-
-    """
-    content: list[str] = []
-
-    # Determine the content subpath for this documentation
-    module = getattr(obj, "module", None)
-    module_path = getattr(module, "path", "")
-    content_subpath = MODULE_CONTENT_SUBPATH
-
-    # Add object type using a component with consistent typing
-    obj_type = get_object_type(obj)
-    content.append(f'<ApiType type="{obj_type}" />\n')
-
-    # Add enhanced signature using a component only if we can get a valid signature
-    signature = format_signature(obj)
-    if signature:
-        content.append(f"<ApiSignature>\n{signature}\n</ApiSignature>\n")
-
-    # Add docstring
-    content.extend(format_docstring_section(obj))
-
-    # Extract parameters and add ParametersTable if available
-    params = extract_params_if_available(obj)
-    if params:
-        content.extend(format_parameters_table(params, content_subpath, module_path))
-
-    # Extract return type and add ReturnType if available
-    return_info = extract_return_info(obj)
-    if "type" in return_info:
-        content.extend(
-            format_return_type_component(return_info, content_subpath, module_path)
-        )
 
     return "\n".join(content)
