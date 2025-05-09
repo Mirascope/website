@@ -4,6 +4,7 @@ import { CodeBlock } from "@/src/components/mdx/elements/CodeBlock";
 import { useProvider } from "@/src/components/mdx/providers";
 import { replaceProviderVariables } from "@/src/config/providers";
 
+// Types
 interface MessageCardProps {
   type: "user" | "assistant";
   content: string;
@@ -22,6 +23,33 @@ interface Trace {
   tokens: number;
 }
 
+interface HeaderProps {
+  functionName: string;
+  version: number;
+}
+
+interface CodePaneProps {
+  code: string;
+}
+
+interface TraceRowProps {
+  trace: Trace;
+  isSelected: boolean;
+  onSelect: (id: string) => void;
+}
+
+interface TracesTableProps {
+  traces: Trace[];
+  selectedTraceId: string;
+  onSelectTrace: (id: string) => void;
+}
+
+interface MessagesPaneProps {
+  input: string;
+  output: string;
+}
+
+// Component: MessageCard
 function MessageCard({ type, content }: MessageCardProps) {
   const badgeClass =
     type === "user" ? "bg-muted text-muted-foreground" : "bg-primary/10 text-primary";
@@ -42,6 +70,126 @@ function MessageCard({ type, content }: MessageCardProps) {
   );
 }
 
+// Component: Header
+function Header({ functionName, version }: HeaderProps) {
+  return (
+    <div className="border-border/60 bg-muted flex items-center justify-between border-b px-4 py-2">
+      <div className="flex items-center gap-2">
+        <span className="text-sm font-semibold">{functionName}</span>
+        <span className="bg-primary text-primary-foreground rounded-full px-2 py-0.5 text-xs">
+          v{version}
+        </span>
+      </div>
+      <div className="flex flex-row items-center gap-1.5">
+        <img src="/assets/branding/lilypad-logo.svg" alt="Lilypad Logo" className="h-4 w-auto" />
+        <span className="text-s font-handwriting text-lilypad-green mb-0 font-semibold">
+          Lilypad
+        </span>
+      </div>
+    </div>
+  );
+}
+
+// Component: CodePane
+function CodePane({ code }: CodePaneProps) {
+  return (
+    <div className="border-border/60 border-b">
+      <div className="max-h-64 overflow-y-auto">
+        <CodeBlock code={code} language="python" className="rounded-none" />
+      </div>
+    </div>
+  );
+}
+
+// Component: TraceRow
+function TraceRow({ trace, isSelected, onSelect }: TraceRowProps) {
+  return (
+    <div
+      className={`flex w-full cursor-pointer text-xs ${
+        isSelected ? "hover:bg-accent/50 bg-accent/30" : "hover:bg-muted/30"
+      }`}
+      onClick={() => onSelect(trace.id)}
+    >
+      <div className="border-border/20 w-[10%] flex-shrink-0 border-t px-4 py-2">
+        {trace.version}
+      </div>
+      <div className="border-border/20 w-[10%] flex-shrink-0 border-t px-4 py-2">
+        {trace.label === "pass" ? (
+          <CheckCircle2 className="h-4 w-4 text-green-500" />
+        ) : (
+          <XCircle className="h-4 w-4 text-red-500" />
+        )}
+      </div>
+      <div className="border-border/20 text-muted-foreground w-[25%] flex-shrink-0 border-t px-4 py-2">
+        {trace.timestamp}
+      </div>
+      <div className="border-border/20 text-muted-foreground w-[15%] flex-shrink-0 border-t px-4 py-2">
+        ${trace.cost.toFixed(4)}
+      </div>
+      <div className="border-border/20 text-muted-foreground w-[15%] flex-shrink-0 border-t px-4 py-2">
+        {trace.tokens}
+      </div>
+    </div>
+  );
+}
+
+// Component: TracesTable
+function TracesTable({ traces, selectedTraceId, onSelectTrace }: TracesTableProps) {
+  return (
+    <div className="border-border/60 border-r md:w-1/2">
+      <div className="border-border/60 bg-muted border-b px-4 py-2">
+        <h3 className="text-sm font-semibold">Traces</h3>
+      </div>
+      <div className="max-h-64 overflow-y-auto">
+        {/* Headers - Flexbox Row */}
+        <div className="bg-muted/50 sticky top-0 flex w-full text-xs">
+          <div className="text-muted-foreground w-[10%] flex-shrink-0 px-4 py-2 font-medium">
+            Ver
+          </div>
+          <div className="text-muted-foreground w-[10%] flex-shrink-0 px-4 py-2 font-medium">
+            Label
+          </div>
+          <div className="text-muted-foreground w-[25%] flex-shrink-0 px-4 py-2 font-medium">
+            Time
+          </div>
+          <div className="text-muted-foreground w-[15%] flex-shrink-0 px-4 py-2 font-medium">
+            Cost
+          </div>
+          <div className="text-muted-foreground w-[15%] flex-shrink-0 px-4 py-2 font-medium">
+            Tokens
+          </div>
+        </div>
+
+        {/* Rows */}
+        {traces.map((trace) => (
+          <TraceRow
+            key={trace.id}
+            trace={trace}
+            isSelected={selectedTraceId === trace.id}
+            onSelect={onSelectTrace}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Component: MessagesPane
+function MessagesPane({ input, output }: MessagesPaneProps) {
+  return (
+    <div className="flex flex-col md:w-1/2">
+      <div className="border-border/60 bg-muted border-b px-4 py-2">
+        <h3 className="text-sm font-semibold">Messages</h3>
+      </div>
+      <div className="flex max-h-64 flex-col gap-3 overflow-y-auto p-3">
+        <MessageCard type="user" content={input} />
+        <MessageCard type="assistant" content={output} />
+      </div>
+    </div>
+  );
+}
+
+// Main Component
 export function LilypadDemo() {
   // Sample trace data
   const traces: Trace[] = [
@@ -126,99 +274,16 @@ answer_question("What is the capital of France?")`;
 
   return (
     <div className="border-border/60 bg-background w-full max-w-3xl overflow-hidden rounded-lg border backdrop-blur-sm">
-      {/* Header */}
-      <div className="border-border/60 bg-card flex items-center justify-between border-b px-4 py-2">
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-medium">answer_question</span>
-          <span className="bg-primary text-primary-foreground rounded-full px-2 py-0.5 text-xs">
-            v{selectedTrace.version}
-          </span>
-        </div>
-        <div className="flex flex-row items-center gap-1.5">
-          <img src="/assets/branding/lilypad-logo.svg" alt="Lilypad Logo" className="h-4 w-auto" />
-          <span className="text-s font-handwriting text-lilypad-green mb-0">Lilypad</span>
-        </div>
-      </div>
+      <Header functionName="answer_question" version={selectedTrace.version} />
+      <CodePane code={getCodeExample(selectedTrace.version)} />
 
-      {/* Code pane */}
-      <div className="border-border/60 border-b">
-        <div className="max-h-64 overflow-y-auto">
-          <CodeBlock
-            code={getCodeExample(selectedTrace.version)}
-            language="python"
-            className="rounded-none"
-          />
-        </div>
-      </div>
-
-      {/* Bottom panes - traces and messages */}
       <div className="flex flex-col md:flex-row">
-        {/* Traces table */}
-        <div className="border-border/60 border-r md:w-1/2">
-          <div className="border-border/60 border-b px-4 py-2">
-            <h3 className="text-sm font-medium">Traces</h3>
-          </div>
-          <div className="max-h-64 overflow-y-auto">
-            {/* Headers - Flexbox Row */}
-            <div className="bg-muted/50 sticky top-0 flex w-full text-xs">
-              <div className="text-muted-foreground w-[10%] flex-shrink-0 px-4 py-2 font-medium">
-                Ver
-              </div>
-              <div className="text-muted-foreground w-[10%] flex-shrink-0 px-4 py-2 font-medium">
-                Label
-              </div>
-              <div className="text-muted-foreground w-[25%] flex-shrink-0 px-4 py-2 font-medium">
-                Time
-              </div>
-              <div className="text-muted-foreground w-[15%] flex-shrink-0 px-4 py-2 font-medium">
-                Cost
-              </div>
-              <div className="text-muted-foreground w-[15%] flex-shrink-0 px-4 py-2 font-medium">
-                Tokens
-              </div>
-            </div>
-
-            {/* Rows */}
-            {traces.map((trace) => (
-              <div
-                key={trace.id}
-                className={`flex w-full cursor-pointer text-xs ${selectedTraceId === trace.id ? "hover:bg-accent/50 bg-accent/30" : "hover:bg-muted/30"}`}
-                onClick={() => setSelectedTraceId(trace.id)}
-              >
-                <div className="border-border/20 w-[10%] flex-shrink-0 border-t px-4 py-2">
-                  {trace.version}
-                </div>
-                <div className="border-border/20 w-[10%] flex-shrink-0 border-t px-4 py-2">
-                  {trace.label === "pass" ? (
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                  ) : (
-                    <XCircle className="h-4 w-4 text-red-500" />
-                  )}
-                </div>
-                <div className="border-border/20 text-muted-foreground w-[25%] flex-shrink-0 border-t px-4 py-2">
-                  {trace.timestamp}
-                </div>
-                <div className="border-border/20 text-muted-foreground w-[15%] flex-shrink-0 border-t px-4 py-2">
-                  ${trace.cost.toFixed(4)}
-                </div>
-                <div className="border-border/20 text-muted-foreground w-[15%] flex-shrink-0 border-t px-4 py-2">
-                  {trace.tokens}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Messages pane */}
-        <div className="flex flex-col md:w-1/2">
-          <div className="border-border/60 border-b px-4 py-2">
-            <h3 className="text-sm font-medium">Messages</h3>
-          </div>
-          <div className="flex max-h-64 flex-col gap-3 overflow-y-auto p-3">
-            <MessageCard type="user" content={selectedTrace.input} />
-            <MessageCard type="assistant" content={selectedTrace.output} />
-          </div>
-        </div>
+        <TracesTable
+          traces={traces}
+          selectedTraceId={selectedTraceId}
+          onSelectTrace={setSelectedTraceId}
+        />
+        <MessagesPane input={selectedTrace.input} output={selectedTrace.output} />
       </div>
     </div>
   );
