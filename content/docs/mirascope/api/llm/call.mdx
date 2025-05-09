@@ -8,10 +8,6 @@ description: API documentation for mirascope.llm.call
 
 <ApiType type="Alias" />
 
-<ApiSignature>
-call(provider: Provider | LocalProvider, model: str, stream: bool, tools: list[BaseTool | Callable], response_model: BaseModel | BaseType, output_parser: Callable[[CallResponse | ResponseModelT], Any], json_mode: bool, client: object, call_params: CommonCallParams)
-</ApiSignature>
-
 ## Description
 
 A decorator for making provider-agnostic LLM API calls with a typed function.
@@ -135,6 +131,7 @@ Returns:
 
 <ReturnType
   type="Callable"
+  moduleContext="collections.abc"
   isBuiltin={false}
   contentSubpath="docs/mirascope"
   currentModule="mirascope.llm._call"

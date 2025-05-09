@@ -8,10 +8,6 @@ description: API documentation for mirascope.core.google.call
 
 <ApiType type="Alias" />
 
-<ApiSignature>
-call(model: str, stream: bool, tools: list[BaseTool | Callable], response_model: BaseModel | BaseType, output_parser: Callable[[GoogleCallResponse | ResponseModelT], Any], json_modem: bool, client: object, call_params: GoogleCallParams)
-</ApiSignature>
-
 ## Description
 
 A decorator for calling the Google API with a typed function.
@@ -125,7 +121,8 @@ Returns:
 
 <ReturnType
   type="Callable"
-  isBuiltin={false}
+  moduleContext="typing"
+  isBuiltin={true}
   contentSubpath="docs/mirascope"
   currentModule="mirascope.core.google._call"
   description="The decorator for turning a typed function into a Google API\ncall."
