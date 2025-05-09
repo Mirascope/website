@@ -9,6 +9,9 @@ package-lock.json
 # Cursor
 .cursorrules
 
+# VS Code
+.vscode
+
 # Python
 __pycache__/
 *.py[cod]
