@@ -61,7 +61,7 @@ function MessageCard({ type, content }: MessageCardProps) {
         <span
           className={`${badgeClass} mb-1.5 self-start rounded px-1.5 py-0.5 text-xs font-medium`}
         >
-          {type === "user" ? "User" : "Assistant"}
+          {type === "user" ? "user" : "assistant"}
         </span>
         <pre className="font-mono text-xs break-words whitespace-pre-wrap">
           <code>{content}</code>
