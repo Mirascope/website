@@ -338,27 +338,30 @@ class DocumentationGenerator:
         if not self.organized_files:
             raise RuntimeError("Files must be organized before generating metadata")
 
-        # Generate the metadata
-        api_section = generate_meta_from_organized_files(self.organized_files)
-        _content = generate_meta_file_content(api_section, "apiMeta")
+        # Generate the metadata with weight 0.25 (API reference sections have lower weight)
+        api_section = generate_meta_from_organized_files(
+            self.organized_files,
+            weight=0.25,  # API reference has lower weight in search results
+        )
+        content = generate_meta_file_content(api_section, "apiMeta")
 
         # Write to file
-        _meta_path = self.project_root / self.config.target_path / "_meta.ts"
-        print("Not writing meta content until migration to new format")
-        if 1:
-            return
+        meta_path = self.project_root / self.config.target_path / "_meta.ts"
+        with open(meta_path, "w") as f:
+            f.write(content)
+        print(f"Generated API meta file at {meta_path}")
 
         # Run prettier to format the file
-        # try:
-        #     subprocess.run(
-        #         ["bun", "prettier", "--write", str(meta_path)],
-        #         check=True,
-        #         capture_output=True,
-        #     )
-        #     print(f"Generated and formatted API meta file at {meta_path}")
-        # except subprocess.CalledProcessError as e:
-        #     print(f"Warning: Prettier formatting failed: {e}")
-        #     print(f"Generated unformatted API meta file at {meta_path}")
+        try:
+            subprocess.run(
+                ["bun", "prettier", "--write", str(meta_path)],
+                check=True,
+                capture_output=True,
+            )
+            print(f"Generated and formatted API meta file at {meta_path}")
+        except subprocess.CalledProcessError as e:
+            print(f"Warning: Prettier formatting failed: {e}")
+            print(f"Generated unformatted API meta file at {meta_path}")
 
     @staticmethod
     def _extract_directives(content: str) -> list[str]:
