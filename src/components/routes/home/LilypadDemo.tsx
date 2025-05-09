@@ -96,7 +96,7 @@ function CodePane({ code }: CodePaneProps) {
   return (
     <div className="border-border/60 border-b">
       <div className="max-h-64 overflow-y-auto">
-        <CodeBlock code={code} language="python" className="rounded-none" />
+        <CodeBlock code={code} language="python" className="rounded-none border-none" />
       </div>
     </div>
   );
@@ -111,10 +111,10 @@ function TraceRow({ trace, isSelected, onSelect }: TraceRowProps) {
       }`}
       onClick={() => onSelect(trace.id)}
     >
-      <div className="border-border/20 w-[10%] flex-shrink-0 border-t px-4 py-2">
+      <div className="border-border/20 w-[15%] flex-shrink-0 border-t px-4 py-2">
         {trace.version}
       </div>
-      <div className="border-border/20 w-[10%] flex-shrink-0 border-t px-4 py-2">
+      <div className="border-border/20 w-[15%] flex-shrink-0 border-t px-4 py-2">
         {trace.label === "pass" ? (
           <CheckCircle2 className="h-4 w-4 text-green-500" />
         ) : (
@@ -124,7 +124,7 @@ function TraceRow({ trace, isSelected, onSelect }: TraceRowProps) {
       <div className="border-border/20 text-muted-foreground w-[25%] flex-shrink-0 border-t px-4 py-2">
         {trace.timestamp}
       </div>
-      <div className="border-border/20 text-muted-foreground w-[15%] flex-shrink-0 border-t px-4 py-2">
+      <div className="border-border/20 text-muted-foreground w-[20%] flex-shrink-0 border-t px-4 py-2">
         ${trace.cost.toFixed(4)}
       </div>
       <div className="border-border/20 text-muted-foreground w-[15%] flex-shrink-0 border-t px-4 py-2">
@@ -144,16 +144,16 @@ function TracesTable({ traces, selectedTraceId, onSelectTrace }: TracesTableProp
       <div className="max-h-64 overflow-y-auto">
         {/* Headers - Flexbox Row */}
         <div className="bg-muted/50 sticky top-0 flex w-full text-xs">
-          <div className="text-muted-foreground w-[10%] flex-shrink-0 px-4 py-2 font-medium">
-            Ver
+          <div className="text-muted-foreground w-[15%] flex-shrink-0 px-4 py-2 font-medium">
+            Version
           </div>
-          <div className="text-muted-foreground w-[10%] flex-shrink-0 px-4 py-2 font-medium">
+          <div className="text-muted-foreground w-[15%] flex-shrink-0 px-4 py-2 font-medium">
             Label
           </div>
           <div className="text-muted-foreground w-[25%] flex-shrink-0 px-4 py-2 font-medium">
             Time
           </div>
-          <div className="text-muted-foreground w-[15%] flex-shrink-0 px-4 py-2 font-medium">
+          <div className="text-muted-foreground w-[20%] flex-shrink-0 px-4 py-2 font-medium">
             Cost
           </div>
           <div className="text-muted-foreground w-[15%] flex-shrink-0 px-4 py-2 font-medium">
@@ -283,7 +283,7 @@ answer_question("${trace.question}")`;
       <Header functionName="answer_question" version={selectedTrace.version} />
       <CodePane code={getCodeExample(selectedTrace)} />
 
-      <div className="flex flex-col md:flex-row">
+      <div className="-mt-2 flex flex-col md:flex-row">
         <TracesTable
           traces={traces}
           selectedTraceId={selectedTraceId}
