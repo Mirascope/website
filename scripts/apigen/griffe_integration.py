@@ -6,9 +6,7 @@ accurate documentation with specialized handlers for different object types.
 """
 
 import re
-from collections.abc import Callable
 from pathlib import Path
-from typing import cast
 
 from griffe import (
     Alias,
@@ -166,21 +164,17 @@ def process_directive(directive: str, module: Module) -> str:
                 f"Could not find {'.'.join(path_parts[: i + 1])} in the module."
             )
 
-    # Generate documentation based on object type
-    object_type = current_obj.__class__.__name__
-
-    # Type check and handlers
-    handlers: dict[str, Callable[[Object | Alias], str]] = {
-        "Function": cast(Callable[[Object | Alias], str], document_function),
-        "Method": cast(Callable[[Object | Alias], str], document_function),  # Treat methods like functions
-        "Class": cast(Callable[[Object | Alias], str], document_class),
-        "Module": cast(Callable[[Object | Alias], str], document_module),
-        "Alias": cast(Callable[[Object | Alias], str], document_alias),
-    }
-
-    # Use the appropriate handler or a fallback if type not recognized
-    handler = handlers.get(object_type, document_placeholder)
-    return handler(current_obj)
+    # Dispatch to appropriate handler based on object type
+    if isinstance(current_obj, Module):
+        return document_module(current_obj)
+    elif isinstance(current_obj, Function):
+        return document_function(current_obj)
+    elif isinstance(current_obj, Class):
+        return document_class(current_obj)
+    elif isinstance(current_obj, Alias):
+        return document_alias(current_obj)
+    else:
+        return document_fallback(current_obj)
 
 
 def format_signature_from_parameters(name: str, parameters: Parameters) -> str:
@@ -943,27 +937,16 @@ def document_alias(alias_obj: Alias) -> str:
     return "\n".join(content)
 
 
-def document_placeholder(obj: Object | Alias) -> str:
-    """Generate documentation with enhanced component usage.
+def document_fallback(obj: Object | Alias) -> str:
+    """Generate documentation for objects that don't match main types.
 
     Args:
-        obj: The Griffe object
+        obj: The Griffe object to document
 
     Returns:
-        MDX documentation with enhanced component usage
+        MDX documentation with basic information
 
     """
-    # Delegate to specialized document functions based on object type
-    if isinstance(obj, Module):
-        return document_module(obj)
-    elif isinstance(obj, Function):
-        return document_function(obj)
-    elif isinstance(obj, Class):
-        return document_class(obj)
-    elif isinstance(obj, Alias):
-        return document_alias(obj)
-
-    # Fallback to a generic approach for any other types
     content: list[str] = []
 
     # Determine the content subpath for this documentation
