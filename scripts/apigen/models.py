@@ -7,7 +7,7 @@ to create these models from Griffe objects.
 
 from dataclasses import dataclass
 
-from griffe import Function
+from griffe import Alias, Function
 
 from scripts.apigen.return_extractor import extract_return_info
 from scripts.apigen.type_utils import (
@@ -29,6 +29,22 @@ class ProcessedFunction:
     docstring: str | None
     parameters: list[ParameterInfo]
     return_info: ReturnInfo | None
+    module_path: str
+
+
+@dataclass
+class ProcessedAlias:
+    """Represents a fully processed alias ready for rendering.
+
+    This dataclass contains all the information needed to render
+    documentation for an alias, extracted from Griffe objects.
+    """
+
+    name: str
+    docstring: str | None
+    parameters: list[ParameterInfo]
+    return_info: ReturnInfo | None
+    target_path: str
     module_path: str
 
 
@@ -70,5 +86,53 @@ def process_function(func_obj: Function) -> ProcessedFunction:
         docstring=docstring,
         parameters=params or [],
         return_info=return_info,
+        module_path=module_path,
+    )
+
+
+def process_alias(alias_obj: Alias) -> ProcessedAlias:
+    """Process an Alias object into a ProcessedAlias model.
+
+    Args:
+        alias_obj: The Griffe Alias object to process
+
+    Returns:
+        A ProcessedAlias object containing all necessary information
+
+    """
+    # Get basic alias information
+    name = getattr(alias_obj, "name", "")
+
+    # Extract module path
+    module = getattr(alias_obj, "module", None)
+    module_path = getattr(module, "path", "")
+
+    # Extract docstring
+    docstring = None
+    if (
+        hasattr(alias_obj, "docstring")
+        and alias_obj.docstring
+        and alias_obj.docstring.value
+    ):
+        docstring = alias_obj.docstring.value.strip()
+
+    # Extract parameters
+    params = extract_params_if_available(alias_obj)
+
+    # Extract return type
+    return_info = extract_return_info(alias_obj)
+
+    # Extract target path
+    target_path = ""
+    if hasattr(alias_obj, "target") and alias_obj.target:
+        target_path = getattr(alias_obj.target, "path", str(alias_obj.target))
+
+    # Create and return the processed alias
+    return ProcessedAlias(
+        name=name,
+        docstring=docstring,
+        parameters=params or [],
+        return_info=return_info,
+        target_path=target_path,
         module_path=module_path,
     )

@@ -21,15 +21,10 @@ from griffe import (
 
 from scripts.apigen.doclinks import UpdateDocstringsExtension
 from scripts.apigen.mdx_renderer import (
-    format_parameters_table,
-    format_return_type_component,
+    render_alias,
     render_function,
 )
-from scripts.apigen.models import process_function
-from scripts.apigen.return_extractor import extract_return_info
-from scripts.apigen.type_utils import (
-    extract_params_if_available,
-)
+from scripts.apigen.models import process_alias, process_function
 
 # Default content subpath for documentation
 MODULE_CONTENT_SUBPATH = "docs/mirascope"
@@ -329,34 +324,8 @@ def document_alias(alias_obj: Alias) -> str:
         MDX documentation with enhanced component usage
 
     """
-    content: list[str] = []
+    # Process the alias into a structured model
+    processed_alias = process_alias(alias_obj)
 
-    # Determine the content subpath for this documentation
-    module = getattr(alias_obj, "module", None)
-    module_path = getattr(module, "path", "")
-    content_subpath = MODULE_CONTENT_SUBPATH
-
-    # Add object type using a component with consistent typing
-    content.append('<ApiType type="Alias" />\n')
-
-    # Add docstring
-    content.extend(format_docstring_section(alias_obj))
-
-    # Extract parameters and add ParametersTable if available
-    params = extract_params_if_available(alias_obj)
-    if params:
-        content.extend(format_parameters_table(params, content_subpath, module_path))
-
-    # Extract return type and add ReturnType if available
-    return_info = extract_return_info(alias_obj)
-    if return_info:
-        content.extend(
-            format_return_type_component(return_info, content_subpath, module_path)
-        )
-
-    # Add what this is an alias to, if available
-    if hasattr(alias_obj, "target") and alias_obj.target:
-        target_path = getattr(alias_obj.target, "path", str(alias_obj.target))
-        content.append(f"\n**Alias to:** `{target_path}`")
-
-    return "\n".join(content)
+    # Render the processed alias to MDX
+    return render_alias(processed_alias)
