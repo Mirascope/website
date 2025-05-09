@@ -12,7 +12,7 @@ export const LilypadBlock = () => {
       className="flex min-h-screen flex-col items-center justify-center px-4 py-16"
     >
       <ResponsiveTextBlock
-        lines={["Start building your data", "flywheel with one line of code"]}
+        lines={["Spin up your data flywheel", "with one line of code"]}
         element="h2"
         fontSize="clamp(1.5rem, 5vw, 3rem)"
         className="mb-6 text-center text-white"
