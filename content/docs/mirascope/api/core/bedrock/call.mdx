@@ -8,10 +8,6 @@ description: API documentation for mirascope.core.bedrock.call
 
 <ApiType type="Alias" />
 
-<ApiSignature>
-call(model: str, stream: bool, tools: list[BaseTool | Callable], response_model: BaseModel | BaseType, output_parser: Callable[[BedrockCallResponse | ResponseModelT], Any], json_mode: bool, client: object, call_params: BedrockCallParams)
-</ApiSignature>
-
 ## Description
 
 A decorator for calling the Bedrock API with a typed function.
@@ -126,7 +122,8 @@ Returns:
 
 <ReturnType
   type="Callable"
-  isBuiltin={false}
+  moduleContext="typing"
+  isBuiltin={true}
   contentSubpath="docs/mirascope"
   currentModule="mirascope.core.bedrock._call"
   description="The decorator for turning a typed function into an Bedrock API\ncall."

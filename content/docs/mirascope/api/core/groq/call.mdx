@@ -8,10 +8,6 @@ description: API documentation for mirascope.core.groq.call
 
 <ApiType type="Alias" />
 
-<ApiSignature>
-call(model: str, stream: bool, tools: list[BaseTool | Callable], response_model: BaseModel | BaseType, output_parser: Callable[[CohereCallResponse | ResponseModelT], Any], json_mode: bool, client: object, call_params: GroqCallParams)
-</ApiSignature>
-
 ## Description
 
 A decorator for calling the Groq API with a typed function.
@@ -125,7 +121,8 @@ Returns:
 
 <ReturnType
   type="Callable"
-  isBuiltin={false}
+  moduleContext="typing"
+  isBuiltin={true}
   contentSubpath="docs/mirascope"
   currentModule="mirascope.core.groq._call"
   description="The decorator for turning a typed function into a Groq API\ncall."
