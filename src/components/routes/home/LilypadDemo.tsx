@@ -4,6 +4,11 @@ import { CodeBlock } from "@/src/components/mdx/elements/CodeBlock";
 import { useProvider } from "@/src/components/mdx/providers";
 import { replaceProviderVariables } from "@/src/config/providers";
 
+interface MessageCardProps {
+  type: "user" | "assistant";
+  content: string;
+}
+
 type TraceLabel = "pass" | "fail";
 
 interface Trace {
@@ -15,6 +20,26 @@ interface Trace {
   output: string;
   cost: number;
   tokens: number;
+}
+
+function MessageCard({ type, content }: MessageCardProps) {
+  const badgeClass =
+    type === "user" ? "bg-muted text-muted-foreground" : "bg-primary/10 text-primary";
+
+  return (
+    <div className="bg-muted/20 rounded-lg p-3">
+      <div className="flex flex-col">
+        <span
+          className={`${badgeClass} mb-1.5 self-start rounded px-1.5 py-0.5 text-xs font-medium`}
+        >
+          {type === "user" ? "User" : "Assistant"}
+        </span>
+        <pre className="font-mono text-xs break-words whitespace-pre-wrap">
+          <code>{content}</code>
+        </pre>
+      </div>
+    </div>
+  );
 }
 
 export function LilypadDemo() {
@@ -55,8 +80,8 @@ export function LilypadDemo() {
       version: 1,
       label: "fail",
       timestamp: "1 hr ago",
-      input: "Answer this question: What is the capital of Portugal?",
-      output: "The capital of Portugal is Lisbon.",
+      input: "Answer this question: What is the capital of China?",
+      output: "The capital of China is Beijing.",
       cost: 0.0019,
       tokens: 38,
     },
@@ -92,7 +117,7 @@ lilypad.configure(auto_llm=True)
 @lilypad.trace(versioning="automatic") # [!code highlight]
 @llm.call(provider="$PROVIDER", model="$MODEL")
 def answer_question(question: str) -> str:
-    ${promptStyle}
+    ${promptStyle} # [!code highlight]
 
 answer_question("What is the capital of France?")`;
     const { provider } = useProvider();
@@ -128,8 +153,8 @@ answer_question("What is the capital of France?")`;
 
       {/* Bottom panes - traces and messages */}
       <div className="flex flex-col md:flex-row">
-        {/* Traces table - takes 60% width on larger screens */}
-        <div className="border-border/60 border-r md:w-3/5">
+        {/* Traces table */}
+        <div className="border-border/60 border-r md:w-1/2">
           <div className="border-border/60 border-b px-4 py-2">
             <h3 className="text-sm font-medium">Traces</h3>
           </div>
@@ -184,35 +209,14 @@ answer_question("What is the capital of France?")`;
           </div>
         </div>
 
-        {/* Messages pane - takes 40% width on larger screens */}
-        <div className="flex flex-col md:w-2/5">
+        {/* Messages pane */}
+        <div className="flex flex-col md:w-1/2">
           <div className="border-border/60 border-b px-4 py-2">
             <h3 className="text-sm font-medium">Messages</h3>
           </div>
           <div className="flex max-h-64 flex-col gap-3 overflow-y-auto p-3">
-            {/* User message */}
-            <div className="bg-muted/20 rounded-lg p-3">
-              <div className="flex items-start">
-                <span className="bg-muted text-muted-foreground mr-2 rounded px-1.5 py-0.5 text-xs font-medium">
-                  User
-                </span>
-                <pre className="flex-1 pt-0.5 font-mono text-xs break-words whitespace-pre-wrap">
-                  <code>{selectedTrace.input}</code>
-                </pre>
-              </div>
-            </div>
-
-            {/* Assistant message */}
-            <div className="bg-muted/20 rounded-lg p-3">
-              <div className="flex items-start">
-                <span className="bg-primary/10 text-primary mr-2 rounded px-1.5 py-0.5 text-xs font-medium">
-                  Assistant
-                </span>
-                <pre className="flex-1 pt-0.5 font-mono text-xs break-words whitespace-pre-wrap">
-                  <code>{selectedTrace.output}</code>
-                </pre>
-              </div>
-            </div>
+            <MessageCard type="user" content={selectedTrace.input} />
+            <MessageCard type="assistant" content={selectedTrace.output} />
           </div>
         </div>
       </div>
