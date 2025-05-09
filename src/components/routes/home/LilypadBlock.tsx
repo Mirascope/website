@@ -23,7 +23,7 @@ export const LilypadBlock = () => {
       <div className="mb-2 w-full max-w-3xl">
         <div className="bg-background/60 mb-2 w-full rounded-md">
           <ProviderTabbedSection>
-            <div className="my-4">
+            <div className="mb-2">
               <LilypadDemo />
             </div>
           </ProviderTabbedSection>
