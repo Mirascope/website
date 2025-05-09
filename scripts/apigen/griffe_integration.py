@@ -1,8 +1,16 @@
 """Integration with Griffe for API documentation generation.
 
 This module provides functionality to process API directives and generate
-documentation using Griffe. The implementation focuses on generating clean,
-accurate documentation with specialized handlers for different object types.
+documentation using Griffe. The implementation follows a clear model-view
+pattern where:
+1. Data is extracted and processed into structured models (via process_* functions)
+2. Models are rendered into MDX format (via render_* functions)
+3. Error handling ensures graceful fallbacks for missing dependencies
+
+The code is organized in the following sections:
+- Configuration: Loader setup for parsing docstrings
+- Documentation Generation: Core object processing and rendering
+- Directive Processing: Handling API directives and error cases
 """
 
 import re
@@ -67,6 +75,44 @@ def get_loader(
     return loader
 
 
+def generate_error_placeholder(object_path: str, error: Exception) -> str:
+    """Generate placeholder documentation for errors.
+
+    Args:
+        object_path: The path of the object that failed to process
+        error: The exception that was raised
+
+    Returns:
+        Placeholder documentation with error details
+
+    """
+    if isinstance(error, KeyError):
+        # Handle missing dependency issues (like opentelemetry not being available)
+        missing_dep = str(error).strip("'")
+        print(
+            f"WARNING: Could not resolve dependency when processing {object_path}: {error}"
+        )
+
+        return f"""
+## Missing Dependency Warning
+
+Documentation for `{object_path}` could not be fully generated because of a missing dependency: `{missing_dep}`.
+
+This is expected and safe to ignore for documentation generation purposes.
+"""
+    else:
+        # Add general error handling to make API docs generation more robust
+        print(f"WARNING: Error processing directive {object_path}: {error}")
+
+        return f"""
+## Error Processing Documentation
+
+An error occurred while generating documentation for `{object_path}`: {error!s}
+
+Please check that all required dependencies are installed.
+"""
+
+
 def process_directive_with_error_handling(directive: str, module: Module) -> str:
     """Process an API directive with error handling for missing dependencies.
 
@@ -84,34 +130,35 @@ def process_directive_with_error_handling(directive: str, module: Module) -> str
     """
     try:
         return process_directive(directive, module)
-    except KeyError as e:
-        # Handle missing dependency issues (like opentelemetry not being available)
-        object_path = directive.replace("::: ", "")
-        missing_dep = str(e).strip("'")
-        print(
-            f"WARNING: Could not resolve dependency when processing {object_path}: {e}"
-        )
-
-        # Return basic placeholder documentation
-        return f"""
-## Missing Dependency Warning
-
-Documentation for `{object_path}` could not be fully generated because of a missing dependency: `{missing_dep}`.
-
-This is expected and safe to ignore for documentation generation purposes.
-"""
     except Exception as e:
-        # Add general error handling to make API docs generation more robust
         object_path = directive.replace("::: ", "")
-        print(f"WARNING: Error processing directive {object_path}: {e}")
+        return generate_error_placeholder(object_path, e)
 
-        return f"""
-## Error Processing Documentation
 
-An error occurred while generating documentation for `{object_path}`: {e!s}
+def document_object(obj: Object | Alias) -> str:
+    """Generate documentation for any supported Griffe object type.
 
-Please check that all required dependencies are installed.
-"""
+    Args:
+        obj: The Griffe object to document
+
+    Returns:
+        MDX documentation with enhanced component usage
+
+    """
+    if isinstance(obj, Module):
+        processed_obj = process_module(obj)
+        return render_module(processed_obj)
+    elif isinstance(obj, Function):
+        processed_obj = process_function(obj)
+        return render_function(processed_obj)
+    elif isinstance(obj, Class):
+        processed_obj = process_class(obj)
+        return render_class(processed_obj)
+    elif isinstance(obj, Alias):
+        processed_obj = process_alias(obj)
+        return render_alias(processed_obj)
+    else:
+        raise ValueError(f"Unsupported object type: {type(obj)}")
 
 
 def process_directive(directive: str, module: Module) -> str:
@@ -147,82 +194,5 @@ def process_directive(directive: str, module: Module) -> str:
                 f"Could not find {'.'.join(path_parts[: i + 1])} in the module."
             )
 
-    # Dispatch to appropriate handler based on object type
-    if isinstance(current_obj, Module):
-        return document_module(current_obj)
-    elif isinstance(current_obj, Function):
-        return document_function(current_obj)
-    elif isinstance(current_obj, Class):
-        return document_class(current_obj)
-    elif isinstance(current_obj, Alias):
-        return document_alias(current_obj)
-    else:
-        raise ValueError("Unsupported object type:", current_obj)
-
-
-def document_module(module_obj: Module) -> str:
-    """Generate documentation for a Module object.
-
-    Args:
-        module_obj: The Module object to document
-
-    Returns:
-        MDX documentation with enhanced component usage
-
-    """
-    # Process the module into a structured model
-    processed_module = process_module(module_obj)
-
-    # Render the processed module to MDX
-    return render_module(processed_module)
-
-
-def document_function(func_obj: Function) -> str:
-    """Generate documentation for a Function object.
-
-    Args:
-        func_obj: The Function object to document
-
-    Returns:
-        MDX documentation with enhanced component usage
-
-    """
-    # Process the function into a structured model
-    processed_func = process_function(func_obj)
-
-    # Render the processed function to MDX
-    return render_function(processed_func)
-
-
-def document_class(class_obj: Class) -> str:
-    """Generate documentation for a Class object.
-
-    Args:
-        class_obj: The Class object to document
-
-    Returns:
-        MDX documentation with enhanced component usage
-
-    """
-    # Process the class into a structured model
-    processed_class = process_class(class_obj)
-
-    # Render the processed class to MDX
-    return render_class(processed_class)
-
-
-def document_alias(alias_obj: Alias) -> str:
-    """Generate documentation for an Alias object.
-
-    Args:
-        alias_obj: The Alias object to document
-
-    Returns:
-        MDX documentation with enhanced component usage
-
-    """
-    # Process the alias into a structured model
-    processed_alias = process_alias(alias_obj)
-
-    # Render the processed alias to MDX
-    return render_alias(processed_alias)
+    # Use the document_object dispatcher function
+    return document_object(current_obj)
