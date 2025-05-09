@@ -29,9 +29,8 @@ answer_question("What is the capital of France?")
         lineClassName="font-bold"
         lineSpacing="mb-2"
         textShadow={true}
-        fadeOnScroll={true}
       />
-      <div data-gradient-fade={true} className="mb-8 w-full max-w-3xl">
+      <div className="mb-8 w-full max-w-3xl">
         <div className="bg-background/60 mb-2 w-full rounded-md">
           <ProviderTabbedSection
             customHeader={

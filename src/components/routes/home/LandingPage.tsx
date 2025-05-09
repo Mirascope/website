@@ -1,6 +1,5 @@
 import { SEOMeta } from "@/src/components/";
 import { useSunsetTime } from "@/src/lib/hooks/useSunsetTime";
-import { useFadeOnScroll } from "@/src/lib/hooks/useFadeOnScroll";
 import { useGradientFadeOnScroll } from "@/src/lib/hooks/useGradientFadeOnScroll";
 import { useRef, useState, useEffect } from "react";
 import { ProviderContextProvider } from "@/src/components/core/providers/ProviderContext";
@@ -10,11 +9,6 @@ import { LilypadBlock } from "./LilypadBlock";
 
 export function LandingPage() {
   useSunsetTime();
-  // Initialize our global fade effect for elements with data-fade-on-scroll attribute
-  useFadeOnScroll({
-    fadeDistance: 100, // Distance from top at which fading starts (in px)
-    fadeRange: 100, // Distance over which the fade occurs (in px)
-  });
   useGradientFadeOnScroll({ fadeStartDistance: 120, fadeEndDistance: 0 });
 
   const heroSectionRef = useRef<HTMLDivElement>(null);
@@ -50,7 +44,7 @@ export function LandingPage() {
       <ProviderContextProvider>
         <div className="flex w-full flex-col">
           {/* Hero section */}
-          <div ref={heroSectionRef}>
+          <div data-gradient-fade={true} ref={heroSectionRef}>
             <HeroBlock
               onScrollDown={scrollToMirascopeSection}
               showScrollButton={showScrollButton}
@@ -58,12 +52,12 @@ export function LandingPage() {
           </div>
 
           {/* Mirascope section */}
-          <div ref={mirascopeSectionRef}>
+          <div data-gradient-fade={true} ref={mirascopeSectionRef}>
             <MirascopeBlock />
           </div>
 
           {/* Lilypad section */}
-          <div ref={lilypadSectionRef}>
+          <div data-gradient-fade={true} ref={lilypadSectionRef}>
             <LilypadBlock />
           </div>
         </div>
