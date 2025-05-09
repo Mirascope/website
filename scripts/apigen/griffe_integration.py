@@ -11,13 +11,11 @@ from pathlib import Path
 from griffe import (
     Alias,
     Class,
-    Docstring,
     Extensions,
     Function,
     GriffeLoader,
     Module,
     Object,
-    Parameters,
     Parser,
 )
 
@@ -175,73 +173,6 @@ def process_directive(directive: str, module: Module) -> str:
         return document_alias(current_obj)
     else:
         return document_fallback(current_obj)
-
-
-def format_signature_from_parameters(name: str, parameters: Parameters) -> str:
-    """Create a signature string from a Parameters object.
-
-    Args:
-        name: Function or method name
-        parameters: Griffe Parameters object
-
-    Returns:
-        A formatted signature string
-
-    """
-    param_strs: list[str] = []
-
-    # Parameters implements __iter__ which returns Parameter objects directly
-    for param in parameters:
-        param_str = param.name
-
-        # Add type annotation if available
-        if param.annotation:
-            param_str += f": {param.annotation}"
-
-        # Add default value if available
-        if param.default:
-            param_str += f" = {param.default}"
-
-        param_strs.append(param_str)
-
-    return f"{name}({', '.join(param_strs)})"
-
-
-def format_signature_from_docstring(name: str, docstring: Docstring) -> str | None:
-    """Create a signature string from a parsed docstring.
-
-    Args:
-        name: Function or method name
-        docstring: Griffe Docstring object
-
-    Returns:
-        A formatted signature string, or None if no parameters found
-
-    """
-    param_strs: list[str] = []
-
-    if not hasattr(docstring, "parsed"):
-        return None
-
-    for section in docstring.parsed:
-        if section.kind == "parameters" and hasattr(section, "value"):
-            for param in section.value:
-                if hasattr(param, "name"):
-                    param_str = param.name
-
-                    # Add type annotation if available
-                    if hasattr(param, "annotation") and param.annotation:
-                        param_str += f": {param.annotation}"
-
-                    # Add default value if available
-                    if hasattr(param, "default") and param.default:
-                        param_str += f" = {param.default}"
-
-                    param_strs.append(param_str)
-
-    if param_strs:
-        return f"{name}({', '.join(param_strs)})"
-    return None
 
 
 def get_type_origin(annotation, module: Module) -> dict:
