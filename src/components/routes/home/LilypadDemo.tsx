@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { CheckCircle2, XCircle } from "lucide-react";
 import { CodeBlock } from "@/src/components/mdx/elements/CodeBlock";
+import { useProvider } from "@/src/components/mdx/providers";
+import { replaceProviderVariables } from "@/src/config/providers";
 
 type TraceLabel = "pass" | "fail";
 
@@ -83,16 +85,18 @@ export function LilypadDemo() {
         ? `return f"Answer in one word: {question}"`
         : `return f"Answer this question: {question}"`;
 
-    return `import lilypad
+    const preSubstitution = `import lilypad
 from mirascope import llm
 lilypad.configure(auto_llm=True)
 
 @lilypad.trace(versioning="automatic") # [!code highlight]
-@llm.call(provider="anthropic", model="claude-3-sonnet-20240229")
+@llm.call(provider="$PROVIDER", model="$MODEL")
 def answer_question(question: str) -> str:
     ${promptStyle}
 
 answer_question("What is the capital of France?")`;
+    const { provider } = useProvider();
+    return replaceProviderVariables(preSubstitution, provider);
   };
 
   return (
@@ -202,7 +206,7 @@ answer_question("What is the capital of France?")`;
             <div className="bg-muted/20 rounded-lg p-3">
               <div className="flex items-start">
                 <span className="bg-primary/10 text-primary mr-2 rounded px-1.5 py-0.5 text-xs font-medium">
-                  AI
+                  Assistant
                 </span>
                 <pre className="flex-1 pt-0.5 font-mono text-xs break-words whitespace-pre-wrap">
                   <code>{selectedTrace.output}</code>
