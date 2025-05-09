@@ -7,11 +7,74 @@ with pre-processed data models rather than directly with Griffe objects.
 
 import json
 
-from scripts.apigen.models import ProcessedAlias, ProcessedClass, ProcessedFunction
+from scripts.apigen.models import (
+    ProcessedAlias,
+    ProcessedClass,
+    ProcessedFunction,
+    ProcessedModule,
+)
 from scripts.apigen.type_utils import parameters_to_dict_list
 
 # Default content subpath for documentation
 MODULE_CONTENT_SUBPATH = "docs/mirascope"
+
+
+def render_module(processed_module: ProcessedModule) -> str:
+    """Render a processed module into MDX documentation.
+
+    Args:
+        processed_module: The processed module object to render
+
+    Returns:
+        MDX documentation string
+
+    """
+    content: list[str] = []
+
+    # Add object type using a component with consistent typing
+    content.append('<ApiType type="Module" />\n')
+
+    # Add docstring if available
+    if processed_module.docstring:
+        content.append("## Description\n")
+        content.append(processed_module.docstring.strip())
+        content.append("")
+
+    # If classes are found, document them
+    if processed_module.classes:
+        if len(processed_module.classes) == 1:
+            # If only one class and it has the same name as the last part of the module,
+            # assume it's the primary class for this module
+            processed_class = processed_module.classes[0]
+            class_name = processed_class.name
+            module_name_parts = processed_module.module_path.split(".")
+
+            if module_name_parts and class_name.lower() == module_name_parts[-1]:
+                # Document this as the primary class
+                content.append(f"## Class {class_name}\n")
+
+                # Use render_class but remove the ApiType line
+                class_docs = render_class(processed_class)
+                class_docs_lines = class_docs.split("\n")
+                # Skip the first line which contains the ApiType
+                content.append("\n".join(class_docs_lines[2:]))
+            else:
+                # Document the class but not as prominently
+                content.append("## Classes\n")
+                content.append(f"### {class_name}\n")
+                if processed_class.docstring:
+                    content.append(processed_class.docstring.strip())
+                content.append("")
+        else:
+            # Multiple classes in the module, document all of them
+            content.append("## Classes\n")
+            for processed_class in processed_module.classes:
+                content.append(f"### {processed_class.name}\n")
+                if processed_class.docstring:
+                    content.append(processed_class.docstring.strip())
+                content.append("")
+
+    return "\n".join(content)
 
 
 def render_function(processed_func: ProcessedFunction) -> str:

@@ -24,8 +24,14 @@ from scripts.apigen.mdx_renderer import (
     render_alias,
     render_class,
     render_function,
+    render_module,
 )
-from scripts.apigen.models import process_alias, process_class, process_function
+from scripts.apigen.models import (
+    process_alias,
+    process_class,
+    process_function,
+    process_module,
+)
 
 # Default content subpath for documentation
 MODULE_CONTENT_SUBPATH = "docs/mirascope"
@@ -164,89 +170,11 @@ def document_module(module_obj: Module) -> str:
         MDX documentation with enhanced component usage
 
     """
-    content: list[str] = []
-    module_path = getattr(module_obj, "path", "")
+    # Process the module into a structured model
+    processed_module = process_module(module_obj)
 
-    # Add object type using a component with consistent typing
-    content.append('<ApiType type="Module" />\n')
-
-    # First handle the module's own docstring
-    if (
-        hasattr(module_obj, "docstring")
-        and module_obj.docstring
-        and module_obj.docstring.value
-    ):
-        content.append("## Description\n")
-        content.append(module_obj.docstring.value.strip())
-        content.append("")
-
-    # Look for classes within the module
-    classes = [
-        (name, member)
-        for name, member in module_obj.members.items()
-        if isinstance(member, Class)
-    ]
-
-    # If classes are found, document them
-    if classes:
-        if len(classes) == 1:
-            # If only one class and it has the same name as the last part of the module,
-            # assume it's the primary class for this module
-            class_name, class_obj = classes[0]
-            module_name_parts = module_path.split(".")
-            if module_name_parts and class_name.lower() == module_name_parts[-1]:
-                # Document this as the primary class
-                content.append(f"## Class {class_name}\n")
-
-                # Use document_class to generate class documentation
-                class_docs = document_class(class_obj)
-                # Split, remove the ApiType line, and join back
-                class_docs_lines = class_docs.split("\n")
-                content.append("\n".join(class_docs_lines))
-            else:
-                # Document the class but not as prominently
-                content.append("## Classes\n")
-                for class_name, class_obj in classes:
-                    content.append(f"### {class_name}\n")
-                    if (
-                        hasattr(class_obj, "docstring")
-                        and class_obj.docstring
-                        and class_obj.docstring.value
-                    ):
-                        content.append(class_obj.docstring.value.strip())
-                    content.append("")
-        else:
-            # Multiple classes in the module, document all of them
-            content.append("## Classes\n")
-            for class_name, class_obj in classes:
-                content.append(f"### {class_name}\n")
-                if (
-                    hasattr(class_obj, "docstring")
-                    and class_obj.docstring
-                    and class_obj.docstring.value
-                ):
-                    content.append(class_obj.docstring.value.strip())
-                content.append("")
-
-    return "\n".join(content)
-
-
-def format_docstring_section(obj: Object | Alias) -> list[str]:
-    """Format a docstring section from an object.
-
-    Args:
-        obj: The Griffe object with a docstring
-
-    Returns:
-        List of strings representing the docstring section, empty if no docstring
-
-    """
-    content = []
-    if hasattr(obj, "docstring") and obj.docstring and obj.docstring.value:
-        content.append("## Description\n")
-        content.append(obj.docstring.value.strip())
-        content.append("")
-    return content
+    # Render the processed module to MDX
+    return render_module(processed_module)
 
 
 def document_function(func_obj: Function) -> str:

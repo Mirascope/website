@@ -7,7 +7,7 @@ to create these models from Griffe objects.
 
 from dataclasses import dataclass
 
-from griffe import Alias, Class, Function
+from griffe import Alias, Class, Function, Module
 
 from scripts.apigen.return_extractor import extract_return_info
 from scripts.apigen.type_utils import (
@@ -53,6 +53,20 @@ class ProcessedClass:
     docstring: str | None
     bases: list[str]
     attributes: list[ProcessedAttribute]
+    module_path: str
+
+
+@dataclass
+class ProcessedModule:
+    """Represents a fully processed module ready for rendering.
+
+    This dataclass contains all the information needed to render
+    documentation for a module, extracted from Griffe objects.
+    """
+
+    name: str
+    docstring: str | None
+    classes: list[ProcessedClass]
     module_path: str
 
 
@@ -169,6 +183,51 @@ def process_class(class_obj: Class) -> ProcessedClass:
         docstring=docstring,
         bases=bases,
         attributes=attributes,
+        module_path=module_path,
+    )
+
+
+def process_module(module_obj: Module) -> ProcessedModule:
+    """Process a Module object into a ProcessedModule model.
+
+    Args:
+        module_obj: The Griffe Module object to process
+
+    Returns:
+        A ProcessedModule object containing all necessary information
+
+    """
+    # Get basic module information
+    name = getattr(module_obj, "name", "")
+    module_path = getattr(module_obj, "path", "")
+
+    # Extract docstring
+    docstring = None
+    if (
+        hasattr(module_obj, "docstring")
+        and module_obj.docstring
+        and module_obj.docstring.value
+    ):
+        docstring = module_obj.docstring.value.strip()
+
+    # Look for classes within the module
+    processed_classes = []
+    if hasattr(module_obj, "members"):
+        classes = [
+            member
+            for _, member in module_obj.members.items()
+            if isinstance(member, Class)
+        ]
+
+        for class_obj in classes:
+            processed_class = process_class(class_obj)
+            processed_classes.append(processed_class)
+
+    # Create and return the processed module
+    return ProcessedModule(
+        name=name,
+        docstring=docstring,
+        classes=processed_classes,
         module_path=module_path,
     )
 
