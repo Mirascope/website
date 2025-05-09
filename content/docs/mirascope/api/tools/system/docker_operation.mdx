@@ -8,21 +8,79 @@ description: API documentation for mirascope.tools.system._docker_operation
 
 <ApiType type="Module" />
 
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| DockerOperationToolKitConfig |  | Configuration for `DockerOperationToolKit` toolkit |
+| DockerOperation |  | Base class for Docker operations. |
+| DockerContainer |  |  |
+| DockerOperationToolKit |  | ToolKit for executing Python code and shell commands in a Docker container. |
+
 ## Classes
 
 ### DockerOperationToolKitConfig
 
+<ApiType type="Class" />
+
+## Description
+
 Configuration for `DockerOperationToolKit` toolkit
+
+**Bases:** _ConfigurableToolConfig
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| docker_image | str |  |
+| max_memory | str |  |
+| allow_network | bool |  |
+
 
 ### DockerOperation
 
+<ApiType type="Class" />
+
+## Description
+
 Base class for Docker operations.
 
+**Bases:** ConfigurableTool[DockerOperationToolKitConfig], ABC
+
+
 ### DockerContainer
+
+<ApiType type="Class" />
+
+**Bases:** BaseModel
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| config | DockerOperationToolKitConfig |  |
+| container | Container |  |
 
 
 ### DockerOperationToolKit
 
+<ApiType type="Class" />
+
+## Description
+
 ToolKit for executing Python code and shell commands in a Docker container.
+
+**Bases:** ConfigurableToolKit[DockerOperationToolKitConfig]
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| config | DockerOperationToolKitConfig |  |
+| docker_container | DockerContainer |  |
+| ExecutePython |  | Tool for executing Python code in a Docker container. |
+| ExecuteShell |  | Tool for executing shell commands in a Docker container. |
+
 
 

@@ -18,16 +18,56 @@ This module defines the base class for tools used in LLM calls.
 
 </Info>
 
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| ToolConfig |  | A base class for tool configurations. |
+| GenerateJsonSchemaNoTitles |  |  |
+| BaseTool |  | A class for defining tools for LLM calls.
+
+Example:
+
+```python
+from mirascope.core import BaseTool
+from pydantic import Field
+
+
+class FormatBook(BaseTool):
+    """Returns a nicely formatted book recommendation."""
+
+    title: str = Field(..., description="The title of the book.")
+    author: str = Field(..., description="The author of the book.")
+
+    def call(self) -> str:
+        return f"{self.title} by {self.author}"
+``` |
+
 ## Classes
 
 ### ToolConfig
 
+<ApiType type="Class" />
+
+## Description
+
 A base class for tool configurations.
+
+**Bases:** TypedDict
+
 
 ### GenerateJsonSchemaNoTitles
 
+<ApiType type="Class" />
+
+**Bases:** GenerateJsonSchema
+
 
 ### BaseTool
+
+<ApiType type="Class" />
+
+## Description
 
 A class for defining tools for LLM calls.
 
@@ -47,5 +87,17 @@ class FormatBook(BaseTool):
     def call(self) -> str:
         return f"{self.title} by {self.author}"
 ```
+
+**Bases:** BaseModel, ABC
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| tool_config | ToolConfig |  |
+| model_config | None |  |
+| delta | SkipJsonSchema[str | None] |  |
+| args | dict[str, Any] | The arguments of the tool as a dictionary. |
+
 
 

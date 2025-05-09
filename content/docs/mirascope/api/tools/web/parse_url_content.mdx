@@ -8,17 +8,54 @@ description: API documentation for mirascope.tools.web._parse_url_content
 
 <ApiType type="Module" />
 
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| ParseURLConfig |  | Configuration for URL content parsing |
+| ParseURLContent |  | Tool for parsing and extracting main content from URLs.
+
+Fetches content from URL, removes unnecessary elements like scripts, styles, navigation, etc.,
+and returns clean text content from the webpage's main body. |
+
 ## Classes
 
 ### ParseURLConfig
 
+<ApiType type="Class" />
+
+## Description
+
 Configuration for URL content parsing
 
+**Bases:** _ConfigurableToolConfig
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| parser | str |  |
+| timeout | int |  |
+
+
 ### ParseURLContent
+
+<ApiType type="Class" />
+
+## Description
 
 Tool for parsing and extracting main content from URLs.
 
 Fetches content from URL, removes unnecessary elements like scripts, styles, navigation, etc.,
 and returns clean text content from the webpage's main body.
+
+**Bases:** ConfigurableTool[ParseURLConfig]
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| url | str |  |
+
 
 

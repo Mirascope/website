@@ -8,43 +8,213 @@ description: API documentation for mirascope.core.base.types
 
 <ApiType type="Module" />
 
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| Image |  |  |
+| AudioSegment |  |  |
+| has_pil_module | bool |  |
+| has_pydub_module | bool |  |
+| FinishReason | TypeAlias |  |
+| Usage |  |  |
+| JsonableType | TypeAlias |  |
+| VideoMetadata |  | Metadata for a video for cost calculation |
+| AudioMetadata |  | Metadata for an audio file for cost calculation |
+| ImageMetadata |  | Metadata for an image for cost calculation |
+| GoogleMetadata |  | Google API specific metadata for cost calculation |
+| PDFImageMetadata |  | Metadata for an image extracted from a PDF page |
+| PDFMetadata |  | Metadata specific to PDF documents for cost calculation |
+| CostMetadata |  | Metadata required for accurate LLM API cost calculation across all providers. |
+| Provider | TypeAlias |  |
+| LocalProvider | TypeAlias |  |
+
 ## Classes
 
 ### Image
 
+<ApiType type="Class" />
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| Image |  |  |
+
 
 ### AudioSegment
+
+<ApiType type="Class" />
 
 
 ### Usage
 
+<ApiType type="Class" />
+
+**Bases:** BaseModel
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| input_tokens | int | Number of tokens in the prompt. |
+| cached_tokens | int | Number of tokens used that were previously cached (and thus cheaper). |
+| output_tokens | int | Number of tokens in the generated output. |
+| total_tokens | int | Total number of tokens used in the request (prompt + completion). |
+
 
 ### VideoMetadata
 
+<ApiType type="Class" />
+
+## Description
+
 Metadata for a video for cost calculation
+
+**Bases:** BaseModel
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| duration_seconds | Annotated[float, Field(description='Duration of the video in seconds')] |  |
+| with_audio | Annotated[bool | None, Field(default=False, description='Whether the video includes audio that should be processed')] |  |
+| tokens | Annotated[int | None, Field(default=None, description='Precalculated token count for this video')] |  |
+
 
 ### AudioMetadata
 
+<ApiType type="Class" />
+
+## Description
+
 Metadata for an audio file for cost calculation
+
+**Bases:** BaseModel
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| duration_seconds | Annotated[float, Field(description='Duration of the audio in seconds')] |  |
+| with_timestamps | Annotated[bool | None, Field(default=False, description='Whether timestamps should be included')] |  |
+| tokens | Annotated[int | None, Field(default=None, description='Precalculated token count for this audio')] |  |
+
 
 ### ImageMetadata
 
+<ApiType type="Class" />
+
+## Description
+
 Metadata for an image for cost calculation
+
+**Bases:** BaseModel
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| width | Annotated[int, Field(description='Width of the image in pixels')] |  |
+| height | Annotated[int, Field(description='Height of the image in pixels')] |  |
+| tokens | Annotated[int | None, Field(default=None, description='Precalculated token count for this image')] |  |
+| detail | Annotated[str | None, Field(default=None, description='Detail level of the image')] |  |
+
 
 ### GoogleMetadata
 
+<ApiType type="Class" />
+
+## Description
+
 Google API specific metadata for cost calculation
+
+**Bases:** BaseModel
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| use_vertex_ai | Annotated[bool | None, Field(default=False, description='Whether to use Vertex AI pricing (vs. direct Gemini API)')] |  |
+| grounding_requests | Annotated[int | None, Field(default=None, description='Number of Google Search grounding requests')] |  |
+
 
 ### PDFImageMetadata
 
+<ApiType type="Class" />
+
+## Description
+
 Metadata for an image extracted from a PDF page
+
+**Bases:** BaseModel
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| width | Annotated[int, Field(description='Width of the image in pixels')] |  |
+| height | Annotated[int, Field(description='Height of the image in pixels')] |  |
+| tokens | Annotated[int | None, Field(default=None, description='Precalculated token count for this image')] |  |
+
 
 ### PDFMetadata
 
+<ApiType type="Class" />
+
+## Description
+
 Metadata specific to PDF documents for cost calculation
+
+**Bases:** BaseModel
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| page_count | Annotated[int | None, Field(default=None, description='Number of pages in the PDF')] |  |
+| text_tokens | Annotated[int | None, Field(default=None, description='Number of tokens from text content in the PDF')] |  |
+| images | Annotated[list[PDFImageMetadata] | None, Field(default=None, description='List of images extracted from PDF with width and height information')] |  |
+| cached | Annotated[bool | None, Field(default=None, description='Whether this PDF was cached for reduced token costs')] |  |
+
 
 ### CostMetadata
 
+<ApiType type="Class" />
+
+## Description
+
 Metadata required for accurate LLM API cost calculation across all providers.
+
+**Bases:** BaseModel
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| model_config | None |  |
+| input_tokens | Annotated[int | float | None, Field(default=None, description='Input tokens')] |  |
+| output_tokens | Annotated[int | float | None, Field(default=None, description='Output tokens')] |  |
+| cached_tokens | Annotated[int | float | None, Field(default=None, description='Cached tokens')] |  |
+| streaming_mode | Annotated[bool | None, Field(default=None, description='Whether streaming API was used')] |  |
+| cached_response | Annotated[bool | None, Field(default=None, description='Whether response was served from cache')] |  |
+| context_length | Annotated[int | None, Field(default=None, description='Total context window length in tokens')] |  |
+| realtime_mode | Annotated[bool | None, Field(default=None, description='Whether realtime processing was used')] |  |
+| region | Annotated[str | None, Field(default=None, description='Cloud region for request (affects pricing in some providers)')] |  |
+| tier | Annotated[str | None, Field(default=None, description='Service tier (e.g. standard, enterprise)')] |  |
+| batch_mode | Annotated[bool | None, Field(default=False, description='Whether batch mode is used (discount usually applies)')] |  |
+| images | Annotated[list[ImageMetadata] | None, Field(default=None, description='List of images with their metadata')] |  |
+| videos | Annotated[list[VideoMetadata] | None, Field(default=None, description='List of videos with their metadata')] |  |
+| audio | Annotated[list[AudioMetadata] | None, Field(default=None, description='List of audio clips with their metadata')] |  |
+| audio_output | Annotated[list[AudioMetadata] | None, Field(default=None, description='List of audio output clips with their metadata')] |  |
+| pdf | Annotated[PDFMetadata | None, Field(default=None, description='Metadata for PDF documents')] |  |
+| context_cache_tokens | Annotated[int | None, Field(default=None, description='Number of cached context tokens')] |  |
+| context_cache_hours | Annotated[float | None, Field(default=None, description='Number of hours to keep context in cache')] |  |
+| google | Annotated[GoogleMetadata | None, Field(default=None, description='Google/Gemini-specific metadata for cost calculation')] |  |
+| realtime_tokens | Annotated[int | None, Field(default=None, description='[OpenAI] Number of realtime tokens in the request')] |  |
+| cache_write | Annotated[bool | None, Field(default=None, description='[Anthropic] Whether cache write occurred')] |  |
+| tool_use_tokens | Annotated[int | None, Field(default=None, description='[Anthropic] Tokens used for tool calls')] |  |
+| cost | Annotated[float | None, Field(default=None, description='Cost provided by the API response')] |  |
+
 
 

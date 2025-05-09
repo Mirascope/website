@@ -12,10 +12,82 @@ description: API documentation for mirascope.core.base.structured_stream
 
 This module defines the base class for structured streams.
 
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| BaseStructuredStream |  | A base class for streaming structured outputs from LLMs. |
+
+## Functions
+
+### structured_stream_factory
+
+<ApiType type="Function" />
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "TCallResponse",
+    "type": "type[_BaseCallResponseT]",
+    "module_context": "mirascope.core.base.structured_stream",
+    "is_builtin": "false"
+  },
+  {
+    "name": "TCallResponseChunk",
+    "type": "type[_BaseCallResponseChunkT]",
+    "module_context": "mirascope.core.base.structured_stream",
+    "is_builtin": "false"
+  },
+  {
+    "name": "TStream",
+    "type": "type[BaseStream]",
+    "module_context": "mirascope.core.base.structured_stream",
+    "is_builtin": "false"
+  },
+  {
+    "name": "TToolType",
+    "type": "type[_BaseToolT]",
+    "module_context": "mirascope.core.base.structured_stream",
+    "is_builtin": "false"
+  },
+  {
+    "name": "setup_call",
+    "type": "SameSyncAndAsyncClientSetupCall[_SameSyncAndAsyncClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT] | SetupCall[_SyncBaseClientT, _AsyncBaseClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT]",
+    "module_context": "mirascope.core.base._utils",
+    "is_builtin": "false"
+  },
+  {
+    "name": "get_json_output",
+    "type": "GetJsonOutput[_BaseCallResponseChunkT]",
+    "module_context": "mirascope.core.base._utils",
+    "is_builtin": "false"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.base.structured_stream"
+/>
+
+
 ## Classes
 
 ### BaseStructuredStream
 
+<ApiType type="Class" />
+
+## Description
+
 A base class for streaming structured outputs from LLMs.
+
+**Bases:** Generic[_ResponseModelT]
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| stream | BaseStream |  |
+| response_model | type[_ResponseModelT] |  |
+| constructed_response_model | _ResponseModelT |  |
+| fields_from_call_args | None |  |
+
 
 

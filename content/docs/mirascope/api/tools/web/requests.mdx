@@ -8,14 +8,50 @@ description: API documentation for mirascope.tools.web._requests
 
 <ApiType type="Module" />
 
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| RequestsConfig |  | Configuration for HTTP requests |
+| Requests |  | Tool for making HTTP requests with built-in requests library. |
+
 ## Classes
 
 ### RequestsConfig
 
+<ApiType type="Class" />
+
+## Description
+
 Configuration for HTTP requests
+
+**Bases:** _ConfigurableToolConfig
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| timeout | int |  |
+
 
 ### Requests
 
+<ApiType type="Class" />
+
+## Description
+
 Tool for making HTTP requests with built-in requests library.
+
+**Bases:** ConfigurableTool
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| url | str |  |
+| method | Literal['GET', 'POST', 'PUT', 'DELETE'] |  |
+| data | dict | None |  |
+| headers | dict | None |  |
+
 
 

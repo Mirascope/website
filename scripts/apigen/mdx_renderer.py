@@ -40,6 +40,26 @@ def render_module(processed_module: ProcessedModule) -> str:
         content.append(processed_module.docstring.strip())
         content.append("")
 
+    # Render module attributes if any
+    if processed_module.attributes:
+        content.append("## Module Attributes\n")
+        content.append("| Name | Type | Description |")
+        content.append("| ---- | ---- | ----------- |")
+
+        for attr in processed_module.attributes:
+            attr_desc = attr.description or ""
+            content.append(f"| {attr.name} | {attr.type_info} | {attr_desc} |")
+
+        content.append("")
+
+    # Render module functions if any
+    if processed_module.functions:
+        content.append("## Functions\n")
+        for func in processed_module.functions:
+            content.append(f"### {func.name}\n")
+            content.append(render_function(func))
+            content.append("")
+
     # If classes are found, document them
     if processed_module.classes:
         if len(processed_module.classes) == 1:
@@ -52,26 +72,19 @@ def render_module(processed_module: ProcessedModule) -> str:
             if module_name_parts and class_name.lower() == module_name_parts[-1]:
                 # Document this as the primary class
                 content.append(f"## Class {class_name}\n")
-
-                # Use render_class but remove the ApiType line
-                class_docs = render_class(processed_class)
-                class_docs_lines = class_docs.split("\n")
-                # Skip the first line which contains the ApiType
-                content.append("\n".join(class_docs_lines[2:]))
+                content.append(render_class(processed_class))
             else:
                 # Document the class but not as prominently
                 content.append("## Classes\n")
                 content.append(f"### {class_name}\n")
-                if processed_class.docstring:
-                    content.append(processed_class.docstring.strip())
+                content.append(render_class(processed_class))
                 content.append("")
         else:
             # Multiple classes in the module, document all of them
             content.append("## Classes\n")
             for processed_class in processed_module.classes:
                 content.append(f"### {processed_class.name}\n")
-                if processed_class.docstring:
-                    content.append(processed_class.docstring.strip())
+                content.append(render_class(processed_class))
                 content.append("")
 
     return "\n".join(content)

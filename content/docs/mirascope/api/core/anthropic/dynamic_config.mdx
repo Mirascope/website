@@ -12,4 +12,24 @@ description: API documentation for mirascope.core.anthropic.dynamic_config
 
 This module defines the function return type for functions as LLM calls.
 
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| AnthropicDynamicConfig | None |  |
+| AsyncAnthropicDynamicConfig | None | The function return type for functions wrapped with the `anthropic_call` decorator.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.anthropic import AnthropicDynamicConfig, anthropic_call
+
+
+@anthropic_call("claude-3-5-sonnet-20240620")
+@prompt_template("Recommend a {capitalized_genre} book")
+def recommend_book(genre: str) -> AnthropicDynamicConfig:
+    return {"computed_fields": {"capitalized_genre": genre.capitalize()}}
+``` |
+
 

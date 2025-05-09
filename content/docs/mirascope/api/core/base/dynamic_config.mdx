@@ -12,30 +12,141 @@ description: API documentation for mirascope.core.base.dynamic_config
 
 The base type in a function as an LLM call to return for dynamic configuration.
 
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| DynamicConfigBase |  |  |
+| DynamicConfigMessages |  |  |
+| DynamicConfigCallParams |  |  |
+| DynamicConfigClient |  |  |
+| DynamicConfigMessagesCallParams |  |  |
+| DynamicConfigMessagesClient |  |  |
+| DynamicConfigCallParamsClient |  |  |
+| DynamicConfigFull |  |  |
+| BaseDynamicConfig | None | The base type in a function as an LLM call to return for dynamic configuration.
+
+Attributes:
+    metadata: Any metadata to include in call responses.
+    computed_fields: Fields to be computed and injected into the prompt template at
+        runtime.
+    tools: Tools to be provided to the LLM API call at runtime.
+    messages: Custom message parameters, which will override any other form of writing
+        prompts when used.
+    call_params: Call parameters to use when making the LLM API call.
+    client: A custom client to use in place of the default client. |
+
 ## Classes
 
 ### DynamicConfigBase
 
+<ApiType type="Class" />
+
+**Bases:** TypedDict
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| metadata | NotRequired[Metadata] |  |
+| computed_fields | NotRequired[dict[str, Any | list[Any] | list[list[Any]]]] |  |
+| tools | NotRequired[Sequence[type[BaseTool] | Callable]] |  |
+
 
 ### DynamicConfigMessages
+
+<ApiType type="Class" />
+
+**Bases:** DynamicConfigBase, Generic[_MessageParamT]
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| messages | NotRequired[Sequence[_MessageParamT]] |  |
 
 
 ### DynamicConfigCallParams
 
+<ApiType type="Class" />
+
+**Bases:** DynamicConfigBase, Generic[_CallParamsT]
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| call_params | NotRequired[_CallParamsT] |  |
+
 
 ### DynamicConfigClient
+
+<ApiType type="Class" />
+
+**Bases:** DynamicConfigBase, Generic[_ClientT]
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| client | NotRequired[_ClientT | None] |  |
 
 
 ### DynamicConfigMessagesCallParams
 
+<ApiType type="Class" />
+
+**Bases:** DynamicConfigBase, Generic[_MessageParamT, _CallParamsT]
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| messages | NotRequired[Sequence[_MessageParamT]] |  |
+| call_params | NotRequired[_CallParamsT] |  |
+
 
 ### DynamicConfigMessagesClient
+
+<ApiType type="Class" />
+
+**Bases:** DynamicConfigBase, Generic[_MessageParamT, _ClientT]
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| messages | NotRequired[Sequence[_MessageParamT]] |  |
+| client | NotRequired[_ClientT | None] |  |
 
 
 ### DynamicConfigCallParamsClient
 
+<ApiType type="Class" />
+
+**Bases:** DynamicConfigBase, Generic[_CallParamsT, _ClientT]
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| call_params | NotRequired[_CallParamsT] |  |
+| client | NotRequired[_ClientT | None] |  |
+
 
 ### DynamicConfigFull
+
+<ApiType type="Class" />
+
+**Bases:** DynamicConfigBase, Generic[_MessageParamT, _CallParamsT, _ClientT]
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| messages | NotRequired[Sequence[_MessageParamT]] |  |
+| call_params | NotRequired[_CallParamsT] |  |
+| client | NotRequired[_ClientT | None] |  |
 
 
 

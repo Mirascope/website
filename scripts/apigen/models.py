@@ -42,6 +42,22 @@ class ProcessedFunction:
 
 
 @dataclass
+class ProcessedAlias:
+    """Represents a fully processed alias ready for rendering.
+
+    This dataclass contains all the information needed to render
+    documentation for an alias, extracted from Griffe objects.
+    """
+
+    name: str
+    docstring: str | None
+    parameters: list[ParameterInfo]
+    return_info: ReturnInfo | None
+    target_path: str
+    module_path: str
+
+
+@dataclass
 class ProcessedClass:
     """Represents a fully processed class ready for rendering.
 
@@ -67,22 +83,8 @@ class ProcessedModule:
     name: str
     docstring: str | None
     classes: list[ProcessedClass]
-    module_path: str
-
-
-@dataclass
-class ProcessedAlias:
-    """Represents a fully processed alias ready for rendering.
-
-    This dataclass contains all the information needed to render
-    documentation for an alias, extracted from Griffe objects.
-    """
-
-    name: str
-    docstring: str | None
-    parameters: list[ParameterInfo]
-    return_info: ReturnInfo | None
-    target_path: str
+    attributes: list[ProcessedAttribute]
+    functions: list[ProcessedFunction]
     module_path: str
 
 
@@ -210,24 +212,52 @@ def process_module(module_obj: Module) -> ProcessedModule:
     ):
         docstring = module_obj.docstring.value.strip()
 
-    # Look for classes within the module
+    # Initialize collections for different member types
     processed_classes = []
-    if hasattr(module_obj, "members"):
-        classes = [
-            member
-            for _, member in module_obj.members.items()
-            if isinstance(member, Class)
-        ]
+    processed_functions = []
+    processed_attributes = []
 
-        for class_obj in classes:
-            processed_class = process_class(class_obj)
-            processed_classes.append(processed_class)
+    if hasattr(module_obj, "members"):
+        # Process all members
+        for member_name, member in module_obj.members.items():
+            # Skip private members (starting with underscore)
+            if member_name.startswith("_"):
+                continue
+
+            # Process classes
+            if isinstance(member, Class):
+                processed_class = process_class(member)
+                processed_classes.append(processed_class)
+
+            if isinstance(member, Alias):
+                pass # TODO: Figure out support
+
+            # Process functions
+            elif isinstance(member, Function):
+                processed_function = process_function(member)
+                processed_functions.append(processed_function)
+
+            # Process attributes (not classes, functions, or aliases)
+            else:
+                attr_type = getattr(member, "annotation", "")
+                attr_desc = None
+                if hasattr(member, "docstring") and member.docstring:
+                    attr_desc = member.docstring.value.strip()
+
+                processed_attr = ProcessedAttribute(
+                    name=member_name,
+                    type_info=str(attr_type),
+                    description=attr_desc,
+                )
+                processed_attributes.append(processed_attr)
 
     # Create and return the processed module
     return ProcessedModule(
         name=name,
         docstring=docstring,
         classes=processed_classes,
+        attributes=processed_attributes,
+        functions=processed_functions,
         module_path=module_path,
     )
 

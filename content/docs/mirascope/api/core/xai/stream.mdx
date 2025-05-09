@@ -18,14 +18,37 @@ The `XAIStream` class for convenience around streaming xAI LLM calls.
 
 </Info>
 
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| XAIStream |  | A simple wrapper around `OpenAIStream`.
+
+Everything is the same except updates to the `construct_call_response` method and
+the `cost` property so that cost is properly calculated using xAI's cost
+calculation method. This ensures cost calculation works for non-OpenAI models. |
+
 ## Classes
 
 ### XAIStream
+
+<ApiType type="Class" />
+
+## Description
 
 A simple wrapper around `OpenAIStream`.
 
 Everything is the same except updates to the `construct_call_response` method and
 the `cost` property so that cost is properly calculated using xAI's cost
 calculation method. This ensures cost calculation works for non-OpenAI models.
+
+**Bases:** OpenAIStream
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| cost | float | None | Returns the cost of the call. |
+
 
 
