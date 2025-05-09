@@ -1,11 +1,15 @@
 import { ButtonLink } from "@/src/components/ui/button-link";
 import { ResponsiveTextBlock } from "@/src/components/ui/responsive-text-block";
-import { BookOpen, Rocket } from "lucide-react";
+import { BookOpen, Rocket, ChevronUp } from "lucide-react";
 import { ProviderTabbedSection } from "@/src/components/mdx/elements/ProviderTabbedSection";
 import { LilypadDemo } from "./LilypadDemo";
 
 // Lilypad feature block component
-export const LilypadBlock = () => {
+export interface LilypadBlockProps {
+  onScrollToTop?: () => void;
+}
+
+export const LilypadBlock = ({ onScrollToTop }: LilypadBlockProps) => {
   return (
     <div
       data-product="lilypad"
@@ -48,6 +52,21 @@ export const LilypadBlock = () => {
           <Rocket className="size-5" aria-hidden="true" /> Open Beta
         </ButtonLink>
       </div>
+
+      {/* Scroll indicator to go back to the top */}
+      {onScrollToTop && (
+        <div className="mt-16 flex justify-center">
+          <div className="landing-page-box-shadow landing-page-box-shadow-hover relative h-10 w-10 overflow-hidden rounded-full">
+            <button
+              onClick={onScrollToTop}
+              className="bg-primary/80 hover:bg-primary absolute inset-0 flex items-center justify-center border-0 transition-all"
+              aria-label="Scroll to top"
+            >
+              <ChevronUp className="h-5 w-5 text-white" />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
