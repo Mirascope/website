@@ -18,9 +18,39 @@ This module contains the `AzureCallResponse` class.
 
 </Info>
 
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| AzureCallResponse |  | A convenience wrapper around the Azure `ChatCompletion` response.
+
+When calling the Azure API using a function decorated with `azure_call`, the
+response will be an `AzureCallResponse` instance with properties that allow for
+more convenience access to commonly used attributes.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.azure import azure_call
+
+
+@azure_call("gpt-4o")
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+response = recommend_book("fantasy")  # response is an `AzureCallResponse` instance
+print(response.content)
+``` |
+
 ## Classes
 
 ### AzureCallResponse
+
+<ApiType type="Class" />
+
+## Description
 
 A convenience wrapper around the Azure `ChatCompletion` response.
 
@@ -43,5 +73,39 @@ def recommend_book(genre: str) -> str:
 response = recommend_book("fantasy")  # response is an `AzureCallResponse` instance
 print(response.content)
 ```
+
+**Bases:** BaseCallResponse[ChatCompletions, AzureTool, ChatCompletionsToolDefinition, AsyncAzureDynamicConfig | AzureDynamicConfig, ChatRequestMessage, AzureCallParams, UserMessage, AzureMessageParamConverter]
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| response | SkipValidation[ChatCompletions] |  |
+| content | str | Returns the content of the chat completion for the 0th choice. |
+| finish_reasons | list[str] | Returns the finish reasons of the response. |
+| model | str | Returns the name of the response model. |
+| id | str | Returns the id of the response. |
+| usage | CompletionsUsage | None | Returns the usage of the chat completion. |
+| input_tokens | int | None | Returns the number of input tokens. |
+| cached_tokens | int | None | Returns the number of cached tokens. |
+| output_tokens | int | None | Returns the number of output tokens. |
+| message_param | SerializeAsAny[AssistantMessage] | Returns the assistants's response as a message parameter. |
+| tools | list[AzureTool] | None | Returns any available tool calls as their `AzureTool` definition.
+
+Raises:
+    ValidationError: if a tool call doesn't match the tool's schema.
+    ValueError: if the model refused to response, in which case the error
+        message will be the refusal. |
+| tool | AzureTool | None | Returns the 0th tool for the 0th choice message.
+
+Raises:
+    ValidationError: if the tool call doesn't match the tool's schema.
+    ValueError: if the model refused to response, in which case the error
+        message will be the refusal. |
+| common_finish_reasons | list[FinishReason] | None | Provider-agnostic finish reasons. |
+| common_message_param | BaseMessageParam |  |
+| common_user_message_param | BaseMessageParam | None |  |
+| cost_metadata | CostMetadata | Get metadata required for cost calculation. |
+
 
 

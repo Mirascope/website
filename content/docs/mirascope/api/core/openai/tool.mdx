@@ -18,16 +18,66 @@ The `OpenAITool` class for easy tool usage with OpenAI LLM calls.
 
 </Info>
 
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| GenerateOpenAIStrictToolJsonSchema |  |  |
+| OpenAIToolConfig |  | A tool configuration for OpenAI-specific features. |
+| OpenAITool |  | A class for defining tools for OpenAI LLM calls.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.openai import openai_call
+
+
+def format_book(title: str, author: str) -> str:
+    return f"{title} by {author}"
+
+
+@openai_call("gpt-4o-mini", tools=[format_book])
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+response = recommend_book("fantasy")
+if tool := response.tool:  # returns an `OpenAITool` instance
+    print(tool.call())
+``` |
+
 ## Classes
 
 ### GenerateOpenAIStrictToolJsonSchema
 
+<ApiType type="Class" />
+
+**Bases:** GenerateJsonSchemaNoTitles
+
 
 ### OpenAIToolConfig
 
+<ApiType type="Class" />
+
+## Description
+
 A tool configuration for OpenAI-specific features.
 
+**Bases:** ToolConfig
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| strict | bool |  |
+
+
 ### OpenAITool
+
+<ApiType type="Class" />
+
+## Description
 
 A class for defining tools for OpenAI LLM calls.
 
@@ -51,5 +101,14 @@ response = recommend_book("fantasy")
 if tool := response.tool:  # returns an `OpenAITool` instance
     print(tool.call())
 ```
+
+**Bases:** BaseTool
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| tool_call | SkipJsonSchema[ChatCompletionMessageToolCall] |  |
+
 
 

@@ -16,9 +16,32 @@ description: API documentation for mirascope.core.mistral.call_params
 
 </Info>
 
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| MistralCallParams |  | The parameters to use when calling the Mistral API.
+
+[Mistral API Reference](https://docs.mistral.ai/api/)
+
+Attributes:
+    endpoint: ...
+    max_tokens: ...
+    random_seed: ...
+    response_format: ...
+    safe_mode: ...
+    safe_prompt: ...
+    temperature: ...
+    tool_choice: ...
+    top_p: ... |
+
 ## Classes
 
 ### MistralCallParams
+
+<ApiType type="Class" />
+
+## Description
 
 The parameters to use when calling the Mistral API.
 
@@ -34,5 +57,22 @@ Attributes:
     temperature: ...
     tool_choice: ...
     top_p: ...
+
+**Bases:** BaseCallParams
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| endpoint | NotRequired[str | None] |  |
+| max_tokens | NotRequired[int | None] |  |
+| random_seed | NotRequired[int | None] |  |
+| response_format | NotRequired[ResponseFormat | None] |  |
+| safe_mode | NotRequired[bool | None] |  |
+| safe_prompt | NotRequired[bool | None] |  |
+| temperature | NotRequired[float | None] |  |
+| tool_choice | NotRequired[ToolChoice | ToolChoiceEnum | None] |  |
+| top_p | NotRequired[float | None] |  |
+
 
 

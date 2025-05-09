@@ -8,28 +8,61 @@ description: API documentation for mirascope.tools.web._duckduckgo
 
 <ApiType type="Module" />
 
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| DuckDuckGoSearchConfig |  | Configuration for DuckDuckGo search |
+| DuckDuckGoSearch |  | Tool for performing web searches using DuckDuckGo.
+
+Takes search queries and returns relevant search results(Title, URL, Snippet). |
+| AsyncDuckDuckGoSearch |  | Tool for performing web searches using DuckDuckGo.
+
+Takes search queries and returns relevant search results(Title, URL, Snippet). |
+
 ## Classes
 
 ### DuckDuckGoSearchConfig
 
+<ApiType type="Class" />
+
+## Description
+
 Configuration for DuckDuckGo search
 
-### _BaseDuckDuckGoSearch
+**Bases:** _ConfigurableToolConfig
 
-Tool for performing web searches using DuckDuckGo.
+### Attributes
 
-Takes search queries and returns relevant search results(Title, URL, Snippet).
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| max_results_per_query | int |  |
+
 
 ### DuckDuckGoSearch
 
+<ApiType type="Class" />
+
+## Description
+
 Tool for performing web searches using DuckDuckGo.
 
 Takes search queries and returns relevant search results(Title, URL, Snippet).
+
+**Bases:** _BaseDuckDuckGoSearch
+
 
 ### AsyncDuckDuckGoSearch
 
+<ApiType type="Class" />
+
+## Description
+
 Tool for performing web searches using DuckDuckGo.
 
 Takes search queries and returns relevant search results(Title, URL, Snippet).
+
+**Bases:** _BaseDuckDuckGoSearch
+
 
 

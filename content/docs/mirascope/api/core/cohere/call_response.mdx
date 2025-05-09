@@ -18,9 +18,39 @@ This module contains the `CohereCallResponse` class.
 
 </Info>
 
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| CohereCallResponse |  | A convenience wrapper around the Cohere `ChatCompletion` response.
+
+When calling the Cohere API using a function decorated with `cohere_call`, the
+response will be an `CohereCallResponse` instance with properties that allow for
+more convenience access to commonly used attributes.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.cohere import cohere_call
+
+
+@cohere_call("command-r-plus")
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+response = recommend_book("fantasy")  # response is an `CohereCallResponse` instance
+print(response.content)
+``` |
+
 ## Classes
 
 ### CohereCallResponse
+
+<ApiType type="Class" />
+
+## Description
 
 A convenience wrapper around the Cohere `ChatCompletion` response.
 
@@ -43,5 +73,36 @@ def recommend_book(genre: str) -> str:
 response = recommend_book("fantasy")  # response is an `CohereCallResponse` instance
 print(response.content)
 ```
+
+**Bases:** BaseCallResponse[SkipValidation[NonStreamedChatResponse], CohereTool, SkipValidation[Tool], AsyncCohereDynamicConfig | CohereDynamicConfig, SkipValidation[ChatMessage], CohereCallParams, SkipValidation[ChatMessage], CohereMessageParamConverter]
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| content | str | Returns the content of the chat completion for the 0th choice. |
+| finish_reasons | list[str] | None | Returns the finish reasons of the response. |
+| model | str | Returns the name of the response model.
+
+Cohere does not return model, so we return the model provided by the user. |
+| id | str | None | Returns the id of the response. |
+| usage | ApiMetaBilledUnits | None | Returns the usage of the response. |
+| input_tokens | float | None | Returns the number of input tokens. |
+| cached_tokens | float | None | Returns the number of cached tokens. |
+| output_tokens | float | None | Returns the number of output tokens. |
+| message_param | ChatMessage | Returns the assistant's response as a message parameter. |
+| tools | list[CohereTool] | None | Returns the tools for the 0th choice message.
+
+Raises:
+    ValidationError: if a tool call doesn't match the tool's schema. |
+| tool | CohereTool | None | Returns the 0th tool for the 0th choice message.
+
+Raises:
+    ValidationError: if the tool call doesn't match the tool's schema. |
+| common_finish_reasons | list[FinishReason] | None |  |
+| common_message_param | BaseMessageParam |  |
+| common_user_message_param | BaseMessageParam | None |  |
+| cost_metadata | CostMetadata | Get metadata required for cost calculation. |
+
 
 

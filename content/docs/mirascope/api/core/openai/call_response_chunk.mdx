@@ -18,9 +18,41 @@ This module contains the `OpenAICallResponseChunk` class.
 
 </Info>
 
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| FinishReason | None |  |
+| OpenAICallResponseChunk |  | A convenience wrapper around the OpenAI `ChatCompletionChunk` streamed chunks.
+
+When calling the OpenAI API using a function decorated with `openai_call` and
+`stream` set to `True`, the stream will contain `OpenAIResponseChunk` instances with
+properties that allow for more convenient access to commonly used attributes.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.openai import openai_call
+
+
+@openai_call("gpt-4o-mini", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+stream = recommend_book("fantasy")  # response is an `OpenAIStream`
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+``` |
+
 ## Classes
 
 ### OpenAICallResponseChunk
+
+<ApiType type="Class" />
+
+## Description
 
 A convenience wrapper around the OpenAI `ChatCompletionChunk` streamed chunks.
 
@@ -44,5 +76,26 @@ stream = recommend_book("fantasy")  # response is an `OpenAIStream`
 for chunk, _ in stream:
     print(chunk.content, end="", flush=True)
 ```
+
+**Bases:** BaseCallResponseChunk[ChatCompletionChunk, FinishReason]
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| chunk | SkipValidation[ChatCompletionChunk] |  |
+| content | str | Returns the content for the 0th choice delta. |
+| finish_reasons | list[FinishReason] | Returns the finish reasons of the response. |
+| model | str | Returns the name of the response model. |
+| id | str | Returns the id of the response. |
+| usage | CompletionUsage | None | Returns the usage of the chat completion. |
+| cached_tokens | int | None | Returns the number of cached tokens. |
+| input_tokens | int | None | Returns the number of input tokens. |
+| output_tokens | int | None | Returns the number of output tokens. |
+| audio | bytes | None | Returns the audio data of the response. |
+| audio_transcript | str | None | Returns the transcript of the audio content. |
+| cost_metadata | CostMetadata | Returns the cost metadata. |
+| common_finish_reasons | list[FinishReason] | None | Provider-agnostic finish reasons. |
+
 
 

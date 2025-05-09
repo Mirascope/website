@@ -12,9 +12,62 @@ description: API documentation for mirascope.core.base.call_response
 
 This module contains the base call response class.
 
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| BaseCallResponse |  | A base abstract interface for LLM call responses.
+
+Attributes:
+    metadata: The metadata pulled from the call that was made.
+    response: The original response from whichever model response this wraps.
+    tool_types: The list of tool types used, if any.
+    prompt_template: The unformatted prompt template from the call that was made.
+    fn_args: The input arguments used when making the call.
+    dynamic_config: Dynamic configuration options, if any.
+    messages: The list of provider-specific messages used to make the API call.
+    call_params: The original call params set in the call decorator.
+    call_kwargs: The keyword arguments used to make the API call.
+    user_message_param: The most recent provider-specific message if it was a user
+        message. Otherwise `None`.
+    start_time: The start time of the completion in ms.
+    end_time: The end time of the completion in ms. |
+
+## Functions
+
+### transform_tool_outputs
+
+<ApiType type="Function" />
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "fn",
+    "type": "Callable[[type[_BaseCallResponseT], list[tuple[_BaseToolT, str]]], list[_ToolMessageParamT]]",
+    "module_context": "collections.abc",
+    "is_builtin": "false"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.base.call_response"
+/>
+
+<ReturnType
+  type="Callable[[type[_BaseCallResponseT], list[tuple[_BaseToolT, JsonableType]]], list[_ToolMessageParamT]]"
+  moduleContext="collections.abc"
+  isBuiltin={false}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.base.call_response"
+/>
+
+
 ## Classes
 
 ### BaseCallResponse
+
+<ApiType type="Class" />
+
+## Description
 
 A base abstract interface for LLM call responses.
 
@@ -32,5 +85,65 @@ Attributes:
         message. Otherwise `None`.
     start_time: The start time of the completion in ms.
     end_time: The end time of the completion in ms.
+
+**Bases:** BaseModel, Generic[_ResponseT, _BaseToolT, _ToolSchemaT, _BaseDynamicConfigT, _MessageParamT, _CallParamsT, _UserMessageParamT, _BaseMessageParamConverterT], ABC
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| metadata | Metadata |  |
+| response | _ResponseT |  |
+| tool_types | list[type[_BaseToolT]] | None |  |
+| prompt_template | str | None |  |
+| fn_args | dict[str, Any] |  |
+| dynamic_config | _BaseDynamicConfigT |  |
+| messages | SkipValidation[list[_MessageParamT]] |  |
+| call_params | SkipValidation[_CallParamsT] |  |
+| call_kwargs | BaseCallKwargs[_ToolSchemaT] |  |
+| user_message_param | _UserMessageParamT | None |  |
+| start_time | float |  |
+| end_time | float |  |
+| model_config | None |  |
+| content | str | Should return the string content of the response.
+
+If there are multiple choices in a response, this method should select the 0th
+choice and return it's string content.
+
+If there is no string content (e.g. when using tools), this method must return
+the empty string. |
+| finish_reasons | list[str] | None | Should return the finish reasons of the response.
+
+If there is no finish reason, this method must return None. |
+| model | str | None | Should return the name of the response model. |
+| id | str | None | Should return the id of the response. |
+| usage | Any | Should return the usage of the response.
+
+If there is no usage, this method must return None. |
+| input_tokens | int | float | None | Should return the number of input tokens.
+
+If there is no input_tokens, this method must return None. |
+| cached_tokens | int | float | None | Should return the number of cached tokens.
+
+If there is no cached_tokens, this method must return None. |
+| output_tokens | int | float | None | Should return the number of output tokens.
+
+If there is no output_tokens, this method must return None. |
+| cost_metadata | CostMetadata | Get metadata required for cost calculation.
+
+Returns:
+    Metadata relevant to cost calculation |
+| cost | float | None | Calculate the cost of this API call using the unified calculate_cost function. |
+| provider | Provider | Get the provider used for this API call. |
+| message_param | Any | Returns the assistant's response as a message parameter. |
+| tools | list[_BaseToolT] | None | Returns the tools for the 0th choice message. |
+| tool | _BaseToolT | None | Returns the 0th tool for the 0th choice message. |
+| common_finish_reasons | list[FinishReason] | None | Provider-agnostic finish reasons. |
+| common_message_param | BaseMessageParam | Provider-agnostic assistant message param. |
+| common_user_message_param | BaseMessageParam | None | Provider-agnostic user message param. |
+| common_messages | list[BaseMessageParam] | Provider-agnostic list of messages. |
+| common_tools | list[Tool] | None | Provider-agnostic tools. |
+| common_usage | Usage | None | Provider-agnostic usage info. |
+
 
 

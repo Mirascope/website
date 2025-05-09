@@ -12,10 +12,96 @@ description: API documentation for mirascope.core.base.stream
 
 This module contains the base classes for streaming responses from LLMs.
 
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| BaseStream |  | A base class for streaming responses from LLMs. |
+
+## Functions
+
+### stream_factory
+
+<ApiType type="Function" />
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "TCallResponse",
+    "type": "type[_BaseCallResponseT]",
+    "module_context": "mirascope.core.base.stream",
+    "is_builtin": "false"
+  },
+  {
+    "name": "TStream",
+    "type": "type[BaseStream]",
+    "module_context": "mirascope.core.base.stream",
+    "is_builtin": "false"
+  },
+  {
+    "name": "setup_call",
+    "type": "SameSyncAndAsyncClientSetupCall[_SameSyncAndAsyncClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT] | SetupCall[_SyncBaseClientT, _AsyncBaseClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT]",
+    "module_context": "mirascope.core.base._utils",
+    "is_builtin": "false"
+  },
+  {
+    "name": "handle_stream",
+    "type": "HandleStream[_ResponseChunkT, _BaseCallResponseChunkT, _BaseToolT]",
+    "module_context": "mirascope.core.base._utils",
+    "is_builtin": "false"
+  },
+  {
+    "name": "handle_stream_async",
+    "type": "HandleStreamAsync[_AsyncResponseChunkT, _BaseCallResponseChunkT, _BaseToolT]",
+    "module_context": "mirascope.core.base._utils",
+    "is_builtin": "false"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.base.stream"
+/>
+
+
 ## Classes
 
 ### BaseStream
 
+<ApiType type="Class" />
+
+## Description
+
 A base class for streaming responses from LLMs.
+
+**Bases:** Generic[_BaseCallResponseT, _BaseCallResponseChunkT, _UserMessageParamT, _AssistantMessageParamT, _ToolMessageParamT, _MessageParamT, _BaseToolT, _ToolSchemaT, _BaseDynamicConfigT, _BaseCallParamsT, _FinishReason], ABC
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| stream | Generator[tuple[_BaseCallResponseChunkT, _BaseToolT | None], None, None] | AsyncGenerator[tuple[_BaseCallResponseChunkT, _BaseToolT | None], None] |  |
+| content | str |  |
+| metadata | Metadata |  |
+| tool_types | list[type[_BaseToolT]] | None |  |
+| call_response_type | type[_BaseCallResponseT] |  |
+| model | str |  |
+| prompt_template | str | None |  |
+| fn_args | dict[str, Any] | None |  |
+| dynamic_config | _BaseDynamicConfigT |  |
+| messages | list[_MessageParamT] |  |
+| call_params | _BaseCallParamsT |  |
+| call_kwargs | BaseCallKwargs[_ToolSchemaT] |  |
+| user_message_param | _UserMessageParamT | None |  |
+| message_param | _AssistantMessageParamT |  |
+| input_tokens | int | float | None |  |
+| cached_tokens | int | float | None |  |
+| output_tokens | int | float | None |  |
+| id | str | None |  |
+| finish_reasons | list[_FinishReason] | None |  |
+| start_time | float |  |
+| end_time | float |  |
+| provider | Provider |  |
+| cost_metadata | CostMetadata | Returns metadata needed for cost calculation. |
+| cost | float | None | Calculate the cost of this streaming API call. |
+
 
 
