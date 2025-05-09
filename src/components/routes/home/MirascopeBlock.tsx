@@ -1,11 +1,15 @@
 import { ButtonLink } from "@/src/components/ui/button-link";
 import { ResponsiveTextBlock } from "@/src/components/ui/responsive-text-block";
-import { BookOpen, Users } from "lucide-react";
+import { BookOpen, Users, ChevronDown } from "lucide-react";
 import { ProviderTabbedSection } from "@/src/components/mdx/elements/ProviderTabbedSection";
 import { ProviderCodeWrapper } from "@/src/components/mdx/providers/ProviderCodeWrapper";
 
 // Mirascope feature block component
-export const MirascopeBlock = () => {
+export interface MirascopeBlockProps {
+  onScrollDown?: () => void;
+}
+
+export const MirascopeBlock = ({ onScrollDown }: MirascopeBlockProps) => {
   const codeExample = `from mirascope import llm
 from pydantic import BaseModel
 
@@ -61,20 +65,35 @@ book: Book = extract_book(text) # [!code highlight]`;
         <ButtonLink
           href="/docs/mirascope"
           variant="default"
-          size="lg"
-          className="landing-page-box-shadow landing-page-box-shadow-hover w-full min-w-[220px] px-8 py-6 text-center text-lg font-medium sm:w-auto"
+          size="default"
+          className="landing-page-box-shadow landing-page-box-shadow-hover w-full min-w-[200px] px-6 py-4 text-center font-medium sm:w-auto"
         >
-          <BookOpen className="size-6" aria-hidden="true" /> Mirascope Docs
+          <BookOpen className="size-5" aria-hidden="true" /> Mirascope Docs
         </ButtonLink>
         <ButtonLink
           href="https://join.slack.com/t/mirascope-community/shared_invite/zt-2ilqhvmki-FB6LWluInUCkkjYD3oSjNA"
           variant="outline"
-          size="lg"
-          className="landing-page-box-shadow landing-page-box-shadow-hover w-full min-w-[220px] border-0 bg-white px-8 py-6 text-center text-lg font-medium text-black hover:bg-gray-100 hover:text-black sm:w-auto"
+          size="default"
+          className="landing-page-box-shadow landing-page-box-shadow-hover w-full min-w-[200px] border-0 bg-white px-6 py-4 text-center font-medium text-black hover:bg-gray-100 hover:text-black sm:w-auto"
         >
-          <Users className="size-6" aria-hidden="true" /> Join the Community
+          <Users className="size-5" aria-hidden="true" /> Join the Community
         </ButtonLink>
       </div>
+
+      {/* Scroll indicator to Lilypad section */}
+      {onScrollDown && (
+        <div className="mt-8 flex justify-center">
+          <div className="landing-page-box-shadow landing-page-box-shadow-hover relative h-12 w-12 overflow-hidden rounded-full">
+            <button
+              onClick={onScrollDown}
+              className="bg-primary/80 hover:bg-primary absolute inset-0 flex items-center justify-center border-0 transition-all"
+              aria-label="Scroll to Lilypad section"
+            >
+              <ChevronDown className="h-6 w-6 text-white" />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
