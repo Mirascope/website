@@ -20,12 +20,15 @@ from griffe import (
 )
 
 from scripts.apigen.doclinks import UpdateDocstringsExtension
+from scripts.apigen.mdx_renderer import (
+    format_parameters_table,
+    format_return_type_component,
+    render_function,
+)
+from scripts.apigen.models import process_function
 from scripts.apigen.return_extractor import extract_return_info
 from scripts.apigen.type_utils import (
-    ParameterInfo,
-    ReturnInfo,
     extract_params_if_available,
-    parameters_to_dict_list,
 )
 
 # Default content subpath for documentation
@@ -250,84 +253,6 @@ def format_docstring_section(obj: Object | Alias) -> list[str]:
     return content
 
 
-def format_return_type_component(
-    return_info: ReturnInfo, content_subpath: str, module_path: str
-) -> list[str]:
-    """Format a ReturnType component from return type information.
-
-    Args:
-        return_info: Dictionary containing return type information
-        content_subpath: The content subpath for documentation
-        module_path: The module path for context
-
-    Returns:
-        List of strings representing the ReturnType component
-
-    """
-    component_lines = []
-
-    type_info = return_info.type_info
-    description = return_info.description
-    type_str = type_info.type_str
-    module_context = type_info.module_context
-
-    # Escape quotes in strings
-    type_str = type_str.replace('"', '\\"')
-    if module_context:
-        module_context = module_context.replace('"', '\\"')
-
-    # Format the component with proper line breaks and proper JSX syntax
-    component_lines.append("<ReturnType")
-    component_lines.append(f'  type="{type_str}"')
-
-    if module_context:
-        component_lines.append(f'  moduleContext="{module_context}"')
-
-    component_lines.append(f"  isBuiltin={{{str(type_info.is_builtin).lower()}}}")
-    component_lines.append(f'  contentSubpath="{content_subpath}"')
-    component_lines.append(f'  currentModule="{module_path}"')
-
-    if description:
-        # Properly escape newlines and quotes for JSX
-        description = description.replace('"', '\\"').replace("\n", "\\n")
-        component_lines.append(f'  description="{description}"')
-
-    component_lines.append("/>\n")
-
-    return component_lines
-
-
-def format_parameters_table(
-    params: list[ParameterInfo], content_subpath: str, module_path: str
-) -> list[str]:
-    """Format a ParametersTable component from parameter information.
-
-    Args:
-        params: List of parameter dictionaries
-        content_subpath: The content subpath for documentation
-        module_path: The module path for context
-
-    Returns:
-        List of strings representing the ParametersTable component
-
-    """
-    component_lines = []
-
-    # Convert the param dictionaries to JSON format with proper indentation
-    import json
-
-    params_json = json.dumps(parameters_to_dict_list(params), indent=2)
-
-    # Format the component with proper line breaks and proper JSX syntax
-    component_lines.append("<ParametersTable")
-    component_lines.append(f"  parameters={{{params_json}}}")
-    component_lines.append(f'  contentSubpath="{content_subpath}"')
-    component_lines.append(f'  currentModule="{module_path}"')
-    component_lines.append("/>\n")
-
-    return component_lines
-
-
 def document_function(func_obj: Function) -> str:
     """Generate documentation for a Function object.
 
@@ -338,32 +263,11 @@ def document_function(func_obj: Function) -> str:
         MDX documentation with enhanced component usage
 
     """
-    content: list[str] = []
+    # Process the function into a structured model
+    processed_func = process_function(func_obj)
 
-    # Determine the content subpath for this documentation
-    module = getattr(func_obj, "module", None)
-    module_path = getattr(module, "path", "")
-    content_subpath = MODULE_CONTENT_SUBPATH
-
-    # Add object type using a component with consistent typing
-    content.append('<ApiType type="Function" />\n')
-
-    # Add docstring
-    content.extend(format_docstring_section(func_obj))
-
-    # Extract parameters and add ParametersTable if available
-    params = extract_params_if_available(func_obj)
-    if params:
-        content.extend(format_parameters_table(params, content_subpath, module_path))
-
-    # Extract return type and add ReturnType if available
-    return_info = extract_return_info(func_obj)
-    if return_info:
-        content.extend(
-            format_return_type_component(return_info, content_subpath, module_path)
-        )
-
-    return "\n".join(content)
+    # Render the processed function to MDX
+    return render_function(processed_func)
 
 
 def document_class(class_obj: Class) -> str:
