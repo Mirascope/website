@@ -36,9 +36,8 @@ export const MirascopeBlock = () => {
         lineClassName="font-bold"
         lineSpacing="mb-2"
         textShadow={true}
-        fadeOnScroll={true}
       />
-      <div data-gradient-fade={true} className="bg-background/60 mb-2 w-full max-w-3xl rounded-md">
+      <div className="bg-background/60 mb-2 w-full max-w-3xl rounded-md">
         <ProviderTabbedSection
           customHeader={
             <div className="flex items-center px-2 pb-2">
@@ -65,7 +64,6 @@ export const MirascopeBlock = () => {
           variant="default"
           size="lg"
           className="landing-page-box-shadow landing-page-box-shadow-hover w-full min-w-[220px] px-8 py-6 text-center text-lg font-medium sm:w-auto"
-          data-fade-on-scroll={true}
         >
           <BookOpen className="size-6" aria-hidden="true" /> Mirascope Docs
         </ButtonLink>
@@ -74,7 +72,6 @@ export const MirascopeBlock = () => {
           variant="outline"
           size="lg"
           className="landing-page-box-shadow landing-page-box-shadow-hover w-full min-w-[220px] border-0 bg-white px-8 py-6 text-center text-lg font-medium text-black hover:bg-gray-100 hover:text-black sm:w-auto"
-          data-fade-on-scroll={true}
         >
           <Users className="size-6" aria-hidden="true" /> Join the Community
         </ButtonLink>

@@ -124,10 +124,8 @@ export function HeroBlock({ onScrollDown, showScrollButton }: HeroBlockProps) {
           }}
         >
           <div
-            data-fade-on-scroll="true"
             style={{
               marginBottom: logoStyles.logoToHeroSpacing,
-              transition: "opacity 0.1s ease-out",
             }}
           >
             <LogoBanner />
@@ -140,7 +138,6 @@ export function HeroBlock({ onScrollDown, showScrollButton }: HeroBlockProps) {
               className="flex flex-col font-medium tracking-tight text-white"
               lineClassName="font-handwriting"
               textShadow={true}
-              fadeOnScroll={true}
             />
           </div>
         </div>
