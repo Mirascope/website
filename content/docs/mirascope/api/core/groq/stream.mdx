@@ -8,8 +8,6 @@ description: API documentation for mirascope.core.groq.stream
 
 <ApiType type="Module" />
 
-## Description
-
 The `GroqStream` class for convenience around streaming LLM calls.
 
 <Info title="Usage">
@@ -17,5 +15,61 @@ The `GroqStream` class for convenience around streaming LLM calls.
 [Streams](/docs/mirascope/learn/streams)
 
 </Info>
+
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| FinishReason | None |  |
+| GroqStream |  | A class for convenience around streaming Groq LLM calls.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.groq import groq_call
+
+
+@groq_call("llama-3.1-8b-instant", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+stream = recommend_book("fantasy")  # returns `GroqStream` instance
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+``` |
+
+## Classes
+
+### GroqStream
+
+<ApiType type="Class" />
+
+A class for convenience around streaming Groq LLM calls.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.groq import groq_call
+
+
+@groq_call("llama-3.1-8b-instant", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+stream = recommend_book("fantasy")  # returns `GroqStream` instance
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+```
+
+**Bases:** BaseStream[GroqCallResponse, GroqCallResponseChunk, ChatCompletionUserMessageParam, ChatCompletionAssistantMessageParam, ChatCompletionToolMessageParam, ChatCompletionMessageParam, GroqTool, ChatCompletionToolParam, AsyncGroqDynamicConfig | GroqDynamicConfig, GroqCallParams, FinishReason]
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| cost_metadata | CostMetadata |  |
+
 
 

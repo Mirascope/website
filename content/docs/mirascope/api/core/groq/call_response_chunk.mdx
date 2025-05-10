@@ -8,8 +8,6 @@ description: API documentation for mirascope.core.groq.call_response_chunk
 
 <ApiType type="Module" />
 
-## Description
-
 This module contains the `GroqCallResponseChunk` class.
 
 <Info title="Usage">
@@ -17,5 +15,78 @@ This module contains the `GroqCallResponseChunk` class.
 [Streams](/docs/mirascope/learn/streams#handling-streamed-responses)
 
 </Info>
+
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| FinishReason | None |  |
+| GroqCallResponseChunk |  | A convenience wrapper around the Groq `ChatCompletionChunk` streamed chunks.
+
+When calling the Groq API using a function decorated with `groq_call` and
+`stream` set to `True`, the stream will contain `GroqResponseChunk` instances with
+properties that allow for more convenient access to commonly used attributes.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.groq import groq_call
+
+
+@groq_call("llama-3.1-8b-instant", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+stream = recommend_book("fantasy")  # response is an `GroqStream`
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+``` |
+
+## Classes
+
+### GroqCallResponseChunk
+
+<ApiType type="Class" />
+
+A convenience wrapper around the Groq `ChatCompletionChunk` streamed chunks.
+
+When calling the Groq API using a function decorated with `groq_call` and
+`stream` set to `True`, the stream will contain `GroqResponseChunk` instances with
+properties that allow for more convenient access to commonly used attributes.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.groq import groq_call
+
+
+@groq_call("llama-3.1-8b-instant", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+stream = recommend_book("fantasy")  # response is an `GroqStream`
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+```
+
+**Bases:** BaseCallResponseChunk[ChatCompletionChunk, FinishReason]
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| content | str | Returns the content for the 0th choice delta. |
+| finish_reasons | list[FinishReason] | Returns the finish reasons of the response. |
+| model | str | Returns the name of the response model. |
+| id | str | Returns the id of the response. |
+| usage | CompletionUsage | None | Returns the usage of the chat completion. |
+| input_tokens | int | None | Returns the number of input tokens. |
+| cached_tokens | int | None | Returns the number of cached tokens. |
+| output_tokens | int | None | Returns the number of output tokens. |
+| cost_metadata | CostMetadata | Returns the cost metadata. |
+| common_finish_reasons | list[FinishReason] | None |  |
+
 
 

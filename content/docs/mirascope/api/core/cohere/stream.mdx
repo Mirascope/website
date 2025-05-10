@@ -8,8 +8,6 @@ description: API documentation for mirascope.core.cohere.stream
 
 <ApiType type="Module" />
 
-## Description
-
 The `CohereStream` class for convenience around streaming LLM calls.
 
 <Info title="Usage">
@@ -17,5 +15,62 @@ The `CohereStream` class for convenience around streaming LLM calls.
 [Streams](/docs/mirascope/learn/streams)
 
 </Info>
+
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| CohereStream |  | A class for convenience around streaming Cohere LLM calls.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.cohere import cohere_call
+
+
+@cohere_call("command-r-plus", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+stream = recommend_book("fantasy")  # returns `CohereStream` instance
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+``` |
+
+## Classes
+
+### CohereStream
+
+<ApiType type="Class" />
+
+A class for convenience around streaming Cohere LLM calls.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.cohere import cohere_call
+
+
+@cohere_call("command-r-plus", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+stream = recommend_book("fantasy")  # returns `CohereStream` instance
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+```
+
+**Bases:** BaseStream[CohereCallResponse, CohereCallResponseChunk, ChatMessage, ChatMessage, ChatMessage, ChatMessage, CohereTool, Tool, AsyncCohereDynamicConfig | CohereDynamicConfig, CohereCallParams, ChatStreamEndEventFinishReason]
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| cost_metadata | CostMetadata |  |
+
 
 

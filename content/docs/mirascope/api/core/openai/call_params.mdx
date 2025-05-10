@@ -8,12 +8,74 @@ description: API documentation for mirascope.core.openai.call_params
 
 <ApiType type="Module" />
 
-## Description
-
 <Info title="Usage">
 
 [Calls](/docs/mirascope/learn/calls#provider-specific-parameters)
 
 </Info>
+
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| ChatCompletionAudioParam |  |  |
+| ChatCompletionModality |  |  |
+| ChatCompletionReasoningEffort |  |  |
+| OpenAICallParams |  | The parameters to use when calling the OpenAI API.
+
+[OpenAI API Reference](https://platform.openai.com/docs/api-reference/chat/create) |
+
+## Classes
+
+### ChatCompletionAudioParam
+
+<ApiType type="Class" />
+
+
+### ChatCompletionModality
+
+<ApiType type="Class" />
+
+
+### ChatCompletionReasoningEffort
+
+<ApiType type="Class" />
+
+
+### OpenAICallParams
+
+<ApiType type="Class" />
+
+The parameters to use when calling the OpenAI API.
+
+[OpenAI API Reference](https://platform.openai.com/docs/api-reference/chat/create)
+
+**Bases:** BaseCallParams
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| audio | NotRequired[ChatCompletionAudioParam | None] |  |
+| extra_headers | NotRequired[dict[str, str] | None] |  |
+| frequency_penalty | NotRequired[float | None] |  |
+| logit_bias | NotRequired[dict[str, int] | None] |  |
+| logprobs | NotRequired[bool | None] |  |
+| max_tokens | NotRequired[int | None] |  |
+| modalities | NotRequired[list[ChatCompletionModality] | None] |  |
+| n | NotRequired[int | None] |  |
+| parallel_tool_calls | NotRequired[bool] |  |
+| presence_penalty | NotRequired[float | None] |  |
+| reasoning_effort | NotRequired[ChatCompletionReasoningEffort | None] |  |
+| response_format | NotRequired[ResponseFormat] |  |
+| seed | NotRequired[int | None] |  |
+| stop | NotRequired[str | list[str] | None] |  |
+| stream_options | NotRequired[ChatCompletionStreamOptionsParam | None] |  |
+| temperature | NotRequired[float | None] |  |
+| tool_choice | NotRequired[ChatCompletionToolChoiceOptionParam] |  |
+| top_logprobs | NotRequired[int | None] |  |
+| top_p | NotRequired[float | None] |  |
+| user | NotRequired[str] |  |
+
 
 

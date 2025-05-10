@@ -8,8 +8,6 @@ description: API documentation for mirascope.core.mistral.call_response
 
 <ApiType type="Module" />
 
-## Description
-
 This module contains the `MistralCallResponse` class.
 
 <Info title="Usage">
@@ -17,5 +15,80 @@ This module contains the `MistralCallResponse` class.
 [Calls](/docs/mirascope/learn/calls#handling-responses)
 
 </Info>
+
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| MistralCallResponse |  | A convenience wrapper around the Mistral `ChatCompletion` response.
+
+When calling the Mistral API using a function decorated with `mistral_call`, the
+response will be an `MistralCallResponse` instance with properties that allow for
+more convenience access to commonly used attributes.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.mistral import mistral_call
+
+
+@mistral_call("mistral-largel-latest")
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+response = recommend_book("fantasy")  # response is an `MistralCallResponse` instance
+print(response.content)
+``` |
+
+## Classes
+
+### MistralCallResponse
+
+<ApiType type="Class" />
+
+A convenience wrapper around the Mistral `ChatCompletion` response.
+
+When calling the Mistral API using a function decorated with `mistral_call`, the
+response will be an `MistralCallResponse` instance with properties that allow for
+more convenience access to commonly used attributes.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.mistral import mistral_call
+
+
+@mistral_call("mistral-largel-latest")
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+response = recommend_book("fantasy")  # response is an `MistralCallResponse` instance
+print(response.content)
+```
+
+**Bases:** BaseCallResponse[ChatCompletionResponse, MistralTool, dict[str, Any], MistralDynamicConfig, AssistantMessage | SystemMessage | ToolMessage | UserMessage, MistralCallParams, UserMessage, MistralMessageParamConverter]
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| content | str | The content of the chat completion for the 0th choice. |
+| finish_reasons | list[str] | Returns the finish reasons of the response. |
+| model | str | Returns the name of the response model. |
+| id | str | Returns the id of the response. |
+| usage | UsageInfo | Returns the usage of the chat completion. |
+| input_tokens | int | Returns the number of input tokens. |
+| cached_tokens | int | Returns the number of cached tokens. |
+| output_tokens | int | None | Returns the number of output tokens. |
+| message_param | AssistantMessage | Returns the assistants's response as a message parameter. |
+| tools | list[MistralTool] | None | Returns the tools for the 0th choice message. |
+| tool | MistralTool | None | Returns the 0th tool for the 0th choice message. |
+| common_finish_reasons | list[FinishReason] | None |  |
+| common_message_param | BaseMessageParam |  |
+| common_user_message_param | BaseMessageParam | None |  |
+| cost_metadata | CostMetadata | Get metadata required for cost calculation. |
+
 
 

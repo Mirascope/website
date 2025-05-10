@@ -1,28 +1,48 @@
 """Integration with Griffe for API documentation generation.
 
 This module provides functionality to process API directives and generate
-documentation using Griffe. The implementation focuses on generating clean,
-accurate documentation with specialized handlers for different object types.
+documentation using Griffe. The implementation follows a clear model-view
+pattern where:
+1. Data is extracted and processed into structured models (via process_* functions)
+2. Models are rendered into MDX format (via render_* functions)
+3. Error handling ensures graceful fallbacks for missing dependencies
+
+The code is organized in the following sections:
+- Configuration: Loader setup for parsing docstrings
+- Documentation Generation: Core object processing and rendering
+- Directive Processing: Handling API directives and error cases
 """
 
 import re
-from collections.abc import Callable
 from pathlib import Path
 
 from griffe import (
     Alias,
     Class,
-    Docstring,
     Extensions,
     Function,
     GriffeLoader,
     Module,
     Object,
-    Parameters,
     Parser,
 )
 
 from scripts.apigen.doclinks import UpdateDocstringsExtension
+from scripts.apigen.mdx_renderer import (
+    render_alias,
+    render_class,
+    render_function,
+    render_module,
+)
+from scripts.apigen.models import (
+    process_alias,
+    process_class,
+    process_function,
+    process_module,
+)
+
+# Default content subpath for documentation
+MODULE_CONTENT_SUBPATH = "docs/mirascope"
 
 
 def get_loader(
@@ -53,6 +73,92 @@ def get_loader(
         loader.extensions = extensions
 
     return loader
+
+
+def generate_error_placeholder(object_path: str, error: Exception) -> str:
+    """Generate placeholder documentation for errors.
+
+    Args:
+        object_path: The path of the object that failed to process
+        error: The exception that was raised
+
+    Returns:
+        Placeholder documentation with error details
+
+    """
+    if isinstance(error, KeyError):
+        # Handle missing dependency issues (like opentelemetry not being available)
+        missing_dep = str(error).strip("'")
+        print(
+            f"WARNING: Could not resolve dependency when processing {object_path}: {error}"
+        )
+
+        return f"""
+## Missing Dependency Warning
+
+Documentation for `{object_path}` could not be fully generated because of a missing dependency: `{missing_dep}`.
+
+This is expected and safe to ignore for documentation generation purposes.
+"""
+    else:
+        # Add general error handling to make API docs generation more robust
+        print(f"WARNING: Error processing directive {object_path}: {error}")
+
+        return f"""
+## Error Processing Documentation
+
+An error occurred while generating documentation for `{object_path}`: {error!s}
+
+Please check that all required dependencies are installed.
+"""
+
+
+def process_directive_with_error_handling(directive: str, module: Module) -> str:
+    """Process an API directive with error handling for missing dependencies.
+
+    This wrapper catches errors during documentation generation, reports them,
+    and provides placeholder documentation, allowing the process to continue
+    even when dependencies are missing or other issues are encountered.
+
+    Args:
+        directive: The directive string (e.g., "::: mirascope.core.anthropic.call")
+        module: The pre-loaded Griffe module
+
+    Returns:
+        The generated documentation content or error placeholder
+
+    """
+    try:
+        return process_directive(directive, module)
+    except Exception as e:
+        object_path = directive.replace("::: ", "")
+        return generate_error_placeholder(object_path, e)
+
+
+def document_object(obj: Object | Alias) -> str:
+    """Generate documentation for any supported Griffe object type.
+
+    Args:
+        obj: The Griffe object to document
+
+    Returns:
+        MDX documentation with enhanced component usage
+
+    """
+    if isinstance(obj, Module):
+        processed_obj = process_module(obj)
+        return render_module(processed_obj)
+    elif isinstance(obj, Function):
+        processed_obj = process_function(obj)
+        return render_function(processed_obj)
+    elif isinstance(obj, Class):
+        processed_obj = process_class(obj)
+        return render_class(processed_obj)
+    elif isinstance(obj, Alias):
+        processed_obj = process_alias(obj)
+        return render_alias(processed_obj)
+    else:
+        raise ValueError(f"Unsupported object type: {type(obj)}")
 
 
 def process_directive(directive: str, module: Module) -> str:
@@ -88,546 +194,5 @@ def process_directive(directive: str, module: Module) -> str:
                 f"Could not find {'.'.join(path_parts[: i + 1])} in the module."
             )
 
-    # Generate documentation based on object type
-    object_type = current_obj.__class__.__name__
-
-    # Type check and handlers
-    handlers: dict[str, Callable[[Object | Alias], str]] = {
-        "Function": document_placeholder,
-        "Method": document_placeholder,
-        "Class": document_placeholder,
-        "Module": document_placeholder,
-        "Alias": document_placeholder,
-    }
-
-    # Use the appropriate handler or a generic one if type not recognized
-    handler = handlers.get(object_type, document_placeholder)
-    return handler(current_obj)
-
-
-def format_signature_from_parameters(name: str, parameters: Parameters) -> str:
-    """Create a signature string from a Parameters object.
-
-    Args:
-        name: Function or method name
-        parameters: Griffe Parameters object
-
-    Returns:
-        A formatted signature string
-
-    """
-    param_strs: list[str] = []
-
-    # Parameters implements __iter__ which returns Parameter objects directly
-    for param in parameters:
-        param_str = param.name
-
-        # Add type annotation if available
-        if param.annotation:
-            param_str += f": {param.annotation}"
-
-        # Add default value if available
-        if param.default:
-            param_str += f" = {param.default}"
-
-        param_strs.append(param_str)
-
-    return f"{name}({', '.join(param_strs)})"
-
-
-def format_signature_from_docstring(name: str, docstring: Docstring) -> str | None:
-    """Create a signature string from a parsed docstring.
-
-    Args:
-        name: Function or method name
-        docstring: Griffe Docstring object
-
-    Returns:
-        A formatted signature string, or None if no parameters found
-
-    """
-    param_strs: list[str] = []
-
-    if not hasattr(docstring, "parsed"):
-        return None
-
-    for section in docstring.parsed:
-        if section.kind == "parameters" and hasattr(section, "value"):
-            for param in section.value:
-                if hasattr(param, "name"):
-                    param_str = param.name
-
-                    # Add type annotation if available
-                    if hasattr(param, "annotation") and param.annotation:
-                        param_str += f": {param.annotation}"
-
-                    # Add default value if available
-                    if hasattr(param, "default") and param.default:
-                        param_str += f" = {param.default}"
-
-                    param_strs.append(param_str)
-
-    if param_strs:
-        return f"{name}({', '.join(param_strs)})"
-    return None
-
-
-def get_type_origin(annotation, module: Module) -> dict:
-    """Find the origin module of a type annotation.
-
-    Args:
-        annotation: The type annotation to analyze
-        module: The module that contains the type annotation
-
-    Returns:
-        A dictionary with information about the type origin
-
-    """
-    type_origin = {
-        "module_path": module.path,
-        "is_internal": True,
-    }
-
-    # Extract the base type name (without generic parameters or union pipes)
-    base_type = str(annotation).split("[")[0].split("|")[0].strip()
-
-    # Check if it's a fully qualified name (contains dots)
-    if "." in base_type:
-        parts = base_type.split(".")
-        type_origin["module_path"] = ".".join(parts[:-1])
-        type_origin["is_internal"] = True
-        return type_origin
-
-    # For types that don't have dots, check if they're imported
-    if hasattr(module, "members"):
-        # Look through imported names in this module
-        for member_name, member in module.members.items():
-            if isinstance(member, Alias) and member_name == base_type:
-                # Found an import of this name
-                if hasattr(member, "target"):
-                    # Handle cases where the target might be None or from an external package
-                    # like Pydantic that we can't fully resolve
-                    if member.target:
-                        target_path = getattr(member.target, "path", "")
-                        if target_path:
-                            # This extracts the module path from the target path
-                            type_origin["module_path"] = ".".join(
-                                target_path.split(".")[:-1]
-                            )
-                            return type_origin
-                    else:
-                        # For external packages like Pydantic, we can infer from the module name
-                        # or use the current module context
-                        type_origin["module_path"] = module.path
-                        type_origin["is_internal"] = False
-                        return type_origin
-
-    # Common Python built-in types and modules
-    python_builtins = {
-        "str",
-        "int",
-        "float",
-        "bool",
-        "list",
-        "dict",
-        "tuple",
-        "set",
-        "None",
-        "Callable",
-        "Optional",
-        "Union",
-        "Any",
-        "List",
-        "Dict",
-        "Tuple",
-        "Set",
-        "Type",
-        "Generator",
-        "Iterable",
-        "Iterator",
-        "Sequence",
-        "Mapping",
-    }
-
-    if base_type in python_builtins:
-        type_origin["module_path"] = (
-            "builtins"
-            if base_type
-            in {"str", "int", "float", "bool", "list", "dict", "tuple", "set"}
-            else "typing"
-        )
-        type_origin["is_internal"] = False
-
-    return type_origin
-
-
-def extract_params_if_available(obj: Object | Alias) -> list[dict]:
-    """Extract parameter information from a Griffe object if available.
-
-    This function tries multiple approaches to extract parameter information:
-    1. First from the object's parameters attribute (for Function objects)
-    2. Then from the object's parsed docstring
-
-    Args:
-        obj: The Griffe object to extract parameters from
-
-    Returns:
-        A list of parameter dictionaries (empty list if none available)
-
-    """
-    # Get the containing module for context
-    module = getattr(obj, "module", None)
-
-    # First try with direct parameters (most reliable)
-    if isinstance(obj, Function) and obj.parameters:
-        params_data = []
-        for param in obj.parameters:
-            param_data = {"name": param.name}
-
-            # Add type annotation if available
-            if param.annotation:
-                param_data["type"] = str(param.annotation)
-
-                # Add type origin information
-                if module:
-                    type_origin = get_type_origin(param.annotation, module)
-                    param_data["module_context"] = type_origin["module_path"]
-                    param_data["is_builtin"] = str(
-                        not type_origin["is_internal"]
-                    ).lower()
-
-            # Add default value if available
-            if param.default:
-                param_data["default"] = str(param.default)
-
-            params_data.append(param_data)
-        return params_data
-
-    # Try from docstring if parameters aren't available
-    if hasattr(obj, "docstring") and obj.docstring and hasattr(obj.docstring, "parsed"):
-        params_data = []
-        for section in obj.docstring.parsed:
-            if section.kind == "parameters" and hasattr(section, "value"):
-                for param in section.value:
-                    if hasattr(param, "name"):
-                        param_data = {"name": param.name}
-
-                        # Add type annotation if available
-                        if hasattr(param, "annotation") and param.annotation:
-                            param_data["type"] = str(param.annotation)
-
-                            # Add type origin information if we have module context
-                            if module:
-                                type_origin = get_type_origin(param.annotation, module)
-                                param_data["module_context"] = type_origin[
-                                    "module_path"
-                                ]
-                                param_data["is_builtin"] = str(
-                                    not type_origin["is_internal"]
-                                ).lower()
-
-                        # Add description if available
-                        if hasattr(param, "description") and param.description:
-                            param_data["description"] = str(param.description)
-
-                        # Add default value if available
-                        if hasattr(param, "default") and param.default:
-                            param_data["default"] = str(param.default)
-
-                        params_data.append(param_data)
-
-        if params_data:
-            return params_data
-
-    # Return empty list if no parameters found
-    return []
-
-
-def extract_return_info(obj: Object | Alias) -> dict:
-    """Extract return type information from a Griffe object if available.
-
-    Args:
-        obj: The Griffe object to extract return info from
-
-    Returns:
-        A dictionary with type and description (empty dict if none available)
-
-    """
-    return_info = {}
-
-    # Get the containing module for context
-    module = getattr(obj, "module", None)
-
-    # Handle aliases - set a default type for aliases (decorators)
-    if isinstance(obj, Alias):
-        return_info["type"] = "Callable"
-
-        # Check if alias's target has annotation (getattr for type checking)
-        if hasattr(obj, "target"):
-            annotation = getattr(obj.target, "annotation", None)
-            if annotation:
-                return_info["type"] = str(annotation)
-
-                # Add type origin information
-                if module:
-                    type_origin = get_type_origin(annotation, module)
-                    return_info["module_context"] = type_origin["module_path"]
-                    return_info["is_builtin"] = str(
-                        not type_origin["is_internal"]
-                    ).lower()
-
-    # Get type from function's return annotation (most reliable)
-    elif isinstance(obj, Function) and hasattr(obj, "returns") and obj.returns:
-        return_info["type"] = str(obj.returns)
-
-        # Add type origin information
-        if module:
-            type_origin = get_type_origin(obj.returns, module)
-            return_info["module_context"] = type_origin["module_path"]
-            return_info["is_builtin"] = str(not type_origin["is_internal"]).lower()
-
-    # Try to get description from docstring's parsed sections
-    if hasattr(obj, "docstring") and obj.docstring:
-        if hasattr(obj.docstring, "parsed"):
-            for section in obj.docstring.parsed:
-                if section.kind == "returns" and hasattr(section, "value"):
-                    # Add type from docstring if not already specified
-                    if "type" not in return_info:
-                        # Check if section has an annotation attribute directly
-                        annotation = getattr(section, "annotation", None)
-                        if annotation:
-                            return_info["type"] = str(annotation)
-
-                            # Add type origin information if not already present
-                            if module and "module_context" not in return_info:
-                                type_origin = get_type_origin(annotation, module)
-                                return_info["module_context"] = type_origin[
-                                    "module_path"
-                                ]
-                                return_info["is_builtin"] = str(
-                                    not type_origin["is_internal"]
-                                ).lower()
-
-                        # Or check if section has a value with annotation (for DocstringSectionReturns)
-                        elif hasattr(section, "value"):
-                            value_annotation = (
-                                getattr(section.value, "annotation", None)
-                                if not isinstance(section.value, (list, str))
-                                else None
-                            )
-                            if value_annotation:
-                                return_info["type"] = str(value_annotation)
-
-                                # Add type origin information if not already present
-                                if module and "module_context" not in return_info:
-                                    type_origin = get_type_origin(
-                                        value_annotation, module
-                                    )
-                                    return_info["module_context"] = type_origin[
-                                        "module_path"
-                                    ]
-                                    return_info["is_builtin"] = str(
-                                        not type_origin["is_internal"]
-                                    ).lower()
-
-                    # Add description if available
-                    if hasattr(section, "value"):
-                        if not isinstance(section.value, (list, str)):
-                            description = getattr(section.value, "description", None)
-                            if description:
-                                return_info["description"] = str(description)
-                                break  # Found what we need
-                        elif isinstance(section.value, str):
-                            return_info["description"] = str(section.value)
-                            break  # Found what we need
-                        elif isinstance(section.value, list) and len(section.value) > 0:
-                            # Handle list of DocstringReturn objects
-                            description = getattr(section.value[0], "description", None)
-                            if description:
-                                return_info["description"] = str(description)
-                            break
-
-        # If we still don't have return info, try to parse it from the raw docstring
-        if ("description" not in return_info) and hasattr(obj.docstring, "value"):
-            docstring_text = obj.docstring.value
-            if "Returns:" in docstring_text:
-                # Get the text after "Returns:"
-                returns_text = docstring_text.split("Returns:")[1].strip()
-                lines = returns_text.split("\n")
-
-                # Get the indentation of the first line to determine the paragraph
-                indent = len(lines[0]) - len(lines[0].lstrip()) if lines else 0
-
-                # Extract the description - stop at first line with less indentation
-                # or at first empty line
-                description_lines = []
-                for line in lines:
-                    if not line.strip():
-                        break
-                    if line.startswith(" " * indent) or not indent:
-                        description_lines.append(line.strip())
-                    else:
-                        break
-
-                if description_lines:
-                    # Join the lines and use as description
-                    return_info["description"] = " ".join(description_lines)
-
-                    # If no type but description mentions "decorator", set type to Callable
-                    if (
-                        "type" not in return_info
-                        and "decorator" in return_info["description"].lower()
-                    ):
-                        return_info["type"] = "Callable"
-
-                        # Add type origin information for Callable if not already present
-                        if module and "module_context" not in return_info:
-                            return_info["module_context"] = "typing"
-                            return_info["is_builtin"] = "true"
-
-    # Always return the dictionary (might be empty)
-    return return_info
-
-
-def format_signature(obj: Object | Alias) -> str | None:
-    """Create a signature string from Griffe object's parameters.
-
-    Args:
-        obj: The Griffe object
-
-    Returns:
-        A formatted signature string if parameters can be extracted, None otherwise
-
-    """
-    name = obj.name
-    params = extract_params_if_available(obj)
-
-    # Don't display an empty signature
-    if not params:
-        return None
-
-    # Format parameters for signature
-    param_strs = []
-    for param in params:
-        param_str = param["name"]
-
-        if "type" in param:
-            param_str += f": {param['type']}"
-
-        if "default" in param:
-            param_str += f" = {param['default']}"
-
-        param_strs.append(param_str)
-
-    return f"{name}({', '.join(param_strs)})"
-
-
-def get_object_type(obj: Object | Alias) -> str:
-    """Determine the actual object type in a reliable way.
-
-    Args:
-        obj: The Griffe object
-
-    Returns:
-        A string representing the object type
-
-    """
-    # Check if we're dealing with a specific type
-    if isinstance(obj, Function):
-        return "Function"
-    elif isinstance(obj, Class):
-        return "Class"
-    elif isinstance(obj, Module):
-        return "Module"
-    elif isinstance(obj, Alias):
-        return "Alias"
-
-    # Fallback to class name for other types (Method, etc.)
-    return obj.__class__.__name__
-
-
-def document_placeholder(obj: Object | Alias) -> str:
-    """Generate documentation with enhanced component usage.
-
-    Args:
-        obj: The Griffe object
-
-    Returns:
-        MDX documentation with enhanced component usage
-
-    """
-    content: list[str] = []
-
-    # Determine the content subpath for this documentation
-    module = getattr(obj, "module", None)
-    module_path = getattr(module, "path", "")
-    content_subpath = "docs/mirascope"  # Default fallback
-
-    # Get the module's package (first part of the path)
-    package_name = module_path.split(".")[0] if module_path else ""
-    if package_name == "mirascope":
-        content_subpath = "docs/mirascope"
-
-    # Add object type using a component with consistent typing
-    obj_type = get_object_type(obj)
-    content.append(f'<ApiType type="{obj_type}" />\n')
-
-    # Add enhanced signature using a component only if we can get a valid signature
-    signature = format_signature(obj)
-    if signature:
-        content.append(f"<ApiSignature>\n{signature}\n</ApiSignature>\n")
-
-    # Add docstring as usual
-    if hasattr(obj, "docstring") and obj.docstring and obj.docstring.value:
-        content.append("## Description\n")
-        content.append(obj.docstring.value.strip())
-        content.append("")
-
-    # Extract parameters and add ParametersTable if available
-    params = extract_params_if_available(obj)
-    if params:
-        # Convert the param dictionaries to JSON format with proper indentation
-        import json
-
-        params_json = json.dumps(params, indent=2)
-
-        # Format the component with proper line breaks and proper JSX syntax
-        # In JSX, we need to wrap arrays with curly braces, not square brackets
-        content.append("<ParametersTable")
-        content.append(f"  parameters={{{params_json}}}")
-        content.append(f'  contentSubpath="{content_subpath}"')
-        content.append(f'  currentModule="{module_path}"')
-        content.append("/>\n")
-
-    # Extract return type and add ReturnType if available
-    return_info = extract_return_info(obj)
-    if "type" in return_info:
-        type_str = return_info.get("type", "")
-        description = return_info.get("description", "")
-        module_context = return_info.get("module_context", "")
-        is_builtin = return_info.get("is_builtin", False)
-
-        # Escape quotes in strings
-        type_str = type_str.replace('"', '\\"')
-        if module_context:
-            module_context = module_context.replace('"', '\\"')
-
-        # Format the component with proper line breaks and proper JSX syntax
-        content.append("<ReturnType")
-        content.append(f'  type="{type_str}"')
-
-        if module_context:
-            content.append(f'  moduleContext="{module_context}"')
-
-        content.append(f"  isBuiltin={{{str(is_builtin).lower()}}}")
-        content.append(f'  contentSubpath="{content_subpath}"')
-        content.append(f'  currentModule="{module_path}"')
-
-        if description:
-            # Properly escape newlines and quotes for JSX
-            description = description.replace('"', '\\"').replace("\n", "\\n")
-            content.append(f'  description="{description}"')
-
-        content.append("/>\n")
-
-    return "\n".join(content)
+    # Use the document_object dispatcher function
+    return document_object(current_obj)

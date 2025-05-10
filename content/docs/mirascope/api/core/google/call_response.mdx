@@ -8,8 +8,6 @@ description: API documentation for mirascope.core.google.call_response
 
 <ApiType type="Module" />
 
-## Description
-
 This module contains the `GoogleCallResponse` class.
 
 <Info title="Usage">
@@ -17,5 +15,91 @@ This module contains the `GoogleCallResponse` class.
 [Calls](/docs/mirascope/learn/calls#handling-responses)
 
 </Info>
+
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| GoogleCallResponse |  | A convenience wrapper around the Google API response.
+
+When calling the Google API using a function decorated with `google_call`, the
+response will be a `GoogleCallResponse` instance with properties that allow for
+more convenient access to commonly used attributes.
+
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.google import google_call
+
+
+@google_call("google-1.5-flash")
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+response = recommend_book("fantasy")  # response is an `GoogleCallResponse` instance
+print(response.content)
+``` |
+
+## Classes
+
+### GoogleCallResponse
+
+<ApiType type="Class" />
+
+A convenience wrapper around the Google API response.
+
+When calling the Google API using a function decorated with `google_call`, the
+response will be a `GoogleCallResponse` instance with properties that allow for
+more convenient access to commonly used attributes.
+
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.google import google_call
+
+
+@google_call("google-1.5-flash")
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+response = recommend_book("fantasy")  # response is an `GoogleCallResponse` instance
+print(response.content)
+```
+
+**Bases:** BaseCallResponse[GenerateContentResponse, GoogleTool, Tool, GoogleDynamicConfig, ContentListUnion | ContentListUnionDict, GoogleCallParams, ContentDict, GoogleMessageParamConverter]
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| content | str | Returns the contained string content for the 0th choice. |
+| finish_reasons | list[str] | Returns the finish reasons of the response. |
+| model | str | Returns the model name.
+
+google.generativeai does not return model, so we return the model provided by
+the user. |
+| id | str | None | Returns the id of the response.
+
+google.generativeai does not return an id |
+| usage | GenerateContentResponseUsageMetadata | None | Returns the usage of the chat completion.
+
+google.generativeai does not have Usage, so we return None |
+| input_tokens | int | None | Returns the number of input tokens. |
+| cached_tokens | int | None | Returns the number of cached tokens. |
+| output_tokens | int | None | Returns the number of output tokens. |
+| message_param | ContentDict | Returns the models's response as a message parameter. |
+| tools | list[GoogleTool] | None | Returns the list of tools for the 0th candidate's 0th content part. |
+| tool | GoogleTool | None | Returns the 0th tool for the 0th candidate's 0th content part. |
+| common_finish_reasons | list[FinishReason] | None |  |
+| common_message_param | BaseMessageParam |  |
+| common_user_message_param | BaseMessageParam | None |  |
+| cost_metadata | CostMetadata |  |
+
 
 
