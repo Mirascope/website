@@ -36,7 +36,6 @@ def render_module(processed_module: ProcessedModule) -> str:
 
     # Add docstring if available
     if processed_module.docstring:
-        content.append("## Description\n")
         content.append(processed_module.docstring.strip())
         content.append("")
 
@@ -108,7 +107,6 @@ def render_function(processed_func: ProcessedFunction) -> str:
 
     # Add docstring if available
     if processed_func.docstring:
-        content.append("## Description\n")
         content.append(processed_func.docstring.strip())
         content.append("")
 
@@ -148,7 +146,6 @@ def render_class(processed_class: ProcessedClass) -> str:
 
     # Add docstring if available
     if processed_class.docstring:
-        content.append("## Description\n")
         content.append(processed_class.docstring.strip())
         content.append("")
 
@@ -186,7 +183,6 @@ def render_alias(processed_alias: ProcessedAlias) -> str:
     content_subpath = MODULE_CONTENT_SUBPATH
     # Add docstring if available
     if processed_alias.docstring:
-        content.append("## Description\n")
         content.append(processed_alias.docstring.strip())
         content.append("")
 
