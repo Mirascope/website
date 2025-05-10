@@ -5,6 +5,9 @@ import { Button } from "@/src/components/ui/button";
 import { ChevronLeft, ChevronRight, X, type LucideIcon } from "lucide-react";
 import { useSidebar, isMobileView } from "./useSidebar";
 
+// Shared positioning for sidebar toggle buttons
+const SIDEBAR_TOGGLE_POSITION = "calc(var(--header-height) - 2.25rem)";
+
 // Create a context to coordinate sidebar states
 type SidebarContextType = {
   leftSidebar: ReturnType<typeof useSidebar>;
@@ -68,7 +71,7 @@ const SidebarToggle = ({
       size="icon"
       onClick={onClick}
       className={cn(
-        "rounded-full border-1 p-0 shadow-md",
+        "z-80 rounded-full border-1 p-0 shadow-md",
         "h-8 w-8",
         isOpen ? "bg-muted" : "bg-background",
         className
@@ -204,7 +207,13 @@ AppLayout.LeftSidebar = ({ children, className, collapsible = true }: SidebarPro
 
         {/* Toggle button - only visible on mobile when collapsible */}
         {collapsible && (
-          <div className="fixed top-[calc(var(--header-height)-2.1rem)] left-4 z-80 md:hidden">
+          <div
+            className={cn(
+              "fixed left-4 z-80 md:hidden",
+              rightSidebarIsOpen && "hidden" // Hide when right sidebar is open
+            )}
+            style={{ top: SIDEBAR_TOGGLE_POSITION }}
+          >
             <SidebarToggle
               isOpen={showAsX}
               onClick={handleToggleClick}
@@ -309,10 +318,8 @@ AppLayout.RightSidebar = ({
         <>
           {/* Mobile toggle button - hidden when left sidebar is open or on large screens */}
           <div
-            className={cn(
-              "fixed right-6 bottom-6 z-40 flex flex-col gap-2 lg:hidden",
-              leftIsOpen && "hidden"
-            )}
+            className={cn("fixed right-4 z-80 lg:hidden", leftIsOpen && "hidden")}
+            style={{ top: SIDEBAR_TOGGLE_POSITION }}
           >
             <SidebarToggle
               isOpen={isOpen}
