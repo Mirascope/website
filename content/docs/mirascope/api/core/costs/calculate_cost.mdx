@@ -8,8 +8,53 @@ description: API documentation for mirascope.core.costs.calculate_cost
 
 <ApiType type="Module" />
 
-## Description
-
 Cost calculation utilities for LLM API calls.
+
+## Functions
+
+### calculate_cost
+
+<ApiType type="Function" />
+
+Calculate the cost for an LLM API call.
+
+This function routes to the appropriate provider-specific cost calculation function,
+preserving existing behavior while providing a unified interface.
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "provider",
+    "type": "Provider",
+    "module_context": "mirascope.core.base.types",
+    "is_builtin": "false"
+  },
+  {
+    "name": "model",
+    "type": "str",
+    "module_context": "builtins",
+    "is_builtin": "true"
+  },
+  {
+    "name": "metadata",
+    "type": "CostMetadata | None",
+    "module_context": "mirascope.core.base.types",
+    "is_builtin": "false",
+    "default": "None"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.costs.calculate_cost"
+/>
+
+<ReturnType
+  type="float | None"
+  moduleContext="builtins"
+  isBuiltin={true}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.costs.calculate_cost"
+  description="The calculated cost in USD or None if unable to calculate"
+/>
+
 
 

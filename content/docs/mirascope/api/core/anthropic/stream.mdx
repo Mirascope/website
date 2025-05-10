@@ -8,8 +8,6 @@ description: API documentation for mirascope.core.anthropic.stream
 
 <ApiType type="Module" />
 
-## Description
-
 The `AnthropicStream` class for convenience around streaming LLM calls.
 
 <Info title="Usage">
@@ -17,5 +15,63 @@ The `AnthropicStream` class for convenience around streaming LLM calls.
 [Streams](/docs/mirascope/learn/streams)
 
 </Info>
+
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| FinishReason | None |  |
+| AnthropicStream |  | A class for convenience around streaming Anthropic LLM calls.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.anthropic import anthropic_call
+
+
+@anthropic_call("claude-3-5-sonnet-20240620", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+stream = recommend_book("fantasy")  # returns `AnthropicStream` instance
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+``` |
+
+## Classes
+
+### AnthropicStream
+
+<ApiType type="Class" />
+
+A class for convenience around streaming Anthropic LLM calls.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.anthropic import anthropic_call
+
+
+@anthropic_call("claude-3-5-sonnet-20240620", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+stream = recommend_book("fantasy")  # returns `AnthropicStream` instance
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+```
+
+**Bases:** BaseStream[AnthropicCallResponse, AnthropicCallResponseChunk, MessageParam, MessageParam, MessageParam, MessageParam, AnthropicTool, ToolParam, AsyncAnthropicDynamicConfig | AnthropicDynamicConfig, AnthropicCallParams, FinishReason]
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| cost_metadata | CostMetadata | Get metadata required for cost calculation. |
+
 
 

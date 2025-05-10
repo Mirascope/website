@@ -6,51 +6,15 @@ description: API documentation for mirascope.integrations.otel
 
 # mirascope.integrations.otel
 
-<ApiType type="Alias" />
 
-<ApiSignature>
-configure(processors: Sequence[SpanProcessor] | None = None)
-</ApiSignature>
+## Error Processing Documentation
 
-## Description
+An error occurred while generating documentation for `mirascope.integrations.otel.configure
 
-Configures the OpenTelemetry tracer, this function should only be called once.
+## `with_otel``: Could not resolve alias mirascope.integrations.otel._utils.Tracer pointing at opentelemetry.trace.Tracer (in .api-generation-repos/mirascope-repo/mirascope/integrations/otel/_utils.py:13)
 
-Args:
-    processors: Optional[Sequence[SpanProcessor]]
-        The span processors to use, if None, a console exporter will be used.
+Please check that all required dependencies are installed.
 
-Returns:
-    The configured tracer.
-
-<ParametersTable
-  parameters={[
-  {
-    "name": "processors",
-    "type": "Sequence[SpanProcessor] | None",
-    "module_context": "collections.abc",
-    "is_builtin": "false",
-    "description": "Optional[Sequence[SpanProcessor]]\nThe span processors to use, if None, a console exporter will be used.",
-    "default": "None"
-  }
-]}
-  contentSubpath="docs/mirascope"
-  currentModule="mirascope.integrations.otel._utils"
-/>
-
-<ReturnType
-  type="Tracer"
-  moduleContext="opentelemetry.trace"
-  isBuiltin={false}
-  contentSubpath="docs/mirascope"
-  currentModule="mirascope.integrations.otel._utils"
-  description="The configured tracer."
-/>
-
-
-<ApiType type="Alias" />
-
-## Description
 
 Wraps a Mirascope function with OpenTelemetry.
 
@@ -85,9 +49,7 @@ print(recommend_book("fantasy"))
 />
 
 
-<ApiType type="Alias" />
-
-## Description
+**Alias to:** `mirascope.integrations.otel._with_otel.with_otel`
 
 Decorator to wrap a function with hyperdx.
 
@@ -123,4 +85,6 @@ print(recommend_book("fantasy"))
   currentModule="mirascope.integrations.otel._with_hyperdx"
 />
 
+
+**Alias to:** `mirascope.integrations.otel._with_hyperdx.with_hyperdx`
 

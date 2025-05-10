@@ -8,8 +8,6 @@ description: API documentation for mirascope.core.mistral.call_response_chunk
 
 <ApiType type="Module" />
 
-## Description
-
 This module contains the `MistralCallResponseChunk` class.
 
 <Info title="Usage">
@@ -17,5 +15,79 @@ This module contains the `MistralCallResponseChunk` class.
 [Streams](/docs/mirascope/learn/streams#handling-streamed-responses)
 
 </Info>
+
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| MistralCallResponseChunk |  | A convenience wrapper around the Mistral `ChatCompletionChunk` streamed chunks.
+
+When calling the Mistral API using a function decorated with `mistral_call` and
+`stream` set to `True`, the stream will contain `MistralResponseChunk` instances with
+properties that allow for more convenient access to commonly used attributes.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.mistral import mistral_call
+
+
+@mistral_call("mistral-large-latest", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+stream = recommend_book("fantasy")  # response is an `MistralStream`
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+``` |
+
+## Classes
+
+### MistralCallResponseChunk
+
+<ApiType type="Class" />
+
+A convenience wrapper around the Mistral `ChatCompletionChunk` streamed chunks.
+
+When calling the Mistral API using a function decorated with `mistral_call` and
+`stream` set to `True`, the stream will contain `MistralResponseChunk` instances with
+properties that allow for more convenient access to commonly used attributes.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.mistral import mistral_call
+
+
+@mistral_call("mistral-large-latest", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+stream = recommend_book("fantasy")  # response is an `MistralStream`
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+```
+
+**Bases:** BaseCallResponseChunk[CompletionChunk, FinishReason]
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| content | str | Returns the content of the delta. |
+| finish_reasons | list[FinishReason] | Returns the finish reasons of the response. |
+| model | str | Returns the name of the response model. |
+| id | str | Returns the id of the response. |
+| usage | UsageInfo | None | Returns the usage of the chat completion. |
+| input_tokens | int | None | Returns the number of input tokens. |
+| cached_tokens | int | Returns the number of cached tokens. |
+| output_tokens | int | None | Returns the number of output tokens. |
+| cost_metadata | CostMetadata | Returns the cost metadata. |
+| common_finish_reasons | list[types.FinishReason] | None |  |
+
 
 

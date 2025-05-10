@@ -8,8 +8,6 @@ description: API documentation for mirascope.core.cohere.call_response_chunk
 
 <ApiType type="Module" />
 
-## Description
-
 This module contains the `CohereCallResponseChunk` class.
 
 <Info title="Usage">
@@ -17,5 +15,81 @@ This module contains the `CohereCallResponseChunk` class.
 [Streams](/docs/mirascope/learn/streams#handling-streamed-responses)
 
 </Info>
+
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| CohereCallResponseChunk |  | A convenience wrapper around the Cohere `ChatCompletionChunk` streamed chunks.
+
+When calling the Cohere API using a function decorated with `cohere_call` and
+`stream` set to `True`, the stream will contain `CohereResponseChunk` instances with
+properties that allow for more convenient access to commonly used attributes.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.cohere import cohere_call
+
+
+@cohere_call("command-r-plus", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+stream = recommend_book("fantasy")  # response is an `CohereStream`
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+``` |
+
+## Classes
+
+### CohereCallResponseChunk
+
+<ApiType type="Class" />
+
+A convenience wrapper around the Cohere `ChatCompletionChunk` streamed chunks.
+
+When calling the Cohere API using a function decorated with `cohere_call` and
+`stream` set to `True`, the stream will contain `CohereResponseChunk` instances with
+properties that allow for more convenient access to commonly used attributes.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.cohere import cohere_call
+
+
+@cohere_call("command-r-plus", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+stream = recommend_book("fantasy")  # response is an `CohereStream`
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+```
+
+**Bases:** BaseCallResponseChunk[SkipValidation[StreamedChatResponse], ChatStreamEndEventFinishReason]
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| content | str | Returns the content for the 0th choice delta. |
+| finish_reasons | list[ChatStreamEndEventFinishReason] | None | Returns the finish reasons of the response. |
+| model | str | None | Returns the name of the response model.
+
+Cohere does not return model, so we return None |
+| id | str | None | Returns the id of the response. |
+| usage | ApiMetaBilledUnits | None | Returns the usage of the response. |
+| input_tokens | float | None | Returns the number of input tokens. |
+| cached_tokens | float | None | Returns the number of cached tokens. |
+| output_tokens | float | None | Returns the number of output tokens. |
+| cost_metadata | CostMetadata | Returns the cost metadata. |
+| common_finish_reasons | list[types.FinishReason] | None |  |
+
 
 

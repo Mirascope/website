@@ -8,8 +8,6 @@ description: API documentation for mirascope.core.xai.stream
 
 <ApiType type="Module" />
 
-## Description
-
 The `XAIStream` class for convenience around streaming xAI LLM calls.
 
 <Info title="Usage">
@@ -17,5 +15,36 @@ The `XAIStream` class for convenience around streaming xAI LLM calls.
 [Streams](/docs/mirascope/learn/streams)
 
 </Info>
+
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| XAIStream |  | A simple wrapper around `OpenAIStream`.
+
+Everything is the same except updates to the `construct_call_response` method and
+the `cost` property so that cost is properly calculated using xAI's cost
+calculation method. This ensures cost calculation works for non-OpenAI models. |
+
+## Classes
+
+### XAIStream
+
+<ApiType type="Class" />
+
+A simple wrapper around `OpenAIStream`.
+
+Everything is the same except updates to the `construct_call_response` method and
+the `cost` property so that cost is properly calculated using xAI's cost
+calculation method. This ensures cost calculation works for non-OpenAI models.
+
+**Bases:** OpenAIStream
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| cost | float | None | Returns the cost of the call. |
+
 
 

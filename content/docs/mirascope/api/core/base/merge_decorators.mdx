@@ -8,4 +8,46 @@ description: API documentation for mirascope.core.base.merge_decorators
 
 <ApiType type="Module" />
 
+## Functions
+
+### merge_decorators
+
+<ApiType type="Function" />
+
+Combines multiple decorators into a single decorator factory.
+
+This function allows you to merge multiple decorators into a single decorator factory.
+The decorators are applied in the order they are passed to the function.
+All function metadata (e.g. docstrings, function name) is preserved through the decoration chain.
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "decorator",
+    "type": "Callable[[Callable[_P, _R]], Callable[_WP, _WR]]",
+    "module_context": "collections.abc",
+    "is_builtin": "false"
+  },
+  {
+    "name": "additional_decorators",
+    "type": "Callable[[Callable], Callable]",
+    "module_context": "collections.abc",
+    "is_builtin": "false",
+    "default": "()"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.base.merge_decorators"
+/>
+
+<ReturnType
+  type="Callable[[], Callable[[Callable[_P, _R]], Callable[_WP, _WR]]]"
+  moduleContext="collections.abc"
+  isBuiltin={false}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.base.merge_decorators"
+  description="A decorator factory function that applies all decorators in the specified order."
+/>
+
+
 

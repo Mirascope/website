@@ -8,8 +8,6 @@ description: API documentation for mirascope.core.azure.call_response_chunk
 
 <ApiType type="Module" />
 
-## Description
-
 This module contains the `AzureCallResponseChunk` class.
 
 <Info title="Usage">
@@ -17,5 +15,80 @@ This module contains the `AzureCallResponseChunk` class.
 [Streams](/docs/mirascope/learn/streams#handling-streamed-responses)
 
 </Info>
+
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| AzureCallResponseChunk |  | A convenience wrapper around the Azure `ChatCompletionChunk` streamed chunks.
+
+When calling the Azure API using a function decorated with `azure_call` and
+`stream` set to `True`, the stream will contain `AzureResponseChunk` instances with
+properties that allow for more convenient access to commonly used attributes.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.azure import azure_call
+
+
+@azure_call("gpt-4o-mini", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+stream = recommend_book("fantasy")  # response is an `AzureStream`
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+``` |
+
+## Classes
+
+### AzureCallResponseChunk
+
+<ApiType type="Class" />
+
+A convenience wrapper around the Azure `ChatCompletionChunk` streamed chunks.
+
+When calling the Azure API using a function decorated with `azure_call` and
+`stream` set to `True`, the stream will contain `AzureResponseChunk` instances with
+properties that allow for more convenient access to commonly used attributes.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.azure import azure_call
+
+
+@azure_call("gpt-4o-mini", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+stream = recommend_book("fantasy")  # response is an `AzureStream`
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+```
+
+**Bases:** BaseCallResponseChunk[StreamingChatCompletionsUpdate, CompletionsFinishReason]
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| chunk | SkipValidation[StreamingChatCompletionsUpdate] |  |
+| content | str | Returns the content for the 0th choice delta. |
+| finish_reasons | list[CompletionsFinishReason] | Returns the finish reasons of the response. |
+| model | str | Returns the name of the response model. |
+| id | str | Returns the id of the response. |
+| usage | CompletionsUsage | Returns the usage of the chat completion. |
+| input_tokens | int | Returns the number of input tokens. |
+| cached_tokens | int | Returns the number of cached tokens. |
+| output_tokens | int | Returns the number of output tokens. |
+| cost_metadata | CostMetadata | Returns the cost metadata. |
+| common_finish_reasons | list[FinishReason] | None | Provider-agnostic finish reasons. |
+
 
 

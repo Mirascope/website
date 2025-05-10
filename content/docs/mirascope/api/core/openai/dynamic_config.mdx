@@ -8,8 +8,26 @@ description: API documentation for mirascope.core.openai.dynamic_config
 
 <ApiType type="Module" />
 
-## Description
-
 This module defines the function return type for functions as LLM calls.
+
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| AsyncOpenAIDynamicConfig | None |  |
+| OpenAIDynamicConfig | None | The function return type for functions wrapped with the `openai_call` decorator.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.openai import OpenAIDynamicConfig, openai_call
+
+
+@openai_call("gpt-4o-mini")
+@prompt_template("Recommend a {capitalized_genre} book")
+def recommend_book(genre: str) -> OpenAIDynamicConfig:
+    return {"computed_fields": {"capitalized_genre": genre.capitalize()}}
+``` |
 
 

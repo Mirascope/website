@@ -8,8 +8,6 @@ description: API documentation for mirascope.core.google.tool
 
 <ApiType type="Module" />
 
-## Description
-
 The `GoogleTool` class for easy tool usage with Google's Google LLM calls.
 
 <Info title="Usage">
@@ -17,5 +15,70 @@ The `GoogleTool` class for easy tool usage with Google's Google LLM calls.
 [Tools](/docs/mirascope/learn/tools)
 
 </Info>
+
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| GoogleTool |  | A class for defining tools for Google LLM calls.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.google import google_call
+
+
+def format_book(title: str, author: str) -> str:
+    return f"{title} by {author}"
+
+
+@google_call("google-1.5-flash", tools=[format_book])
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+response = recommend_book("fantasy")
+if tool := response.tool:  # returns an `GoogleTool` instance
+    print(tool.call())
+``` |
+
+## Classes
+
+### GoogleTool
+
+<ApiType type="Class" />
+
+A class for defining tools for Google LLM calls.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.google import google_call
+
+
+def format_book(title: str, author: str) -> str:
+    return f"{title} by {author}"
+
+
+@google_call("google-1.5-flash", tools=[format_book])
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+response = recommend_book("fantasy")
+if tool := response.tool:  # returns an `GoogleTool` instance
+    print(tool.call())
+```
+
+**Bases:** BaseTool
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| tool_call | SkipJsonSchema[FunctionCall] |  |
+
 
 
