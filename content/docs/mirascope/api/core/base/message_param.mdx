@@ -18,12 +18,6 @@ A base class for message parameters.
 
 </Info>
 
-
-Attributes:
-    role: The role of the message (e.g. "system", "user", "assistant", "tool")
-    content: The content of the message
-    tool_name: The name of the tool, if any
-
 **Bases:** BaseModel
 
 ### Attributes
@@ -40,10 +34,6 @@ Attributes:
 
 A content part for text.
 
-Attributes:
-    type: Always "text"
-    text: The text content
-
 **Bases:** BaseModel
 
 ### Attributes
@@ -59,12 +49,6 @@ Attributes:
 ## Description
 
 A content part for images.
-
-Attributes:
-    type: Always "image"
-    media_type: The media type (e.g. image/jpeg)
-    image: The raw image bytes
-    detail: (Optional) The detail to use for the image (supported by OpenAI)
 
 **Bases:** BaseModel
 
@@ -83,11 +67,6 @@ Attributes:
 ## Description
 
 A content part for audio.
-
-Attributes:
-    type: Always "audio"
-    media_type: The media type (e.g. audio/wav)
-    audio: The raw audio bytes or base64 encoded audio data
 
 **Bases:** BaseModel
 

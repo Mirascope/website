@@ -78,10 +78,6 @@ print(recommend_book("fantasy"))
 # Output: [BaseMessageParam(role='user', content='Recommend a fantasy book')]
 ```
 
-Returns:
-    decorator (Callable): The decorator function that turns the decorated function
-        into a prompt template.
-
 <ParametersTable
   parameters={[
   {
@@ -134,10 +130,6 @@ def recommend_book(genre: str):
 response = recommend_book("fantasy")
 print(response.metadata)
 ```
-
-Returns:
-    decorator (Callable): The decorator function that updates the `_metadata`
-        attribute of the decorated input prompt or call.
 
 <ParametersTable
   parameters={[

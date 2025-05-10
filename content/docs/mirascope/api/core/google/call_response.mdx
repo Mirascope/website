@@ -99,10 +99,7 @@ google.generativeai does not have Usage, so we return None |
 | output_tokens | int | None | Returns the number of output tokens. |
 | message_param | ContentDict | Returns the models's response as a message parameter. |
 | tools | list[GoogleTool] | None | Returns the list of tools for the 0th candidate's 0th content part. |
-| tool | GoogleTool | None | Returns the 0th tool for the 0th candidate's 0th content part.
-
-Raises:
-    ValidationError: if the tool call doesn't match the tool's schema. |
+| tool | GoogleTool | None | Returns the 0th tool for the 0th candidate's 0th content part. |
 | common_finish_reasons | list[FinishReason] | None |  |
 | common_message_param | BaseMessageParam |  |
 | common_user_message_param | BaseMessageParam | None |  |

@@ -184,10 +184,6 @@ def render_alias(processed_alias: ProcessedAlias) -> str:
     """
     content: list[str] = []
     content_subpath = MODULE_CONTENT_SUBPATH
-
-    # Add object type using a component with consistent typing
-    content.append('<ApiType type="Alias" />\n')
-
     # Add docstring if available
     if processed_alias.docstring:
         content.append("## Description\n")
