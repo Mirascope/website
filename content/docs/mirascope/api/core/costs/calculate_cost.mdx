@@ -25,14 +25,6 @@ Calculate the cost for an LLM API call.
 This function routes to the appropriate provider-specific cost calculation function,
 preserving existing behavior while providing a unified interface.
 
-Args:
-    provider: The LLM provider (e.g., "openai", "anthropic")
-    model: The model name (e.g., "gpt-4", "claude-3-opus")
-    metadata: Additional metadata required for cost calculation
-
-Returns:
-    The calculated cost in USD or None if unable to calculate
-
 <ParametersTable
   parameters={[
   {

@@ -90,18 +90,8 @@ print(response.content)
 | cached_tokens | int | None | Returns the number of cached tokens. |
 | output_tokens | int | None | Returns the number of output tokens. |
 | message_param | SerializeAsAny[AssistantMessage] | Returns the assistants's response as a message parameter. |
-| tools | list[AzureTool] | None | Returns any available tool calls as their `AzureTool` definition.
-
-Raises:
-    ValidationError: if a tool call doesn't match the tool's schema.
-    ValueError: if the model refused to response, in which case the error
-        message will be the refusal. |
-| tool | AzureTool | None | Returns the 0th tool for the 0th choice message.
-
-Raises:
-    ValidationError: if the tool call doesn't match the tool's schema.
-    ValueError: if the model refused to response, in which case the error
-        message will be the refusal. |
+| tools | list[AzureTool] | None | Returns any available tool calls as their `AzureTool` definition. |
+| tool | AzureTool | None | Returns the 0th tool for the 0th choice message. |
 | common_finish_reasons | list[FinishReason] | None | Provider-agnostic finish reasons. |
 | common_message_param | BaseMessageParam |  |
 | common_user_message_param | BaseMessageParam | None |  |

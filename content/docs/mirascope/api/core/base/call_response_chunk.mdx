@@ -22,10 +22,7 @@ This module contains the `BaseCallResponseChunk` class.
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| BaseCallResponseChunk |  | A base abstract interface for LLM streaming response chunks.
-
-Attributes:
-    chunk: The original response chunk from whichever model response this wraps. |
+| BaseCallResponseChunk |  | A base abstract interface for LLM streaming response chunks. |
 
 ## Classes
 
@@ -36,9 +33,6 @@ Attributes:
 ## Description
 
 A base abstract interface for LLM streaming response chunks.
-
-Attributes:
-    chunk: The original response chunk from whichever model response this wraps.
 
 **Bases:** BaseModel, Generic[_ChunkT, _FinishReasonT], ABC
 
@@ -72,10 +66,7 @@ If there is no cached_tokens, this method must return None. |
 | output_tokens | int | float | None | Should return the number of output tokens.
 
 If there is no output_tokens, this method must return None. |
-| cost_metadata | CostMetadata | Get metadata required for cost calculation.
-
-Returns:
-    A CostMetadata object with information relevant to cost calculation |
+| cost_metadata | CostMetadata | Get metadata required for cost calculation. |
 | common_finish_reasons | list[FinishReason] | None | Provider-agnostic finish reasons. |
 | common_usage | Usage | None | Provider-agnostic usage info. |
 

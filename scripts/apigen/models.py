@@ -7,7 +7,7 @@ to create these models from Griffe objects.
 
 from dataclasses import dataclass
 
-from griffe import Alias, Class, Function, Module
+from griffe import Alias, Class, DocstringSectionKind, Function, Module, Object
 
 from scripts.apigen.return_extractor import extract_return_info
 from scripts.apigen.type_utils import (
@@ -15,6 +15,40 @@ from scripts.apigen.type_utils import (
     ReturnInfo,
     extract_params_if_available,
 )
+
+
+def extract_clean_docstring(obj: Object | Alias) -> str | None:
+    """Extract clean descriptive text from a docstring.
+
+    This function extracts only the descriptive text sections from a docstring,
+    excluding parameter, returns, and other sections that would be redundant with
+    our structured rendering of the API documentation.
+
+    Args:
+        obj: The Griffe object to extract the docstring from
+
+    Returns:
+        The clean docstring text, or None if no docstring is available
+
+    """
+    # Check if docstring is available
+    if not (hasattr(obj, "docstring") and obj.docstring):
+        return None
+
+    # Extract text sections from the parsed docstring
+    text_sections = []
+
+    for section in obj.docstring.parsed:
+        if section.kind == DocstringSectionKind.text:
+            if hasattr(section, "value") and section.value:
+                text_sections.append(str(section.value).strip())
+
+    # Join text sections with newlines
+    if text_sections:
+        return "\n\n".join(text_sections)
+
+    # Fallback to raw value if no text sections were found
+    return obj.docstring.value.strip() if obj.docstring.value else None
 
 
 @dataclass
@@ -105,14 +139,8 @@ def process_function(func_obj: Function) -> ProcessedFunction:
     module = getattr(func_obj, "module", None)
     module_path = getattr(module, "path", "")
 
-    # Extract docstring
-    docstring = None
-    if (
-        hasattr(func_obj, "docstring")
-        and func_obj.docstring
-        and func_obj.docstring.value
-    ):
-        docstring = func_obj.docstring.value.strip()
+    # Extract clean docstring
+    docstring = extract_clean_docstring(func_obj)
 
     # Extract parameters
     params = extract_params_if_available(func_obj)
@@ -147,14 +175,8 @@ def process_class(class_obj: Class) -> ProcessedClass:
     module = getattr(class_obj, "module", None)
     module_path = getattr(module, "path", "")
 
-    # Extract docstring
-    docstring = None
-    if (
-        hasattr(class_obj, "docstring")
-        and class_obj.docstring
-        and class_obj.docstring.value
-    ):
-        docstring = class_obj.docstring.value.strip()
+    # Extract clean docstring
+    docstring = extract_clean_docstring(class_obj)
 
     # Extract base classes
     bases = []
@@ -168,9 +190,7 @@ def process_class(class_obj: Class) -> ProcessedClass:
             # Check if it's not a function and doesn't start with underscore
             if not isinstance(attr, Function) and not attr_name.startswith("_"):
                 attr_type = getattr(attr, "annotation", "")
-                attr_desc = None
-                if hasattr(attr, "docstring") and attr.docstring:
-                    attr_desc = attr.docstring.value.strip()
+                attr_desc = extract_clean_docstring(attr)
 
                 processed_attr = ProcessedAttribute(
                     name=attr_name,
@@ -203,14 +223,8 @@ def process_module(module_obj: Module) -> ProcessedModule:
     name = getattr(module_obj, "name", "")
     module_path = getattr(module_obj, "path", "")
 
-    # Extract docstring
-    docstring = None
-    if (
-        hasattr(module_obj, "docstring")
-        and module_obj.docstring
-        and module_obj.docstring.value
-    ):
-        docstring = module_obj.docstring.value.strip()
+    # Extract clean docstring
+    docstring = extract_clean_docstring(module_obj)
 
     # Initialize collections for different member types
     processed_classes = []
@@ -230,7 +244,7 @@ def process_module(module_obj: Module) -> ProcessedModule:
                 processed_classes.append(processed_class)
 
             if isinstance(member, Alias):
-                pass # TODO: Figure out support
+                pass  # TODO: Figure out support
 
             # Process functions
             elif isinstance(member, Function):
@@ -240,9 +254,7 @@ def process_module(module_obj: Module) -> ProcessedModule:
             # Process attributes (not classes, functions, or aliases)
             else:
                 attr_type = getattr(member, "annotation", "")
-                attr_desc = None
-                if hasattr(member, "docstring") and member.docstring:
-                    attr_desc = member.docstring.value.strip()
+                attr_desc = extract_clean_docstring(member)
 
                 processed_attr = ProcessedAttribute(
                     name=member_name,
@@ -279,14 +291,8 @@ def process_alias(alias_obj: Alias) -> ProcessedAlias:
     module = getattr(alias_obj, "module", None)
     module_path = getattr(module, "path", "")
 
-    # Extract docstring
-    docstring = None
-    if (
-        hasattr(alias_obj, "docstring")
-        and alias_obj.docstring
-        and alias_obj.docstring.value
-    ):
-        docstring = alias_obj.docstring.value.strip()
+    # Extract clean docstring
+    docstring = extract_clean_docstring(alias_obj)
 
     # Extract parameters
     params = extract_params_if_available(alias_obj)

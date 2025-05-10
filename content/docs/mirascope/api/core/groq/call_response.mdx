@@ -87,14 +87,8 @@ print(response.content)
 | cached_tokens | int | None | Returns the number of cached tokens. |
 | output_tokens | int | None | Returns the number of output tokens. |
 | message_param | SerializeAsAny[ChatCompletionAssistantMessageParam] | Returns the assistants's response as a message parameter. |
-| tools | list[GroqTool] | None | Returns any available tool calls as their `GroqTool` definition.
-
-Raises:
-    ValidationError: if a tool call doesn't match the tool's schema. |
-| tool | GroqTool | None | Returns the 0th tool for the 0th choice message.
-
-Raises:
-    ValidationError: if the tool call doesn't match the tool's schema. |
+| tools | list[GroqTool] | None | Returns any available tool calls as their `GroqTool` definition. |
+| tool | GroqTool | None | Returns the 0th tool for the 0th choice message. |
 | common_finish_reasons | list[FinishReason] | None |  |
 | common_message_param | BaseMessageParam |  |
 | common_user_message_param | BaseMessageParam | None |  |

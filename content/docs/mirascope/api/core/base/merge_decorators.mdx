@@ -22,28 +22,6 @@ This function allows you to merge multiple decorators into a single decorator fa
 The decorators are applied in the order they are passed to the function.
 All function metadata (e.g. docstrings, function name) is preserved through the decoration chain.
 
-Args:
-    decorator: The base decorator that determines the type signature of the decorated function.
-    *additional_decorators: Additional decorators to be merged with the base decorator.
-
-Returns:
-    A decorator factory function that applies all decorators in the specified order.
-
-Example:
-    ```python
-    # Combine multiple decorators
-    merged = merge_decorators(
-        retry(),
-        with_logging(),
-        handle_errors()
-    )
-
-    # Apply the merged decorators
-    @merged()
-    def my_function():
-        pass
-    ```
-
 <ParametersTable
   parameters={[
   {
