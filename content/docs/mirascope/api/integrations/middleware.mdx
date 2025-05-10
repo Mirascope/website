@@ -8,12 +8,6 @@ description: API documentation for mirascope.integrations.middleware
 
 <ApiType type="Function" />
 
-<ApiSignature>
-middleware_factory(custom_context_manager: Callable[[SyncFunc | AsyncFunc], AbstractContextManager[_T]] = default_context_manager, custom_decorator: Callable | None = None, handle_call_response: Callable[[BaseCallResponse, SyncFunc | AsyncFunc, _T | None], None] | None = None, handle_call_response_async: Callable[[BaseCallResponse, SyncFunc | AsyncFunc, _T | None], Awaitable[None]] | None = None, handle_stream: Callable[[BaseStream, SyncFunc | AsyncFunc, _T | None], None] | None = None, handle_stream_async: Callable[[BaseStream, SyncFunc | AsyncFunc, _T | None], Awaitable[None]] | None = None, handle_response_model: Callable[[ResponseModel, SyncFunc | AsyncFunc, _T | None], None] | None = None, handle_response_model_async: Callable[[ResponseModel, SyncFunc | AsyncFunc, _T | None], Awaitable[None]] | None = None, handle_structured_stream: Callable[[BaseStructuredStream, SyncFunc | AsyncFunc, _T | None], None] | None = None, handle_structured_stream_async: Callable[[BaseStructuredStream, SyncFunc | AsyncFunc, _T | None], Awaitable[None]] | None = None, handle_error: Callable[[Exception, SyncFunc | AsyncFunc, _T | None], Any] | None = None, handle_error_async: Callable[[Exception, SyncFunc | AsyncFunc, _T | None], Awaitable[Any]] | None = None)
-</ApiSignature>
-
-## Description
-
 A factory method for creating middleware decorators.
 
 Example:

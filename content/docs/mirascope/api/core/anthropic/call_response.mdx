@@ -8,8 +8,6 @@ description: API documentation for mirascope.core.anthropic.call_response
 
 <ApiType type="Module" />
 
-## Description
-
 This module contains the `AnthropicCallResponse` class.
 
 <Info title="Usage">
@@ -17,5 +15,82 @@ This module contains the `AnthropicCallResponse` class.
 [Calls](/docs/mirascope/learn/calls#handling-responses)
 
 </Info>
+
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| AnthropicCallResponse |  | A convenience wrapper around the Anthropic `Message` response.
+
+When calling the Anthropic API using a function decorated with `anthropic_call`, the
+response will be an `AnthropicCallResponse` instance with properties that allow for
+more convenience access to commonly used attributes.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.anthropic import anthropic_call
+
+
+@anthropic_call("claude-3-5-sonnet-20240620")
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+response = recommend_book("fantasy")  # response is an `AnthropicCallResponse` instance
+print(response.content)
+``` |
+
+## Classes
+
+### AnthropicCallResponse
+
+<ApiType type="Class" />
+
+A convenience wrapper around the Anthropic `Message` response.
+
+When calling the Anthropic API using a function decorated with `anthropic_call`, the
+response will be an `AnthropicCallResponse` instance with properties that allow for
+more convenience access to commonly used attributes.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.anthropic import anthropic_call
+
+
+@anthropic_call("claude-3-5-sonnet-20240620")
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+response = recommend_book("fantasy")  # response is an `AnthropicCallResponse` instance
+print(response.content)
+```
+
+**Bases:** BaseCallResponse[Message, AnthropicTool, ToolParam, AsyncAnthropicDynamicConfig | AnthropicDynamicConfig, MessageParam, AnthropicCallParams, MessageParam, AnthropicMessageParamConverter]
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| content | str | Returns the string text of the 0th text block. |
+| finish_reasons | list[str] | Returns the finish reasons of the response. |
+| model | str | Returns the name of the response model. |
+| id | str | Returns the id of the response. |
+| usage | Usage | Returns the usage of the message. |
+| input_tokens | int | Returns the number of input tokens. |
+| cached_tokens | int | Returns the number of cached tokens. |
+| output_tokens | int | Returns the number of output tokens. |
+| message_param | SerializeAsAny[MessageParam] | Returns the assistants's response as a message parameter. |
+| tools | list[AnthropicTool] | None | Returns any available tool calls as their `AnthropicTool` definition. |
+| tool | AnthropicTool | None | Returns the 0th tool for the 0th choice message. |
+| common_finish_reasons | list[types.FinishReason] | None | Provider-agnostic finish reasons. |
+| common_message_param | BaseMessageParam |  |
+| common_user_message_param | BaseMessageParam | None |  |
+| cost_metadata | CostMetadata | Get metadata required for cost calculation. |
+
 
 

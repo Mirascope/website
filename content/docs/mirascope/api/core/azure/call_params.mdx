@@ -8,12 +8,47 @@ description: API documentation for mirascope.core.azure.call_params
 
 <ApiType type="Module" />
 
-## Description
-
 <Info title="Usage">
 
 [Calls](/docs/mirascope/learn/calls#provider-specific-parameters)
 
 </Info>
+
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| ResponseFormatJSON | TypeAlias |  |
+| AzureCallParams |  | The parameters to use when calling the Azure API.
+
+[Azure API Reference](https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/ai/azure-ai-inference) |
+
+## Classes
+
+### AzureCallParams
+
+<ApiType type="Class" />
+
+The parameters to use when calling the Azure API.
+
+[Azure API Reference](https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/ai/azure-ai-inference)
+
+**Bases:** BaseCallParams
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| frequency_penalty | NotRequired[float | None] |  |
+| max_tokens | NotRequired[int | None] |  |
+| model_extras | NotRequired[dict[str, Any] | None] |  |
+| presence_penalty | NotRequired[float | None] |  |
+| response_format | NotRequired[ResponseFormatJSON | None] |  |
+| seed | NotRequired[int | None] |  |
+| stop | NotRequired[list[str] | None] |  |
+| temperature | NotRequired[float | None] |  |
+| tool_choice | NotRequired[str | ChatCompletionsToolChoicePreset | ChatCompletionsNamedToolChoice | None] |  |
+| top_p | NotRequired[float | None] |  |
+
 
 

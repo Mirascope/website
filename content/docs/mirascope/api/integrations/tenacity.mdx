@@ -6,14 +6,6 @@ description: API documentation for mirascope.integrations.tenacity
 
 # mirascope.integrations.tenacity
 
-<ApiType type="Alias" />
-
-<ApiSignature>
-collect_errors(*args: type[Exception] = ())
-</ApiSignature>
-
-## Description
-
 Collects specified errors into an `errors` keyword argument.
 
 Example:
@@ -37,9 +29,6 @@ except RetryError:
     ...
 ```
 
-Args:
-    *args: The `Exception` types to catch.
-
 <ParametersTable
   parameters={[
   {
@@ -47,8 +36,8 @@ Args:
     "type": "type[Exception]",
     "module_context": "mirascope.retries.tenacity",
     "is_builtin": "false",
-    "description": "The `Exception` types to catch.",
-    "default": "()"
+    "default": "()",
+    "description": "The `Exception` types to catch."
   }
 ]}
   contentSubpath="docs/mirascope"
@@ -63,4 +52,6 @@ Args:
   currentModule="mirascope.retries.tenacity"
 />
 
+
+**Alias to:** `mirascope.retries.tenacity.collect_errors`
 

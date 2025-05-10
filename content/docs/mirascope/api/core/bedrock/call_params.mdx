@@ -8,12 +8,42 @@ description: API documentation for mirascope.core.bedrock.call_params
 
 <ApiType type="Module" />
 
-## Description
-
 <Info title="Usage">
 
 [Calls](/docs/mirascope/learn/calls#provider-specific-parameters)
 
 </Info>
+
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| BedrockCallParams |  | The parameters to use when calling the Bedrock API.
+
+[Bedrock converse API Reference](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/bedrock-runtime/client/converse.html) |
+
+## Classes
+
+### BedrockCallParams
+
+<ApiType type="Class" />
+
+The parameters to use when calling the Bedrock API.
+
+[Bedrock converse API Reference](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/bedrock-runtime/client/converse.html)
+
+**Bases:** BaseCallParams
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| system | NotRequired[list[SystemContentBlockTypeDef]] |  |
+| inferenceConfig | NotRequired[InferenceConfigurationTypeDef] |  |
+| toolConfig | NotRequired[ToolConfigurationTypeDef] |  |
+| guardrailConfig | NotRequired[GuardrailConfigurationTypeDef] |  |
+| additionalModelRequestFields | NotRequired[Mapping[str, Any]] |  |
+| additionalModelResponseFieldPaths | NotRequired[list[str]] |  |
+
 
 

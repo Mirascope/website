@@ -8,8 +8,6 @@ description: API documentation for mirascope.core.google.call_response_chunk
 
 <ApiType type="Module" />
 
-## Description
-
 This module contains the `GoogleCallResponseChunk` class.
 
 <Info title="Usage">
@@ -17,5 +15,83 @@ This module contains the `GoogleCallResponseChunk` class.
 [Streams](/docs/mirascope/learn/streams#handling-streamed-responses)
 
 </Info>
+
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| GoogleCallResponseChunk |  | A convenience wrapper around the Google API streamed response chunks.
+
+When calling the Google API using a function decorated with `google_call` and
+`stream` set to `True`, the stream will contain `GoogleCallResponseChunk` instances
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.google import google_call
+
+
+@google_call("google-1.5-flash", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+stream = recommend_book("fantasy")  # response is an `GoogleStream`
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+``` |
+
+## Classes
+
+### GoogleCallResponseChunk
+
+<ApiType type="Class" />
+
+A convenience wrapper around the Google API streamed response chunks.
+
+When calling the Google API using a function decorated with `google_call` and
+`stream` set to `True`, the stream will contain `GoogleCallResponseChunk` instances
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.google import google_call
+
+
+@google_call("google-1.5-flash", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+stream = recommend_book("fantasy")  # response is an `GoogleStream`
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+```
+
+**Bases:** BaseCallResponseChunk[GenerateContentResponse, GoogleFinishReason]
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| content | str | Returns the chunk content for the 0th choice. |
+| finish_reasons | list[GoogleFinishReason] | Returns the finish reasons of the response. |
+| model | str | None | Returns the model name.
+
+google.generativeai does not return model, so we return None |
+| id | str | None | Returns the id of the response.
+
+google.generativeai does not return an id |
+| usage | GenerateContentResponseUsageMetadata | None | Returns the usage of the chat completion.
+
+google.generativeai does not have Usage, so we return None |
+| input_tokens | int | None | Returns the number of input tokens. |
+| cached_tokens | int | None | Returns the number of cached tokens. |
+| output_tokens | int | None | Returns the number of output tokens. |
+| cost_metadata | CostMetadata | Returns the cost metadata. |
+| common_finish_reasons | list[FinishReason] | None |  |
+
 
 

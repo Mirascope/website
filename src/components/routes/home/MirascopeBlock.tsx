@@ -3,6 +3,7 @@ import { ResponsiveTextBlock } from "@/src/components/ui/responsive-text-block";
 import { BookOpen, Users, ChevronDown } from "lucide-react";
 import { ProviderTabbedSection } from "@/src/components/mdx/elements/ProviderTabbedSection";
 import { ProviderCodeWrapper } from "@/src/components/mdx/providers/ProviderCodeWrapper";
+import { MirascopeLogo } from "@/src/components/core/branding";
 
 // Mirascope feature block component
 export interface MirascopeBlockProps {
@@ -44,16 +45,7 @@ book: Book = extract_book(text) # [!code highlight]`;
         <ProviderTabbedSection
           customHeader={
             <div className="flex items-center px-2 pb-2">
-              <div className="flex flex-row items-center justify-center">
-                <div className="mr-1.5">
-                  <img
-                    src="/assets/branding/mirascope-logo.svg"
-                    alt="Mirascope Logo"
-                    className="h-4 w-auto"
-                  />
-                </div>
-                <h1 className="text-s font-handwriting text-mirascope-purple mb-0">Mirascope</h1>
-              </div>
+              <MirascopeLogo size="micro" withText={true} />
             </div>
           }
         >

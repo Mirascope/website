@@ -8,8 +8,200 @@ description: API documentation for mirascope.core.base.prompt
 
 <ApiType type="Module" />
 
-## Description
-
 The `BasePrompt` class for better prompt engineering.
+
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| SUPPORTED_MESSAGE_ROLES | None |  |
+| BasePrompt |  | The base class for engineering prompts.
+
+This class is implemented as the base for all prompting needs. It is intended to
+work across various providers by providing a common prompt interface.
+
+Example:
+
+```python
+from mirascope.core import BasePrompt, metadata, prompt_template
+
+@prompt_template("Recommend a {genre} book")
+@metadata({"tags": {"version:0001", "books"}})
+class BookRecommendationPrompt(BasePrompt):
+    genre: str
+
+prompt = BookRecommendationPrompt(genre="fantasy")
+
+print(prompt)
+# > Recommend a fantasy book
+
+print(prompt.message_params())
+# > [BaseMessageParam(role="user", content="Recommend a fantasy book")]
+
+print(prompt.dump()["metadata"])
+# > {"metadata": {"version:0001", "books"}}
+``` |
+| PromptDecorator |  |  |
+| MetadataDecorator |  |  |
+
+## Functions
+
+### prompt_template
+
+<ApiType type="Function" />
+
+A decorator for setting the `prompt_template` of a `BasePrompt` or `call`.
+
+<Info title="Usage">
+
+[Prompts](/docs/mirascope/learn/prompts#prompt-templates-messages)
+
+</Info>
+
+
+Example:
+
+```python
+from mirascope.core import openai, prompt_template
+
+
+@prompt_template()
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+print(recommend_book("fantasy"))
+# Output: [BaseMessageParam(role='user', content='Recommend a fantasy book')]
+```
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "template",
+    "type": "str | None",
+    "module_context": "builtins",
+    "is_builtin": "true",
+    "default": "None"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.base.prompt"
+/>
+
+<ReturnType
+  type="PromptDecorator | MessagesDecorator"
+  moduleContext="mirascope.core.base.prompt"
+  isBuiltin={false}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.base.prompt"
+  description="The decorator function that turns the decorated function\ninto a prompt template."
+/>
+
+
+### metadata
+
+<ApiType type="Function" />
+
+A decorator for adding metadata to a `BasePrompt` or `call`.
+
+Adding this decorator to a `BasePrompt` or `call` updates the `metadata` annotation
+to the given value. This is useful for adding metadata to a `BasePrompt` or `call`
+that can be used for logging or filtering.
+
+Example:
+
+```python
+from mirascope.core import metadata, openai, prompt_template
+
+
+@openai.call("gpt-4o-mini")
+@prompt_template("Recommend a {genre} book")
+@metadata({"tags": {"version:0001", "books"}})
+def recommend_book(genre: str):
+    ...
+
+
+response = recommend_book("fantasy")
+print(response.metadata)
+```
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "metadata",
+    "type": "Metadata",
+    "module_context": "mirascope.core.base.metadata",
+    "is_builtin": "false"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.base.prompt"
+/>
+
+<ReturnType
+  type="MetadataDecorator"
+  moduleContext="mirascope.core.base.prompt"
+  isBuiltin={false}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.base.prompt"
+  description="The decorator function that updates the `_metadata`\nattribute of the decorated input prompt or call."
+/>
+
+
+## Classes
+
+### BasePrompt
+
+<ApiType type="Class" />
+
+The base class for engineering prompts.
+
+This class is implemented as the base for all prompting needs. It is intended to
+work across various providers by providing a common prompt interface.
+
+Example:
+
+```python
+from mirascope.core import BasePrompt, metadata, prompt_template
+
+@prompt_template("Recommend a {genre} book")
+@metadata({"tags": {"version:0001", "books"}})
+class BookRecommendationPrompt(BasePrompt):
+    genre: str
+
+prompt = BookRecommendationPrompt(genre="fantasy")
+
+print(prompt)
+# > Recommend a fantasy book
+
+print(prompt.message_params())
+# > [BaseMessageParam(role="user", content="Recommend a fantasy book")]
+
+print(prompt.dump()["metadata"])
+# > {"metadata": {"version:0001", "books"}}
+```
+
+**Bases:** BaseModel
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| prompt_template | str |  |
+
+
+### PromptDecorator
+
+<ApiType type="Class" />
+
+**Bases:** Protocol
+
+
+### MetadataDecorator
+
+<ApiType type="Class" />
+
+**Bases:** Protocol
+
 
 

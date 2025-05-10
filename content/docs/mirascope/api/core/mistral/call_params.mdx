@@ -8,12 +8,45 @@ description: API documentation for mirascope.core.mistral.call_params
 
 <ApiType type="Module" />
 
-## Description
-
 <Info title="Usage">
 
 [Calls](/docs/mirascope/learn/calls#provider-specific-parameters)
 
 </Info>
+
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| MistralCallParams |  | The parameters to use when calling the Mistral API.
+
+[Mistral API Reference](https://docs.mistral.ai/api/) |
+
+## Classes
+
+### MistralCallParams
+
+<ApiType type="Class" />
+
+The parameters to use when calling the Mistral API.
+
+[Mistral API Reference](https://docs.mistral.ai/api/)
+
+**Bases:** BaseCallParams
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| endpoint | NotRequired[str | None] |  |
+| max_tokens | NotRequired[int | None] |  |
+| random_seed | NotRequired[int | None] |  |
+| response_format | NotRequired[ResponseFormat | None] |  |
+| safe_mode | NotRequired[bool | None] |  |
+| safe_prompt | NotRequired[bool | None] |  |
+| temperature | NotRequired[float | None] |  |
+| tool_choice | NotRequired[ToolChoice | ToolChoiceEnum | None] |  |
+| top_p | NotRequired[float | None] |  |
+
 
 

@@ -8,8 +8,6 @@ description: API documentation for mirascope.core.anthropic.tool
 
 <ApiType type="Module" />
 
-## Description
-
 The `OpenAITool` class for easy tool usage with OpenAI LLM calls.
 
 <Info title="Usage">
@@ -17,5 +15,84 @@ The `OpenAITool` class for easy tool usage with OpenAI LLM calls.
 [Tools](/docs/mirascope/learn/tools)
 
 </Info>
+
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| AnthropicToolConfig |  | A tool configuration for Anthropic-specific features. |
+| AnthropicTool |  | A class for defining tools for Anthropic LLM calls.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.anthropic import anthropic_call
+
+
+def format_book(title: str, author: str) -> str:
+    return f"{title} by {author}"
+
+
+@anthropic_call("claude-3-5-sonnet-20240620", tools=[format_book])
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+response = recommend_book("fantasy")
+if tool := response.tool:  # returns an `AnthropicTool` instance
+    print(tool.call())
+``` |
+
+## Classes
+
+### AnthropicToolConfig
+
+<ApiType type="Class" />
+
+A tool configuration for Anthropic-specific features.
+
+**Bases:** ToolConfig
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| cache_control | _CacheControl |  |
+
+
+### AnthropicTool
+
+<ApiType type="Class" />
+
+A class for defining tools for Anthropic LLM calls.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.anthropic import anthropic_call
+
+
+def format_book(title: str, author: str) -> str:
+    return f"{title} by {author}"
+
+
+@anthropic_call("claude-3-5-sonnet-20240620", tools=[format_book])
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+response = recommend_book("fantasy")
+if tool := response.tool:  # returns an `AnthropicTool` instance
+    print(tool.call())
+```
+
+**Bases:** BaseTool
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| tool_call | SkipJsonSchema[ToolUseBlock] |  |
+
 
 

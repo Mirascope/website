@@ -8,8 +8,6 @@ description: API documentation for mirascope.core.azure.tool
 
 <ApiType type="Module" />
 
-## Description
-
 The `AzureTool` class for easy tool usage with Azure LLM calls.
 
 <Info title="Usage">
@@ -17,5 +15,94 @@ The `AzureTool` class for easy tool usage with Azure LLM calls.
 [Tools](/docs/mirascope/learn/tools)
 
 </Info>
+
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| GenerateAzureStrictToolJsonSchema |  |  |
+| AzureToolConfig |  | A tool configuration for Azure-specific features. |
+| AzureTool |  | A class for defining tools for Azure LLM calls.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.azure import azure_call
+
+
+def format_book(title: str, author: str) -> str:
+    return f"{title} by {author}"
+
+
+@azure_call("gpt-4o-mini", tools=[format_book])
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+response = recommend_book("fantasy")
+if tool := response.tool:  # returns an `AzureTool` instance
+    print(tool.call())
+``` |
+
+## Classes
+
+### GenerateAzureStrictToolJsonSchema
+
+<ApiType type="Class" />
+
+**Bases:** GenerateJsonSchemaNoTitles
+
+
+### AzureToolConfig
+
+<ApiType type="Class" />
+
+A tool configuration for Azure-specific features.
+
+**Bases:** ToolConfig
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| strict | bool |  |
+
+
+### AzureTool
+
+<ApiType type="Class" />
+
+A class for defining tools for Azure LLM calls.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.azure import azure_call
+
+
+def format_book(title: str, author: str) -> str:
+    return f"{title} by {author}"
+
+
+@azure_call("gpt-4o-mini", tools=[format_book])
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+response = recommend_book("fantasy")
+if tool := response.tool:  # returns an `AzureTool` instance
+    print(tool.call())
+```
+
+**Bases:** BaseTool
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| tool_call | SkipJsonSchema[ChatCompletionsToolCall] |  |
+
 
 

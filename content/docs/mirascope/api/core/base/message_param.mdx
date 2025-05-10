@@ -8,8 +8,6 @@ description: API documentation for mirascope.core.base.message_param
 
 <ApiType type="Class" />
 
-## Description
-
 A base class for message parameters.
 
 <Info title="Usage">
@@ -18,46 +16,58 @@ A base class for message parameters.
 
 </Info>
 
+**Bases:** BaseModel
 
-Attributes:
-    role: The role of the message (e.g. "system", "user", "assistant", "tool")
-    content: The content of the message
-    tool_name: The name of the tool, if any
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| role | str |  |
+| content | str | Sequence[TextPart | ImagePart | ImageURLPart | AudioPart | AudioURLPart | CacheControlPart | DocumentPart | ToolCallPart | ToolResultPart] |  |
 
 
 <ApiType type="Class" />
-
-## Description
 
 A content part for text.
 
-Attributes:
-    type: Always "text"
-    text: The text content
+**Bases:** BaseModel
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| type | Literal['text'] |  |
+| text | str |  |
 
 
 <ApiType type="Class" />
-
-## Description
 
 A content part for images.
 
-Attributes:
-    type: Always "image"
-    media_type: The media type (e.g. image/jpeg)
-    image: The raw image bytes
-    detail: (Optional) The detail to use for the image (supported by OpenAI)
+**Bases:** BaseModel
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| type | Literal['image'] |  |
+| media_type | str |  |
+| image | bytes |  |
+| detail | str | None |  |
 
 
 <ApiType type="Class" />
 
-## Description
-
 A content part for audio.
 
-Attributes:
-    type: Always "audio"
-    media_type: The media type (e.g. audio/wav)
-    audio: The raw audio bytes or base64 encoded audio data
+**Bases:** BaseModel
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| type | Literal['audio'] |  |
+| media_type | str |  |
+| audio | bytes | str |  |
 
 

@@ -8,8 +8,6 @@ description: API documentation for mirascope.core.mistral.stream
 
 <ApiType type="Module" />
 
-## Description
-
 The `MistralStream` class for convenience around streaming LLM calls.
 
 <Info title="Usage">
@@ -17,5 +15,62 @@ The `MistralStream` class for convenience around streaming LLM calls.
 [Streams](/docs/mirascope/learn/streams)
 
 </Info>
+
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| MistralStream |  | A class for convenience around streaming Mistral LLM calls.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.mistral import mistral_call
+
+
+@mistral_call("mistral-large-latest", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+stream = recommend_book("fantasy")  # returns `MistralStream` instance
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+``` |
+
+## Classes
+
+### MistralStream
+
+<ApiType type="Class" />
+
+A class for convenience around streaming Mistral LLM calls.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.mistral import mistral_call
+
+
+@mistral_call("mistral-large-latest", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+stream = recommend_book("fantasy")  # returns `MistralStream` instance
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+```
+
+**Bases:** BaseStream[MistralCallResponse, MistralCallResponseChunk, UserMessage, AssistantMessage, ToolMessage, AssistantMessage | SystemMessage | ToolMessage | UserMessage, MistralTool, dict[str, Any], MistralDynamicConfig, MistralCallParams, FinishReason]
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| cost_metadata | CostMetadata |  |
+
 
 

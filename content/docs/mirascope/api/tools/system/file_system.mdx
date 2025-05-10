@@ -8,4 +8,68 @@ description: API documentation for mirascope.tools.system._file_system
 
 <ApiType type="Module" />
 
+## Module Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| FileSystemToolKitConfig |  | Configuration for file_system toolkit |
+| FileOperation |  | Base class for file system operations. |
+| FileSystemToolKit |  | ToolKit for file system operations.
+Read, write, list, create, and delete files and directories. |
+
+## Classes
+
+### FileSystemToolKitConfig
+
+<ApiType type="Class" />
+
+Configuration for file_system toolkit
+
+**Bases:** _ConfigurableToolConfig
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| max_file_size | int |  |
+| allowed_extensions | list[str] |  |
+
+
+### FileOperation
+
+<ApiType type="Class" />
+
+Base class for file system operations.
+
+**Bases:** ConfigurableTool[FileSystemToolKitConfig], ABC
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| base_directory | Path |  |
+
+
+### FileSystemToolKit
+
+<ApiType type="Class" />
+
+ToolKit for file system operations.
+Read, write, list, create, and delete files and directories.
+
+**Bases:** ConfigurableToolKit[FileSystemToolKitConfig]
+
+### Attributes
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| config | FileSystemToolKitConfig |  |
+| ReadFile |  | Tool for reading file contents. |
+| WriteFile |  | Tool for writing content to a file. |
+| ListDirectory |  | Tool for listing directory contents. |
+| CreateDirectory |  | Tool for creating directories. |
+| DeleteFile |  | Tool for deleting files. |
+| base_directory | Path |  |
+
+
 
