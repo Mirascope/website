@@ -8,6 +8,7 @@ from dataclasses import dataclass
 
 from .tokenizer import Token, TokenType, tokenize
 from .type_model import GenericType, SimpleType, TypeInfo, TypeKind
+from .type_urls import get_doc_url_for_type
 
 CALLABLE_PARAMETER_LENGTH = 2
 
@@ -126,7 +127,9 @@ class Parser:
             type_str = " | ".join(t.type_str for t in union_types)
 
             # Create a UnionType (represented as a GenericType with "Union" base type)
-            base_type = SimpleType(type_str="Union")
+            # Get the doc URL for the Union type
+            doc_url = get_doc_url_for_type("Union")
+            base_type = SimpleType(type_str="Union", doc_url=doc_url)
             return GenericType(
                 type_str=type_str,
                 base_type=base_type,
@@ -166,7 +169,9 @@ class Parser:
                 return self.parse_generic_type(identifier)
 
             # Otherwise, it's a simple type
-            return SimpleType(type_str=identifier)
+            # Get documentation URL for this type if available
+            doc_url = get_doc_url_for_type(identifier)
+            return SimpleType(type_str=identifier, doc_url=doc_url)
 
         raise ParseError(f"Unexpected token: {token.type.name} '{token.value}'")
 
@@ -180,8 +185,9 @@ class Parser:
             A GenericType representing the parsed type
 
         """
-        # Create the base type
-        base_type = SimpleType(type_str=base_type_str)
+        # Create the base type with documentation URL if available
+        doc_url = get_doc_url_for_type(base_type_str)
+        base_type = SimpleType(type_str=base_type_str, doc_url=doc_url)
 
         # Consume the open bracket
         self.expect_token_type(TokenType.OPEN_BRACKET)
@@ -286,7 +292,8 @@ class Parser:
         type_str = f"[{', '.join(element_strs)}]"
 
         # Create and return the tuple type (as a generic with TUPLE kind)
-        base_type = SimpleType(type_str="tuple")
+        doc_url = get_doc_url_for_type("tuple")
+        base_type = SimpleType(type_str="tuple", doc_url=doc_url)
         return GenericType(
             type_str=type_str,
             base_type=base_type,

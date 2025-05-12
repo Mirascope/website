@@ -28,12 +28,21 @@ def test_type_model_classes():
     assert simple_type.type_str == "str"
     assert simple_type.kind == TypeKind.SIMPLE
     assert simple_type.description is None
+    assert simple_type.doc_url is None
 
     # Test simple type with description
     simple_type_with_desc = SimpleType(type_str="int", description="A whole number")
     assert simple_type_with_desc.type_str == "int"
     assert simple_type_with_desc.kind == TypeKind.SIMPLE
     assert simple_type_with_desc.description == "A whole number"
+    assert simple_type_with_desc.doc_url is None
+
+    # Test simple type with doc_url
+    doc_url = "https://docs.python.org/3/library/stdtypes.html#str"
+    simple_type_with_url = SimpleType(type_str="str", doc_url=doc_url)
+    assert simple_type_with_url.type_str == "str"
+    assert simple_type_with_url.kind == TypeKind.SIMPLE
+    assert simple_type_with_url.doc_url == doc_url
 
     # Test generic type
     generic_type = GenericType(
@@ -77,6 +86,18 @@ def test_json_serialization():
     assert parsed["type_str"] == "str"
     assert parsed["kind"] == "simple"
     assert parsed["description"] is None
+    assert parsed["doc_url"] is None
+
+    # Test simple type with doc_url
+    doc_url = "https://docs.python.org/3/library/stdtypes.html#str"
+    type_info_with_url = SimpleType(type_str="str", doc_url=doc_url)
+
+    # Serialize and deserialize
+    json_str = type_info_with_url.to_json()
+    parsed = json.loads(json_str)
+
+    # Check doc_url is preserved
+    assert parsed["doc_url"] == doc_url
 
     # Test generic type with nested structure
     nested_type = GenericType(
@@ -96,7 +117,12 @@ def test_json_serialization():
         "kind": "generic",
         "type_str": "List[Dict[str, int]]",
         "description": None,
-        "base_type": {"kind": "simple", "type_str": "List", "description": None},
+        "base_type": {
+            "kind": "simple",
+            "type_str": "List",
+            "description": None,
+            "doc_url": None,
+        },
         "parameters": [
             {
                 "kind": "generic",
@@ -106,10 +132,21 @@ def test_json_serialization():
                     "kind": "simple",
                     "type_str": "Dict",
                     "description": None,
+                    "doc_url": None,
                 },
                 "parameters": [
-                    {"kind": "simple", "type_str": "str", "description": None},
-                    {"kind": "simple", "type_str": "int", "description": None},
+                    {
+                        "kind": "simple",
+                        "type_str": "str",
+                        "description": None,
+                        "doc_url": None,
+                    },
+                    {
+                        "kind": "simple",
+                        "type_str": "int",
+                        "description": None,
+                        "doc_url": None,
+                    },
                 ],
             }
         ],

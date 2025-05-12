@@ -33,7 +33,8 @@ A tool configuration for Anthropic-specific features.
     "type_info": {
       "type_str": "_CacheControl",
       "description": null,
-      "kind": "simple"
+      "kind": "simple",
+      "doc_url": null
     }
   }
 ]}
@@ -79,13 +80,15 @@ if tool := response.tool:  # returns an `AnthropicTool` instance
       "base_type": {
         "type_str": "SkipJsonSchema",
         "description": null,
-        "kind": "simple"
+        "kind": "simple",
+        "doc_url": null
       },
       "parameters": [
         {
           "type_str": "ToolUseBlock",
           "description": null,
-          "kind": "simple"
+          "kind": "simple",
+          "doc_url": null
         }
       ]
     }

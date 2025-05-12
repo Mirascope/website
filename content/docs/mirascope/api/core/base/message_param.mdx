@@ -25,7 +25,8 @@ A base class for message parameters.
     "type_info": {
       "type_str": "str",
       "description": null,
-      "kind": "simple"
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
     }
   },
   {
@@ -37,13 +38,15 @@ A base class for message parameters.
       "base_type": {
         "type_str": "Union",
         "description": null,
-        "kind": "simple"
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
       },
       "parameters": [
         {
           "type_str": "str",
           "description": null,
-          "kind": "simple"
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
         },
         {
           "type_str": "Sequence[TextPart | ImagePart | ImageURLPart | AudioPart | AudioURLPart | CacheControlPart | DocumentPart | ToolCallPart | ToolResultPart]",
@@ -52,7 +55,8 @@ A base class for message parameters.
           "base_type": {
             "type_str": "Sequence",
             "description": null,
-            "kind": "simple"
+            "kind": "simple",
+            "doc_url": null
           },
           "parameters": [
             {
@@ -62,53 +66,63 @@ A base class for message parameters.
               "base_type": {
                 "type_str": "Union",
                 "description": null,
-                "kind": "simple"
+                "kind": "simple",
+                "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
               },
               "parameters": [
                 {
                   "type_str": "TextPart",
                   "description": null,
-                  "kind": "simple"
+                  "kind": "simple",
+                  "doc_url": null
                 },
                 {
                   "type_str": "ImagePart",
                   "description": null,
-                  "kind": "simple"
+                  "kind": "simple",
+                  "doc_url": null
                 },
                 {
                   "type_str": "ImageURLPart",
                   "description": null,
-                  "kind": "simple"
+                  "kind": "simple",
+                  "doc_url": null
                 },
                 {
                   "type_str": "AudioPart",
                   "description": null,
-                  "kind": "simple"
+                  "kind": "simple",
+                  "doc_url": null
                 },
                 {
                   "type_str": "AudioURLPart",
                   "description": null,
-                  "kind": "simple"
+                  "kind": "simple",
+                  "doc_url": null
                 },
                 {
                   "type_str": "CacheControlPart",
                   "description": null,
-                  "kind": "simple"
+                  "kind": "simple",
+                  "doc_url": null
                 },
                 {
                   "type_str": "DocumentPart",
                   "description": null,
-                  "kind": "simple"
+                  "kind": "simple",
+                  "doc_url": null
                 },
                 {
                   "type_str": "ToolCallPart",
                   "description": null,
-                  "kind": "simple"
+                  "kind": "simple",
+                  "doc_url": null
                 },
                 {
                   "type_str": "ToolResultPart",
                   "description": null,
-                  "kind": "simple"
+                  "kind": "simple",
+                  "doc_url": null
                 }
               ]
             }
@@ -138,13 +152,15 @@ A content part for text.
       "base_type": {
         "type_str": "Literal",
         "description": null,
-        "kind": "simple"
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Literal"
       },
       "parameters": [
         {
           "type_str": "'text'",
           "description": null,
-          "kind": "simple"
+          "kind": "simple",
+          "doc_url": null
         }
       ]
     }
@@ -154,7 +170,8 @@ A content part for text.
     "type_info": {
       "type_str": "str",
       "description": null,
-      "kind": "simple"
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
     }
   }
 ]}
@@ -178,13 +195,15 @@ A content part for images.
       "base_type": {
         "type_str": "Literal",
         "description": null,
-        "kind": "simple"
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Literal"
       },
       "parameters": [
         {
           "type_str": "'image'",
           "description": null,
-          "kind": "simple"
+          "kind": "simple",
+          "doc_url": null
         }
       ]
     }
@@ -194,7 +213,8 @@ A content part for images.
     "type_info": {
       "type_str": "str",
       "description": null,
-      "kind": "simple"
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
     }
   },
   {
@@ -202,7 +222,8 @@ A content part for images.
     "type_info": {
       "type_str": "bytes",
       "description": null,
-      "kind": "simple"
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes"
     }
   },
   {
@@ -214,18 +235,21 @@ A content part for images.
       "base_type": {
         "type_str": "Union",
         "description": null,
-        "kind": "simple"
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
       },
       "parameters": [
         {
           "type_str": "str",
           "description": null,
-          "kind": "simple"
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
         },
         {
           "type_str": "None",
           "description": null,
-          "kind": "simple"
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
         }
       ]
     }
@@ -251,13 +275,15 @@ A content part for audio.
       "base_type": {
         "type_str": "Literal",
         "description": null,
-        "kind": "simple"
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Literal"
       },
       "parameters": [
         {
           "type_str": "'audio'",
           "description": null,
-          "kind": "simple"
+          "kind": "simple",
+          "doc_url": null
         }
       ]
     }
@@ -267,7 +293,8 @@ A content part for audio.
     "type_info": {
       "type_str": "str",
       "description": null,
-      "kind": "simple"
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
     }
   },
   {
@@ -279,18 +306,21 @@ A content part for audio.
       "base_type": {
         "type_str": "Union",
         "description": null,
-        "kind": "simple"
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
       },
       "parameters": [
         {
           "type_str": "bytes",
           "description": null,
-          "kind": "simple"
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes"
         },
         {
           "type_str": "str",
           "description": null,
-          "kind": "simple"
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
         }
       ]
     }

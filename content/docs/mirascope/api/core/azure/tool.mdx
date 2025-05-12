@@ -40,7 +40,8 @@ A tool configuration for Azure-specific features.
     "type_info": {
       "type_str": "bool",
       "description": null,
-      "kind": "simple"
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/functions.html#bool"
     }
   }
 ]}
@@ -87,13 +88,15 @@ if tool := response.tool:  # returns an `AzureTool` instance
       "base_type": {
         "type_str": "SkipJsonSchema",
         "description": null,
-        "kind": "simple"
+        "kind": "simple",
+        "doc_url": null
       },
       "parameters": [
         {
           "type_str": "ChatCompletionsToolCall",
           "description": null,
-          "kind": "simple"
+          "kind": "simple",
+          "doc_url": null
         }
       ]
     }

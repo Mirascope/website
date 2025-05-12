@@ -33,7 +33,8 @@ A base abstract interface for LLM streaming response chunks.
     "type_info": {
       "type_str": "_ChunkT",
       "description": null,
-      "kind": "simple"
+      "kind": "simple",
+      "doc_url": null
     }
   },
   {
@@ -41,7 +42,8 @@ A base abstract interface for LLM streaming response chunks.
     "type_info": {
       "type_str": "None",
       "description": null,
-      "kind": "simple"
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/constants.html#None"
     }
   },
   {
@@ -49,7 +51,8 @@ A base abstract interface for LLM streaming response chunks.
     "type_info": {
       "type_str": "str",
       "description": null,
-      "kind": "simple"
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
     },
     "description": "Should return the string content of the response chunk.\n\nIf there are multiple choices in a chunk, this method should select the 0th\nchoice and return it's string content.\n\nIf there is no string content (e.g. when using tools), this method must return\nthe empty string."
   },
@@ -62,7 +65,8 @@ A base abstract interface for LLM streaming response chunks.
       "base_type": {
         "type_str": "Union",
         "description": null,
-        "kind": "simple"
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
       },
       "parameters": [
         {
@@ -72,20 +76,23 @@ A base abstract interface for LLM streaming response chunks.
           "base_type": {
             "type_str": "list",
             "description": null,
-            "kind": "simple"
+            "kind": "simple",
+            "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
           },
           "parameters": [
             {
               "type_str": "_FinishReasonT",
               "description": null,
-              "kind": "simple"
+              "kind": "simple",
+              "doc_url": null
             }
           ]
         },
         {
           "type_str": "None",
           "description": null,
-          "kind": "simple"
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
         }
       ]
     },
@@ -100,18 +107,21 @@ A base abstract interface for LLM streaming response chunks.
       "base_type": {
         "type_str": "Union",
         "description": null,
-        "kind": "simple"
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
       },
       "parameters": [
         {
           "type_str": "str",
           "description": null,
-          "kind": "simple"
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
         },
         {
           "type_str": "None",
           "description": null,
-          "kind": "simple"
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
         }
       ]
     },
@@ -126,18 +136,21 @@ A base abstract interface for LLM streaming response chunks.
       "base_type": {
         "type_str": "Union",
         "description": null,
-        "kind": "simple"
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
       },
       "parameters": [
         {
           "type_str": "str",
           "description": null,
-          "kind": "simple"
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
         },
         {
           "type_str": "None",
           "description": null,
-          "kind": "simple"
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
         }
       ]
     },
@@ -148,7 +161,8 @@ A base abstract interface for LLM streaming response chunks.
     "type_info": {
       "type_str": "Any",
       "description": null,
-      "kind": "simple"
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/typing.html#typing.Any"
     },
     "description": "Should return the usage of the response.\n\nIf there is no usage, this method must return None."
   },
@@ -161,23 +175,27 @@ A base abstract interface for LLM streaming response chunks.
       "base_type": {
         "type_str": "Union",
         "description": null,
-        "kind": "simple"
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
       },
       "parameters": [
         {
           "type_str": "int",
           "description": null,
-          "kind": "simple"
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/functions.html#int"
         },
         {
           "type_str": "float",
           "description": null,
-          "kind": "simple"
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/functions.html#float"
         },
         {
           "type_str": "None",
           "description": null,
-          "kind": "simple"
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
         }
       ]
     },
@@ -192,23 +210,27 @@ A base abstract interface for LLM streaming response chunks.
       "base_type": {
         "type_str": "Union",
         "description": null,
-        "kind": "simple"
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
       },
       "parameters": [
         {
           "type_str": "int",
           "description": null,
-          "kind": "simple"
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/functions.html#int"
         },
         {
           "type_str": "float",
           "description": null,
-          "kind": "simple"
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/functions.html#float"
         },
         {
           "type_str": "None",
           "description": null,
-          "kind": "simple"
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
         }
       ]
     },
@@ -223,23 +245,27 @@ A base abstract interface for LLM streaming response chunks.
       "base_type": {
         "type_str": "Union",
         "description": null,
-        "kind": "simple"
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
       },
       "parameters": [
         {
           "type_str": "int",
           "description": null,
-          "kind": "simple"
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/functions.html#int"
         },
         {
           "type_str": "float",
           "description": null,
-          "kind": "simple"
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/functions.html#float"
         },
         {
           "type_str": "None",
           "description": null,
-          "kind": "simple"
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
         }
       ]
     },
@@ -250,7 +276,8 @@ A base abstract interface for LLM streaming response chunks.
     "type_info": {
       "type_str": "CostMetadata",
       "description": null,
-      "kind": "simple"
+      "kind": "simple",
+      "doc_url": null
     },
     "description": "Get metadata required for cost calculation."
   },
@@ -263,7 +290,8 @@ A base abstract interface for LLM streaming response chunks.
       "base_type": {
         "type_str": "Union",
         "description": null,
-        "kind": "simple"
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
       },
       "parameters": [
         {
@@ -273,20 +301,23 @@ A base abstract interface for LLM streaming response chunks.
           "base_type": {
             "type_str": "list",
             "description": null,
-            "kind": "simple"
+            "kind": "simple",
+            "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
           },
           "parameters": [
             {
               "type_str": "FinishReason",
               "description": null,
-              "kind": "simple"
+              "kind": "simple",
+              "doc_url": null
             }
           ]
         },
         {
           "type_str": "None",
           "description": null,
-          "kind": "simple"
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
         }
       ]
     },
@@ -301,18 +332,21 @@ A base abstract interface for LLM streaming response chunks.
       "base_type": {
         "type_str": "Union",
         "description": null,
-        "kind": "simple"
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
       },
       "parameters": [
         {
           "type_str": "Usage",
           "description": null,
-          "kind": "simple"
+          "kind": "simple",
+          "doc_url": null
         },
         {
           "type_str": "None",
           "description": null,
-          "kind": "simple"
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
         }
       ]
     },
