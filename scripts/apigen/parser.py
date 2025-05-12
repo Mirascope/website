@@ -226,19 +226,13 @@ class Parser:
             kind = TypeKind.OPTIONAL
         elif base_type_str == "Callable":
             kind = TypeKind.CALLABLE
-            # Validate Callable structure
+            # Only validate that Callable has 2 parameters: args and return type
             if len(parameters) != CALLABLE_PARAMETER_LENGTH:
                 raise ParseError(
                     f"Callable must have exactly 2 parameters, got {len(parameters)}"
                 )
-            # First parameter should be a tuple (argument types)
-            if parameters[0].kind != TypeKind.TUPLE and not (
-                isinstance(parameters[0], GenericType)
-                and parameters[0].base_type.type_str == "Tuple"
-            ):
-                raise ParseError(
-                    "First parameter of Callable must be a tuple of argument types"
-                )
+            # Note: We don't validate the first parameter's type anymore
+            # It can be a tuple ([arg1, arg2]), a generic (ParamSpec), a type alias, etc.
         elif base_type_str == "Tuple":
             kind = TypeKind.TUPLE
 

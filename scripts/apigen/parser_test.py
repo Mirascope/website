@@ -346,6 +346,25 @@ def test_parse_callable_types():
     )
     assert_json_equal(actual, expected)
 
+    # Test callable with empty arguments list (no parameters)
+    type_str = "Callable[[], str]"
+    actual = parse_type_string(type_str)
+    expected = GenericType(
+        type_str=type_str,
+        base_type=SimpleType(type_str="Callable", kind=TypeKind.SIMPLE),
+        parameters=[
+            GenericType(
+                type_str="[]",
+                base_type=SimpleType(type_str="tuple", kind=TypeKind.SIMPLE),
+                parameters=[],  # Empty parameters list
+                kind=TypeKind.TUPLE,
+            ),
+            SimpleType(type_str="str", kind=TypeKind.SIMPLE),
+        ],
+        kind=TypeKind.CALLABLE,
+    )
+    assert_json_equal(actual, expected)
+
     # Test callable with complex return type
     type_str = "Callable[[str], Dict[str, int]]"
     actual = parse_type_string(type_str)
@@ -420,10 +439,6 @@ def test_error_handling():
     # Test unexpected token - This will actually be caught by the unbalanced bracket check
     with pytest.raises(ParseError):
         parse_type_string("List[str]]")
-
-    # Test invalid callable (missing tuple for args)
-    with pytest.raises(ParseError):
-        parse_type_string("Callable[str, bool]")
 
     # Test invalid callable (wrong number of parameters)
     with pytest.raises(ParseError):

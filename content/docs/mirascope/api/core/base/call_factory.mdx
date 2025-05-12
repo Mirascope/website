@@ -14,39 +14,48 @@ A factory method for creating provider-specific call decorators.
   parameters={[
   {
     "name": "TCallResponse",
-    "type": "type[_BaseCallResponseT]"
+    "type": "type[_BaseCallResponseT]",
+    "description": "The provider-specific `BaseCallResponse` type."
   },
   {
     "name": "TCallResponseChunk",
-    "type": "type[_BaseCallResponseChunkT]"
+    "type": "type[_BaseCallResponseChunkT]",
+    "description": "The provider-specific `BaseCallResponseChunk` type."
   },
   {
     "name": "TToolType",
-    "type": "type[_BaseToolT]"
+    "type": "type[_BaseToolT]",
+    "description": "The provider-specific `BaseTool` type."
   },
   {
     "name": "TStream",
-    "type": "type[_BaseStreamT]"
+    "type": "type[_BaseStreamT]",
+    "description": "The provider-specific `BaseStream` type."
   },
   {
     "name": "default_call_params",
-    "type": "BaseCallParams"
+    "type": "BaseCallParams",
+    "description": "The default call parameters to use, which must match the\n`TCallParams` type if provided."
   },
   {
     "name": "setup_call",
-    "type": "SameSyncAndAsyncClientSetupCall[_SameSyncAndAsyncClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT] | SetupCall[_SyncBaseClientT, _AsyncBaseClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT]"
+    "type": "SameSyncAndAsyncClientSetupCall[_SameSyncAndAsyncClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT] | SetupCall[_SyncBaseClientT, _AsyncBaseClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT]",
+    "description": "The helper method for setting up a call, which returns the\nconfigured create function, the prompt template, the list of\nprovider-specific messages, the list of provider-specific tool types, and\nthe finalized `call_kwargs` with which to make the API call with the create\nfunction."
   },
   {
     "name": "get_json_output",
-    "type": "GetJsonOutput[_BaseCallResponseT | _BaseCallResponseChunkT]"
+    "type": "GetJsonOutput[_BaseCallResponseT | _BaseCallResponseChunkT]",
+    "description": "The helper method for getting JSON output from a call response."
   },
   {
     "name": "handle_stream",
-    "type": "HandleStream[_ResponseChunkT, _BaseCallResponseChunkT, _BaseToolT]"
+    "type": "HandleStream[_ResponseChunkT, _BaseCallResponseChunkT, _BaseToolT]",
+    "description": "The helper method for converting a provider's original stream\ngenerator into a generator that returns tuples of `(chunk, tool)` where\n`chunk` and `tool` are provider-specific `BaseCallResponseChunk` and\n`BaseTool` instances, respectively."
   },
   {
     "name": "handle_stream_async",
-    "type": "HandleStreamAsync[_AsyncResponseChunkT, _BaseCallResponseChunkT, _BaseToolT]"
+    "type": "HandleStreamAsync[_AsyncResponseChunkT, _BaseCallResponseChunkT, _BaseToolT]",
+    "description": "The same helper method as `handle_stream` except for\nhandling asynchronous streaming."
   }
 ]}
 />
