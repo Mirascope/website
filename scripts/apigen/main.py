@@ -5,9 +5,14 @@ This script:
 1. Clones/updates the Mirascope repository at the version specified in pyproject.toml
 2. Extracts the API documentation structure
 3. Generates MDX files with API documentation based on autodoc directives using Griffe
+
+Usage:
+  - `bun run apigen`: Regenerate all API documentation
+  - `bun run apigen pattern`: Regenerate only files matching the pattern
 """
 
 import argparse
+import os
 import re
 import sys
 from pathlib import Path
@@ -40,8 +45,6 @@ def get_mirascope_version(pyproject_path: Path) -> str:
     raise ValueError("Mirascope dependency not found in pyproject.toml")
 
 
-## Claude: Make a dataclass for the api source config
-
 # Configuration for API documentation sources
 # Maps repository/package to documentation target directory
 API_SOURCES: ApiSourcesDict = {
@@ -62,13 +65,15 @@ API_SOURCES: ApiSourcesDict = {
     # ),
 }
 
+# Default source when only one is currently in use
+DEFAULT_SOURCE = "mirascope"
+
 
 def process_source(
     source_name: str,
     source_config: ApiSourceConfig,
     project_root: Path,
-    only_file: str | None = None,
-    with_meta: bool = False,
+    pattern: str | None = None,
 ) -> bool:
     """Process a single API documentation source.
 
@@ -76,8 +81,7 @@ def process_source(
         source_name: Name of the source
         source_config: Configuration for the source
         project_root: Root directory of the project
-        only_file: Optional file pattern to regenerate only specific files
-        with_meta: Whether to regenerate metadata when using only_file
+        pattern: Optional file pattern to regenerate only specific files
 
     Returns:
         True if successful, False otherwise
@@ -94,9 +98,9 @@ def process_source(
         generator.setup()
 
         # Generate documentation
-        if only_file:
-            # Skip metadata generation unless with_meta is True
-            generator.generate_selected(only_file, skip_meta=not with_meta)
+        if pattern:
+            # Always regenerate metadata for consistency
+            generator.generate_selected(pattern, skip_meta=False)
         else:
             generator.generate_all()
 
@@ -107,25 +111,53 @@ def process_source(
         return False
 
 
-def parse_qualified_path(
-    only_file: str, sources: ApiSourcesDict
-) -> tuple[str | None, str]:
-    """Parse a qualified path like "mirascope:llm/call.mdx" into source and file parts.
+def normalize_pattern(pattern: str | None) -> str | None:
+    """Normalize a file pattern to handle extension issues.
+
+    Strips the extension from the pattern to match files regardless of whether
+    they use .md or .mdx extensions.
 
     Args:
-        only_file: The qualified path
-        sources: Dictionary of available API sources
+        pattern: The file pattern to normalize
 
     Returns:
-        Tuple of (source_name, file_pattern) - source_name is None if not qualified
+        The normalized pattern
 
     """
-    if ":" in only_file:
-        source_name, file_pattern = only_file.split(":", 1)
-        if source_name not in sources:
-            raise ValueError(f"Unknown API source '{source_name}' in qualified path")
-        return source_name, file_pattern
-    return None, only_file
+    if not pattern:
+        return None
+
+    # If the pattern ends with a file extension (.md or .mdx), strip it
+    if pattern.endswith(".md") or pattern.endswith(".mdx"):
+        # Get the base name without extension
+        return os.path.splitext(pattern)[0]
+
+    return pattern
+
+
+def parse_source_pattern(pattern: str | None) -> tuple[str, str | None]:
+    """Parse a pattern that may include a source prefix.
+
+    If pattern includes a source prefix like "mirascope:core/call.mdx",
+    extract the source name and file pattern. Otherwise, use the default source.
+    The pattern's file extension will be stripped to work with any extension.
+
+    Args:
+        pattern: The pattern string, possibly with a source prefix
+
+    Returns:
+        Tuple of (source_name, file_pattern)
+
+    """
+    if pattern and ":" in pattern:
+        # Pattern includes a source prefix
+        source_name, file_pattern = pattern.split(":", 1)
+        if source_name not in API_SOURCES:
+            raise ValueError(f"Unknown API source '{source_name}' in pattern")
+        return source_name, normalize_pattern(file_pattern)
+
+    # No source prefix or no pattern at all
+    return DEFAULT_SOURCE, normalize_pattern(pattern)
 
 
 def main(cmd_args: list[str] | None = None) -> int:
@@ -142,24 +174,13 @@ def main(cmd_args: list[str] | None = None) -> int:
         description="Regenerate API documentation from source repositories."
     )
     parser.add_argument(
-        "--source",
-        type=str,
-        choices=[*list(API_SOURCES.keys()), "all"],
-        default="all",
-        help="API source to generate documentation for (default: all)",
-    )
-    parser.add_argument(
-        "--only",
-        type=str,
+        "pattern",
+        nargs="?",
         help=(
-            "Only regenerate files matching this pattern. "
-            "Can be a qualified path like 'mirascope:llm/call.mdx'"
+            "Optional pattern to regenerate only matching files. "
+            "Will match regardless of whether files use .md or .mdx extensions. "
+            "Can include a source prefix like 'mirascope:core/call.mdx'"
         ),
-    )
-    parser.add_argument(
-        "--with-meta",
-        action="store_true",
-        help="Also regenerate metadata file when using --only",
     )
 
     parsed_args = parser.parse_args(cmd_args)
@@ -167,38 +188,19 @@ def main(cmd_args: list[str] | None = None) -> int:
     # Get the project root directory
     project_root = Path(__file__).parent.parent.parent
 
-    # If --only has a qualified path, use that to determine source
-    qualified_source = None
-    file_pattern = None
-    if parsed_args.only:
-        qualified_source, file_pattern = parse_qualified_path(
-            parsed_args.only, API_SOURCES
-        )
+    # Determine the source and pattern
+    source_name, file_pattern = parse_source_pattern(parsed_args.pattern)
 
-    # Determine which sources to process
-    if qualified_source:
-        sources_to_process = [qualified_source]
-    elif parsed_args.source == "all":
-        sources_to_process = list(API_SOURCES.keys())
-    else:
-        sources_to_process = [parsed_args.source]
+    source_config = API_SOURCES[source_name]
+    print(f"\nProcessing {source_name}...")
 
-    success = True
-    for source_name in sources_to_process:
-        source_config = API_SOURCES[source_name]
-        print(f"\nProcessing {source_name}...")
-
-        # Use file_pattern from qualified path if available, otherwise use --only
-        only_file_to_use = file_pattern if qualified_source else parsed_args.only
-
-        if not process_source(
-            source_name,
-            source_config,
-            project_root,
-            only_file_to_use,
-            parsed_args.with_meta,
-        ):
-            success = False
+    # Generate documentation with or without a pattern
+    success = process_source(
+        source_name,
+        source_config,
+        project_root,
+        file_pattern,
+    )
 
     return 0 if success else 1
 
