@@ -14,7 +14,7 @@ from scripts.apigen.models import (
     ProcessedFunction,
     ProcessedModule,
 )
-from scripts.apigen.type_utils import ParameterInfo
+from scripts.apigen.type_model import ParameterInfo
 
 
 def render_module(processed_module: ProcessedModule) -> str:

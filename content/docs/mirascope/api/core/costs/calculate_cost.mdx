@@ -25,16 +25,19 @@ preserving existing behavior while providing a unified interface.
   parameters={[
   {
     "name": "provider",
-    "type": "Provider"
+    "type": "Provider",
+    "description": "The LLM provider (e.g., \"openai\", \"anthropic\")"
   },
   {
     "name": "model",
-    "type": "str"
+    "type": "str",
+    "description": "The model name (e.g., \"gpt-4\", \"claude-3-opus\")"
   },
   {
     "name": "metadata",
     "type": "CostMetadata | None",
-    "default": "None"
+    "default": "None",
+    "description": "Additional metadata required for cost calculation"
   }
 ]}
 />

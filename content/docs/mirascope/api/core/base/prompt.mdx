@@ -52,7 +52,7 @@ print(recommend_book("fantasy"))
 
 <ReturnTable
   returnType={{
-  "type": "PromptDecorator | MessagesDecorator",
+  "type": "Callable",
   "description": "The decorator function that turns the decorated function\ninto a prompt template."
 }}
 />
@@ -96,7 +96,7 @@ print(response.metadata)
 
 <ReturnTable
   returnType={{
-  "type": "MetadataDecorator",
+  "type": "Callable",
   "description": "The decorator function that updates the `_metadata`\nattribute of the decorated input prompt or call."
 }}
 />

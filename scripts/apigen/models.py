@@ -9,12 +9,8 @@ from dataclasses import dataclass
 
 from griffe import Alias, Class, DocstringSectionKind, Function, Module, Object
 
-from scripts.apigen.return_extractor import extract_return_info
-from scripts.apigen.type_utils import (
-    ParameterInfo,
-    ReturnInfo,
-    extract_params_if_available,
-)
+from scripts.apigen.type_extractor import extract_type_info
+from scripts.apigen.type_model import ParameterInfo, ReturnInfo
 
 
 def extract_clean_docstring(obj: Object | Alias) -> str | None:
@@ -142,11 +138,8 @@ def process_function(func_obj: Function) -> ProcessedFunction:
     # Extract clean docstring
     docstring = extract_clean_docstring(func_obj)
 
-    # Extract parameters
-    params = extract_params_if_available(func_obj)
-
-    # Extract return type
-    return_info = extract_return_info(func_obj)
+    # Extract parameters and return type
+    params, return_info = extract_type_info(func_obj)
 
     # Create and return the processed function
     return ProcessedFunction(
@@ -294,11 +287,8 @@ def process_alias(alias_obj: Alias) -> ProcessedAlias:
     # Extract clean docstring
     docstring = extract_clean_docstring(alias_obj)
 
-    # Extract parameters
-    params = extract_params_if_available(alias_obj)
-
-    # Extract return type
-    return_info = extract_return_info(alias_obj)
+    # Extract parameters and return type
+    params, return_info = extract_type_info(alias_obj)
 
     # Extract target path
     target_path = ""
