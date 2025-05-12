@@ -6,15 +6,34 @@ description: API documentation for mirascope.integrations.otel
 
 # mirascope.integrations.otel
 
+Configures the OpenTelemetry tracer, this function should only be called once.
 
-## Error Processing Documentation
+<ParametersTable
+  parameters={[
+  {
+    "name": "processors",
+    "type": "Sequence[SpanProcessor] | None",
+    "module_context": "collections.abc",
+    "is_builtin": "false",
+    "default": "None",
+    "description": "Optional[Sequence[SpanProcessor]]\nThe span processors to use, if None, a console exporter will be used."
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.integrations.otel._utils"
+/>
 
-An error occurred while generating documentation for `mirascope.integrations.otel.configure
+<ReturnType
+  type="Tracer"
+  moduleContext="opentelemetry.trace"
+  isBuiltin={false}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.integrations.otel._utils"
+  description="The configured tracer."
+/>
 
-## `with_otel``: Could not resolve alias mirascope.integrations.otel._utils.Tracer pointing at opentelemetry.trace.Tracer (in .api-generation-repos/mirascope-repo/mirascope/integrations/otel/_utils.py:13)
 
-Please check that all required dependencies are installed.
-
+**Alias to:** `mirascope.integrations.otel._utils.configure`
 
 Wraps a Mirascope function with OpenTelemetry.
 
