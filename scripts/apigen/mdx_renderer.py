@@ -13,7 +13,7 @@ from scripts.apigen.models import (
     ProcessedFunction,
     ProcessedModule,
 )
-from scripts.apigen.type_utils import parameters_to_dict_list
+from scripts.apigen.type_utils import ParameterInfo
 
 # Default content subpath for documentation
 MODULE_CONTENT_SUBPATH = "docs/mirascope"
@@ -259,7 +259,7 @@ def format_return_type_component(
 
 
 def format_parameters_table(
-    params, content_subpath: str, module_path: str
+    params: list[ParameterInfo], content_subpath: str, module_path: str
 ) -> list[str]:
     """Format a ParametersTable component from parameter information.
 
@@ -274,8 +274,22 @@ def format_parameters_table(
     """
     component_lines = []
 
-    # Convert the param dictionaries to JSON format with proper indentation
-    params_json = json.dumps(parameters_to_dict_list(params), indent=2)
+    # Convert parameters to dictionaries inline
+    param_dicts = []
+    for param in params:
+        param_dict = {"name": param.name}
+        if param.type_info:
+            param_dict["type"] = param.type_info.type_str
+            param_dict["module_context"] = param.type_info.module_context
+            param_dict["is_builtin"] = str(param.type_info.is_builtin).lower()
+        if param.default:
+            param_dict["default"] = param.default
+        if param.description:
+            param_dict["description"] = param.description
+        param_dicts.append(param_dict)
+
+    # Convert to JSON format with proper indentation
+    params_json = json.dumps(param_dicts, indent=2)
 
     # Format the component with proper line breaks and proper JSX syntax
     component_lines.append("<ParametersTable")
