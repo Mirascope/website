@@ -128,7 +128,7 @@ export function ProviderTabbedSection({
       ) : null}
 
       <Tabs value={activeProvider} onValueChange={handleProviderChange} className="w-full">
-        <div className="relative mb-0 px-1">
+        <div className="relative mb-0">
           {/* Left scroll button - always rendered but conditionally visible */}
           <button
             onClick={canScrollLeft ? scrollLeft : undefined}
