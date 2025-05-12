@@ -70,7 +70,7 @@ fi
 
 # Install dependencies with uv
 log $YELLOW "Installing dependencies with uv..."
-uv pip install -e ".[providers]"
+uv pip install -e ".[mirascope-all]"
 log $GREEN "Dependencies installed"
 
 # Prepare tool commands
