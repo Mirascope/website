@@ -97,13 +97,15 @@ print(response.content)
   currentModule="mirascope.core.xai._call"
 />
 
-<ReturnType
-  type="Callable"
-  moduleContext="typing"
-  isBuiltin={true}
+<ReturnTable
+  returnType={{
+  "type": "Callable",
+  "module_context": "typing",
+  "is_builtin": "true",
+  "description": "The decorator for turning a typed function into a xAI\nrouted LLM API call."
+}}
   contentSubpath="docs/mirascope"
   currentModule="mirascope.core.xai._call"
-  description="The decorator for turning a typed function into a xAI\nrouted LLM API call."
 />
 
 

@@ -47,13 +47,15 @@ preserving existing behavior while providing a unified interface.
   currentModule="mirascope.core.costs.calculate_cost"
 />
 
-<ReturnType
-  type="float | None"
-  moduleContext="builtins"
-  isBuiltin={true}
+<ReturnTable
+  returnType={{
+  "type": "float | None",
+  "module_context": "builtins",
+  "is_builtin": "true",
+  "description": "The calculated cost in USD or None if unable to calculate"
+}}
   contentSubpath="docs/mirascope"
   currentModule="mirascope.core.costs.calculate_cost"
-  description="The calculated cost in USD or None if unable to calculate"
 />
 
 

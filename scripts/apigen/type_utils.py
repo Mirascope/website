@@ -61,6 +61,7 @@ class ReturnInfo:
 
     type_info: TypeInfo
     description: str | None = None
+    name: str | None = None
 
 
 def get_type_origin(annotation, module: Module) -> TypeInfo:

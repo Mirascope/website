@@ -200,7 +200,7 @@ def render_alias(processed_alias: ProcessedAlias) -> str:
 def format_return_type_component(
     return_info, content_subpath: str, module_path: str
 ) -> list[str]:
-    """Format a ReturnType component from return type information.
+    """Format a ReturnTable component from return type information.
 
     Args:
         return_info: The return type information
@@ -208,37 +208,37 @@ def format_return_type_component(
         module_path: The module path for context
 
     Returns:
-        List of strings representing the ReturnType component
+        List of strings representing the ReturnTable component
 
     """
     component_lines = []
 
     type_info = return_info.type_info
     description = return_info.description
-    type_str = type_info.type_str
-    module_context = type_info.module_context
+    # We'll use the name field when we enhance the return_extractor
+    name = getattr(return_info, "name", None)
 
-    # Escape quotes in strings
-    type_str = type_str.replace('"', '\\"')
-    if module_context:
-        module_context = module_context.replace('"', '\\"')
-
-    # Format the component with proper line breaks and proper JSX syntax
-    component_lines.append("<ReturnType")
-    component_lines.append(f'  type="{type_str}"')
-
-    if module_context:
-        component_lines.append(f'  moduleContext="{module_context}"')
-
-    component_lines.append(f"  isBuiltin={{{str(type_info.is_builtin).lower()}}}")
-    component_lines.append(f'  contentSubpath="{content_subpath}"')
-    component_lines.append(f'  currentModule="{module_path}"')
+    # Create a return type dictionary
+    return_dict = {
+        "type": type_info.type_str,
+        "module_context": type_info.module_context,
+        "is_builtin": str(type_info.is_builtin).lower(),
+    }
 
     if description:
-        # Properly escape newlines and quotes for JSX
-        description = description.replace('"', '\\"').replace("\n", "\\n")
-        component_lines.append(f'  description="{description}"')
+        return_dict["description"] = description
 
+    if name:
+        return_dict["name"] = name
+
+    # Convert to JSON format with proper indentation
+    return_json = json.dumps(return_dict, indent=2)
+
+    # Format the component with proper line breaks and proper JSX syntax
+    component_lines.append("<ReturnTable")
+    component_lines.append(f"  returnType={{{return_json}}}")
+    component_lines.append(f'  contentSubpath="{content_subpath}"')
+    component_lines.append(f'  currentModule="{module_path}"')
     component_lines.append("/>\n")
 
     return component_lines

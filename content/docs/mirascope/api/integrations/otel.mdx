@@ -23,13 +23,15 @@ Configures the OpenTelemetry tracer, this function should only be called once.
   currentModule="mirascope.integrations.otel._utils"
 />
 
-<ReturnType
-  type="Tracer"
-  moduleContext="opentelemetry.trace"
-  isBuiltin={false}
+<ReturnTable
+  returnType={{
+  "type": "Tracer",
+  "module_context": "opentelemetry.trace",
+  "is_builtin": "false",
+  "description": "The configured tracer."
+}}
   contentSubpath="docs/mirascope"
   currentModule="mirascope.integrations.otel._utils"
-  description="The configured tracer."
 />
 
 
@@ -59,10 +61,12 @@ def recommend_book(genre: str) -> str:
 print(recommend_book("fantasy"))
 ```
 
-<ReturnType
-  type="Callable[[Callable[_P, _R]], Callable[_P, _R]]"
-  moduleContext="collections.abc"
-  isBuiltin={false}
+<ReturnTable
+  returnType={{
+  "type": "Callable[[Callable[_P, _R]], Callable[_P, _R]]",
+  "module_context": "collections.abc",
+  "is_builtin": "false"
+}}
   contentSubpath="docs/mirascope"
   currentModule="mirascope.integrations.otel._with_otel"
 />
@@ -96,10 +100,12 @@ def recommend_book(genre: str) -> str:
 print(recommend_book("fantasy"))
 ```
 
-<ReturnType
-  type="Callable[[Callable[_P, _R]], Callable[_P, _R]]"
-  moduleContext="collections.abc"
-  isBuiltin={false}
+<ReturnTable
+  returnType={{
+  "type": "Callable[[Callable[_P, _R]], Callable[_P, _R]]",
+  "module_context": "collections.abc",
+  "is_builtin": "false"
+}}
   contentSubpath="docs/mirascope"
   currentModule="mirascope.integrations.otel._with_hyperdx"
 />
