@@ -20,7 +20,7 @@ class BaseTypeInfo:
     def to_dict(self) -> dict:
         """Convert this object to a dictionary suitable for JSON serialization."""
         return asdict(self)
-    
+
     def to_json(self) -> str:
         """Convert this object to a JSON string."""
         return json.dumps(self.to_dict())
