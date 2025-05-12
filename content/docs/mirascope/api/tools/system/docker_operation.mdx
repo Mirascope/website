@@ -8,15 +8,6 @@ description: API documentation for mirascope.tools.system._docker_operation
 
 <ApiType type="Module" />
 
-## Module Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| DockerOperationToolKitConfig |  | Configuration for `DockerOperationToolKit` toolkit |
-| DockerOperation |  | Base class for Docker operations. |
-| DockerContainer |  |  |
-| DockerOperationToolKit |  | ToolKit for executing Python code and shell commands in a Docker container. |
-
 ## Classes
 
 ### DockerOperationToolKitConfig
@@ -27,13 +18,24 @@ Configuration for `DockerOperationToolKit` toolkit
 
 **Bases:** _ConfigurableToolConfig
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| docker_image | str |  |
-| max_memory | str |  |
-| allow_network | bool |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "docker_image",
+    "type": "str"
+  },
+  {
+    "name": "max_memory",
+    "type": "str"
+  },
+  {
+    "name": "allow_network",
+    "type": "bool"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.tools.system._docker_operation"
+/>
 
 
 ### DockerOperation
@@ -51,12 +53,20 @@ Base class for Docker operations.
 
 **Bases:** BaseModel
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| config | DockerOperationToolKitConfig |  |
-| container | Container |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "config",
+    "type": "DockerOperationToolKitConfig"
+  },
+  {
+    "name": "container",
+    "type": "Container"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.tools.system._docker_operation"
+/>
 
 
 ### DockerOperationToolKit
@@ -67,14 +77,30 @@ ToolKit for executing Python code and shell commands in a Docker container.
 
 **Bases:** ConfigurableToolKit[DockerOperationToolKitConfig]
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| config | DockerOperationToolKitConfig |  |
-| docker_container | DockerContainer |  |
-| ExecutePython |  | Tool for executing Python code in a Docker container. |
-| ExecuteShell |  | Tool for executing shell commands in a Docker container. |
+<AttributesTable
+  attributes={[
+  {
+    "name": "config",
+    "type": "DockerOperationToolKitConfig"
+  },
+  {
+    "name": "docker_container",
+    "type": "DockerContainer"
+  },
+  {
+    "name": "ExecutePython",
+    "type": "",
+    "description": "Tool for executing Python code in a Docker container."
+  },
+  {
+    "name": "ExecuteShell",
+    "type": "",
+    "description": "Tool for executing shell commands in a Docker container."
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.tools.system._docker_operation"
+/>
 
 
 

@@ -10,12 +10,6 @@ description: API documentation for mirascope.core.base.stream
 
 This module contains the base classes for streaming responses from LLMs.
 
-## Module Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| BaseStream |  | A base class for streaming responses from LLMs. |
-
 ## Functions
 
 ### stream_factory
@@ -70,34 +64,110 @@ A base class for streaming responses from LLMs.
 
 **Bases:** Generic[_BaseCallResponseT, _BaseCallResponseChunkT, _UserMessageParamT, _AssistantMessageParamT, _ToolMessageParamT, _MessageParamT, _BaseToolT, _ToolSchemaT, _BaseDynamicConfigT, _BaseCallParamsT, _FinishReason], ABC
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| stream | Generator[tuple[_BaseCallResponseChunkT, _BaseToolT | None], None, None] | AsyncGenerator[tuple[_BaseCallResponseChunkT, _BaseToolT | None], None] |  |
-| content | str |  |
-| metadata | Metadata |  |
-| tool_types | list[type[_BaseToolT]] | None |  |
-| call_response_type | type[_BaseCallResponseT] |  |
-| model | str |  |
-| prompt_template | str | None |  |
-| fn_args | dict[str, Any] | None |  |
-| dynamic_config | _BaseDynamicConfigT |  |
-| messages | list[_MessageParamT] |  |
-| call_params | _BaseCallParamsT |  |
-| call_kwargs | BaseCallKwargs[_ToolSchemaT] |  |
-| user_message_param | _UserMessageParamT | None |  |
-| message_param | _AssistantMessageParamT |  |
-| input_tokens | int | float | None |  |
-| cached_tokens | int | float | None |  |
-| output_tokens | int | float | None |  |
-| id | str | None |  |
-| finish_reasons | list[_FinishReason] | None |  |
-| start_time | float |  |
-| end_time | float |  |
-| provider | Provider |  |
-| cost_metadata | CostMetadata | Returns metadata needed for cost calculation. |
-| cost | float | None | Calculate the cost of this streaming API call. |
+<AttributesTable
+  attributes={[
+  {
+    "name": "stream",
+    "type": "Generator[tuple[_BaseCallResponseChunkT, _BaseToolT | None], None, None] | AsyncGenerator[tuple[_BaseCallResponseChunkT, _BaseToolT | None], None]"
+  },
+  {
+    "name": "content",
+    "type": "str"
+  },
+  {
+    "name": "metadata",
+    "type": "Metadata"
+  },
+  {
+    "name": "tool_types",
+    "type": "list[type[_BaseToolT]] | None"
+  },
+  {
+    "name": "call_response_type",
+    "type": "type[_BaseCallResponseT]"
+  },
+  {
+    "name": "model",
+    "type": "str"
+  },
+  {
+    "name": "prompt_template",
+    "type": "str | None"
+  },
+  {
+    "name": "fn_args",
+    "type": "dict[str, Any] | None"
+  },
+  {
+    "name": "dynamic_config",
+    "type": "_BaseDynamicConfigT"
+  },
+  {
+    "name": "messages",
+    "type": "list[_MessageParamT]"
+  },
+  {
+    "name": "call_params",
+    "type": "_BaseCallParamsT"
+  },
+  {
+    "name": "call_kwargs",
+    "type": "BaseCallKwargs[_ToolSchemaT]"
+  },
+  {
+    "name": "user_message_param",
+    "type": "_UserMessageParamT | None"
+  },
+  {
+    "name": "message_param",
+    "type": "_AssistantMessageParamT"
+  },
+  {
+    "name": "input_tokens",
+    "type": "int | float | None"
+  },
+  {
+    "name": "cached_tokens",
+    "type": "int | float | None"
+  },
+  {
+    "name": "output_tokens",
+    "type": "int | float | None"
+  },
+  {
+    "name": "id",
+    "type": "str | None"
+  },
+  {
+    "name": "finish_reasons",
+    "type": "list[_FinishReason] | None"
+  },
+  {
+    "name": "start_time",
+    "type": "float"
+  },
+  {
+    "name": "end_time",
+    "type": "float"
+  },
+  {
+    "name": "provider",
+    "type": "Provider"
+  },
+  {
+    "name": "cost_metadata",
+    "type": "CostMetadata",
+    "description": "Returns metadata needed for cost calculation."
+  },
+  {
+    "name": "cost",
+    "type": "float | None",
+    "description": "Calculate the cost of this streaming API call."
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.base.stream"
+/>
 
 
 

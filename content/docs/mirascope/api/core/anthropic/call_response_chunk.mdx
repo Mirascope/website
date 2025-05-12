@@ -16,34 +16,6 @@ This module contains the `AnthropicCallResponseChunk` class.
 
 </Info>
 
-## Module Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| FinishReason | None |  |
-| AnthropicCallResponseChunk |  | A convenience wrapper around the Anthropic `ChatCompletionChunk` streamed chunks.
-
-When calling the Anthropic API using a function decorated with `anthropic_call` and
-`stream` set to `True`, the stream will contain `AnthropicResponseChunk` instances
-with properties that allow for more convenient access to commonly used attributes.
-
-Example:
-
-```python
-from mirascope.core import prompt_template
-from mirascope.core.anthropic import anthropic_call
-
-
-@anthropic_call("claude-3-5-sonnet-20240620", stream=True)
-def recommend_book(genre: str) -> str:
-    return f"Recommend a {genre} book"
-
-
-stream = recommend_book("fantasy")  # response is an `AnthropicStream`
-for chunk, _ in stream:
-    print(chunk.content, end="", flush=True)
-``` |
-
 ## Classes
 
 ### AnthropicCallResponseChunk
@@ -75,20 +47,62 @@ for chunk, _ in stream:
 
 **Bases:** BaseCallResponseChunk[MessageStreamEvent, FinishReason]
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| content | str | Returns the string content of the 0th message. |
-| finish_reasons | list[FinishReason] | None | Returns the finish reason of the response. |
-| model | str | None | Returns the name of the response model. |
-| id | str | None | Returns the id of the response. |
-| usage | Usage | MessageDeltaUsage | None | Returns the usage of the message. |
-| input_tokens | int | None | Returns the number of input tokens. |
-| cached_tokens | int | None | Returns the number of cached tokens. |
-| output_tokens | int | None | Returns the number of output tokens. |
-| cost_metadata | CostMetadata | Returns the cost metadata. |
-| common_finish_reasons | list[types.FinishReason] | None | Provider-agnostic finish reasons. |
+<AttributesTable
+  attributes={[
+  {
+    "name": "content",
+    "type": "str",
+    "description": "Returns the string content of the 0th message."
+  },
+  {
+    "name": "finish_reasons",
+    "type": "list[FinishReason] | None",
+    "description": "Returns the finish reason of the response."
+  },
+  {
+    "name": "model",
+    "type": "str | None",
+    "description": "Returns the name of the response model."
+  },
+  {
+    "name": "id",
+    "type": "str | None",
+    "description": "Returns the id of the response."
+  },
+  {
+    "name": "usage",
+    "type": "Usage | MessageDeltaUsage | None",
+    "description": "Returns the usage of the message."
+  },
+  {
+    "name": "input_tokens",
+    "type": "int | None",
+    "description": "Returns the number of input tokens."
+  },
+  {
+    "name": "cached_tokens",
+    "type": "int | None",
+    "description": "Returns the number of cached tokens."
+  },
+  {
+    "name": "output_tokens",
+    "type": "int | None",
+    "description": "Returns the number of output tokens."
+  },
+  {
+    "name": "cost_metadata",
+    "type": "CostMetadata",
+    "description": "Returns the cost metadata."
+  },
+  {
+    "name": "common_finish_reasons",
+    "type": "list[types.FinishReason] | None",
+    "description": "Provider-agnostic finish reasons."
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.anthropic.call_response_chunk"
+/>
 
 
 

@@ -16,16 +16,6 @@ The `LiteLLMStream` class for convenience around streaming LLM calls.
 
 </Info>
 
-## Module Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| LiteLLMStream |  | A simple wrapper around `OpenAIStream`.
-
-Everything is the same except updates to the `construct_call_response` method and
-the `cost` property so that cost is properly calculated using LiteLLM's cost
-calculation method. This ensures cost calculation works for non-OpenAI models. |
-
 ## Classes
 
 ### LiteLLMStream
@@ -40,11 +30,17 @@ calculation method. This ensures cost calculation works for non-OpenAI models.
 
 **Bases:** OpenAIStream
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| cost_metadata | CostMetadata | Returns metadata needed for cost calculation. |
+<AttributesTable
+  attributes={[
+  {
+    "name": "cost_metadata",
+    "type": "CostMetadata",
+    "description": "Returns metadata needed for cost calculation."
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.litellm.stream"
+/>
 
 
 

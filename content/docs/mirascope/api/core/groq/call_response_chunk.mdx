@@ -16,33 +16,6 @@ This module contains the `GroqCallResponseChunk` class.
 
 </Info>
 
-## Module Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| FinishReason | None |  |
-| GroqCallResponseChunk |  | A convenience wrapper around the Groq `ChatCompletionChunk` streamed chunks.
-
-When calling the Groq API using a function decorated with `groq_call` and
-`stream` set to `True`, the stream will contain `GroqResponseChunk` instances with
-properties that allow for more convenient access to commonly used attributes.
-
-Example:
-
-```python
-from mirascope.core import prompt_template
-from mirascope.core.groq import groq_call
-
-
-@groq_call("llama-3.1-8b-instant", stream=True)
-def recommend_book(genre: str) -> str:
-    return f"Recommend a {genre} book"
-
-stream = recommend_book("fantasy")  # response is an `GroqStream`
-for chunk, _ in stream:
-    print(chunk.content, end="", flush=True)
-``` |
-
 ## Classes
 
 ### GroqCallResponseChunk
@@ -73,20 +46,61 @@ for chunk, _ in stream:
 
 **Bases:** BaseCallResponseChunk[ChatCompletionChunk, FinishReason]
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| content | str | Returns the content for the 0th choice delta. |
-| finish_reasons | list[FinishReason] | Returns the finish reasons of the response. |
-| model | str | Returns the name of the response model. |
-| id | str | Returns the id of the response. |
-| usage | CompletionUsage | None | Returns the usage of the chat completion. |
-| input_tokens | int | None | Returns the number of input tokens. |
-| cached_tokens | int | None | Returns the number of cached tokens. |
-| output_tokens | int | None | Returns the number of output tokens. |
-| cost_metadata | CostMetadata | Returns the cost metadata. |
-| common_finish_reasons | list[FinishReason] | None |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "content",
+    "type": "str",
+    "description": "Returns the content for the 0th choice delta."
+  },
+  {
+    "name": "finish_reasons",
+    "type": "list[FinishReason]",
+    "description": "Returns the finish reasons of the response."
+  },
+  {
+    "name": "model",
+    "type": "str",
+    "description": "Returns the name of the response model."
+  },
+  {
+    "name": "id",
+    "type": "str",
+    "description": "Returns the id of the response."
+  },
+  {
+    "name": "usage",
+    "type": "CompletionUsage | None",
+    "description": "Returns the usage of the chat completion."
+  },
+  {
+    "name": "input_tokens",
+    "type": "int | None",
+    "description": "Returns the number of input tokens."
+  },
+  {
+    "name": "cached_tokens",
+    "type": "int | None",
+    "description": "Returns the number of cached tokens."
+  },
+  {
+    "name": "output_tokens",
+    "type": "int | None",
+    "description": "Returns the number of output tokens."
+  },
+  {
+    "name": "cost_metadata",
+    "type": "CostMetadata",
+    "description": "Returns the cost metadata."
+  },
+  {
+    "name": "common_finish_reasons",
+    "type": "list[FinishReason] | None"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.groq.call_response_chunk"
+/>
 
 
 

@@ -8,13 +8,6 @@ description: API documentation for mirascope.tools.web._requests
 
 <ApiType type="Module" />
 
-## Module Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| RequestsConfig |  | Configuration for HTTP requests |
-| Requests |  | Tool for making HTTP requests with built-in requests library. |
-
 ## Classes
 
 ### RequestsConfig
@@ -25,11 +18,16 @@ Configuration for HTTP requests
 
 **Bases:** _ConfigurableToolConfig
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| timeout | int |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "timeout",
+    "type": "int"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.tools.web._requests"
+/>
 
 
 ### Requests
@@ -40,14 +38,28 @@ Tool for making HTTP requests with built-in requests library.
 
 **Bases:** ConfigurableTool
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| url | str |  |
-| method | Literal['GET', 'POST', 'PUT', 'DELETE'] |  |
-| data | dict | None |  |
-| headers | dict | None |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "url",
+    "type": "str"
+  },
+  {
+    "name": "method",
+    "type": "Literal['GET', 'POST', 'PUT', 'DELETE']"
+  },
+  {
+    "name": "data",
+    "type": "dict | None"
+  },
+  {
+    "name": "headers",
+    "type": "dict | None"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.tools.web._requests"
+/>
 
 
 

@@ -16,29 +16,6 @@ The `GroqStream` class for convenience around streaming LLM calls.
 
 </Info>
 
-## Module Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| FinishReason | None |  |
-| GroqStream |  | A class for convenience around streaming Groq LLM calls.
-
-Example:
-
-```python
-from mirascope.core import prompt_template
-from mirascope.core.groq import groq_call
-
-
-@groq_call("llama-3.1-8b-instant", stream=True)
-def recommend_book(genre: str) -> str:
-    return f"Recommend a {genre} book"
-
-stream = recommend_book("fantasy")  # returns `GroqStream` instance
-for chunk, _ in stream:
-    print(chunk.content, end="", flush=True)
-``` |
-
 ## Classes
 
 ### GroqStream
@@ -65,11 +42,16 @@ for chunk, _ in stream:
 
 **Bases:** BaseStream[GroqCallResponse, GroqCallResponseChunk, ChatCompletionUserMessageParam, ChatCompletionAssistantMessageParam, ChatCompletionToolMessageParam, ChatCompletionMessageParam, GroqTool, ChatCompletionToolParam, AsyncGroqDynamicConfig | GroqDynamicConfig, GroqCallParams, FinishReason]
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| cost_metadata | CostMetadata |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "cost_metadata",
+    "type": "CostMetadata"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.groq.stream"
+/>
 
 
 

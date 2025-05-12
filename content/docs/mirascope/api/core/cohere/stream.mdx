@@ -16,29 +16,6 @@ The `CohereStream` class for convenience around streaming LLM calls.
 
 </Info>
 
-## Module Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| CohereStream |  | A class for convenience around streaming Cohere LLM calls.
-
-Example:
-
-```python
-from mirascope.core import prompt_template
-from mirascope.core.cohere import cohere_call
-
-
-@cohere_call("command-r-plus", stream=True)
-def recommend_book(genre: str) -> str:
-    return f"Recommend a {genre} book"
-
-
-stream = recommend_book("fantasy")  # returns `CohereStream` instance
-for chunk, _ in stream:
-    print(chunk.content, end="", flush=True)
-``` |
-
 ## Classes
 
 ### CohereStream
@@ -66,11 +43,16 @@ for chunk, _ in stream:
 
 **Bases:** BaseStream[CohereCallResponse, CohereCallResponseChunk, ChatMessage, ChatMessage, ChatMessage, ChatMessage, CohereTool, Tool, AsyncCohereDynamicConfig | CohereDynamicConfig, CohereCallParams, ChatStreamEndEventFinishReason]
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| cost_metadata | CostMetadata |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "cost_metadata",
+    "type": "CostMetadata"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.cohere.stream"
+/>
 
 
 

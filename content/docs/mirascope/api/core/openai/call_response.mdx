@@ -16,45 +16,26 @@ This module contains the `OpenAICallResponse` class.
 
 </Info>
 
-## Module Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| ChatCompletionAudio |  |  |
-| OpenAICallResponse |  | A convenience wrapper around the OpenAI `ChatCompletion` response.
-
-When calling the OpenAI API using a function decorated with `openai_call`, the
-response will be an `OpenAICallResponse` instance with properties that allow for
-more convenience access to commonly used attributes.
-
-Example:
-
-```python
-from mirascope.core import prompt_template
-from mirascope.core.openai import openai_call
-
-
-@openai_call("gpt-4o")
-def recommend_book(genre: str) -> str:
-    return f"Recommend a {genre} book"
-
-
-response = recommend_book("fantasy")  # response is an `OpenAICallResponse` instance
-print(response.content)
-``` |
-
 ## Classes
 
 ### ChatCompletionAudio
 
 <ApiType type="Class" />
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| data | str |  |
-| transcript | str |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "data",
+    "type": "str"
+  },
+  {
+    "name": "transcript",
+    "type": "str"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.openai.call_response"
+/>
 
 
 ### OpenAICallResponse
@@ -85,28 +66,98 @@ print(response.content)
 
 **Bases:** BaseCallResponse[ChatCompletion, OpenAITool, ChatCompletionToolParam, OpenAIDynamicConfig, ChatCompletionMessageParam, OpenAICallParams, ChatCompletionUserMessageParam, OpenAIMessageParamConverter]
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| response | SkipValidation[ChatCompletion] |  |
-| content | str | Returns the content of the chat completion for the 0th choice. |
-| finish_reasons | list[str] | Returns the finish reasons of the response. |
-| model | str | Returns the name of the response model. |
-| id | str | Returns the id of the response. |
-| usage | CompletionUsage | None | Returns the usage of the chat completion. |
-| input_tokens | int | None | Returns the number of input tokens. |
-| cached_tokens | int | None | Returns the number of cached tokens. |
-| output_tokens | int | None | Returns the number of output tokens. |
-| message_param | SerializeAsAny[ChatCompletionAssistantMessageParam] | Returns the assistants's response as a message parameter. |
-| tools | list[OpenAITool] | None | Returns any available tool calls as their `OpenAITool` definition. |
-| tool | OpenAITool | None | Returns the 0th tool for the 0th choice message. |
-| audio | bytes | None | Returns the audio data of the response. |
-| audio_transcript | str | None | Returns the transcript of the audio content. |
-| common_finish_reasons | list[FinishReason] | None | Provider-agnostic finish reasons. |
-| common_message_param | BaseMessageParam |  |
-| common_user_message_param | BaseMessageParam | None |  |
-| cost_metadata | CostMetadata |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "response",
+    "type": "SkipValidation[ChatCompletion]"
+  },
+  {
+    "name": "content",
+    "type": "str",
+    "description": "Returns the content of the chat completion for the 0th choice."
+  },
+  {
+    "name": "finish_reasons",
+    "type": "list[str]",
+    "description": "Returns the finish reasons of the response."
+  },
+  {
+    "name": "model",
+    "type": "str",
+    "description": "Returns the name of the response model."
+  },
+  {
+    "name": "id",
+    "type": "str",
+    "description": "Returns the id of the response."
+  },
+  {
+    "name": "usage",
+    "type": "CompletionUsage | None",
+    "description": "Returns the usage of the chat completion."
+  },
+  {
+    "name": "input_tokens",
+    "type": "int | None",
+    "description": "Returns the number of input tokens."
+  },
+  {
+    "name": "cached_tokens",
+    "type": "int | None",
+    "description": "Returns the number of cached tokens."
+  },
+  {
+    "name": "output_tokens",
+    "type": "int | None",
+    "description": "Returns the number of output tokens."
+  },
+  {
+    "name": "message_param",
+    "type": "SerializeAsAny[ChatCompletionAssistantMessageParam]",
+    "description": "Returns the assistants's response as a message parameter."
+  },
+  {
+    "name": "tools",
+    "type": "list[OpenAITool] | None",
+    "description": "Returns any available tool calls as their `OpenAITool` definition."
+  },
+  {
+    "name": "tool",
+    "type": "OpenAITool | None",
+    "description": "Returns the 0th tool for the 0th choice message."
+  },
+  {
+    "name": "audio",
+    "type": "bytes | None",
+    "description": "Returns the audio data of the response."
+  },
+  {
+    "name": "audio_transcript",
+    "type": "str | None",
+    "description": "Returns the transcript of the audio content."
+  },
+  {
+    "name": "common_finish_reasons",
+    "type": "list[FinishReason] | None",
+    "description": "Provider-agnostic finish reasons."
+  },
+  {
+    "name": "common_message_param",
+    "type": "BaseMessageParam"
+  },
+  {
+    "name": "common_user_message_param",
+    "type": "BaseMessageParam | None"
+  },
+  {
+    "name": "cost_metadata",
+    "type": "CostMetadata"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.openai.call_response"
+/>
 
 
 
