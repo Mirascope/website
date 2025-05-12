@@ -27,8 +27,20 @@ class SimpleType(BaseTypeInfo):
     kind: str = field(default="simple")
 
 
+@dataclass
+class GenericType(BaseTypeInfo):
+    """Represents a generic type like List[str] or Dict[str, int]."""
+
+    # Use field with default to ensure kind is always "generic"
+    kind: str = field(default="generic")
+    # The base type (e.g., "List" in List[str])
+    base_type: str = ""
+    # Type parameters (can be any TypeInfo)
+    parameters: list["TypeInfo"] = field(default_factory=list)
+
+
 # Define the TypeInfo union type
-TypeInfo = SimpleType  # Will expand to include other types
+TypeInfo = SimpleType | GenericType
 
 
 # List of Python built-in types
@@ -59,10 +71,45 @@ PYTHON_BUILTINS = {
 }
 
 
+def split_parameters(params_str: str) -> list[str]:
+    """Split a parameters string into individual parameter strings.
+
+    Handles nested brackets correctly.
+
+    Args:
+        params_str: The parameters string to split
+
+    Returns:
+        A list of parameter strings
+
+    """
+    result = []
+    current = ""
+    depth = 0
+
+    for char in params_str:
+        if char == "[":
+            depth += 1
+            current += char
+        elif char == "]":
+            depth -= 1
+            current += char
+        elif char == "," and depth == 0:
+            result.append(current.strip())
+            current = ""
+        else:
+            current += char
+
+    if current.strip():
+        result.append(current.strip())
+
+    return result
+
+
 def parse_type_string(type_str: str, module_context: str) -> TypeInfo:
     """Parse a type string into a TypeInfo object.
 
-    Currently only supports simple types.
+    Supports simple types and generic types.
 
     Args:
         type_str: The type string to parse
@@ -72,7 +119,28 @@ def parse_type_string(type_str: str, module_context: str) -> TypeInfo:
         A TypeInfo object representing the parsed type
 
     """
-    # For now, just handle simple types
+    # Check if this is a generic type (contains square brackets)
+    if "[" in type_str and type_str.endswith("]"):
+        # Extract the base type and parameters
+        open_bracket = type_str.find("[")
+        base_type = type_str[:open_bracket]
+        params_str = type_str[open_bracket + 1 : -1]
+
+        # Parse parameters recursively
+        parameters = []
+        for param in split_parameters(params_str):
+            param_type = parse_type_string(param, module_context)
+            parameters.append(param_type)
+
+        return GenericType(
+            type_str=type_str,
+            module_context=module_context,
+            is_builtin=base_type in PYTHON_BUILTINS,
+            base_type=base_type,
+            parameters=parameters,
+        )
+
+    # Handle simple type if not generic
     return SimpleType(
         type_str=type_str,
         module_context=module_context,

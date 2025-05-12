@@ -42,7 +42,7 @@ ignore = [
 # Disable rules for example/snippet code and scripts
 [lint.per-file-ignores]
 "public/**/*.py" = [
-    "E501",  # ignore line too long 
+    "E501",  # ignore line too long
     "I",     # ignore isort for examples
     "D",     # ignore docstring issues
     "T",     # ignore type checking issues
@@ -55,6 +55,9 @@ ignore = [
     "E501",  # line too long
     "UP038", # use X | Y in isinstance instead of (X, Y)
     "PLR0915", # too many statements
+]
+"scripts/apigen/**/*_test.py" = [
+    "PLR2004", # magic value used in comparison
 ]
 
 [lint.isort]
