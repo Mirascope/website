@@ -1,8 +1,8 @@
-import { TypeLink } from "./TypeLink";
+import { type TypeInfo, TypeLink } from "./TypeLink";
 
 export type Parameter = {
   name: string;
-  type?: string;
+  type_info: TypeInfo;
   description?: string;
   default?: string;
 };
@@ -41,7 +41,7 @@ export function ParametersTable({ parameters }: ParametersTableProps) {
                   )}
                 </td>
                 <td className="text-primary border-b px-4 py-2">
-                  <TypeLink type={param.type || "-"} />
+                  <TypeLink type={param.type_info} />
                 </td>
                 <td className="border-b px-4 py-2">{param.description || "-"}</td>
               </tr>

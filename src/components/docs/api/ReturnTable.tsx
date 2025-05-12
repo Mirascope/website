@@ -1,8 +1,8 @@
-import { TypeLink } from "./TypeLink";
+import { type TypeInfo, TypeLink } from "./TypeLink";
 
 export type ReturnTypeInfo = {
   name?: string;
-  type: string;
+  type_info: TypeInfo;
   description?: string;
 };
 
@@ -14,7 +14,7 @@ interface ReturnTableProps {
  * Component to display a function's return type in a table format consistent with other tables
  */
 export function ReturnTable({ returnType }: ReturnTableProps) {
-  if (!returnType || !returnType.type) {
+  if (!returnType || !returnType.type_info) {
     return null;
   }
 
@@ -36,7 +36,7 @@ export function ReturnTable({ returnType }: ReturnTableProps) {
                 <td className="border-b px-4 py-2 font-mono">{returnType.name}</td>
               )}
               <td className="text-primary border-b px-4 py-2">
-                <TypeLink type={returnType.type} />
+                <TypeLink type={returnType.type_info} />
               </td>
               <td className="border-b px-4 py-2">{returnType.description || "-"}</td>
             </tr>

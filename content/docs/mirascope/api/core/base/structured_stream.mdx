@@ -20,27 +20,237 @@ This module defines the base class for structured streams.
   parameters={[
   {
     "name": "TCallResponse",
-    "type": "type[_BaseCallResponseT]"
+    "type_info": {
+      "type_str": "type[_BaseCallResponseT]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "type",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "_BaseCallResponseT",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "TCallResponseChunk",
-    "type": "type[_BaseCallResponseChunkT]"
+    "type_info": {
+      "type_str": "type[_BaseCallResponseChunkT]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "type",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "_BaseCallResponseChunkT",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "TStream",
-    "type": "type[BaseStream]"
+    "type_info": {
+      "type_str": "type[BaseStream]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "type",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "BaseStream",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "TToolType",
-    "type": "type[_BaseToolT]"
+    "type_info": {
+      "type_str": "type[_BaseToolT]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "type",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "_BaseToolT",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "setup_call",
-    "type": "SameSyncAndAsyncClientSetupCall[_SameSyncAndAsyncClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT] | SetupCall[_SyncBaseClientT, _AsyncBaseClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT]"
+    "type_info": {
+      "type_str": "SameSyncAndAsyncClientSetupCall[_SameSyncAndAsyncClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT] | SetupCall[_SyncBaseClientT, _AsyncBaseClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT]",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "SameSyncAndAsyncClientSetupCall[_SameSyncAndAsyncClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "SameSyncAndAsyncClientSetupCall",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "_SameSyncAndAsyncClientT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_BaseDynamicConfigT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_AsyncBaseDynamicConfigT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_BaseCallParamsT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_ResponseT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_ResponseChunkT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_AsyncResponseT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_AsyncResponseChunkT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_BaseToolT",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        },
+        {
+          "type_str": "SetupCall[_SyncBaseClientT, _AsyncBaseClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "SetupCall",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "_SyncBaseClientT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_AsyncBaseClientT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_BaseDynamicConfigT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_AsyncBaseDynamicConfigT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_BaseCallParamsT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_ResponseT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_ResponseChunkT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_AsyncResponseT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_AsyncResponseChunkT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_BaseToolT",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "name": "get_json_output",
-    "type": "GetJsonOutput[_BaseCallResponseChunkT]"
+    "type_info": {
+      "type_str": "GetJsonOutput[_BaseCallResponseChunkT]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "GetJsonOutput",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "_BaseCallResponseChunkT",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   }
 ]}
 />
@@ -60,19 +270,47 @@ A base class for streaming structured outputs from LLMs.
   attributes={[
   {
     "name": "stream",
-    "type": "BaseStream"
+    "type_info": {
+      "type_str": "BaseStream",
+      "description": null,
+      "kind": "simple"
+    }
   },
   {
     "name": "response_model",
-    "type": "type[_ResponseModelT]"
+    "type_info": {
+      "type_str": "type[_ResponseModelT]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "type",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "_ResponseModelT",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "constructed_response_model",
-    "type": "_ResponseModelT"
+    "type_info": {
+      "type_str": "_ResponseModelT",
+      "description": null,
+      "kind": "simple"
+    }
   },
   {
     "name": "fields_from_call_args",
-    "type": "None"
+    "type_info": {
+      "type_str": "None",
+      "description": null,
+      "kind": "simple"
+    }
   }
 ]}
 />

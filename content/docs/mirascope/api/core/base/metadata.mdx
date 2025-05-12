@@ -22,7 +22,35 @@ The `Metadata` typed dictionary for including general metadata.
   attributes={[
   {
     "name": "tags",
-    "type": "NotRequired[set[str]]"
+    "type_info": {
+      "type_str": "NotRequired[set[str]]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "set[str]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "set",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "str",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   }
 ]}
 />

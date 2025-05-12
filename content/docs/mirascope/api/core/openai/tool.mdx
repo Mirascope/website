@@ -37,7 +37,11 @@ A tool configuration for OpenAI-specific features.
   attributes={[
   {
     "name": "strict",
-    "type": "bool"
+    "type_info": {
+      "type_str": "bool",
+      "description": null,
+      "kind": "simple"
+    }
   }
 ]}
 />
@@ -76,7 +80,23 @@ if tool := response.tool:  # returns an `OpenAITool` instance
   attributes={[
   {
     "name": "tool_call",
-    "type": "SkipJsonSchema[ChatCompletionMessageToolCall]"
+    "type_info": {
+      "type_str": "SkipJsonSchema[ChatCompletionMessageToolCall]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "SkipJsonSchema",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "ChatCompletionMessageToolCall",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   }
 ]}
 />

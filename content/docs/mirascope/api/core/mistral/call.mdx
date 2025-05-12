@@ -38,42 +38,166 @@ print(response.content)
   parameters={[
   {
     "name": "model",
-    "type": "str",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "The Mistral model to use in the API call."
   },
   {
     "name": "stream",
-    "type": "bool",
+    "type_info": {
+      "type_str": "bool",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "Whether to stream the response from the API call."
   },
   {
     "name": "tools",
-    "type": "list[BaseTool | Callable]",
+    "type_info": {
+      "type_str": "list[BaseTool | Callable]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "list",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "BaseTool | Callable",
+          "description": null,
+          "kind": "union",
+          "base_type": {
+            "type_str": "Union",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "BaseTool",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "Callable",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    },
     "description": "The tools to use in the Mistral API call."
   },
   {
     "name": "response_model",
-    "type": "BaseModel | BaseType",
+    "type_info": {
+      "type_str": "BaseModel | BaseType",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "BaseModel",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "BaseType",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "The response model into which the response should be structured."
   },
   {
     "name": "output_parser",
-    "type": "Callable[[MistralCallResponse | ResponseModelT], Any]",
+    "type_info": {
+      "type_str": "Callable[[MistralCallResponse | ResponseModelT], Any]",
+      "description": null,
+      "kind": "callable",
+      "base_type": {
+        "type_str": "Callable",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "[MistralCallResponse | ResponseModelT]",
+          "description": null,
+          "kind": "tuple",
+          "base_type": {
+            "type_str": "tuple",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "MistralCallResponse | ResponseModelT",
+              "description": null,
+              "kind": "union",
+              "base_type": {
+                "type_str": "Union",
+                "description": null,
+                "kind": "simple"
+              },
+              "parameters": [
+                {
+                  "type_str": "MistralCallResponse",
+                  "description": null,
+                  "kind": "simple"
+                },
+                {
+                  "type_str": "ResponseModelT",
+                  "description": null,
+                  "kind": "simple"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type_str": "Any",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "A function for\nparsing the call response whose value will be returned in place of the original call response."
   },
   {
     "name": "json_mode",
-    "type": "bool",
+    "type_info": {
+      "type_str": "bool",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "Whether to use JSON Mode."
   },
   {
     "name": "client",
-    "type": "object",
+    "type_info": {
+      "type_str": "object",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "An optional custom client to use in place of the default client."
   },
   {
     "name": "call_params",
-    "type": "MistralCallParams",
+    "type_info": {
+      "type_str": "MistralCallParams",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "The `MistralCallParams` call parameters to use in\nthe API call."
   }
 ]}
@@ -81,7 +205,11 @@ print(response.content)
 
 <ReturnTable
   returnType={{
-  "type": "Callable",
+  "type_info": {
+    "type_str": "Callable",
+    "description": null,
+    "kind": "simple"
+  },
   "description": "The decorator for turning a typed function into a Mistral API\ncall."
 }}
 />

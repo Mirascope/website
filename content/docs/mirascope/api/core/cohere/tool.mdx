@@ -51,7 +51,35 @@ if tool := response.tool:  # returns an `CohereTool` instance
   attributes={[
   {
     "name": "tool_call",
-    "type": "SkipValidation[SkipJsonSchema[ToolCall]]"
+    "type_info": {
+      "type_str": "SkipValidation[SkipJsonSchema[ToolCall]]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "SkipValidation",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "SkipJsonSchema[ToolCall]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "SkipJsonSchema",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "ToolCall",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   }
 ]}
 />

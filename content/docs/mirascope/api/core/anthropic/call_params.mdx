@@ -30,43 +30,395 @@ The parameters to use when calling the Anthropic API.
   attributes={[
   {
     "name": "extra_headers",
-    "type": "NotRequired[dict[str, str] | None]"
+    "type_info": {
+      "type_str": "NotRequired[dict[str, str] | None]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "dict[str, str] | None",
+          "description": null,
+          "kind": "union",
+          "base_type": {
+            "type_str": "Union",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "dict[str, str]",
+              "description": null,
+              "kind": "generic",
+              "base_type": {
+                "type_str": "dict",
+                "description": null,
+                "kind": "simple"
+              },
+              "parameters": [
+                {
+                  "type_str": "str",
+                  "description": null,
+                  "kind": "simple"
+                },
+                {
+                  "type_str": "str",
+                  "description": null,
+                  "kind": "simple"
+                }
+              ]
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "name": "max_tokens",
-    "type": "int"
+    "type_info": {
+      "type_str": "int",
+      "description": null,
+      "kind": "simple"
+    }
   },
   {
     "name": "tool_choice",
-    "type": "NotRequired[ToolChoice | None]"
+    "type_info": {
+      "type_str": "NotRequired[ToolChoice | None]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "ToolChoice | None",
+          "description": null,
+          "kind": "union",
+          "base_type": {
+            "type_str": "Union",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "ToolChoice",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "name": "metadata",
-    "type": "NotRequired[Metadata | None]"
+    "type_info": {
+      "type_str": "NotRequired[Metadata | None]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "Metadata | None",
+          "description": null,
+          "kind": "union",
+          "base_type": {
+            "type_str": "Union",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "Metadata",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "name": "stop_sequences",
-    "type": "NotRequired[list[str] | None]"
+    "type_info": {
+      "type_str": "NotRequired[list[str] | None]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "list[str] | None",
+          "description": null,
+          "kind": "union",
+          "base_type": {
+            "type_str": "Union",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "list[str]",
+              "description": null,
+              "kind": "generic",
+              "base_type": {
+                "type_str": "list",
+                "description": null,
+                "kind": "simple"
+              },
+              "parameters": [
+                {
+                  "type_str": "str",
+                  "description": null,
+                  "kind": "simple"
+                }
+              ]
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "name": "system",
-    "type": "NotRequired[str | Iterable[TextBlockParam] | None]"
+    "type_info": {
+      "type_str": "NotRequired[str | Iterable[TextBlockParam] | None]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "str | Iterable[TextBlockParam] | None",
+          "description": null,
+          "kind": "union",
+          "base_type": {
+            "type_str": "Union",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "str",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "Iterable[TextBlockParam]",
+              "description": null,
+              "kind": "generic",
+              "base_type": {
+                "type_str": "Iterable",
+                "description": null,
+                "kind": "simple"
+              },
+              "parameters": [
+                {
+                  "type_str": "TextBlockParam",
+                  "description": null,
+                  "kind": "simple"
+                }
+              ]
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "name": "temperature",
-    "type": "NotRequired[float | None]"
+    "type_info": {
+      "type_str": "NotRequired[float | None]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "float | None",
+          "description": null,
+          "kind": "union",
+          "base_type": {
+            "type_str": "Union",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "float",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "name": "top_k",
-    "type": "NotRequired[int | None]"
+    "type_info": {
+      "type_str": "NotRequired[int | None]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "int | None",
+          "description": null,
+          "kind": "union",
+          "base_type": {
+            "type_str": "Union",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "int",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "name": "top_p",
-    "type": "NotRequired[float | None]"
+    "type_info": {
+      "type_str": "NotRequired[float | None]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "float | None",
+          "description": null,
+          "kind": "union",
+          "base_type": {
+            "type_str": "Union",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "float",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "name": "timeout",
-    "type": "NotRequired[float | Timeout | None]"
+    "type_info": {
+      "type_str": "NotRequired[float | Timeout | None]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "float | Timeout | None",
+          "description": null,
+          "kind": "union",
+          "base_type": {
+            "type_str": "Union",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "float",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "Timeout",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   }
 ]}
 />

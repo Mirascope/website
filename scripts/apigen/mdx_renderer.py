@@ -14,7 +14,7 @@ from scripts.apigen.models import (
     ProcessedFunction,
     ProcessedModule,
 )
-from scripts.apigen.type_model import ParameterInfo
+from scripts.apigen.type_model import EnumEncoder, ParameterInfo
 
 
 def render_module(processed_module: ProcessedModule) -> str:
@@ -183,12 +183,11 @@ def format_return_type_component(return_info) -> list[str]:
 
     type_info = return_info.type_info
     description = return_info.description
-    # We'll use the name field when we enhance the return_extractor
     name = getattr(return_info, "name", None)
 
-    # Create a return type dictionary
-    return_dict = {
-        "type": type_info.type_str,
+    # Create a return type dictionary with the full type_info object
+    return_dict: dict[str, object] = {
+        "type_info": type_info.to_dict(),
     }
 
     if description:
@@ -198,7 +197,7 @@ def format_return_type_component(return_info) -> list[str]:
         return_dict["name"] = name
 
     # Convert to JSON format with proper indentation
-    return_json = json.dumps(return_dict, indent=2)
+    return_json = json.dumps(return_dict, indent=2, cls=EnumEncoder)
 
     # Format the component with proper line breaks and proper JSX syntax
     component_lines.append("<ReturnTable")
@@ -223,9 +222,9 @@ def format_parameters_table(params: list[ParameterInfo]) -> list[str]:
     # Convert parameters to dictionaries inline
     param_dicts = []
     for param in params:
-        param_dict = {"name": param.name}
+        param_dict: dict[str, object] = {"name": param.name}
         if param.type_info:
-            param_dict["type"] = param.type_info.type_str
+            param_dict["type_info"] = param.type_info.to_dict()
         if param.default:
             param_dict["default"] = param.default
         if param.description:
@@ -233,7 +232,7 @@ def format_parameters_table(params: list[ParameterInfo]) -> list[str]:
         param_dicts.append(param_dict)
 
     # Convert to JSON format with proper indentation
-    params_json = json.dumps(param_dicts, indent=2)
+    params_json = json.dumps(param_dicts, indent=2, cls=EnumEncoder)
 
     # Format the component with proper line breaks and proper JSX syntax
     component_lines.append("<ParametersTable")
@@ -258,16 +257,16 @@ def format_attributes_table(attrs: list[ProcessedAttribute]) -> list[str]:
     # Convert attributes to dictionaries inline
     attr_dicts = []
     for attr in attrs:
-        attr_dict = {
+        attr_dict: dict[str, object] = {
             "name": attr.name,
-            "type": attr.type_info.type_str,  # Using type_str for now for rendering consistency
+            "type_info": attr.type_info.to_dict(),  # Using the full type_info object
         }
         if attr.description:
             attr_dict["description"] = attr.description
         attr_dicts.append(attr_dict)
 
     # Convert to JSON format with proper indentation
-    attrs_json = json.dumps(attr_dicts, indent=2)
+    attrs_json = json.dumps(attr_dicts, indent=2, cls=EnumEncoder)
 
     # Format the component with proper line breaks and proper JSX syntax
     component_lines.append("<AttributesTable")

@@ -22,11 +22,31 @@ Configuration for file_system toolkit
   attributes={[
   {
     "name": "max_file_size",
-    "type": "int"
+    "type_info": {
+      "type_str": "int",
+      "description": null,
+      "kind": "simple"
+    }
   },
   {
     "name": "allowed_extensions",
-    "type": "list[str]"
+    "type_info": {
+      "type_str": "list[str]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "list",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "str",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   }
 ]}
 />
@@ -44,7 +64,11 @@ Base class for file system operations.
   attributes={[
   {
     "name": "base_directory",
-    "type": "Path"
+    "type_info": {
+      "type_str": "Path",
+      "description": null,
+      "kind": "simple"
+    }
   }
 ]}
 />
@@ -63,36 +87,64 @@ Read, write, list, create, and delete files and directories.
   attributes={[
   {
     "name": "config",
-    "type": "FileSystemToolKitConfig"
+    "type_info": {
+      "type_str": "FileSystemToolKitConfig",
+      "description": null,
+      "kind": "simple"
+    }
   },
   {
     "name": "ReadFile",
-    "type": "Any",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "Tool for reading file contents."
   },
   {
     "name": "WriteFile",
-    "type": "Any",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "Tool for writing content to a file."
   },
   {
     "name": "ListDirectory",
-    "type": "Any",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "Tool for listing directory contents."
   },
   {
     "name": "CreateDirectory",
-    "type": "Any",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "Tool for creating directories."
   },
   {
     "name": "DeleteFile",
-    "type": "Any",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "Tool for deleting files."
   },
   {
     "name": "base_directory",
-    "type": "Path"
+    "type_info": {
+      "type_str": "Path",
+      "description": null,
+      "kind": "simple"
+    }
   }
 ]}
 />

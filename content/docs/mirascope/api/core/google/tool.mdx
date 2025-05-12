@@ -51,7 +51,23 @@ if tool := response.tool:  # returns an `GoogleTool` instance
   attributes={[
   {
     "name": "tool_call",
-    "type": "SkipJsonSchema[FunctionCall]"
+    "type_info": {
+      "type_str": "SkipJsonSchema[FunctionCall]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "SkipJsonSchema",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "FunctionCall",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   }
 ]}
 />

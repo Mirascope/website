@@ -25,17 +25,46 @@ preserving existing behavior while providing a unified interface.
   parameters={[
   {
     "name": "provider",
-    "type": "Provider",
+    "type_info": {
+      "type_str": "Provider",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "The LLM provider (e.g., \"openai\", \"anthropic\")"
   },
   {
     "name": "model",
-    "type": "str",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "The model name (e.g., \"gpt-4\", \"claude-3-opus\")"
   },
   {
     "name": "metadata",
-    "type": "CostMetadata | None",
+    "type_info": {
+      "type_str": "CostMetadata | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "CostMetadata",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "default": "None",
     "description": "Additional metadata required for cost calculation"
   }
@@ -44,7 +73,28 @@ preserving existing behavior while providing a unified interface.
 
 <ReturnTable
   returnType={{
-  "type": "float | None",
+  "type_info": {
+    "type_str": "float | None",
+    "description": null,
+    "kind": "union",
+    "base_type": {
+      "type_str": "Union",
+      "description": null,
+      "kind": "simple"
+    },
+    "parameters": [
+      {
+        "type_str": "float",
+        "description": null,
+        "kind": "simple"
+      },
+      {
+        "type_str": "None",
+        "description": null,
+        "kind": "simple"
+      }
+    ]
+  },
   "description": "The calculated cost in USD or None if unable to calculate"
 }}
 />

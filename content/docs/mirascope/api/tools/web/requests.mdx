@@ -22,7 +22,11 @@ Configuration for HTTP requests
   attributes={[
   {
     "name": "timeout",
-    "type": "int"
+    "type_info": {
+      "type_str": "int",
+      "description": null,
+      "kind": "simple"
+    }
   }
 ]}
 />
@@ -40,19 +44,96 @@ Tool for making HTTP requests with built-in requests library.
   attributes={[
   {
     "name": "url",
-    "type": "str"
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple"
+    }
   },
   {
     "name": "method",
-    "type": "Literal['GET', 'POST', 'PUT', 'DELETE']"
+    "type_info": {
+      "type_str": "Literal['GET', 'POST', 'PUT', 'DELETE']",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "Literal",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "'GET'",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "'POST'",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "'PUT'",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "'DELETE'",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "data",
-    "type": "dict | None"
+    "type_info": {
+      "type_str": "dict | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "dict",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "headers",
-    "type": "dict | None"
+    "type_info": {
+      "type_str": "dict | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "dict",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   }
 ]}
 />

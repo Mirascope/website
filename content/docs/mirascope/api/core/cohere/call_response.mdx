@@ -50,74 +50,340 @@ print(response.content)
   attributes={[
   {
     "name": "content",
-    "type": "str",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "Returns the content of the chat completion for the 0th choice."
   },
   {
     "name": "finish_reasons",
-    "type": "list[str] | None",
+    "type_info": {
+      "type_str": "list[str] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "list[str]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "list",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "str",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Returns the finish reasons of the response."
   },
   {
     "name": "model",
-    "type": "str",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "Returns the name of the response model.\n\nCohere does not return model, so we return the model provided by the user."
   },
   {
     "name": "id",
-    "type": "str | None",
+    "type_info": {
+      "type_str": "str | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "str",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Returns the id of the response."
   },
   {
     "name": "usage",
-    "type": "ApiMetaBilledUnits | None",
+    "type_info": {
+      "type_str": "ApiMetaBilledUnits | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "ApiMetaBilledUnits",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Returns the usage of the response."
   },
   {
     "name": "input_tokens",
-    "type": "float | None",
+    "type_info": {
+      "type_str": "float | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "float",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Returns the number of input tokens."
   },
   {
     "name": "cached_tokens",
-    "type": "float | None",
+    "type_info": {
+      "type_str": "float | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "float",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Returns the number of cached tokens."
   },
   {
     "name": "output_tokens",
-    "type": "float | None",
+    "type_info": {
+      "type_str": "float | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "float",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Returns the number of output tokens."
   },
   {
     "name": "message_param",
-    "type": "ChatMessage",
+    "type_info": {
+      "type_str": "ChatMessage",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "Returns the assistant's response as a message parameter."
   },
   {
     "name": "tools",
-    "type": "list[CohereTool] | None",
+    "type_info": {
+      "type_str": "list[CohereTool] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "list[CohereTool]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "list",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "CohereTool",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Returns the tools for the 0th choice message."
   },
   {
     "name": "tool",
-    "type": "CohereTool | None",
+    "type_info": {
+      "type_str": "CohereTool | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "CohereTool",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Returns the 0th tool for the 0th choice message."
   },
   {
     "name": "common_finish_reasons",
-    "type": "list[FinishReason] | None"
+    "type_info": {
+      "type_str": "list[FinishReason] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "list[FinishReason]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "list",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "FinishReason",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "common_message_param",
-    "type": "BaseMessageParam"
+    "type_info": {
+      "type_str": "BaseMessageParam",
+      "description": null,
+      "kind": "simple"
+    }
   },
   {
     "name": "common_user_message_param",
-    "type": "BaseMessageParam | None"
+    "type_info": {
+      "type_str": "BaseMessageParam | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "BaseMessageParam",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "cost_metadata",
-    "type": "CostMetadata",
+    "type_info": {
+      "type_str": "CostMetadata",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "Get metadata required for cost calculation."
   }
 ]}

@@ -44,7 +44,28 @@ print(recommend_book("fantasy"))
   parameters={[
   {
     "name": "template",
-    "type": "str | None",
+    "type_info": {
+      "type_str": "str | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "str",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "default": "None"
   }
 ]}
@@ -52,7 +73,11 @@ print(recommend_book("fantasy"))
 
 <ReturnTable
   returnType={{
-  "type": "Callable",
+  "type_info": {
+    "type_str": "Callable",
+    "description": null,
+    "kind": "simple"
+  },
   "description": "The decorator function that turns the decorated function\ninto a prompt template."
 }}
 />
@@ -89,14 +114,22 @@ print(response.metadata)
   parameters={[
   {
     "name": "metadata",
-    "type": "Metadata"
+    "type_info": {
+      "type_str": "Metadata",
+      "description": null,
+      "kind": "simple"
+    }
   }
 ]}
 />
 
 <ReturnTable
   returnType={{
-  "type": "Callable",
+  "type_info": {
+    "type_str": "Callable",
+    "description": null,
+    "kind": "simple"
+  },
   "description": "The decorator function that updates the `_metadata`\nattribute of the decorated input prompt or call."
 }}
 />
@@ -141,7 +174,11 @@ print(prompt.dump()["metadata"])
   attributes={[
   {
     "name": "prompt_template",
-    "type": "str"
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple"
+    }
   }
 ]}
 />

@@ -50,52 +50,235 @@ for chunk, _ in stream:
   attributes={[
   {
     "name": "content",
-    "type": "str",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "Returns the chunk content for the 0th choice."
   },
   {
     "name": "finish_reasons",
-    "type": "list[GoogleFinishReason]",
+    "type_info": {
+      "type_str": "list[GoogleFinishReason]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "list",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "GoogleFinishReason",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Returns the finish reasons of the response."
   },
   {
     "name": "model",
-    "type": "str | None",
+    "type_info": {
+      "type_str": "str | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "str",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Returns the model name.\n\ngoogle.generativeai does not return model, so we return None"
   },
   {
     "name": "id",
-    "type": "str | None",
+    "type_info": {
+      "type_str": "str | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "str",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Returns the id of the response.\n\ngoogle.generativeai does not return an id"
   },
   {
     "name": "usage",
-    "type": "GenerateContentResponseUsageMetadata | None",
+    "type_info": {
+      "type_str": "GenerateContentResponseUsageMetadata | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "GenerateContentResponseUsageMetadata",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Returns the usage of the chat completion.\n\ngoogle.generativeai does not have Usage, so we return None"
   },
   {
     "name": "input_tokens",
-    "type": "int | None",
+    "type_info": {
+      "type_str": "int | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "int",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Returns the number of input tokens."
   },
   {
     "name": "cached_tokens",
-    "type": "int | None",
+    "type_info": {
+      "type_str": "int | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "int",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Returns the number of cached tokens."
   },
   {
     "name": "output_tokens",
-    "type": "int | None",
+    "type_info": {
+      "type_str": "int | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "int",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Returns the number of output tokens."
   },
   {
     "name": "cost_metadata",
-    "type": "CostMetadata",
+    "type_info": {
+      "type_str": "CostMetadata",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "Returns the cost metadata."
   },
   {
     "name": "common_finish_reasons",
-    "type": "list[FinishReason] | None"
+    "type_info": {
+      "type_str": "list[FinishReason] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "list[FinishReason]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "list",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "FinishReason",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   }
 ]}
 />
