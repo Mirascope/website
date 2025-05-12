@@ -5,24 +5,16 @@ export type Parameter = {
   type?: string;
   description?: string;
   default?: string;
-  module_context?: string;
-  is_builtin?: boolean;
 };
 
 interface ParametersTableProps {
   parameters: Parameter[];
-  contentSubpath?: string;
-  currentModule?: string;
 }
 
 /**
- * Component to display a table of parameters with linked type references
+ * Component to display a table of parameters with their types
  */
-export function ParametersTable({
-  parameters,
-  contentSubpath = "docs/mirascope",
-  currentModule,
-}: ParametersTableProps) {
+export function ParametersTable({ parameters }: ParametersTableProps) {
   if (!parameters || parameters.length === 0) {
     return null;
   }
@@ -49,13 +41,7 @@ export function ParametersTable({
                   )}
                 </td>
                 <td className="text-primary border-b px-4 py-2">
-                  <TypeLink
-                    type={param.type || "-"}
-                    moduleContext={param.module_context}
-                    isBuiltin={param.is_builtin}
-                    contentSubpath={contentSubpath}
-                    currentModule={currentModule}
-                  />
+                  <TypeLink type={param.type || "-"} />
                 </td>
                 <td className="border-b px-4 py-2">{param.description || "-"}</td>
               </tr>

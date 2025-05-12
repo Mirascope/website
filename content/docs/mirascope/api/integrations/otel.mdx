@@ -13,25 +13,17 @@ Configures the OpenTelemetry tracer, this function should only be called once.
   {
     "name": "processors",
     "type": "Sequence[SpanProcessor] | None",
-    "module_context": "collections.abc",
-    "is_builtin": "false",
     "default": "None",
     "description": "Optional[Sequence[SpanProcessor]]\nThe span processors to use, if None, a console exporter will be used."
   }
 ]}
-  contentSubpath="docs/mirascope"
-  currentModule="mirascope.integrations.otel._utils"
 />
 
 <ReturnTable
   returnType={{
   "type": "Tracer",
-  "module_context": "opentelemetry.trace",
-  "is_builtin": "false",
   "description": "The configured tracer."
 }}
-  contentSubpath="docs/mirascope"
-  currentModule="mirascope.integrations.otel._utils"
 />
 
 
@@ -63,12 +55,8 @@ print(recommend_book("fantasy"))
 
 <ReturnTable
   returnType={{
-  "type": "Callable[[Callable[_P, _R]], Callable[_P, _R]]",
-  "module_context": "collections.abc",
-  "is_builtin": "false"
+  "type": "Callable[[Callable[_P, _R]], Callable[_P, _R]]"
 }}
-  contentSubpath="docs/mirascope"
-  currentModule="mirascope.integrations.otel._with_otel"
 />
 
 
@@ -102,12 +90,8 @@ print(recommend_book("fantasy"))
 
 <ReturnTable
   returnType={{
-  "type": "Callable[[Callable[_P, _R]], Callable[_P, _R]]",
-  "module_context": "collections.abc",
-  "is_builtin": "false"
+  "type": "Callable[[Callable[_P, _R]], Callable[_P, _R]]"
 }}
-  contentSubpath="docs/mirascope"
-  currentModule="mirascope.integrations.otel._with_hyperdx"
 />
 
 

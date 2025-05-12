@@ -39,73 +39,51 @@ print(response.content)
   {
     "name": "model",
     "type": "str",
-    "module_context": "builtins",
-    "is_builtin": "true",
     "description": "The model to use in the API call."
   },
   {
     "name": "stream",
     "type": "bool",
-    "module_context": "builtins",
-    "is_builtin": "true",
     "description": "Whether to stream the response from the API call."
   },
   {
     "name": "tools",
     "type": "list[BaseTool | Callable]",
-    "module_context": "builtins",
-    "is_builtin": "true",
     "description": "The tools to use in the API call."
   },
   {
     "name": "response_model",
     "type": "BaseModel | BaseType",
-    "module_context": "mirascope.core.xai._call",
-    "is_builtin": "false",
     "description": "The response model into which the response\nshould be structured."
   },
   {
     "name": "output_parser",
     "type": "Callable[[OpenAICallResponse | ResponseModelT], Any]",
-    "module_context": "typing",
-    "is_builtin": "true",
     "description": "A function for\nparsing the call response whose value will be returned in place of the original\ncall response."
   },
   {
     "name": "json_mode",
     "type": "bool",
-    "module_context": "builtins",
-    "is_builtin": "true",
     "description": "Whether to use JSON Mode."
   },
   {
     "name": "client",
     "type": "None",
-    "module_context": "typing",
-    "is_builtin": "true",
     "description": "xAI does not support a custom client."
   },
   {
     "name": "call_params",
     "type": "OpenAICallParams",
-    "module_context": "mirascope.core.xai._call",
-    "is_builtin": "false",
     "description": "The `OpenAICallParams` call parameters to use in the\nAPI call."
   }
 ]}
-  contentSubpath="docs/mirascope"
-  currentModule="mirascope.core.xai._call"
 />
 
 <ReturnTable
   returnType={{
   "type": "Callable",
-  "module_context": "typing",
-  "is_builtin": "true",
   "description": "The decorator for turning a typed function into a xAI\nrouted LLM API call."
 }}
-  contentSubpath="docs/mirascope"
-  currentModule="mirascope.core.xai._call"
 />
 
 

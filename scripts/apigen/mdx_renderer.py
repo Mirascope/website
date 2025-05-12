@@ -16,9 +16,6 @@ from scripts.apigen.models import (
 )
 from scripts.apigen.type_utils import ParameterInfo
 
-# Default content subpath for documentation
-MODULE_CONTENT_SUBPATH = "docs/mirascope"
-
 
 def render_module(processed_module: ProcessedModule) -> str:
     """Render a processed module into MDX documentation.
@@ -89,7 +86,6 @@ def render_function(processed_func: ProcessedFunction) -> str:
 
     """
     content: list[str] = []
-    content_subpath = MODULE_CONTENT_SUBPATH
 
     # Add object type using a component with consistent typing
     content.append('<ApiType type="Function" />\n')
@@ -101,19 +97,11 @@ def render_function(processed_func: ProcessedFunction) -> str:
 
     # Add parameters table if available
     if processed_func.parameters:
-        content.extend(
-            format_parameters_table(
-                processed_func.parameters, content_subpath, processed_func.module_path
-            )
-        )
+        content.extend(format_parameters_table(processed_func.parameters))
 
     # Add return type if available
     if processed_func.return_info:
-        content.extend(
-            format_return_type_component(
-                processed_func.return_info, content_subpath, processed_func.module_path
-            )
-        )
+        content.extend(format_return_type_component(processed_func.return_info))
 
     return "\n".join(content)
 
@@ -129,7 +117,6 @@ def render_class(processed_class: ProcessedClass) -> str:
 
     """
     content: list[str] = []
-    content_subpath = MODULE_CONTENT_SUBPATH
 
     # Add object type using a component with consistent typing
     content.append('<ApiType type="Class" />\n')
@@ -146,11 +133,7 @@ def render_class(processed_class: ProcessedClass) -> str:
 
     # Document attributes using AttributesTable component
     if processed_class.attributes:
-        content.extend(
-            format_attributes_table(
-                processed_class.attributes, content_subpath, processed_class.module_path
-            )
-        )
+        content.extend(format_attributes_table(processed_class.attributes))
 
     return "\n".join(content)
 
@@ -166,7 +149,6 @@ def render_alias(processed_alias: ProcessedAlias) -> str:
 
     """
     content: list[str] = []
-    content_subpath = MODULE_CONTENT_SUBPATH
     # Add docstring if available
     if processed_alias.docstring:
         content.append(processed_alias.docstring.strip())
@@ -174,21 +156,11 @@ def render_alias(processed_alias: ProcessedAlias) -> str:
 
     # Add parameters table if available
     if processed_alias.parameters:
-        content.extend(
-            format_parameters_table(
-                processed_alias.parameters, content_subpath, processed_alias.module_path
-            )
-        )
+        content.extend(format_parameters_table(processed_alias.parameters))
 
     # Add return type if available
     if processed_alias.return_info:
-        content.extend(
-            format_return_type_component(
-                processed_alias.return_info,
-                content_subpath,
-                processed_alias.module_path,
-            )
-        )
+        content.extend(format_return_type_component(processed_alias.return_info))
 
     # Add what this is an alias to, if target path is available
     if processed_alias.target_path:
@@ -197,15 +169,11 @@ def render_alias(processed_alias: ProcessedAlias) -> str:
     return "\n".join(content)
 
 
-def format_return_type_component(
-    return_info, content_subpath: str, module_path: str
-) -> list[str]:
+def format_return_type_component(return_info) -> list[str]:
     """Format a ReturnTable component from return type information.
 
     Args:
         return_info: The return type information
-        content_subpath: The content subpath for documentation
-        module_path: The module path for context
 
     Returns:
         List of strings representing the ReturnTable component
@@ -221,8 +189,6 @@ def format_return_type_component(
     # Create a return type dictionary
     return_dict = {
         "type": type_info.type_str,
-        "module_context": type_info.module_context,
-        "is_builtin": str(type_info.is_builtin).lower(),
     }
 
     if description:
@@ -237,22 +203,16 @@ def format_return_type_component(
     # Format the component with proper line breaks and proper JSX syntax
     component_lines.append("<ReturnTable")
     component_lines.append(f"  returnType={{{return_json}}}")
-    component_lines.append(f'  contentSubpath="{content_subpath}"')
-    component_lines.append(f'  currentModule="{module_path}"')
     component_lines.append("/>\n")
 
     return component_lines
 
 
-def format_parameters_table(
-    params: list[ParameterInfo], content_subpath: str, module_path: str
-) -> list[str]:
+def format_parameters_table(params: list[ParameterInfo]) -> list[str]:
     """Format a ParametersTable component from parameter information.
 
     Args:
         params: List of parameter information objects
-        content_subpath: The content subpath for documentation
-        module_path: The module path for context
 
     Returns:
         List of strings representing the ParametersTable component
@@ -266,8 +226,6 @@ def format_parameters_table(
         param_dict = {"name": param.name}
         if param.type_info:
             param_dict["type"] = param.type_info.type_str
-            param_dict["module_context"] = param.type_info.module_context
-            param_dict["is_builtin"] = str(param.type_info.is_builtin).lower()
         if param.default:
             param_dict["default"] = param.default
         if param.description:
@@ -280,22 +238,16 @@ def format_parameters_table(
     # Format the component with proper line breaks and proper JSX syntax
     component_lines.append("<ParametersTable")
     component_lines.append(f"  parameters={{{params_json}}}")
-    component_lines.append(f'  contentSubpath="{content_subpath}"')
-    component_lines.append(f'  currentModule="{module_path}"')
     component_lines.append("/>\n")
 
     return component_lines
 
 
-def format_attributes_table(
-    attrs: list[ProcessedAttribute], content_subpath: str, module_path: str
-) -> list[str]:
+def format_attributes_table(attrs: list[ProcessedAttribute]) -> list[str]:
     """Format an AttributesTable component from attribute information.
 
     Args:
         attrs: List of ProcessedAttribute objects
-        content_subpath: The content subpath for documentation
-        module_path: The module path for context
 
     Returns:
         List of strings representing the AttributesTable component
@@ -320,8 +272,6 @@ def format_attributes_table(
     # Format the component with proper line breaks and proper JSX syntax
     component_lines.append("<AttributesTable")
     component_lines.append(f"  attributes={{{attrs_json}}}")
-    component_lines.append(f'  contentSubpath="{content_subpath}"')
-    component_lines.append(f'  currentModule="{module_path}"')
     component_lines.append("/>\n")
 
     return component_lines

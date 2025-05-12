@@ -25,37 +25,25 @@ preserving existing behavior while providing a unified interface.
   parameters={[
   {
     "name": "provider",
-    "type": "Provider",
-    "module_context": "mirascope.core.base.types",
-    "is_builtin": "false"
+    "type": "Provider"
   },
   {
     "name": "model",
-    "type": "str",
-    "module_context": "builtins",
-    "is_builtin": "true"
+    "type": "str"
   },
   {
     "name": "metadata",
     "type": "CostMetadata | None",
-    "module_context": "mirascope.core.base.types",
-    "is_builtin": "false",
     "default": "None"
   }
 ]}
-  contentSubpath="docs/mirascope"
-  currentModule="mirascope.core.costs.calculate_cost"
 />
 
 <ReturnTable
   returnType={{
   "type": "float | None",
-  "module_context": "builtins",
-  "is_builtin": "true",
   "description": "The calculated cost in USD or None if unable to calculate"
 }}
-  contentSubpath="docs/mirascope"
-  currentModule="mirascope.core.costs.calculate_cost"
 />
 
 
