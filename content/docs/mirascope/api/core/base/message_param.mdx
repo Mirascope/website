@@ -22,11 +22,100 @@ A base class for message parameters.
   attributes={[
   {
     "name": "role",
-    "type": "str"
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple"
+    }
   },
   {
     "name": "content",
-    "type": "str | Sequence[TextPart | ImagePart | ImageURLPart | AudioPart | AudioURLPart | CacheControlPart | DocumentPart | ToolCallPart | ToolResultPart]"
+    "type_info": {
+      "type_str": "str | Sequence[TextPart | ImagePart | ImageURLPart | AudioPart | AudioURLPart | CacheControlPart | DocumentPart | ToolCallPart | ToolResultPart]",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "str",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "Sequence[TextPart | ImagePart | ImageURLPart | AudioPart | AudioURLPart | CacheControlPart | DocumentPart | ToolCallPart | ToolResultPart]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "Sequence",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "TextPart | ImagePart | ImageURLPart | AudioPart | AudioURLPart | CacheControlPart | DocumentPart | ToolCallPart | ToolResultPart",
+              "description": null,
+              "kind": "union",
+              "base_type": {
+                "type_str": "Union",
+                "description": null,
+                "kind": "simple"
+              },
+              "parameters": [
+                {
+                  "type_str": "TextPart",
+                  "description": null,
+                  "kind": "simple"
+                },
+                {
+                  "type_str": "ImagePart",
+                  "description": null,
+                  "kind": "simple"
+                },
+                {
+                  "type_str": "ImageURLPart",
+                  "description": null,
+                  "kind": "simple"
+                },
+                {
+                  "type_str": "AudioPart",
+                  "description": null,
+                  "kind": "simple"
+                },
+                {
+                  "type_str": "AudioURLPart",
+                  "description": null,
+                  "kind": "simple"
+                },
+                {
+                  "type_str": "CacheControlPart",
+                  "description": null,
+                  "kind": "simple"
+                },
+                {
+                  "type_str": "DocumentPart",
+                  "description": null,
+                  "kind": "simple"
+                },
+                {
+                  "type_str": "ToolCallPart",
+                  "description": null,
+                  "kind": "simple"
+                },
+                {
+                  "type_str": "ToolResultPart",
+                  "description": null,
+                  "kind": "simple"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
   }
 ]}
 />
@@ -42,11 +131,31 @@ A content part for text.
   attributes={[
   {
     "name": "type",
-    "type": "Literal['text']"
+    "type_info": {
+      "type_str": "Literal['text']",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "Literal",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "'text'",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "text",
-    "type": "str"
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple"
+    }
   }
 ]}
 />
@@ -62,19 +171,64 @@ A content part for images.
   attributes={[
   {
     "name": "type",
-    "type": "Literal['image']"
+    "type_info": {
+      "type_str": "Literal['image']",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "Literal",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "'image'",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "media_type",
-    "type": "str"
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple"
+    }
   },
   {
     "name": "image",
-    "type": "bytes"
+    "type_info": {
+      "type_str": "bytes",
+      "description": null,
+      "kind": "simple"
+    }
   },
   {
     "name": "detail",
-    "type": "str | None"
+    "type_info": {
+      "type_str": "str | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "str",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   }
 ]}
 />
@@ -90,15 +244,56 @@ A content part for audio.
   attributes={[
   {
     "name": "type",
-    "type": "Literal['audio']"
+    "type_info": {
+      "type_str": "Literal['audio']",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "Literal",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "'audio'",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "media_type",
-    "type": "str"
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple"
+    }
   },
   {
     "name": "audio",
-    "type": "bytes | str"
+    "type_info": {
+      "type_str": "bytes | str",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "bytes",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "str",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   }
 ]}
 />

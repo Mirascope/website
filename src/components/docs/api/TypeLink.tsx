@@ -1,17 +1,24 @@
+export interface TypeInfo {
+  kind: "simple" | "generic" | "union" | "optional" | "callable" | "tuple";
+  type_str: string;
+  description?: string;
+  // For generic types
+  base_type?: TypeInfo;
+  parameters?: TypeInfo[];
+}
+
 export interface TypeLinkProps {
-  type: string;
+  type: TypeInfo;
 }
 
 /**
- * Simplified TypeLink component that just displays the type as text.
- * This is a first-pass simplification that removes all linking logic.
- * Future implementations will restore linking capabilities in a more
- * structured way based on the new type model.
+ * TypeLink component that displays type information from a structured TypeInfo object.
+ * Currently just renders the type string, but will be enhanced with linking in the future.
  */
 export function TypeLink({ type }: TypeLinkProps) {
   if (!type) {
     return <span className="font-mono">-</span>;
   }
 
-  return <span className="font-mono">{type}</span>;
+  return <span className="font-mono">{type.type_str}</span>;
 }

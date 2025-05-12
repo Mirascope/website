@@ -50,75 +50,251 @@ print(response.content)
   attributes={[
   {
     "name": "content",
-    "type": "str",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "Returns the string text of the 0th text block."
   },
   {
     "name": "finish_reasons",
-    "type": "list[str]",
+    "type_info": {
+      "type_str": "list[str]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "list",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "str",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Returns the finish reasons of the response."
   },
   {
     "name": "model",
-    "type": "str",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "Returns the name of the response model."
   },
   {
     "name": "id",
-    "type": "str",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "Returns the id of the response."
   },
   {
     "name": "usage",
-    "type": "Usage",
+    "type_info": {
+      "type_str": "Usage",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "Returns the usage of the message."
   },
   {
     "name": "input_tokens",
-    "type": "int",
+    "type_info": {
+      "type_str": "int",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "Returns the number of input tokens."
   },
   {
     "name": "cached_tokens",
-    "type": "int",
+    "type_info": {
+      "type_str": "int",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "Returns the number of cached tokens."
   },
   {
     "name": "output_tokens",
-    "type": "int",
+    "type_info": {
+      "type_str": "int",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "Returns the number of output tokens."
   },
   {
     "name": "message_param",
-    "type": "SerializeAsAny[MessageParam]",
+    "type_info": {
+      "type_str": "SerializeAsAny[MessageParam]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "SerializeAsAny",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "MessageParam",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Returns the assistants's response as a message parameter."
   },
   {
     "name": "tools",
-    "type": "list[AnthropicTool] | None",
+    "type_info": {
+      "type_str": "list[AnthropicTool] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "list[AnthropicTool]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "list",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "AnthropicTool",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Returns any available tool calls as their `AnthropicTool` definition."
   },
   {
     "name": "tool",
-    "type": "AnthropicTool | None",
+    "type_info": {
+      "type_str": "AnthropicTool | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "AnthropicTool",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Returns the 0th tool for the 0th choice message."
   },
   {
     "name": "common_finish_reasons",
-    "type": "list[types.FinishReason] | None",
+    "type_info": {
+      "type_str": "list[types.FinishReason] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "list[types.FinishReason]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "list",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "types.FinishReason",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Provider-agnostic finish reasons."
   },
   {
     "name": "common_message_param",
-    "type": "BaseMessageParam"
+    "type_info": {
+      "type_str": "BaseMessageParam",
+      "description": null,
+      "kind": "simple"
+    }
   },
   {
     "name": "common_user_message_param",
-    "type": "BaseMessageParam | None"
+    "type_info": {
+      "type_str": "BaseMessageParam | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "BaseMessageParam",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "cost_metadata",
-    "type": "CostMetadata",
+    "type_info": {
+      "type_str": "CostMetadata",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "Get metadata required for cost calculation."
   }
 ]}

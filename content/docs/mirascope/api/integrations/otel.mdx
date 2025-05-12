@@ -12,7 +12,40 @@ Configures the OpenTelemetry tracer, this function should only be called once.
   parameters={[
   {
     "name": "processors",
-    "type": "Sequence[SpanProcessor] | None",
+    "type_info": {
+      "type_str": "Sequence[SpanProcessor] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "Sequence[SpanProcessor]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "Sequence",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "SpanProcessor",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "default": "None",
     "description": "Optional[Sequence[SpanProcessor]]\nThe span processors to use, if None, a console exporter will be used."
   }
@@ -21,7 +54,11 @@ Configures the OpenTelemetry tracer, this function should only be called once.
 
 <ReturnTable
   returnType={{
-  "type": "Tracer",
+  "type_info": {
+    "type_str": "Tracer",
+    "description": null,
+    "kind": "simple"
+  },
   "description": "The configured tracer."
 }}
 />
@@ -55,7 +92,74 @@ print(recommend_book("fantasy"))
 
 <ReturnTable
   returnType={{
-  "type": "Callable[[Callable[_P, _R]], Callable[_P, _R]]"
+  "type_info": {
+    "type_str": "Callable[[Callable[_P, _R]], Callable[_P, _R]]",
+    "description": null,
+    "kind": "callable",
+    "base_type": {
+      "type_str": "Callable",
+      "description": null,
+      "kind": "simple"
+    },
+    "parameters": [
+      {
+        "type_str": "[Callable[_P, _R]]",
+        "description": null,
+        "kind": "tuple",
+        "base_type": {
+          "type_str": "tuple",
+          "description": null,
+          "kind": "simple"
+        },
+        "parameters": [
+          {
+            "type_str": "Callable[_P, _R]",
+            "description": null,
+            "kind": "callable",
+            "base_type": {
+              "type_str": "Callable",
+              "description": null,
+              "kind": "simple"
+            },
+            "parameters": [
+              {
+                "type_str": "_P",
+                "description": null,
+                "kind": "simple"
+              },
+              {
+                "type_str": "_R",
+                "description": null,
+                "kind": "simple"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type_str": "Callable[_P, _R]",
+        "description": null,
+        "kind": "callable",
+        "base_type": {
+          "type_str": "Callable",
+          "description": null,
+          "kind": "simple"
+        },
+        "parameters": [
+          {
+            "type_str": "_P",
+            "description": null,
+            "kind": "simple"
+          },
+          {
+            "type_str": "_R",
+            "description": null,
+            "kind": "simple"
+          }
+        ]
+      }
+    ]
+  }
 }}
 />
 
@@ -90,7 +194,74 @@ print(recommend_book("fantasy"))
 
 <ReturnTable
   returnType={{
-  "type": "Callable[[Callable[_P, _R]], Callable[_P, _R]]"
+  "type_info": {
+    "type_str": "Callable[[Callable[_P, _R]], Callable[_P, _R]]",
+    "description": null,
+    "kind": "callable",
+    "base_type": {
+      "type_str": "Callable",
+      "description": null,
+      "kind": "simple"
+    },
+    "parameters": [
+      {
+        "type_str": "[Callable[_P, _R]]",
+        "description": null,
+        "kind": "tuple",
+        "base_type": {
+          "type_str": "tuple",
+          "description": null,
+          "kind": "simple"
+        },
+        "parameters": [
+          {
+            "type_str": "Callable[_P, _R]",
+            "description": null,
+            "kind": "callable",
+            "base_type": {
+              "type_str": "Callable",
+              "description": null,
+              "kind": "simple"
+            },
+            "parameters": [
+              {
+                "type_str": "_P",
+                "description": null,
+                "kind": "simple"
+              },
+              {
+                "type_str": "_R",
+                "description": null,
+                "kind": "simple"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type_str": "Callable[_P, _R]",
+        "description": null,
+        "kind": "callable",
+        "base_type": {
+          "type_str": "Callable",
+          "description": null,
+          "kind": "simple"
+        },
+        "parameters": [
+          {
+            "type_str": "_P",
+            "description": null,
+            "kind": "simple"
+          },
+          {
+            "type_str": "_R",
+            "description": null,
+            "kind": "simple"
+          }
+        ]
+      }
+    ]
+  }
 }}
 />
 

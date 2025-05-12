@@ -30,39 +30,341 @@ The parameters to use when calling the Mistral API.
   attributes={[
   {
     "name": "endpoint",
-    "type": "NotRequired[str | None]"
+    "type_info": {
+      "type_str": "NotRequired[str | None]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "str | None",
+          "description": null,
+          "kind": "union",
+          "base_type": {
+            "type_str": "Union",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "str",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "name": "max_tokens",
-    "type": "NotRequired[int | None]"
+    "type_info": {
+      "type_str": "NotRequired[int | None]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "int | None",
+          "description": null,
+          "kind": "union",
+          "base_type": {
+            "type_str": "Union",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "int",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "name": "random_seed",
-    "type": "NotRequired[int | None]"
+    "type_info": {
+      "type_str": "NotRequired[int | None]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "int | None",
+          "description": null,
+          "kind": "union",
+          "base_type": {
+            "type_str": "Union",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "int",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "name": "response_format",
-    "type": "NotRequired[ResponseFormat | None]"
+    "type_info": {
+      "type_str": "NotRequired[ResponseFormat | None]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "ResponseFormat | None",
+          "description": null,
+          "kind": "union",
+          "base_type": {
+            "type_str": "Union",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "ResponseFormat",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "name": "safe_mode",
-    "type": "NotRequired[bool | None]"
+    "type_info": {
+      "type_str": "NotRequired[bool | None]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "bool | None",
+          "description": null,
+          "kind": "union",
+          "base_type": {
+            "type_str": "Union",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "bool",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "name": "safe_prompt",
-    "type": "NotRequired[bool | None]"
+    "type_info": {
+      "type_str": "NotRequired[bool | None]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "bool | None",
+          "description": null,
+          "kind": "union",
+          "base_type": {
+            "type_str": "Union",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "bool",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "name": "temperature",
-    "type": "NotRequired[float | None]"
+    "type_info": {
+      "type_str": "NotRequired[float | None]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "float | None",
+          "description": null,
+          "kind": "union",
+          "base_type": {
+            "type_str": "Union",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "float",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "name": "tool_choice",
-    "type": "NotRequired[ToolChoice | ToolChoiceEnum | None]"
+    "type_info": {
+      "type_str": "NotRequired[ToolChoice | ToolChoiceEnum | None]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "ToolChoice | ToolChoiceEnum | None",
+          "description": null,
+          "kind": "union",
+          "base_type": {
+            "type_str": "Union",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "ToolChoice",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "ToolChoiceEnum",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "name": "top_p",
-    "type": "NotRequired[float | None]"
+    "type_info": {
+      "type_str": "NotRequired[float | None]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "float | None",
+          "description": null,
+          "kind": "union",
+          "base_type": {
+            "type_str": "Union",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "float",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   }
 ]}
 />

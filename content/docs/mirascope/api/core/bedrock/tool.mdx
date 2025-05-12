@@ -68,7 +68,23 @@ if tool := response.tool:  # returns an `BedrockTool` instance
   attributes={[
   {
     "name": "tool_call",
-    "type": "SkipJsonSchema[ToolUseBlockContentTypeDef]"
+    "type_info": {
+      "type_str": "SkipJsonSchema[ToolUseBlockContentTypeDef]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "SkipJsonSchema",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "ToolUseBlockContentTypeDef",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   }
 ]}
 />

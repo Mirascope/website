@@ -30,27 +30,164 @@ The parameters to use when calling the Bedrock API.
   attributes={[
   {
     "name": "system",
-    "type": "NotRequired[list[SystemContentBlockTypeDef]]"
+    "type_info": {
+      "type_str": "NotRequired[list[SystemContentBlockTypeDef]]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "list[SystemContentBlockTypeDef]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "list",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "SystemContentBlockTypeDef",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "name": "inferenceConfig",
-    "type": "NotRequired[InferenceConfigurationTypeDef]"
+    "type_info": {
+      "type_str": "NotRequired[InferenceConfigurationTypeDef]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "InferenceConfigurationTypeDef",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "toolConfig",
-    "type": "NotRequired[ToolConfigurationTypeDef]"
+    "type_info": {
+      "type_str": "NotRequired[ToolConfigurationTypeDef]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "ToolConfigurationTypeDef",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "guardrailConfig",
-    "type": "NotRequired[GuardrailConfigurationTypeDef]"
+    "type_info": {
+      "type_str": "NotRequired[GuardrailConfigurationTypeDef]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "GuardrailConfigurationTypeDef",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "additionalModelRequestFields",
-    "type": "NotRequired[Mapping[str, Any]]"
+    "type_info": {
+      "type_str": "NotRequired[Mapping[str, Any]]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "Mapping[str, Any]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "Mapping",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "str",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "Any",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "name": "additionalModelResponseFieldPaths",
-    "type": "NotRequired[list[str]]"
+    "type_info": {
+      "type_str": "NotRequired[list[str]]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "list[str]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "list",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "str",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   }
 ]}
 />

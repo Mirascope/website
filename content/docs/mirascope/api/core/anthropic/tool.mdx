@@ -30,7 +30,11 @@ A tool configuration for Anthropic-specific features.
   attributes={[
   {
     "name": "cache_control",
-    "type": "_CacheControl"
+    "type_info": {
+      "type_str": "_CacheControl",
+      "description": null,
+      "kind": "simple"
+    }
   }
 ]}
 />
@@ -68,7 +72,23 @@ if tool := response.tool:  # returns an `AnthropicTool` instance
   attributes={[
   {
     "name": "tool_call",
-    "type": "SkipJsonSchema[ToolUseBlock]"
+    "type_info": {
+      "type_str": "SkipJsonSchema[ToolUseBlock]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "SkipJsonSchema",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "ToolUseBlock",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   }
 ]}
 />

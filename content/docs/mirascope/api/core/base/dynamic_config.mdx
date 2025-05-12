@@ -22,15 +22,179 @@ The base type in a function as an LLM call to return for dynamic configuration.
   attributes={[
   {
     "name": "metadata",
-    "type": "NotRequired[Metadata]"
+    "type_info": {
+      "type_str": "NotRequired[Metadata]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "Metadata",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "computed_fields",
-    "type": "NotRequired[dict[str, Any | list[Any] | list[list[Any]]]]"
+    "type_info": {
+      "type_str": "NotRequired[dict[str, Any | list[Any] | list[list[Any]]]]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "dict[str, Any | list[Any] | list[list[Any]]]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "dict",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "str",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "Any | list[Any] | list[list[Any]]",
+              "description": null,
+              "kind": "union",
+              "base_type": {
+                "type_str": "Union",
+                "description": null,
+                "kind": "simple"
+              },
+              "parameters": [
+                {
+                  "type_str": "Any",
+                  "description": null,
+                  "kind": "simple"
+                },
+                {
+                  "type_str": "list[Any]",
+                  "description": null,
+                  "kind": "generic",
+                  "base_type": {
+                    "type_str": "list",
+                    "description": null,
+                    "kind": "simple"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "Any",
+                      "description": null,
+                      "kind": "simple"
+                    }
+                  ]
+                },
+                {
+                  "type_str": "list[list[Any]]",
+                  "description": null,
+                  "kind": "generic",
+                  "base_type": {
+                    "type_str": "list",
+                    "description": null,
+                    "kind": "simple"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "list[Any]",
+                      "description": null,
+                      "kind": "generic",
+                      "base_type": {
+                        "type_str": "list",
+                        "description": null,
+                        "kind": "simple"
+                      },
+                      "parameters": [
+                        {
+                          "type_str": "Any",
+                          "description": null,
+                          "kind": "simple"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "name": "tools",
-    "type": "NotRequired[Sequence[type[BaseTool] | Callable]]"
+    "type_info": {
+      "type_str": "NotRequired[Sequence[type[BaseTool] | Callable]]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "Sequence[type[BaseTool] | Callable]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "Sequence",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "type[BaseTool] | Callable",
+              "description": null,
+              "kind": "union",
+              "base_type": {
+                "type_str": "Union",
+                "description": null,
+                "kind": "simple"
+              },
+              "parameters": [
+                {
+                  "type_str": "type[BaseTool]",
+                  "description": null,
+                  "kind": "generic",
+                  "base_type": {
+                    "type_str": "type",
+                    "description": null,
+                    "kind": "simple"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "BaseTool",
+                      "description": null,
+                      "kind": "simple"
+                    }
+                  ]
+                },
+                {
+                  "type_str": "Callable",
+                  "description": null,
+                  "kind": "simple"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
   }
 ]}
 />
@@ -46,7 +210,35 @@ The base type in a function as an LLM call to return for dynamic configuration.
   attributes={[
   {
     "name": "messages",
-    "type": "NotRequired[Sequence[_MessageParamT]]"
+    "type_info": {
+      "type_str": "NotRequired[Sequence[_MessageParamT]]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "Sequence[_MessageParamT]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "Sequence",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "_MessageParamT",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   }
 ]}
 />
@@ -62,7 +254,23 @@ The base type in a function as an LLM call to return for dynamic configuration.
   attributes={[
   {
     "name": "call_params",
-    "type": "NotRequired[_CallParamsT]"
+    "type_info": {
+      "type_str": "NotRequired[_CallParamsT]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "_CallParamsT",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   }
 ]}
 />
@@ -78,7 +286,40 @@ The base type in a function as an LLM call to return for dynamic configuration.
   attributes={[
   {
     "name": "client",
-    "type": "NotRequired[_ClientT | None]"
+    "type_info": {
+      "type_str": "NotRequired[_ClientT | None]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "_ClientT | None",
+          "description": null,
+          "kind": "union",
+          "base_type": {
+            "type_str": "Union",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "_ClientT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   }
 ]}
 />
@@ -94,11 +335,55 @@ The base type in a function as an LLM call to return for dynamic configuration.
   attributes={[
   {
     "name": "messages",
-    "type": "NotRequired[Sequence[_MessageParamT]]"
+    "type_info": {
+      "type_str": "NotRequired[Sequence[_MessageParamT]]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "Sequence[_MessageParamT]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "Sequence",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "_MessageParamT",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "name": "call_params",
-    "type": "NotRequired[_CallParamsT]"
+    "type_info": {
+      "type_str": "NotRequired[_CallParamsT]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "_CallParamsT",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   }
 ]}
 />
@@ -114,11 +399,72 @@ The base type in a function as an LLM call to return for dynamic configuration.
   attributes={[
   {
     "name": "messages",
-    "type": "NotRequired[Sequence[_MessageParamT]]"
+    "type_info": {
+      "type_str": "NotRequired[Sequence[_MessageParamT]]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "Sequence[_MessageParamT]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "Sequence",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "_MessageParamT",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "name": "client",
-    "type": "NotRequired[_ClientT | None]"
+    "type_info": {
+      "type_str": "NotRequired[_ClientT | None]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "_ClientT | None",
+          "description": null,
+          "kind": "union",
+          "base_type": {
+            "type_str": "Union",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "_ClientT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   }
 ]}
 />
@@ -134,11 +480,60 @@ The base type in a function as an LLM call to return for dynamic configuration.
   attributes={[
   {
     "name": "call_params",
-    "type": "NotRequired[_CallParamsT]"
+    "type_info": {
+      "type_str": "NotRequired[_CallParamsT]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "_CallParamsT",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "client",
-    "type": "NotRequired[_ClientT | None]"
+    "type_info": {
+      "type_str": "NotRequired[_ClientT | None]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "_ClientT | None",
+          "description": null,
+          "kind": "union",
+          "base_type": {
+            "type_str": "Union",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "_ClientT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   }
 ]}
 />
@@ -154,15 +549,92 @@ The base type in a function as an LLM call to return for dynamic configuration.
   attributes={[
   {
     "name": "messages",
-    "type": "NotRequired[Sequence[_MessageParamT]]"
+    "type_info": {
+      "type_str": "NotRequired[Sequence[_MessageParamT]]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "Sequence[_MessageParamT]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "Sequence",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "_MessageParamT",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "name": "call_params",
-    "type": "NotRequired[_CallParamsT]"
+    "type_info": {
+      "type_str": "NotRequired[_CallParamsT]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "_CallParamsT",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "client",
-    "type": "NotRequired[_ClientT | None]"
+    "type_info": {
+      "type_str": "NotRequired[_ClientT | None]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "_ClientT | None",
+          "description": null,
+          "kind": "union",
+          "base_type": {
+            "type_str": "Union",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "_ClientT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   }
 ]}
 />

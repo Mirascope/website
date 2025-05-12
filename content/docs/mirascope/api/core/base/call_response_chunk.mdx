@@ -30,65 +30,292 @@ A base abstract interface for LLM streaming response chunks.
   attributes={[
   {
     "name": "chunk",
-    "type": "_ChunkT"
+    "type_info": {
+      "type_str": "_ChunkT",
+      "description": null,
+      "kind": "simple"
+    }
   },
   {
     "name": "model_config",
-    "type": "None"
+    "type_info": {
+      "type_str": "None",
+      "description": null,
+      "kind": "simple"
+    }
   },
   {
     "name": "content",
-    "type": "str",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "Should return the string content of the response chunk.\n\nIf there are multiple choices in a chunk, this method should select the 0th\nchoice and return it's string content.\n\nIf there is no string content (e.g. when using tools), this method must return\nthe empty string."
   },
   {
     "name": "finish_reasons",
-    "type": "list[_FinishReasonT] | None",
+    "type_info": {
+      "type_str": "list[_FinishReasonT] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "list[_FinishReasonT]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "list",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "_FinishReasonT",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Should return the finish reasons of the response.\n\nIf there is no finish reason, this method must return None."
   },
   {
     "name": "model",
-    "type": "str | None",
+    "type_info": {
+      "type_str": "str | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "str",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Should return the name of the response model."
   },
   {
     "name": "id",
-    "type": "str | None",
+    "type_info": {
+      "type_str": "str | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "str",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Should return the id of the response."
   },
   {
     "name": "usage",
-    "type": "Any",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "Should return the usage of the response.\n\nIf there is no usage, this method must return None."
   },
   {
     "name": "input_tokens",
-    "type": "int | float | None",
+    "type_info": {
+      "type_str": "int | float | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "int",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "float",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Should return the number of input tokens.\n\nIf there is no input_tokens, this method must return None."
   },
   {
     "name": "cached_tokens",
-    "type": "int | float | None",
+    "type_info": {
+      "type_str": "int | float | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "int",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "float",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Should return the number of cached tokens.\n\nIf there is no cached_tokens, this method must return None."
   },
   {
     "name": "output_tokens",
-    "type": "int | float | None",
+    "type_info": {
+      "type_str": "int | float | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "int",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "float",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Should return the number of output tokens.\n\nIf there is no output_tokens, this method must return None."
   },
   {
     "name": "cost_metadata",
-    "type": "CostMetadata",
+    "type_info": {
+      "type_str": "CostMetadata",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "Get metadata required for cost calculation."
   },
   {
     "name": "common_finish_reasons",
-    "type": "list[FinishReason] | None",
+    "type_info": {
+      "type_str": "list[FinishReason] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "list[FinishReason]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "list",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "FinishReason",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Provider-agnostic finish reasons."
   },
   {
     "name": "common_usage",
-    "type": "Usage | None",
+    "type_info": {
+      "type_str": "Usage | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "Usage",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Provider-agnostic usage info."
   }
 ]}

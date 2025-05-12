@@ -26,14 +26,56 @@ The module for defining the toolkit class for LLM call tools.
   parameters={[
   {
     "name": "method",
-    "type": "Callable[..., Any] | BaseTool"
+    "type_info": {
+      "type_str": "Callable[..., Any] | BaseTool",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "Callable[..., Any]",
+          "description": null,
+          "kind": "callable",
+          "base_type": {
+            "type_str": "Callable",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "...",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "Any",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        },
+        {
+          "type_str": "BaseTool",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   }
 ]}
 />
 
 <ReturnTable
   returnType={{
-  "type": "bool"
+  "type_info": {
+    "type_str": "bool",
+    "description": null,
+    "kind": "simple"
+  }
 }}
 />
 
@@ -46,14 +88,148 @@ The module for defining the toolkit class for LLM call tools.
   parameters={[
   {
     "name": "method",
-    "type": "Callable[Concatenate[_BaseToolKitT, P], str] | type[_BaseToolT]"
+    "type_info": {
+      "type_str": "Callable[Concatenate[_BaseToolKitT, P], str] | type[_BaseToolT]",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "Callable[Concatenate[_BaseToolKitT, P], str]",
+          "description": null,
+          "kind": "callable",
+          "base_type": {
+            "type_str": "Callable",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "Concatenate[_BaseToolKitT, P]",
+              "description": null,
+              "kind": "generic",
+              "base_type": {
+                "type_str": "Concatenate",
+                "description": null,
+                "kind": "simple"
+              },
+              "parameters": [
+                {
+                  "type_str": "_BaseToolKitT",
+                  "description": null,
+                  "kind": "simple"
+                },
+                {
+                  "type_str": "P",
+                  "description": null,
+                  "kind": "simple"
+                }
+              ]
+            },
+            {
+              "type_str": "str",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        },
+        {
+          "type_str": "type[_BaseToolT]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "type",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "_BaseToolT",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   }
 ]}
 />
 
 <ReturnTable
   returnType={{
-  "type": "Callable[Concatenate[_BaseToolKitT, P], str] | type[_BaseToolT]"
+  "type_info": {
+    "type_str": "Callable[Concatenate[_BaseToolKitT, P], str] | type[_BaseToolT]",
+    "description": null,
+    "kind": "union",
+    "base_type": {
+      "type_str": "Union",
+      "description": null,
+      "kind": "simple"
+    },
+    "parameters": [
+      {
+        "type_str": "Callable[Concatenate[_BaseToolKitT, P], str]",
+        "description": null,
+        "kind": "callable",
+        "base_type": {
+          "type_str": "Callable",
+          "description": null,
+          "kind": "simple"
+        },
+        "parameters": [
+          {
+            "type_str": "Concatenate[_BaseToolKitT, P]",
+            "description": null,
+            "kind": "generic",
+            "base_type": {
+              "type_str": "Concatenate",
+              "description": null,
+              "kind": "simple"
+            },
+            "parameters": [
+              {
+                "type_str": "_BaseToolKitT",
+                "description": null,
+                "kind": "simple"
+              },
+              {
+                "type_str": "P",
+                "description": null,
+                "kind": "simple"
+              }
+            ]
+          },
+          {
+            "type_str": "str",
+            "description": null,
+            "kind": "simple"
+          }
+        ]
+      },
+      {
+        "type_str": "type[_BaseToolT]",
+        "description": null,
+        "kind": "generic",
+        "base_type": {
+          "type_str": "type",
+          "description": null,
+          "kind": "simple"
+        },
+        "parameters": [
+          {
+            "type_str": "_BaseToolT",
+            "description": null,
+            "kind": "simple"
+          }
+        ]
+      }
+    ]
+  }
 }}
 />
 
@@ -70,15 +246,56 @@ The module for defining the toolkit class for LLM call tools.
   attributes={[
   {
     "name": "method",
-    "type": "Callable[..., str]"
+    "type_info": {
+      "type_str": "Callable[..., str]",
+      "description": null,
+      "kind": "callable",
+      "base_type": {
+        "type_str": "Callable",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "...",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "str",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "template_vars",
-    "type": "list[str]"
+    "type_info": {
+      "type_str": "list[str]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "list",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "str",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "template",
-    "type": "str"
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple"
+    }
   }
 ]}
 />
@@ -133,7 +350,11 @@ else:
   attributes={[
   {
     "name": "model_config",
-    "type": "None"
+    "type_info": {
+      "type_str": "None",
+      "description": null,
+      "kind": "simple"
+    }
   }
 ]}
 />

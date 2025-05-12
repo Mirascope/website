@@ -22,15 +22,27 @@ Configuration for `DockerOperationToolKit` toolkit
   attributes={[
   {
     "name": "docker_image",
-    "type": "str"
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple"
+    }
   },
   {
     "name": "max_memory",
-    "type": "str"
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple"
+    }
   },
   {
     "name": "allow_network",
-    "type": "bool"
+    "type_info": {
+      "type_str": "bool",
+      "description": null,
+      "kind": "simple"
+    }
   }
 ]}
 />
@@ -55,11 +67,19 @@ Base class for Docker operations.
   attributes={[
   {
     "name": "config",
-    "type": "DockerOperationToolKitConfig"
+    "type_info": {
+      "type_str": "DockerOperationToolKitConfig",
+      "description": null,
+      "kind": "simple"
+    }
   },
   {
     "name": "container",
-    "type": "Container"
+    "type_info": {
+      "type_str": "Container",
+      "description": null,
+      "kind": "simple"
+    }
   }
 ]}
 />
@@ -77,20 +97,36 @@ ToolKit for executing Python code and shell commands in a Docker container.
   attributes={[
   {
     "name": "config",
-    "type": "DockerOperationToolKitConfig"
+    "type_info": {
+      "type_str": "DockerOperationToolKitConfig",
+      "description": null,
+      "kind": "simple"
+    }
   },
   {
     "name": "docker_container",
-    "type": "DockerContainer"
+    "type_info": {
+      "type_str": "DockerContainer",
+      "description": null,
+      "kind": "simple"
+    }
   },
   {
     "name": "ExecutePython",
-    "type": "Any",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "Tool for executing Python code in a Docker container."
   },
   {
     "name": "ExecuteShell",
-    "type": "Any",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "Tool for executing shell commands in a Docker container."
   }
 ]}

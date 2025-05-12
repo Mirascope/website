@@ -34,7 +34,28 @@ calculation method. This ensures cost calculation works for non-OpenAI models.
   attributes={[
   {
     "name": "cost",
-    "type": "float | None",
+    "type_info": {
+      "type_str": "float | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "float",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Returns the cost of the call."
   }
 ]}

@@ -20,23 +20,237 @@ This module contains the base classes for streaming responses from LLMs.
   parameters={[
   {
     "name": "TCallResponse",
-    "type": "type[_BaseCallResponseT]"
+    "type_info": {
+      "type_str": "type[_BaseCallResponseT]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "type",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "_BaseCallResponseT",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "TStream",
-    "type": "type[BaseStream]"
+    "type_info": {
+      "type_str": "type[BaseStream]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "type",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "BaseStream",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "setup_call",
-    "type": "SameSyncAndAsyncClientSetupCall[_SameSyncAndAsyncClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT] | SetupCall[_SyncBaseClientT, _AsyncBaseClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT]"
+    "type_info": {
+      "type_str": "SameSyncAndAsyncClientSetupCall[_SameSyncAndAsyncClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT] | SetupCall[_SyncBaseClientT, _AsyncBaseClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT]",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "SameSyncAndAsyncClientSetupCall[_SameSyncAndAsyncClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "SameSyncAndAsyncClientSetupCall",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "_SameSyncAndAsyncClientT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_BaseDynamicConfigT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_AsyncBaseDynamicConfigT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_BaseCallParamsT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_ResponseT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_ResponseChunkT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_AsyncResponseT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_AsyncResponseChunkT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_BaseToolT",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        },
+        {
+          "type_str": "SetupCall[_SyncBaseClientT, _AsyncBaseClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "SetupCall",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "_SyncBaseClientT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_AsyncBaseClientT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_BaseDynamicConfigT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_AsyncBaseDynamicConfigT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_BaseCallParamsT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_ResponseT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_ResponseChunkT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_AsyncResponseT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_AsyncResponseChunkT",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "_BaseToolT",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "name": "handle_stream",
-    "type": "HandleStream[_ResponseChunkT, _BaseCallResponseChunkT, _BaseToolT]"
+    "type_info": {
+      "type_str": "HandleStream[_ResponseChunkT, _BaseCallResponseChunkT, _BaseToolT]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "HandleStream",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "_ResponseChunkT",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "_BaseCallResponseChunkT",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "_BaseToolT",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "handle_stream_async",
-    "type": "HandleStreamAsync[_AsyncResponseChunkT, _BaseCallResponseChunkT, _BaseToolT]"
+    "type_info": {
+      "type_str": "HandleStreamAsync[_AsyncResponseChunkT, _BaseCallResponseChunkT, _BaseToolT]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "HandleStreamAsync",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "_AsyncResponseChunkT",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "_BaseCallResponseChunkT",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "_BaseToolT",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   }
 ]}
 />
@@ -56,100 +270,594 @@ A base class for streaming responses from LLMs.
   attributes={[
   {
     "name": "stream",
-    "type": "Generator[tuple[_BaseCallResponseChunkT, _BaseToolT | None], None, None] | AsyncGenerator[tuple[_BaseCallResponseChunkT, _BaseToolT | None], None]"
+    "type_info": {
+      "type_str": "Generator[tuple[_BaseCallResponseChunkT, _BaseToolT | None], None, None] | AsyncGenerator[tuple[_BaseCallResponseChunkT, _BaseToolT | None], None]",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "Generator[tuple[_BaseCallResponseChunkT, _BaseToolT | None], None, None]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "Generator",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "tuple[_BaseCallResponseChunkT, _BaseToolT | None]",
+              "description": null,
+              "kind": "generic",
+              "base_type": {
+                "type_str": "tuple",
+                "description": null,
+                "kind": "simple"
+              },
+              "parameters": [
+                {
+                  "type_str": "_BaseCallResponseChunkT",
+                  "description": null,
+                  "kind": "simple"
+                },
+                {
+                  "type_str": "_BaseToolT | None",
+                  "description": null,
+                  "kind": "union",
+                  "base_type": {
+                    "type_str": "Union",
+                    "description": null,
+                    "kind": "simple"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "_BaseToolT",
+                      "description": null,
+                      "kind": "simple"
+                    },
+                    {
+                      "type_str": "None",
+                      "description": null,
+                      "kind": "simple"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        },
+        {
+          "type_str": "AsyncGenerator[tuple[_BaseCallResponseChunkT, _BaseToolT | None], None]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "AsyncGenerator",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "tuple[_BaseCallResponseChunkT, _BaseToolT | None]",
+              "description": null,
+              "kind": "generic",
+              "base_type": {
+                "type_str": "tuple",
+                "description": null,
+                "kind": "simple"
+              },
+              "parameters": [
+                {
+                  "type_str": "_BaseCallResponseChunkT",
+                  "description": null,
+                  "kind": "simple"
+                },
+                {
+                  "type_str": "_BaseToolT | None",
+                  "description": null,
+                  "kind": "union",
+                  "base_type": {
+                    "type_str": "Union",
+                    "description": null,
+                    "kind": "simple"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "_BaseToolT",
+                      "description": null,
+                      "kind": "simple"
+                    },
+                    {
+                      "type_str": "None",
+                      "description": null,
+                      "kind": "simple"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "name": "content",
-    "type": "str"
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple"
+    }
   },
   {
     "name": "metadata",
-    "type": "Metadata"
+    "type_info": {
+      "type_str": "Metadata",
+      "description": null,
+      "kind": "simple"
+    }
   },
   {
     "name": "tool_types",
-    "type": "list[type[_BaseToolT]] | None"
+    "type_info": {
+      "type_str": "list[type[_BaseToolT]] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "list[type[_BaseToolT]]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "list",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "type[_BaseToolT]",
+              "description": null,
+              "kind": "generic",
+              "base_type": {
+                "type_str": "type",
+                "description": null,
+                "kind": "simple"
+              },
+              "parameters": [
+                {
+                  "type_str": "_BaseToolT",
+                  "description": null,
+                  "kind": "simple"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "call_response_type",
-    "type": "type[_BaseCallResponseT]"
+    "type_info": {
+      "type_str": "type[_BaseCallResponseT]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "type",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "_BaseCallResponseT",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "model",
-    "type": "str"
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple"
+    }
   },
   {
     "name": "prompt_template",
-    "type": "str | None"
+    "type_info": {
+      "type_str": "str | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "str",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "fn_args",
-    "type": "dict[str, Any] | None"
+    "type_info": {
+      "type_str": "dict[str, Any] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "dict[str, Any]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "dict",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "str",
+              "description": null,
+              "kind": "simple"
+            },
+            {
+              "type_str": "Any",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "dynamic_config",
-    "type": "_BaseDynamicConfigT"
+    "type_info": {
+      "type_str": "_BaseDynamicConfigT",
+      "description": null,
+      "kind": "simple"
+    }
   },
   {
     "name": "messages",
-    "type": "list[_MessageParamT]"
+    "type_info": {
+      "type_str": "list[_MessageParamT]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "list",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "_MessageParamT",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "call_params",
-    "type": "_BaseCallParamsT"
+    "type_info": {
+      "type_str": "_BaseCallParamsT",
+      "description": null,
+      "kind": "simple"
+    }
   },
   {
     "name": "call_kwargs",
-    "type": "BaseCallKwargs[_ToolSchemaT]"
+    "type_info": {
+      "type_str": "BaseCallKwargs[_ToolSchemaT]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "BaseCallKwargs",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "_ToolSchemaT",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "user_message_param",
-    "type": "_UserMessageParamT | None"
+    "type_info": {
+      "type_str": "_UserMessageParamT | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "_UserMessageParamT",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "message_param",
-    "type": "_AssistantMessageParamT"
+    "type_info": {
+      "type_str": "_AssistantMessageParamT",
+      "description": null,
+      "kind": "simple"
+    }
   },
   {
     "name": "input_tokens",
-    "type": "int | float | None"
+    "type_info": {
+      "type_str": "int | float | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "int",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "float",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "cached_tokens",
-    "type": "int | float | None"
+    "type_info": {
+      "type_str": "int | float | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "int",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "float",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "output_tokens",
-    "type": "int | float | None"
+    "type_info": {
+      "type_str": "int | float | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "int",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "float",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "id",
-    "type": "str | None"
+    "type_info": {
+      "type_str": "str | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "str",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "finish_reasons",
-    "type": "list[_FinishReason] | None"
+    "type_info": {
+      "type_str": "list[_FinishReason] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "list[_FinishReason]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "list",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "_FinishReason",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    }
   },
   {
     "name": "start_time",
-    "type": "float"
+    "type_info": {
+      "type_str": "float",
+      "description": null,
+      "kind": "simple"
+    }
   },
   {
     "name": "end_time",
-    "type": "float"
+    "type_info": {
+      "type_str": "float",
+      "description": null,
+      "kind": "simple"
+    }
   },
   {
     "name": "provider",
-    "type": "Provider"
+    "type_info": {
+      "type_str": "Provider",
+      "description": null,
+      "kind": "simple"
+    }
   },
   {
     "name": "cost_metadata",
-    "type": "CostMetadata",
+    "type_info": {
+      "type_str": "CostMetadata",
+      "description": null,
+      "kind": "simple"
+    },
     "description": "Returns metadata needed for cost calculation."
   },
   {
     "name": "cost",
-    "type": "float | None",
+    "type_info": {
+      "type_str": "float | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "float",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "description": "Calculate the cost of this streaming API call."
   }
 ]}

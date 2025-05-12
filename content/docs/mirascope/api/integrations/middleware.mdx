@@ -49,62 +49,1145 @@ print(response.content)
   parameters={[
   {
     "name": "custom_context_manager",
-    "type": "Callable[[SyncFunc | AsyncFunc], AbstractContextManager[_T]]",
+    "type_info": {
+      "type_str": "Callable[[SyncFunc | AsyncFunc], AbstractContextManager[_T]]",
+      "description": null,
+      "kind": "callable",
+      "base_type": {
+        "type_str": "Callable",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "[SyncFunc | AsyncFunc]",
+          "description": null,
+          "kind": "tuple",
+          "base_type": {
+            "type_str": "tuple",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "SyncFunc | AsyncFunc",
+              "description": null,
+              "kind": "union",
+              "base_type": {
+                "type_str": "Union",
+                "description": null,
+                "kind": "simple"
+              },
+              "parameters": [
+                {
+                  "type_str": "SyncFunc",
+                  "description": null,
+                  "kind": "simple"
+                },
+                {
+                  "type_str": "AsyncFunc",
+                  "description": null,
+                  "kind": "simple"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type_str": "AbstractContextManager[_T]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "AbstractContextManager",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "_T",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        }
+      ]
+    },
     "default": "default_context_manager"
   },
   {
     "name": "custom_decorator",
-    "type": "Callable | None",
+    "type_info": {
+      "type_str": "Callable | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "Callable",
+          "description": null,
+          "kind": "simple"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "default": "None"
   },
   {
     "name": "handle_call_response",
-    "type": "Callable[[BaseCallResponse, SyncFunc | AsyncFunc, _T | None], None] | None",
+    "type_info": {
+      "type_str": "Callable[[BaseCallResponse, SyncFunc | AsyncFunc, _T | None], None] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "Callable[[BaseCallResponse, SyncFunc | AsyncFunc, _T | None], None]",
+          "description": null,
+          "kind": "callable",
+          "base_type": {
+            "type_str": "Callable",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "[BaseCallResponse, SyncFunc | AsyncFunc, _T | None]",
+              "description": null,
+              "kind": "tuple",
+              "base_type": {
+                "type_str": "tuple",
+                "description": null,
+                "kind": "simple"
+              },
+              "parameters": [
+                {
+                  "type_str": "BaseCallResponse",
+                  "description": null,
+                  "kind": "simple"
+                },
+                {
+                  "type_str": "SyncFunc | AsyncFunc",
+                  "description": null,
+                  "kind": "union",
+                  "base_type": {
+                    "type_str": "Union",
+                    "description": null,
+                    "kind": "simple"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "SyncFunc",
+                      "description": null,
+                      "kind": "simple"
+                    },
+                    {
+                      "type_str": "AsyncFunc",
+                      "description": null,
+                      "kind": "simple"
+                    }
+                  ]
+                },
+                {
+                  "type_str": "_T | None",
+                  "description": null,
+                  "kind": "union",
+                  "base_type": {
+                    "type_str": "Union",
+                    "description": null,
+                    "kind": "simple"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "_T",
+                      "description": null,
+                      "kind": "simple"
+                    },
+                    {
+                      "type_str": "None",
+                      "description": null,
+                      "kind": "simple"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "default": "None"
   },
   {
     "name": "handle_call_response_async",
-    "type": "Callable[[BaseCallResponse, SyncFunc | AsyncFunc, _T | None], Awaitable[None]] | None",
+    "type_info": {
+      "type_str": "Callable[[BaseCallResponse, SyncFunc | AsyncFunc, _T | None], Awaitable[None]] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "Callable[[BaseCallResponse, SyncFunc | AsyncFunc, _T | None], Awaitable[None]]",
+          "description": null,
+          "kind": "callable",
+          "base_type": {
+            "type_str": "Callable",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "[BaseCallResponse, SyncFunc | AsyncFunc, _T | None]",
+              "description": null,
+              "kind": "tuple",
+              "base_type": {
+                "type_str": "tuple",
+                "description": null,
+                "kind": "simple"
+              },
+              "parameters": [
+                {
+                  "type_str": "BaseCallResponse",
+                  "description": null,
+                  "kind": "simple"
+                },
+                {
+                  "type_str": "SyncFunc | AsyncFunc",
+                  "description": null,
+                  "kind": "union",
+                  "base_type": {
+                    "type_str": "Union",
+                    "description": null,
+                    "kind": "simple"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "SyncFunc",
+                      "description": null,
+                      "kind": "simple"
+                    },
+                    {
+                      "type_str": "AsyncFunc",
+                      "description": null,
+                      "kind": "simple"
+                    }
+                  ]
+                },
+                {
+                  "type_str": "_T | None",
+                  "description": null,
+                  "kind": "union",
+                  "base_type": {
+                    "type_str": "Union",
+                    "description": null,
+                    "kind": "simple"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "_T",
+                      "description": null,
+                      "kind": "simple"
+                    },
+                    {
+                      "type_str": "None",
+                      "description": null,
+                      "kind": "simple"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type_str": "Awaitable[None]",
+              "description": null,
+              "kind": "generic",
+              "base_type": {
+                "type_str": "Awaitable",
+                "description": null,
+                "kind": "simple"
+              },
+              "parameters": [
+                {
+                  "type_str": "None",
+                  "description": null,
+                  "kind": "simple"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "default": "None"
   },
   {
     "name": "handle_stream",
-    "type": "Callable[[BaseStream, SyncFunc | AsyncFunc, _T | None], None] | None",
+    "type_info": {
+      "type_str": "Callable[[BaseStream, SyncFunc | AsyncFunc, _T | None], None] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "Callable[[BaseStream, SyncFunc | AsyncFunc, _T | None], None]",
+          "description": null,
+          "kind": "callable",
+          "base_type": {
+            "type_str": "Callable",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "[BaseStream, SyncFunc | AsyncFunc, _T | None]",
+              "description": null,
+              "kind": "tuple",
+              "base_type": {
+                "type_str": "tuple",
+                "description": null,
+                "kind": "simple"
+              },
+              "parameters": [
+                {
+                  "type_str": "BaseStream",
+                  "description": null,
+                  "kind": "simple"
+                },
+                {
+                  "type_str": "SyncFunc | AsyncFunc",
+                  "description": null,
+                  "kind": "union",
+                  "base_type": {
+                    "type_str": "Union",
+                    "description": null,
+                    "kind": "simple"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "SyncFunc",
+                      "description": null,
+                      "kind": "simple"
+                    },
+                    {
+                      "type_str": "AsyncFunc",
+                      "description": null,
+                      "kind": "simple"
+                    }
+                  ]
+                },
+                {
+                  "type_str": "_T | None",
+                  "description": null,
+                  "kind": "union",
+                  "base_type": {
+                    "type_str": "Union",
+                    "description": null,
+                    "kind": "simple"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "_T",
+                      "description": null,
+                      "kind": "simple"
+                    },
+                    {
+                      "type_str": "None",
+                      "description": null,
+                      "kind": "simple"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "default": "None"
   },
   {
     "name": "handle_stream_async",
-    "type": "Callable[[BaseStream, SyncFunc | AsyncFunc, _T | None], Awaitable[None]] | None",
+    "type_info": {
+      "type_str": "Callable[[BaseStream, SyncFunc | AsyncFunc, _T | None], Awaitable[None]] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "Callable[[BaseStream, SyncFunc | AsyncFunc, _T | None], Awaitable[None]]",
+          "description": null,
+          "kind": "callable",
+          "base_type": {
+            "type_str": "Callable",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "[BaseStream, SyncFunc | AsyncFunc, _T | None]",
+              "description": null,
+              "kind": "tuple",
+              "base_type": {
+                "type_str": "tuple",
+                "description": null,
+                "kind": "simple"
+              },
+              "parameters": [
+                {
+                  "type_str": "BaseStream",
+                  "description": null,
+                  "kind": "simple"
+                },
+                {
+                  "type_str": "SyncFunc | AsyncFunc",
+                  "description": null,
+                  "kind": "union",
+                  "base_type": {
+                    "type_str": "Union",
+                    "description": null,
+                    "kind": "simple"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "SyncFunc",
+                      "description": null,
+                      "kind": "simple"
+                    },
+                    {
+                      "type_str": "AsyncFunc",
+                      "description": null,
+                      "kind": "simple"
+                    }
+                  ]
+                },
+                {
+                  "type_str": "_T | None",
+                  "description": null,
+                  "kind": "union",
+                  "base_type": {
+                    "type_str": "Union",
+                    "description": null,
+                    "kind": "simple"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "_T",
+                      "description": null,
+                      "kind": "simple"
+                    },
+                    {
+                      "type_str": "None",
+                      "description": null,
+                      "kind": "simple"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type_str": "Awaitable[None]",
+              "description": null,
+              "kind": "generic",
+              "base_type": {
+                "type_str": "Awaitable",
+                "description": null,
+                "kind": "simple"
+              },
+              "parameters": [
+                {
+                  "type_str": "None",
+                  "description": null,
+                  "kind": "simple"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "default": "None"
   },
   {
     "name": "handle_response_model",
-    "type": "Callable[[ResponseModel, SyncFunc | AsyncFunc, _T | None], None] | None",
+    "type_info": {
+      "type_str": "Callable[[ResponseModel, SyncFunc | AsyncFunc, _T | None], None] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "Callable[[ResponseModel, SyncFunc | AsyncFunc, _T | None], None]",
+          "description": null,
+          "kind": "callable",
+          "base_type": {
+            "type_str": "Callable",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "[ResponseModel, SyncFunc | AsyncFunc, _T | None]",
+              "description": null,
+              "kind": "tuple",
+              "base_type": {
+                "type_str": "tuple",
+                "description": null,
+                "kind": "simple"
+              },
+              "parameters": [
+                {
+                  "type_str": "ResponseModel",
+                  "description": null,
+                  "kind": "simple"
+                },
+                {
+                  "type_str": "SyncFunc | AsyncFunc",
+                  "description": null,
+                  "kind": "union",
+                  "base_type": {
+                    "type_str": "Union",
+                    "description": null,
+                    "kind": "simple"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "SyncFunc",
+                      "description": null,
+                      "kind": "simple"
+                    },
+                    {
+                      "type_str": "AsyncFunc",
+                      "description": null,
+                      "kind": "simple"
+                    }
+                  ]
+                },
+                {
+                  "type_str": "_T | None",
+                  "description": null,
+                  "kind": "union",
+                  "base_type": {
+                    "type_str": "Union",
+                    "description": null,
+                    "kind": "simple"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "_T",
+                      "description": null,
+                      "kind": "simple"
+                    },
+                    {
+                      "type_str": "None",
+                      "description": null,
+                      "kind": "simple"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "default": "None"
   },
   {
     "name": "handle_response_model_async",
-    "type": "Callable[[ResponseModel, SyncFunc | AsyncFunc, _T | None], Awaitable[None]] | None",
+    "type_info": {
+      "type_str": "Callable[[ResponseModel, SyncFunc | AsyncFunc, _T | None], Awaitable[None]] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "Callable[[ResponseModel, SyncFunc | AsyncFunc, _T | None], Awaitable[None]]",
+          "description": null,
+          "kind": "callable",
+          "base_type": {
+            "type_str": "Callable",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "[ResponseModel, SyncFunc | AsyncFunc, _T | None]",
+              "description": null,
+              "kind": "tuple",
+              "base_type": {
+                "type_str": "tuple",
+                "description": null,
+                "kind": "simple"
+              },
+              "parameters": [
+                {
+                  "type_str": "ResponseModel",
+                  "description": null,
+                  "kind": "simple"
+                },
+                {
+                  "type_str": "SyncFunc | AsyncFunc",
+                  "description": null,
+                  "kind": "union",
+                  "base_type": {
+                    "type_str": "Union",
+                    "description": null,
+                    "kind": "simple"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "SyncFunc",
+                      "description": null,
+                      "kind": "simple"
+                    },
+                    {
+                      "type_str": "AsyncFunc",
+                      "description": null,
+                      "kind": "simple"
+                    }
+                  ]
+                },
+                {
+                  "type_str": "_T | None",
+                  "description": null,
+                  "kind": "union",
+                  "base_type": {
+                    "type_str": "Union",
+                    "description": null,
+                    "kind": "simple"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "_T",
+                      "description": null,
+                      "kind": "simple"
+                    },
+                    {
+                      "type_str": "None",
+                      "description": null,
+                      "kind": "simple"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type_str": "Awaitable[None]",
+              "description": null,
+              "kind": "generic",
+              "base_type": {
+                "type_str": "Awaitable",
+                "description": null,
+                "kind": "simple"
+              },
+              "parameters": [
+                {
+                  "type_str": "None",
+                  "description": null,
+                  "kind": "simple"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "default": "None"
   },
   {
     "name": "handle_structured_stream",
-    "type": "Callable[[BaseStructuredStream, SyncFunc | AsyncFunc, _T | None], None] | None",
+    "type_info": {
+      "type_str": "Callable[[BaseStructuredStream, SyncFunc | AsyncFunc, _T | None], None] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "Callable[[BaseStructuredStream, SyncFunc | AsyncFunc, _T | None], None]",
+          "description": null,
+          "kind": "callable",
+          "base_type": {
+            "type_str": "Callable",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "[BaseStructuredStream, SyncFunc | AsyncFunc, _T | None]",
+              "description": null,
+              "kind": "tuple",
+              "base_type": {
+                "type_str": "tuple",
+                "description": null,
+                "kind": "simple"
+              },
+              "parameters": [
+                {
+                  "type_str": "BaseStructuredStream",
+                  "description": null,
+                  "kind": "simple"
+                },
+                {
+                  "type_str": "SyncFunc | AsyncFunc",
+                  "description": null,
+                  "kind": "union",
+                  "base_type": {
+                    "type_str": "Union",
+                    "description": null,
+                    "kind": "simple"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "SyncFunc",
+                      "description": null,
+                      "kind": "simple"
+                    },
+                    {
+                      "type_str": "AsyncFunc",
+                      "description": null,
+                      "kind": "simple"
+                    }
+                  ]
+                },
+                {
+                  "type_str": "_T | None",
+                  "description": null,
+                  "kind": "union",
+                  "base_type": {
+                    "type_str": "Union",
+                    "description": null,
+                    "kind": "simple"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "_T",
+                      "description": null,
+                      "kind": "simple"
+                    },
+                    {
+                      "type_str": "None",
+                      "description": null,
+                      "kind": "simple"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "default": "None"
   },
   {
     "name": "handle_structured_stream_async",
-    "type": "Callable[[BaseStructuredStream, SyncFunc | AsyncFunc, _T | None], Awaitable[None]] | None",
+    "type_info": {
+      "type_str": "Callable[[BaseStructuredStream, SyncFunc | AsyncFunc, _T | None], Awaitable[None]] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "Callable[[BaseStructuredStream, SyncFunc | AsyncFunc, _T | None], Awaitable[None]]",
+          "description": null,
+          "kind": "callable",
+          "base_type": {
+            "type_str": "Callable",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "[BaseStructuredStream, SyncFunc | AsyncFunc, _T | None]",
+              "description": null,
+              "kind": "tuple",
+              "base_type": {
+                "type_str": "tuple",
+                "description": null,
+                "kind": "simple"
+              },
+              "parameters": [
+                {
+                  "type_str": "BaseStructuredStream",
+                  "description": null,
+                  "kind": "simple"
+                },
+                {
+                  "type_str": "SyncFunc | AsyncFunc",
+                  "description": null,
+                  "kind": "union",
+                  "base_type": {
+                    "type_str": "Union",
+                    "description": null,
+                    "kind": "simple"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "SyncFunc",
+                      "description": null,
+                      "kind": "simple"
+                    },
+                    {
+                      "type_str": "AsyncFunc",
+                      "description": null,
+                      "kind": "simple"
+                    }
+                  ]
+                },
+                {
+                  "type_str": "_T | None",
+                  "description": null,
+                  "kind": "union",
+                  "base_type": {
+                    "type_str": "Union",
+                    "description": null,
+                    "kind": "simple"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "_T",
+                      "description": null,
+                      "kind": "simple"
+                    },
+                    {
+                      "type_str": "None",
+                      "description": null,
+                      "kind": "simple"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type_str": "Awaitable[None]",
+              "description": null,
+              "kind": "generic",
+              "base_type": {
+                "type_str": "Awaitable",
+                "description": null,
+                "kind": "simple"
+              },
+              "parameters": [
+                {
+                  "type_str": "None",
+                  "description": null,
+                  "kind": "simple"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "default": "None"
   },
   {
     "name": "handle_error",
-    "type": "Callable[[Exception, SyncFunc | AsyncFunc, _T | None], Any] | None",
+    "type_info": {
+      "type_str": "Callable[[Exception, SyncFunc | AsyncFunc, _T | None], Any] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "Callable[[Exception, SyncFunc | AsyncFunc, _T | None], Any]",
+          "description": null,
+          "kind": "callable",
+          "base_type": {
+            "type_str": "Callable",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "[Exception, SyncFunc | AsyncFunc, _T | None]",
+              "description": null,
+              "kind": "tuple",
+              "base_type": {
+                "type_str": "tuple",
+                "description": null,
+                "kind": "simple"
+              },
+              "parameters": [
+                {
+                  "type_str": "Exception",
+                  "description": null,
+                  "kind": "simple"
+                },
+                {
+                  "type_str": "SyncFunc | AsyncFunc",
+                  "description": null,
+                  "kind": "union",
+                  "base_type": {
+                    "type_str": "Union",
+                    "description": null,
+                    "kind": "simple"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "SyncFunc",
+                      "description": null,
+                      "kind": "simple"
+                    },
+                    {
+                      "type_str": "AsyncFunc",
+                      "description": null,
+                      "kind": "simple"
+                    }
+                  ]
+                },
+                {
+                  "type_str": "_T | None",
+                  "description": null,
+                  "kind": "union",
+                  "base_type": {
+                    "type_str": "Union",
+                    "description": null,
+                    "kind": "simple"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "_T",
+                      "description": null,
+                      "kind": "simple"
+                    },
+                    {
+                      "type_str": "None",
+                      "description": null,
+                      "kind": "simple"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type_str": "Any",
+              "description": null,
+              "kind": "simple"
+            }
+          ]
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "default": "None"
   },
   {
     "name": "handle_error_async",
-    "type": "Callable[[Exception, SyncFunc | AsyncFunc, _T | None], Awaitable[Any]] | None",
+    "type_info": {
+      "type_str": "Callable[[Exception, SyncFunc | AsyncFunc, _T | None], Awaitable[Any]] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple"
+      },
+      "parameters": [
+        {
+          "type_str": "Callable[[Exception, SyncFunc | AsyncFunc, _T | None], Awaitable[Any]]",
+          "description": null,
+          "kind": "callable",
+          "base_type": {
+            "type_str": "Callable",
+            "description": null,
+            "kind": "simple"
+          },
+          "parameters": [
+            {
+              "type_str": "[Exception, SyncFunc | AsyncFunc, _T | None]",
+              "description": null,
+              "kind": "tuple",
+              "base_type": {
+                "type_str": "tuple",
+                "description": null,
+                "kind": "simple"
+              },
+              "parameters": [
+                {
+                  "type_str": "Exception",
+                  "description": null,
+                  "kind": "simple"
+                },
+                {
+                  "type_str": "SyncFunc | AsyncFunc",
+                  "description": null,
+                  "kind": "union",
+                  "base_type": {
+                    "type_str": "Union",
+                    "description": null,
+                    "kind": "simple"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "SyncFunc",
+                      "description": null,
+                      "kind": "simple"
+                    },
+                    {
+                      "type_str": "AsyncFunc",
+                      "description": null,
+                      "kind": "simple"
+                    }
+                  ]
+                },
+                {
+                  "type_str": "_T | None",
+                  "description": null,
+                  "kind": "union",
+                  "base_type": {
+                    "type_str": "Union",
+                    "description": null,
+                    "kind": "simple"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "_T",
+                      "description": null,
+                      "kind": "simple"
+                    },
+                    {
+                      "type_str": "None",
+                      "description": null,
+                      "kind": "simple"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type_str": "Awaitable[Any]",
+              "description": null,
+              "kind": "generic",
+              "base_type": {
+                "type_str": "Awaitable",
+                "description": null,
+                "kind": "simple"
+              },
+              "parameters": [
+                {
+                  "type_str": "Any",
+                  "description": null,
+                  "kind": "simple"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple"
+        }
+      ]
+    },
     "default": "None"
   }
 ]}
@@ -112,7 +1195,74 @@ print(response.content)
 
 <ReturnTable
   returnType={{
-  "type": "Callable[[Callable[_P, _R]], Callable[_P, _R]]"
+  "type_info": {
+    "type_str": "Callable[[Callable[_P, _R]], Callable[_P, _R]]",
+    "description": null,
+    "kind": "callable",
+    "base_type": {
+      "type_str": "Callable",
+      "description": null,
+      "kind": "simple"
+    },
+    "parameters": [
+      {
+        "type_str": "[Callable[_P, _R]]",
+        "description": null,
+        "kind": "tuple",
+        "base_type": {
+          "type_str": "tuple",
+          "description": null,
+          "kind": "simple"
+        },
+        "parameters": [
+          {
+            "type_str": "Callable[_P, _R]",
+            "description": null,
+            "kind": "callable",
+            "base_type": {
+              "type_str": "Callable",
+              "description": null,
+              "kind": "simple"
+            },
+            "parameters": [
+              {
+                "type_str": "_P",
+                "description": null,
+                "kind": "simple"
+              },
+              {
+                "type_str": "_R",
+                "description": null,
+                "kind": "simple"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type_str": "Callable[_P, _R]",
+        "description": null,
+        "kind": "callable",
+        "base_type": {
+          "type_str": "Callable",
+          "description": null,
+          "kind": "simple"
+        },
+        "parameters": [
+          {
+            "type_str": "_P",
+            "description": null,
+            "kind": "simple"
+          },
+          {
+            "type_str": "_R",
+            "description": null,
+            "kind": "simple"
+          }
+        ]
+      }
+    ]
+  }
 }}
 />
 
