@@ -84,4 +84,40 @@ class GenericType(BaseTypeInfo):
 TypeInfo = SimpleType | GenericType
 
 
+@dataclass
+class ParameterInfo:
+    """Represents a function parameter."""
+
+    name: str
+    type_info: TypeInfo
+    description: str | None = None
+    default: str | None = None  # String representation of default value
+    is_optional: bool = False  # Whether this parameter can be omitted
+
+    def to_dict(self) -> dict:
+        """Convert this object to a dictionary suitable for JSON serialization."""
+        return asdict(self)
+
+    def to_json(self) -> str:
+        """Convert this object to a JSON string."""
+        return json.dumps(self.to_dict(), cls=EnumEncoder)
+
+
+@dataclass
+class ReturnInfo:
+    """Represents a function return value."""
+
+    type_info: TypeInfo
+    description: str | None = None
+    name: str | None = None  # Some APIs name their return values
+
+    def to_dict(self) -> dict:
+        """Convert this object to a dictionary suitable for JSON serialization."""
+        return asdict(self)
+
+    def to_json(self) -> str:
+        """Convert this object to a JSON string."""
+        return json.dumps(self.to_dict(), cls=EnumEncoder)
+
+
 # Note: Type string parsing is now handled by the parser module
