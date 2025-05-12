@@ -24,11 +24,11 @@ Navigate to [Settings -> Organization](https://lilypad.mirascope.com/settings/or
 1. Create a new project.
 2. Generate an API key for that project.
 
-We recommend saving the ID and API key in your environment (e.g. export or .env file):
+The API key will only be shown once, so make sure to copy and save it.
 
 ```bash
-LILYPAD_PROJECT_ID=...
-LILYPAD_API_KEY=...
+LILYPAD_PROJECT_ID="YOUR_PROJECT_ID"
+LILYPAD_API_KEY="YOUR_API_KEY"
 ```
 
 If using a `.env` file, remember to use something like [`load_dotenv()`](https://github.com/theskumar/python-dotenv) so they are properly loaded.
@@ -92,7 +92,10 @@ Run your first automatically [traced](/docs/lilypad/observability/traces) and [v
 from google.genai import Client
 import lilypad
 
-lilypad.configure()
+lilypad.configure(
+    project_id=os.environ["LILYPAD_PROJECT_ID"],
+    api_key=os.environ["LILYPAD_API_KEY"],
+)
 client = Client()
 
 @lilypad.trace(versioning="automatic")
@@ -110,10 +113,15 @@ print(response)
 </Tab>
 <Tab value="OpenAI">
 ```python
+import os
+
 import lilypad
 from openai import OpenAI
 
-lilypad.configure()
+lilypad.configure(
+    project_id=os.environ["LILYPAD_PROJECT_ID"],
+    api_key=os.environ["LILYPAD_API_KEY"],
+)
 client = OpenAI()
 
 @lilypad.trace(versioning="automatic")
@@ -131,10 +139,15 @@ print(response)
 </Tab>
 <Tab value="Anthropic">
 ```python
+import os
+
 from anthropic import Anthropic
 import lilypad
 
-lilypad.configure()
+lilypad.configure(
+    project_id=os.environ["LILYPAD_PROJECT_ID"],
+    api_key=os.environ["LILYPAD_API_KEY"],
+)
 client = Anthropic()
 
 @lilypad.trace(versioning="automatic")
@@ -159,7 +172,10 @@ import os
 import lilypad
 from mistralai import Mistral
 
-lilypad.configure()
+lilypad.configure(
+    project_id=os.environ["LILYPAD_PROJECT_ID"],
+    api_key=os.environ["LILYPAD_API_KEY"],
+)
 client = Mistral(api_key=os.environ["MISTRAL_API_KEY"])
 
 @lilypad.trace(versioning="automatic")
@@ -182,7 +198,10 @@ import os
 from boto3.session import Session
 import lilypad
 
-lilypad.configure()
+lilypad.configure(
+    project_id=os.environ["LILYPAD_PROJECT_ID"],
+    api_key=os.environ["LILYPAD_API_KEY"],
+)
 session = Session()
 client = session.client("bedrock-runtime")
 
@@ -203,11 +222,16 @@ print(response)
 </Tab>
 <Tab value="Azure">
 ```python
+import os
+
 from azure.ai.inference import ChatCompletionsClient
 from azure.core.credentials import AzureKeyCredential
 import lilypad
 
-lilypad.configure()
+lilypad.configure(
+    project_id=os.environ["LILYPAD_PROJECT_ID"],
+    api_key=os.environ["LILYPAD_API_KEY"],
+)
 client = ChatCompletionsClient(
     endpoint="https://your-endpoint.openai.azure.com/openai/deployments/gpt-4o-mini",
     credential=AzureKeyCredential(key="..."),
@@ -228,10 +252,15 @@ print(response)
 </Tab>
 <Tab value="Outlines">
 ```python
+import os
+
 import lilypad
 import outlines
 
-lilypad.configure()
+lilypad.configure(
+    project_id=os.environ["LILYPAD_PROJECT_ID"],
+    api_key=os.environ["LILYPAD_API_KEY"],
+)
 
 @lilypad.trace(versioning="automatic")
 def answer_question(question: str) -> str | None:
