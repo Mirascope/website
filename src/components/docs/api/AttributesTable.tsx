@@ -4,24 +4,16 @@ export type Attribute = {
   name: string;
   type?: string;
   description?: string;
-  module_context?: string;
-  is_builtin?: boolean;
 };
 
 interface AttributesTableProps {
   attributes: Attribute[];
-  contentSubpath?: string;
-  currentModule?: string;
 }
 
 /**
- * Component to display a table of class attributes with linked type references
+ * Component to display a table of class attributes
  */
-export function AttributesTable({
-  attributes,
-  contentSubpath = "docs/mirascope",
-  currentModule,
-}: AttributesTableProps) {
+export function AttributesTable({ attributes }: AttributesTableProps) {
   if (!attributes || attributes.length === 0) {
     return null;
   }
@@ -43,13 +35,7 @@ export function AttributesTable({
               <tr key={index} className={index % 2 === 0 ? "bg-background" : "bg-muted/20"}>
                 <td className="border-b px-4 py-2 font-mono">{attr.name}</td>
                 <td className="text-primary border-b px-4 py-2">
-                  <TypeLink
-                    type={attr.type || "-"}
-                    moduleContext={attr.module_context}
-                    isBuiltin={attr.is_builtin}
-                    contentSubpath={contentSubpath}
-                    currentModule={currentModule}
-                  />
+                  <TypeLink type={attr.type || "-"} />
                 </td>
                 <td className="border-b px-4 py-2">{attr.description || "-"}</td>
               </tr>

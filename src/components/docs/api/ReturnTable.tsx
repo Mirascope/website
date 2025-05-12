@@ -4,24 +4,16 @@ export type ReturnTypeInfo = {
   name?: string;
   type: string;
   description?: string;
-  module_context?: string;
-  is_builtin?: boolean;
 };
 
 interface ReturnTableProps {
   returnType: ReturnTypeInfo;
-  contentSubpath?: string;
-  currentModule?: string;
 }
 
 /**
  * Component to display a function's return type in a table format consistent with other tables
  */
-export function ReturnTable({
-  returnType,
-  contentSubpath = "docs/mirascope",
-  currentModule,
-}: ReturnTableProps) {
+export function ReturnTable({ returnType }: ReturnTableProps) {
   if (!returnType || !returnType.type) {
     return null;
   }
@@ -44,13 +36,7 @@ export function ReturnTable({
                 <td className="border-b px-4 py-2 font-mono">{returnType.name}</td>
               )}
               <td className="text-primary border-b px-4 py-2">
-                <TypeLink
-                  type={returnType.type}
-                  moduleContext={returnType.module_context}
-                  isBuiltin={returnType.is_builtin}
-                  contentSubpath={contentSubpath}
-                  currentModule={currentModule}
-                />
+                <TypeLink type={returnType.type} />
               </td>
               <td className="border-b px-4 py-2">{returnType.description || "-"}</td>
             </tr>

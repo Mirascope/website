@@ -45,24 +45,16 @@ print(recommend_book("fantasy"))
   {
     "name": "template",
     "type": "str | None",
-    "module_context": "builtins",
-    "is_builtin": "true",
     "default": "None"
   }
 ]}
-  contentSubpath="docs/mirascope"
-  currentModule="mirascope.core.base.prompt"
 />
 
 <ReturnTable
   returnType={{
   "type": "PromptDecorator | MessagesDecorator",
-  "module_context": "mirascope.core.base.prompt",
-  "is_builtin": "false",
   "description": "The decorator function that turns the decorated function\ninto a prompt template."
 }}
-  contentSubpath="docs/mirascope"
-  currentModule="mirascope.core.base.prompt"
 />
 
 
@@ -97,24 +89,16 @@ print(response.metadata)
   parameters={[
   {
     "name": "metadata",
-    "type": "Metadata",
-    "module_context": "mirascope.core.base.metadata",
-    "is_builtin": "false"
+    "type": "Metadata"
   }
 ]}
-  contentSubpath="docs/mirascope"
-  currentModule="mirascope.core.base.prompt"
 />
 
 <ReturnTable
   returnType={{
   "type": "MetadataDecorator",
-  "module_context": "mirascope.core.base.prompt",
-  "is_builtin": "false",
   "description": "The decorator function that updates the `_metadata`\nattribute of the decorated input prompt or call."
 }}
-  contentSubpath="docs/mirascope"
-  currentModule="mirascope.core.base.prompt"
 />
 
 
@@ -160,8 +144,6 @@ print(prompt.dump()["metadata"])
     "type": "str"
   }
 ]}
-  contentSubpath="docs/mirascope"
-  currentModule="mirascope.core.base.prompt"
 />
 
 

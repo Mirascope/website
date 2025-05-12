@@ -20,37 +20,25 @@ This module contains the base classes for streaming responses from LLMs.
   parameters={[
   {
     "name": "TCallResponse",
-    "type": "type[_BaseCallResponseT]",
-    "module_context": "mirascope.core.base.stream",
-    "is_builtin": "false"
+    "type": "type[_BaseCallResponseT]"
   },
   {
     "name": "TStream",
-    "type": "type[BaseStream]",
-    "module_context": "mirascope.core.base.stream",
-    "is_builtin": "false"
+    "type": "type[BaseStream]"
   },
   {
     "name": "setup_call",
-    "type": "SameSyncAndAsyncClientSetupCall[_SameSyncAndAsyncClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT] | SetupCall[_SyncBaseClientT, _AsyncBaseClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT]",
-    "module_context": "mirascope.core.base._utils",
-    "is_builtin": "false"
+    "type": "SameSyncAndAsyncClientSetupCall[_SameSyncAndAsyncClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT] | SetupCall[_SyncBaseClientT, _AsyncBaseClientT, _BaseDynamicConfigT, _AsyncBaseDynamicConfigT, _BaseCallParamsT, _ResponseT, _ResponseChunkT, _AsyncResponseT, _AsyncResponseChunkT, _BaseToolT]"
   },
   {
     "name": "handle_stream",
-    "type": "HandleStream[_ResponseChunkT, _BaseCallResponseChunkT, _BaseToolT]",
-    "module_context": "mirascope.core.base._utils",
-    "is_builtin": "false"
+    "type": "HandleStream[_ResponseChunkT, _BaseCallResponseChunkT, _BaseToolT]"
   },
   {
     "name": "handle_stream_async",
-    "type": "HandleStreamAsync[_AsyncResponseChunkT, _BaseCallResponseChunkT, _BaseToolT]",
-    "module_context": "mirascope.core.base._utils",
-    "is_builtin": "false"
+    "type": "HandleStreamAsync[_AsyncResponseChunkT, _BaseCallResponseChunkT, _BaseToolT]"
   }
 ]}
-  contentSubpath="docs/mirascope"
-  currentModule="mirascope.core.base.stream"
 />
 
 
@@ -165,8 +153,6 @@ A base class for streaming responses from LLMs.
     "description": "Calculate the cost of this streaming API call."
   }
 ]}
-  contentSubpath="docs/mirascope"
-  currentModule="mirascope.core.base.stream"
 />
 
 

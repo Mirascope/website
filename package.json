@@ -21,7 +21,7 @@
     "typecheck": "bun run tsc --noEmit",
     "lint:mdx": "bun run scripts/validate-mdx.ts",
     "lint:snippets": "uv pip install -e '.[mirascope-all]' && bun run scripts/update-snippets.ts --check && uv run pyright public/examples/ public/extracted-snippets/ && uv run ruff check public/examples/ public/extracted-snippets/",
-    "lint:python": "uv pip install -e '.' && uv run pyright scripts/apigen/ && uv run ruff check scripts/apigen/ && uv run pytest scripts/apigen/",
+    "lint:python": "uv pip install -e '.' && uv run pyright scripts/apigen/ && uv run ruff check scripts/apigen/ && uv run pytest && echo \"Lint successful\"",
     "lint:format": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\"",
     "fix": "bun run fix:format && bun run fix:snippets && bun run fix:python",
     "fix:format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\"",

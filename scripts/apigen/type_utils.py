@@ -40,8 +40,6 @@ class TypeInfo:
     """Structured information about a type annotation."""
 
     type_str: str
-    module_context: str
-    is_builtin: bool
     description: str | None = None
 
 
@@ -75,22 +73,13 @@ def get_type_origin(annotation, module: Module) -> TypeInfo:
         TypeInfo object with information about the type origin
 
     """
-    # Start with default values
-    is_internal = True
-    module_path = module.path
-
     # Extract the base type name (without generic parameters or union pipes)
     type_str = str(annotation)
     base_type = type_str.split("[")[0].split("|")[0].strip()
 
     # Check if it's a fully qualified name (contains dots)
     if "." in base_type:
-        parts = base_type.split(".")
-        module_path = ".".join(parts[:-1])
-        is_internal = True
-        return TypeInfo(
-            type_str=type_str, module_context=module_path, is_builtin=not is_internal
-        )
+        return TypeInfo(type_str=type_str)
 
     # For types that don't have dots, check if they're imported
     if hasattr(module, "members"):
@@ -105,35 +94,17 @@ def get_type_origin(annotation, module: Module) -> TypeInfo:
                         target_path = getattr(member.target, "path", "")
                         if target_path:
                             # This extracts the module path from the target path
-                            module_path = ".".join(target_path.split(".")[:-1])
                             return TypeInfo(
                                 type_str=type_str,
-                                module_context=module_path,
-                                is_builtin=not is_internal,
                             )
                     else:
                         # For external packages like Pydantic, we can infer from the module name
                         # or use the current module context
-                        module_path = module.path
-                        is_internal = False
                         return TypeInfo(
                             type_str=type_str,
-                            module_context=module_path,
-                            is_builtin=not is_internal,
                         )
 
-    if base_type in PYTHON_BUILTINS:
-        module_path = (
-            "builtins"
-            if base_type
-            in {"str", "int", "float", "bool", "list", "dict", "tuple", "set"}
-            else "typing"
-        )
-        is_internal = False
-
-    return TypeInfo(
-        type_str=type_str, module_context=module_path, is_builtin=not is_internal
-    )
+    return TypeInfo(type_str=type_str)
 
 
 def extract_params_if_available(
