@@ -105,13 +105,15 @@ print(response.content)
   currentModule="mirascope.llm._call"
 />
 
-<ReturnType
-  type="Callable"
-  moduleContext="collections.abc"
-  isBuiltin={false}
+<ReturnTable
+  returnType={{
+  "type": "Callable",
+  "module_context": "collections.abc",
+  "is_builtin": "false",
+  "description": "A decorator that transforms a typed function into a\nprovider-agnostic LLM API call that returns standardized response types\nregardless of the underlying provider used."
+}}
   contentSubpath="docs/mirascope"
   currentModule="mirascope.llm._call"
-  description="A decorator that transforms a typed function into a\nprovider-agnostic LLM API call that returns standardized response types\nregardless of the underlying provider used."
 />
 
 

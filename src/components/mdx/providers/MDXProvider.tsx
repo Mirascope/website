@@ -20,7 +20,7 @@ import {
   ApiType,
   ApiSignature,
   ParametersTable,
-  ReturnType,
+  ReturnTable,
   AttributesTable,
 } from "@/src/components/docs/api";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/src/components/ui/tabs";
@@ -107,7 +107,7 @@ export const components = {
   ApiSignature,
   AttributesTable,
   ParametersTable,
-  ReturnType,
+  ReturnTable,
 
   // UI Components
   Button,

@@ -40,13 +40,15 @@ All function metadata (e.g. docstrings, function name) is preserved through the 
   currentModule="mirascope.core.base.merge_decorators"
 />
 
-<ReturnType
-  type="Callable[[], Callable[[Callable[_P, _R]], Callable[_WP, _WR]]]"
-  moduleContext="collections.abc"
-  isBuiltin={false}
+<ReturnTable
+  returnType={{
+  "type": "Callable[[], Callable[[Callable[_P, _R]], Callable[_WP, _WR]]]",
+  "module_context": "collections.abc",
+  "is_builtin": "false",
+  "description": "A decorator factory function that applies all decorators in the specified order."
+}}
   contentSubpath="docs/mirascope"
   currentModule="mirascope.core.base.merge_decorators"
-  description="A decorator factory function that applies all decorators in the specified order."
 />
 
 

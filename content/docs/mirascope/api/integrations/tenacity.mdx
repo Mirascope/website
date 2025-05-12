@@ -44,10 +44,12 @@ except RetryError:
   currentModule="mirascope.retries.tenacity"
 />
 
-<ReturnType
-  type="Callable[[RetryCallState], None]"
-  moduleContext="collections.abc"
-  isBuiltin={false}
+<ReturnTable
+  returnType={{
+  "type": "Callable[[RetryCallState], None]",
+  "module_context": "collections.abc",
+  "is_builtin": "false"
+}}
   contentSubpath="docs/mirascope"
   currentModule="mirascope.retries.tenacity"
 />

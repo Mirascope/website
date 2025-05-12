@@ -35,10 +35,12 @@ The module for defining the toolkit class for LLM call tools.
   currentModule="mirascope.core.base.toolkit"
 />
 
-<ReturnType
-  type="bool"
-  moduleContext="builtins"
-  isBuiltin={true}
+<ReturnTable
+  returnType={{
+  "type": "bool",
+  "module_context": "builtins",
+  "is_builtin": "true"
+}}
   contentSubpath="docs/mirascope"
   currentModule="mirascope.core.base.toolkit"
 />
@@ -61,10 +63,12 @@ The module for defining the toolkit class for LLM call tools.
   currentModule="mirascope.core.base.toolkit"
 />
 
-<ReturnType
-  type="Callable[Concatenate[_BaseToolKitT, P], str] | type[_BaseToolT]"
-  moduleContext="collections.abc"
-  isBuiltin={false}
+<ReturnTable
+  returnType={{
+  "type": "Callable[Concatenate[_BaseToolKitT, P], str] | type[_BaseToolT]",
+  "module_context": "collections.abc",
+  "is_builtin": "false"
+}}
   contentSubpath="docs/mirascope"
   currentModule="mirascope.core.base.toolkit"
 />

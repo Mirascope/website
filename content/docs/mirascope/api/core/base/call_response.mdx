@@ -29,10 +29,12 @@ This module contains the base call response class.
   currentModule="mirascope.core.base.call_response"
 />
 
-<ReturnType
-  type="Callable[[type[_BaseCallResponseT], list[tuple[_BaseToolT, JsonableType]]], list[_ToolMessageParamT]]"
-  moduleContext="collections.abc"
-  isBuiltin={false}
+<ReturnTable
+  returnType={{
+  "type": "Callable[[type[_BaseCallResponseT], list[tuple[_BaseToolT, JsonableType]]], list[_ToolMessageParamT]]",
+  "module_context": "collections.abc",
+  "is_builtin": "false"
+}}
   contentSubpath="docs/mirascope"
   currentModule="mirascope.core.base.call_response"
 />
