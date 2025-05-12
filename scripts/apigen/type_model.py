@@ -4,7 +4,8 @@ This module provides a structured type model for Python type annotations,
 offering a more comprehensive representation than simple strings.
 """
 
-from dataclasses import dataclass, field
+import json
+from dataclasses import asdict, dataclass, field
 
 
 @dataclass
@@ -17,6 +18,14 @@ class BaseTypeInfo:
     description: str | None = None  # Optional description
     # Making kind a required argument but with a default that gets overridden in subclasses
     kind: str = ""
+
+    def to_dict(self) -> dict:
+        """Convert this object to a dictionary suitable for JSON serialization."""
+        return asdict(self)
+
+    def to_json(self) -> str:
+        """Convert this object to a JSON string."""
+        return json.dumps(self.to_dict())
 
 
 @dataclass

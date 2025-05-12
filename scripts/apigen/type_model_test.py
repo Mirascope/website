@@ -1,11 +1,20 @@
 """Tests for the type_model module."""
 
+import json
+
 from .type_model import (
     GenericType,
     SimpleType,
     parse_type_string,
     split_parameters,
 )
+
+
+def assert_json_equal(actual, expected):
+    """Assert that two objects are equal when serialized to JSON."""
+    actual_json = json.loads(actual.to_json())
+    expected_json = json.loads(expected.to_json())
+    assert actual_json == expected_json, f"JSON not equal: {json.dumps(actual_json)} != {json.dumps(expected_json)}"
 
 
 def test_parse_simple_types():
@@ -96,3 +105,89 @@ def test_parse_generic_types():
     assert len(inner_type.parameters) == 2
     assert inner_type.parameters[0].type_str == "str"
     assert inner_type.parameters[1].type_str == "int"
+
+
+def test_json_serialization():
+    """Test JSON serialization of type models."""
+    # Test simple type
+    type_info = SimpleType(
+        type_str="str",
+        module_context="test_module",
+        is_builtin=True
+    )
+
+    # Serialize and deserialize
+    json_str = type_info.to_json()
+    parsed = json.loads(json_str)
+
+    # Check fields are preserved
+    assert parsed["type_str"] == "str"
+    assert parsed["module_context"] == "test_module"
+    assert parsed["is_builtin"] is True
+    assert parsed["kind"] == "simple"
+
+    # Test generic type with nested structure
+    nested_type = GenericType(
+        type_str="List[Dict[str, int]]",
+        module_context="test_module",
+        is_builtin=True,
+        base_type="List",
+        parameters=[
+            GenericType(
+                type_str="Dict[str, int]",
+                module_context="test_module",
+                is_builtin=True,
+                base_type="Dict",
+                parameters=[
+                    SimpleType(type_str="str", module_context="test_module", is_builtin=True),
+                    SimpleType(type_str="int", module_context="test_module", is_builtin=True)
+                ]
+            )
+        ]
+    )
+
+    # Parse the same string
+    parsed_type = parse_type_string("List[Dict[str, int]]", "test_module")
+
+    # Compare using JSON equality
+    assert_json_equal(parsed_type, nested_type)
+
+    # Snapshot test to show exact JSON format
+    expected_json_snapshot = {
+        "kind": "generic",
+        "type_str": "List[Dict[str, int]]",
+        "module_context": "test_module",
+        "is_builtin": True,
+        "description": None,
+        "base_type": "List",
+        "parameters": [
+            {
+                "kind": "generic",
+                "type_str": "Dict[str, int]",
+                "module_context": "test_module",
+                "is_builtin": True,
+                "description": None,
+                "base_type": "Dict",
+                "parameters": [
+                    {
+                        "kind": "simple",
+                        "type_str": "str",
+                        "module_context": "test_module",
+                        "is_builtin": True,
+                        "description": None
+                    },
+                    {
+                        "kind": "simple",
+                        "type_str": "int",
+                        "module_context": "test_module",
+                        "is_builtin": True,
+                        "description": None
+                    }
+                ]
+            }
+        ]
+    }
+
+    # Verify the exact JSON structure matches our expectation
+    actual_json = json.loads(nested_type.to_json())
+    assert actual_json == expected_json_snapshot, "JSON snapshot does not match expected format"
