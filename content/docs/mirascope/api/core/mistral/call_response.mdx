@@ -16,31 +16,6 @@ This module contains the `MistralCallResponse` class.
 
 </Info>
 
-## Module Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| MistralCallResponse |  | A convenience wrapper around the Mistral `ChatCompletion` response.
-
-When calling the Mistral API using a function decorated with `mistral_call`, the
-response will be an `MistralCallResponse` instance with properties that allow for
-more convenience access to commonly used attributes.
-
-Example:
-
-```python
-from mirascope.core import prompt_template
-from mirascope.core.mistral import mistral_call
-
-
-@mistral_call("mistral-largel-latest")
-def recommend_book(genre: str) -> str:
-    return f"Recommend a {genre} book"
-
-response = recommend_book("fantasy")  # response is an `MistralCallResponse` instance
-print(response.content)
-``` |
-
 ## Classes
 
 ### MistralCallResponse
@@ -70,25 +45,84 @@ print(response.content)
 
 **Bases:** BaseCallResponse[ChatCompletionResponse, MistralTool, dict[str, Any], MistralDynamicConfig, AssistantMessage | SystemMessage | ToolMessage | UserMessage, MistralCallParams, UserMessage, MistralMessageParamConverter]
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| content | str | The content of the chat completion for the 0th choice. |
-| finish_reasons | list[str] | Returns the finish reasons of the response. |
-| model | str | Returns the name of the response model. |
-| id | str | Returns the id of the response. |
-| usage | UsageInfo | Returns the usage of the chat completion. |
-| input_tokens | int | Returns the number of input tokens. |
-| cached_tokens | int | Returns the number of cached tokens. |
-| output_tokens | int | None | Returns the number of output tokens. |
-| message_param | AssistantMessage | Returns the assistants's response as a message parameter. |
-| tools | list[MistralTool] | None | Returns the tools for the 0th choice message. |
-| tool | MistralTool | None | Returns the 0th tool for the 0th choice message. |
-| common_finish_reasons | list[FinishReason] | None |  |
-| common_message_param | BaseMessageParam |  |
-| common_user_message_param | BaseMessageParam | None |  |
-| cost_metadata | CostMetadata | Get metadata required for cost calculation. |
+<AttributesTable
+  attributes={[
+  {
+    "name": "content",
+    "type": "str",
+    "description": "The content of the chat completion for the 0th choice."
+  },
+  {
+    "name": "finish_reasons",
+    "type": "list[str]",
+    "description": "Returns the finish reasons of the response."
+  },
+  {
+    "name": "model",
+    "type": "str",
+    "description": "Returns the name of the response model."
+  },
+  {
+    "name": "id",
+    "type": "str",
+    "description": "Returns the id of the response."
+  },
+  {
+    "name": "usage",
+    "type": "UsageInfo",
+    "description": "Returns the usage of the chat completion."
+  },
+  {
+    "name": "input_tokens",
+    "type": "int",
+    "description": "Returns the number of input tokens."
+  },
+  {
+    "name": "cached_tokens",
+    "type": "int",
+    "description": "Returns the number of cached tokens."
+  },
+  {
+    "name": "output_tokens",
+    "type": "int | None",
+    "description": "Returns the number of output tokens."
+  },
+  {
+    "name": "message_param",
+    "type": "AssistantMessage",
+    "description": "Returns the assistants's response as a message parameter."
+  },
+  {
+    "name": "tools",
+    "type": "list[MistralTool] | None",
+    "description": "Returns the tools for the 0th choice message."
+  },
+  {
+    "name": "tool",
+    "type": "MistralTool | None",
+    "description": "Returns the 0th tool for the 0th choice message."
+  },
+  {
+    "name": "common_finish_reasons",
+    "type": "list[FinishReason] | None"
+  },
+  {
+    "name": "common_message_param",
+    "type": "BaseMessageParam"
+  },
+  {
+    "name": "common_user_message_param",
+    "type": "BaseMessageParam | None"
+  },
+  {
+    "name": "cost_metadata",
+    "type": "CostMetadata",
+    "description": "Get metadata required for cost calculation."
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.mistral.call_response"
+/>
 
 
 

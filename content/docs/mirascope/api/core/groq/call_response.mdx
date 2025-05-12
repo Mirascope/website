@@ -16,31 +16,6 @@ This module contains the `GroqCallResponse` class.
 
 </Info>
 
-## Module Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| GroqCallResponse |  | A convenience wrapper around the Groq `ChatCompletion` response.
-
-When calling the Groq API using a function decorated with `groq_call`, the
-response will be an `GroqCallResponse` instance with properties that allow for
-more convenience access to commonly used attributes.
-
-Example:
-
-```python
-from mirascope.core import prompt_template
-from mirascope.core.groq import groq_call
-
-
-@groq_call("llama-3.1-8b-instant")
-def recommend_book(genre: str) -> str:
-    return f"Recommend a {genre} book"
-
-response = recommend_book("fantasy")  # response is an `GroqCallResponse` instance
-print(response.content)
-``` |
-
 ## Classes
 
 ### GroqCallResponse
@@ -70,25 +45,83 @@ print(response.content)
 
 **Bases:** BaseCallResponse[ChatCompletion, GroqTool, ChatCompletionToolParam, AsyncGroqDynamicConfig | GroqDynamicConfig, ChatCompletionMessageParam, GroqCallParams, ChatCompletionUserMessageParam, GroqMessageParamConverter]
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| content | str | Returns the content of the chat completion for the 0th choice. |
-| finish_reasons | list[str] | Returns the finish reasons of the response. |
-| model | str | Returns the name of the response model. |
-| id | str | Returns the id of the response. |
-| usage | CompletionUsage | None | Returns the usage of the chat completion. |
-| input_tokens | int | None | Returns the number of input tokens. |
-| cached_tokens | int | None | Returns the number of cached tokens. |
-| output_tokens | int | None | Returns the number of output tokens. |
-| message_param | SerializeAsAny[ChatCompletionAssistantMessageParam] | Returns the assistants's response as a message parameter. |
-| tools | list[GroqTool] | None | Returns any available tool calls as their `GroqTool` definition. |
-| tool | GroqTool | None | Returns the 0th tool for the 0th choice message. |
-| common_finish_reasons | list[FinishReason] | None |  |
-| common_message_param | BaseMessageParam |  |
-| common_user_message_param | BaseMessageParam | None |  |
-| cost_metadata | CostMetadata |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "content",
+    "type": "str",
+    "description": "Returns the content of the chat completion for the 0th choice."
+  },
+  {
+    "name": "finish_reasons",
+    "type": "list[str]",
+    "description": "Returns the finish reasons of the response."
+  },
+  {
+    "name": "model",
+    "type": "str",
+    "description": "Returns the name of the response model."
+  },
+  {
+    "name": "id",
+    "type": "str",
+    "description": "Returns the id of the response."
+  },
+  {
+    "name": "usage",
+    "type": "CompletionUsage | None",
+    "description": "Returns the usage of the chat completion."
+  },
+  {
+    "name": "input_tokens",
+    "type": "int | None",
+    "description": "Returns the number of input tokens."
+  },
+  {
+    "name": "cached_tokens",
+    "type": "int | None",
+    "description": "Returns the number of cached tokens."
+  },
+  {
+    "name": "output_tokens",
+    "type": "int | None",
+    "description": "Returns the number of output tokens."
+  },
+  {
+    "name": "message_param",
+    "type": "SerializeAsAny[ChatCompletionAssistantMessageParam]",
+    "description": "Returns the assistants's response as a message parameter."
+  },
+  {
+    "name": "tools",
+    "type": "list[GroqTool] | None",
+    "description": "Returns any available tool calls as their `GroqTool` definition."
+  },
+  {
+    "name": "tool",
+    "type": "GroqTool | None",
+    "description": "Returns the 0th tool for the 0th choice message."
+  },
+  {
+    "name": "common_finish_reasons",
+    "type": "list[FinishReason] | None"
+  },
+  {
+    "name": "common_message_param",
+    "type": "BaseMessageParam"
+  },
+  {
+    "name": "common_user_message_param",
+    "type": "BaseMessageParam | None"
+  },
+  {
+    "name": "cost_metadata",
+    "type": "CostMetadata"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.groq.call_response"
+/>
 
 
 

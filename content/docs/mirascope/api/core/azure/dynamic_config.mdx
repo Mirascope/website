@@ -10,24 +10,4 @@ description: API documentation for mirascope.core.azure.dynamic_config
 
 This module defines the function return type for functions as LLM calls.
 
-## Module Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| AsyncAzureDynamicConfig | None |  |
-| AzureDynamicConfig | None | The function return type for functions wrapped with the `azure_call` decorator.
-
-Example:
-
-```python
-from mirascope.core import prompt_template
-from mirascope.core.azure import AzureDynamicConfig, azure_call
-
-
-@azure_call("gpt-4o-mini")
-@prompt_template("Recommend a {capitalized_genre} book")
-def recommend_book(genre: str) -> AzureDynamicConfig:
-    return {"computed_fields": {"capitalized_genre": genre.capitalize()}}
-``` |
-
 

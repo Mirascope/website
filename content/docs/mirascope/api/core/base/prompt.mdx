@@ -10,40 +10,6 @@ description: API documentation for mirascope.core.base.prompt
 
 The `BasePrompt` class for better prompt engineering.
 
-## Module Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| SUPPORTED_MESSAGE_ROLES | None |  |
-| BasePrompt |  | The base class for engineering prompts.
-
-This class is implemented as the base for all prompting needs. It is intended to
-work across various providers by providing a common prompt interface.
-
-Example:
-
-```python
-from mirascope.core import BasePrompt, metadata, prompt_template
-
-@prompt_template("Recommend a {genre} book")
-@metadata({"tags": {"version:0001", "books"}})
-class BookRecommendationPrompt(BasePrompt):
-    genre: str
-
-prompt = BookRecommendationPrompt(genre="fantasy")
-
-print(prompt)
-# > Recommend a fantasy book
-
-print(prompt.message_params())
-# > [BaseMessageParam(role="user", content="Recommend a fantasy book")]
-
-print(prompt.dump()["metadata"])
-# > {"metadata": {"version:0001", "books"}}
-``` |
-| PromptDecorator |  |  |
-| MetadataDecorator |  |  |
-
 ## Functions
 
 ### prompt_template
@@ -183,11 +149,16 @@ print(prompt.dump()["metadata"])
 
 **Bases:** BaseModel
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| prompt_template | str |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "prompt_template",
+    "type": "str"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.base.prompt"
+/>
 
 
 ### PromptDecorator

@@ -16,28 +16,6 @@ The `GoogleStream` class for convenience around streaming LLM calls.
 
 </Info>
 
-## Module Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| GoogleStream |  | A class for convenience around streaming Google LLM calls.
-
-Example:
-
-```python
-from mirascope.core import prompt_template
-from mirascope.core.google import google_call
-
-
-@google_call("google-1.5-flash", stream=True)
-def recommend_book(genre: str) -> str:
-    return f"Recommend a {genre} book"
-
-stream = recommend_book("fantasy")  # returns `GoogleStream` instance
-for chunk, _ in stream:
-    print(chunk.content, end="", flush=True)
-``` |
-
 ## Classes
 
 ### GoogleStream
@@ -64,11 +42,16 @@ for chunk, _ in stream:
 
 **Bases:** BaseStream[GoogleCallResponse, GoogleCallResponseChunk, ContentDict, ContentDict, ContentDict, ContentListUnion | ContentListUnionDict, GoogleTool, Tool, GoogleDynamicConfig, GoogleCallParams, FinishReason]
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| cost_metadata | CostMetadata |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "cost_metadata",
+    "type": "CostMetadata"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.google.stream"
+/>
 
 
 

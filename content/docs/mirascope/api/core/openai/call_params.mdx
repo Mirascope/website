@@ -14,17 +14,6 @@ description: API documentation for mirascope.core.openai.call_params
 
 </Info>
 
-## Module Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| ChatCompletionAudioParam |  |  |
-| ChatCompletionModality |  |  |
-| ChatCompletionReasoningEffort |  |  |
-| OpenAICallParams |  | The parameters to use when calling the OpenAI API.
-
-[OpenAI API Reference](https://platform.openai.com/docs/api-reference/chat/create) |
-
 ## Classes
 
 ### ChatCompletionAudioParam
@@ -52,30 +41,92 @@ The parameters to use when calling the OpenAI API.
 
 **Bases:** BaseCallParams
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| audio | NotRequired[ChatCompletionAudioParam | None] |  |
-| extra_headers | NotRequired[dict[str, str] | None] |  |
-| frequency_penalty | NotRequired[float | None] |  |
-| logit_bias | NotRequired[dict[str, int] | None] |  |
-| logprobs | NotRequired[bool | None] |  |
-| max_tokens | NotRequired[int | None] |  |
-| modalities | NotRequired[list[ChatCompletionModality] | None] |  |
-| n | NotRequired[int | None] |  |
-| parallel_tool_calls | NotRequired[bool] |  |
-| presence_penalty | NotRequired[float | None] |  |
-| reasoning_effort | NotRequired[ChatCompletionReasoningEffort | None] |  |
-| response_format | NotRequired[ResponseFormat] |  |
-| seed | NotRequired[int | None] |  |
-| stop | NotRequired[str | list[str] | None] |  |
-| stream_options | NotRequired[ChatCompletionStreamOptionsParam | None] |  |
-| temperature | NotRequired[float | None] |  |
-| tool_choice | NotRequired[ChatCompletionToolChoiceOptionParam] |  |
-| top_logprobs | NotRequired[int | None] |  |
-| top_p | NotRequired[float | None] |  |
-| user | NotRequired[str] |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "audio",
+    "type": "NotRequired[ChatCompletionAudioParam | None]"
+  },
+  {
+    "name": "extra_headers",
+    "type": "NotRequired[dict[str, str] | None]"
+  },
+  {
+    "name": "frequency_penalty",
+    "type": "NotRequired[float | None]"
+  },
+  {
+    "name": "logit_bias",
+    "type": "NotRequired[dict[str, int] | None]"
+  },
+  {
+    "name": "logprobs",
+    "type": "NotRequired[bool | None]"
+  },
+  {
+    "name": "max_tokens",
+    "type": "NotRequired[int | None]"
+  },
+  {
+    "name": "modalities",
+    "type": "NotRequired[list[ChatCompletionModality] | None]"
+  },
+  {
+    "name": "n",
+    "type": "NotRequired[int | None]"
+  },
+  {
+    "name": "parallel_tool_calls",
+    "type": "NotRequired[bool]"
+  },
+  {
+    "name": "presence_penalty",
+    "type": "NotRequired[float | None]"
+  },
+  {
+    "name": "reasoning_effort",
+    "type": "NotRequired[ChatCompletionReasoningEffort | None]"
+  },
+  {
+    "name": "response_format",
+    "type": "NotRequired[ResponseFormat]"
+  },
+  {
+    "name": "seed",
+    "type": "NotRequired[int | None]"
+  },
+  {
+    "name": "stop",
+    "type": "NotRequired[str | list[str] | None]"
+  },
+  {
+    "name": "stream_options",
+    "type": "NotRequired[ChatCompletionStreamOptionsParam | None]"
+  },
+  {
+    "name": "temperature",
+    "type": "NotRequired[float | None]"
+  },
+  {
+    "name": "tool_choice",
+    "type": "NotRequired[ChatCompletionToolChoiceOptionParam]"
+  },
+  {
+    "name": "top_logprobs",
+    "type": "NotRequired[int | None]"
+  },
+  {
+    "name": "top_p",
+    "type": "NotRequired[float | None]"
+  },
+  {
+    "name": "user",
+    "type": "NotRequired[str]"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.openai.call_params"
+/>
 
 
 

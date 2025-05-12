@@ -16,30 +16,6 @@ The `OpenAIStream` class for convenience around streaming LLM calls.
 
 </Info>
 
-## Module Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| FinishReason | None |  |
-| OpenAIStream |  | A class for convenience around streaming OpenAI LLM calls.
-
-Example:
-
-```python
-from mirascope.core import prompt_template
-from mirascope.core.openai import openai_call
-
-
-@openai_call("gpt-4o-mini", stream=True)
-def recommend_book(genre: str) -> str:
-    return f"Recommend a {genre} book"
-
-
-stream = recommend_book("fantasy")  # returns `OpenAIStream` instance
-for chunk, _ in stream:
-    print(chunk.content, end="", flush=True)
-``` |
-
 ## Classes
 
 ### OpenAIStream
@@ -67,12 +43,20 @@ for chunk, _ in stream:
 
 **Bases:** BaseStream[OpenAICallResponse, OpenAICallResponseChunk, ChatCompletionUserMessageParam, ChatCompletionAssistantMessageParam, ChatCompletionToolMessageParam, ChatCompletionMessageParam, OpenAITool, ChatCompletionToolParam, OpenAIDynamicConfig, OpenAICallParams, FinishReason]
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| audio_id | str | None |  |
-| cost_metadata | CostMetadata |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "audio_id",
+    "type": "str | None"
+  },
+  {
+    "name": "cost_metadata",
+    "type": "CostMetadata"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.openai.stream"
+/>
 
 
 

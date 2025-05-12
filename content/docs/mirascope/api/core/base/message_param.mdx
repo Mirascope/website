@@ -18,12 +18,20 @@ A base class for message parameters.
 
 **Bases:** BaseModel
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| role | str |  |
-| content | str | Sequence[TextPart | ImagePart | ImageURLPart | AudioPart | AudioURLPart | CacheControlPart | DocumentPart | ToolCallPart | ToolResultPart] |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "role",
+    "type": "str"
+  },
+  {
+    "name": "content",
+    "type": "str | Sequence[TextPart | ImagePart | ImageURLPart | AudioPart | AudioURLPart | CacheControlPart | DocumentPart | ToolCallPart | ToolResultPart]"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.base.message_param"
+/>
 
 
 <ApiType type="Class" />
@@ -32,12 +40,20 @@ A content part for text.
 
 **Bases:** BaseModel
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| type | Literal['text'] |  |
-| text | str |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "type",
+    "type": "Literal['text']"
+  },
+  {
+    "name": "text",
+    "type": "str"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.base.message_param"
+/>
 
 
 <ApiType type="Class" />
@@ -46,14 +62,28 @@ A content part for images.
 
 **Bases:** BaseModel
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| type | Literal['image'] |  |
-| media_type | str |  |
-| image | bytes |  |
-| detail | str | None |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "type",
+    "type": "Literal['image']"
+  },
+  {
+    "name": "media_type",
+    "type": "str"
+  },
+  {
+    "name": "image",
+    "type": "bytes"
+  },
+  {
+    "name": "detail",
+    "type": "str | None"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.base.message_param"
+/>
 
 
 <ApiType type="Class" />
@@ -62,12 +92,23 @@ A content part for audio.
 
 **Bases:** BaseModel
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| type | Literal['audio'] |  |
-| media_type | str |  |
-| audio | bytes | str |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "type",
+    "type": "Literal['audio']"
+  },
+  {
+    "name": "media_type",
+    "type": "str"
+  },
+  {
+    "name": "audio",
+    "type": "bytes | str"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.base.message_param"
+/>
 
 

@@ -10,12 +10,6 @@ description: API documentation for mirascope.core.base.call_response
 
 This module contains the base call response class.
 
-## Module Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| BaseCallResponse |  | A base abstract interface for LLM call responses. |
-
 ## Functions
 
 ### transform_tool_outputs
@@ -54,59 +48,164 @@ A base abstract interface for LLM call responses.
 
 **Bases:** BaseModel, Generic[_ResponseT, _BaseToolT, _ToolSchemaT, _BaseDynamicConfigT, _MessageParamT, _CallParamsT, _UserMessageParamT, _BaseMessageParamConverterT], ABC
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| metadata | Metadata |  |
-| response | _ResponseT |  |
-| tool_types | list[type[_BaseToolT]] | None |  |
-| prompt_template | str | None |  |
-| fn_args | dict[str, Any] |  |
-| dynamic_config | _BaseDynamicConfigT |  |
-| messages | SkipValidation[list[_MessageParamT]] |  |
-| call_params | SkipValidation[_CallParamsT] |  |
-| call_kwargs | BaseCallKwargs[_ToolSchemaT] |  |
-| user_message_param | _UserMessageParamT | None |  |
-| start_time | float |  |
-| end_time | float |  |
-| model_config | None |  |
-| content | str | Should return the string content of the response.
-
-If there are multiple choices in a response, this method should select the 0th
-choice and return it's string content.
-
-If there is no string content (e.g. when using tools), this method must return
-the empty string. |
-| finish_reasons | list[str] | None | Should return the finish reasons of the response.
-
-If there is no finish reason, this method must return None. |
-| model | str | None | Should return the name of the response model. |
-| id | str | None | Should return the id of the response. |
-| usage | Any | Should return the usage of the response.
-
-If there is no usage, this method must return None. |
-| input_tokens | int | float | None | Should return the number of input tokens.
-
-If there is no input_tokens, this method must return None. |
-| cached_tokens | int | float | None | Should return the number of cached tokens.
-
-If there is no cached_tokens, this method must return None. |
-| output_tokens | int | float | None | Should return the number of output tokens.
-
-If there is no output_tokens, this method must return None. |
-| cost_metadata | CostMetadata | Get metadata required for cost calculation. |
-| cost | float | None | Calculate the cost of this API call using the unified calculate_cost function. |
-| provider | Provider | Get the provider used for this API call. |
-| message_param | Any | Returns the assistant's response as a message parameter. |
-| tools | list[_BaseToolT] | None | Returns the tools for the 0th choice message. |
-| tool | _BaseToolT | None | Returns the 0th tool for the 0th choice message. |
-| common_finish_reasons | list[FinishReason] | None | Provider-agnostic finish reasons. |
-| common_message_param | BaseMessageParam | Provider-agnostic assistant message param. |
-| common_user_message_param | BaseMessageParam | None | Provider-agnostic user message param. |
-| common_messages | list[BaseMessageParam] | Provider-agnostic list of messages. |
-| common_tools | list[Tool] | None | Provider-agnostic tools. |
-| common_usage | Usage | None | Provider-agnostic usage info. |
+<AttributesTable
+  attributes={[
+  {
+    "name": "metadata",
+    "type": "Metadata"
+  },
+  {
+    "name": "response",
+    "type": "_ResponseT"
+  },
+  {
+    "name": "tool_types",
+    "type": "list[type[_BaseToolT]] | None"
+  },
+  {
+    "name": "prompt_template",
+    "type": "str | None"
+  },
+  {
+    "name": "fn_args",
+    "type": "dict[str, Any]"
+  },
+  {
+    "name": "dynamic_config",
+    "type": "_BaseDynamicConfigT"
+  },
+  {
+    "name": "messages",
+    "type": "SkipValidation[list[_MessageParamT]]"
+  },
+  {
+    "name": "call_params",
+    "type": "SkipValidation[_CallParamsT]"
+  },
+  {
+    "name": "call_kwargs",
+    "type": "BaseCallKwargs[_ToolSchemaT]"
+  },
+  {
+    "name": "user_message_param",
+    "type": "_UserMessageParamT | None"
+  },
+  {
+    "name": "start_time",
+    "type": "float"
+  },
+  {
+    "name": "end_time",
+    "type": "float"
+  },
+  {
+    "name": "model_config",
+    "type": "None"
+  },
+  {
+    "name": "content",
+    "type": "str",
+    "description": "Should return the string content of the response.\n\nIf there are multiple choices in a response, this method should select the 0th\nchoice and return it's string content.\n\nIf there is no string content (e.g. when using tools), this method must return\nthe empty string."
+  },
+  {
+    "name": "finish_reasons",
+    "type": "list[str] | None",
+    "description": "Should return the finish reasons of the response.\n\nIf there is no finish reason, this method must return None."
+  },
+  {
+    "name": "model",
+    "type": "str | None",
+    "description": "Should return the name of the response model."
+  },
+  {
+    "name": "id",
+    "type": "str | None",
+    "description": "Should return the id of the response."
+  },
+  {
+    "name": "usage",
+    "type": "Any",
+    "description": "Should return the usage of the response.\n\nIf there is no usage, this method must return None."
+  },
+  {
+    "name": "input_tokens",
+    "type": "int | float | None",
+    "description": "Should return the number of input tokens.\n\nIf there is no input_tokens, this method must return None."
+  },
+  {
+    "name": "cached_tokens",
+    "type": "int | float | None",
+    "description": "Should return the number of cached tokens.\n\nIf there is no cached_tokens, this method must return None."
+  },
+  {
+    "name": "output_tokens",
+    "type": "int | float | None",
+    "description": "Should return the number of output tokens.\n\nIf there is no output_tokens, this method must return None."
+  },
+  {
+    "name": "cost_metadata",
+    "type": "CostMetadata",
+    "description": "Get metadata required for cost calculation."
+  },
+  {
+    "name": "cost",
+    "type": "float | None",
+    "description": "Calculate the cost of this API call using the unified calculate_cost function."
+  },
+  {
+    "name": "provider",
+    "type": "Provider",
+    "description": "Get the provider used for this API call."
+  },
+  {
+    "name": "message_param",
+    "type": "Any",
+    "description": "Returns the assistant's response as a message parameter."
+  },
+  {
+    "name": "tools",
+    "type": "list[_BaseToolT] | None",
+    "description": "Returns the tools for the 0th choice message."
+  },
+  {
+    "name": "tool",
+    "type": "_BaseToolT | None",
+    "description": "Returns the 0th tool for the 0th choice message."
+  },
+  {
+    "name": "common_finish_reasons",
+    "type": "list[FinishReason] | None",
+    "description": "Provider-agnostic finish reasons."
+  },
+  {
+    "name": "common_message_param",
+    "type": "BaseMessageParam",
+    "description": "Provider-agnostic assistant message param."
+  },
+  {
+    "name": "common_user_message_param",
+    "type": "BaseMessageParam | None",
+    "description": "Provider-agnostic user message param."
+  },
+  {
+    "name": "common_messages",
+    "type": "list[BaseMessageParam]",
+    "description": "Provider-agnostic list of messages."
+  },
+  {
+    "name": "common_tools",
+    "type": "list[Tool] | None",
+    "description": "Provider-agnostic tools."
+  },
+  {
+    "name": "common_usage",
+    "type": "Usage | None",
+    "description": "Provider-agnostic usage info."
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.base.call_response"
+/>
 
 
 

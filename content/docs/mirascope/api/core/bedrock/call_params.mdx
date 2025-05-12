@@ -14,14 +14,6 @@ description: API documentation for mirascope.core.bedrock.call_params
 
 </Info>
 
-## Module Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| BedrockCallParams |  | The parameters to use when calling the Bedrock API.
-
-[Bedrock converse API Reference](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/bedrock-runtime/client/converse.html) |
-
 ## Classes
 
 ### BedrockCallParams
@@ -34,16 +26,36 @@ The parameters to use when calling the Bedrock API.
 
 **Bases:** BaseCallParams
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| system | NotRequired[list[SystemContentBlockTypeDef]] |  |
-| inferenceConfig | NotRequired[InferenceConfigurationTypeDef] |  |
-| toolConfig | NotRequired[ToolConfigurationTypeDef] |  |
-| guardrailConfig | NotRequired[GuardrailConfigurationTypeDef] |  |
-| additionalModelRequestFields | NotRequired[Mapping[str, Any]] |  |
-| additionalModelResponseFieldPaths | NotRequired[list[str]] |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "system",
+    "type": "NotRequired[list[SystemContentBlockTypeDef]]"
+  },
+  {
+    "name": "inferenceConfig",
+    "type": "NotRequired[InferenceConfigurationTypeDef]"
+  },
+  {
+    "name": "toolConfig",
+    "type": "NotRequired[ToolConfigurationTypeDef]"
+  },
+  {
+    "name": "guardrailConfig",
+    "type": "NotRequired[GuardrailConfigurationTypeDef]"
+  },
+  {
+    "name": "additionalModelRequestFields",
+    "type": "NotRequired[Mapping[str, Any]]"
+  },
+  {
+    "name": "additionalModelResponseFieldPaths",
+    "type": "NotRequired[list[str]]"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.bedrock.call_params"
+/>
 
 
 

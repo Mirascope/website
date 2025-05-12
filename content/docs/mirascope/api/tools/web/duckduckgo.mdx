@@ -8,18 +8,6 @@ description: API documentation for mirascope.tools.web._duckduckgo
 
 <ApiType type="Module" />
 
-## Module Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| DuckDuckGoSearchConfig |  | Configuration for DuckDuckGo search |
-| DuckDuckGoSearch |  | Tool for performing web searches using DuckDuckGo.
-
-Takes search queries and returns relevant search results(Title, URL, Snippet). |
-| AsyncDuckDuckGoSearch |  | Tool for performing web searches using DuckDuckGo.
-
-Takes search queries and returns relevant search results(Title, URL, Snippet). |
-
 ## Classes
 
 ### DuckDuckGoSearchConfig
@@ -30,11 +18,16 @@ Configuration for DuckDuckGo search
 
 **Bases:** _ConfigurableToolConfig
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| max_results_per_query | int |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "max_results_per_query",
+    "type": "int"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.tools.web._duckduckgo"
+/>
 
 
 ### DuckDuckGoSearch

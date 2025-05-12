@@ -10,20 +10,6 @@ description: API documentation for mirascope.core.base.dynamic_config
 
 The base type in a function as an LLM call to return for dynamic configuration.
 
-## Module Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| DynamicConfigBase |  |  |
-| DynamicConfigMessages |  |  |
-| DynamicConfigCallParams |  |  |
-| DynamicConfigClient |  |  |
-| DynamicConfigMessagesCallParams |  |  |
-| DynamicConfigMessagesClient |  |  |
-| DynamicConfigCallParamsClient |  |  |
-| DynamicConfigFull |  |  |
-| BaseDynamicConfig | None | The base type in a function as an LLM call to return for dynamic configuration. |
-
 ## Classes
 
 ### DynamicConfigBase
@@ -32,13 +18,24 @@ The base type in a function as an LLM call to return for dynamic configuration.
 
 **Bases:** TypedDict
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| metadata | NotRequired[Metadata] |  |
-| computed_fields | NotRequired[dict[str, Any | list[Any] | list[list[Any]]]] |  |
-| tools | NotRequired[Sequence[type[BaseTool] | Callable]] |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "metadata",
+    "type": "NotRequired[Metadata]"
+  },
+  {
+    "name": "computed_fields",
+    "type": "NotRequired[dict[str, Any | list[Any] | list[list[Any]]]]"
+  },
+  {
+    "name": "tools",
+    "type": "NotRequired[Sequence[type[BaseTool] | Callable]]"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.base.dynamic_config"
+/>
 
 
 ### DynamicConfigMessages
@@ -47,11 +44,16 @@ The base type in a function as an LLM call to return for dynamic configuration.
 
 **Bases:** DynamicConfigBase, Generic[_MessageParamT]
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| messages | NotRequired[Sequence[_MessageParamT]] |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "messages",
+    "type": "NotRequired[Sequence[_MessageParamT]]"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.base.dynamic_config"
+/>
 
 
 ### DynamicConfigCallParams
@@ -60,11 +62,16 @@ The base type in a function as an LLM call to return for dynamic configuration.
 
 **Bases:** DynamicConfigBase, Generic[_CallParamsT]
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| call_params | NotRequired[_CallParamsT] |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "call_params",
+    "type": "NotRequired[_CallParamsT]"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.base.dynamic_config"
+/>
 
 
 ### DynamicConfigClient
@@ -73,11 +80,16 @@ The base type in a function as an LLM call to return for dynamic configuration.
 
 **Bases:** DynamicConfigBase, Generic[_ClientT]
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| client | NotRequired[_ClientT | None] |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "client",
+    "type": "NotRequired[_ClientT | None]"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.base.dynamic_config"
+/>
 
 
 ### DynamicConfigMessagesCallParams
@@ -86,12 +98,20 @@ The base type in a function as an LLM call to return for dynamic configuration.
 
 **Bases:** DynamicConfigBase, Generic[_MessageParamT, _CallParamsT]
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| messages | NotRequired[Sequence[_MessageParamT]] |  |
-| call_params | NotRequired[_CallParamsT] |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "messages",
+    "type": "NotRequired[Sequence[_MessageParamT]]"
+  },
+  {
+    "name": "call_params",
+    "type": "NotRequired[_CallParamsT]"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.base.dynamic_config"
+/>
 
 
 ### DynamicConfigMessagesClient
@@ -100,12 +120,20 @@ The base type in a function as an LLM call to return for dynamic configuration.
 
 **Bases:** DynamicConfigBase, Generic[_MessageParamT, _ClientT]
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| messages | NotRequired[Sequence[_MessageParamT]] |  |
-| client | NotRequired[_ClientT | None] |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "messages",
+    "type": "NotRequired[Sequence[_MessageParamT]]"
+  },
+  {
+    "name": "client",
+    "type": "NotRequired[_ClientT | None]"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.base.dynamic_config"
+/>
 
 
 ### DynamicConfigCallParamsClient
@@ -114,12 +142,20 @@ The base type in a function as an LLM call to return for dynamic configuration.
 
 **Bases:** DynamicConfigBase, Generic[_CallParamsT, _ClientT]
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| call_params | NotRequired[_CallParamsT] |  |
-| client | NotRequired[_ClientT | None] |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "call_params",
+    "type": "NotRequired[_CallParamsT]"
+  },
+  {
+    "name": "client",
+    "type": "NotRequired[_ClientT | None]"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.base.dynamic_config"
+/>
 
 
 ### DynamicConfigFull
@@ -128,13 +164,24 @@ The base type in a function as an LLM call to return for dynamic configuration.
 
 **Bases:** DynamicConfigBase, Generic[_MessageParamT, _CallParamsT, _ClientT]
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| messages | NotRequired[Sequence[_MessageParamT]] |  |
-| call_params | NotRequired[_CallParamsT] |  |
-| client | NotRequired[_ClientT | None] |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "messages",
+    "type": "NotRequired[Sequence[_MessageParamT]]"
+  },
+  {
+    "name": "call_params",
+    "type": "NotRequired[_CallParamsT]"
+  },
+  {
+    "name": "client",
+    "type": "NotRequired[_ClientT | None]"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.base.dynamic_config"
+/>
 
 
 

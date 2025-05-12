@@ -10,12 +10,6 @@ description: API documentation for mirascope.core.base.structured_stream
 
 This module defines the base class for structured streams.
 
-## Module Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| BaseStructuredStream |  | A base class for streaming structured outputs from LLMs. |
-
 ## Functions
 
 ### structured_stream_factory
@@ -76,14 +70,28 @@ A base class for streaming structured outputs from LLMs.
 
 **Bases:** Generic[_ResponseModelT]
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| stream | BaseStream |  |
-| response_model | type[_ResponseModelT] |  |
-| constructed_response_model | _ResponseModelT |  |
-| fields_from_call_args | None |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "stream",
+    "type": "BaseStream"
+  },
+  {
+    "name": "response_model",
+    "type": "type[_ResponseModelT]"
+  },
+  {
+    "name": "constructed_response_model",
+    "type": "_ResponseModelT"
+  },
+  {
+    "name": "fields_from_call_args",
+    "type": "None"
+  }
+]}
+  contentSubpath="docs/mirascope"
+  currentModule="mirascope.core.base.structured_stream"
+/>
 
 
 
