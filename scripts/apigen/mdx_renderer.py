@@ -40,18 +40,6 @@ def render_module(processed_module: ProcessedModule) -> str:
         content.append(processed_module.docstring.strip())
         content.append("")
 
-    # Render module attributes if any
-    if processed_module.attributes:
-        content.append("## Module Attributes\n")
-        content.append("| Name | Type | Description |")
-        content.append("| ---- | ---- | ----------- |")
-
-        for attr in processed_module.attributes:
-            attr_desc = attr.description or ""
-            content.append(f"| {attr.name} | {attr.type_info} | {attr_desc} |")
-
-        content.append("")
-
     # Render module functions if any
     if processed_module.functions:
         content.append("## Functions\n")
