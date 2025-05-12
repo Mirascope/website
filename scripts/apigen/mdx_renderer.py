@@ -9,6 +9,7 @@ import json
 
 from scripts.apigen.models import (
     ProcessedAlias,
+    ProcessedAttribute,
     ProcessedClass,
     ProcessedFunction,
     ProcessedModule,
@@ -140,6 +141,7 @@ def render_class(processed_class: ProcessedClass) -> str:
 
     """
     content: list[str] = []
+    content_subpath = MODULE_CONTENT_SUBPATH
 
     # Add object type using a component with consistent typing
     content.append('<ApiType type="Class" />\n')
@@ -154,17 +156,13 @@ def render_class(processed_class: ProcessedClass) -> str:
         bases_str = ", ".join(processed_class.bases)
         content.append(f"**Bases:** {bases_str}\n")
 
-    # Document attributes
+    # Document attributes using AttributesTable component
     if processed_class.attributes:
-        content.append("### Attributes\n")
-        content.append("| Name | Type | Description |")
-        content.append("| ---- | ---- | ----------- |")
-
-        for attr in processed_class.attributes:
-            attr_desc = attr.description or ""
-            content.append(f"| {attr.name} | {attr.type_info} | {attr_desc} |")
-
-        content.append("")
+        content.extend(
+            format_attributes_table(
+                processed_class.attributes, content_subpath, processed_class.module_path
+            )
+        )
 
     return "\n".join(content)
 
@@ -294,6 +292,46 @@ def format_parameters_table(
     # Format the component with proper line breaks and proper JSX syntax
     component_lines.append("<ParametersTable")
     component_lines.append(f"  parameters={{{params_json}}}")
+    component_lines.append(f'  contentSubpath="{content_subpath}"')
+    component_lines.append(f'  currentModule="{module_path}"')
+    component_lines.append("/>\n")
+
+    return component_lines
+
+
+def format_attributes_table(
+    attrs: list[ProcessedAttribute], content_subpath: str, module_path: str
+) -> list[str]:
+    """Format an AttributesTable component from attribute information.
+
+    Args:
+        attrs: List of ProcessedAttribute objects
+        content_subpath: The content subpath for documentation
+        module_path: The module path for context
+
+    Returns:
+        List of strings representing the AttributesTable component
+
+    """
+    component_lines = []
+
+    # Convert attributes to dictionaries inline
+    attr_dicts = []
+    for attr in attrs:
+        attr_dict = {
+            "name": attr.name,
+            "type": attr.type_info,
+        }
+        if attr.description:
+            attr_dict["description"] = attr.description
+        attr_dicts.append(attr_dict)
+
+    # Convert to JSON format with proper indentation
+    attrs_json = json.dumps(attr_dicts, indent=2)
+
+    # Format the component with proper line breaks and proper JSX syntax
+    component_lines.append("<AttributesTable")
+    component_lines.append(f"  attributes={{{attrs_json}}}")
     component_lines.append(f'  contentSubpath="{content_subpath}"')
     component_lines.append(f'  currentModule="{module_path}"')
     component_lines.append("/>\n")

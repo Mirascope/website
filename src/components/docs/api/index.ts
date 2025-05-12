@@ -6,5 +6,6 @@
 export { ApiType } from "./ApiType";
 export { ApiSignature } from "./ApiSignature";
 export { ParametersTable } from "./ParametersTable";
+export { AttributesTable } from "./AttributesTable";
 export { ReturnType } from "./ReturnType";
 export { TypeLink } from "./TypeLink";
