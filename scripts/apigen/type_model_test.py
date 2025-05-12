@@ -21,25 +21,29 @@ def test_parse_simple_types():
     """Test parsing simple types."""
     # Test builtin types
     for builtin_type in ["str", "int", "float", "bool"]:
-        type_info = parse_type_string(builtin_type, "test_module")
+        type_info = parse_type_string(builtin_type)
 
         assert isinstance(type_info, SimpleType)
         assert type_info.kind == "simple"
         assert type_info.type_str == builtin_type
-        assert type_info.module_context == "test_module"
-        assert type_info.is_builtin is True
         assert type_info.description is None
 
     # Test custom type
     custom_type = "MyCustomType"
-    type_info = parse_type_string(custom_type, "test_module")
+    type_info = parse_type_string(custom_type)
 
     assert isinstance(type_info, SimpleType)
     assert type_info.kind == "simple"
     assert type_info.type_str == custom_type
-    assert type_info.module_context == "test_module"
-    assert type_info.is_builtin is False
     assert type_info.description is None
+    
+    # Test fully qualified type
+    qualified_type = "mirascope.core.base.Response"
+    type_info = parse_type_string(qualified_type)
+    
+    assert isinstance(type_info, SimpleType)
+    assert type_info.kind == "simple"
+    assert type_info.type_str == qualified_type
 
 
 def test_split_parameters():
@@ -65,20 +69,18 @@ def test_split_parameters():
 def test_parse_generic_types():
     """Test parsing generic types."""
     # Test simple generic type
-    type_info = parse_type_string("List[str]", "test_module")
+    type_info = parse_type_string("List[str]")
 
     assert isinstance(type_info, GenericType)
     assert type_info.kind == "generic"
     assert type_info.type_str == "List[str]"
-    assert type_info.module_context == "test_module"
-    assert type_info.is_builtin is True
     assert type_info.base_type == "List"
     assert len(type_info.parameters) == 1
     assert isinstance(type_info.parameters[0], SimpleType)
     assert type_info.parameters[0].type_str == "str"
 
     # Test generic type with multiple parameters
-    type_info = parse_type_string("Dict[str, int]", "test_module")
+    type_info = parse_type_string("Dict[str, int]")
 
     assert isinstance(type_info, GenericType)
     assert type_info.kind == "generic"
@@ -89,7 +91,7 @@ def test_parse_generic_types():
     assert type_info.parameters[1].type_str == "int"
 
     # Test nested generic types
-    type_info = parse_type_string("List[Dict[str, int]]", "test_module")
+    type_info = parse_type_string("List[Dict[str, int]]")
 
     assert isinstance(type_info, GenericType)
     assert type_info.kind == "generic"
@@ -112,82 +114,79 @@ def test_json_serialization():
     # Test simple type
     type_info = SimpleType(
         type_str="str",
-        module_context="test_module",
-        is_builtin=True
     )
-
+    
     # Serialize and deserialize
     json_str = type_info.to_json()
     parsed = json.loads(json_str)
-
+    
     # Check fields are preserved
     assert parsed["type_str"] == "str"
-    assert parsed["module_context"] == "test_module"
-    assert parsed["is_builtin"] is True
     assert parsed["kind"] == "simple"
-
+    
     # Test generic type with nested structure
     nested_type = GenericType(
         type_str="List[Dict[str, int]]",
-        module_context="test_module",
-        is_builtin=True,
         base_type="List",
         parameters=[
             GenericType(
                 type_str="Dict[str, int]",
-                module_context="test_module",
-                is_builtin=True,
                 base_type="Dict",
                 parameters=[
-                    SimpleType(type_str="str", module_context="test_module", is_builtin=True),
-                    SimpleType(type_str="int", module_context="test_module", is_builtin=True)
+                    SimpleType(type_str="str"),
+                    SimpleType(type_str="int")
                 ]
             )
         ]
     )
-
+    
     # Parse the same string
-    parsed_type = parse_type_string("List[Dict[str, int]]", "test_module")
-
+    parsed_type = parse_type_string("List[Dict[str, int]]")
+    
     # Compare using JSON equality
     assert_json_equal(parsed_type, nested_type)
-
+    
     # Snapshot test to show exact JSON format
     expected_json_snapshot = {
         "kind": "generic",
         "type_str": "List[Dict[str, int]]",
-        "module_context": "test_module",
-        "is_builtin": True,
         "description": None,
         "base_type": "List",
         "parameters": [
             {
                 "kind": "generic",
                 "type_str": "Dict[str, int]",
-                "module_context": "test_module",
-                "is_builtin": True,
                 "description": None,
                 "base_type": "Dict",
                 "parameters": [
                     {
                         "kind": "simple",
                         "type_str": "str",
-                        "module_context": "test_module",
-                        "is_builtin": True,
                         "description": None
                     },
                     {
                         "kind": "simple",
                         "type_str": "int",
-                        "module_context": "test_module",
-                        "is_builtin": True,
                         "description": None
                     }
                 ]
             }
         ]
     }
-
+    
     # Verify the exact JSON structure matches our expectation
     actual_json = json.loads(nested_type.to_json())
     assert actual_json == expected_json_snapshot, "JSON snapshot does not match expected format"
+
+
+def test_parse_qualified_types():
+    """Test parsing fully qualified types."""
+    # Test fully qualified generic type
+    type_info = parse_type_string("mirascope.core.List[mirascope.types.Response]")
+    
+    assert isinstance(type_info, GenericType)
+    assert type_info.kind == "generic"
+    assert type_info.type_str == "mirascope.core.List[mirascope.types.Response]"
+    assert type_info.base_type == "mirascope.core.List"
+    assert len(type_info.parameters) == 1
+    assert type_info.parameters[0].type_str == "mirascope.types.Response"

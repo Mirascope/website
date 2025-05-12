@@ -13,8 +13,6 @@ class BaseTypeInfo:
     """Base class for all type info representations."""
 
     type_str: str  # Original string representation
-    module_context: str  # Module containing this type
-    is_builtin: bool  # Whether this is a Python builtin
     description: str | None = None  # Optional description
     # Making kind a required argument but with a default that gets overridden in subclasses
     kind: str = ""
@@ -22,7 +20,7 @@ class BaseTypeInfo:
     def to_dict(self) -> dict:
         """Convert this object to a dictionary suitable for JSON serialization."""
         return asdict(self)
-
+    
     def to_json(self) -> str:
         """Convert this object to a JSON string."""
         return json.dumps(self.to_dict())
@@ -50,34 +48,6 @@ class GenericType(BaseTypeInfo):
 
 # Define the TypeInfo union type
 TypeInfo = SimpleType | GenericType
-
-
-# List of Python built-in types
-PYTHON_BUILTINS = {
-    "str",
-    "int",
-    "float",
-    "bool",
-    "list",
-    "dict",
-    "tuple",
-    "set",
-    "None",
-    "Callable",
-    "Optional",
-    "Union",
-    "Any",
-    "List",
-    "Dict",
-    "Tuple",
-    "Set",
-    "Type",
-    "Generator",
-    "Iterable",
-    "Iterator",
-    "Sequence",
-    "Mapping",
-}
 
 
 def split_parameters(params_str: str) -> list[str]:
@@ -115,14 +85,13 @@ def split_parameters(params_str: str) -> list[str]:
     return result
 
 
-def parse_type_string(type_str: str, module_context: str) -> TypeInfo:
+def parse_type_string(type_str: str) -> TypeInfo:
     """Parse a type string into a TypeInfo object.
 
     Supports simple types and generic types.
 
     Args:
         type_str: The type string to parse
-        module_context: The module context for the type
 
     Returns:
         A TypeInfo object representing the parsed type
@@ -138,13 +107,11 @@ def parse_type_string(type_str: str, module_context: str) -> TypeInfo:
         # Parse parameters recursively
         parameters = []
         for param in split_parameters(params_str):
-            param_type = parse_type_string(param, module_context)
+            param_type = parse_type_string(param)
             parameters.append(param_type)
 
         return GenericType(
             type_str=type_str,
-            module_context=module_context,
-            is_builtin=base_type in PYTHON_BUILTINS,
             base_type=base_type,
             parameters=parameters,
         )
@@ -152,6 +119,4 @@ def parse_type_string(type_str: str, module_context: str) -> TypeInfo:
     # Handle simple type if not generic
     return SimpleType(
         type_str=type_str,
-        module_context=module_context,
-        is_builtin=type_str in PYTHON_BUILTINS,
     )
