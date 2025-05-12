@@ -199,36 +199,3 @@ def extract_params_if_available(
 
     # Return empty list if no parameters found
     return []
-
-
-def parameter_info_to_dict(param: ParameterInfo) -> dict[str, str]:
-    """Convert a ParameterInfo object to a dictionary for component formatting.
-
-    Args:
-        param: The ParameterInfo object to convert
-    Returns:
-        A dictionary representing the parameter
-
-    """
-    result = {"name": param.name}
-    if param.type_info:
-        result["type"] = param.type_info.type_str
-        result["module_context"] = param.type_info.module_context
-        result["is_builtin"] = str(param.type_info.is_builtin).lower()
-    if param.default:
-        result["default"] = param.default
-    if param.description:
-        result["description"] = param.description
-    return result
-
-
-def parameters_to_dict_list(params: list[ParameterInfo]) -> list[dict[str, str]]:
-    """Convert a list of ParameterInfo objects to a list of dictionaries.
-
-    Args:
-        params: The list of ParameterInfo objects to convert
-    Returns:
-        A list of dictionaries representing the parameters
-
-    """
-    return [parameter_info_to_dict(param) for param in params]
