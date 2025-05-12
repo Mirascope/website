@@ -2,12 +2,7 @@
 
 import json
 
-from .type_model import (
-    GenericType,
-    SimpleType,
-    parse_type_string,
-    split_parameters,
-)
+from .type_model import EnumEncoder, GenericType, SimpleType, TypeKind
 
 
 def assert_json_equal(actual, expected):
@@ -15,112 +10,57 @@ def assert_json_equal(actual, expected):
     actual_json = json.loads(actual.to_json())
     expected_json = json.loads(expected.to_json())
     assert actual_json == expected_json, (
-        f"JSON not equal: {json.dumps(actual_json)} != {json.dumps(expected_json)}"
+        f"JSON not equal: {json.dumps(actual_json, cls=EnumEncoder)} != {json.dumps(expected_json, cls=EnumEncoder)}"
     )
 
 
-def test_parse_simple_types():
-    """Test parsing simple types."""
-    # Test builtin types
-    for builtin_type in ["str", "int", "float", "bool"]:
-        type_info = parse_type_string(builtin_type)
+def test_type_model_classes():
+    """Test the type model classes."""
+    # Test simple type
+    simple_type = SimpleType(type_str="str")
+    assert simple_type.type_str == "str"
+    assert simple_type.kind == TypeKind.SIMPLE
+    assert simple_type.description is None
 
-        assert isinstance(type_info, SimpleType)
-        assert type_info.kind == "simple"
-        assert type_info.type_str == builtin_type
-        assert type_info.description is None
+    # Test simple type with description
+    simple_type_with_desc = SimpleType(type_str="int", description="A whole number")
+    assert simple_type_with_desc.type_str == "int"
+    assert simple_type_with_desc.kind == TypeKind.SIMPLE
+    assert simple_type_with_desc.description == "A whole number"
 
-    # Test custom type
-    custom_type = "MyCustomType"
-    type_info = parse_type_string(custom_type)
+    # Test generic type
+    generic_type = GenericType(
+        type_str="List[str]",
+        base_type=SimpleType(type_str="List"),
+        parameters=[SimpleType(type_str="str")],
+    )
+    assert generic_type.type_str == "List[str]"
+    assert generic_type.kind == TypeKind.GENERIC
+    assert generic_type.description is None
+    assert isinstance(generic_type.base_type, SimpleType)
+    assert generic_type.base_type.type_str == "List"
+    assert len(generic_type.parameters) == 1
+    assert isinstance(generic_type.parameters[0], SimpleType)
+    assert generic_type.parameters[0].type_str == "str"
 
-    assert isinstance(type_info, SimpleType)
-    assert type_info.kind == "simple"
-    assert type_info.type_str == custom_type
-    assert type_info.description is None
-
-    # Test fully qualified type
-    qualified_type = "mirascope.core.base.Response"
-    type_info = parse_type_string(qualified_type)
-
-    assert isinstance(type_info, SimpleType)
-    assert type_info.kind == "simple"
-    assert type_info.type_str == qualified_type
-
-
-def test_split_parameters():
-    """Test the split_parameters function."""
-    # Simple parameters
-    assert split_parameters("str, int, bool") == ["str", "int", "bool"]
-
-    # Nested parameters
-    assert split_parameters("str, List[int], Dict[str, bool]") == [
-        "str",
-        "List[int]",
-        "Dict[str, bool]",
-    ]
-
-    # Complex nesting
-    assert split_parameters("str, Dict[str, List[int]], Set[Tuple[str, int]]") == [
-        "str",
-        "Dict[str, List[int]]",
-        "Set[Tuple[str, int]]",
-    ]
-
-
-def test_parse_generic_types():
-    """Test parsing generic types."""
-    # Test simple generic type
-    type_info = parse_type_string("List[str]")
-
-    assert isinstance(type_info, GenericType)
-    assert type_info.kind == "generic"
-    assert type_info.type_str == "List[str]"
-    assert isinstance(type_info.base_type, SimpleType)
-    assert type_info.base_type.type_str == "List"
-    assert len(type_info.parameters) == 1
-    assert isinstance(type_info.parameters[0], SimpleType)
-    assert type_info.parameters[0].type_str == "str"
-
-    # Test generic type with multiple parameters
-    type_info = parse_type_string("Dict[str, int]")
-
-    assert isinstance(type_info, GenericType)
-    assert type_info.kind == "generic"
-    assert type_info.type_str == "Dict[str, int]"
-    assert isinstance(type_info.base_type, SimpleType)
-    assert type_info.base_type.type_str == "Dict"
-    assert len(type_info.parameters) == 2
-    assert type_info.parameters[0].type_str == "str"
-    assert type_info.parameters[1].type_str == "int"
-
-    # Test nested generic types
-    type_info = parse_type_string("List[Dict[str, int]]")
-
-    assert isinstance(type_info, GenericType)
-    assert type_info.kind == "generic"
-    assert type_info.type_str == "List[Dict[str, int]]"
-    assert isinstance(type_info.base_type, SimpleType)
-    assert type_info.base_type.type_str == "List"
-    assert len(type_info.parameters) == 1
-
-    inner_type = type_info.parameters[0]
-    assert isinstance(inner_type, GenericType)
-    assert inner_type.kind == "generic"
-    assert inner_type.type_str == "Dict[str, int]"
-    assert isinstance(inner_type.base_type, SimpleType)
-    assert inner_type.base_type.type_str == "Dict"
-    assert len(inner_type.parameters) == 2
-    assert inner_type.parameters[0].type_str == "str"
-    assert inner_type.parameters[1].type_str == "int"
+    # Test generic type with different kind
+    union_type = GenericType(
+        type_str="str | int",
+        base_type=SimpleType(type_str="Union"),
+        parameters=[SimpleType(type_str="str"), SimpleType(type_str="int")],
+        kind=TypeKind.UNION,
+    )
+    assert union_type.type_str == "str | int"
+    assert union_type.kind == TypeKind.UNION
+    assert isinstance(union_type.base_type, SimpleType)
+    assert union_type.base_type.type_str == "Union"
+    assert len(union_type.parameters) == 2
 
 
 def test_json_serialization():
     """Test JSON serialization of type models."""
     # Test simple type
-    type_info = SimpleType(
-        type_str="str",
-    )
+    type_info = SimpleType(type_str="str")
 
     # Serialize and deserialize
     json_str = type_info.to_json()
@@ -129,6 +69,7 @@ def test_json_serialization():
     # Check fields are preserved
     assert parsed["type_str"] == "str"
     assert parsed["kind"] == "simple"
+    assert parsed["description"] is None
 
     # Test generic type with nested structure
     nested_type = GenericType(
@@ -143,13 +84,7 @@ def test_json_serialization():
         ],
     )
 
-    # Parse the same string
-    parsed_type = parse_type_string("List[Dict[str, int]]")
-
-    # Compare using JSON equality
-    assert_json_equal(parsed_type, nested_type)
-
-    # Snapshot test to show exact JSON format
+    # Verify the JSON structure
     expected_json_snapshot = {
         "kind": "generic",
         "type_str": "List[Dict[str, int]]",
@@ -179,16 +114,7 @@ def test_json_serialization():
         "JSON snapshot does not match expected format"
     )
 
-
-def test_parse_qualified_types():
-    """Test parsing fully qualified types."""
-    # Test fully qualified generic type
-    type_info = parse_type_string("mirascope.core.List[mirascope.types.Response]")
-
-    assert isinstance(type_info, GenericType)
-    assert type_info.kind == "generic"
-    assert type_info.type_str == "mirascope.core.List[mirascope.types.Response]"
-    assert isinstance(type_info.base_type, SimpleType)
-    assert type_info.base_type.type_str == "mirascope.core.List"
-    assert len(type_info.parameters) == 1
-    assert type_info.parameters[0].type_str == "mirascope.types.Response"
+    # Test enum serialization
+    enum_value = TypeKind.UNION
+    json_str = json.dumps(enum_value, cls=EnumEncoder)
+    assert json_str == '"union"'
