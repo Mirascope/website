@@ -260,7 +260,7 @@ def format_attributes_table(attrs: list[ProcessedAttribute]) -> list[str]:
     for attr in attrs:
         attr_dict = {
             "name": attr.name,
-            "type": attr.type_info,
+            "type": attr.type_info.type_str,  # Using type_str for now for rendering consistency
         }
         if attr.description:
             attr_dict["description"] = attr.description

@@ -9,8 +9,9 @@ from dataclasses import dataclass
 
 from griffe import Alias, Class, DocstringSectionKind, Function, Module, Object
 
+from scripts.apigen.parser import parse_type_string
 from scripts.apigen.type_extractor import extract_type_info
-from scripts.apigen.type_model import ParameterInfo, ReturnInfo
+from scripts.apigen.type_model import ParameterInfo, ReturnInfo, SimpleType, TypeInfo
 
 
 def extract_clean_docstring(obj: Object | Alias) -> str | None:
@@ -52,7 +53,7 @@ class ProcessedAttribute:
     """Represents a fully processed class attribute ready for rendering."""
 
     name: str
-    type_info: str
+    type_info: TypeInfo  # Using the TypeInfo from type_model
     description: str | None
 
 
@@ -182,12 +183,26 @@ def process_class(class_obj: Class) -> ProcessedClass:
         for attr_name, attr in class_obj.members.items():
             # Check if it's not a function and doesn't start with underscore
             if not isinstance(attr, Function) and not attr_name.startswith("_"):
-                attr_type = getattr(attr, "annotation", "")
+                # Get the type annotation as a string
+                attr_type_str = str(getattr(attr, "annotation", ""))
+                # Use a default "Any" type for empty annotations
+                if attr_type_str.strip():
+                    # Try to parse the string into a TypeInfo object, with fallback
+                    try:
+                        attr_type_info = parse_type_string(attr_type_str)
+                    except Exception as e:
+                        # Print a warning with the failed type string
+                        print(f"WARNING: Failed to parse type annotation: '{attr_type_str}'. Error: {e}")
+                        # Fallback to simple type with the original string
+                        attr_type_info = SimpleType(type_str=attr_type_str)
+                else:
+                    # Create a simple "Any" type for empty annotations
+                    attr_type_info = SimpleType(type_str="Any")
                 attr_desc = extract_clean_docstring(attr)
 
                 processed_attr = ProcessedAttribute(
                     name=attr_name,
-                    type_info=str(attr_type),
+                    type_info=attr_type_info,
                     description=attr_desc,
                 )
                 attributes.append(processed_attr)
@@ -246,12 +261,26 @@ def process_module(module_obj: Module) -> ProcessedModule:
 
             # Process attributes (not classes, functions, or aliases)
             else:
-                attr_type = getattr(member, "annotation", "")
+                # Get the type annotation as a string
+                attr_type_str = str(getattr(member, "annotation", ""))
+                # Use a default "Any" type for empty annotations
+                if attr_type_str.strip():
+                    # Try to parse the string into a TypeInfo object, with fallback
+                    try:
+                        attr_type_info = parse_type_string(attr_type_str)
+                    except Exception as e:
+                        # Print a warning with the failed type string
+                        print(f"WARNING: Failed to parse type annotation: '{attr_type_str}'. Error: {e}")
+                        # Fallback to simple type with the original string
+                        attr_type_info = SimpleType(type_str=attr_type_str)
+                else:
+                    # Create a simple "Any" type for empty annotations
+                    attr_type_info = SimpleType(type_str="Any")
                 attr_desc = extract_clean_docstring(member)
 
                 processed_attr = ProcessedAttribute(
                     name=member_name,
-                    type_info=str(attr_type),
+                    type_info=attr_type_info,
                     description=attr_desc,
                 )
                 processed_attributes.append(processed_attr)
