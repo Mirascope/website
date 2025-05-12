@@ -40,8 +40,8 @@ class GenericType(BaseTypeInfo):
 
     # Use field with default to ensure kind is always "generic"
     kind: str = field(default="generic")
-    # The base type (e.g., "List" in List[str])
-    base_type: str = ""
+    # The base type (e.g., "List" in List[str]) as a SimpleType
+    base_type: SimpleType = field(default_factory=lambda: SimpleType(type_str=""))
     # Type parameters (can be any TypeInfo)
     parameters: list["TypeInfo"] = field(default_factory=list)
 
@@ -101,8 +101,11 @@ def parse_type_string(type_str: str) -> TypeInfo:
     if "[" in type_str and type_str.endswith("]"):
         # Extract the base type and parameters
         open_bracket = type_str.find("[")
-        base_type = type_str[:open_bracket]
+        base_type_str = type_str[:open_bracket]
         params_str = type_str[open_bracket + 1 : -1]
+
+        # Create base type as SimpleType
+        base_type = SimpleType(type_str=base_type_str)
 
         # Parse parameters recursively
         parameters = []

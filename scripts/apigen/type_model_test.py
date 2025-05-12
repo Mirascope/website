@@ -74,7 +74,8 @@ def test_parse_generic_types():
     assert isinstance(type_info, GenericType)
     assert type_info.kind == "generic"
     assert type_info.type_str == "List[str]"
-    assert type_info.base_type == "List"
+    assert isinstance(type_info.base_type, SimpleType)
+    assert type_info.base_type.type_str == "List"
     assert len(type_info.parameters) == 1
     assert isinstance(type_info.parameters[0], SimpleType)
     assert type_info.parameters[0].type_str == "str"
@@ -85,7 +86,8 @@ def test_parse_generic_types():
     assert isinstance(type_info, GenericType)
     assert type_info.kind == "generic"
     assert type_info.type_str == "Dict[str, int]"
-    assert type_info.base_type == "Dict"
+    assert isinstance(type_info.base_type, SimpleType)
+    assert type_info.base_type.type_str == "Dict"
     assert len(type_info.parameters) == 2
     assert type_info.parameters[0].type_str == "str"
     assert type_info.parameters[1].type_str == "int"
@@ -96,14 +98,16 @@ def test_parse_generic_types():
     assert isinstance(type_info, GenericType)
     assert type_info.kind == "generic"
     assert type_info.type_str == "List[Dict[str, int]]"
-    assert type_info.base_type == "List"
+    assert isinstance(type_info.base_type, SimpleType)
+    assert type_info.base_type.type_str == "List"
     assert len(type_info.parameters) == 1
 
     inner_type = type_info.parameters[0]
     assert isinstance(inner_type, GenericType)
     assert inner_type.kind == "generic"
     assert inner_type.type_str == "Dict[str, int]"
-    assert inner_type.base_type == "Dict"
+    assert isinstance(inner_type.base_type, SimpleType)
+    assert inner_type.base_type.type_str == "Dict"
     assert len(inner_type.parameters) == 2
     assert inner_type.parameters[0].type_str == "str"
     assert inner_type.parameters[1].type_str == "int"
@@ -127,11 +131,11 @@ def test_json_serialization():
     # Test generic type with nested structure
     nested_type = GenericType(
         type_str="List[Dict[str, int]]",
-        base_type="List",
+        base_type=SimpleType(type_str="List"),
         parameters=[
             GenericType(
                 type_str="Dict[str, int]",
-                base_type="Dict",
+                base_type=SimpleType(type_str="Dict"),
                 parameters=[
                     SimpleType(type_str="str"),
                     SimpleType(type_str="int")
@@ -151,13 +155,21 @@ def test_json_serialization():
         "kind": "generic",
         "type_str": "List[Dict[str, int]]",
         "description": None,
-        "base_type": "List",
+        "base_type": {
+            "kind": "simple",
+            "type_str": "List",
+            "description": None
+        },
         "parameters": [
             {
                 "kind": "generic",
                 "type_str": "Dict[str, int]",
                 "description": None,
-                "base_type": "Dict",
+                "base_type": {
+                    "kind": "simple",
+                    "type_str": "Dict",
+                    "description": None
+                },
                 "parameters": [
                     {
                         "kind": "simple",
@@ -187,6 +199,7 @@ def test_parse_qualified_types():
     assert isinstance(type_info, GenericType)
     assert type_info.kind == "generic"
     assert type_info.type_str == "mirascope.core.List[mirascope.types.Response]"
-    assert type_info.base_type == "mirascope.core.List"
+    assert isinstance(type_info.base_type, SimpleType)
+    assert type_info.base_type.type_str == "mirascope.core.List"
     assert len(type_info.parameters) == 1
     assert type_info.parameters[0].type_str == "mirascope.types.Response"
