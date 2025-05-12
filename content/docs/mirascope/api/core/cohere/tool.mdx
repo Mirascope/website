@@ -58,7 +58,8 @@ if tool := response.tool:  # returns an `CohereTool` instance
       "base_type": {
         "type_str": "SkipValidation",
         "description": null,
-        "kind": "simple"
+        "kind": "simple",
+        "doc_url": null
       },
       "parameters": [
         {
@@ -68,13 +69,15 @@ if tool := response.tool:  # returns an `CohereTool` instance
           "base_type": {
             "type_str": "SkipJsonSchema",
             "description": null,
-            "kind": "simple"
+            "kind": "simple",
+            "doc_url": null
           },
           "parameters": [
             {
               "type_str": "ToolCall",
               "description": null,
-              "kind": "simple"
+              "kind": "simple",
+              "doc_url": null
             }
           ]
         }

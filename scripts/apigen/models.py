@@ -192,7 +192,9 @@ def process_class(class_obj: Class) -> ProcessedClass:
                         attr_type_info = parse_type_string(attr_type_str)
                     except Exception as e:
                         # Print a warning with the failed type string
-                        print(f"WARNING: Failed to parse type annotation: '{attr_type_str}'. Error: {e}")
+                        print(
+                            f"WARNING: Failed to parse type annotation: '{attr_type_str}'. Error: {e}"
+                        )
                         # Fallback to simple type with the original string
                         attr_type_info = SimpleType(type_str=attr_type_str)
                 else:
@@ -270,7 +272,9 @@ def process_module(module_obj: Module) -> ProcessedModule:
                         attr_type_info = parse_type_string(attr_type_str)
                     except Exception as e:
                         # Print a warning with the failed type string
-                        print(f"WARNING: Failed to parse type annotation: '{attr_type_str}'. Error: {e}")
+                        print(
+                            f"WARNING: Failed to parse type annotation: '{attr_type_str}'. Error: {e}"
+                        )
                         # Fallback to simple type with the original string
                         attr_type_info = SimpleType(type_str=attr_type_str)
                 else:

@@ -9,9 +9,27 @@ from .type_model import EnumEncoder, GenericType, SimpleType, TypeKind
 
 
 def assert_json_equal(actual, expected):
-    """Assert that two objects are equal when serialized to JSON."""
+    """Assert that two objects are equal when serialized to JSON.
+
+    Note: This ignores the doc_url field which may be set by the parser.
+    """
     actual_json = json.loads(actual.to_json())
     expected_json = json.loads(expected.to_json())
+
+    # Recursively remove doc_url from both objects for comparison
+    def remove_doc_url(obj):
+        if isinstance(obj, dict):
+            if "doc_url" in obj:
+                obj.pop("doc_url")
+            for value in list(obj.values()):
+                remove_doc_url(value)
+        elif isinstance(obj, list):
+            for item in obj:
+                remove_doc_url(item)
+
+    remove_doc_url(actual_json)
+    remove_doc_url(expected_json)
+
     assert actual_json == expected_json, (
         f"JSON not equal: {json.dumps(actual_json, cls=EnumEncoder)} != {json.dumps(expected_json, cls=EnumEncoder)}"
     )
