@@ -5,37 +5,38 @@ description: Add labels and feedback to your LLM outputs
 
 # Annotations
 
-When you click on a trace to view more details, there's a panel for annotations.
+When you are viewing a trace in the full view, the right sidebar contains a section for discussions and annotations.
 
-Click on that to annotate the trace:
+[INSERT IMAGE]
 
-\[INSERT IMAGE]
+## Discussion
 
-You can also navigate to a specific function version and click on the "Annotations" tab to see a table with columns for inputs, output, ideal output, label, and reasoning:
+The discussion tab is a place for you to leave open-ended comments on the trace.
+Often this is the first step towards annotating the trace. When you aren't yet sure how to annotate or trace (or if you want to), open-ended discussions are a great way to start.
 
-\[INSERT IMAGE]
+You can use this to ask questions, leave feedback, discuss the trace with your team, or even just leave a note to yourself.
 
-Clicking on an annotation row will open the underlying trace details.
+## Assigning Traces For Annotation
 
-## Exact Match
+In the trace view, annotations are read only. You can annotate a trace by assigning to a user, which adds it to their annotation queue.
 
-You can mark a function as exact match. This indicates that you expect the output to have a label that it should match exactly. Once you've entered the exact match for a specific input, any function that is run with that input will have it's ideal output automatically populated with the predefined exact match.
+[INSERT IMAGE]
 
-You can view aggregate metrics in the "Annotations" tab for a function version.
+Once added to the queue, you can annotate the trace by clicking the label, (optionally) providing a reason, and clicking submit.
 
-\[INSERT IMAGE]
+[INSERT IMAGE]
 
-## Fuzzy Metrics
+When annotating a trace, existing annotations are not shown to you. This is to prevent biasing your annotation.
 
-When there isn't necessarily an exact output you're looking for, you can provide PASS/FAIL labels with a reason. This can help to better categorize and understand where your functions are failing:
+## Annotating In Code
 
-\[INSERT IMAGE]
+You can also annotate traces in code. This is useful when you want to annotate a trace using a custom script or UI.
 
-These annotations will prove to be extremely useful for later automating parts of your annotation flow.
+```python
+INSERT CODE
+```
 
-We're working on some new tooling called [vibe synthesis](/docs/lilypad/vibe-synthesis) to help with this.
-
-## Annotate In Code
+## Passthrough Annotations
 
 Setting `mode="wrap"` in the `trace` decorator converts the original return type of the decorated function into a `Traced[R]` that provides methods for operating on the corresponding trace directly.
 
@@ -46,7 +47,7 @@ import lilypad
 
 lilypad.configure()
 
-@lilypad.trace(name="Answer Question", versioning="automatic", mode="wrap") 
+@lilypad.trace(name="Answer Question", versioning="automatic", mode="wrap")  # [!code highlight]
 def answer_question(question: str) -> str | None:
     response = client.models.generate_content(
         model="gemini-2.0-flash-001",
@@ -58,5 +59,5 @@ trace: lilypad.Trace[str | None] = answer_question("What is the capital of Franc
 print(trace.response)  # original response
 # > The capital of France is Paris.
 
-trace.annotate(label="PASS", reason="The answer was correct")
+trace.annotate(label="PASS", reason="The answer was correct")  # [!code highlight]
 ```
