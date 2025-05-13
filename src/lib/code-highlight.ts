@@ -131,7 +131,45 @@ export function fallbackHighlighter(
   return { lightHtml, darkHtml };
 }
 
-export const initialHighlight = fallbackHighlighter;
+// Flag to control whether to use sync highlighter for the next render
+let useSyncHighlighterForNextRender: boolean = false;
+
+// Flag to control always using sync highlighter for initial highilght
+let useSyncHighlighterForAllRenders: boolean = false;
+
+// Function to set the next render to use sync highlighter
+export function useSyncHighlighterForNext(): void {
+  useSyncHighlighterForNextRender = true;
+}
+
+export function useSyncHighlighterAlways(bool: boolean): void {
+  useSyncHighlighterForAllRenders = bool;
+}
+
+export function isNextHighlightSync(): boolean {
+  return (
+    highlighterInitialized &&
+    syncHighlighter != null &&
+    (useSyncHighlighterForAllRenders || useSyncHighlighterForNextRender)
+  );
+}
+
+export function initialHighlight(
+  code: string,
+  language: string = "text",
+  meta: string = ""
+): HighlightResult {
+  if (isNextHighlightSync()) {
+    useSyncHighlighterForNextRender = false;
+    try {
+      return highlightCodeSync(code, language, meta);
+    } catch (error) {
+      console.warn("Failed to use sync highlighter, falling back:", error);
+      // Fall back to the basic highlighter if sync fails
+    }
+  }
+  return fallbackHighlighter(code, language, meta);
+}
 
 /**
  * Strips highlight markers from code for clipboard copying
