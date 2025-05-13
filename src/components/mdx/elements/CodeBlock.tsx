@@ -18,7 +18,9 @@ interface CodeBlockProps {
 }
 
 export function CodeBlock({ code, language = "text", meta = "", className = "" }: CodeBlockProps) {
-  const [highlightedCode, setHighlightedCode] = useState<HighlightResult>(initialHighlight(code));
+  const [highlightedCode, setHighlightedCode] = useState<HighlightResult>(
+    initialHighlight(code, language, meta)
+  );
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [funMode, toggleFunMode] = useFunMode();
   const codeRef = useRef<HTMLDivElement>(null);
@@ -29,16 +31,22 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
     "code-block-wrapper border-card relative m-0 mb-2 rounded-md overflow-hidden border p-0 text-xs";
 
   useEffect(() => {
-    async function highlight() {
-      try {
-        setHighlightedCode(await highlightCode(code, language, meta));
-      } catch (error) {
-        console.error("Error highlighting code:", error);
-        // Leave the fallback code
-      }
-    }
+    // If code changed, use the initial highlighter for the first render
+    const result = initialHighlight(code, language, meta);
+    setHighlightedCode(result);
 
-    highlight();
+    // Only do async highlighting if the initial highlight didn't already do a full highlight
+    if (!result.highlighted) {
+      async function highlight() {
+        try {
+          setHighlightedCode(await highlightCode(code, language, meta));
+        } catch (error) {
+          console.error("Error highlighting code:", error);
+          // Leave the fallback code
+        }
+      }
+      highlight();
+    }
   }, [code, language, meta]);
 
   // Check if code block is small after rendering
