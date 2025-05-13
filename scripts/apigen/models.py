@@ -7,10 +7,18 @@ to create these models from Griffe objects.
 
 from dataclasses import dataclass
 
-from griffe import Alias, Class, DocstringSectionKind, Function, Module, Object
+from griffe import (
+    Alias,
+    Attribute,
+    Class,
+    DocstringSectionKind,
+    Function,
+    Module,
+    Object,
+)
 
 from scripts.apigen.parser import parse_type_string
-from scripts.apigen.type_extractor import extract_type_info
+from scripts.apigen.type_extractor import extract_attribute_type_info, extract_type_info
 from scripts.apigen.type_model import ParameterInfo, ReturnInfo, SimpleType, TypeInfo
 
 
@@ -219,6 +227,13 @@ def process_class(class_obj: Class) -> ProcessedClass:
     )
 
 
+def process_attribute(obj: Attribute) -> ProcessedAttribute:
+    name = getattr(obj, "name", "")
+    type_info = extract_attribute_type_info(obj)
+    descr = extract_clean_docstring(obj)
+    return ProcessedAttribute(name=name, type_info=type_info, description=descr)
+
+
 def process_module(module_obj: Module) -> ProcessedModule:
     """Process a Module object into a ProcessedModule model.
 
@@ -262,6 +277,9 @@ def process_module(module_obj: Module) -> ProcessedModule:
                 processed_functions.append(processed_function)
 
             # Process attributes (not classes, functions, or aliases)
+            elif isinstance(member, Attribute):
+                processed_attribute = process_attribute(member)
+                processed_attributes.append(processed_attribute)
             else:
                 # Get the type annotation as a string
                 attr_type_str = str(getattr(member, "annotation", ""))
