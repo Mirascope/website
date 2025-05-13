@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/src/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/src/components/ui/tabs";
 import { Logo } from "@/src/components/core/branding";
 import { cn } from "@/src/lib/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -163,13 +163,8 @@ export function ProviderTabbedSection({
             <ChevronRight className="h-3 w-3" />
           </button>
         </div>
-
-        {providers.map((p) => (
-          <TabsContent key={p} value={p} className="m-0 p-0">
-            {children}
-          </TabsContent>
-        ))}
       </Tabs>
+      {children}
     </div>
   );
 }
