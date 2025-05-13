@@ -20,12 +20,14 @@ This module defines the base class for tools used in LLM calls.
 
 A base class for tool configurations.
 
-**Bases:** TypedDict
+**Bases:** 
+<TypeLink type={{"type_str": "TypedDict", "description": null, "kind": "simple", "doc_url": "https://docs.python.org/3/library/typing.html#typing.TypedDict"}} />
 
 
 ## <ApiType type="Class" path="core/base/tool" symbolName="GenerateJsonSchemaNoTitles" /> GenerateJsonSchemaNoTitles
 
-**Bases:** GenerateJsonSchema
+**Bases:** 
+<TypeLink type={{"type_str": "GenerateJsonSchema", "description": null, "kind": "simple", "doc_identifier": "GenerateJsonSchema"}} />
 
 ## <ApiType type="Function" path="core/base/tool" symbolName="generate" /> generate
 
@@ -96,7 +98,8 @@ class FormatBook(BaseTool):
         return f"{self.title} by {self.author}"
 ```
 
-**Bases:** BaseModel, ABC
+**Bases:** 
+<TypeLink type={{"type_str": "BaseModel", "description": null, "kind": "simple", "doc_url": "https://docs.pydantic.dev/latest/api/base_model/"}} />, <TypeLink type={{"type_str": "ABC", "description": null, "kind": "simple", "doc_identifier": "ABC"}} />
 
 <AttributesTable
   attributes={[

@@ -18,14 +18,16 @@ The `AzureTool` class for easy tool usage with Azure LLM calls.
 
 ## <ApiType type="Class" path="core/azure/tool" symbolName="GenerateAzureStrictToolJsonSchema" /> GenerateAzureStrictToolJsonSchema
 
-**Bases:** GenerateJsonSchemaNoTitles
+**Bases:** 
+<TypeLink type={{"type_str": "GenerateJsonSchemaNoTitles", "description": null, "kind": "simple", "doc_url": "/docs/mirascope/api/core/base/tool#generatejsonschemanotitles"}} />
 
 
 ## <ApiType type="Class" path="core/azure/tool" symbolName="AzureToolConfig" /> AzureToolConfig
 
 A tool configuration for Azure-specific features.
 
-**Bases:** ToolConfig
+**Bases:** 
+<TypeLink type={{"type_str": "ToolConfig", "description": null, "kind": "simple", "doc_url": "/docs/mirascope/api/core/base/tool#toolconfig"}} />
 
 <AttributesTable
   attributes={[
@@ -67,7 +69,8 @@ if tool := response.tool:  # returns an `AzureTool` instance
     print(tool.call())
 ```
 
-**Bases:** BaseTool
+**Bases:** 
+<TypeLink type={{"type_str": "BaseTool", "description": null, "kind": "simple", "doc_url": "/docs/mirascope/api/core/base/tool#basetool"}} />
 
 <AttributesTable
   attributes={[

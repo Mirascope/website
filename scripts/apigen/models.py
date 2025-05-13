@@ -19,8 +19,9 @@ from griffe import (
     Object,
 )
 
+from scripts.apigen.parser import parse_type_string
 from scripts.apigen.type_extractor import extract_attribute_type_info, extract_type_info
-from scripts.apigen.type_model import ParameterInfo, ReturnInfo, TypeInfo
+from scripts.apigen.type_model import ParameterInfo, ReturnInfo, SimpleType, TypeInfo
 
 # Configure logging
 logging.basicConfig(
@@ -113,7 +114,7 @@ class ProcessedClass:
 
     name: str
     docstring: str | None
-    bases: list[str]
+    bases: list[TypeInfo]
     members: list["ProcessedObject"]
     module_path: str
 
@@ -197,7 +198,15 @@ def process_class(class_obj: Class) -> ProcessedClass:
     # Extract base classes
     bases = []
     if hasattr(class_obj, "bases") and class_obj.bases:
-        bases = [str(base) for base in class_obj.bases]
+        for base in class_obj.bases:
+            base_str = str(base)
+            try:
+                base_type_info = parse_type_string(base_str)
+                bases.append(base_type_info)
+            except Exception as e:
+                logger.warning(f"Failed to parse base class type: {base_str}. Error: {e}")
+                # Fallback to simple type
+                bases.append(SimpleType(type_str=base_str))
 
     # Process all members
     processed_members = []
