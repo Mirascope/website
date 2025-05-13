@@ -9,7 +9,16 @@
   font-weight: normal;
   font-style: normal;
   font-display: swap;
-  descent-override: 5%;
+  descent-override: normal;
+}
+
+@font-face {
+  font-family: "Williams Handwriting Descent";
+  src: url("/fonts/Williams-Handwriting-Regular-v1.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+  descent-override: 10%;
 }
 
 @import "tailwindcss";
@@ -360,15 +369,10 @@ h6 code {
   font-family: "Williams Handwriting", cursive !important;
 }
 
-.handwriting-enabled kbd,
+/* .handwriting-enabled kbd,
 button {
-  font-family: "Williams Handwriting", cursive !important;
-}
-
-/* Font class for handwriting - used in handwriting mode */
-.font-handwriting {
-  font-family: "Williams Handwriting", cursive !important;
-}
+  font-family: "Williams Handwriting Button", cursive !important;
+} */
 
 /* Font class for Excalifont - used for stylistic elements in mono mode */
 .font-excalifont {
@@ -431,6 +435,10 @@ header button:not(.font-toggle-button),
 
 .font-handwriting {
   font-family: "Williams Handwriting", cursive !important;
+}
+
+.font-handwriting-descent {
+  font-family: "Williams Handwriting Descent", cursive !important;
 }
 
 /* Font menu option sizing */
