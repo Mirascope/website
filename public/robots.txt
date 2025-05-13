@@ -1,6 +1,6 @@
 # robots.txt for mirascope.com
 User-agent: *
-Disallow: /
+Disallow: /docs/lilypad/getting-started/playground
 
 # Sitemap location
 Sitemap: https://mirascope.com/sitemap.xml

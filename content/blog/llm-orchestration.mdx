@@ -245,23 +245,6 @@ A prompt management system maintains [consistency in prompting](/blog/langchain-
 
 An example of prompt management is [Lilypad](/blog/prompt-versioning), which versions and traces all prompts automatically so you don't have to worry about it and can instead focus on iterating and improving your prompts.
 
-```plaintext
-|
-|-- .lilypad/
-|-- |-- config.json
-|-- lily/
-|   |-- __init__.py
-|   |-- {llm_function_name}.py
-|-- pad.db
-```
-
-**Lilypad includes**:
-
-- A `create` command for quickly creating a new LLM function shim
-- A `run` command for quickly running prompts during development
-- The `lily/` directory where LLM functions live
-- The `pad.db` SQLite database for local development to store versions and traces
-
 The magic is that Lilypad automatically versions the entire lexical closure. This means that changes to helper methods and utility functions will be considered version changes, enabling you to more easily catch changes that impact your prompt quality even when unexpected.
 
 ### 4. Scalability
