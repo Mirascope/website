@@ -293,9 +293,9 @@ export class AnalyticsManager {
   }
 
   /**
-   * Track a page view in Google Analytics
+   * Track a page view in all analytics systems
    */
-  trackGAPageView(path: string): void {
+  trackPageView(path: string): void {
     if (!this.enableAnalytics()) return;
 
     // Send pageview to Google Analytics
@@ -305,14 +305,6 @@ export class AnalyticsManager {
         page_path: path,
       });
     }
-  }
-
-  /**
-   * Track a page view in PostHog
-   */
-  trackPHPageView(path: string): void {
-    if (!this.enableAnalytics()) return;
-
     // Send pageview to PostHog
     if (window.posthog) {
       window.posthog.capture("$pageview", {
@@ -320,14 +312,6 @@ export class AnalyticsManager {
         site_version: this.siteVersion,
       });
     }
-  }
-
-  /**
-   * Track a page view in all analytics systems
-   */
-  trackPageView(path: string): void {
-    this.trackGAPageView(path);
-    this.trackPHPageView(path);
   }
 
   /**
@@ -343,90 +327,30 @@ export class AnalyticsManager {
     };
 
     console.log(`GA Event tracked: ${action}`, eventParams);
-
-    // Send event to Google Analytics
-    if (window.gtag) {
-      // @ts-ignore - Using arguments in the expected way for GA4
-      window.gtag("event", action, eventParams);
-    }
-  }
-
-  /**
-   * Track a custom event in PostHog
-   */
-  trackPHEvent(event: string, properties: EventParams = {}): void {
-    if (!this.enableAnalytics()) return;
-
-    // Add site version to all events
-    const eventProperties = {
-      ...properties,
-      site_version: this.siteVersion,
-    };
-
-    console.log(`PH Event tracked: ${event}`, eventProperties);
-
-    // Send event to PostHog
-    if (window.posthog) {
-      window.posthog.capture(event, eventProperties);
-    }
   }
 
   /**
    * Track a custom event in all analytics systems
    */
-  trackEvent(action: string, params: EventParams = {}): void {
-    this.trackGAEvent(action, params);
-    this.trackPHEvent(action, params);
-  }
+  trackEvent(eventName: string, params: EventParams = {}): void {
+    if (!this.enableAnalytics()) return;
 
-  /**
-   * Track a copy to clipboard event consistently across the site with Google Analytics
-   */
-  trackGACopyEvent({
-    contentType,
-    itemId,
-    product,
-    language,
-  }: {
-    contentType: "blog_markdown" | "document_markdown" | "code_snippet";
-    itemId: string;
-    product: string;
-    language?: string;
-  }): void {
-    const pagePath = window.location.pathname;
+    // Add site version to all events
+    const eventParams = {
+      ...params,
+      site_version: this.siteVersion,
+    };
 
-    this.trackGAEvent("select_content", {
-      content_type: contentType,
-      item_id: itemId,
-      product: product,
-      page_path: pagePath,
-      ...(language && { language }),
-    });
-  }
+    // Send event to Google Analytics
+    if (window.gtag) {
+      // @ts-ignore - Using arguments in the expected way for GA4
+      window.gtag("event", eventName, eventParams);
+    }
 
-  /**
-   * Track a copy to clipboard event consistently across the site with PostHog
-   */
-  trackPHCopyEvent({
-    contentType,
-    itemId,
-    product,
-    language,
-  }: {
-    contentType: "blog_markdown" | "document_markdown" | "code_snippet";
-    itemId: string;
-    product: string;
-    language?: string;
-  }): void {
-    const pagePath = window.location.pathname;
-
-    this.trackPHEvent("select_content", {
-      content_type: contentType,
-      item_id: itemId,
-      product: product,
-      page_path: pagePath,
-      ...(language && { language }),
-    });
+    // Send event to PostHog
+    if (window.posthog) {
+      window.posthog.capture(eventName, eventParams);
+    }
   }
 
   /**
@@ -443,52 +367,25 @@ export class AnalyticsManager {
     product: string;
     language?: string;
   }): void {
-    this.trackGACopyEvent({ contentType, itemId, product, language });
-    this.trackPHCopyEvent({ contentType, itemId, product, language });
+    this.trackEvent("select_content", { contentType, itemId, product, language });
   }
 
   /**
-   * Report web vitals metrics to Google Analytics
+   * Report web vitals metrics to GA / PostHog
    */
-  reportGAWebVital(metric: any): void {
+  reportWebVital(metric: any): void {
     if (!this.enableAnalytics()) return;
 
     console.log(
       `Web vital reported to GA: ${metric.name} - ${Math.round(metric.value * 100) / 100}`
     );
 
-    this.trackGAEvent("web-vitals", {
+    this.trackEvent("web-vitals", {
       event_category: "Web Vitals",
       event_label: metric.id,
       value: Math.round(metric.value * 100) / 100,
       non_interaction: true,
     });
-  }
-
-  /**
-   * Report web vitals metrics to PostHog
-   */
-  reportPHWebVital(metric: any): void {
-    if (!this.enableAnalytics()) return;
-
-    console.log(
-      `Web vital reported to PH: ${metric.name} - ${Math.round(metric.value * 100) / 100}`
-    );
-
-    this.trackPHEvent("web-vitals", {
-      event_category: "Web Vitals",
-      event_label: metric.id,
-      value: Math.round(metric.value * 100) / 100,
-      non_interaction: true,
-    });
-  }
-
-  /**
-   * Report web vitals metrics to all analytics providers
-   */
-  reportWebVital(metric: any): void {
-    this.reportGAWebVital(metric);
-    this.reportPHWebVital(metric);
   }
 }
 
