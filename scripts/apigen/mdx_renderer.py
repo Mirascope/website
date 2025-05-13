@@ -13,8 +13,34 @@ from scripts.apigen.models import (
     ProcessedClass,
     ProcessedFunction,
     ProcessedModule,
+    ProcessedObject,
 )
 from scripts.apigen.type_model import EnumEncoder, ParameterInfo
+
+
+def render_object(processed_obj: ProcessedObject, doc_path: str) -> str:
+    """Render any processed object into MDX documentation.
+
+    Args:
+        processed_obj: The processed object to render
+        doc_path: Path to the document, used for API component links
+
+    Returns:
+        MDX documentation string
+
+    """
+    if isinstance(processed_obj, ProcessedModule):
+        return render_module(processed_obj, doc_path)
+    elif isinstance(processed_obj, ProcessedClass):
+        return render_class(processed_obj, doc_path)
+    elif isinstance(processed_obj, ProcessedFunction):
+        return render_function(processed_obj, doc_path)
+    elif isinstance(processed_obj, ProcessedAttribute):
+        return render_attribute(processed_obj, doc_path)
+    elif isinstance(processed_obj, ProcessedAlias):
+        return render_alias(processed_obj, doc_path)
+    else:
+        raise ValueError(f"Unsupported object type: {type(processed_obj)}")
 
 
 def render_module(processed_module: ProcessedModule, doc_path: str) -> str:
