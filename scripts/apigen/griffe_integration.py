@@ -18,9 +18,7 @@ from pathlib import Path
 
 from griffe import (
     Alias,
-    Class,
     Extensions,
-    Function,
     GriffeLoader,
     Module,
     Object,
@@ -29,16 +27,10 @@ from griffe import (
 
 from scripts.apigen.doclinks import UpdateDocstringsExtension
 from scripts.apigen.mdx_renderer import (
-    render_alias,
-    render_class,
-    render_function,
-    render_module,
+    render_object,
 )
 from scripts.apigen.models import (
-    process_alias,
-    process_class,
-    process_function,
-    process_module,
+    process_object,
 )
 
 # Default content subpath for documentation
@@ -113,7 +105,9 @@ Please check that all required dependencies are installed.
 """
 
 
-def process_directive_with_error_handling(directive: str, module: Module) -> str:
+def process_directive_with_error_handling(
+    directive: str, module: Module, doc_path: str
+) -> str:
     """Process an API directive with error handling for missing dependencies.
 
     This wrapper catches errors during documentation generation, reports them,
@@ -123,50 +117,44 @@ def process_directive_with_error_handling(directive: str, module: Module) -> str
     Args:
         directive: The directive string (e.g., "::: mirascope.core.anthropic.call")
         module: The pre-loaded Griffe module
+        doc_path: Optional path to the document, used for API component links
 
     Returns:
         The generated documentation content or error placeholder
 
     """
     try:
-        return process_directive(directive, module)
+        return process_directive(directive, module, doc_path)
     except Exception as e:
         object_path = directive.replace("::: ", "")
         return generate_error_placeholder(object_path, e)
 
 
-def document_object(obj: Object | Alias) -> str:
+def document_object(obj: Object | Alias, doc_path: str) -> str:
     """Generate documentation for any supported Griffe object type.
 
     Args:
         obj: The Griffe object to document
+        doc_path: Optional path to the document, used for API component links
 
     Returns:
         MDX documentation with enhanced component usage
 
     """
-    if isinstance(obj, Module):
-        processed_obj = process_module(obj)
-        return render_module(processed_obj)
-    elif isinstance(obj, Function):
-        processed_obj = process_function(obj)
-        return render_function(processed_obj)
-    elif isinstance(obj, Class):
-        processed_obj = process_class(obj)
-        return render_class(processed_obj)
-    elif isinstance(obj, Alias):
-        processed_obj = process_alias(obj)
-        return render_alias(processed_obj)
-    else:
-        raise ValueError(f"Unsupported object type: {type(obj)}")
+    processed_obj = process_object(obj)
+    if processed_obj is None:
+        raise ValueError(f"Failed to process object: {obj}")
+
+    return render_object(processed_obj, doc_path)
 
 
-def process_directive(directive: str, module: Module) -> str:
+def process_directive(directive: str, module: Module, doc_path: str) -> str:
     """Process an API directive and generate documentation.
 
     Args:
         directive: The directive string (e.g., "::: mirascope.core.anthropic.call")
         module: The pre-loaded Griffe module
+        doc_path: Optional path to the document, used for API component links
 
     Returns:
         The generated documentation content
@@ -195,4 +183,4 @@ def process_directive(directive: str, module: Module) -> str:
             )
 
     # Use the document_object dispatcher function
-    return document_object(current_obj)
+    return document_object(current_obj, doc_path)

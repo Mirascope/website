@@ -23,7 +23,7 @@ describe("AnalyticsManager", () => {
     process.env.NODE_ENV = "production";
 
     // Create fresh analytics manager for each test
-    analyticsManager = new AnalyticsManager("test-id", "test-version");
+    analyticsManager = new AnalyticsManager("test-ga-id", "test-ph-key", "test-version");
   });
 
   afterEach(() => {
@@ -40,7 +40,8 @@ describe("AnalyticsManager", () => {
 
   test("analytics manager is created with correct properties", () => {
     expect(analyticsManager).toBeDefined();
-    expect((analyticsManager as any).measurmentId).toBe("test-id");
+    expect((analyticsManager as any).gaMeasurementId).toBe("test-ga-id");
+    expect((analyticsManager as any).posthogApiKey).toBe("test-ph-key");
     expect((analyticsManager as any).siteVersion).toBe("test-version");
   });
 
@@ -99,8 +100,8 @@ describe("AnalyticsManager", () => {
   });
 
   test("enableAnalytics initializes tracking when enabled", () => {
-    // Spy on private initialize method
-    const initializeSpy = spyOn(analyticsManager as any, "initialize");
+    // Spy on private initializeGoogleAnalytics method
+    const initializeSpy = spyOn(analyticsManager as any, "initializeGoogleAnalytics");
 
     // When analytics should be enabled
     const isEnabledSpy = spyOn(analyticsManager, "isEnabled");
@@ -117,19 +118,19 @@ describe("AnalyticsManager", () => {
     expect(initializeSpy.mock.calls.length).toBe(1);
   });
 
-  test("trackPageView only tracks when analytics is enabled", () => {
+  test("trackGAPageView only tracks when analytics is enabled", () => {
     // When analytics is enabled
     const enableSpy = spyOn(analyticsManager, "enableAnalytics");
     enableSpy.mockImplementation(() => true);
 
-    analyticsManager.trackPageView("/test-page");
+    analyticsManager.trackGAPageView("/test-page");
     expect(window.gtag).toHaveBeenCalled();
 
     // When analytics is disabled
     window.gtag = mock(() => {}); // Reset the mock
     enableSpy.mockImplementation(() => false);
 
-    analyticsManager.trackPageView("/test-page");
+    analyticsManager.trackGAPageView("/test-page");
     expect(window.gtag).not.toHaveBeenCalled();
   });
 });

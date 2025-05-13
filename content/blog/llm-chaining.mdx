@@ -25,7 +25,7 @@ This is why LLM chains are useful: they let you build sophisticated applications
 
 It’s for that reason we designed [Mirascope](https://github.com/mirascope/mirascope), our developer-friendly, pythonic toolkit, to overcome shortcomings of modern frameworks.
 
-Mirascope works together with [Lilypad](/docs/lilypad), our open source prompt observability platform that allows software developers to version, trace, and optimize language model calls, treating these as non-deterministic functions.
+Mirascope works together with [Lilypad](/docs/lilypad), our open source AI observability platform that allows software developers to version, trace, and optimize language model calls, treating these as non-deterministic functions.
 
 Below, we dive into techniques for chaining and discuss what to look for in an LLM chaining framework.
 
@@ -657,15 +657,17 @@ We believe version control should be as effortless as possible and run in the ba
 
 In the end, prompt engineering can be seen as the optimization of non-deterministic functions (LLM calls) through structured experimentation. You need to continuously tweak parameters (in this case, prompts and function bodies) and measure their impact​, since outputs can be random and inconsistent.
 
-To keep track of all this, we developed [Lilypad](/docs/lilypad), an open source prompt engineering framework that automatically versions and traces LLM calls when you simply add the `@lilypad.generation` decorator, ensuring that evaluations are systematic and reproducible:
+To keep track of all this, we developed [Lilypad](/docs/lilypad), an open source AI engineering framework that automatically versions and traces LLM calls when you simply add the `@lilypad.trace` decorator, ensuring that evaluations are systematic and reproducible:
 
 ```python {6}
 import lilypad
 from openai import OpenAI
  
+lilypad.configure(auto_llm=True)  # [!code highlight]
 client = OpenAI()
  
-@lilypad.generation()
+ 
+@lilypad.trace(versioning="automatic")  # [!code highlight]
 def answer_question(question: str) -> str:
     completion = client.chat.completions.create(
         model="gpt-4o-mini",
@@ -673,10 +675,9 @@ def answer_question(question: str) -> str:
     )
     return str(completion.choices[0].message.content)
  
-if __name__ == "__main__":
-    lilypad.configure()
-    answer = answer_question("What is the meaning of life?")
-    print(answer) 
+
+answer = answer_question("What is the meaning of life?")
+print(answer) 
 ```
 
 The decorator also ensures that every time `answer_question` is modified, it gets a new version automatically, making it easier to track changes and compare outputs over time. This includes:

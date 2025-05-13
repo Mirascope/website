@@ -36,15 +36,14 @@ book: Book = extract_book(text) # [!code highlight]`;
         lines={["LLM abstractions that", "aren't obstructions"]}
         element="h2"
         fontSize="clamp(1.5rem, 5vw, 3rem)"
-        className="mb-6 text-center text-white"
+        className="text-shadow-medium mb-6 text-center text-white"
         lineClassName="font-bold"
         lineSpacing="mb-2"
-        textShadow={true}
       />
       <div className="bg-background/60 mb-2 w-full max-w-3xl rounded-md">
         <ProviderTabbedSection
           customHeader={
-            <div className="flex items-center px-2 pb-2">
+            <div className="flex items-center px-1 pb-2">
               <MirascopeLogo size="micro" withText={true} />
             </div>
           }
@@ -74,7 +73,7 @@ book: Book = extract_book(text) # [!code highlight]`;
 
       {/* Scroll indicator to Lilypad section */}
       {onScrollDown && (
-        <div className="mt-8 flex justify-center">
+        <div className="mt-12 flex justify-center">
           <div className="landing-page-box-shadow landing-page-box-shadow-hover relative h-12 w-12 overflow-hidden rounded-full">
             <button
               onClick={onScrollDown}

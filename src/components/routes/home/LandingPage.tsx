@@ -28,7 +28,7 @@ export function LandingPage() {
   // Function to scroll to mirascope section with offset for better positioning
   const scrollToMirascopeSection = () => {
     if (mirascopeSectionRef.current) {
-      const yOffset = -window.innerHeight * 0.05;
+      const yOffset = -window.innerHeight * -0.02;
       const element = mirascopeSectionRef.current;
       const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
 

@@ -6,44 +6,201 @@ description: API documentation for mirascope.core.bedrock.call_params
 
 # mirascope.core.bedrock.call_params
 
-<ApiType type="Module" />
-
 <Info title="Usage">
 
 [Calls](/docs/mirascope/learn/calls#provider-specific-parameters)
 
 </Info>
 
-## Module Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| BedrockCallParams |  | The parameters to use when calling the Bedrock API.
-
-[Bedrock converse API Reference](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/bedrock-runtime/client/converse.html) |
-
-## Classes
-
-### BedrockCallParams
-
-<ApiType type="Class" />
+## <ApiType type="Class" path="core/bedrock/call_params" symbolName="BedrockCallParams" /> BedrockCallParams
 
 The parameters to use when calling the Bedrock API.
 
 [Bedrock converse API Reference](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/bedrock-runtime/client/converse.html)
 
-**Bases:** BaseCallParams
+**Bases:** 
+<TypeLink type={{"type_str": "BaseCallParams", "description": null, "kind": "simple", "doc_url": "/docs/mirascope/api/core/base/call_params#basecallparams"}} />
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| system | NotRequired[list[SystemContentBlockTypeDef]] |  |
-| inferenceConfig | NotRequired[InferenceConfigurationTypeDef] |  |
-| toolConfig | NotRequired[ToolConfigurationTypeDef] |  |
-| guardrailConfig | NotRequired[GuardrailConfigurationTypeDef] |  |
-| additionalModelRequestFields | NotRequired[Mapping[str, Any]] |  |
-| additionalModelResponseFieldPaths | NotRequired[list[str]] |  |
-
+<AttributesTable
+  attributes={[
+  {
+    "name": "system",
+    "type_info": {
+      "type_str": "NotRequired[list[SystemContentBlockTypeDef]]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.NotRequired"
+      },
+      "parameters": [
+        {
+          "type_str": "list[SystemContentBlockTypeDef]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "list",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
+          },
+          "parameters": [
+            {
+              "type_str": "SystemContentBlockTypeDef",
+              "description": null,
+              "kind": "simple",
+              "doc_identifier": "SystemContentBlockTypeDef"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "inferenceConfig",
+    "type_info": {
+      "type_str": "NotRequired[InferenceConfigurationTypeDef]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.NotRequired"
+      },
+      "parameters": [
+        {
+          "type_str": "InferenceConfigurationTypeDef",
+          "description": null,
+          "kind": "simple",
+          "doc_identifier": "InferenceConfigurationTypeDef"
+        }
+      ]
+    }
+  },
+  {
+    "name": "toolConfig",
+    "type_info": {
+      "type_str": "NotRequired[ToolConfigurationTypeDef]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.NotRequired"
+      },
+      "parameters": [
+        {
+          "type_str": "ToolConfigurationTypeDef",
+          "description": null,
+          "kind": "simple",
+          "doc_identifier": "ToolConfigurationTypeDef"
+        }
+      ]
+    }
+  },
+  {
+    "name": "guardrailConfig",
+    "type_info": {
+      "type_str": "NotRequired[GuardrailConfigurationTypeDef]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.NotRequired"
+      },
+      "parameters": [
+        {
+          "type_str": "GuardrailConfigurationTypeDef",
+          "description": null,
+          "kind": "simple",
+          "doc_identifier": "GuardrailConfigurationTypeDef"
+        }
+      ]
+    }
+  },
+  {
+    "name": "additionalModelRequestFields",
+    "type_info": {
+      "type_str": "NotRequired[Mapping[str, Any]]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.NotRequired"
+      },
+      "parameters": [
+        {
+          "type_str": "Mapping[str, Any]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "Mapping",
+            "description": null,
+            "kind": "simple",
+            "doc_identifier": "Mapping"
+          },
+          "parameters": [
+            {
+              "type_str": "str",
+              "description": null,
+              "kind": "simple",
+              "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+            },
+            {
+              "type_str": "Any",
+              "description": null,
+              "kind": "simple",
+              "doc_url": "https://docs.python.org/3/library/typing.html#typing.Any"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "additionalModelResponseFieldPaths",
+    "type_info": {
+      "type_str": "NotRequired[list[str]]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.NotRequired"
+      },
+      "parameters": [
+        {
+          "type_str": "list[str]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "list",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
+          },
+          "parameters": [
+            {
+              "type_str": "str",
+              "description": null,
+              "kind": "simple",
+              "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]}
+/>
 
 

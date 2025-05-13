@@ -16,7 +16,14 @@ import {
   MermaidDiagram,
   Icon,
 } from "@/src/components/mdx/elements";
-import { ApiType, ApiSignature, ParametersTable, ReturnType } from "@/src/components/docs/api";
+import {
+  ApiType,
+  ApiSignature,
+  ParametersTable,
+  ReturnTable,
+  AttributesTable,
+  TypeLink,
+} from "@/src/components/docs/api";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/src/components/ui/tabs";
 import { Button } from "@/src/components/ui/button";
 import { ButtonLink } from "@/src/components/ui/button-link";
@@ -99,8 +106,10 @@ export const components = {
   // API documentation components
   ApiType,
   ApiSignature,
+  AttributesTable,
   ParametersTable,
-  ReturnType,
+  ReturnTable,
+  TypeLink,
 
   // UI Components
   Button,
@@ -187,7 +196,7 @@ export const components = {
       </h5>
     );
   },
-  p: (props: React.ComponentPropsWithoutRef<"p">) => <p className="my-3" {...props} />,
+  p: (props: React.ComponentPropsWithoutRef<"p">) => <p className="my-3 text-base" {...props} />,
   a: (props: React.ComponentPropsWithoutRef<"a">) => {
     // Check if the link is internal
     const { href, ...rest } = props;
@@ -201,11 +210,13 @@ export const components = {
           !href.startsWith("tel:")))
     ) {
       // It's an internal link, use Link from TanStack Router
-      return <Link to={href} className="text-primary no-underline hover:underline" {...rest} />;
+      return (
+        <Link to={href} className="text-primary text-base no-underline hover:underline" {...rest} />
+      );
     }
 
     // Use regular <a> for external links or anchor links
-    return <a className="text-primary no-underline hover:underline" {...props} />;
+    return <a className="text-primary text-base no-underline hover:underline" {...props} />;
   },
   ul: (props: React.ComponentPropsWithoutRef<"ul">) => (
     <ul className="my-4 list-disc pl-5" {...props} />

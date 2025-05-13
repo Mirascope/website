@@ -14,6 +14,10 @@ const lilypadSpec: ProductSpec = {
           label: "Welcome",
         },
         {
+          slug: "open-source",
+          label: "Open Source",
+        },
+        {
           slug: "getting-started",
           label: "Getting Started",
           children: [
@@ -22,16 +26,12 @@ const lilypadSpec: ProductSpec = {
               label: "Quickstart",
             },
             {
-              slug: "playground",
-              label: "Playground",
-            },
-            {
-              slug: "open-source",
-              label: "Open Source",
-            },
-            {
               slug: "self-hosting",
               label: "Self-Hosting",
+            },
+            {
+              slug: "playground",
+              label: "Playground",
             },
           ],
         },
@@ -62,30 +62,16 @@ const lilypadSpec: ProductSpec = {
           label: "Evaluation",
           children: [
             {
-              slug: "annotations",
-              label: "Annotations",
+              slug: "cost-and-latency",
+              label: "Cost & Latency",
             },
             {
               slug: "comparisons",
               label: "Comparisons",
             },
             {
-              slug: "cost-and-latency-tracking",
-              label: "Cost & Latency Tracking",
-            },
-          ],
-        },
-        {
-          slug: "under-development",
-          label: "Under Development",
-          children: [
-            {
-              slug: "vibe-synthesis",
-              label: "Vibe Synthesis",
-            },
-            {
-              slug: "experiments",
-              label: "Experiments",
+              slug: "annotations",
+              label: "Annotations",
             },
           ],
         },
@@ -94,7 +80,7 @@ const lilypadSpec: ProductSpec = {
 
     {
       slug: "api",
-      label: "API",
+      label: "API Reference",
       children: [
         {
           slug: "index",

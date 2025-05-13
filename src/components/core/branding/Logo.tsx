@@ -1,13 +1,9 @@
 import React from "react";
 import { cn } from "@/src/lib/utils";
+import { logoSizeMap } from "./logoUtils";
+import type { BaseLogoProps } from "./logoUtils";
 
-interface LogoProps {
-  size?: "micro" | "small" | "medium" | "large";
-  withText?: boolean;
-  className?: string;
-  textClassName?: string;
-  imgClassName?: string;
-  containerClassName?: string;
+interface LogoProps extends BaseLogoProps {
   showLilypad?: boolean;
 }
 
@@ -25,39 +21,7 @@ const Logo: React.FC<LogoProps> = ({
   containerClassName,
   showLilypad = false,
 }) => {
-  // Size mappings for the logo
-  const sizeMap = {
-    micro: {
-      container: "w-auto",
-      img: "h-4 w-auto",
-      text: "text-s",
-      spacing: "mr-1.5",
-      wrapper: "px-1.5 py-0.5",
-    },
-    small: {
-      container: "w-auto",
-      img: "h-7 w-auto",
-      text: "text-2xl",
-      spacing: "mr-2",
-      wrapper: "px-4 py-2",
-    },
-    medium: {
-      container: "w-auto",
-      img: "h-10 w-auto",
-      text: "text-3xl",
-      spacing: "mr-3",
-      wrapper: "px-5 py-2.5",
-    },
-    large: {
-      container: "w-auto",
-      img: "w-16 h-auto",
-      text: "text-5xl",
-      spacing: "mr-4",
-      wrapper: "px-6 py-3",
-    },
-  };
-
-  const selectedSize = sizeMap[size];
+  const selectedSize = logoSizeMap[size];
 
   // Choose logo based on showLilypad flag
   const logoPath = showLilypad

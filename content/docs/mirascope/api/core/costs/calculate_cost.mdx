@@ -6,15 +6,9 @@ description: API documentation for mirascope.core.costs.calculate_cost
 
 # mirascope.core.costs.calculate_cost
 
-<ApiType type="Module" />
-
 Cost calculation utilities for LLM API calls.
 
-## Functions
-
-### calculate_cost
-
-<ApiType type="Function" />
+## <ApiType type="Function" path="core/costs/calculate_cost" symbolName="calculate_cost" /> calculate_cost
 
 Calculate the cost for an LLM API call.
 
@@ -25,36 +19,86 @@ preserving existing behavior while providing a unified interface.
   parameters={[
   {
     "name": "provider",
-    "type": "Provider",
-    "module_context": "mirascope.core.base.types",
-    "is_builtin": "false"
+    "type_info": {
+      "type_str": "Provider",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "/docs/mirascope/api/core/base/types#provider"
+    },
+    "description": "The LLM provider (e.g., \"openai\", \"anthropic\")"
   },
   {
     "name": "model",
-    "type": "str",
-    "module_context": "builtins",
-    "is_builtin": "true"
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    },
+    "description": "The model name (e.g., \"gpt-4\", \"claude-3-opus\")"
   },
   {
     "name": "metadata",
-    "type": "CostMetadata | None",
-    "module_context": "mirascope.core.base.types",
-    "is_builtin": "false",
-    "default": "None"
+    "type_info": {
+      "type_str": "CostMetadata | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+      },
+      "parameters": [
+        {
+          "type_str": "CostMetadata",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "/docs/mirascope/api/core/base/types#costmetadata"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
+        }
+      ]
+    },
+    "default": "None",
+    "description": "Additional metadata required for cost calculation"
   }
 ]}
-  contentSubpath="docs/mirascope"
-  currentModule="mirascope.core.costs.calculate_cost"
 />
 
-<ReturnType
-  type="float | None"
-  moduleContext="builtins"
-  isBuiltin={true}
-  contentSubpath="docs/mirascope"
-  currentModule="mirascope.core.costs.calculate_cost"
-  description="The calculated cost in USD or None if unable to calculate"
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "float | None",
+    "description": null,
+    "kind": "union",
+    "base_type": {
+      "type_str": "Union",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+    },
+    "parameters": [
+      {
+        "type_str": "float",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/functions.html#float"
+      },
+      {
+        "type_str": "None",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/constants.html#None"
+      }
+    ]
+  },
+  "description": "The calculated cost in USD or None if unable to calculate"
+}}
 />
-
 
 

@@ -205,16 +205,17 @@ You can see this in the code example above, where the `@openai.call` decorator e
 
 Our prompt management tool [Lilypad](/docs/lilypad) automatically versions and traces every LLM function call to ensure code readability and maintainability and to facilitate testing.
 
-For instance, you can version an LLM call simply by adding the `generation` decorator to ensure that any call the function makes is traced against the version:
+For instance, you can version an LLM call simply by adding the `trace` decorator to ensure that any call the function makes is traced against the version:
 
 ```python
 import lilypad
 from openai import OpenAI
  
+lilypad.configure(auto_llm=True)  # [!code highlight]
 client = OpenAI()
  
  
-@lilypad.generation()
+@lilypad.trace(versioning="automatic")  # [!code highlight]
 def answer_question(question: str) -> str:
 d    completion = client.chat.completions.create(
         model="gpt-4o-mini",
@@ -223,11 +224,8 @@ d    completion = client.chat.completions.create(
     return str(completion.choices[0].message.content)
  
  
-if __name__ == "__main__":
-    lilypad.configure()
-    answer = answer_question("What's the population of New York?")
-    print(answer)
-
+answer = answer_question("What's the population of New York?")
+print(answer)
 ```
 
 In the code above, `answer_question` will be versioned and traced when called, and changing anything inside that function will automatically increment the version (even when changing the model version in the call itself).

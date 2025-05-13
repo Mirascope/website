@@ -14,8 +14,12 @@ class Book(BaseModel):
     title: str
     author: str
 
-
-@llm.call(provider="anthropic", model="claude-3-5-sonnet-latest", response_model=Book) # [!code highlight]
+# [!code highlight:6]
+@llm.call(
+    provider="anthropic", 
+    model="claude-3-5-sonnet-latest", 
+    response_model=Book
+) 
 def extract_book(text: str) -> str:
     return f"Extract {text}"
 

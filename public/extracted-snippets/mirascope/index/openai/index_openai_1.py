@@ -14,8 +14,12 @@ class Book(BaseModel):
     title: str
     author: str
 
-
-@llm.call(provider="openai", model="gpt-4o-mini", response_model=Book) # [!code highlight]
+# [!code highlight:6]
+@llm.call(
+    provider="openai", 
+    model="gpt-4o-mini", 
+    response_model=Book
+) 
 def extract_book(text: str) -> str:
     return f"Extract {text}"
 

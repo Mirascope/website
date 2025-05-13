@@ -241,30 +241,17 @@ This is extremely important for versioning everything together as a single unit.
 
 Lilypad offers a [prompt management and versioning](/docs/lilypad) framework that versions and traces every LLM function call automatically. This helps you iterate faster on prompts and their calls rather than worrying about the tedium of versioning and tracing things manually. Ultimately, this provides a more structured way to refine and tests prompts easily while maintaining a clean and organized environment.
 
-```plaintext
-|
-|-- .lilypad/
-|-- |-- config.json
-|-- lily/
-|   |-- __init__.py
-|   |-- {llm_function_name}.py
-|-- pad.db
-```
-
-**The Lilypad framework structure contains subdirectories and files for:**
-
-- Configuring your project (`.lilypad`)
-- Managing prompts as LLM functions (`lily/`)
-- Saving prompt versions and traces automatically (`pad.db`)
-
-The automatically version and trace, all you need to do is add the `lilypad.llm_fn` decorator on top of your LLM function:
+The automatically version and trace, all you need to do is add the `lilypad.trace` decorator on top of your LLM function:
 
 ```python
 import lilypad
-from mirascope.core import openai
+from mirascope import llm
 
-@lilypad.llm_fn()
-@openai.call("gpt-4o-mini")
+lilypad.configure(auto_llm=True)  # [!code highlight] 
+
+
+@lilypad.trace(versioning="automatic")  # [!code highlight]
+@llm.call("openai", "gpt-4o-mini")
 def recommend_book(genre: str) -> str:
     return f"Recommend a {genre} book"
 
@@ -273,31 +260,32 @@ if __name__ == "__main__":
     print(output.content)
 ```
 
-We include the `if __name__` bit so that you can run `lilypad run recommend_book` to easily run the prompt during development. The above example shows using Lilypad with Mirascope, but Lilypad also works with the official provider SDKs (e.g. the previous OpenAI SDK example).
+We include the `if __name__` bit so that you can run `recommend_book` easily during development in isolation. The above example shows using Lilypad with Mirascope, but Lilypad also works with the official provider SDKs (e.g. the previous OpenAI SDK example).
 
-When using the `lilypad.llm_fn` decorator, the version is determined based on all user-defined code that could impact the prompt. In more technical terms, the version is determined by the entire lexical closure.
+When using the `lilypad.trace` decorator, the version is determined based on all user-defined code that could impact the prompt. In more technical terms, the version is determined by the entire lexical closure.
 
 This means not only that any changes to the function itself will be versioned but also that any changes to user-defined functions used by this function will also update the version:
 
 ```python
-
-# lily/recommend_book.py
-
 import lilypad
-from mirascope.core import openai
+from mirascope import llm
+
+lilypad.configure(auto_llm=True)
 
 # Changes to this function will also be detected and bump
 
 # the version of the LLM function :)
 
-def get_available_books() -> list[str]:
-    return ["The Name of the Wind"]
+def get_available_books() -> list[str]:    # [!code highlight]
+    return ["The Name of the Wind"]    # [!code highlight]
 
-@lilypad.llm_fn()
-@openai.call("gpt-4o-mini")
+
+@lilypad.trace(versioning="automatic")
+@llm.call("openai", "gpt-4o-mini")
 def recommend_book(genre: str) -> str:
-    books = get_available_books()
+    books = get_available_books()    # [!code highlight]
     return f"Recommend a {genre} book from this list: {books}"
+
 
 if __name__ == "__main__":
     output = recommend_book("fantasy")
@@ -375,23 +363,7 @@ Using Pydantic with Mirascope makes writing even more complex validation logic s
 
 Effective prompt management involves not only tracking changes to prompts over time, but also testing them for performance and improving them based on those results.
 
-We are actively working on evaluation and testing features in Lilypad. In the meantime, you can easily use the [`Weave`](https://wandb.github.io/weave/) toolkit from the team at Weights & Biases, which is a tool for logging, debugging, evaluating, and organizing all aspects of LLM workflows, from experimentation to production, via their `@weave.op()` decorator (which allows you to log any call to that op to Weave), as shown below: ‍
-
-```python
-from mirascope.core import openai, prompt_template
-import weave
-
-weave.init("my-project")
-
-@weave.op()
-@openai.call("gpt-4o-mini")
-@prompt_template("Recommend some {genre} movies")
-def recommend_movies(genre: str): ...
-
-response = recommend_movies("sci-fi")  # this will automatically get logged to Weave
-
-print(response.content)
-```
+The first step when evaluating prompts is to look at your data and annotate it. You can use Lilypad to [annotate traces](/docs/lilypad/evaluation/annotations) directly in the UI or through code.
 
 ### Track Prompt Evolution Through Comprehensive Data Logging
 
@@ -400,137 +372,71 @@ Since Mirascope's responses are built on top of Pydantic's `BaseModel` class, yo
 With Lilypad, you can better understand how changes to input values or parameters affect the models' responses without having to worry about manually tracking the dump. For example, for a given prompt, the function might output:
 
 ```python
-
 # {
-
 #     "metadata": {},
-
 #     "response": {
-
 #         "id": "chatcmpl-9uO3BPd58TzVWjRejHJxagctE6OSi",
-
 #         "choices": [
-
 #             {
-
 #                 "finish_reason": "stop",
-
 #                 "index": 0,
-
 #                 "logprobs": None,
-
 #                 "message": {
-
 #                     "content": 'That’s a solid start! The positive vibe in those lines is infectious. You might want to build on that feeling of joy and satisfaction. Consider adding some imagery or details about the food or the morning to create a more vivid scene. Here’s a suggestion for how you might expand it:\n\n"I woke up feeling oh so great,  \nSunshine streaming, can\'t be late,  \nI cooked some food that I ate,  \nPancakes flipping, can’t wait!"\n\nThis keeps the upbeat energy and adds a bit more texture. What direction are you thinking of taking the song?',
-
 #                     "refusal": None,
-
 #                     "role": "assistant",
-
 #                     "function_call": None,
-
 #                     "tool_calls": None,
-
 #                 },
-
 #             }
-
 #         ],
-
 #         "created": 1723225845,
-
 #         "model": "gpt-4o-mini-2024-07-18",
-
 #         "object": "chat.completion",
-
 #         "service_tier": None,
-
 #         "system_fingerprint": "fp_507c9469a1",
-
 #         "usage": {"completion_tokens": 116, "prompt_tokens": 45, "total_tokens": 161},
-
 #     },
-
 #     "tool_types": [],
-
 #     "prompt_template": "\n    SYSTEM:\n    You are an acclaimed music producer.\n    \n    USER:\n    I'm working on a new song. What do you think?\n    {song_lyrics}\n    ",
-
 #     "fn_args": {
-
 #         "song_lyrics": "I woke up feeling oh so great, I cooked some food that i ate"
-
 #     },
-
 #     "dynamic_config": None,
-
 #     "messages": [
-
 #         {"role": "system", "content": "You are an acclaimed music producer."},
-
 #         {
-
 #             "role": "user",
-
 #             "content": "I'm working on a new song. What do you think?\nI woke up feeling oh so great, I cooked some food that i ate",
-
 #         },
-
 #     ],
-
 #     "call_params": {"temperature": 0.4},
-
 #     "call_kwargs": {
-
 #         "temperature": 0.4,
-
 #         "model": "gpt-4o-mini",
-
 #         "messages": [
-
 #             {"role": "system", "content": "You are an acclaimed music producer."},
-
 #             {
-
 #                 "role": "user",
-
 #                 "content": "I'm working on a new song. What do you think?\nI woke up feeling oh so great, I cooked some food that i ate",
-
 #             },
-
 #         ],
-
 #     },
-
 #     "user_message_param": {
-
 #         "content": "I'm working on a new song. What do you think?\nI woke up feeling oh so great, I cooked some food that i ate",
-
 #         "role": "user",
-
 #     },
-
 #     "start_time": 1723225844872.8289,
-
 #     "end_time": 1723225846620.729,
-
 #     "message_param": {
-
 #         "content": 'That’s a solid start! The positive vibe in those lines is infectious. You might want to build on that feeling of joy and satisfaction. Consider adding some imagery or details about the food or the morning to create a more vivid scene. Here’s a suggestion for how you might expand it:\n\n"I woke up feeling oh so great,  \nSunshine streaming, can\'t be late,  \nI cooked some food that I ate,  \nPancakes flipping, can’t wait!"\n\nThis keeps the upbeat energy and adds a bit more texture. What direction are you thinking of taking the song?',
-
 #         "refusal": None,
-
 #         "role": "assistant",
-
 #         "tool_calls": None,
-
 #     },
-
 #     "tools": None,
-
 #     "tool": None,
-
 # }
-
 ```
 
 Each prompt iteration might involve tweaks to the prompt structure, changes in the parameters fed into the model, or adjustments in how the data is processed before being sent to the model. The `model_dump()` function serializes these changes into a structured format that can be logged and tracked over time, and Lilypad enables automatically versioning and tracing all of this information into a nice and readable interface so you don't have to worry about it.

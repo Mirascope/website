@@ -18,7 +18,7 @@ We currently support [OpenAI](https://openai.com/), [Anthropic](https://www.anth
 If there are any providers we don't yet support that you'd like to see supported, let us know!
 
 <Callout type="api">
-  [`mirascope.llm.call`](/docs/mirascope/api)
+  [`mirascope.llm.call`](/docs/mirascope/api/llm/call)
 </Callout>
 
 ## Basic Usage and Syntax
@@ -134,7 +134,7 @@ print(override_response.content)
 ### Common Response Properties and Methods
 
 <Callout type="api">
-  [`mirascope.core.base.call_response`](/docs/mirascope/api)
+  [`mirascope.core.base.call_response`](/docs/mirascope/api/core/base/call_response)
 </Callout>
 
 All [`BaseCallResponse`](/docs/mirascope/api) objects share these common properties:
@@ -406,9 +406,16 @@ print(response.content)
 <Callout type="api">
   For details on provider-specific modules, see the API documentation for each provider:
   
-  - [`mirascope.core.openai.call`](/docs/mirascope/api)
-  - [`mirascope.core.anthropic.call`](/docs/mirascope/api)
-  - And so on for each supported provider
+  - [`mirascope.core.openai.call`](/docs/mirascope/api/core/openai/call)
+  - [`mirascope.core.anthropic.call`](/docs/mirascope/api/core/anthropic/call)
+  - [`mirascope.core.mistral.call`](/docs/mirascope/api/core/mistral/call)
+  - [`mirascope.core.google.call`](/docs/mirascope/api/core/google/call)
+  - [`mirascope.core.azure.call`](/docs/mirascope/api/core/azure/call)
+  - [`mirascope.core.cohere.call`](/docs/mirascope/api/core/cohere/call)
+  - [`mirascope.core.groq.call`](/docs/mirascope/api/core/groq/call)
+  - [`mirascope.core.xai.call`](/docs/mirascope/api/core/xai/call)
+  - [`mirascope.core.bedrock.call`](/docs/mirascope/api/core/bedrock/call)
+  - [`mirascope.core.litellm.call`](/docs/mirascope/api/core/litellm/call)
 </Callout>
 
 While Mirascope provides a consistent interface across different LLM providers, you can also use provider-specific modules with refined typing for an individual provider.

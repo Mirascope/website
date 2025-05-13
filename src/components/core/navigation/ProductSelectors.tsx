@@ -5,7 +5,7 @@ import { type ProductName } from "@/src/lib/content/spec";
 
 // Shared styles and components
 const ProductTitle = ({ product }: { product: ProductName }) => {
-  const titleClass = `text-xl font-medium ${product === "mirascope" ? "text-mirascope-purple" : "text-lilypad-green"}`;
+  const titleClass = `text-lg font-medium ${product === "mirascope" ? "text-mirascope-purple" : "text-lilypad-green"}`;
   return <span className={titleClass}>{product === "mirascope" ? "Mirascope" : "Lilypad"}</span>;
 };
 
@@ -15,7 +15,7 @@ const ProductLink = ({ product }: { product: ProductName }) => {
   return (
     <Link
       to={getProductRoute(product)}
-      className={`text-muted-foreground text-xl font-medium ${hoverClass}`}
+      className={`text-muted-foreground text-lg font-medium ${hoverClass}`}
     >
       {product === "mirascope" ? "Mirascope" : "Lilypad"}
     </Link>
@@ -66,7 +66,7 @@ export function DevProductSelector({ currentProduct }: { currentProduct: Product
   return (
     <div className="flex space-x-6 px-1">
       <button
-        className={`text-xl font-medium ${
+        className={`text-lg font-medium ${
           currentProduct === "mirascope"
             ? "text-mirascope-purple"
             : "text-muted-foreground hover:text-mirascope-purple"
@@ -76,7 +76,7 @@ export function DevProductSelector({ currentProduct }: { currentProduct: Product
         Mirascope
       </button>
       <button
-        className={`text-xl font-medium ${
+        className={`text-lg font-medium ${
           currentProduct === "lilypad"
             ? "text-lilypad-green"
             : "text-muted-foreground hover:text-lilypad-green"

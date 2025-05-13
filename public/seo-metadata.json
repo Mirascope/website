@@ -209,15 +209,10 @@
     "title": "Comparisons | Lilypad",
     "description": "Compare different LLM function implementations"
   },
-  "/docs/lilypad/evaluation/cost-and-latency-tracking": {
-    "route": "/docs/lilypad/evaluation/cost-and-latency-tracking",
-    "title": "Cost & Latency Tracking | Lilypad",
+  "/docs/lilypad/evaluation/cost-and-latency": {
+    "route": "/docs/lilypad/evaluation/cost-and-latency",
+    "title": "Cost & Latency | Lilypad",
     "description": "Monitor the performance and cost of your LLM functions"
-  },
-  "/docs/lilypad/getting-started/open-source": {
-    "route": "/docs/lilypad/getting-started/open-source",
-    "title": "Open-Source | Lilypad",
-    "description": "How Lilypad balances open-source and enterprise features"
   },
   "/docs/lilypad/getting-started/playground": {
     "route": "/docs/lilypad/getting-started/playground",
@@ -254,15 +249,10 @@
     "title": "Versioning | Lilypad",
     "description": "Track versions of your LLM functions"
   },
-  "/docs/lilypad/under-development/experiments": {
-    "route": "/docs/lilypad/under-development/experiments",
-    "title": "Experiments | Lilypad",
-    "description": "Run experiments with Lilypad"
-  },
-  "/docs/lilypad/under-development/vibe-synthesis": {
-    "route": "/docs/lilypad/under-development/vibe-synthesis",
-    "title": "Vibe Synthesis | Lilypad",
-    "description": "Automated synthesis of evaluation criteria"
+  "/docs/lilypad/open-source": {
+    "route": "/docs/lilypad/open-source",
+    "title": "Open-Source | Lilypad",
+    "description": "How Lilypad balances open-source and enterprise features"
   },
   "/docs/mirascope": {
     "route": "/docs/mirascope",

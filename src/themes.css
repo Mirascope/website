@@ -8,6 +8,28 @@
   --color-lilypad-green: #409b45; /* Vibrant lily pad green */
   --color-lilypad-green-dark: #25562a; /* Darker version of the lily pad green */
 
+  /* Responsive font sizes using clamp() - smaller sizes with more dramatic scaling */
+  --text-code: clamp(0.6rem, 0.55rem + 0.5vw, 0.75rem); /* For code elements */
+
+  --text-xs: clamp(0.6rem, 0.55rem + 0.5vw, 0.8rem); /* ~10-13px */
+  --text-sm: clamp(0.7rem, 0.6rem + 0.75vw, 0.875rem); /* ~11-14px */
+  --text-base: clamp(0.825rem, 0.7rem + 0.875vw, 1rem); /* ~13-16px */
+  --text-lg: clamp(0.9rem, 0.75rem + 1vw, 1.125rem); /* ~14-18px */
+  --text-xl: clamp(1rem, 0.825rem + 1.125vw, 1.25rem); /* ~16-20px */
+  --text-2xl: clamp(1.125rem, 0.9rem + 1.5vw, 1.5rem); /* ~18-24px */
+  --text-3xl: clamp(1.25rem, 0.95rem + 1.75vw, 1.75rem); /* ~20-28px */
+  --text-4xl: clamp(1.5rem, 1.125rem + 2vw, 2.25rem); /* ~24-36px */
+  --text-5xl: clamp(1.75rem, 1.25rem + 2.5vw, 2.75rem); /* ~28-44px */
+  --text-6xl: clamp(2.25rem, 1.5rem + 3.5vw, 3.5rem); /* ~36-56px */
+  --text-7xl: clamp(2.75rem, 1.75rem + 4.5vw, 4.5rem); /* ~44-72px */
+  --text-8xl: clamp(3.5rem, 2.5rem + 5vw, 5.5rem); /* ~56-88px */
+  --text-9xl: clamp(4.5rem, 3rem + 6vw, 7rem); /* ~72-112px */
+
+  /* Special purpose text sizes */
+  --text-hero: clamp(2.5rem, 2rem + 5vw, 6rem); /* Hero text block */
+  --text-logo: clamp(1.75rem, 1.5rem + 2.5vw, 3.5rem); /* Logo text */
+  --text-medium: clamp(1.5rem, 1.25rem + 2.5vw, 3rem); /* Medium headings like h2 in blocks */
+
   /* Default (Mirascope) theme colors */
 
   /* Base */

@@ -1,5 +1,51 @@
-import { codeToHtml } from "shiki";
+import { createHighlighter } from "shiki";
 import { transformerNotationHighlight } from "@shikijs/transformers";
+
+// Create singleton highlighters for light and dark themes
+let lightHighlighter: Awaited<ReturnType<typeof createHighlighter>> | null = null;
+let darkHighlighter: Awaited<ReturnType<typeof createHighlighter>> | null = null;
+let highlightersInitialized = false;
+let initializationPromise: Promise<void> | null = null;
+
+// Initialize highlighters - returns a promise that resolves when highlighters are ready
+export const initHighlighters = async (): Promise<void> => {
+  // If already initialized, return immediately
+  if (highlightersInitialized) return Promise.resolve();
+  // If initialization is in progress, return the existing promise
+  if (initializationPromise) return initializationPromise;
+
+  const langs = ["python", "bash", "text", "javascript", "typescript", "powershell", "json"];
+  // Create a new initialization promise
+  initializationPromise = (async () => {
+    try {
+      // Create the light theme highlighter with Python only
+      lightHighlighter = await createHighlighter({
+        themes: ["github-light"],
+        langs,
+      });
+
+      // Create the dark theme highlighter with Python only
+      darkHighlighter = await createHighlighter({
+        themes: ["github-dark-default"],
+        langs,
+      });
+
+      // Mark as initialized
+      highlightersInitialized = true;
+    } catch (error) {
+      console.error("Failed to initialize code highlighters:", error);
+      // Reset the initialization promise so we can try again
+      initializationPromise = null;
+    }
+  })();
+
+  return initializationPromise;
+};
+
+// Check if highlighters are ready
+export const areHighlightersReady = (): boolean => {
+  return highlightersInitialized;
+};
 
 /**
  * Strips highlight markers from code for clipboard copying
@@ -122,47 +168,50 @@ export function processCodeWithMetaHighlighting(
   return processedLines.join("\n");
 }
 
-// Generate HTML for highlighted code
-export async function highlightCode(code: string, language: string = "text", meta: string = "") {
+// Helper function for creating fallback HTML when highlighting fails
+function createFallbackHighlighting(code: string) {
+  // Fallback to a simple code block with escaped HTML
+  const escapedCode = code
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+  const fallbackHtml = `<pre class="shiki"><code>${escapedCode.trim()}</code></pre>`;
+  return { lightThemeHtml: fallbackHtml, darkThemeHtml: fallbackHtml };
+}
+
+// Synchronous highlighting function - main function to use
+export function highlightCode(code: string, language: string = "text", meta: string = "") {
   try {
     // Process the code with meta information for line highlighting
     const processedCode = processCodeWithMetaHighlighting(code.trim(), meta, language);
-    // Use the v1 matching algorithm to ensure we highlight bare comment lines
-    // See: https://github.com/shikijs/shiki/issues/1006
-    // Note: If ever migrating to the v3 algorithm, it will create an off-by-one
-    // issue with every block like this: # [!code highlight:21]
-    // (The line counting behavior in v1 is weird with comments, which is the
-    // motivation for the v3 algorithm.) So change with care.
-    const transformer = () => transformerNotationHighlight({ matchAlgorithm: "v1" });
 
-    // Generate HTML for both light and dark themes
-    // Using direct codeToHtml call from shiki
-    const lightThemeHtml = await codeToHtml(processedCode, {
+    // If highlighters aren't initialized, return a fallback
+    if (!lightHighlighter || !darkHighlighter) {
+      return createFallbackHighlighting(code);
+    }
+
+    // Use the pre-initialized highlighters synchronously
+    // Apply the transformer for highlight notation inline
+    const transformer = transformerNotationHighlight({ matchAlgorithm: "v1" });
+
+    const lightThemeHtml = lightHighlighter.codeToHtml(processedCode, {
       lang: language || "text",
-      theme: "github-light", // Use original theme
-      transformers: [transformer()],
+      theme: "github-light",
+      transformers: [transformer],
     });
 
-    const darkThemeHtml = await codeToHtml(processedCode, {
+    const darkThemeHtml = darkHighlighter.codeToHtml(processedCode, {
       lang: language || "text",
-      theme: "github-dark-default", // Use original theme
-      transformers: [transformer()],
+      theme: "github-dark-default",
+      transformers: [transformer],
     });
 
-    // Return both versions for theme switching
     return { lightThemeHtml, darkThemeHtml };
   } catch (error) {
     console.error(`Error highlighting code with language "${language}":`, error);
-
-    // Fallback to a simple code block with escaped HTML
-    const escapedCode = code
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-
-    const fallbackHtml = `<pre class="shiki"><code>${escapedCode.trim()}</code></pre>`;
-    return { lightThemeHtml: fallbackHtml, darkThemeHtml: fallbackHtml };
+    return createFallbackHighlighting(code);
   }
 }

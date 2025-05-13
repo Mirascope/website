@@ -13,16 +13,15 @@ export const LilypadBlock = ({ onScrollToTop }: LilypadBlockProps) => {
   return (
     <div
       data-product="lilypad"
-      className="flex min-h-screen flex-col items-center justify-center px-4 py-16"
+      className="flex min-h-screen flex-col items-center justify-center px-4 pt-16"
     >
       <ResponsiveTextBlock
         lines={["Spin up your data flywheel", "with one line of code"]}
         element="h2"
         fontSize="clamp(1.5rem, 5vw, 3rem)"
-        className="mb-6 text-center text-white"
+        className="text-shadow-medium mb-6 text-center text-white"
         lineClassName="font-bold"
         lineSpacing="mb-2"
-        textShadow={true}
       />
       <div className="mb-2 w-full max-w-3xl">
         <div className="bg-background/60 mb-2 w-full rounded-md">
@@ -55,7 +54,7 @@ export const LilypadBlock = ({ onScrollToTop }: LilypadBlockProps) => {
 
       {/* Scroll indicator to go back to the top */}
       {onScrollToTop && (
-        <div className="mt-16 flex justify-center">
+        <div className="mt-8 flex justify-center">
           <div className="landing-page-box-shadow landing-page-box-shadow-hover relative h-10 w-10 overflow-hidden rounded-full">
             <button
               onClick={onScrollToTop}

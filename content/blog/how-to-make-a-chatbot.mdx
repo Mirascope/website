@@ -147,15 +147,16 @@ Prompt versioning typically allows you to:
 * Provide an audit trail of who made changes, when they were made, and why.  
 * Manage code without worrying about manually versioning using Git for every little change.
 
-[Lilypad](/docs/lilypad), which works with Mirascope, is an open source prompt engineering framework that automatically versions your code every time you make an LLM call. You can use Lilypad by adding the `lilypad.generation()` decorator to any Python function:
+[Lilypad](/docs/lilypad), which works with Mirascope, is an open source prompt engineering framework that automatically versions your code every time you make an LLM call. You can use Lilypad by adding the `lilypad.trace()` decorator to any Python function:
 
 ```python
 import lilypad
 from openai import OpenAI
 
+lilypad.configure(auto_llm=True)  # [!code highlight]
 client = OpenAI()
 
-@lilypad.generation()
+@lilypad.trace(versioning="automatic")  # [!code highlight]
 def answer_question(question: str) -> str:
     completion = client.chat.completions.create(
         model="gpt-4o-mini",
@@ -164,9 +165,7 @@ def answer_question(question: str) -> str:
     return str(completion.choices[0].message.content)
  
  
-if __name__ == "__main__":
-    lilypad.configure()
-    answer = answer_question("What is the tallest building in the world?")
+answer = answer_question("What is the tallest building in the world?")    
 ```
 
 In the example above, the function `answer_question` gets versioned and a trace is collected against that version to keep a full record of every call, such as the exact input prompt sent to the LLM, outputs generated, etc.

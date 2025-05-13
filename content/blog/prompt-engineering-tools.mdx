@@ -332,20 +332,6 @@ As mentioned previously, a major pain point of ours has been successfully managi
 
 For this reason we are working on [`Lilypad`](/docs/lilypad), which is our prompt engineering framework. You can version and trace every prompt and LLM call automatically so you can spend your time focusing on improving your prompts rather than tracking them.
 
-When installed, Lilypad creates a predefined directory structure as shown below:
-
-```plaintext
-|
-|-- .lilypad/
-|-- |-- config.json
-|-- lily/
-|   |-- __init__.py
-|   |-- {llm_function_name}.py
-|-- pad.db
-```
-
-This creates a prompt management environment that supports collaboration and allows you to centralize prompt development in one place. LLM functions live in the `lily` folder, and automatic versions and traces live in the `pad.db` SQLite database.
-
 By versioning the entire lexical closure and tracing every call automatically, you can continue iterating on your prompts and any other code in your codebase without having to worry about manually tracking the potential impacts of such changes on the outputs of your functions.
 
 ### Extend Model Capabilities by Adding Tools (Function Calling)

@@ -67,7 +67,7 @@ Each tool offers unique features to address different aspects of prompt evaluati
 
 ### Lilypad
 
-[Lilypad](/docs/lilypad) allows you to automatically version, trace, and manage prompts (generations) by simply adding the Python decorator `@lilypad.generation` to your LLM functions.  
+[Lilypad](/docs/lilypad) allows you to automatically version, trace, and manage prompts (functions) by simply adding the Python decorator `@lilypad.trace` to your LLM functions.  
 
 It recognizes the non-deterministic nature of LLM outputs and treats prompts and everything else that goes into generating the output as optimization problems rather than as one-time configurations that don't adapt to real-world performance.
 
@@ -613,7 +613,7 @@ Systematically versioning prompts and refining evaluation criteria helps establi
 * Automating experimentation and detecting regressions, such as A/B testing of prompt variations  
 * Historically comparing the effectiveness of different prompts, via Lilypad’s traceability  
 * Providing context-aware evaluations entailing factors like token usage, latency, and model parameters  
-* Letting you include custom evaluation metrics
+* Letting you run custom evaluation metrics
 
 ## Evaluate Prompts for AI-Generated Hiring Recommendations
 

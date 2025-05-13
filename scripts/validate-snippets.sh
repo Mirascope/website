@@ -67,9 +67,9 @@ log $YELLOW "Found $TOTAL_FILES Python files ($EXAMPLES_FILES in examples, $SNIP
 # Install dependencies with uv
 log $YELLOW "Installing dependencies with uv..."
 if [ "$VERBOSE" = true ]; then
-  uv pip install -e ".[providers]"
+  uv pip install -e ".[mirascope-all]"
 else
-  uv pip install -e ".[providers]" > /dev/null 2>&1
+  uv pip install -e ".[mirascope-all]" > /dev/null 2>&1
 fi
 log $GREEN "Dependencies installed"
 

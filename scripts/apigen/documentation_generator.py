@@ -13,6 +13,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from scripts.apigen.admonition_converter import convert_admonitions
 from scripts.apigen.config import ApiSourceConfig
 from scripts.apigen.griffe_integration import (
     get_loader,
@@ -251,6 +252,12 @@ class DocumentationGenerator:
                 "typing",
                 "opentelemetry",
                 "opentelemetry.trace",
+                "openai",
+                "mistralai",
+                "functools",
+                "base64",
+                "typing_extensions",
+                "__future__",
             ]
             for dep in common_dependencies:
                 try:
@@ -291,6 +298,9 @@ class DocumentationGenerator:
         with open(src_path) as f:
             content = f.read()
 
+        # Convert any MkDocs admonitions to MDX callout components
+        content = convert_admonitions(content)
+
         # Extract title from the first heading or use the filename
         title_match = re.search(r"^#\s+(.+)$", content, re.MULTILINE)
         if title_match:
@@ -308,15 +318,41 @@ class DocumentationGenerator:
             f.write("---\n\n")
             f.write(f"# {title}\n\n")
 
-            # Extract and process directives
-            directives = self._extract_directives(content)
-            for directive in directives:
-                # Use the error-handling wrapper version to provide better resilience
-                doc_content = process_directive_with_error_handling(
-                    directive, self.module
-                )
-                f.write(doc_content)
-                f.write("\n\n")
+            # Get the relative file path for the API component
+            relative_path = target_path.relative_to(
+                self.project_root / self.config.target_path
+            )
+            doc_path = str(relative_path.with_suffix(""))  # Remove .mdx extension
+
+            # Process the content line by line
+            lines = content.split("\n")
+            skip_next_title = (
+                True  # Skip the first title line since we've already written it
+            )
+
+            for line in lines:
+                line_stripped = line.strip()
+
+                # Skip empty lines
+                if not line_stripped:
+                    continue
+
+                # Check if this is a directive line
+                if line_stripped.startswith(":::"):
+                    # Process directive
+                    doc_content = process_directive_with_error_handling(
+                        line_stripped, self.module, doc_path
+                    )
+                    f.write(doc_content)
+                    f.write("\n\n")
+                elif skip_next_title and line_stripped.startswith("# "):
+                    # Skip the first title line
+                    skip_next_title = False
+                    continue
+                else:
+                    # Write normal content line
+                    f.write(line)
+                    f.write("\n")
 
     def _create_index_file(self) -> None:
         """Create the index.mdx file in the target directory."""
@@ -375,22 +411,3 @@ class DocumentationGenerator:
         except subprocess.CalledProcessError as e:
             print(f"Warning: Prettier formatting failed: {e}")
             print(f"Generated unformatted API meta file at {meta_path}")
-
-    @staticmethod
-    def _extract_directives(content: str) -> list[str]:
-        """Extract API directives from the content.
-
-        Args:
-            content: The source file content
-
-        Returns:
-            A list of directive lines
-
-        """
-        directive_pattern = r"::: ([a-zA-Z0-9_.]+)(?:\s+(.+))?"
-        directives = []
-
-        for match in re.finditer(directive_pattern, content, re.MULTILINE):
-            directives.append(match.group(0))
-
-        return directives

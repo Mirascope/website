@@ -122,7 +122,7 @@ export function ProviderTabbedSection({
       {customHeader ? (
         customHeader
       ) : showLogo ? (
-        <div className="flex items-center px-2 pb-2">
+        <div className="flex items-center px-1 pb-2">
           <Logo size="micro" withText={true} />
         </div>
       ) : null}
@@ -141,7 +141,7 @@ export function ProviderTabbedSection({
 
           <div
             ref={tabsListRef}
-            className="hide-scrollbar overflow-x-auto px-1 pb-0"
+            className="hide-scrollbar overflow-x-auto pb-0"
             onScroll={checkScrollability}
           >
             <TabsList className="inline-flex h-auto flex-nowrap gap-x-2 bg-transparent p-0">
