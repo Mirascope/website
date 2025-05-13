@@ -15,7 +15,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Regex for ApiType components
-API_TYPE_REGEX = r'<ApiType\s+(?:[^>]*\s+)?type="([^"]+)"\s+module="([^"]+)"\s+path="([^"]+)"\s+symbolName="([^"]+)"[^>]*>'
+API_TYPE_REGEX = r'<ApiType\s+(?:[^>]*\s+)?type="([^"]+)"\s+path="([^"]+)"\s+symbolName="([^"]+)"[^>]*>'
 
 # Regex for JSON doc_identifier
 DOC_IDENTIFIER_REGEX = r'"doc_identifier":\s*"([^"]+)"'
@@ -109,8 +109,8 @@ class SymbolRegistryBuilder:
 
                 # Find all ApiType components
                 for match in re.finditer(API_TYPE_REGEX, content):
-                    _, _, doc_path, symbol_name = match.groups()
-                    # Create a URL fragment from the module and symbol name
+                    _, doc_path, symbol_name = match.groups()
+                    # Create a URL fragment from the symbol name
                     fragment = f"{symbol_name.lower()}"
                     doc_url = f"/docs/mirascope/api/{doc_path}#{fragment}"
 

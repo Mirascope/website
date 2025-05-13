@@ -58,7 +58,7 @@ def render_module(processed_module: ProcessedModule, doc_path: str) -> str:
 
     # Add heading with embedded ApiType component
     content.append(
-        f'## <ApiType type="Module" module="{processed_module.module_path}" path="{doc_path}" symbolName="{module_name}" /> {module_name}\n'
+        f'## <ApiType type="Module" path="{doc_path}" symbolName="{module_name}" /> {module_name}\n'
     )
 
     # Add docstring if available
@@ -93,7 +93,7 @@ def render_function(processed_func: ProcessedFunction, doc_path: str) -> str:
 
     # Add heading with embedded ApiType component
     content.append(
-        f'## <ApiType type="Function" module="{processed_func.module_path}" path="{doc_path}" symbolName="{processed_func.name}" /> {processed_func.name}\n'
+        f'## <ApiType type="Function" path="{doc_path}" symbolName="{processed_func.name}" /> {processed_func.name}\n'
     )
 
     # Add docstring if available
@@ -127,7 +127,7 @@ def render_class(processed_class: ProcessedClass, doc_path: str) -> str:
 
     # Add heading with embedded ApiType component
     content.append(
-        f'## <ApiType type="Class" module="{processed_class.module_path}" path="{doc_path}" symbolName="{processed_class.name}" /> {processed_class.name}\n'
+        f'## <ApiType type="Class" path="{doc_path}" symbolName="{processed_class.name}" /> {processed_class.name}\n'
     )
 
     # Add docstring if available
@@ -162,7 +162,7 @@ def render_alias(processed_alias: ProcessedAlias, doc_path: str) -> str:
 
     # Add heading with embedded ApiType component
     content.append(
-        f'## <ApiType type="Alias" module="{processed_alias.module_path}" path="{doc_path}" symbolName="{processed_alias.name}" /> {processed_alias.name}\n'
+        f'## <ApiType type="Alias" path="{doc_path}" symbolName="{processed_alias.name}" /> {processed_alias.name}\n'
     )
     # Add docstring if available
     if processed_alias.docstring:
