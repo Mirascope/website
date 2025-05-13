@@ -1,8 +1,11 @@
 /**
  * Analytics service to handle all tracking functionality.
- * Integrated with Google Analytics 4.
+ * Integrated with Google Analytics 4 and PostHog.
  */
 import { GA_MEASUREMENT_ID, SITE_VERSION } from "../constants/site";
+
+// PostHog API key - would normally be in constants file
+const POSTHOG_API_KEY = "phc_tnTm56utLwHvtXvjyIwj0rF1AKc6wgfLlczRRZ2dthy";
 
 // Centralized check for browser environment
 export const isBrowser = typeof window !== "undefined";
@@ -24,12 +27,19 @@ type EventParams = {
  * including consent management, initialization, and tracking.
  */
 export class AnalyticsManager {
-  private initialized = false;
-  private measurmentId: string;
+  private gaInitialized = false;
+  private phInitialized = false;
+  private gaMeasurementId: string;
+  private posthogApiKey: string;
   private siteVersion: string;
 
-  constructor(measurmentId: string = GA_MEASUREMENT_ID, siteVersion: string = SITE_VERSION) {
-    this.measurmentId = measurmentId;
+  constructor(
+    gaMeasurementId: string = GA_MEASUREMENT_ID,
+    posthogApiKey: string = POSTHOG_API_KEY,
+    siteVersion: string = SITE_VERSION
+  ) {
+    this.gaMeasurementId = gaMeasurementId;
+    this.posthogApiKey = posthogApiKey;
     this.siteVersion = siteVersion;
   }
 
@@ -93,12 +103,13 @@ export class AnalyticsManager {
   }
 
   /**
-   * Enable analytics - initializes if needed
+   * Enable analytics - initializes both analytics providers if needed
    */
   enableAnalytics(): boolean {
     if (!this.isEnabled()) return false;
 
-    this.initialize();
+    this.initializeGoogleAnalytics();
+    this.initializePostHog();
     return true;
   }
 
@@ -106,7 +117,8 @@ export class AnalyticsManager {
    * Disable analytics and update consent settings if already loaded
    */
   disableAnalytics(): void {
-    this.initialized = false;
+    this.gaInitialized = false;
+    this.phInitialized = false;
 
     // Update Google Analytics consent settings if already loaded
     if (window.gtag) {
@@ -114,6 +126,11 @@ export class AnalyticsManager {
       window.gtag("consent", "update", {
         analytics_storage: "denied",
       });
+    }
+
+    // Opt out of PostHog tracking if loaded
+    if (window.posthog) {
+      window.posthog.opt_out_capturing();
     }
   }
 
@@ -172,26 +189,26 @@ export class AnalyticsManager {
   /**
    * Initialize Google Analytics
    */
-  private initialize(): void {
+  private initializeGoogleAnalytics(): void {
     // Prevent duplicate initialization
-    if (this.initialized) {
-      console.log("Analytics already initialized");
+    if (this.gaInitialized) {
+      console.log("Google Analytics already initialized");
       return;
     }
 
-    console.log(`Analytics initializing`);
+    console.log(`Google Analytics initializing`);
 
     // Add the Google Analytics script dynamically
     if (!document.getElementById("ga-script")) {
       const script = document.createElement("script");
       script.id = "ga-script";
       script.async = true;
-      script.src = `https://www.googletagmanager.com/gtag/js?id=${this.measurmentId}`;
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${this.gaMeasurementId}`;
 
       // Add error handling for script loading
       script.onerror = () => {
         console.error("Failed to load Google Analytics script");
-        this.initialized = false;
+        this.gaInitialized = false;
       };
 
       document.head.appendChild(script);
@@ -221,36 +238,105 @@ export class AnalyticsManager {
 
       // Initialize with the measurement ID
       // @ts-ignore - Using arguments in the expected way for GA4
-      gtag("config", this.measurmentId, {
+      gtag("config", this.gaMeasurementId, {
         anonymize_ip: true,
         send_page_view: true,
         site_version: this.siteVersion,
       });
 
-      this.initialized = true;
-      console.log(`Analytics initialized`);
+      this.gaInitialized = true;
+      console.log(`Google Analytics initialized`);
     }
   }
 
   /**
-   * Track a page view
+   * Initialize PostHog
    */
-  trackPageView(path: string): void {
+  private initializePostHog(): void {
+    // Prevent duplicate initialization
+    if (this.phInitialized) {
+      console.log("PostHog already initialized");
+      return;
+    }
+
+    console.log(`PostHog initializing`);
+
+    // Add the PostHog script dynamically
+    if (!document.getElementById("posthog-script")) {
+      try {
+        // Create and configure the script element
+        const script = document.createElement("script");
+        script.id = "posthog-script";
+        script.type = "text/javascript";
+        script.crossOrigin = "anonymous";
+        script.async = true;
+
+        // Add PostHog initialization code inline
+        script.innerHTML = `
+          !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init bs ws ge fs capture De calculateEventProperties $s register register_once register_for_session unregister unregister_for_session Is getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey canRenderSurveyAsync identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty xs Ss createPersonProfile Es gs opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing ys debug ks getPageViewId captureTraceFeedback captureTraceMetric".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+          posthog.init('${this.posthogApiKey}', {
+            api_host: 'https://us.i.posthog.com',
+            person_profiles: 'identified_only',
+            capture_pageview: true,
+            capture_pageleave: true,
+            autocapture: true
+          });
+        `;
+
+        // Append the script to the document
+        document.head.appendChild(script);
+
+        this.phInitialized = true;
+        console.log(`PostHog initialized`);
+      } catch (error) {
+        console.error("Failed to load PostHog:", error);
+        this.phInitialized = false;
+      }
+    }
+  }
+
+  /**
+   * Track a page view in Google Analytics
+   */
+  trackGAPageView(path: string): void {
     if (!this.enableAnalytics()) return;
 
     // Send pageview to Google Analytics
     if (window.gtag) {
       // @ts-ignore - Using arguments in the expected way for GA4
-      window.gtag("config", this.measurmentId, {
+      window.gtag("config", this.gaMeasurementId, {
         page_path: path,
       });
     }
   }
 
   /**
-   * Track a custom event
+   * Track a page view in PostHog
    */
-  trackEvent(action: string, params: EventParams = {}): void {
+  trackPHPageView(path: string): void {
+    if (!this.enableAnalytics()) return;
+
+    // Send pageview to PostHog
+    if (window.posthog) {
+      window.posthog.capture("$pageview", {
+        path: path,
+        site_version: this.siteVersion,
+      });
+    }
+  }
+
+  /**
+   * Track a page view in all analytics systems
+   */
+  trackPageView(path: string): void {
+    this.trackGAPageView(path);
+    this.trackPHPageView(path);
+  }
+
+  /**
+   * Track a custom event in Google Analytics
+   */
+  trackGAEvent(action: string, params: EventParams = {}): void {
     if (!this.enableAnalytics()) return;
 
     // Add site version to all events
@@ -259,7 +345,7 @@ export class AnalyticsManager {
       site_version: this.siteVersion,
     };
 
-    console.log(`Event tracked: ${action}`, eventParams);
+    console.log(`GA Event tracked: ${action}`, eventParams);
 
     // Send event to Google Analytics
     if (window.gtag) {
@@ -269,9 +355,37 @@ export class AnalyticsManager {
   }
 
   /**
-   * Track a copy to clipboard event consistently across the site
+   * Track a custom event in PostHog
    */
-  trackCopyEvent({
+  trackPHEvent(event: string, properties: EventParams = {}): void {
+    if (!this.enableAnalytics()) return;
+
+    // Add site version to all events
+    const eventProperties = {
+      ...properties,
+      site_version: this.siteVersion,
+    };
+
+    console.log(`PH Event tracked: ${event}`, eventProperties);
+
+    // Send event to PostHog
+    if (window.posthog) {
+      window.posthog.capture(event, eventProperties);
+    }
+  }
+
+  /**
+   * Track a custom event in all analytics systems
+   */
+  trackEvent(action: string, params: EventParams = {}): void {
+    this.trackGAEvent(action, params);
+    this.trackPHEvent(action, params);
+  }
+
+  /**
+   * Track a copy to clipboard event consistently across the site with Google Analytics
+   */
+  trackGACopyEvent({
     contentType,
     itemId,
     product,
@@ -284,7 +398,7 @@ export class AnalyticsManager {
   }): void {
     const pagePath = window.location.pathname;
 
-    this.trackEvent("select_content", {
+    this.trackGAEvent("select_content", {
       content_type: contentType,
       item_id: itemId,
       product: product,
@@ -294,19 +408,90 @@ export class AnalyticsManager {
   }
 
   /**
-   * Report web vitals metrics
+   * Track a copy to clipboard event consistently across the site with PostHog
    */
-  reportWebVital(metric: any): void {
+  trackPHCopyEvent({
+    contentType,
+    itemId,
+    product,
+    language,
+  }: {
+    contentType: "blog_markdown" | "document_markdown" | "code_snippet";
+    itemId: string;
+    product: string;
+    language?: string;
+  }): void {
+    const pagePath = window.location.pathname;
+
+    this.trackPHEvent("select_content", {
+      content_type: contentType,
+      item_id: itemId,
+      product: product,
+      page_path: pagePath,
+      ...(language && { language }),
+    });
+  }
+
+  /**
+   * Track a copy to clipboard event consistently across the site with all analytics
+   */
+  trackCopyEvent({
+    contentType,
+    itemId,
+    product,
+    language,
+  }: {
+    contentType: "blog_markdown" | "document_markdown" | "code_snippet";
+    itemId: string;
+    product: string;
+    language?: string;
+  }): void {
+    this.trackGACopyEvent({ contentType, itemId, product, language });
+    this.trackPHCopyEvent({ contentType, itemId, product, language });
+  }
+
+  /**
+   * Report web vitals metrics to Google Analytics
+   */
+  reportGAWebVital(metric: any): void {
     if (!this.enableAnalytics()) return;
 
-    console.log(`Web vital reported: ${metric.name} - ${Math.round(metric.value * 100) / 100}`);
+    console.log(
+      `Web vital reported to GA: ${metric.name} - ${Math.round(metric.value * 100) / 100}`
+    );
 
-    this.trackEvent("web-vitals", {
+    this.trackGAEvent("web-vitals", {
       event_category: "Web Vitals",
       event_label: metric.id,
       value: Math.round(metric.value * 100) / 100,
       non_interaction: true,
     });
+  }
+
+  /**
+   * Report web vitals metrics to PostHog
+   */
+  reportPHWebVital(metric: any): void {
+    if (!this.enableAnalytics()) return;
+
+    console.log(
+      `Web vital reported to PH: ${metric.name} - ${Math.round(metric.value * 100) / 100}`
+    );
+
+    this.trackPHEvent("web-vitals", {
+      event_category: "Web Vitals",
+      event_label: metric.id,
+      value: Math.round(metric.value * 100) / 100,
+      non_interaction: true,
+    });
+  }
+
+  /**
+   * Report web vitals metrics to all analytics providers
+   */
+  reportWebVital(metric: any): void {
+    this.reportGAWebVital(metric);
+    this.reportPHWebVital(metric);
   }
 }
 
