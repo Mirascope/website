@@ -22,7 +22,7 @@ description: API documentation for mirascope.core.base.types
       "type_str": "Any",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   }
 ]}
@@ -48,7 +48,7 @@ description: API documentation for mirascope.core.base.types
       "type_str": "int",
       "description": null,
       "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/functions.html#int"
+      "doc_identifier": "int"
     },
     "description": "Number of tokens in the prompt."
   },
@@ -58,7 +58,7 @@ description: API documentation for mirascope.core.base.types
       "type_str": "int",
       "description": null,
       "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/functions.html#int"
+      "doc_identifier": "int"
     },
     "description": "Number of tokens used that were previously cached (and thus cheaper)."
   },
@@ -68,7 +68,7 @@ description: API documentation for mirascope.core.base.types
       "type_str": "int",
       "description": null,
       "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/functions.html#int"
+      "doc_identifier": "int"
     },
     "description": "Number of tokens in the generated output."
   },
@@ -78,7 +78,7 @@ description: API documentation for mirascope.core.base.types
       "type_str": "int",
       "description": null,
       "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/functions.html#int"
+      "doc_identifier": "int"
     },
     "description": "Total number of tokens used in the request (prompt + completion)."
   }
@@ -102,7 +102,7 @@ Metadata for a video for cost calculation
       "type_str": "Annotated[float, Field(description='Duration of the video in seconds')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -111,7 +111,7 @@ Metadata for a video for cost calculation
       "type_str": "Annotated[bool | None, Field(default=False, description='Whether the video includes audio that should be processed')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -120,7 +120,7 @@ Metadata for a video for cost calculation
       "type_str": "Annotated[int | None, Field(default=None, description='Precalculated token count for this video')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   }
 ]}
@@ -143,7 +143,7 @@ Metadata for an audio file for cost calculation
       "type_str": "Annotated[float, Field(description='Duration of the audio in seconds')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -152,7 +152,7 @@ Metadata for an audio file for cost calculation
       "type_str": "Annotated[bool | None, Field(default=False, description='Whether timestamps should be included')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -161,7 +161,7 @@ Metadata for an audio file for cost calculation
       "type_str": "Annotated[int | None, Field(default=None, description='Precalculated token count for this audio')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   }
 ]}
@@ -184,7 +184,7 @@ Metadata for an image for cost calculation
       "type_str": "Annotated[int, Field(description='Width of the image in pixels')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -193,7 +193,7 @@ Metadata for an image for cost calculation
       "type_str": "Annotated[int, Field(description='Height of the image in pixels')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -202,7 +202,7 @@ Metadata for an image for cost calculation
       "type_str": "Annotated[int | None, Field(default=None, description='Precalculated token count for this image')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -211,7 +211,7 @@ Metadata for an image for cost calculation
       "type_str": "Annotated[str | None, Field(default=None, description='Detail level of the image')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   }
 ]}
@@ -234,7 +234,7 @@ Google API specific metadata for cost calculation
       "type_str": "Annotated[bool | None, Field(default=False, description='Whether to use Vertex AI pricing (vs. direct Gemini API)')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -243,7 +243,7 @@ Google API specific metadata for cost calculation
       "type_str": "Annotated[int | None, Field(default=None, description='Number of Google Search grounding requests')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   }
 ]}
@@ -266,7 +266,7 @@ Metadata for an image extracted from a PDF page
       "type_str": "Annotated[int, Field(description='Width of the image in pixels')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -275,7 +275,7 @@ Metadata for an image extracted from a PDF page
       "type_str": "Annotated[int, Field(description='Height of the image in pixels')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -284,7 +284,7 @@ Metadata for an image extracted from a PDF page
       "type_str": "Annotated[int | None, Field(default=None, description='Precalculated token count for this image')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   }
 ]}
@@ -307,7 +307,7 @@ Metadata specific to PDF documents for cost calculation
       "type_str": "Annotated[int | None, Field(default=None, description='Number of pages in the PDF')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -316,7 +316,7 @@ Metadata specific to PDF documents for cost calculation
       "type_str": "Annotated[int | None, Field(default=None, description='Number of tokens from text content in the PDF')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -325,7 +325,7 @@ Metadata specific to PDF documents for cost calculation
       "type_str": "Annotated[list[PDFImageMetadata] | None, Field(default=None, description='List of images extracted from PDF with width and height information')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -334,7 +334,7 @@ Metadata specific to PDF documents for cost calculation
       "type_str": "Annotated[bool | None, Field(default=None, description='Whether this PDF was cached for reduced token costs')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   }
 ]}
@@ -357,7 +357,7 @@ Metadata required for accurate LLM API cost calculation across all providers.
       "type_str": "None",
       "description": null,
       "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/constants.html#None"
+      "doc_identifier": "None"
     }
   },
   {
@@ -366,7 +366,7 @@ Metadata required for accurate LLM API cost calculation across all providers.
       "type_str": "Annotated[int | float | None, Field(default=None, description='Input tokens')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -375,7 +375,7 @@ Metadata required for accurate LLM API cost calculation across all providers.
       "type_str": "Annotated[int | float | None, Field(default=None, description='Output tokens')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -384,7 +384,7 @@ Metadata required for accurate LLM API cost calculation across all providers.
       "type_str": "Annotated[int | float | None, Field(default=None, description='Cached tokens')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -393,7 +393,7 @@ Metadata required for accurate LLM API cost calculation across all providers.
       "type_str": "Annotated[bool | None, Field(default=None, description='Whether streaming API was used')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -402,7 +402,7 @@ Metadata required for accurate LLM API cost calculation across all providers.
       "type_str": "Annotated[bool | None, Field(default=None, description='Whether response was served from cache')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -411,7 +411,7 @@ Metadata required for accurate LLM API cost calculation across all providers.
       "type_str": "Annotated[int | None, Field(default=None, description='Total context window length in tokens')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -420,7 +420,7 @@ Metadata required for accurate LLM API cost calculation across all providers.
       "type_str": "Annotated[bool | None, Field(default=None, description='Whether realtime processing was used')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -429,7 +429,7 @@ Metadata required for accurate LLM API cost calculation across all providers.
       "type_str": "Annotated[str | None, Field(default=None, description='Cloud region for request (affects pricing in some providers)')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -438,7 +438,7 @@ Metadata required for accurate LLM API cost calculation across all providers.
       "type_str": "Annotated[str | None, Field(default=None, description='Service tier (e.g. standard, enterprise)')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -447,7 +447,7 @@ Metadata required for accurate LLM API cost calculation across all providers.
       "type_str": "Annotated[bool | None, Field(default=False, description='Whether batch mode is used (discount usually applies)')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -456,7 +456,7 @@ Metadata required for accurate LLM API cost calculation across all providers.
       "type_str": "Annotated[list[ImageMetadata] | None, Field(default=None, description='List of images with their metadata')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -465,7 +465,7 @@ Metadata required for accurate LLM API cost calculation across all providers.
       "type_str": "Annotated[list[VideoMetadata] | None, Field(default=None, description='List of videos with their metadata')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -474,7 +474,7 @@ Metadata required for accurate LLM API cost calculation across all providers.
       "type_str": "Annotated[list[AudioMetadata] | None, Field(default=None, description='List of audio clips with their metadata')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -483,7 +483,7 @@ Metadata required for accurate LLM API cost calculation across all providers.
       "type_str": "Annotated[list[AudioMetadata] | None, Field(default=None, description='List of audio output clips with their metadata')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -492,7 +492,7 @@ Metadata required for accurate LLM API cost calculation across all providers.
       "type_str": "Annotated[PDFMetadata | None, Field(default=None, description='Metadata for PDF documents')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -501,7 +501,7 @@ Metadata required for accurate LLM API cost calculation across all providers.
       "type_str": "Annotated[int | None, Field(default=None, description='Number of cached context tokens')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -510,7 +510,7 @@ Metadata required for accurate LLM API cost calculation across all providers.
       "type_str": "Annotated[float | None, Field(default=None, description='Number of hours to keep context in cache')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -519,7 +519,7 @@ Metadata required for accurate LLM API cost calculation across all providers.
       "type_str": "Annotated[GoogleMetadata | None, Field(default=None, description='Google/Gemini-specific metadata for cost calculation')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -528,7 +528,7 @@ Metadata required for accurate LLM API cost calculation across all providers.
       "type_str": "Annotated[int | None, Field(default=None, description='[OpenAI] Number of realtime tokens in the request')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -537,7 +537,7 @@ Metadata required for accurate LLM API cost calculation across all providers.
       "type_str": "Annotated[bool | None, Field(default=None, description='[Anthropic] Whether cache write occurred')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -546,7 +546,7 @@ Metadata required for accurate LLM API cost calculation across all providers.
       "type_str": "Annotated[int | None, Field(default=None, description='[Anthropic] Tokens used for tool calls')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   },
   {
@@ -555,7 +555,7 @@ Metadata required for accurate LLM API cost calculation across all providers.
       "type_str": "Annotated[float | None, Field(default=None, description='Cost provided by the API response')]",
       "description": null,
       "kind": "simple",
-      "doc_url": null
+      "doc_identifier": null
     }
   }
 ]}

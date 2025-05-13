@@ -19,8 +19,8 @@ def assert_json_equal(actual, expected):
     # Recursively remove doc_url from both objects for comparison
     def remove_doc_url(obj):
         if isinstance(obj, dict):
-            if "doc_url" in obj:
-                obj.pop("doc_url")
+            if "doc_identifier" in obj:
+                obj.pop("doc_identifier")
             for value in list(obj.values()):
                 remove_doc_url(value)
         elif isinstance(obj, list):
