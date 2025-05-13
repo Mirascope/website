@@ -38,7 +38,7 @@ print(output)
 # > Parent Finished!
 ```
 
-[INSERT IMAGE]
+![Basic Trace](/assets/docs/lilypad/observability/traces/basic-trace.png)
 
 <Info title="What this might look like using span instead of trace" collapsible={true} defaultOpen={false}>
 ```python
@@ -89,6 +89,8 @@ print(answer)
 # > The capital of France is Paris.
 ```
 
+![Custom Trace Name](/assets/docs/lilypad/observability/traces/custom-name.png)
+
 ## Updating Trace Metadata
 
 The `trace` decorator captures information such as inputs/outputs by default, but often you'll want to log additional information or metadata as part of that function's span (and not a sub-span).
@@ -116,6 +118,8 @@ The resulting decorated function's call signature will then be updated such that
 
 Above, `answer_question` only expects `question` as an input — and your editor knows this.
 
+![Trace With A Log](/assets/docs/lilypad/observability/traces/trace-log.png)
+
 ## Tracing LLM Calls
 
 <Warning>
@@ -130,14 +134,19 @@ import lilypad
 
 lilypad.configure(auto_llm=True)  # [!code highlight]
 client = Client()
-   
-@lilypad.trace(name="Answer Question") 
+
+
+@lilypad.trace(name="Answer Question")
 def answer_question(question: str) -> str | None:
     response = client.models.generate_content(
         model="gemini-2.0-flash-001",
         contents=f"Answer this question: {question}",
     )
     return response.text
+
+
+response = answer_question("What is the capital of France?")
+print(response)
 ```
 
-\[INSERT IMAGE]
+![Trace With Auto LLM Span](/assets/docs/lilypad/observability/traces/auto-llm-trace.png)
