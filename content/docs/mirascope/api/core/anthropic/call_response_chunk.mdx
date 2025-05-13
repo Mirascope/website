@@ -19,34 +19,6 @@ This module contains the `AnthropicCallResponseChunk` class.
 **Type:** <TypeLink type={{"type_str": "Message.__annotations__['stop_reason']", "description": null, "kind": "generic", "base_type": {"type_str": "Message.__annotations__", "description": null, "kind": "simple", "doc_identifier": "Message.__annotations__"}, "parameters": [{"type_str": "'stop_reason'", "description": null, "kind": "simple", "doc_identifier": "'stop_reason'"}]}} />
 
 
-## <ApiType type="Attribute" path="core/anthropic/call_response_chunk" symbolName="AnthropicCallResponseChunk" /> AnthropicCallResponseChunk
-
-**Type:** <TypeLink type={{"type_str": "Any", "description": null, "kind": "simple", "doc_identifier": null}} />
-
-A convenience wrapper around the Anthropic `ChatCompletionChunk` streamed chunks.
-
-When calling the Anthropic API using a function decorated with `anthropic_call` and
-`stream` set to `True`, the stream will contain `AnthropicResponseChunk` instances
-with properties that allow for more convenient access to commonly used attributes.
-
-Example:
-
-```python
-from mirascope.core import prompt_template
-from mirascope.core.anthropic import anthropic_call
-
-
-@anthropic_call("claude-3-5-sonnet-20240620", stream=True)
-def recommend_book(genre: str) -> str:
-    return f"Recommend a {genre} book"
-
-
-stream = recommend_book("fantasy")  # response is an `AnthropicStream`
-for chunk, _ in stream:
-    print(chunk.content, end="", flush=True)
-```
-
-
 ## <ApiType type="Class" path="core/anthropic/call_response_chunk" symbolName="AnthropicCallResponseChunk" /> AnthropicCallResponseChunk
 
 A convenience wrapper around the Anthropic `ChatCompletionChunk` streamed chunks.

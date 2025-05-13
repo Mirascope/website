@@ -16,38 +16,6 @@ This module contains the `OpenAICallResponse` class.
 
 </Info>
 
-## <ApiType type="Attribute" path="core/openai/call_response" symbolName="ChatCompletionAudio" /> ChatCompletionAudio
-
-**Type:** <TypeLink type={{"type_str": "Any", "description": null, "kind": "simple", "doc_identifier": null}} />
-
-
-## <ApiType type="Attribute" path="core/openai/call_response" symbolName="OpenAICallResponse" /> OpenAICallResponse
-
-**Type:** <TypeLink type={{"type_str": "Any", "description": null, "kind": "simple", "doc_identifier": null}} />
-
-A convenience wrapper around the OpenAI `ChatCompletion` response.
-
-When calling the OpenAI API using a function decorated with `openai_call`, the
-response will be an `OpenAICallResponse` instance with properties that allow for
-more convenience access to commonly used attributes.
-
-Example:
-
-```python
-from mirascope.core import prompt_template
-from mirascope.core.openai import openai_call
-
-
-@openai_call("gpt-4o")
-def recommend_book(genre: str) -> str:
-    return f"Recommend a {genre} book"
-
-
-response = recommend_book("fantasy")  # response is an `OpenAICallResponse` instance
-print(response.content)
-```
-
-
 ## <ApiType type="Class" path="core/openai/call_response" symbolName="ChatCompletionAudio" /> ChatCompletionAudio
 
 <AttributesTable
