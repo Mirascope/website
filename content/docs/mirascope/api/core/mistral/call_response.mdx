@@ -14,32 +14,6 @@ This module contains the `MistralCallResponse` class.
 
 </Info>
 
-## <ApiType type="Attribute" path="core/mistral/call_response" symbolName="MistralCallResponse" /> MistralCallResponse
-
-**Type:** <TypeLink type={{"type_str": "Any", "description": null, "kind": "simple", "doc_identifier": null}} />
-
-A convenience wrapper around the Mistral `ChatCompletion` response.
-
-When calling the Mistral API using a function decorated with `mistral_call`, the
-response will be an `MistralCallResponse` instance with properties that allow for
-more convenience access to commonly used attributes.
-
-Example:
-
-```python
-from mirascope.core import prompt_template
-from mirascope.core.mistral import mistral_call
-
-
-@mistral_call("mistral-largel-latest")
-def recommend_book(genre: str) -> str:
-    return f"Recommend a {genre} book"
-
-response = recommend_book("fantasy")  # response is an `MistralCallResponse` instance
-print(response.content)
-```
-
-
 ## <ApiType type="Class" path="core/mistral/call_response" symbolName="MistralCallResponse" /> MistralCallResponse
 
 A convenience wrapper around the Mistral `ChatCompletion` response.

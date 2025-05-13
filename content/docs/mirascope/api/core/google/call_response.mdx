@@ -14,34 +14,6 @@ This module contains the `GoogleCallResponse` class.
 
 </Info>
 
-## <ApiType type="Attribute" path="core/google/call_response" symbolName="GoogleCallResponse" /> GoogleCallResponse
-
-**Type:** <TypeLink type={{"type_str": "Any", "description": null, "kind": "simple", "doc_identifier": null}} />
-
-A convenience wrapper around the Google API response.
-
-When calling the Google API using a function decorated with `google_call`, the
-response will be a `GoogleCallResponse` instance with properties that allow for
-more convenient access to commonly used attributes.
-
-
-Example:
-
-```python
-from mirascope.core import prompt_template
-from mirascope.core.google import google_call
-
-
-@google_call("google-1.5-flash")
-def recommend_book(genre: str) -> str:
-    return f"Recommend a {genre} book"
-
-
-response = recommend_book("fantasy")  # response is an `GoogleCallResponse` instance
-print(response.content)
-```
-
-
 ## <ApiType type="Class" path="core/google/call_response" symbolName="GoogleCallResponse" /> GoogleCallResponse
 
 A convenience wrapper around the Google API response.

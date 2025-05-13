@@ -14,30 +14,6 @@ The `CohereStream` class for convenience around streaming LLM calls.
 
 </Info>
 
-## <ApiType type="Attribute" path="core/cohere/stream" symbolName="CohereStream" /> CohereStream
-
-**Type:** <TypeLink type={{"type_str": "Any", "description": null, "kind": "simple", "doc_identifier": null}} />
-
-A class for convenience around streaming Cohere LLM calls.
-
-Example:
-
-```python
-from mirascope.core import prompt_template
-from mirascope.core.cohere import cohere_call
-
-
-@cohere_call("command-r-plus", stream=True)
-def recommend_book(genre: str) -> str:
-    return f"Recommend a {genre} book"
-
-
-stream = recommend_book("fantasy")  # returns `CohereStream` instance
-for chunk, _ in stream:
-    print(chunk.content, end="", flush=True)
-```
-
-
 ## <ApiType type="Class" path="core/cohere/stream" symbolName="CohereStream" /> CohereStream
 
 A class for convenience around streaming Cohere LLM calls.

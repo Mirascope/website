@@ -5,10 +5,12 @@ processed and prepared for rendering in various formats, along with functions
 to create these models from Griffe objects.
 """
 
+import logging
 from dataclasses import dataclass
 
 from griffe import (
     Alias,
+    AliasResolutionError,
     Attribute,
     Class,
     DocstringSectionKind,
@@ -20,6 +22,12 @@ from griffe import (
 from scripts.apigen.parser import parse_type_string
 from scripts.apigen.type_extractor import extract_attribute_type_info, extract_type_info
 from scripts.apigen.type_model import ParameterInfo, ReturnInfo, SimpleType, TypeInfo
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger(__name__)
 
 
 def extract_clean_docstring(obj: Object | Alias) -> str | None:
@@ -125,6 +133,15 @@ class ProcessedModule:
     attributes: list[ProcessedAttribute]
     functions: list[ProcessedFunction]
     module_path: str
+
+
+ProcessedObject = (
+    ProcessedModule
+    | ProcessedAlias
+    | ProcessedAttribute
+    | ProcessedClass
+    | ProcessedFunction
+)
 
 
 def process_function(func_obj: Function) -> ProcessedFunction:
@@ -234,6 +251,35 @@ def process_attribute(obj: Attribute) -> ProcessedAttribute:
     return ProcessedAttribute(name=name, type_info=type_info, description=descr)
 
 
+def process_object(obj: Object | Alias) -> ProcessedObject | None:
+    """Process a Griffe object into the appropriate processed model.
+
+    Args:
+        obj: The Griffe object to process
+        name: Optional name override for the object
+
+    Returns:
+        A processed object appropriate for the input type, or None for unsupported types
+
+    """
+    if isinstance(obj, Class):
+        return process_class(obj)
+    elif isinstance(obj, Function):
+        return process_function(obj)
+    elif isinstance(obj, Attribute):
+        return process_attribute(obj)
+    elif isinstance(obj, Alias):
+        try:
+            return process_alias(obj)
+        except AliasResolutionError as e:
+            logger.warning(e)
+            return None
+    elif isinstance(obj, Module):
+        return process_module(obj)
+    else:
+        raise ValueError("Unexpected object", obj)
+
+
 def process_module(module_obj: Module) -> ProcessedModule:
     """Process a Module object into a ProcessedModule model.
 
@@ -263,49 +309,17 @@ def process_module(module_obj: Module) -> ProcessedModule:
             if member_name.startswith("_"):
                 continue
 
-            # Process classes
-            if isinstance(member, Class):
-                processed_class = process_class(member)
-                processed_classes.append(processed_class)
+            processed_obj = process_object(member)
 
-            if isinstance(member, Alias):
-                pass  # TODO: Figure out support
-
-            # Process functions
-            elif isinstance(member, Function):
-                processed_function = process_function(member)
-                processed_functions.append(processed_function)
-
-            # Process attributes (not classes, functions, or aliases)
-            elif isinstance(member, Attribute):
-                processed_attribute = process_attribute(member)
-                processed_attributes.append(processed_attribute)
-            else:
-                # Get the type annotation as a string
-                attr_type_str = str(getattr(member, "annotation", ""))
-                # Use a default "Any" type for empty annotations
-                if attr_type_str.strip():
-                    # Try to parse the string into a TypeInfo object, with fallback
-                    try:
-                        attr_type_info = parse_type_string(attr_type_str)
-                    except Exception as e:
-                        # Print a warning with the failed type string
-                        print(
-                            f"WARNING: Failed to parse type annotation: '{attr_type_str}'. Error: {e}"
-                        )
-                        # Fallback to simple type with the original string
-                        attr_type_info = SimpleType(type_str=attr_type_str)
-                else:
-                    # Create a simple "Any" type for empty annotations
-                    attr_type_info = SimpleType(type_str="Any")
-                attr_desc = extract_clean_docstring(member)
-
-                processed_attr = ProcessedAttribute(
-                    name=member_name,
-                    type_info=attr_type_info,
-                    description=attr_desc,
-                )
-                processed_attributes.append(processed_attr)
+            if isinstance(processed_obj, ProcessedClass):
+                processed_classes.append(processed_obj)
+            elif isinstance(processed_obj, ProcessedFunction):
+                processed_functions.append(processed_obj)
+            elif isinstance(processed_obj, ProcessedAttribute):
+                processed_attributes.append(processed_obj)
+            elif isinstance(processed_obj, ProcessedAlias):
+                # TODO: When alias support is added
+                pass
 
     # Create and return the processed module
     return ProcessedModule(
@@ -345,7 +359,6 @@ def process_alias(alias_obj: Alias) -> ProcessedAlias:
     target_path = ""
     if hasattr(alias_obj, "target") and alias_obj.target:
         target_path = getattr(alias_obj.target, "path", str(alias_obj.target))
-
     # Create and return the processed alias
     return ProcessedAlias(
         name=name,

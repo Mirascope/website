@@ -14,29 +14,6 @@ The `GoogleStream` class for convenience around streaming LLM calls.
 
 </Info>
 
-## <ApiType type="Attribute" path="core/google/stream" symbolName="GoogleStream" /> GoogleStream
-
-**Type:** <TypeLink type={{"type_str": "Any", "description": null, "kind": "simple", "doc_identifier": null}} />
-
-A class for convenience around streaming Google LLM calls.
-
-Example:
-
-```python
-from mirascope.core import prompt_template
-from mirascope.core.google import google_call
-
-
-@google_call("google-1.5-flash", stream=True)
-def recommend_book(genre: str) -> str:
-    return f"Recommend a {genre} book"
-
-stream = recommend_book("fantasy")  # returns `GoogleStream` instance
-for chunk, _ in stream:
-    print(chunk.content, end="", flush=True)
-```
-
-
 ## <ApiType type="Class" path="core/google/stream" symbolName="GoogleStream" /> GoogleStream
 
 A class for convenience around streaming Google LLM calls.

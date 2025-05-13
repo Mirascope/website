@@ -14,30 +14,6 @@ The `MistralStream` class for convenience around streaming LLM calls.
 
 </Info>
 
-## <ApiType type="Attribute" path="core/mistral/stream" symbolName="MistralStream" /> MistralStream
-
-**Type:** <TypeLink type={{"type_str": "Any", "description": null, "kind": "simple", "doc_identifier": null}} />
-
-A class for convenience around streaming Mistral LLM calls.
-
-Example:
-
-```python
-from mirascope.core import prompt_template
-from mirascope.core.mistral import mistral_call
-
-
-@mistral_call("mistral-large-latest", stream=True)
-def recommend_book(genre: str) -> str:
-    return f"Recommend a {genre} book"
-
-
-stream = recommend_book("fantasy")  # returns `MistralStream` instance
-for chunk, _ in stream:
-    print(chunk.content, end="", flush=True)
-```
-
-
 ## <ApiType type="Class" path="core/mistral/stream" symbolName="MistralStream" /> MistralStream
 
 A class for convenience around streaming Mistral LLM calls.
