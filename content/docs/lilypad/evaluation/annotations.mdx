@@ -7,7 +7,7 @@ description: Add labels and feedback to your LLM outputs
 
 When you are viewing a trace in the full view, the right sidebar contains a section for discussions and annotations.
 
-[INSERT IMAGE]
+![Trace Annotation Sidebar](/assets/docs/lilypad/evaluation/annotations/annotation-sidebar.png)
 
 ## Discussion
 
@@ -16,15 +16,19 @@ Often this is the first step towards annotating the trace. When you aren't yet s
 
 You can use this to ask questions, leave feedback, discuss the trace with your team, or even just leave a note to yourself.
 
+![Trace Discussion](/assets/docs/lilypad/evaluation/annotations/trace-discussion.png)
+
 ## Assigning Traces For Annotation
 
 In the trace view, annotations are read only. You can annotate a trace by assigning to a user, which adds it to their annotation queue.
 
-[INSERT IMAGE]
+![Click Assign Annotation](/assets/docs/lilypad/evaluation/annotations/click-assign-annotation.png)
+
+![Assign Annotation](/assets/docs/lilypad/evaluation/annotations/assign-annotation.png)
 
 Once added to the queue, you can annotate the trace by clicking the label, (optionally) providing a reason, and clicking submit.
 
-[INSERT IMAGE]
+![Annotation Queue](/assets/docs/lilypad/evaluation/annotations/annotation-queue.png)
 
 When annotating a trace, existing annotations are not shown to you. This is to prevent biasing your annotation.
 
@@ -33,7 +37,28 @@ When annotating a trace, existing annotations are not shown to you. This is to p
 You can also annotate traces in code. This is useful when you want to annotate a trace using a custom script or UI.
 
 ```python
-INSERT CODE
+import os
+
+from lilypad import Lilypad
+
+client = Lilypad()
+
+client.ee.projects.annotations.create(
+    project_uuid=os.environ["LILYPAD_PROJECT_ID"],
+    body=[
+        {
+            "span_uuid": "...",
+            "project_uuid": os.environ["LILYPAD_PROJECT_ID"],
+            "function_uuid": "...",
+            "label": "pass",  # [!code highlight]
+            "reasoning": "this is a pass because...",  # [!code highlight]
+            "type": "manual",
+            "data": {},
+            "assigned_to": ["..."],
+            "assignee_email": ["e@mail.com"],
+        }
+    ],
+)
 ```
 
 ## Passthrough Annotations
