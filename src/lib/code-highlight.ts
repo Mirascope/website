@@ -135,16 +135,8 @@ export function fallbackHighlighter(
   return { lightHtml, darkHtml, code, language, meta, highlighted: false };
 }
 
-// Flag to control whether to use sync highlighter for the next render
-let useSyncHighlighterForNextRender: boolean = false;
-
 // Flag to control always using sync highlighter for initial highilght
 let useSyncHighlighterForAllRenders: boolean = false;
-
-// Function to set the next render to use sync highlighter
-export function useSyncHighlighterForNext(): void {
-  useSyncHighlighterForNextRender = true;
-}
 
 export function useSyncHighlighterAlways(bool: boolean): void {
   useSyncHighlighterForAllRenders = bool;
@@ -171,11 +163,7 @@ export function temporarilyEnableSyncHighlighting(delayMs: number = 100) {
 }
 
 export function isNextHighlightSync(): boolean {
-  return (
-    highlighterInitialized &&
-    syncHighlighter != null &&
-    (useSyncHighlighterForAllRenders || useSyncHighlighterForNextRender)
-  );
+  return highlighterInitialized && syncHighlighter != null && useSyncHighlighterForAllRenders;
 }
 
 export function initialHighlight(
@@ -184,7 +172,6 @@ export function initialHighlight(
   meta: string = ""
 ): HighlightResult {
   if (isNextHighlightSync()) {
-    useSyncHighlighterForNextRender = false;
     try {
       return highlightCodeSync(code, language, meta);
     } catch (error) {
