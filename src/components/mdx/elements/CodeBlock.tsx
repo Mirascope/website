@@ -1,8 +1,13 @@
-import { useRef, useState, useEffect } from "react";
-import { highlightCode, stripHighlightMarkers } from "@/src/lib/code-highlight";
+import { useEffect, useState, useRef } from "react";
+import {
+  highlightCode,
+  stripHighlightMarkers,
+  type HighlightResult,
+  initialHighlight,
+} from "@/src/lib/code-highlight";
+import { cn, getProductFromPath } from "@/src/lib/utils";
 import analyticsManager from "@/src/lib/services/analytics";
 import { Sparkles } from "lucide-react";
-import { cn } from "@/src/lib/utils";
 import useFunMode from "@/src/lib/hooks/useFunMode";
 
 interface CodeBlockProps {
@@ -13,35 +18,38 @@ interface CodeBlockProps {
 }
 
 export function CodeBlock({ code, language = "text", meta = "", className = "" }: CodeBlockProps) {
-  const [isCopied, setIsCopied] = useState(false);
+  const [highlightedCode, setHighlightedCode] = useState<HighlightResult>(initialHighlight(code));
+  const [isCopied, setIsCopied] = useState<boolean>(false);
   const [funMode, toggleFunMode] = useFunMode();
   const codeRef = useRef<HTMLDivElement>(null);
-  const [isSmallBlock, setIsSmallBlock] = useState(false);
+  const [isSmallBlock, setIsSmallBlock] = useState<boolean>(false);
 
   // Base styles for code block container
   const codeBlockBaseStyles =
     "code-block-wrapper border-card relative m-0 mb-2 rounded-md overflow-hidden border p-0 text-xs";
 
-  // Highlight code synchronously during render
-  const { lightThemeHtml, darkThemeHtml } = highlightCode(code, language, meta);
+  useEffect(() => {
+    async function highlight() {
+      try {
+        setHighlightedCode(await highlightCode(code, language, meta));
+      } catch (error) {
+        console.error("Error highlighting code:", error);
+        // Leave the fallback code
+      }
+    }
 
-  // Check if code block is small after first render
-  const checkBlockSize = () => {
+    highlight();
+  }, [code, language, meta]);
+
+  // Check if code block is small after rendering
+  useEffect(() => {
     if (codeRef.current) {
       // Get the height of the code block
       const height = codeRef.current.clientHeight;
       // Consider blocks less than 100px as small
       setIsSmallBlock(height < 100);
     }
-  };
-
-  // Check size after render and when the ref is available
-  useEffect(() => {
-    checkBlockSize();
-    // Add a slight delay to ensure content is fully rendered
-    const timer = setTimeout(checkBlockSize, 100);
-    return () => clearTimeout(timer);
-  }, []);
+  }, [highlightedCode]);
 
   const copyToClipboard = () => {
     // Strip highlight markers before copying to clipboard
@@ -62,13 +70,8 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
       }
     }
 
-    // Extract product from URL path if in docs section
-    let product = "unknown";
     const pagePath = window.location.pathname;
-    const docsMatch = pagePath.match(/^\/doc\/([^/]+)/);
-    if (docsMatch && docsMatch[1]) {
-      product = docsMatch[1];
-    }
+    const product = getProductFromPath(window.location.pathname);
 
     analyticsManager.trackCopyEvent({
       contentType: "code_snippet",
@@ -77,8 +80,6 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
       language: language || "text",
     });
   };
-
-  // No loading state needed - highlighting is synchronous
 
   return (
     <div
@@ -170,13 +171,13 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
       {/* Light theme code */}
       <div
         className="light-theme-code w-full dark:hidden"
-        dangerouslySetInnerHTML={{ __html: lightThemeHtml }}
+        dangerouslySetInnerHTML={{ __html: highlightedCode.lightHtml }}
       />
 
       {/* Dark theme code */}
       <div
-        className="dark-theme-code hidden w-full dark:block"
-        dangerouslySetInnerHTML={{ __html: darkThemeHtml }}
+        className="dark-theme-code hidden w-full text-sm dark:block"
+        dangerouslySetInnerHTML={{ __html: highlightedCode.darkHtml }}
       />
     </div>
   );

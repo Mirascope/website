@@ -7,7 +7,6 @@ import { routeTree } from "./routeTree.gen";
 
 import "./styles.css";
 import reportWebVitals from "./reportWebVitals.ts";
-import { initHighlighters } from "./lib/code-highlight";
 
 // Initial theme setup (later handled by ThemeSwitcher component)
 const initializeTheme = () => {
@@ -68,17 +67,12 @@ if (!rootElement) {
   // Function to mount the app
   const mountApp = async () => {
     if (hasPrerenderedContent) {
-      // If we have prerendered content, initialize highlighters and wait for router to load
-      // before replacing the prerendered content
-      await Promise.all([initHighlighters(), router.load()]);
-    } else {
-      // Still initialize highlighters even if no prerendered content
-      // But don't block rendering since there's nothing to preserve
-      initHighlighters();
+      // If we have prerendered content, wait for router to load before replacing it
+      // This ensures we have all data ready before switching from SSG content
+      await router.load();
     }
 
     // Always use createRoot/render instead of hydrateRoot to avoid hydration mismatches
-    // By now, highlighters should be initialized for the first render if prerendered
     root.render(
       <StrictMode>
         <RouterProvider router={router} />
