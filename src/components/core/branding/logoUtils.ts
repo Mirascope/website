@@ -14,34 +14,35 @@ export interface LogoSizeConfig {
 
 /**
  * Size configurations for logos - shared across all product logos
- * for consistent sizing and spacing
+ * for consistent sizing and spacing.
+ * Logo image heights are now set to match the text height using CSS variables.
  */
 export const logoSizeMap: Record<LogoSize, LogoSizeConfig> = {
   micro: {
     container: "w-auto",
-    img: "h-4 w-auto",
-    text: "text-s",
+    img: "h-[var(--text-sm)] w-auto",
+    text: "text-sm",
     spacing: "mr-1.5",
     wrapper: "px-1.5 py-0.5",
   },
   small: {
     container: "w-auto",
-    img: "h-7 w-auto",
-    text: "text-2xl",
+    img: "h-[var(--text-xl)] w-auto",
+    text: "text-xl",
     spacing: "mr-2",
     wrapper: "px-4 py-2",
   },
   medium: {
     container: "w-auto",
-    img: "h-10 w-auto",
-    text: "text-3xl",
+    img: "h-[var(--text-2xl)] w-auto",
+    text: "text-2xl",
     spacing: "mr-3",
     wrapper: "px-5 py-2.5",
   },
   large: {
     container: "w-auto",
-    img: "w-16 h-auto",
-    text: "text-5xl",
+    img: "h-[var(--text-4xl)] w-auto",
+    text: "text-4xl",
     spacing: "mr-4",
     wrapper: "px-6 py-3",
   },

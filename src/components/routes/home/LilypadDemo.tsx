@@ -236,17 +236,6 @@ export function LilypadDemo() {
       cost: 0.0019,
       tokens: 38,
     },
-    {
-      id: "trace_5",
-      version: 1,
-      label: "pass",
-      timestamp: "1 hr ago",
-      promptTemplate: "Answer this question: {question}",
-      question: "What is the capital of Japan?",
-      output: "Tokyo",
-      cost: 0.0015,
-      tokens: 30,
-    },
   ];
 
   // State for selected trace

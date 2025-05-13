@@ -37,7 +37,7 @@ const NavLink = ({ href, children, className, onClick }: NavLinkProps) => {
     <Link
       to={href}
       className={cn(
-        "relative flex cursor-pointer items-center px-2 py-2 text-lg font-medium",
+        "relative flex cursor-pointer items-center px-2 py-2 text-xl font-medium",
         isLandingPage ? "nav-text-landing" : "nav-text-regular",
         className
       )}
@@ -123,7 +123,7 @@ export default function Header() {
               <NavigationMenuItem>
                 <NavigationMenuTrigger
                   className={cn(
-                    "flex cursor-pointer items-center !bg-transparent p-0 text-lg font-medium transition-colors duration-200 hover:!bg-transparent focus:!bg-transparent data-[state=open]:!bg-transparent data-[state=open]:hover:!bg-transparent",
+                    "flex cursor-pointer items-center !bg-transparent p-0 text-xl font-medium transition-colors duration-200 hover:!bg-transparent focus:!bg-transparent data-[state=open]:!bg-transparent data-[state=open]:hover:!bg-transparent",
                     isLandingPage ? "nav-text-landing" : "nav-text-regular"
                   )}
                 >
@@ -150,7 +150,7 @@ export default function Header() {
                             "data-[active=true]:focus:bg-mirascope-purple/60"
                           )}
                         >
-                          <div className="text-mirascope-purple text-lg font-medium">Mirascope</div>
+                          <div className="text-mirascope-purple text-xl font-medium">Mirascope</div>
                           <p className="text-foreground text-base">
                             LLM abstractions that aren't obstructions.
                           </p>
@@ -169,7 +169,7 @@ export default function Header() {
                             "data-[active=true]:focus:bg-lilypad-green/60"
                           )}
                         >
-                          <div className="text-lilypad-green text-lg font-medium">Lilypad</div>
+                          <div className="text-lilypad-green text-xl font-medium">Lilypad</div>
                           <p className="text-foreground text-base">
                             Spin up your data flywheel with one line of code.
                           </p>
@@ -223,7 +223,7 @@ export default function Header() {
       {isMenuOpen && (
         <div className="text-foreground bg-background absolute top-full right-4 z-50 mt-2 max-w-xs rounded-lg p-6 shadow-lg [text-shadow:none] md:hidden">
           <div className="flex flex-col space-y-4">
-            <div className="my-2 text-lg font-medium">Docs</div>
+            <div className="my-2 text-xl font-medium">Docs</div>
             <Link
               to={getProductRoute("mirascope")}
               className="bg-background text-mirascope-purple hover:bg-muted rounded-md p-3 font-medium transition-colors"
@@ -241,14 +241,14 @@ export default function Header() {
             <hr className="my-2" />
             <Link
               to="/blog"
-              className="hover:text-primary relative flex cursor-pointer items-center py-2 text-lg font-medium transition-colors duration-200"
+              className="hover:text-primary relative flex cursor-pointer items-center py-2 text-xl font-medium transition-colors duration-200"
               onClick={() => setIsMenuOpen(false)}
             >
               Blog
             </Link>
             <Link
               to="/pricing"
-              className="hover:text-primary relative flex cursor-pointer items-center py-2 text-lg font-medium transition-colors duration-200"
+              className="hover:text-primary relative flex cursor-pointer items-center py-2 text-xl font-medium transition-colors duration-200"
               onClick={() => setIsMenuOpen(false)}
             >
               Pricing

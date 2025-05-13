@@ -9,7 +9,7 @@
   --color-lilypad-green-dark: #25562a; /* Darker version of the lily pad green */
 
   /* Responsive font sizes using clamp() - smaller sizes with more dramatic scaling */
-  --text-code: clamp(0.55rem, 0.5rem + 0.5vw, 0.75rem); /* For code elements */
+  --text-code: clamp(0.6rem, 0.55rem + 0.5vw, 0.75rem); /* For code elements */
 
   --text-xs: clamp(0.6rem, 0.55rem + 0.5vw, 0.8rem); /* ~10-13px */
   --text-sm: clamp(0.7rem, 0.6rem + 0.75vw, 0.875rem); /* ~11-14px */
