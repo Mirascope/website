@@ -33,7 +33,9 @@ const PolicyPage: React.FC<PolicyPageProps> = ({ content, type = "privacy" }) =>
         <div>
           <h1 className="text-3xl font-bold uppercase">{title}</h1>
           {lastUpdated && (
-            <p className="text-muted-foreground mt-1 font-medium">Last Updated: {lastUpdated}</p>
+            <p className="text-muted-foreground mt-1 font-medium">
+              Last Updated: <span className="last-updated-time">{lastUpdated}</span>
+            </p>
           )}
         </div>
       </div>
