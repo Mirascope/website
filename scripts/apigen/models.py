@@ -331,19 +331,46 @@ def process_module(module_obj: Module) -> ProcessedModule:
     # Process all members
     processed_members = []
 
-    if hasattr(module_obj, "members"):
-        # Process all members
-        for member_name, member in module_obj.members.items():
-            # Skip private members (starting with underscore)
-            if member_name.startswith("_"):
-                continue
+    # Check if the module has an __all__ attribute
+    module_all = None
+    if hasattr(module_obj, "members") and "__all__" in module_obj.members:
+        all_member = module_obj.members["__all__"]
+        value = getattr(all_member, "value", None)
+        if value:
+            try:
+                # Try to evaluate the __all__ list
+                module_all = eval(str(value))
+                logger.info(f"Found __all__ in module {module_path}: {module_all}")
+            except Exception as e:
+                logger.warning(
+                    f"Failed to evaluate __all__ in module {module_path}: {e}"
+                )
 
-            processed_obj = process_object(member)
-            if isinstance(processed_obj, ProcessedAlias):
-                # Don't document module aliases, they are noise
-                continue
-            if processed_obj is not None:
-                processed_members.append(processed_obj)
+    if hasattr(module_obj, "members"):
+        # If we have __all__, only process those members
+        if module_all:
+            for member_name in module_all:
+                if member_name in module_obj.members:
+                    member = module_obj.members[member_name]
+                    processed_obj = process_object(member)
+                    if processed_obj is not None:
+                        processed_members.append(processed_obj)
+                else:
+                    logger.warning(
+                        f"Member {member_name} in __all__ not found in module {module_path}"
+                    )
+        else:
+            # Otherwise, process all members (except private ones or aliases)
+            for member_name, member in module_obj.members.items():
+                # Skip private members (starting with underscore)
+                if member_name.startswith("_"):
+                    continue
+
+                processed_obj = process_object(member)
+                if isinstance(processed_obj, ProcessedAlias):
+                    continue
+                if processed_obj is not None:
+                    processed_members.append(processed_obj)
 
     # Create and return the processed module
     return ProcessedModule(
