@@ -84,8 +84,19 @@ def render_module(processed_module: ProcessedModule, doc_path: str) -> str:
         content.append(processed_module.docstring.strip())
         content.append("")
 
-    # Render all members in order
-    for member in processed_module.members:
+    # Sort members alphabetically by name and type
+    sorted_members = sorted(processed_module.members, key=lambda m: (
+        # Sort by type first (classes, then functions, then attributes, then aliases)
+        0 if isinstance(m, ProcessedClass) else 
+        1 if isinstance(m, ProcessedFunction) else 
+        2 if isinstance(m, ProcessedAttribute) else 
+        3,
+        # Then sort by name
+        m.name.lower()
+    ))
+
+    # Render all members in sorted order
+    for member in sorted_members:
         content.append(render_object(member, doc_path))
         content.append("")
 
@@ -165,15 +176,28 @@ def render_class(processed_class: ProcessedClass, doc_path: str) -> str:
         if isinstance(member, ProcessedAttribute):
             attributes.append(member)
 
+    # Sort attributes alphabetically by name
+    attributes.sort(key=lambda attr: attr.name.lower())
+
     # Document attributes using AttributesTable component if there are any
     if attributes:
         content.extend(format_attributes_table(attributes))
 
-    # Render other members in order (except attributes which are in the table)
-    for member in processed_class.members:
-        if not isinstance(member, ProcessedAttribute):
-            content.append(render_object(member, doc_path))
-            content.append("")
+    # Get non-attribute members and sort them
+    other_members = [m for m in processed_class.members if not isinstance(m, ProcessedAttribute)]
+    
+    # Sort other members by type and name
+    sorted_other_members = sorted(other_members, key=lambda m: (
+        # Sort by type first (methods, then nested classes)
+        0 if isinstance(m, ProcessedFunction) else 1,
+        # Then sort by name
+        m.name.lower()
+    ))
+
+    # Render sorted members
+    for member in sorted_other_members:
+        content.append(render_object(member, doc_path))
+        content.append("")
 
     return "\n".join(content)
 

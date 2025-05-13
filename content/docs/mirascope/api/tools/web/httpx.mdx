@@ -8,26 +8,41 @@ description: API documentation for mirascope.tools.web._httpx
 
 ## <ApiType type="Module" path="tools/web/httpx" symbolName="_httpx" /> _httpx
 
-## <ApiType type="Class" path="tools/web/httpx" symbolName="HTTPXConfig" /> HTTPXConfig
-
-Configuration for HTTPX requests
+## <ApiType type="Class" path="tools/web/httpx" symbolName="AsyncHTTPX" /> AsyncHTTPX
 
 **Bases:** 
-<TypeLink type={{"type_str": "_ConfigurableToolConfig", "description": null, "kind": "simple", "doc_identifier": "_ConfigurableToolConfig"}} />
+<TypeLink type={{"type_str": "_BaseHTTPX", "description": null, "kind": "simple", "doc_identifier": "_BaseHTTPX"}} />
 
-<AttributesTable
-  attributes={[
+## <ApiType type="Function" path="tools/web/httpx" symbolName="call" /> call
+
+Make an asynchronous HTTP request to the given URL using HTTPX.
+
+<ParametersTable
+  parameters={[
   {
-    "name": "timeout",
+    "name": "self",
     "type_info": {
-      "type_str": "int",
+      "type_str": "Any",
       "description": null,
       "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/functions.html#int"
+      "doc_identifier": null
     }
   }
 ]}
 />
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "str",
+    "description": null,
+    "kind": "simple",
+    "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+  },
+  "description": "Response text if successful, error message if request fails"
+}}
+/>
+
 
 
 ## <ApiType type="Class" path="tools/web/httpx" symbolName="HTTPX" /> HTTPX
@@ -67,41 +82,26 @@ Make an HTTP request to the given URL using HTTPX.
 
 
 
-## <ApiType type="Class" path="tools/web/httpx" symbolName="AsyncHTTPX" /> AsyncHTTPX
+## <ApiType type="Class" path="tools/web/httpx" symbolName="HTTPXConfig" /> HTTPXConfig
+
+Configuration for HTTPX requests
 
 **Bases:** 
-<TypeLink type={{"type_str": "_BaseHTTPX", "description": null, "kind": "simple", "doc_identifier": "_BaseHTTPX"}} />
+<TypeLink type={{"type_str": "_ConfigurableToolConfig", "description": null, "kind": "simple", "doc_identifier": "_ConfigurableToolConfig"}} />
 
-## <ApiType type="Function" path="tools/web/httpx" symbolName="call" /> call
-
-Make an asynchronous HTTP request to the given URL using HTTPX.
-
-<ParametersTable
-  parameters={[
+<AttributesTable
+  attributes={[
   {
-    "name": "self",
+    "name": "timeout",
     "type_info": {
-      "type_str": "Any",
+      "type_str": "int",
       "description": null,
       "kind": "simple",
-      "doc_identifier": null
+      "doc_url": "https://docs.python.org/3/library/functions.html#int"
     }
   }
 ]}
 />
-
-<ReturnTable
-  returnType={{
-  "type_info": {
-    "type_str": "str",
-    "description": null,
-    "kind": "simple",
-    "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-  },
-  "description": "Response text if successful, error message if request fails"
-}}
-/>
-
 
 
 

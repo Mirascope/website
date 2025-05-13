@@ -16,147 +16,6 @@ The module for defining the toolkit class for LLM call tools.
 
 </Info>
 
-## <ApiType type="Attribute" path="core/base/toolkit" symbolName="P" /> P
-
-**Type:** <TypeLink type={{"type_str": "ParamSpec('P')", "description": null, "kind": "simple", "doc_identifier": "ParamSpec('P')"}} />
-
-
-## <ApiType type="Function" path="core/base/toolkit" symbolName="is_toolkit_tool" /> is_toolkit_tool
-
-<ParametersTable
-  parameters={[
-  {
-    "name": "method",
-    "type_info": {
-      "type_str": "Callable[..., Any] | BaseTool",
-      "description": null,
-      "kind": "union",
-      "base_type": {
-        "type_str": "Union",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
-      },
-      "parameters": [
-        {
-          "type_str": "Callable[..., Any]",
-          "description": null,
-          "kind": "callable",
-          "base_type": {
-            "type_str": "Callable",
-            "description": null,
-            "kind": "simple",
-            "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
-          },
-          "parameters": [
-            {
-              "type_str": "...",
-              "description": null,
-              "kind": "simple",
-              "doc_identifier": "..."
-            },
-            {
-              "type_str": "Any",
-              "description": null,
-              "kind": "simple",
-              "doc_url": "https://docs.python.org/3/library/typing.html#typing.Any"
-            }
-          ]
-        },
-        {
-          "type_str": "BaseTool",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "/docs/mirascope/api/core/base/tool#basetool"
-        }
-      ]
-    }
-  }
-]}
-/>
-
-<ReturnTable
-  returnType={{
-  "type_info": {
-    "type_str": "bool",
-    "description": null,
-    "kind": "simple",
-    "doc_url": "https://docs.python.org/3/library/functions.html#bool"
-  }
-}}
-/>
-
-
-## <ApiType type="Class" path="core/base/toolkit" symbolName="ToolKitToolMethod" /> ToolKitToolMethod
-
-**Bases:** 
-<TypeLink type={{"type_str": "NamedTuple", "description": null, "kind": "simple", "doc_identifier": "NamedTuple"}} />
-
-<AttributesTable
-  attributes={[
-  {
-    "name": "method",
-    "type_info": {
-      "type_str": "Callable[..., str]",
-      "description": null,
-      "kind": "callable",
-      "base_type": {
-        "type_str": "Callable",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
-      },
-      "parameters": [
-        {
-          "type_str": "...",
-          "description": null,
-          "kind": "simple",
-          "doc_identifier": "..."
-        },
-        {
-          "type_str": "str",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-        }
-      ]
-    }
-  },
-  {
-    "name": "template_vars",
-    "type_info": {
-      "type_str": "list[str]",
-      "description": null,
-      "kind": "generic",
-      "base_type": {
-        "type_str": "list",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
-      },
-      "parameters": [
-        {
-          "type_str": "str",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-        }
-      ]
-    }
-  },
-  {
-    "name": "template",
-    "type_info": {
-      "type_str": "str",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-    }
-  }
-]}
-/>
-
-
 ## <ApiType type="Class" path="core/base/toolkit" symbolName="BaseToolKit" /> BaseToolKit
 
 A class for defining tools for LLM call tools.
@@ -270,6 +129,142 @@ The method to create the tools.
 }}
 />
 
+
+
+## <ApiType type="Class" path="core/base/toolkit" symbolName="ToolKitToolMethod" /> ToolKitToolMethod
+
+**Bases:** 
+<TypeLink type={{"type_str": "NamedTuple", "description": null, "kind": "simple", "doc_identifier": "NamedTuple"}} />
+
+<AttributesTable
+  attributes={[
+  {
+    "name": "method",
+    "type_info": {
+      "type_str": "Callable[..., str]",
+      "description": null,
+      "kind": "callable",
+      "base_type": {
+        "type_str": "Callable",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+      },
+      "parameters": [
+        {
+          "type_str": "...",
+          "description": null,
+          "kind": "simple",
+          "doc_identifier": "..."
+        },
+        {
+          "type_str": "str",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+        }
+      ]
+    }
+  },
+  {
+    "name": "template",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    }
+  },
+  {
+    "name": "template_vars",
+    "type_info": {
+      "type_str": "list[str]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "list",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
+      },
+      "parameters": [
+        {
+          "type_str": "str",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+        }
+      ]
+    }
+  }
+]}
+/>
+
+
+## <ApiType type="Function" path="core/base/toolkit" symbolName="is_toolkit_tool" /> is_toolkit_tool
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "method",
+    "type_info": {
+      "type_str": "Callable[..., Any] | BaseTool",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+      },
+      "parameters": [
+        {
+          "type_str": "Callable[..., Any]",
+          "description": null,
+          "kind": "callable",
+          "base_type": {
+            "type_str": "Callable",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+          },
+          "parameters": [
+            {
+              "type_str": "...",
+              "description": null,
+              "kind": "simple",
+              "doc_identifier": "..."
+            },
+            {
+              "type_str": "Any",
+              "description": null,
+              "kind": "simple",
+              "doc_url": "https://docs.python.org/3/library/typing.html#typing.Any"
+            }
+          ]
+        },
+        {
+          "type_str": "BaseTool",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "/docs/mirascope/api/core/base/tool#basetool"
+        }
+      ]
+    }
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "bool",
+    "description": null,
+    "kind": "simple",
+    "doc_url": "https://docs.python.org/3/library/functions.html#bool"
+  }
+}}
+/>
 
 
 ## <ApiType type="Function" path="core/base/toolkit" symbolName="toolkit_tool" /> toolkit_tool
@@ -438,6 +433,11 @@ The method to create the tools.
   }
 }}
 />
+
+
+## <ApiType type="Attribute" path="core/base/toolkit" symbolName="P" /> P
+
+**Type:** <TypeLink type={{"type_str": "ParamSpec('P')", "description": null, "kind": "simple", "doc_identifier": "ParamSpec('P')"}} />
 
 
 

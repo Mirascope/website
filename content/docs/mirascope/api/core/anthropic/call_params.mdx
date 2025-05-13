@@ -93,47 +93,6 @@ The parameters to use when calling the Anthropic API.
     }
   },
   {
-    "name": "tool_choice",
-    "type_info": {
-      "type_str": "NotRequired[ToolChoice | None]",
-      "description": null,
-      "kind": "generic",
-      "base_type": {
-        "type_str": "NotRequired",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.NotRequired"
-      },
-      "parameters": [
-        {
-          "type_str": "ToolChoice | None",
-          "description": null,
-          "kind": "union",
-          "base_type": {
-            "type_str": "Union",
-            "description": null,
-            "kind": "simple",
-            "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
-          },
-          "parameters": [
-            {
-              "type_str": "ToolChoice",
-              "description": null,
-              "kind": "simple",
-              "doc_identifier": "ToolChoice"
-            },
-            {
-              "type_str": "None",
-              "description": null,
-              "kind": "simple",
-              "doc_url": "https://docs.python.org/3/library/constants.html#None"
-            }
-          ]
-        }
-      ]
-    }
-  },
-  {
     "name": "metadata",
     "type_info": {
       "type_str": "NotRequired[Metadata | None]",
@@ -330,6 +289,94 @@ The parameters to use when calling the Anthropic API.
     }
   },
   {
+    "name": "timeout",
+    "type_info": {
+      "type_str": "NotRequired[float | Timeout | None]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.NotRequired"
+      },
+      "parameters": [
+        {
+          "type_str": "float | Timeout | None",
+          "description": null,
+          "kind": "union",
+          "base_type": {
+            "type_str": "Union",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+          },
+          "parameters": [
+            {
+              "type_str": "float",
+              "description": null,
+              "kind": "simple",
+              "doc_url": "https://docs.python.org/3/library/functions.html#float"
+            },
+            {
+              "type_str": "Timeout",
+              "description": null,
+              "kind": "simple",
+              "doc_identifier": "Timeout"
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple",
+              "doc_url": "https://docs.python.org/3/library/constants.html#None"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "tool_choice",
+    "type_info": {
+      "type_str": "NotRequired[ToolChoice | None]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.NotRequired"
+      },
+      "parameters": [
+        {
+          "type_str": "ToolChoice | None",
+          "description": null,
+          "kind": "union",
+          "base_type": {
+            "type_str": "Union",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+          },
+          "parameters": [
+            {
+              "type_str": "ToolChoice",
+              "description": null,
+              "kind": "simple",
+              "doc_identifier": "ToolChoice"
+            },
+            {
+              "type_str": "None",
+              "description": null,
+              "kind": "simple",
+              "doc_url": "https://docs.python.org/3/library/constants.html#None"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
     "name": "top_k",
     "type_info": {
       "type_str": "NotRequired[int | None]",
@@ -399,53 +446,6 @@ The parameters to use when calling the Anthropic API.
               "description": null,
               "kind": "simple",
               "doc_url": "https://docs.python.org/3/library/functions.html#float"
-            },
-            {
-              "type_str": "None",
-              "description": null,
-              "kind": "simple",
-              "doc_url": "https://docs.python.org/3/library/constants.html#None"
-            }
-          ]
-        }
-      ]
-    }
-  },
-  {
-    "name": "timeout",
-    "type_info": {
-      "type_str": "NotRequired[float | Timeout | None]",
-      "description": null,
-      "kind": "generic",
-      "base_type": {
-        "type_str": "NotRequired",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.NotRequired"
-      },
-      "parameters": [
-        {
-          "type_str": "float | Timeout | None",
-          "description": null,
-          "kind": "union",
-          "base_type": {
-            "type_str": "Union",
-            "description": null,
-            "kind": "simple",
-            "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
-          },
-          "parameters": [
-            {
-              "type_str": "float",
-              "description": null,
-              "kind": "simple",
-              "doc_url": "https://docs.python.org/3/library/functions.html#float"
-            },
-            {
-              "type_str": "Timeout",
-              "description": null,
-              "kind": "simple",
-              "doc_identifier": "Timeout"
             },
             {
               "type_str": "None",

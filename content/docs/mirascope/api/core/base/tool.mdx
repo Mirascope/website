@@ -16,67 +16,6 @@ This module defines the base class for tools used in LLM calls.
 
 </Info>
 
-## <ApiType type="Class" path="core/base/tool" symbolName="ToolConfig" /> ToolConfig
-
-A base class for tool configurations.
-
-**Bases:** 
-<TypeLink type={{"type_str": "TypedDict", "description": null, "kind": "simple", "doc_url": "https://docs.python.org/3/library/typing.html#typing.TypedDict"}} />
-
-
-## <ApiType type="Class" path="core/base/tool" symbolName="GenerateJsonSchemaNoTitles" /> GenerateJsonSchemaNoTitles
-
-**Bases:** 
-<TypeLink type={{"type_str": "GenerateJsonSchema", "description": null, "kind": "simple", "doc_identifier": "GenerateJsonSchema"}} />
-
-## <ApiType type="Function" path="core/base/tool" symbolName="generate" /> generate
-
-<ParametersTable
-  parameters={[
-  {
-    "name": "self",
-    "type_info": {
-      "type_str": "Any",
-      "description": null,
-      "kind": "simple",
-      "doc_identifier": null
-    }
-  },
-  {
-    "name": "schema",
-    "type_info": {
-      "type_str": "CoreSchema",
-      "description": null,
-      "kind": "simple",
-      "doc_identifier": "CoreSchema"
-    }
-  },
-  {
-    "name": "mode",
-    "type_info": {
-      "type_str": "JsonSchemaMode",
-      "description": null,
-      "kind": "simple",
-      "doc_identifier": "JsonSchemaMode"
-    },
-    "default": "'validation'"
-  }
-]}
-/>
-
-<ReturnTable
-  returnType={{
-  "type_info": {
-    "type_str": "JsonSchemaValue",
-    "description": null,
-    "kind": "simple",
-    "doc_identifier": "JsonSchemaValue"
-  }
-}}
-/>
-
-
-
 ## <ApiType type="Class" path="core/base/tool" symbolName="BaseTool" /> BaseTool
 
 A class for defining tools for LLM calls.
@@ -104,22 +43,33 @@ class FormatBook(BaseTool):
 <AttributesTable
   attributes={[
   {
-    "name": "tool_config",
+    "name": "args",
     "type_info": {
-      "type_str": "ToolConfig",
+      "type_str": "dict[str, Any]",
       "description": null,
-      "kind": "simple",
-      "doc_url": "/docs/mirascope/api/core/base/tool#toolconfig"
-    }
-  },
-  {
-    "name": "model_config",
-    "type_info": {
-      "type_str": "ConfigDict(arbitrary_types_allowed=True)",
-      "description": null,
-      "kind": "simple",
-      "doc_identifier": "ConfigDict(arbitrary_types_allowed=True)"
-    }
+      "kind": "generic",
+      "base_type": {
+        "type_str": "dict",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/stdtypes.html#dict"
+      },
+      "parameters": [
+        {
+          "type_str": "str",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+        },
+        {
+          "type_str": "Any",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/typing.html#typing.Any"
+        }
+      ]
+    },
+    "description": "The arguments of the tool as a dictionary."
   },
   {
     "name": "delta",
@@ -163,33 +113,22 @@ class FormatBook(BaseTool):
     }
   },
   {
-    "name": "args",
+    "name": "model_config",
     "type_info": {
-      "type_str": "dict[str, Any]",
+      "type_str": "ConfigDict(arbitrary_types_allowed=True)",
       "description": null,
-      "kind": "generic",
-      "base_type": {
-        "type_str": "dict",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/stdtypes.html#dict"
-      },
-      "parameters": [
-        {
-          "type_str": "str",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-        },
-        {
-          "type_str": "Any",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/typing.html#typing.Any"
-        }
-      ]
-    },
-    "description": "The arguments of the tool as a dictionary."
+      "kind": "simple",
+      "doc_identifier": "ConfigDict(arbitrary_types_allowed=True)"
+    }
+  },
+  {
+    "name": "tool_config",
+    "type_info": {
+      "type_str": "ToolConfig",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "/docs/mirascope/api/core/base/tool#toolconfig"
+    }
   }
 ]}
 />
@@ -244,16 +183,45 @@ The method to call the tool.
 />
 
 
-## <ApiType type="Function" path="core/base/tool" symbolName="type_from_fn" /> type_from_fn
+## <ApiType type="Function" path="core/base/tool" symbolName="model_json_schema" /> model_json_schema
 
-Returns this tool type converted from a function.
+Returns the generated JSON schema for the class.
 
 <ParametersTable
   parameters={[
   {
     "name": "cls",
     "type_info": {
-      "type_str": "type[_BaseToolT]",
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  },
+  {
+    "name": "by_alias",
+    "type_info": {
+      "type_str": "bool",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/functions.html#bool"
+    },
+    "default": "True"
+  },
+  {
+    "name": "ref_template",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    },
+    "default": "DEFAULT_REF_TEMPLATE"
+  },
+  {
+    "name": "schema_generator",
+    "type_info": {
+      "type_str": "type[GenerateJsonSchema]",
       "description": null,
       "kind": "generic",
       "base_type": {
@@ -264,23 +232,24 @@ Returns this tool type converted from a function.
       },
       "parameters": [
         {
-          "type_str": "_BaseToolT",
+          "type_str": "GenerateJsonSchema",
           "description": null,
           "kind": "simple",
-          "doc_url": "/docs/mirascope/api/core/base/tool#basetool"
+          "doc_identifier": "GenerateJsonSchema"
         }
       ]
-    }
+    },
+    "default": "GenerateJsonSchemaNoTitles"
   },
   {
-    "name": "fn",
+    "name": "mode",
     "type_info": {
-      "type_str": "Callable",
+      "type_str": "JsonSchemaMode",
       "description": null,
       "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+      "doc_identifier": "JsonSchemaMode"
     },
-    "description": "The function to convert into this tool type."
+    "default": "'validation'"
   }
 ]}
 />
@@ -288,23 +257,57 @@ Returns this tool type converted from a function.
 <ReturnTable
   returnType={{
   "type_info": {
-    "type_str": "type[_BaseToolT]",
+    "type_str": "dict[str, Any]",
     "description": null,
     "kind": "generic",
     "base_type": {
-      "type_str": "type",
+      "type_str": "dict",
       "description": null,
       "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/functions.html#type"
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#dict"
     },
     "parameters": [
       {
-        "type_str": "_BaseToolT",
+        "type_str": "str",
         "description": null,
         "kind": "simple",
-        "doc_url": "/docs/mirascope/api/core/base/tool#basetool"
+        "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+      },
+      {
+        "type_str": "Any",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Any"
       }
     ]
+  }
+}}
+/>
+
+
+## <ApiType type="Function" path="core/base/tool" symbolName="tool_schema" /> tool_schema
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "cls",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "Any",
+    "description": null,
+    "kind": "simple",
+    "doc_url": "https://docs.python.org/3/library/typing.html#typing.Any"
   }
 }}
 />
@@ -468,73 +471,16 @@ Returns this tool type converted from a base type.
 />
 
 
-## <ApiType type="Function" path="core/base/tool" symbolName="tool_schema" /> tool_schema
+## <ApiType type="Function" path="core/base/tool" symbolName="type_from_fn" /> type_from_fn
+
+Returns this tool type converted from a function.
 
 <ParametersTable
   parameters={[
   {
     "name": "cls",
     "type_info": {
-      "type_str": "Any",
-      "description": null,
-      "kind": "simple",
-      "doc_identifier": null
-    }
-  }
-]}
-/>
-
-<ReturnTable
-  returnType={{
-  "type_info": {
-    "type_str": "Any",
-    "description": null,
-    "kind": "simple",
-    "doc_url": "https://docs.python.org/3/library/typing.html#typing.Any"
-  }
-}}
-/>
-
-
-## <ApiType type="Function" path="core/base/tool" symbolName="model_json_schema" /> model_json_schema
-
-Returns the generated JSON schema for the class.
-
-<ParametersTable
-  parameters={[
-  {
-    "name": "cls",
-    "type_info": {
-      "type_str": "Any",
-      "description": null,
-      "kind": "simple",
-      "doc_identifier": null
-    }
-  },
-  {
-    "name": "by_alias",
-    "type_info": {
-      "type_str": "bool",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/functions.html#bool"
-    },
-    "default": "True"
-  },
-  {
-    "name": "ref_template",
-    "type_info": {
-      "type_str": "str",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-    },
-    "default": "DEFAULT_REF_TEMPLATE"
-  },
-  {
-    "name": "schema_generator",
-    "type_info": {
-      "type_str": "type[GenerateJsonSchema]",
+      "type_str": "type[_BaseToolT]",
       "description": null,
       "kind": "generic",
       "base_type": {
@@ -545,24 +491,23 @@ Returns the generated JSON schema for the class.
       },
       "parameters": [
         {
-          "type_str": "GenerateJsonSchema",
+          "type_str": "_BaseToolT",
           "description": null,
           "kind": "simple",
-          "doc_identifier": "GenerateJsonSchema"
+          "doc_url": "/docs/mirascope/api/core/base/tool#basetool"
         }
       ]
-    },
-    "default": "GenerateJsonSchemaNoTitles"
+    }
   },
   {
-    "name": "mode",
+    "name": "fn",
     "type_info": {
-      "type_str": "JsonSchemaMode",
+      "type_str": "Callable",
       "description": null,
       "kind": "simple",
-      "doc_identifier": "JsonSchemaMode"
+      "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
     },
-    "default": "'validation'"
+    "description": "The function to convert into this tool type."
   }
 ]}
 />
@@ -570,27 +515,21 @@ Returns the generated JSON schema for the class.
 <ReturnTable
   returnType={{
   "type_info": {
-    "type_str": "dict[str, Any]",
+    "type_str": "type[_BaseToolT]",
     "description": null,
     "kind": "generic",
     "base_type": {
-      "type_str": "dict",
+      "type_str": "type",
       "description": null,
       "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/stdtypes.html#dict"
+      "doc_url": "https://docs.python.org/3/library/functions.html#type"
     },
     "parameters": [
       {
-        "type_str": "str",
+        "type_str": "_BaseToolT",
         "description": null,
         "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-      },
-      {
-        "type_str": "Any",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Any"
+        "doc_url": "/docs/mirascope/api/core/base/tool#basetool"
       }
     ]
   }
@@ -627,6 +566,67 @@ Warns when a specific provider does not support provided config options.
 }}
 />
 
+
+
+## <ApiType type="Class" path="core/base/tool" symbolName="GenerateJsonSchemaNoTitles" /> GenerateJsonSchemaNoTitles
+
+**Bases:** 
+<TypeLink type={{"type_str": "GenerateJsonSchema", "description": null, "kind": "simple", "doc_identifier": "GenerateJsonSchema"}} />
+
+## <ApiType type="Function" path="core/base/tool" symbolName="generate" /> generate
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "self",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  },
+  {
+    "name": "schema",
+    "type_info": {
+      "type_str": "CoreSchema",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": "CoreSchema"
+    }
+  },
+  {
+    "name": "mode",
+    "type_info": {
+      "type_str": "JsonSchemaMode",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": "JsonSchemaMode"
+    },
+    "default": "'validation'"
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "JsonSchemaValue",
+    "description": null,
+    "kind": "simple",
+    "doc_identifier": "JsonSchemaValue"
+  }
+}}
+/>
+
+
+
+## <ApiType type="Class" path="core/base/tool" symbolName="ToolConfig" /> ToolConfig
+
+A base class for tool configurations.
+
+**Bases:** 
+<TypeLink type={{"type_str": "TypedDict", "description": null, "kind": "simple", "doc_url": "https://docs.python.org/3/library/typing.html#typing.TypedDict"}} />
 
 
 

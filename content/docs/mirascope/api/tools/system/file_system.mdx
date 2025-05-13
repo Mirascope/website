@@ -8,50 +8,6 @@ description: API documentation for mirascope.tools.system._file_system
 
 ## <ApiType type="Module" path="tools/system/file_system" symbolName="_file_system" /> _file_system
 
-## <ApiType type="Class" path="tools/system/file_system" symbolName="FileSystemToolKitConfig" /> FileSystemToolKitConfig
-
-Configuration for file_system toolkit
-
-**Bases:** 
-<TypeLink type={{"type_str": "_ConfigurableToolConfig", "description": null, "kind": "simple", "doc_identifier": "_ConfigurableToolConfig"}} />
-
-<AttributesTable
-  attributes={[
-  {
-    "name": "max_file_size",
-    "type_info": {
-      "type_str": "int",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/functions.html#int"
-    }
-  },
-  {
-    "name": "allowed_extensions",
-    "type_info": {
-      "type_str": "list[str]",
-      "description": null,
-      "kind": "generic",
-      "base_type": {
-        "type_str": "list",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
-      },
-      "parameters": [
-        {
-          "type_str": "str",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-        }
-      ]
-    }
-  }
-]}
-/>
-
-
 ## <ApiType type="Class" path="tools/system/file_system" symbolName="FileOperation" /> FileOperation
 
 Base class for file system operations.
@@ -85,15 +41,6 @@ Read, write, list, create, and delete files and directories.
 <AttributesTable
   attributes={[
   {
-    "name": "config",
-    "type_info": {
-      "type_str": "FileSystemToolKitConfig",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "/docs/mirascope/api/tools/system/file_system#filesystemtoolkitconfig"
-    }
-  },
-  {
     "name": "base_directory",
     "type_info": {
       "type_str": "Path",
@@ -101,45 +48,43 @@ Read, write, list, create, and delete files and directories.
       "kind": "simple",
       "doc_identifier": "Path"
     }
-  }
-]}
-/>
-
-## <ApiType type="Class" path="tools/system/file_system" symbolName="ReadFile" /> ReadFile
-
-Tool for reading file contents.
-
-**Bases:** 
-<TypeLink type={{"type_str": "FileOperation", "description": null, "kind": "simple", "doc_url": "/docs/mirascope/api/tools/system/file_system#fileoperation"}} />
-
-<AttributesTable
-  attributes={[
+  },
   {
-    "name": "path",
+    "name": "config",
     "type_info": {
-      "type_str": "str",
+      "type_str": "FileSystemToolKitConfig",
       "description": null,
       "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+      "doc_url": "/docs/mirascope/api/tools/system/file_system#filesystemtoolkitconfig"
     }
   }
 ]}
 />
 
-## <ApiType type="Function" path="tools/system/file_system" symbolName="call" /> call
+## <ApiType type="Function" path="tools/system/file_system" symbolName="validate_base_directory" /> validate_base_directory
 
-Read and return file contents.
+Validates that the base directory exists and is a directory.
 
 <ParametersTable
   parameters={[
   {
-    "name": "self",
+    "name": "cls",
     "type_info": {
       "type_str": "Any",
       "description": null,
       "kind": "simple",
       "doc_identifier": null
     }
+  },
+  {
+    "name": "v",
+    "type_info": {
+      "type_str": "Path",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": "Path"
+    },
+    "description": "The path to validate"
   }
 ]}
 />
@@ -147,130 +92,14 @@ Read and return file contents.
 <ReturnTable
   returnType={{
   "type_info": {
-    "type_str": "str",
+    "type_str": "Path",
     "description": null,
     "kind": "simple",
-    "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    "doc_identifier": "Path"
   },
-  "description": "File contents or error message if operation fails"
+  "description": "The validated path"
 }}
 />
-
-
-
-## <ApiType type="Class" path="tools/system/file_system" symbolName="WriteFile" /> WriteFile
-
-Tool for writing content to a file.
-
-**Bases:** 
-<TypeLink type={{"type_str": "FileOperation", "description": null, "kind": "simple", "doc_url": "/docs/mirascope/api/tools/system/file_system#fileoperation"}} />
-
-<AttributesTable
-  attributes={[
-  {
-    "name": "path",
-    "type_info": {
-      "type_str": "str",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-    }
-  },
-  {
-    "name": "content",
-    "type_info": {
-      "type_str": "str",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-    }
-  }
-]}
-/>
-
-## <ApiType type="Function" path="tools/system/file_system" symbolName="call" /> call
-
-Write content to file and return status.
-
-<ParametersTable
-  parameters={[
-  {
-    "name": "self",
-    "type_info": {
-      "type_str": "Any",
-      "description": null,
-      "kind": "simple",
-      "doc_identifier": null
-    }
-  }
-]}
-/>
-
-<ReturnTable
-  returnType={{
-  "type_info": {
-    "type_str": "str",
-    "description": null,
-    "kind": "simple",
-    "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-  },
-  "description": "Success message or error message if operation fails"
-}}
-/>
-
-
-
-## <ApiType type="Class" path="tools/system/file_system" symbolName="ListDirectory" /> ListDirectory
-
-Tool for listing directory contents.
-
-**Bases:** 
-<TypeLink type={{"type_str": "FileOperation", "description": null, "kind": "simple", "doc_url": "/docs/mirascope/api/tools/system/file_system#fileoperation"}} />
-
-<AttributesTable
-  attributes={[
-  {
-    "name": "path",
-    "type_info": {
-      "type_str": "str",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-    }
-  }
-]}
-/>
-
-## <ApiType type="Function" path="tools/system/file_system" symbolName="call" /> call
-
-List directory contents and return formatted string.
-
-<ParametersTable
-  parameters={[
-  {
-    "name": "self",
-    "type_info": {
-      "type_str": "Any",
-      "description": null,
-      "kind": "simple",
-      "doc_identifier": null
-    }
-  }
-]}
-/>
-
-<ReturnTable
-  returnType={{
-  "type_info": {
-    "type_str": "str",
-    "description": null,
-    "kind": "simple",
-    "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-  },
-  "description": "Formatted directory listing or error message if operation fails"
-}}
-/>
-
 
 
 ## <ApiType type="Class" path="tools/system/file_system" symbolName="CreateDirectory" /> CreateDirectory
@@ -379,30 +208,41 @@ Delete file and return status.
 
 
 
-## <ApiType type="Function" path="tools/system/file_system" symbolName="validate_base_directory" /> validate_base_directory
+## <ApiType type="Class" path="tools/system/file_system" symbolName="ListDirectory" /> ListDirectory
 
-Validates that the base directory exists and is a directory.
+Tool for listing directory contents.
+
+**Bases:** 
+<TypeLink type={{"type_str": "FileOperation", "description": null, "kind": "simple", "doc_url": "/docs/mirascope/api/tools/system/file_system#fileoperation"}} />
+
+<AttributesTable
+  attributes={[
+  {
+    "name": "path",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    }
+  }
+]}
+/>
+
+## <ApiType type="Function" path="tools/system/file_system" symbolName="call" /> call
+
+List directory contents and return formatted string.
 
 <ParametersTable
   parameters={[
   {
-    "name": "cls",
+    "name": "self",
     "type_info": {
       "type_str": "Any",
       "description": null,
       "kind": "simple",
       "doc_identifier": null
     }
-  },
-  {
-    "name": "v",
-    "type_info": {
-      "type_str": "Path",
-      "description": null,
-      "kind": "simple",
-      "doc_identifier": "Path"
-    },
-    "description": "The path to validate"
   }
 ]}
 />
@@ -410,15 +250,175 @@ Validates that the base directory exists and is a directory.
 <ReturnTable
   returnType={{
   "type_info": {
-    "type_str": "Path",
+    "type_str": "str",
     "description": null,
     "kind": "simple",
-    "doc_identifier": "Path"
+    "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
   },
-  "description": "The validated path"
+  "description": "Formatted directory listing or error message if operation fails"
 }}
 />
 
+
+
+## <ApiType type="Class" path="tools/system/file_system" symbolName="ReadFile" /> ReadFile
+
+Tool for reading file contents.
+
+**Bases:** 
+<TypeLink type={{"type_str": "FileOperation", "description": null, "kind": "simple", "doc_url": "/docs/mirascope/api/tools/system/file_system#fileoperation"}} />
+
+<AttributesTable
+  attributes={[
+  {
+    "name": "path",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    }
+  }
+]}
+/>
+
+## <ApiType type="Function" path="tools/system/file_system" symbolName="call" /> call
+
+Read and return file contents.
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "self",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "str",
+    "description": null,
+    "kind": "simple",
+    "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+  },
+  "description": "File contents or error message if operation fails"
+}}
+/>
+
+
+
+## <ApiType type="Class" path="tools/system/file_system" symbolName="WriteFile" /> WriteFile
+
+Tool for writing content to a file.
+
+**Bases:** 
+<TypeLink type={{"type_str": "FileOperation", "description": null, "kind": "simple", "doc_url": "/docs/mirascope/api/tools/system/file_system#fileoperation"}} />
+
+<AttributesTable
+  attributes={[
+  {
+    "name": "content",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    }
+  },
+  {
+    "name": "path",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    }
+  }
+]}
+/>
+
+## <ApiType type="Function" path="tools/system/file_system" symbolName="call" /> call
+
+Write content to file and return status.
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "self",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "str",
+    "description": null,
+    "kind": "simple",
+    "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+  },
+  "description": "Success message or error message if operation fails"
+}}
+/>
+
+
+
+
+## <ApiType type="Class" path="tools/system/file_system" symbolName="FileSystemToolKitConfig" /> FileSystemToolKitConfig
+
+Configuration for file_system toolkit
+
+**Bases:** 
+<TypeLink type={{"type_str": "_ConfigurableToolConfig", "description": null, "kind": "simple", "doc_identifier": "_ConfigurableToolConfig"}} />
+
+<AttributesTable
+  attributes={[
+  {
+    "name": "allowed_extensions",
+    "type_info": {
+      "type_str": "list[str]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "list",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
+      },
+      "parameters": [
+        {
+          "type_str": "str",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+        }
+      ]
+    }
+  },
+  {
+    "name": "max_file_size",
+    "type_info": {
+      "type_str": "int",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/functions.html#int"
+    }
+  }
+]}
+/>
 
 
 

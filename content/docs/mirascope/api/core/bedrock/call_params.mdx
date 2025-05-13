@@ -24,107 +24,6 @@ The parameters to use when calling the Bedrock API.
 <AttributesTable
   attributes={[
   {
-    "name": "system",
-    "type_info": {
-      "type_str": "NotRequired[list[SystemContentBlockTypeDef]]",
-      "description": null,
-      "kind": "generic",
-      "base_type": {
-        "type_str": "NotRequired",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.NotRequired"
-      },
-      "parameters": [
-        {
-          "type_str": "list[SystemContentBlockTypeDef]",
-          "description": null,
-          "kind": "generic",
-          "base_type": {
-            "type_str": "list",
-            "description": null,
-            "kind": "simple",
-            "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
-          },
-          "parameters": [
-            {
-              "type_str": "SystemContentBlockTypeDef",
-              "description": null,
-              "kind": "simple",
-              "doc_identifier": "SystemContentBlockTypeDef"
-            }
-          ]
-        }
-      ]
-    }
-  },
-  {
-    "name": "inferenceConfig",
-    "type_info": {
-      "type_str": "NotRequired[InferenceConfigurationTypeDef]",
-      "description": null,
-      "kind": "generic",
-      "base_type": {
-        "type_str": "NotRequired",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.NotRequired"
-      },
-      "parameters": [
-        {
-          "type_str": "InferenceConfigurationTypeDef",
-          "description": null,
-          "kind": "simple",
-          "doc_identifier": "InferenceConfigurationTypeDef"
-        }
-      ]
-    }
-  },
-  {
-    "name": "toolConfig",
-    "type_info": {
-      "type_str": "NotRequired[ToolConfigurationTypeDef]",
-      "description": null,
-      "kind": "generic",
-      "base_type": {
-        "type_str": "NotRequired",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.NotRequired"
-      },
-      "parameters": [
-        {
-          "type_str": "ToolConfigurationTypeDef",
-          "description": null,
-          "kind": "simple",
-          "doc_identifier": "ToolConfigurationTypeDef"
-        }
-      ]
-    }
-  },
-  {
-    "name": "guardrailConfig",
-    "type_info": {
-      "type_str": "NotRequired[GuardrailConfigurationTypeDef]",
-      "description": null,
-      "kind": "generic",
-      "base_type": {
-        "type_str": "NotRequired",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.NotRequired"
-      },
-      "parameters": [
-        {
-          "type_str": "GuardrailConfigurationTypeDef",
-          "description": null,
-          "kind": "simple",
-          "doc_identifier": "GuardrailConfigurationTypeDef"
-        }
-      ]
-    }
-  },
-  {
     "name": "additionalModelRequestFields",
     "type_info": {
       "type_str": "NotRequired[Mapping[str, Any]]",
@@ -196,6 +95,107 @@ The parameters to use when calling the Bedrock API.
               "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
             }
           ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "guardrailConfig",
+    "type_info": {
+      "type_str": "NotRequired[GuardrailConfigurationTypeDef]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.NotRequired"
+      },
+      "parameters": [
+        {
+          "type_str": "GuardrailConfigurationTypeDef",
+          "description": null,
+          "kind": "simple",
+          "doc_identifier": "GuardrailConfigurationTypeDef"
+        }
+      ]
+    }
+  },
+  {
+    "name": "inferenceConfig",
+    "type_info": {
+      "type_str": "NotRequired[InferenceConfigurationTypeDef]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.NotRequired"
+      },
+      "parameters": [
+        {
+          "type_str": "InferenceConfigurationTypeDef",
+          "description": null,
+          "kind": "simple",
+          "doc_identifier": "InferenceConfigurationTypeDef"
+        }
+      ]
+    }
+  },
+  {
+    "name": "system",
+    "type_info": {
+      "type_str": "NotRequired[list[SystemContentBlockTypeDef]]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.NotRequired"
+      },
+      "parameters": [
+        {
+          "type_str": "list[SystemContentBlockTypeDef]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "list",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
+          },
+          "parameters": [
+            {
+              "type_str": "SystemContentBlockTypeDef",
+              "description": null,
+              "kind": "simple",
+              "doc_identifier": "SystemContentBlockTypeDef"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "toolConfig",
+    "type_info": {
+      "type_str": "NotRequired[ToolConfigurationTypeDef]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.NotRequired"
+      },
+      "parameters": [
+        {
+          "type_str": "ToolConfigurationTypeDef",
+          "description": null,
+          "kind": "simple",
+          "doc_identifier": "ToolConfigurationTypeDef"
         }
       ]
     }

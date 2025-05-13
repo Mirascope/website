@@ -8,28 +8,6 @@ description: API documentation for mirascope.tools.web._requests
 
 ## <ApiType type="Module" path="tools/web/requests" symbolName="_requests" /> _requests
 
-## <ApiType type="Class" path="tools/web/requests" symbolName="RequestsConfig" /> RequestsConfig
-
-Configuration for HTTP requests
-
-**Bases:** 
-<TypeLink type={{"type_str": "_ConfigurableToolConfig", "description": null, "kind": "simple", "doc_identifier": "_ConfigurableToolConfig"}} />
-
-<AttributesTable
-  attributes={[
-  {
-    "name": "timeout",
-    "type_info": {
-      "type_str": "int",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/functions.html#int"
-    }
-  }
-]}
-/>
-
-
 ## <ApiType type="Class" path="tools/web/requests" symbolName="Requests" /> Requests
 
 Tool for making HTTP requests with built-in requests library.
@@ -39,55 +17,6 @@ Tool for making HTTP requests with built-in requests library.
 
 <AttributesTable
   attributes={[
-  {
-    "name": "url",
-    "type_info": {
-      "type_str": "str",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-    }
-  },
-  {
-    "name": "method",
-    "type_info": {
-      "type_str": "Literal['GET', 'POST', 'PUT', 'DELETE']",
-      "description": null,
-      "kind": "generic",
-      "base_type": {
-        "type_str": "Literal",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Literal"
-      },
-      "parameters": [
-        {
-          "type_str": "'GET'",
-          "description": null,
-          "kind": "simple",
-          "doc_identifier": "'GET'"
-        },
-        {
-          "type_str": "'POST'",
-          "description": null,
-          "kind": "simple",
-          "doc_identifier": "'POST'"
-        },
-        {
-          "type_str": "'PUT'",
-          "description": null,
-          "kind": "simple",
-          "doc_identifier": "'PUT'"
-        },
-        {
-          "type_str": "'DELETE'",
-          "description": null,
-          "kind": "simple",
-          "doc_identifier": "'DELETE'"
-        }
-      ]
-    }
-  },
   {
     "name": "data",
     "type_info": {
@@ -143,6 +72,55 @@ Tool for making HTTP requests with built-in requests library.
         }
       ]
     }
+  },
+  {
+    "name": "method",
+    "type_info": {
+      "type_str": "Literal['GET', 'POST', 'PUT', 'DELETE']",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "Literal",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Literal"
+      },
+      "parameters": [
+        {
+          "type_str": "'GET'",
+          "description": null,
+          "kind": "simple",
+          "doc_identifier": "'GET'"
+        },
+        {
+          "type_str": "'POST'",
+          "description": null,
+          "kind": "simple",
+          "doc_identifier": "'POST'"
+        },
+        {
+          "type_str": "'PUT'",
+          "description": null,
+          "kind": "simple",
+          "doc_identifier": "'PUT'"
+        },
+        {
+          "type_str": "'DELETE'",
+          "description": null,
+          "kind": "simple",
+          "doc_identifier": "'DELETE'"
+        }
+      ]
+    }
+  },
+  {
+    "name": "url",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    }
   }
 ]}
 />
@@ -177,6 +155,28 @@ Make an HTTP request to the given URL.
 }}
 />
 
+
+
+## <ApiType type="Class" path="tools/web/requests" symbolName="RequestsConfig" /> RequestsConfig
+
+Configuration for HTTP requests
+
+**Bases:** 
+<TypeLink type={{"type_str": "_ConfigurableToolConfig", "description": null, "kind": "simple", "doc_identifier": "_ConfigurableToolConfig"}} />
+
+<AttributesTable
+  attributes={[
+  {
+    "name": "timeout",
+    "type_info": {
+      "type_str": "int",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/functions.html#int"
+    }
+  }
+]}
+/>
 
 
 

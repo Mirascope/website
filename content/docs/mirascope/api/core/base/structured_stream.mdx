@@ -20,12 +20,21 @@ A base class for streaming structured outputs from LLMs.
 <AttributesTable
   attributes={[
   {
-    "name": "stream",
+    "name": "constructed_response_model",
     "type_info": {
-      "type_str": "BaseStream",
+      "type_str": "_ResponseModelT",
       "description": null,
       "kind": "simple",
-      "doc_url": "/docs/mirascope/api/core/base/stream#basestream"
+      "doc_identifier": "_ResponseModelT"
+    }
+  },
+  {
+    "name": "fields_from_call_args",
+    "type_info": {
+      "type_str": "fields_from_call_args",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": "fields_from_call_args"
     }
   },
   {
@@ -51,21 +60,12 @@ A base class for streaming structured outputs from LLMs.
     }
   },
   {
-    "name": "constructed_response_model",
+    "name": "stream",
     "type_info": {
-      "type_str": "_ResponseModelT",
+      "type_str": "BaseStream",
       "description": null,
       "kind": "simple",
-      "doc_identifier": "_ResponseModelT"
-    }
-  },
-  {
-    "name": "fields_from_call_args",
-    "type_info": {
-      "type_str": "fields_from_call_args",
-      "description": null,
-      "kind": "simple",
-      "doc_identifier": "fields_from_call_args"
+      "doc_url": "/docs/mirascope/api/core/base/stream#basestream"
     }
   }
 ]}

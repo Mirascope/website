@@ -16,11 +16,6 @@ This module contains the `GroqCallResponseChunk` class.
 
 </Info>
 
-## <ApiType type="Attribute" path="core/groq/call_response_chunk" symbolName="FinishReason" /> FinishReason
-
-**Type:** <TypeLink type={{"type_str": "Choice.__annotations__['finish_reason']", "description": null, "kind": "generic", "base_type": {"type_str": "Choice.__annotations__", "description": null, "kind": "simple", "doc_identifier": "Choice.__annotations__"}, "parameters": [{"type_str": "'finish_reason'", "description": null, "kind": "simple", "doc_identifier": "'finish_reason'"}]}} />
-
-
 ## <ApiType type="Class" path="core/groq/call_response_chunk" symbolName="GroqCallResponseChunk" /> GroqCallResponseChunk
 
 A convenience wrapper around the Groq `ChatCompletionChunk` streamed chunks.
@@ -51,117 +46,6 @@ for chunk, _ in stream:
 <AttributesTable
   attributes={[
   {
-    "name": "content",
-    "type_info": {
-      "type_str": "str",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-    },
-    "description": "Returns the content for the 0th choice delta."
-  },
-  {
-    "name": "finish_reasons",
-    "type_info": {
-      "type_str": "list[FinishReason]",
-      "description": null,
-      "kind": "generic",
-      "base_type": {
-        "type_str": "list",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
-      },
-      "parameters": [
-        {
-          "type_str": "FinishReason",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "/docs/mirascope/api/core/openai/call_response_chunk#finishreason"
-        }
-      ]
-    },
-    "description": "Returns the finish reasons of the response."
-  },
-  {
-    "name": "model",
-    "type_info": {
-      "type_str": "str",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-    },
-    "description": "Returns the name of the response model."
-  },
-  {
-    "name": "id",
-    "type_info": {
-      "type_str": "str",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-    },
-    "description": "Returns the id of the response."
-  },
-  {
-    "name": "usage",
-    "type_info": {
-      "type_str": "CompletionUsage | None",
-      "description": null,
-      "kind": "union",
-      "base_type": {
-        "type_str": "Union",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
-      },
-      "parameters": [
-        {
-          "type_str": "CompletionUsage",
-          "description": null,
-          "kind": "simple",
-          "doc_identifier": "CompletionUsage"
-        },
-        {
-          "type_str": "None",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/constants.html#None"
-        }
-      ]
-    },
-    "description": "Returns the usage of the chat completion."
-  },
-  {
-    "name": "input_tokens",
-    "type_info": {
-      "type_str": "int | None",
-      "description": null,
-      "kind": "union",
-      "base_type": {
-        "type_str": "Union",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
-      },
-      "parameters": [
-        {
-          "type_str": "int",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/functions.html#int"
-        },
-        {
-          "type_str": "None",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/constants.html#None"
-        }
-      ]
-    },
-    "description": "Returns the number of input tokens."
-  },
-  {
     "name": "cached_tokens",
     "type_info": {
       "type_str": "int | None",
@@ -189,45 +73,6 @@ for chunk, _ in stream:
       ]
     },
     "description": "Returns the number of cached tokens."
-  },
-  {
-    "name": "output_tokens",
-    "type_info": {
-      "type_str": "int | None",
-      "description": null,
-      "kind": "union",
-      "base_type": {
-        "type_str": "Union",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
-      },
-      "parameters": [
-        {
-          "type_str": "int",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/functions.html#int"
-        },
-        {
-          "type_str": "None",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/constants.html#None"
-        }
-      ]
-    },
-    "description": "Returns the number of output tokens."
-  },
-  {
-    "name": "cost_metadata",
-    "type_info": {
-      "type_str": "CostMetadata",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "/docs/mirascope/api/core/base/types#costmetadata"
-    },
-    "description": "Returns the cost metadata."
   },
   {
     "name": "common_finish_reasons",
@@ -269,9 +114,164 @@ for chunk, _ in stream:
         }
       ]
     }
+  },
+  {
+    "name": "content",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    },
+    "description": "Returns the content for the 0th choice delta."
+  },
+  {
+    "name": "cost_metadata",
+    "type_info": {
+      "type_str": "CostMetadata",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "/docs/mirascope/api/core/base/types#costmetadata"
+    },
+    "description": "Returns the cost metadata."
+  },
+  {
+    "name": "finish_reasons",
+    "type_info": {
+      "type_str": "list[FinishReason]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "list",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
+      },
+      "parameters": [
+        {
+          "type_str": "FinishReason",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "/docs/mirascope/api/core/openai/call_response_chunk#finishreason"
+        }
+      ]
+    },
+    "description": "Returns the finish reasons of the response."
+  },
+  {
+    "name": "id",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    },
+    "description": "Returns the id of the response."
+  },
+  {
+    "name": "input_tokens",
+    "type_info": {
+      "type_str": "int | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+      },
+      "parameters": [
+        {
+          "type_str": "int",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/functions.html#int"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
+        }
+      ]
+    },
+    "description": "Returns the number of input tokens."
+  },
+  {
+    "name": "model",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    },
+    "description": "Returns the name of the response model."
+  },
+  {
+    "name": "output_tokens",
+    "type_info": {
+      "type_str": "int | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+      },
+      "parameters": [
+        {
+          "type_str": "int",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/functions.html#int"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
+        }
+      ]
+    },
+    "description": "Returns the number of output tokens."
+  },
+  {
+    "name": "usage",
+    "type_info": {
+      "type_str": "CompletionUsage | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+      },
+      "parameters": [
+        {
+          "type_str": "CompletionUsage",
+          "description": null,
+          "kind": "simple",
+          "doc_identifier": "CompletionUsage"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
+        }
+      ]
+    },
+    "description": "Returns the usage of the chat completion."
   }
 ]}
 />
+
+
+## <ApiType type="Attribute" path="core/groq/call_response_chunk" symbolName="FinishReason" /> FinishReason
+
+**Type:** <TypeLink type={{"type_str": "Choice.__annotations__['finish_reason']", "description": null, "kind": "generic", "base_type": {"type_str": "Choice.__annotations__", "description": null, "kind": "simple", "doc_identifier": "Choice.__annotations__"}, "parameters": [{"type_str": "'finish_reason'", "description": null, "kind": "simple", "doc_identifier": "'finish_reason'"}]}} />
 
 
 

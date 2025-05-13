@@ -45,136 +45,6 @@ print(response.content)
 <AttributesTable
   attributes={[
   {
-    "name": "content",
-    "type_info": {
-      "type_str": "str",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-    },
-    "description": "Returns the contained string content for the 0th choice."
-  },
-  {
-    "name": "finish_reasons",
-    "type_info": {
-      "type_str": "list[str]",
-      "description": null,
-      "kind": "generic",
-      "base_type": {
-        "type_str": "list",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
-      },
-      "parameters": [
-        {
-          "type_str": "str",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-        }
-      ]
-    },
-    "description": "Returns the finish reasons of the response."
-  },
-  {
-    "name": "model",
-    "type_info": {
-      "type_str": "str",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-    },
-    "description": "Returns the model name.\n\ngoogle.generativeai does not return model, so we return the model provided by\nthe user."
-  },
-  {
-    "name": "id",
-    "type_info": {
-      "type_str": "str | None",
-      "description": null,
-      "kind": "union",
-      "base_type": {
-        "type_str": "Union",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
-      },
-      "parameters": [
-        {
-          "type_str": "str",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-        },
-        {
-          "type_str": "None",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/constants.html#None"
-        }
-      ]
-    },
-    "description": "Returns the id of the response.\n\ngoogle.generativeai does not return an id"
-  },
-  {
-    "name": "usage",
-    "type_info": {
-      "type_str": "GenerateContentResponseUsageMetadata | None",
-      "description": null,
-      "kind": "union",
-      "base_type": {
-        "type_str": "Union",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
-      },
-      "parameters": [
-        {
-          "type_str": "GenerateContentResponseUsageMetadata",
-          "description": null,
-          "kind": "simple",
-          "doc_identifier": "GenerateContentResponseUsageMetadata"
-        },
-        {
-          "type_str": "None",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/constants.html#None"
-        }
-      ]
-    },
-    "description": "Returns the usage of the chat completion.\n\ngoogle.generativeai does not have Usage, so we return None"
-  },
-  {
-    "name": "input_tokens",
-    "type_info": {
-      "type_str": "int | None",
-      "description": null,
-      "kind": "union",
-      "base_type": {
-        "type_str": "Union",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
-      },
-      "parameters": [
-        {
-          "type_str": "int",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/functions.html#int"
-        },
-        {
-          "type_str": "None",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/constants.html#None"
-        }
-      ]
-    },
-    "description": "Returns the number of input tokens."
-  },
-  {
     "name": "cached_tokens",
     "type_info": {
       "type_str": "int | None",
@@ -202,116 +72,6 @@ print(response.content)
       ]
     },
     "description": "Returns the number of cached tokens."
-  },
-  {
-    "name": "output_tokens",
-    "type_info": {
-      "type_str": "int | None",
-      "description": null,
-      "kind": "union",
-      "base_type": {
-        "type_str": "Union",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
-      },
-      "parameters": [
-        {
-          "type_str": "int",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/functions.html#int"
-        },
-        {
-          "type_str": "None",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/constants.html#None"
-        }
-      ]
-    },
-    "description": "Returns the number of output tokens."
-  },
-  {
-    "name": "message_param",
-    "type_info": {
-      "type_str": "ContentDict",
-      "description": null,
-      "kind": "simple",
-      "doc_identifier": "ContentDict"
-    },
-    "description": "Returns the models's response as a message parameter."
-  },
-  {
-    "name": "tools",
-    "type_info": {
-      "type_str": "list[GoogleTool] | None",
-      "description": null,
-      "kind": "union",
-      "base_type": {
-        "type_str": "Union",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
-      },
-      "parameters": [
-        {
-          "type_str": "list[GoogleTool]",
-          "description": null,
-          "kind": "generic",
-          "base_type": {
-            "type_str": "list",
-            "description": null,
-            "kind": "simple",
-            "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
-          },
-          "parameters": [
-            {
-              "type_str": "GoogleTool",
-              "description": null,
-              "kind": "simple",
-              "doc_url": "/docs/mirascope/api/core/google/tool#googletool"
-            }
-          ]
-        },
-        {
-          "type_str": "None",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/constants.html#None"
-        }
-      ]
-    },
-    "description": "Returns the list of tools for the 0th candidate's 0th content part."
-  },
-  {
-    "name": "tool",
-    "type_info": {
-      "type_str": "GoogleTool | None",
-      "description": null,
-      "kind": "union",
-      "base_type": {
-        "type_str": "Union",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
-      },
-      "parameters": [
-        {
-          "type_str": "GoogleTool",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "/docs/mirascope/api/core/google/tool#googletool"
-        },
-        {
-          "type_str": "None",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/constants.html#None"
-        }
-      ]
-    },
-    "description": "Returns the 0th tool for the 0th candidate's 0th content part."
   },
   {
     "name": "common_finish_reasons",
@@ -392,6 +152,16 @@ print(response.content)
     }
   },
   {
+    "name": "content",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    },
+    "description": "Returns the contained string content for the 0th choice."
+  },
+  {
     "name": "cost_metadata",
     "type_info": {
       "type_str": "CostMetadata",
@@ -399,6 +169,236 @@ print(response.content)
       "kind": "simple",
       "doc_url": "/docs/mirascope/api/core/base/types#costmetadata"
     }
+  },
+  {
+    "name": "finish_reasons",
+    "type_info": {
+      "type_str": "list[str]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "list",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
+      },
+      "parameters": [
+        {
+          "type_str": "str",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+        }
+      ]
+    },
+    "description": "Returns the finish reasons of the response."
+  },
+  {
+    "name": "id",
+    "type_info": {
+      "type_str": "str | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+      },
+      "parameters": [
+        {
+          "type_str": "str",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
+        }
+      ]
+    },
+    "description": "Returns the id of the response.\n\ngoogle.generativeai does not return an id"
+  },
+  {
+    "name": "input_tokens",
+    "type_info": {
+      "type_str": "int | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+      },
+      "parameters": [
+        {
+          "type_str": "int",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/functions.html#int"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
+        }
+      ]
+    },
+    "description": "Returns the number of input tokens."
+  },
+  {
+    "name": "message_param",
+    "type_info": {
+      "type_str": "ContentDict",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": "ContentDict"
+    },
+    "description": "Returns the models's response as a message parameter."
+  },
+  {
+    "name": "model",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    },
+    "description": "Returns the model name.\n\ngoogle.generativeai does not return model, so we return the model provided by\nthe user."
+  },
+  {
+    "name": "output_tokens",
+    "type_info": {
+      "type_str": "int | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+      },
+      "parameters": [
+        {
+          "type_str": "int",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/functions.html#int"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
+        }
+      ]
+    },
+    "description": "Returns the number of output tokens."
+  },
+  {
+    "name": "tool",
+    "type_info": {
+      "type_str": "GoogleTool | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+      },
+      "parameters": [
+        {
+          "type_str": "GoogleTool",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "/docs/mirascope/api/core/google/tool#googletool"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
+        }
+      ]
+    },
+    "description": "Returns the 0th tool for the 0th candidate's 0th content part."
+  },
+  {
+    "name": "tools",
+    "type_info": {
+      "type_str": "list[GoogleTool] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+      },
+      "parameters": [
+        {
+          "type_str": "list[GoogleTool]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "list",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
+          },
+          "parameters": [
+            {
+              "type_str": "GoogleTool",
+              "description": null,
+              "kind": "simple",
+              "doc_url": "/docs/mirascope/api/core/google/tool#googletool"
+            }
+          ]
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
+        }
+      ]
+    },
+    "description": "Returns the list of tools for the 0th candidate's 0th content part."
+  },
+  {
+    "name": "usage",
+    "type_info": {
+      "type_str": "GenerateContentResponseUsageMetadata | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+      },
+      "parameters": [
+        {
+          "type_str": "GenerateContentResponseUsageMetadata",
+          "description": null,
+          "kind": "simple",
+          "doc_identifier": "GenerateContentResponseUsageMetadata"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
+        }
+      ]
+    },
+    "description": "Returns the usage of the chat completion.\n\ngoogle.generativeai does not have Usage, so we return None"
   }
 ]}
 />

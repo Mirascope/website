@@ -45,117 +45,6 @@ for chunk, _ in stream:
 <AttributesTable
   attributes={[
   {
-    "name": "content",
-    "type_info": {
-      "type_str": "str",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-    },
-    "description": "Returns the content of the delta."
-  },
-  {
-    "name": "finish_reasons",
-    "type_info": {
-      "type_str": "list[FinishReason]",
-      "description": null,
-      "kind": "generic",
-      "base_type": {
-        "type_str": "list",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
-      },
-      "parameters": [
-        {
-          "type_str": "FinishReason",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "/docs/mirascope/api/core/openai/call_response_chunk#finishreason"
-        }
-      ]
-    },
-    "description": "Returns the finish reasons of the response."
-  },
-  {
-    "name": "model",
-    "type_info": {
-      "type_str": "str",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-    },
-    "description": "Returns the name of the response model."
-  },
-  {
-    "name": "id",
-    "type_info": {
-      "type_str": "str",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-    },
-    "description": "Returns the id of the response."
-  },
-  {
-    "name": "usage",
-    "type_info": {
-      "type_str": "UsageInfo | None",
-      "description": null,
-      "kind": "union",
-      "base_type": {
-        "type_str": "Union",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
-      },
-      "parameters": [
-        {
-          "type_str": "UsageInfo",
-          "description": null,
-          "kind": "simple",
-          "doc_identifier": "UsageInfo"
-        },
-        {
-          "type_str": "None",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/constants.html#None"
-        }
-      ]
-    },
-    "description": "Returns the usage of the chat completion."
-  },
-  {
-    "name": "input_tokens",
-    "type_info": {
-      "type_str": "int | None",
-      "description": null,
-      "kind": "union",
-      "base_type": {
-        "type_str": "Union",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
-      },
-      "parameters": [
-        {
-          "type_str": "int",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/functions.html#int"
-        },
-        {
-          "type_str": "None",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/constants.html#None"
-        }
-      ]
-    },
-    "description": "Returns the number of input tokens."
-  },
-  {
     "name": "cached_tokens",
     "type_info": {
       "type_str": "int",
@@ -164,45 +53,6 @@ for chunk, _ in stream:
       "doc_url": "https://docs.python.org/3/library/functions.html#int"
     },
     "description": "Returns the number of cached tokens."
-  },
-  {
-    "name": "output_tokens",
-    "type_info": {
-      "type_str": "int | None",
-      "description": null,
-      "kind": "union",
-      "base_type": {
-        "type_str": "Union",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
-      },
-      "parameters": [
-        {
-          "type_str": "int",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/functions.html#int"
-        },
-        {
-          "type_str": "None",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/constants.html#None"
-        }
-      ]
-    },
-    "description": "Returns the number of output tokens."
-  },
-  {
-    "name": "cost_metadata",
-    "type_info": {
-      "type_str": "CostMetadata",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "/docs/mirascope/api/core/base/types#costmetadata"
-    },
-    "description": "Returns the cost metadata."
   },
   {
     "name": "common_finish_reasons",
@@ -244,6 +94,156 @@ for chunk, _ in stream:
         }
       ]
     }
+  },
+  {
+    "name": "content",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    },
+    "description": "Returns the content of the delta."
+  },
+  {
+    "name": "cost_metadata",
+    "type_info": {
+      "type_str": "CostMetadata",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "/docs/mirascope/api/core/base/types#costmetadata"
+    },
+    "description": "Returns the cost metadata."
+  },
+  {
+    "name": "finish_reasons",
+    "type_info": {
+      "type_str": "list[FinishReason]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "list",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
+      },
+      "parameters": [
+        {
+          "type_str": "FinishReason",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "/docs/mirascope/api/core/openai/call_response_chunk#finishreason"
+        }
+      ]
+    },
+    "description": "Returns the finish reasons of the response."
+  },
+  {
+    "name": "id",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    },
+    "description": "Returns the id of the response."
+  },
+  {
+    "name": "input_tokens",
+    "type_info": {
+      "type_str": "int | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+      },
+      "parameters": [
+        {
+          "type_str": "int",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/functions.html#int"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
+        }
+      ]
+    },
+    "description": "Returns the number of input tokens."
+  },
+  {
+    "name": "model",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    },
+    "description": "Returns the name of the response model."
+  },
+  {
+    "name": "output_tokens",
+    "type_info": {
+      "type_str": "int | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+      },
+      "parameters": [
+        {
+          "type_str": "int",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/functions.html#int"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
+        }
+      ]
+    },
+    "description": "Returns the number of output tokens."
+  },
+  {
+    "name": "usage",
+    "type_info": {
+      "type_str": "UsageInfo | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+      },
+      "parameters": [
+        {
+          "type_str": "UsageInfo",
+          "description": null,
+          "kind": "simple",
+          "doc_identifier": "UsageInfo"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
+        }
+      ]
+    },
+    "description": "Returns the usage of the chat completion."
   }
 ]}
 />

@@ -23,15 +23,6 @@ A base class for message parameters.
 <AttributesTable
   attributes={[
   {
-    "name": "role",
-    "type_info": {
-      "type_str": "str",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-    }
-  },
-  {
     "name": "content",
     "type_info": {
       "type_str": "str | Sequence[TextPart | ImagePart | ImageURLPart | AudioPart | AudioURLPart | CacheControlPart | DocumentPart | ToolCallPart | ToolResultPart]",
@@ -132,6 +123,15 @@ A base class for message parameters.
         }
       ]
     }
+  },
+  {
+    "name": "role",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    }
   }
 ]}
 />
@@ -147,6 +147,15 @@ A content part for text.
 
 <AttributesTable
   attributes={[
+  {
+    "name": "text",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    }
+  },
   {
     "name": "type",
     "type_info": {
@@ -168,15 +177,6 @@ A content part for text.
         }
       ]
     }
-  },
-  {
-    "name": "text",
-    "type_info": {
-      "type_str": "str",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-    }
   }
 ]}
 />
@@ -192,46 +192,6 @@ A content part for images.
 
 <AttributesTable
   attributes={[
-  {
-    "name": "type",
-    "type_info": {
-      "type_str": "Literal['image']",
-      "description": null,
-      "kind": "generic",
-      "base_type": {
-        "type_str": "Literal",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Literal"
-      },
-      "parameters": [
-        {
-          "type_str": "'image'",
-          "description": null,
-          "kind": "simple",
-          "doc_identifier": "'image'"
-        }
-      ]
-    }
-  },
-  {
-    "name": "media_type",
-    "type_info": {
-      "type_str": "str",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-    }
-  },
-  {
-    "name": "image",
-    "type_info": {
-      "type_str": "bytes",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes"
-    }
-  },
   {
     "name": "detail",
     "type_info": {
@@ -259,6 +219,46 @@ A content part for images.
         }
       ]
     }
+  },
+  {
+    "name": "image",
+    "type_info": {
+      "type_str": "bytes",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes"
+    }
+  },
+  {
+    "name": "media_type",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    }
+  },
+  {
+    "name": "type",
+    "type_info": {
+      "type_str": "Literal['image']",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "Literal",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Literal"
+      },
+      "parameters": [
+        {
+          "type_str": "'image'",
+          "description": null,
+          "kind": "simple",
+          "doc_identifier": "'image'"
+        }
+      ]
+    }
   }
 ]}
 />
@@ -274,37 +274,6 @@ A content part for audio.
 
 <AttributesTable
   attributes={[
-  {
-    "name": "type",
-    "type_info": {
-      "type_str": "Literal['audio']",
-      "description": null,
-      "kind": "generic",
-      "base_type": {
-        "type_str": "Literal",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Literal"
-      },
-      "parameters": [
-        {
-          "type_str": "'audio'",
-          "description": null,
-          "kind": "simple",
-          "doc_identifier": "'audio'"
-        }
-      ]
-    }
-  },
-  {
-    "name": "media_type",
-    "type_info": {
-      "type_str": "str",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-    }
-  },
   {
     "name": "audio",
     "type_info": {
@@ -329,6 +298,37 @@ A content part for audio.
           "description": null,
           "kind": "simple",
           "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+        }
+      ]
+    }
+  },
+  {
+    "name": "media_type",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    }
+  },
+  {
+    "name": "type",
+    "type_info": {
+      "type_str": "Literal['audio']",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "Literal",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Literal"
+      },
+      "parameters": [
+        {
+          "type_str": "'audio'",
+          "description": null,
+          "kind": "simple",
+          "doc_identifier": "'audio'"
         }
       ]
     }

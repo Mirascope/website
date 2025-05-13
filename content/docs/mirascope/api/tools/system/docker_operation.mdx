@@ -8,54 +8,6 @@ description: API documentation for mirascope.tools.system._docker_operation
 
 ## <ApiType type="Module" path="tools/system/docker_operation" symbolName="_docker_operation" /> _docker_operation
 
-## <ApiType type="Class" path="tools/system/docker_operation" symbolName="DockerOperationToolKitConfig" /> DockerOperationToolKitConfig
-
-Configuration for `DockerOperationToolKit` toolkit
-
-**Bases:** 
-<TypeLink type={{"type_str": "_ConfigurableToolConfig", "description": null, "kind": "simple", "doc_identifier": "_ConfigurableToolConfig"}} />
-
-<AttributesTable
-  attributes={[
-  {
-    "name": "docker_image",
-    "type_info": {
-      "type_str": "str",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-    }
-  },
-  {
-    "name": "max_memory",
-    "type_info": {
-      "type_str": "str",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-    }
-  },
-  {
-    "name": "allow_network",
-    "type_info": {
-      "type_str": "bool",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/functions.html#bool"
-    }
-  }
-]}
-/>
-
-
-## <ApiType type="Class" path="tools/system/docker_operation" symbolName="DockerOperation" /> DockerOperation
-
-Base class for Docker operations.
-
-**Bases:** 
-<TypeLink type={{"type_str": "ConfigurableTool[DockerOperationToolKitConfig]", "description": null, "kind": "generic", "base_type": {"type_str": "ConfigurableTool", "description": null, "kind": "simple", "doc_identifier": "ConfigurableTool"}, "parameters": [{"type_str": "DockerOperationToolKitConfig", "description": null, "kind": "simple", "doc_url": "/docs/mirascope/api/tools/system/docker_operation#dockeroperationtoolkitconfig"}]}} />, <TypeLink type={{"type_str": "ABC", "description": null, "kind": "simple", "doc_identifier": "ABC"}} />
-
-
 ## <ApiType type="Class" path="tools/system/docker_operation" symbolName="DockerContainer" /> DockerContainer
 
 **Bases:** 
@@ -83,6 +35,14 @@ Base class for Docker operations.
   }
 ]}
 />
+
+
+## <ApiType type="Class" path="tools/system/docker_operation" symbolName="DockerOperation" /> DockerOperation
+
+Base class for Docker operations.
+
+**Bases:** 
+<TypeLink type={{"type_str": "ConfigurableTool[DockerOperationToolKitConfig]", "description": null, "kind": "generic", "base_type": {"type_str": "ConfigurableTool", "description": null, "kind": "simple", "doc_identifier": "ConfigurableTool"}, "parameters": [{"type_str": "DockerOperationToolKitConfig", "description": null, "kind": "simple", "doc_url": "/docs/mirascope/api/tools/system/docker_operation#dockeroperationtoolkitconfig"}]}} />, <TypeLink type={{"type_str": "ABC", "description": null, "kind": "simple", "doc_identifier": "ABC"}} />
 
 
 ## <ApiType type="Class" path="tools/system/docker_operation" symbolName="DockerOperationToolKit" /> DockerOperationToolKit
@@ -323,6 +283,46 @@ allow_network: \{self.__config__.allow_network\}
 />
 
 
+
+
+## <ApiType type="Class" path="tools/system/docker_operation" symbolName="DockerOperationToolKitConfig" /> DockerOperationToolKitConfig
+
+Configuration for `DockerOperationToolKit` toolkit
+
+**Bases:** 
+<TypeLink type={{"type_str": "_ConfigurableToolConfig", "description": null, "kind": "simple", "doc_identifier": "_ConfigurableToolConfig"}} />
+
+<AttributesTable
+  attributes={[
+  {
+    "name": "allow_network",
+    "type_info": {
+      "type_str": "bool",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/functions.html#bool"
+    }
+  },
+  {
+    "name": "docker_image",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    }
+  },
+  {
+    "name": "max_memory",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    }
+  }
+]}
+/>
 
 
 

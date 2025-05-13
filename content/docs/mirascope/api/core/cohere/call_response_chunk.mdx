@@ -45,6 +45,76 @@ for chunk, _ in stream:
 <AttributesTable
   attributes={[
   {
+    "name": "cached_tokens",
+    "type_info": {
+      "type_str": "float | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+      },
+      "parameters": [
+        {
+          "type_str": "float",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/functions.html#float"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
+        }
+      ]
+    },
+    "description": "Returns the number of cached tokens."
+  },
+  {
+    "name": "common_finish_reasons",
+    "type_info": {
+      "type_str": "list[types.FinishReason] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+      },
+      "parameters": [
+        {
+          "type_str": "list[types.FinishReason]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "list",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
+          },
+          "parameters": [
+            {
+              "type_str": "types.FinishReason",
+              "description": null,
+              "kind": "simple",
+              "doc_identifier": "types.FinishReason"
+            }
+          ]
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
+        }
+      ]
+    }
+  },
+  {
     "name": "content",
     "type_info": {
       "type_str": "str",
@@ -53,6 +123,16 @@ for chunk, _ in stream:
       "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
     },
     "description": "Returns the content for the 0th choice delta."
+  },
+  {
+    "name": "cost_metadata",
+    "type_info": {
+      "type_str": "CostMetadata",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "/docs/mirascope/api/core/base/types#costmetadata"
+    },
+    "description": "Returns the cost metadata."
   },
   {
     "name": "finish_reasons",
@@ -97,35 +177,6 @@ for chunk, _ in stream:
     "description": "Returns the finish reasons of the response."
   },
   {
-    "name": "model",
-    "type_info": {
-      "type_str": "str | None",
-      "description": null,
-      "kind": "union",
-      "base_type": {
-        "type_str": "Union",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
-      },
-      "parameters": [
-        {
-          "type_str": "str",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-        },
-        {
-          "type_str": "None",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/constants.html#None"
-        }
-      ]
-    },
-    "description": "Returns the name of the response model.\n\nCohere does not return model, so we return None"
-  },
-  {
     "name": "id",
     "type_info": {
       "type_str": "str | None",
@@ -153,35 +204,6 @@ for chunk, _ in stream:
       ]
     },
     "description": "Returns the id of the response."
-  },
-  {
-    "name": "usage",
-    "type_info": {
-      "type_str": "ApiMetaBilledUnits | None",
-      "description": null,
-      "kind": "union",
-      "base_type": {
-        "type_str": "Union",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
-      },
-      "parameters": [
-        {
-          "type_str": "ApiMetaBilledUnits",
-          "description": null,
-          "kind": "simple",
-          "doc_identifier": "ApiMetaBilledUnits"
-        },
-        {
-          "type_str": "None",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/constants.html#None"
-        }
-      ]
-    },
-    "description": "Returns the usage of the response."
   },
   {
     "name": "input_tokens",
@@ -213,9 +235,9 @@ for chunk, _ in stream:
     "description": "Returns the number of input tokens."
   },
   {
-    "name": "cached_tokens",
+    "name": "model",
     "type_info": {
-      "type_str": "float | None",
+      "type_str": "str | None",
       "description": null,
       "kind": "union",
       "base_type": {
@@ -226,10 +248,10 @@ for chunk, _ in stream:
       },
       "parameters": [
         {
-          "type_str": "float",
+          "type_str": "str",
           "description": null,
           "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/functions.html#float"
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
         },
         {
           "type_str": "None",
@@ -239,7 +261,7 @@ for chunk, _ in stream:
         }
       ]
     },
-    "description": "Returns the number of cached tokens."
+    "description": "Returns the name of the response model.\n\nCohere does not return model, so we return None"
   },
   {
     "name": "output_tokens",
@@ -271,19 +293,9 @@ for chunk, _ in stream:
     "description": "Returns the number of output tokens."
   },
   {
-    "name": "cost_metadata",
+    "name": "usage",
     "type_info": {
-      "type_str": "CostMetadata",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "/docs/mirascope/api/core/base/types#costmetadata"
-    },
-    "description": "Returns the cost metadata."
-  },
-  {
-    "name": "common_finish_reasons",
-    "type_info": {
-      "type_str": "list[types.FinishReason] | None",
+      "type_str": "ApiMetaBilledUnits | None",
       "description": null,
       "kind": "union",
       "base_type": {
@@ -294,23 +306,10 @@ for chunk, _ in stream:
       },
       "parameters": [
         {
-          "type_str": "list[types.FinishReason]",
+          "type_str": "ApiMetaBilledUnits",
           "description": null,
-          "kind": "generic",
-          "base_type": {
-            "type_str": "list",
-            "description": null,
-            "kind": "simple",
-            "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
-          },
-          "parameters": [
-            {
-              "type_str": "types.FinishReason",
-              "description": null,
-              "kind": "simple",
-              "doc_identifier": "types.FinishReason"
-            }
-          ]
+          "kind": "simple",
+          "doc_identifier": "ApiMetaBilledUnits"
         },
         {
           "type_str": "None",
@@ -319,7 +318,8 @@ for chunk, _ in stream:
           "doc_url": "https://docs.python.org/3/library/constants.html#None"
         }
       ]
-    }
+    },
+    "description": "Returns the usage of the response."
   }
 ]}
 />

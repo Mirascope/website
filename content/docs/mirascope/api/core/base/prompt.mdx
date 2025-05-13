@@ -10,11 +10,6 @@ description: API documentation for mirascope.core.base.prompt
 
 The `BasePrompt` class for better prompt engineering.
 
-## <ApiType type="Attribute" path="core/base/prompt" symbolName="SUPPORTED_MESSAGE_ROLES" /> SUPPORTED_MESSAGE_ROLES
-
-**Type:** <TypeLink type={{"type_str": "['system', 'user', 'assistant']", "description": null, "kind": "tuple", "base_type": {"type_str": "tuple", "description": null, "kind": "simple", "doc_url": "https://docs.python.org/3/library/stdtypes.html#tuple"}, "parameters": [{"type_str": "'system'", "description": null, "kind": "simple", "doc_identifier": "'system'"}, {"type_str": "'user'", "description": null, "kind": "simple", "doc_identifier": "'user'"}, {"type_str": "'assistant'", "description": null, "kind": "simple", "doc_identifier": "'assistant'"}]}} />
-
-
 ## <ApiType type="Class" path="core/base/prompt" symbolName="BasePrompt" /> BasePrompt
 
 The base class for engineering prompts.
@@ -61,79 +56,6 @@ print(prompt.dump()["metadata"])
 ]}
 />
 
-## <ApiType type="Function" path="core/base/prompt" symbolName="message_params" /> message_params
-
-Returns the list of parsed message parameters.
-
-<ParametersTable
-  parameters={[
-  {
-    "name": "self",
-    "type_info": {
-      "type_str": "Any",
-      "description": null,
-      "kind": "simple",
-      "doc_identifier": null
-    }
-  }
-]}
-/>
-
-<ReturnTable
-  returnType={{
-  "type_info": {
-    "type_str": "list[BaseMessageParam]",
-    "description": null,
-    "kind": "generic",
-    "base_type": {
-      "type_str": "list",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
-    },
-    "parameters": [
-      {
-        "type_str": "BaseMessageParam",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "/docs/mirascope/api/core/base/message_param#basemessageparam"
-      }
-    ]
-  }
-}}
-/>
-
-
-## <ApiType type="Function" path="core/base/prompt" symbolName="dynamic_config" /> dynamic_config
-
-Returns the dynamic config of the prompt.
-
-<ParametersTable
-  parameters={[
-  {
-    "name": "self",
-    "type_info": {
-      "type_str": "Any",
-      "description": null,
-      "kind": "simple",
-      "doc_identifier": null
-    }
-  }
-]}
-/>
-
-<ReturnTable
-  returnType={{
-  "type_info": {
-    "type_str": "BaseDynamicConfig",
-    "description": null,
-    "kind": "simple",
-    "doc_url": "/docs/mirascope/api/core/base/dynamic_config#basedynamicconfig"
-  }
-}}
-/>
-
-
 ## <ApiType type="Function" path="core/base/prompt" symbolName="dump" /> dump
 
 Dumps the contents of the prompt into a dictionary.
@@ -176,6 +98,79 @@ Dumps the contents of the prompt into a dictionary.
         "description": null,
         "kind": "simple",
         "doc_url": "https://docs.python.org/3/library/typing.html#typing.Any"
+      }
+    ]
+  }
+}}
+/>
+
+
+## <ApiType type="Function" path="core/base/prompt" symbolName="dynamic_config" /> dynamic_config
+
+Returns the dynamic config of the prompt.
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "self",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "BaseDynamicConfig",
+    "description": null,
+    "kind": "simple",
+    "doc_url": "/docs/mirascope/api/core/base/dynamic_config#basedynamicconfig"
+  }
+}}
+/>
+
+
+## <ApiType type="Function" path="core/base/prompt" symbolName="message_params" /> message_params
+
+Returns the list of parsed message parameters.
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "self",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "list[BaseMessageParam]",
+    "description": null,
+    "kind": "generic",
+    "base_type": {
+      "type_str": "list",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
+    },
+    "parameters": [
+      {
+        "type_str": "BaseMessageParam",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "/docs/mirascope/api/core/base/message_param#basemessageparam"
       }
     ]
   }
@@ -1276,10 +1271,68 @@ asyncio.run(run())
 
 
 
+## <ApiType type="Class" path="core/base/prompt" symbolName="MetadataDecorator" /> MetadataDecorator
+
+**Bases:** 
+<TypeLink type={{"type_str": "Protocol", "description": null, "kind": "simple", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Protocol"}} />
+
+
 ## <ApiType type="Class" path="core/base/prompt" symbolName="PromptDecorator" /> PromptDecorator
 
 **Bases:** 
 <TypeLink type={{"type_str": "Protocol", "description": null, "kind": "simple", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Protocol"}} />
+
+
+## <ApiType type="Function" path="core/base/prompt" symbolName="metadata" /> metadata
+
+A decorator for adding metadata to a `BasePrompt` or `call`.
+
+Adding this decorator to a `BasePrompt` or `call` updates the `metadata` annotation
+to the given value. This is useful for adding metadata to a `BasePrompt` or `call`
+that can be used for logging or filtering.
+
+Example:
+
+```python
+from mirascope.core import metadata, openai, prompt_template
+
+
+@openai.call("gpt-4o-mini")
+@prompt_template("Recommend a {genre} book")
+@metadata({"tags": {"version:0001", "books"}})
+def recommend_book(genre: str):
+    ...
+
+
+response = recommend_book("fantasy")
+print(response.metadata)
+```
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "metadata",
+    "type_info": {
+      "type_str": "Metadata",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "/docs/mirascope/api/core/base/metadata#metadata"
+    }
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "Callable",
+    "description": null,
+    "kind": "simple",
+    "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+  },
+  "description": "The decorator function that updates the `_metadata`\nattribute of the decorated input prompt or call."
+}}
+/>
 
 
 ## <ApiType type="Function" path="core/base/prompt" symbolName="prompt_template" /> prompt_template
@@ -1355,62 +1408,9 @@ print(recommend_book("fantasy"))
 />
 
 
-## <ApiType type="Class" path="core/base/prompt" symbolName="MetadataDecorator" /> MetadataDecorator
+## <ApiType type="Attribute" path="core/base/prompt" symbolName="SUPPORTED_MESSAGE_ROLES" /> SUPPORTED_MESSAGE_ROLES
 
-**Bases:** 
-<TypeLink type={{"type_str": "Protocol", "description": null, "kind": "simple", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Protocol"}} />
-
-
-## <ApiType type="Function" path="core/base/prompt" symbolName="metadata" /> metadata
-
-A decorator for adding metadata to a `BasePrompt` or `call`.
-
-Adding this decorator to a `BasePrompt` or `call` updates the `metadata` annotation
-to the given value. This is useful for adding metadata to a `BasePrompt` or `call`
-that can be used for logging or filtering.
-
-Example:
-
-```python
-from mirascope.core import metadata, openai, prompt_template
-
-
-@openai.call("gpt-4o-mini")
-@prompt_template("Recommend a {genre} book")
-@metadata({"tags": {"version:0001", "books"}})
-def recommend_book(genre: str):
-    ...
-
-
-response = recommend_book("fantasy")
-print(response.metadata)
-```
-
-<ParametersTable
-  parameters={[
-  {
-    "name": "metadata",
-    "type_info": {
-      "type_str": "Metadata",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "/docs/mirascope/api/core/base/metadata#metadata"
-    }
-  }
-]}
-/>
-
-<ReturnTable
-  returnType={{
-  "type_info": {
-    "type_str": "Callable",
-    "description": null,
-    "kind": "simple",
-    "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
-  },
-  "description": "The decorator function that updates the `_metadata`\nattribute of the decorated input prompt or call."
-}}
-/>
+**Type:** <TypeLink type={{"type_str": "['system', 'user', 'assistant']", "description": null, "kind": "tuple", "base_type": {"type_str": "tuple", "description": null, "kind": "simple", "doc_url": "https://docs.python.org/3/library/stdtypes.html#tuple"}, "parameters": [{"type_str": "'system'", "description": null, "kind": "simple", "doc_identifier": "'system'"}, {"type_str": "'user'", "description": null, "kind": "simple", "doc_identifier": "'user'"}, {"type_str": "'assistant'", "description": null, "kind": "simple", "doc_identifier": "'assistant'"}]}} />
 
 
 

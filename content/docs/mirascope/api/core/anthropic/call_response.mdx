@@ -44,79 +44,6 @@ print(response.content)
 <AttributesTable
   attributes={[
   {
-    "name": "content",
-    "type_info": {
-      "type_str": "str",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-    },
-    "description": "Returns the string text of the 0th text block."
-  },
-  {
-    "name": "finish_reasons",
-    "type_info": {
-      "type_str": "list[str]",
-      "description": null,
-      "kind": "generic",
-      "base_type": {
-        "type_str": "list",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
-      },
-      "parameters": [
-        {
-          "type_str": "str",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-        }
-      ]
-    },
-    "description": "Returns the finish reasons of the response."
-  },
-  {
-    "name": "model",
-    "type_info": {
-      "type_str": "str",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-    },
-    "description": "Returns the name of the response model."
-  },
-  {
-    "name": "id",
-    "type_info": {
-      "type_str": "str",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-    },
-    "description": "Returns the id of the response."
-  },
-  {
-    "name": "usage",
-    "type_info": {
-      "type_str": "Usage",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "/docs/mirascope/api/core/base/types#usage"
-    },
-    "description": "Returns the usage of the message."
-  },
-  {
-    "name": "input_tokens",
-    "type_info": {
-      "type_str": "int",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/functions.html#int"
-    },
-    "description": "Returns the number of input tokens."
-  },
-  {
     "name": "cached_tokens",
     "type_info": {
       "type_str": "int",
@@ -125,110 +52,6 @@ print(response.content)
       "doc_url": "https://docs.python.org/3/library/functions.html#int"
     },
     "description": "Returns the number of cached tokens."
-  },
-  {
-    "name": "output_tokens",
-    "type_info": {
-      "type_str": "int",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/functions.html#int"
-    },
-    "description": "Returns the number of output tokens."
-  },
-  {
-    "name": "message_param",
-    "type_info": {
-      "type_str": "SerializeAsAny[MessageParam]",
-      "description": null,
-      "kind": "generic",
-      "base_type": {
-        "type_str": "SerializeAsAny",
-        "description": null,
-        "kind": "simple",
-        "doc_identifier": "SerializeAsAny"
-      },
-      "parameters": [
-        {
-          "type_str": "MessageParam",
-          "description": null,
-          "kind": "simple",
-          "doc_identifier": "MessageParam"
-        }
-      ]
-    },
-    "description": "Returns the assistants's response as a message parameter."
-  },
-  {
-    "name": "tools",
-    "type_info": {
-      "type_str": "list[AnthropicTool] | None",
-      "description": null,
-      "kind": "union",
-      "base_type": {
-        "type_str": "Union",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
-      },
-      "parameters": [
-        {
-          "type_str": "list[AnthropicTool]",
-          "description": null,
-          "kind": "generic",
-          "base_type": {
-            "type_str": "list",
-            "description": null,
-            "kind": "simple",
-            "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
-          },
-          "parameters": [
-            {
-              "type_str": "AnthropicTool",
-              "description": null,
-              "kind": "simple",
-              "doc_url": "/docs/mirascope/api/core/anthropic/tool#anthropictool"
-            }
-          ]
-        },
-        {
-          "type_str": "None",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/constants.html#None"
-        }
-      ]
-    },
-    "description": "Returns any available tool calls as their `AnthropicTool` definition."
-  },
-  {
-    "name": "tool",
-    "type_info": {
-      "type_str": "AnthropicTool | None",
-      "description": null,
-      "kind": "union",
-      "base_type": {
-        "type_str": "Union",
-        "description": null,
-        "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
-      },
-      "parameters": [
-        {
-          "type_str": "AnthropicTool",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "/docs/mirascope/api/core/anthropic/tool#anthropictool"
-        },
-        {
-          "type_str": "None",
-          "description": null,
-          "kind": "simple",
-          "doc_url": "https://docs.python.org/3/library/constants.html#None"
-        }
-      ]
-    },
-    "description": "Returns the 0th tool for the 0th choice message."
   },
   {
     "name": "common_finish_reasons",
@@ -310,6 +133,16 @@ print(response.content)
     }
   },
   {
+    "name": "content",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    },
+    "description": "Returns the string text of the 0th text block."
+  },
+  {
     "name": "cost_metadata",
     "type_info": {
       "type_str": "CostMetadata",
@@ -318,6 +151,173 @@ print(response.content)
       "doc_url": "/docs/mirascope/api/core/base/types#costmetadata"
     },
     "description": "Get metadata required for cost calculation."
+  },
+  {
+    "name": "finish_reasons",
+    "type_info": {
+      "type_str": "list[str]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "list",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
+      },
+      "parameters": [
+        {
+          "type_str": "str",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+        }
+      ]
+    },
+    "description": "Returns the finish reasons of the response."
+  },
+  {
+    "name": "id",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    },
+    "description": "Returns the id of the response."
+  },
+  {
+    "name": "input_tokens",
+    "type_info": {
+      "type_str": "int",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/functions.html#int"
+    },
+    "description": "Returns the number of input tokens."
+  },
+  {
+    "name": "message_param",
+    "type_info": {
+      "type_str": "SerializeAsAny[MessageParam]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "SerializeAsAny",
+        "description": null,
+        "kind": "simple",
+        "doc_identifier": "SerializeAsAny"
+      },
+      "parameters": [
+        {
+          "type_str": "MessageParam",
+          "description": null,
+          "kind": "simple",
+          "doc_identifier": "MessageParam"
+        }
+      ]
+    },
+    "description": "Returns the assistants's response as a message parameter."
+  },
+  {
+    "name": "model",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    },
+    "description": "Returns the name of the response model."
+  },
+  {
+    "name": "output_tokens",
+    "type_info": {
+      "type_str": "int",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/functions.html#int"
+    },
+    "description": "Returns the number of output tokens."
+  },
+  {
+    "name": "tool",
+    "type_info": {
+      "type_str": "AnthropicTool | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+      },
+      "parameters": [
+        {
+          "type_str": "AnthropicTool",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "/docs/mirascope/api/core/anthropic/tool#anthropictool"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
+        }
+      ]
+    },
+    "description": "Returns the 0th tool for the 0th choice message."
+  },
+  {
+    "name": "tools",
+    "type_info": {
+      "type_str": "list[AnthropicTool] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+      },
+      "parameters": [
+        {
+          "type_str": "list[AnthropicTool]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "list",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
+          },
+          "parameters": [
+            {
+              "type_str": "AnthropicTool",
+              "description": null,
+              "kind": "simple",
+              "doc_url": "/docs/mirascope/api/core/anthropic/tool#anthropictool"
+            }
+          ]
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
+        }
+      ]
+    },
+    "description": "Returns any available tool calls as their `AnthropicTool` definition."
+  },
+  {
+    "name": "usage",
+    "type_info": {
+      "type_str": "Usage",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "/docs/mirascope/api/core/base/types#usage"
+    },
+    "description": "Returns the usage of the message."
   }
 ]}
 />
