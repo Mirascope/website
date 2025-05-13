@@ -12,14 +12,17 @@ This also means that any code that has already been instrumented with OpenTeleme
 ```python
 import lilypad
 
-lilypad.configure()  # configure Lilypad's `TraceProvider`
+# configure Lilypad's `TraceProvider`
+lilypad.configure()
 ```
 
 ## You Code Will Always Execute
 
-Barring user errors that are supposed to throw errors during development, Lilypad will never crash your code. If there's ever an issue connecting to Lilypad or pulling information, your code will run as-written as though Lilypad was not there.
+<Warning>
+    _This is important, so if you ever find that it's not the case, please let us know asap!_
+</Warning>
 
-_This is important, so if you ever find that it's not the case, please let us know asap!_
+Barring user errors that are supposed to throw errors during development, Lilypad will never crash your code. If there's ever an issue connecting to Lilypad or pulling information, your code will run as-written as though Lilypad was not there.
 
 ## Automatically Monitor LLM API Calls
 
@@ -33,8 +36,7 @@ For example, if you make a call to OpenAI's API as in the example below, that ca
 from google.genai import Client
 import lilypad
 
-lilypad.configure(auto_llm=True)
-
+lilypad.configure(auto_llm=True) # [!code highlight]
 client = Client()
 
 question = "What is the capital of France?"
@@ -48,4 +50,4 @@ print(response.text)
 
 Follow the link to see the trace (or navigate to your project's home page).
 
-\[INSERT IMAGE]
+[INSERT IMAGE]

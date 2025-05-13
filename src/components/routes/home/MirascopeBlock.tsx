@@ -44,7 +44,7 @@ book: Book = extract_book(text) # [!code highlight]`;
       <div className="bg-background/60 mb-2 w-full max-w-3xl rounded-md">
         <ProviderTabbedSection
           customHeader={
-            <div className="flex items-center px-2 pb-2">
+            <div className="flex items-center px-1 pb-2">
               <MirascopeLogo size="micro" withText={true} />
             </div>
           }

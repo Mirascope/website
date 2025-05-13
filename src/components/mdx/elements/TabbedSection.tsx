@@ -75,13 +75,13 @@ export function TabbedSection({
       )}
     >
       {showLogo && (
-        <div className="flex items-center px-2 pb-2">
+        <div className="flex items-center px-1 pb-2">
           <Logo size="micro" withText={true} />
         </div>
       )}
 
       <Tabs defaultValue={defaultTab} className="w-full">
-        <div className="flex px-1">
+        <div className="flex">
           <TabsList className="h-auto gap-x-2 bg-transparent p-0">
             {tabs.map((tab) => (
               <TabsTrigger key={tab.value} value={tab.value}>

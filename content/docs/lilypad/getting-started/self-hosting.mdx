@@ -5,10 +5,10 @@ description: Run Lilypad in your own infrastructure
 
 # Self Hosting
 
-<Warning title="Lilypad self hosting is currently in an open beta.">
+<Warning title="Lilypad self hosting is currently in a closed beta.">
   The Free version is available for self hosting with community support. Pro and Team plan features are available for beta testing upon request.
 
-  Interested in participating in the open beta? [Join our community](https://join.slack.com/t/mirascope-community/shared_invite/zt-2ilqhvmki-FB6LWluInUCkkjYD3oSjNA) and send a message to William Bakst. You'll get early access to Pro and Team plan features when self hosting.
+  Interested in participating in the closed beta? [Join our community](https://join.slack.com/t/mirascope-community/shared_invite/zt-2ilqhvmki-FB6LWluInUCkkjYD3oSjNA) and send a message to William Bakst. If we determine it's a good fit, you'll get early access to Pro and Team plan features when self hosting.
 </Warning>
 
 Lilypad is fully [open-source](/docs/lilypad/getting-started/open-source) and can be self-hosted in your own infrastructure.
@@ -27,7 +27,7 @@ To self-host Lilypad, you'll need:
 <Info>
   In the following sections we will be using `http://localhost:8000` as the host/port URL.
   
-  You should replace this with the URL where you are ultimately hosting Lilypad and making it accessible.
+  Replace this with the URL where you are ultimately hosting Lilypad and making it accessible.
 </Info>
 
 ## Setup
@@ -107,8 +107,8 @@ cd ..
 Set the remote API and client URLs so the server knows where to route everything:
 
 ```bash
-LILYPAD_API_BASE_URL=http://localhost:8000
-LILYPAD_CLIENT_BASE_URL=http://localhost:8000
+LILYPAD_REMOTE_API_URL=http://localhost:8000
+LILYPAD_REMOTE_CLIENT_URL=http://localhost:8000
 ```
 
 Whether you're running this locally or hosted in the cloud, you'll need to build the image:
@@ -159,7 +159,7 @@ In your LLM code that uses Lilypad, you'll need to set the API and client URLs s
 
 ```bash
 LILYPAD_BASE_URL=http://localhost:8000
-LILYPAD_CLIENT_BASE_URL=http://localhost:8000
+LILYPAD_REMOTE_CLIENT_URL=http://localhost:8000
 ```
 
 Now you can use Lilypad as [documented](/docs/lilypad/getting-started/quickstart).

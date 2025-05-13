@@ -111,21 +111,7 @@ def recommend_book(genre: str) -> openai.OpenAIDynamicConfig:
 
 Creating prompts efficiently is one thing, but managing and tracking changes to prompts over time is another. Prompts are exploratory, often involving trial and error. Without a process for storing, versioning, and tracing prompts, it’s easy to lose iterations and it’s more difficult to collaborate with others on prompt design.
 
-Mirascope offers a prompt management tool called [Lilypad](/docs/lilypad) for automatically versioning any and all changes made to a prompt as well as automatically tracing every call made against that version.
-
-**The working directory contains subdirectories and files for:**
-
-- Configuring project settings (`.lilypad/`)
-- Prompt management and engineering (`lily/`)
-- Automatic versioning and tracing (`pad.db`)
-
-**In addition, Lilypad offers commands and functionality allowing you to:**
-
-- Easily run prompts / LLM functions individually
-- View all prompt versions and their traces
-- Generate LLM function shims
-
-These features become especially useful if you’re generating large volumes of prompts in a collaborative environment.
+Mirascope offers a function management tool called [Lilypad](/docs/lilypad) for automatically versioning any and all changes made to a function as well as automatically tracing every call made against that version.
 
 Mirascope extends its support beyond the command line interface. If you prefer to work within a code editor environment, Mirascope offers comprehensive editor integration for its API documentation, as shown in this example of autocomplete suggestions for a property.
 

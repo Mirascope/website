@@ -220,26 +220,9 @@ except ValidationError as e:
 
 ```
 
-Mirascope also offers a prompt engineering framework called [Lilypad](/docs/lilypad), which versions and traces every LLM function call and prompt automatically. By removing the worry of manually tracking changes systematically, Lilypad provides you the headspace to rapidly iterate on and optimize prompts, ensuring that all your fine-tuning efforts are recorded and retrievable.
+Mirascope also offers an AI engineering framework called [Lilypad](/docs/lilypad), which versions and traces every LLM function call and prompt automatically. By removing the worry of manually tracking changes systematically, Lilypad provides you the headspace to rapidly iterate on and optimize prompts, ensuring that all your fine-tuning efforts are recorded and retrievable.
 
-Furthermore, Lilypad is also fully open-source and can be run locally.
-
-```python
-|
-|-- .lilypad/
-|-- |-- config.json
-|-- lily/
-|   |-- __init__.py
-|   |-- {llm_function_name}.py
-|-- pad.db
-```
-
-The framework structure primarily includes:
-
-- The `lily/` director for all your LLM functions
-- The `pad.db` SQLite database for local development where versions and traces are stored.
-
-The `Lilypad` CLI also provides commands such a `create` for easily creating a new LLM function shim and `run` to reasily run LLM functions in development.
+Furthermore, Lilypad is also fully open-source and can be self-hosted.
 
 ## Functionality for RAG Applications
 

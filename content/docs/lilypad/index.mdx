@@ -3,7 +3,7 @@ title: Lilypad
 description: An open-source prompt engineering framework
 ---
 
-# Welcome
+# Lilypad
 
 Welcome to the Lilypad documentation! We're excited you're here.
 
@@ -31,12 +31,9 @@ For the remaining sections, let's use a simple LLM call as an example:
 ```python
 from mirascope import llm
 
-@llm.call(
-    provider="$PROVIDER",
-    model="$MODEL",
-)
+@llm.call(provider="$PROVIDER", model="$MODEL")  # [!code highlight]
 def answer_question(question: str) -> str:
-    return f"Answer this question: {question}"
+    return f"Answer this question: {question}"  # [!code highlight]
 
 response = answer_question("What is the capital of France?")
 print(response.content)
@@ -54,27 +51,20 @@ Let's say our gut feeling is "not good enough" because we want a single word ans
 ```python
 from mirascope import llm
 
-@llm.call(
-    provider="$PROVIDER",
-    model="$MODEL",
-)
+@llm.call(provider="$PROVIDER", model="$MODEL")
 def answer_question(question: str) -> str:
-    return f"Answer this question in one word: {question}"
+    return f"Answer this question in one word: {question}"  # [!code highlight]
 
 response = answer_question("What is the capital of France?")
 print(response.content)
 # > Paris
 ```
 
-Oops, we forgot to commit our previous prompt.
+Oops, we forgot to commit our previous prompt. Not good.
 
-For a simple example this might not seems like a big deal, but LLMs are fickle. What if the prompt we just lost happened to be the one that would've performed the best, and now you can't replicate it.
+For a simple example this might not seems like a big deal, but LLMs are fickle. What if the prompt we just lost happened to be the one that would've performed the best, and now you can't replicate it. How do you decide when to commit what? And how do you properly keep track of all of the different versions?
 
-Not good.
-
-This is the point at which most people reach for observability tooling. This is *almost* the right choice.
-
-The issue is that today's observability tooling was not built for the LLM era. It was built for deterministic software, but LLMs are non-deterministic.
+This is the point at which most people reach for observability tooling. This is *almost* the right choice. The issue is that today's observability tooling was not built for the LLM era. It was built for deterministic software, but LLMs are non-deterministic.
 
 You need more than just observability — you need to build a data flywheel.
 
@@ -87,18 +77,16 @@ This requires:
 
 Current observability tools provide 1 and 2 but not 3 or 4, which are critical.
 
-Lilypad provides all four — in just two lines of code.
+Lilypad provides all four — in just one line of code.
 
-```python
+```python {6}
 import lilypad
 from mirascope import llm
 
-lilypad.configure(auto_llm=True)  # automatically version and track
-@lilypad.trace(versioning="automatic")
-@llm.call(
-    provider="$PROVIDER",
-    model="$MODEL",
-)
+lilypad.configure(auto_llm=True)
+
+@lilypad.trace(versioning="automatic")  # [!code highlight]
+@llm.call(provider="$PROVIDER", model="$MODEL")
 def answer_question(question: str) -> str:
     return f"Answer this question in one word: {question}"
 
@@ -107,7 +95,7 @@ print(response.content)
 # > Paris
 ```
 
-Check out the Versioning section for more information.
+Check out the [Versioning](./observability/versioning.mdx) section for more information.
 
 ## 3. Annotate
 
@@ -115,13 +103,15 @@ The next step is to look at real (or synthetic) data and systematically label it
 
 With Lilypad, you annotate the data right where you look at it. This makes it seamless.
 
+[INSERT IMAGE]
+
 It's also extremely important that we annotate not just the inputs/outputs but also everything about the trace. This includes the code, the prompt, the call parameters, the cost, the latency — everything you might need to know if you'd consider it "good enough" or not.
 
 ## 4. Analyze
 
-Once you've annotated enough data, it's time to look for trends — common failure points.
+Once you've annotated enough data, it's time to look for trends — common failure points. Compare outputs from different versions on the same input. Did the changes help?
 
-Compare outputs from different versions on the same input. Did the changes help?
+[INSERT IMAGE]
 
 Distilling your annotations into action items makes for much easier optimization.
 
@@ -129,13 +119,11 @@ Distilling your annotations into action items makes for much easier optimization
 
 Now we can apply our analysis and update the system to improve it.
 
-For example, we could identify the most common point of failure and work to resolve that first. Consider our earlier example. We could have identified that there were a lot of longer answers and we really want single word answers. So we added "in one word" to the prompt and ran it again.
+For example, we can identify the most common points of failure and work to resolve those first. Consider our earlier example. We identify that there are a lot of longer answers and we really want single word answers, so we add "in one word" to the prompt and run the process again.
 
-This step is just the more advanced and systematic version of that.
+[INSERT IMAGE]
 
-This is also often the stage where developers realize they need to involve domain experts who can properly annotate, analyze, and optimize their prompts. And for the first time ever, non-technical team members need to be involved in the writing of the actual software itself.
-
-Check out the Managed Generations section for more information on how Lilypad helps.
+This step is just the systematic version of our earlier "vibe check" process that results in real data and actionable insights.
 
 ## 6. Iterate
 
@@ -153,12 +141,6 @@ All we have to do is repeat steps 3 through 5 until we deem the system "good eno
   </div>
   
   <div className="border rounded-lg p-4 shadow-sm">
-    <h3 className="text-lg font-medium mb-2"><Icon name="github" className="inline mr-2" /> Playground</h3>
-    <p className="mb-3">No-code interface for experimenting with Lilypad</p>
-    <a href="/docs/lilypad/getting-started/playground" className="text-primary hover:underline">Read more →</a>
-  </div>
-  
-  <div className="border rounded-lg p-4 shadow-sm">
     <h3 className="text-lg font-medium mb-2"><Icon name="check-circle" className="inline mr-2" /> Open Source</h3>
     <p className="mb-3">Learn about Lilypad's open-source initiative</p>
     <a href="/docs/lilypad/getting-started/open-source" className="text-primary hover:underline">Read more →</a>
@@ -169,23 +151,11 @@ All we have to do is repeat steps 3 through 5 until we deem the system "good eno
     <p className="mb-3">Run Lilypad in your own infrastructure</p>
     <a href="/docs/lilypad/getting-started/self-hosting" className="text-primary hover:underline">Read more →</a>
   </div>
-  
-  <div className="border rounded-lg p-4 shadow-sm">
-    <h3 className="text-lg font-medium mb-2"><Icon name="dollar-sign" className="inline mr-2" /> Pricing</h3>
-    <p className="mb-3">Lilypad pricing plans and features</p>
-    <a href="/pricing" className="text-primary hover:underline">Read more →</a>
-  </div>
 </div>
 
 ## Observability
 
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-6">
-  <div className="border rounded-lg p-4 shadow-sm">
-    <h3 className="text-lg font-medium mb-2"><Icon name="info" className="inline mr-2" /> OpenTelemetry</h3>
-    <p className="mb-3">Observability made easy</p>
-    <a href="/docs/lilypad/observability/opentelemetry" className="text-primary hover:underline">Read more →</a>
-  </div>
-  
   <div className="border rounded-lg p-4 shadow-sm">
     <h3 className="text-lg font-medium mb-2"><Icon name="bolt" className="inline mr-2" /> Spans</h3>
     <p className="mb-3">Instrument arbitrary blocks of code</p>
@@ -224,22 +194,6 @@ All we have to do is repeat steps 3 through 5 until we deem the system "good eno
     <h3 className="text-lg font-medium mb-2"><Icon name="edit" className="inline mr-2" /> Annotations</h3>
     <p className="mb-3">Add labels and feedback to your LLM outputs</p>
     <a href="/docs/lilypad/evaluation/annotations" className="text-primary hover:underline">Read more →</a>
-  </div>
-</div>
-
-## Under Development
-
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-6">
-  <div className="border rounded-lg p-4 shadow-sm">
-    <h3 className="text-lg font-medium mb-2"><Icon name="flask" className="inline mr-2" /> Experiments</h3>
-    <p className="mb-3">Run experiments with Lilypad</p>
-    <a href="/docs/lilypad/under-development/experiments" className="text-primary hover:underline">Read more →</a>
-  </div>
-  
-  <div className="border rounded-lg p-4 shadow-sm">
-    <h3 className="text-lg font-medium mb-2"><Icon name="zap" className="inline mr-2" /> Vibe Synthesis</h3>
-    <p className="mb-3">Automated synthesis of evaluation criteria</p>
-    <a href="/docs/lilypad/under-development/vibe-synthesis" className="text-primary hover:underline">Read more →</a>
   </div>
 </div>
 
