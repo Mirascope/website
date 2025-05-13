@@ -73,7 +73,7 @@ book: Book = extract_book(text) # [!code highlight]`;
 
       {/* Scroll indicator to Lilypad section */}
       {onScrollDown && (
-        <div className="mt-8 flex justify-center">
+        <div className="mt-12 flex justify-center">
           <div className="landing-page-box-shadow landing-page-box-shadow-hover relative h-12 w-12 overflow-hidden rounded-full">
             <button
               onClick={onScrollDown}

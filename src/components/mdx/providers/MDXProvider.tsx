@@ -196,7 +196,7 @@ export const components = {
       </h5>
     );
   },
-  p: (props: React.ComponentPropsWithoutRef<"p">) => <p className="my-3" {...props} />,
+  p: (props: React.ComponentPropsWithoutRef<"p">) => <p className="my-3 text-base" {...props} />,
   a: (props: React.ComponentPropsWithoutRef<"a">) => {
     // Check if the link is internal
     const { href, ...rest } = props;
@@ -210,11 +210,13 @@ export const components = {
           !href.startsWith("tel:")))
     ) {
       // It's an internal link, use Link from TanStack Router
-      return <Link to={href} className="text-primary no-underline hover:underline" {...rest} />;
+      return (
+        <Link to={href} className="text-primary text-base no-underline hover:underline" {...rest} />
+      );
     }
 
     // Use regular <a> for external links or anchor links
-    return <a className="text-primary no-underline hover:underline" {...props} />;
+    return <a className="text-primary text-base no-underline hover:underline" {...props} />;
   },
   ul: (props: React.ComponentPropsWithoutRef<"ul">) => (
     <ul className="my-4 list-disc pl-5" {...props} />
