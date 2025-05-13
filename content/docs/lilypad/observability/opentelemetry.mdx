@@ -13,10 +13,7 @@ This also means that any code that has already been instrumented with OpenTeleme
 import lilypad
 
 # configure Lilypad's `TraceProvider`
-lilypad.configure(
-    project_id=os.environ["LILYPAD_PROJECT_ID"],  
-    api_key=os.environ["LILYPAD_API_KEY"],
-)
+lilypad.configure()
 ```
 
 ## You Code Will Always Execute
@@ -39,12 +36,7 @@ For example, if you make a call to OpenAI's API as in the example below, that ca
 from google.genai import Client
 import lilypad
 
-lilypad.configure(
-    project_id=os.environ["LILYPAD_PROJECT_ID"],  
-    api_key=os.environ["LILYPAD_API_KEY"],
-    auto_llm=True,  # [!code highlight]
-)
-
+lilypad.configure(auto_llm=True) # [!code highlight]
 client = Client()
 
 question = "What is the capital of France?"
@@ -58,4 +50,4 @@ print(response.text)
 
 Follow the link to see the trace (or navigate to your project's home page).
 
-\[INSERT IMAGE]
+[INSERT IMAGE]
