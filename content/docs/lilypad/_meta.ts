@@ -62,16 +62,16 @@ const lilypadSpec: ProductSpec = {
           label: "Evaluation",
           children: [
             {
+              slug: "cost-and-latency",
+              label: "Cost & Latency",
+            },
+            {
               slug: "annotations",
               label: "Annotations",
             },
             {
               slug: "comparisons",
               label: "Comparisons",
-            },
-            {
-              slug: "cost-and-latency-tracking",
-              label: "Cost & Latency Tracking",
             },
           ],
         },
