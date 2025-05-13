@@ -34,7 +34,7 @@ export function TypeLink({ type }: TypeLinkProps) {
         <a
           href={type.doc_url}
           rel={isExternal ? "noopener noreferrer" : undefined}
-          className="text-primary font-mono hover:underline"
+          className="text-primary !font-mono font-mono hover:underline"
         >
           {type.type_str}
         </a>
