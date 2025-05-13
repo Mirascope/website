@@ -107,7 +107,7 @@ cd ..
 Set the remote API and client URLs so the server knows where to route everything:
 
 ```bash
-LILYPAD_REMOTE_API_URL=http://localhost:8000/v0
+LILYPAD_REMOTE_API_URL=http://localhost:8000
 LILYPAD_REMOTE_CLIENT_URL=http://localhost:8000
 ```
 
@@ -131,7 +131,7 @@ docker-compose up
 
 You should now be able to access your Lilypad instance at `http://localhost:8000`.
 
-Note that this results in a PostgreSQL database running in a container. Should you spin down the container, you'll lose all data.
+Note that spinning down the container will not result in a loss of data, as the database is persisted in a volume.
 
 ## Hosted
 
