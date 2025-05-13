@@ -13,7 +13,7 @@ None of the tooling below requires LLMs. It is, however, very handy when working
 
 As mentioned in the section on [nested spans](/docs/lilypad/observability/spans#nested-spans), traces are really just collections of spans.
 
-In the context of observability, a "trace" often refers to a record of events in a systems execution. Generally this means capturing the inputs, outputs, and additional metadata for each function or module in your system's execution flow.
+In the context of observability, a "trace" often refers to a record of events in a system's execution. Generally this means capturing the inputs, outputs, and additional metadata for each function or module in your system's execution flow.
 
 Lilypad makes this simple and easy with the `trace` decorator:
 
@@ -22,11 +22,11 @@ import lilypad
 
 lilypad.configure()
 
-@lilypad.trace()
+@lilypad.trace()  # [!code highlight]
 def child(text: str) -> str:
     return "Child Finished!"
 
-@lilypad.trace()
+@lilypad.trace()  # [!code highlight]
 def parent(text: str) -> str:
     output = child("I'm the child!")
     print(output)
@@ -38,9 +38,9 @@ print(output)
 # > Parent Finished!
 ```
 
-\[INSERT IMAGE]
+[INSERT IMAGE]
 
-<Info title="What this might look like using span instead of trace">
+<Info title="What this might look like using span instead of trace" collapsible={true} defaultOpen={false}>
 ```python
 from mirascope import lilypad
 
@@ -80,7 +80,7 @@ import lilypad
 
 lilypad.configure()
 
-@lilypad.trace(name="Answer Question")
+@lilypad.trace(name="Answer Question")  # [!code highlight]
 def answer_question(question: str) -> str:
     return "The capital of France is Paris."
     
@@ -101,8 +101,8 @@ import lilypad
 lilypad.configure()
 
 @lilypad.trace(name="Answer Question")
-def answer_question(trace_ctx: lilypad.Span, question: str) -> str:
-    trace_ctx.log("I'm the span for Answer Question.")
+def answer_question(trace_ctx: lilypad.Span, question: str) -> str:  # [!code highlight]
+    trace_ctx.log("I'm the span for Answer Question.")  # [!code highlight]
     return "The capital of France is Paris."
     
 answer = answer_question("What is the capital of France?")
@@ -128,7 +128,7 @@ Since Lilypad can create spans for LLM API calls automatically, simple calling t
 from google.genai import Client
 import lilypad
 
-lilypad.configure(auto_llm=True)
+lilypad.configure(auto_llm=True)  # [!code highlight]
 client = Client()
    
 @lilypad.trace(name="Answer Question") 
