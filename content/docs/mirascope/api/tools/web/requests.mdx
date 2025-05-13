@@ -145,5 +145,36 @@ Tool for making HTTP requests with built-in requests library.
 ]}
 />
 
+## <ApiType type="Function" path="tools/web/requests" symbolName="call" /> call
+
+Make an HTTP request to the given URL.
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "self",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "str",
+    "description": null,
+    "kind": "simple",
+    "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+  },
+  "description": "Response text content if successful, error message if request fails"
+}}
+/>
+
+
 
 

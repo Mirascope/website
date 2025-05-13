@@ -6,8 +6,6 @@ description: API documentation for mirascope.core.mistral.dynamic_config
 
 # mirascope.core.mistral.dynamic_config
 
-## <ApiType type="Module" path="core/mistral/dynamic_config" symbolName="dynamic_config" /> dynamic_config
-
 This module defines the function return type for functions as LLM calls.
 
 ## <ApiType type="Attribute" path="core/mistral/dynamic_config" symbolName="MistralDynamicConfig" /> MistralDynamicConfig
@@ -28,6 +26,5 @@ from mirascope.core.mistral import MistralDynamicConfig, mistral_call
 def recommend_book(genre: str) -> MistralDynamicConfig:
     return {"computed_fields": {"capitalized_genre": genre.capitalize()}}
 ```
-
 
 

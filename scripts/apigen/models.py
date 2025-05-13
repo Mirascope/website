@@ -19,9 +19,8 @@ from griffe import (
     Object,
 )
 
-from scripts.apigen.parser import parse_type_string
 from scripts.apigen.type_extractor import extract_attribute_type_info, extract_type_info
-from scripts.apigen.type_model import ParameterInfo, ReturnInfo, SimpleType, TypeInfo
+from scripts.apigen.type_model import ParameterInfo, ReturnInfo, TypeInfo
 
 # Configure logging
 logging.basicConfig(
@@ -115,7 +114,7 @@ class ProcessedClass:
     name: str
     docstring: str | None
     bases: list[str]
-    attributes: list[ProcessedAttribute]
+    members: list["ProcessedObject"]
     module_path: str
 
 
@@ -129,9 +128,7 @@ class ProcessedModule:
 
     name: str
     docstring: str | None
-    classes: list[ProcessedClass]
-    attributes: list[ProcessedAttribute]
-    functions: list[ProcessedFunction]
+    members: list["ProcessedObject"]
     module_path: str
 
 
@@ -202,44 +199,26 @@ def process_class(class_obj: Class) -> ProcessedClass:
     if hasattr(class_obj, "bases") and class_obj.bases:
         bases = [str(base) for base in class_obj.bases]
 
-    # Extract attributes
-    attributes = []
+    # Process all members
+    processed_members = []
     if hasattr(class_obj, "members"):
-        for attr_name, attr in class_obj.members.items():
-            # Check if it's not a function and doesn't start with underscore
-            if not isinstance(attr, Function) and not attr_name.startswith("_"):
-                # Get the type annotation as a string
-                attr_type_str = str(getattr(attr, "annotation", ""))
-                # Use a default "Any" type for empty annotations
-                if attr_type_str.strip():
-                    # Try to parse the string into a TypeInfo object, with fallback
-                    try:
-                        attr_type_info = parse_type_string(attr_type_str)
-                    except Exception as e:
-                        # Print a warning with the failed type string
-                        print(
-                            f"WARNING: Failed to parse type annotation: '{attr_type_str}'. Error: {e}"
-                        )
-                        # Fallback to simple type with the original string
-                        attr_type_info = SimpleType(type_str=attr_type_str)
-                else:
-                    # Create a simple "Any" type for empty annotations
-                    attr_type_info = SimpleType(type_str="Any")
-                attr_desc = extract_clean_docstring(attr)
+        for member_name, member in class_obj.members.items():
+            # Skip private members (starting with underscore)
+            if member_name.startswith("_"):
+                continue
 
-                processed_attr = ProcessedAttribute(
-                    name=attr_name,
-                    type_info=attr_type_info,
-                    description=attr_desc,
-                )
-                attributes.append(processed_attr)
+            processed_obj = process_object(member)
+            if isinstance(processed_obj, ProcessedAlias):
+                continue  # Don't document aliases on classes
+            if processed_obj is not None:
+                processed_members.append(processed_obj)
 
     # Create and return the processed class
     return ProcessedClass(
         name=name,
         docstring=docstring,
         bases=bases,
-        attributes=attributes,
+        members=processed_members,
         module_path=module_path,
     )
 
@@ -297,10 +276,8 @@ def process_module(module_obj: Module) -> ProcessedModule:
     # Extract clean docstring
     docstring = extract_clean_docstring(module_obj)
 
-    # Initialize collections for different member types
-    processed_classes = []
-    processed_functions = []
-    processed_attributes = []
+    # Process all members
+    processed_members = []
 
     if hasattr(module_obj, "members"):
         # Process all members
@@ -310,24 +287,17 @@ def process_module(module_obj: Module) -> ProcessedModule:
                 continue
 
             processed_obj = process_object(member)
-
-            if isinstance(processed_obj, ProcessedClass):
-                processed_classes.append(processed_obj)
-            elif isinstance(processed_obj, ProcessedFunction):
-                processed_functions.append(processed_obj)
-            elif isinstance(processed_obj, ProcessedAttribute):
-                processed_attributes.append(processed_obj)
-            elif isinstance(processed_obj, ProcessedAlias):
-                # TODO: When alias support is added
-                pass
+            if isinstance(processed_obj, ProcessedAlias):
+                # Don't document module aliases, they are noise
+                continue
+            if processed_obj is not None:
+                processed_members.append(processed_obj)
 
     # Create and return the processed module
     return ProcessedModule(
         name=name,
         docstring=docstring,
-        classes=processed_classes,
-        attributes=processed_attributes,
-        functions=processed_functions,
+        members=processed_members,
         module_path=module_path,
     )
 

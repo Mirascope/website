@@ -91,56 +91,6 @@ Read, write, list, create, and delete files and directories.
     }
   },
   {
-    "name": "ReadFile",
-    "type_info": {
-      "type_str": "Any",
-      "description": null,
-      "kind": "simple",
-      "doc_identifier": null
-    },
-    "description": "Tool for reading file contents."
-  },
-  {
-    "name": "WriteFile",
-    "type_info": {
-      "type_str": "Any",
-      "description": null,
-      "kind": "simple",
-      "doc_identifier": null
-    },
-    "description": "Tool for writing content to a file."
-  },
-  {
-    "name": "ListDirectory",
-    "type_info": {
-      "type_str": "Any",
-      "description": null,
-      "kind": "simple",
-      "doc_identifier": null
-    },
-    "description": "Tool for listing directory contents."
-  },
-  {
-    "name": "CreateDirectory",
-    "type_info": {
-      "type_str": "Any",
-      "description": null,
-      "kind": "simple",
-      "doc_identifier": null
-    },
-    "description": "Tool for creating directories."
-  },
-  {
-    "name": "DeleteFile",
-    "type_info": {
-      "type_str": "Any",
-      "description": null,
-      "kind": "simple",
-      "doc_identifier": null
-    },
-    "description": "Tool for deleting files."
-  },
-  {
     "name": "base_directory",
     "type_info": {
       "type_str": "Path",
@@ -151,6 +101,316 @@ Read, write, list, create, and delete files and directories.
   }
 ]}
 />
+
+## <ApiType type="Class" path="tools/system/file_system" symbolName="ReadFile" /> ReadFile
+
+Tool for reading file contents.
+
+**Bases:** FileOperation
+
+<AttributesTable
+  attributes={[
+  {
+    "name": "path",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    }
+  }
+]}
+/>
+
+## <ApiType type="Function" path="tools/system/file_system" symbolName="call" /> call
+
+Read and return file contents.
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "self",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "str",
+    "description": null,
+    "kind": "simple",
+    "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+  },
+  "description": "File contents or error message if operation fails"
+}}
+/>
+
+
+
+## <ApiType type="Class" path="tools/system/file_system" symbolName="WriteFile" /> WriteFile
+
+Tool for writing content to a file.
+
+**Bases:** FileOperation
+
+<AttributesTable
+  attributes={[
+  {
+    "name": "path",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    }
+  },
+  {
+    "name": "content",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    }
+  }
+]}
+/>
+
+## <ApiType type="Function" path="tools/system/file_system" symbolName="call" /> call
+
+Write content to file and return status.
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "self",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "str",
+    "description": null,
+    "kind": "simple",
+    "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+  },
+  "description": "Success message or error message if operation fails"
+}}
+/>
+
+
+
+## <ApiType type="Class" path="tools/system/file_system" symbolName="ListDirectory" /> ListDirectory
+
+Tool for listing directory contents.
+
+**Bases:** FileOperation
+
+<AttributesTable
+  attributes={[
+  {
+    "name": "path",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    }
+  }
+]}
+/>
+
+## <ApiType type="Function" path="tools/system/file_system" symbolName="call" /> call
+
+List directory contents and return formatted string.
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "self",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "str",
+    "description": null,
+    "kind": "simple",
+    "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+  },
+  "description": "Formatted directory listing or error message if operation fails"
+}}
+/>
+
+
+
+## <ApiType type="Class" path="tools/system/file_system" symbolName="CreateDirectory" /> CreateDirectory
+
+Tool for creating directories.
+
+**Bases:** FileOperation
+
+<AttributesTable
+  attributes={[
+  {
+    "name": "path",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    }
+  }
+]}
+/>
+
+## <ApiType type="Function" path="tools/system/file_system" symbolName="call" /> call
+
+Create directory and return status.
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "self",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "str",
+    "description": null,
+    "kind": "simple",
+    "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+  },
+  "description": "Success message or error message if operation fails"
+}}
+/>
+
+
+
+## <ApiType type="Class" path="tools/system/file_system" symbolName="DeleteFile" /> DeleteFile
+
+Tool for deleting files.
+
+**Bases:** FileOperation
+
+<AttributesTable
+  attributes={[
+  {
+    "name": "path",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    }
+  }
+]}
+/>
+
+## <ApiType type="Function" path="tools/system/file_system" symbolName="call" /> call
+
+Delete file and return status.
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "self",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "str",
+    "description": null,
+    "kind": "simple",
+    "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+  },
+  "description": "Success message or error message if operation fails"
+}}
+/>
+
+
+
+## <ApiType type="Function" path="tools/system/file_system" symbolName="validate_base_directory" /> validate_base_directory
+
+Validates that the base directory exists and is a directory.
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "cls",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  },
+  {
+    "name": "v",
+    "type_info": {
+      "type_str": "Path",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": "Path"
+    },
+    "description": "The path to validate"
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "Path",
+    "description": null,
+    "kind": "simple",
+    "doc_identifier": "Path"
+  },
+  "description": "The validated path"
+}}
+/>
+
 
 
 

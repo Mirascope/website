@@ -54,11 +54,8 @@ def render_module(processed_module: ProcessedModule, doc_path: str) -> str:
         MDX documentation string
 
     """
-    # Check total number of children across classes and functions
-    total_items = len(processed_module.classes) + len(processed_module.functions)
-
-    # If there's exactly one child item, render the module docstring followed by the item
-    if total_items == 1:
+    # Check if there's exactly one member (special compact rendering case)
+    if len(processed_module.members) == 1:
         content = []
 
         # Add docstring if available (keeping important usage links)
@@ -66,18 +63,8 @@ def render_module(processed_module: ProcessedModule, doc_path: str) -> str:
             content.append(processed_module.docstring.strip())
             content.append("")
 
-        # Add module attributes if any
-        for attr in processed_module.attributes:
-            content.append(render_attribute(attr, doc_path))
-            content.append("")
-
-        # Add the single item
-        if processed_module.classes:
-            # Single class - render it directly
-            content.append(render_class(processed_module.classes[0], doc_path))
-        elif processed_module.functions:
-            # Single function - render it directly
-            content.append(render_function(processed_module.functions[0], doc_path))
+        # Add the single member item
+        content.append(render_object(processed_module.members[0], doc_path))
 
         return "\n".join(content)
 
@@ -97,18 +84,9 @@ def render_module(processed_module: ProcessedModule, doc_path: str) -> str:
         content.append(processed_module.docstring.strip())
         content.append("")
 
-    # Add module attributes if any
-    for attr in processed_module.attributes:
-        content.append(render_attribute(attr, doc_path))
-        content.append("")
-
-    # Render module functions if any
-    for func in processed_module.functions:
-        content.append(render_function(func, doc_path))
-        content.append("")
-
-    for processed_class in processed_module.classes:
-        content.append(render_class(processed_class, doc_path))
+    # Render all members in order
+    for member in processed_module.members:
+        content.append(render_object(member, doc_path))
         content.append("")
 
     return "\n".join(content)
@@ -176,9 +154,21 @@ def render_class(processed_class: ProcessedClass, doc_path: str) -> str:
         bases_str = ", ".join(processed_class.bases)
         content.append(f"**Bases:** {bases_str}\n")
 
-    # Document attributes using AttributesTable component
-    if processed_class.attributes:
-        content.extend(format_attributes_table(processed_class.attributes))
+    # Collect all attributes for the attributes table
+    attributes = []
+    for member in processed_class.members:
+        if isinstance(member, ProcessedAttribute):
+            attributes.append(member)
+    
+    # Document attributes using AttributesTable component if there are any
+    if attributes:
+        content.extend(format_attributes_table(attributes))
+    
+    # Render other members in order (except attributes which are in the table)
+    for member in processed_class.members:
+        if not isinstance(member, ProcessedAttribute):
+            content.append(render_object(member, doc_path))
+            content.append("")
 
     return "\n".join(content)
 
