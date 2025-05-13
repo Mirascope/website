@@ -4,10 +4,12 @@ This module provides utilities for extracting type information from Python
 functions, methods, and parameters within the API documentation system.
 """
 
+import logging
 from typing import TypeVar, cast
 
 from griffe import (
     Alias,
+    Attribute,
     DocstringParameter,
     DocstringReturn,
     DocstringSection,
@@ -19,6 +21,13 @@ from griffe import (
 
 from .parser import parse_type_string
 from .type_model import ParameterInfo, ReturnInfo, SimpleType, TypeInfo
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger(__name__)
+
 
 # Generic helper for type safety
 T = TypeVar("T", bound=DocstringSection)
@@ -287,6 +296,41 @@ def extract_alias_return_info(obj: Alias) -> ReturnInfo | None:
             return ReturnInfo(type_info=type_info, description=None)
 
     return None
+
+
+def extract_attribute_type_info(attr: Attribute) -> TypeInfo:
+    """Extract type information from a Griffe Attribute object.
+
+    Args:
+        attr: The Griffe Attribute object to extract type info from
+
+    Returns:
+        A TypeInfo object representing the attribute's type
+
+    """
+    # Get the annotation (can be string or Expr)
+    annotation = getattr(attr, "annotation", None)
+    value = getattr(attr, "value", None)
+    type = None
+    if annotation is not None:
+        type = str(annotation)
+    if type is None and value is not None:
+        type = str(value)
+
+    # Handle different annotation types
+    if type is not None:
+        try:
+            attr_type_info = parse_type_string(type)
+        except Exception as e:
+            # Log a warning with the failed type string
+            logger.warning(f"Failed to parse type annotation: '{type}'. Error: {e}")
+            # Fallback to simple type with the original string
+            attr_type_info = SimpleType(type_str=type)
+    else:
+        # Create a simple "Any" type for empty annotations
+        attr_type_info = SimpleType(type_str="Any")
+
+    return attr_type_info
 
 
 def extract_type_info(
