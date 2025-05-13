@@ -310,10 +310,19 @@ class DocumentationGenerator:
 
             # Extract and process directives
             directives = self._extract_directives(content)
+
+            # Get the relative file path for the API component
+            # This is from target_path relative to the target directory
+            relative_path = target_path.relative_to(
+                self.project_root / self.config.target_path
+            )
+            doc_path = str(relative_path.with_suffix(""))  # Remove .mdx extension
+
             for directive in directives:
                 # Use the error-handling wrapper version to provide better resilience
+                # Pass the doc_path for use in API components
                 doc_content = process_directive_with_error_handling(
-                    directive, self.module
+                    directive, self.module, doc_path
                 )
                 f.write(doc_content)
                 f.write("\n\n")
