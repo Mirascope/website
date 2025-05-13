@@ -164,11 +164,11 @@ def render_class(processed_class: ProcessedClass, doc_path: str) -> str:
     for member in processed_class.members:
         if isinstance(member, ProcessedAttribute):
             attributes.append(member)
-    
+
     # Document attributes using AttributesTable component if there are any
     if attributes:
         content.extend(format_attributes_table(attributes))
-    
+
     # Render other members in order (except attributes which are in the table)
     for member in processed_class.members:
         if not isinstance(member, ProcessedAttribute):
