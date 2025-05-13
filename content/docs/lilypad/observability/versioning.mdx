@@ -29,13 +29,11 @@ def answer_question(question: str) -> str | None:
     return response.text
     
 response = answer_question("What is the capital of France?")  # automatically versioned
-print(response.content)
+print(response)
 # > The capital of France is Paris.
 ```
 
-<Success>
-**The version is the "runnable closure" snapshot**
-
+<Note title="The version is the 'runnable closure' snapshot" collapsible={true} defaultOpen={false}>
 Whenever you run a `trace`-decorated function with `versioning="automatic"`, we compute the entire code execution graph necessary to reproduce the current execution of the function.
 
 _This is what we use to determine the version._
@@ -58,7 +56,9 @@ def answer_question(question: str) -> str | None:
     )
     return response.text
 ```
-</Success>
+</Note>
+
+![Versioned Function](/assets/docs/lilypad/observability/versioning/basic-version.png)
 
 ## Version Override
 
