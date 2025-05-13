@@ -150,6 +150,26 @@ export function useSyncHighlighterAlways(bool: boolean): void {
   useSyncHighlighterForAllRenders = bool;
 }
 
+// Keep track of the current timeout ID
+let syncHighlightingTimeoutId: number | null = null;
+
+export function temporarilyEnableSyncHighlighting(delayMs: number = 100) {
+  // Enable sync highlighting
+  useSyncHighlighterAlways(true);
+
+  // Clear any existing timeout
+  if (syncHighlightingTimeoutId !== null) {
+    clearTimeout(syncHighlightingTimeoutId);
+    syncHighlightingTimeoutId = null;
+  }
+
+  // Set a new timeout - this will be the one that wins
+  syncHighlightingTimeoutId = window.setTimeout(() => {
+    useSyncHighlighterAlways(false);
+    syncHighlightingTimeoutId = null;
+  }, delayMs);
+}
+
 export function isNextHighlightSync(): boolean {
   return (
     highlighterInitialized &&
