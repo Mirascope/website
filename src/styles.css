@@ -682,38 +682,35 @@ header button:not(.font-toggle-button),
   display: inline-block;
   text-align: right;
   color: rgba(115, 138, 148, 0.4);
+  position: relative; /* Ensure line numbers stay above backgrounds */
+  z-index: 1;
 }
 
 /* Line highlighting styles for the shiki transformer */
+.shiki {
+  position: relative !important;
+}
+
+/* Line highlighting */
 .shiki .highlighted,
 .shiki [data-highlighted],
 .shiki .line[data-highlighted="true"] {
-  background-color: rgba(
-    124,
-    58,
-    237,
-    0.07
-  ) !important; /* More purple background (violet-600 with opacity) */
-  border-left: 3px solid #6366f1 !important; /* Violet-600 color */
-  margin-left: -1rem !important;
+  background-color: rgba(124, 58, 237, 0.07) !important; /* Purple background */
+  border-left: 3px solid #6366f1 !important; /* Purple border */
   padding-left: calc(1rem - 3px) !important;
-  box-shadow: 9999px 0 0 0 rgba(124, 58, 237, 0.07) !important; /* Extend highlight to the right */
-  margin-right: -9999px !important; /* Make sure it extends beyond container */
-  padding-right: 9999px !important; /* Add padding to fill the space */
+  margin-left: -1rem !important;
+  margin-right: -0.75rem !important;
   display: inline-block !important;
+  box-sizing: border-box !important;
+  width: calc(100% + 1.75rem) !important; /* Full width + left margin + right margin */
 }
 
+/* Dark theme styles */
 .dark-theme-code .shiki .highlighted,
 .dark-theme-code .shiki [data-highlighted],
 .dark-theme-code .shiki .line[data-highlighted="true"] {
-  background-color: rgba(
-    139,
-    92,
-    246,
-    0.1
-  ) !important; /* More purple for dark mode (violet-500 with opacity) */
+  background-color: rgba(139, 92, 246, 0.1) !important; /* Dark mode purple */
   border-left-color: #6366f1 !important; /* Violet-500 color for dark mode */
-  box-shadow: 9999px 0 0 0 rgba(139, 92, 246, 0.1) !important; /* Extend highlight to the right in dark mode */
 }
 
 /* Word highlighting */
