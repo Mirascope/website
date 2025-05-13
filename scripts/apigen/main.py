@@ -20,6 +20,7 @@ from pathlib import Path
 import tomli
 
 from scripts.apigen.config import ApiSourceConfig, ApiSourcesDict
+from scripts.apigen.doclinks_postprocessor import process_doc_links
 from scripts.apigen.documentation_generator import DocumentationGenerator
 
 
@@ -103,6 +104,11 @@ def process_source(
             generator.generate_selected(pattern, skip_meta=False)
         else:
             generator.generate_all()
+
+        # Process documentation links
+        target_dir = project_root / source_config.target_path
+        modified_count = process_doc_links(str(target_dir))
+        print(f"Processed documentation links, modified {modified_count} files")
 
         print(f"Successfully processed {source_name}")
         return True
