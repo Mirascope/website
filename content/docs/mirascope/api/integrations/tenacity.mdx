@@ -6,6 +6,9 @@ description: API documentation for mirascope.integrations.tenacity
 
 # mirascope.integrations.tenacity
 
+## `collect_errors`
+## <ApiType type="Alias" path="integrations/tenacity" symbolName="collect_errors" /> collect_errors
+
 Collects specified errors into an `errors` keyword argument.
 
 Example:
@@ -33,23 +36,72 @@ except RetryError:
   parameters={[
   {
     "name": "*args",
-    "type": "type[Exception]",
-    "module_context": "mirascope.retries.tenacity",
-    "is_builtin": "false",
+    "type_info": {
+      "type_str": "type[Exception]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "type",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/functions.html#type"
+      },
+      "parameters": [
+        {
+          "type_str": "Exception",
+          "description": null,
+          "kind": "simple",
+          "doc_identifier": "Exception"
+        }
+      ]
+    },
     "default": "()",
     "description": "The `Exception` types to catch."
   }
 ]}
-  contentSubpath="docs/mirascope"
-  currentModule="mirascope.retries.tenacity"
 />
 
-<ReturnType
-  type="Callable[[RetryCallState], None]"
-  moduleContext="collections.abc"
-  isBuiltin={false}
-  contentSubpath="docs/mirascope"
-  currentModule="mirascope.retries.tenacity"
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "Callable[[RetryCallState], None]",
+    "description": null,
+    "kind": "callable",
+    "base_type": {
+      "type_str": "Callable",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+    },
+    "parameters": [
+      {
+        "type_str": "[RetryCallState]",
+        "description": null,
+        "kind": "tuple",
+        "base_type": {
+          "type_str": "tuple",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#tuple"
+        },
+        "parameters": [
+          {
+            "type_str": "RetryCallState",
+            "description": null,
+            "kind": "simple",
+            "doc_identifier": "RetryCallState"
+          }
+        ]
+      },
+      {
+        "type_str": "None",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/constants.html#None"
+      }
+    ]
+  }
+}}
 />
 
 

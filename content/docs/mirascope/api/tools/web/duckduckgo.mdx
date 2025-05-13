@@ -6,57 +6,110 @@ description: API documentation for mirascope.tools.web._duckduckgo
 
 # mirascope.tools.web._duckduckgo
 
-<ApiType type="Module" />
+## <ApiType type="Module" path="tools/web/duckduckgo" symbolName="_duckduckgo" /> _duckduckgo
 
-## Module Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| DuckDuckGoSearchConfig |  | Configuration for DuckDuckGo search |
-| DuckDuckGoSearch |  | Tool for performing web searches using DuckDuckGo.
-
-Takes search queries and returns relevant search results(Title, URL, Snippet). |
-| AsyncDuckDuckGoSearch |  | Tool for performing web searches using DuckDuckGo.
-
-Takes search queries and returns relevant search results(Title, URL, Snippet). |
-
-## Classes
-
-### DuckDuckGoSearchConfig
-
-<ApiType type="Class" />
+## <ApiType type="Class" path="tools/web/duckduckgo" symbolName="DuckDuckGoSearchConfig" /> DuckDuckGoSearchConfig
 
 Configuration for DuckDuckGo search
 
-**Bases:** _ConfigurableToolConfig
+**Bases:** 
+<TypeLink type={{"type_str": "_ConfigurableToolConfig", "description": null, "kind": "simple", "doc_identifier": "_ConfigurableToolConfig"}} />
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| max_results_per_query | int |  |
-
-
-### DuckDuckGoSearch
-
-<ApiType type="Class" />
-
-Tool for performing web searches using DuckDuckGo.
-
-Takes search queries and returns relevant search results(Title, URL, Snippet).
-
-**Bases:** _BaseDuckDuckGoSearch
+<AttributesTable
+  attributes={[
+  {
+    "name": "max_results_per_query",
+    "type_info": {
+      "type_str": "int",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/functions.html#int"
+    }
+  }
+]}
+/>
 
 
-### AsyncDuckDuckGoSearch
-
-<ApiType type="Class" />
+## <ApiType type="Class" path="tools/web/duckduckgo" symbolName="DuckDuckGoSearch" /> DuckDuckGoSearch
 
 Tool for performing web searches using DuckDuckGo.
 
 Takes search queries and returns relevant search results(Title, URL, Snippet).
 
-**Bases:** _BaseDuckDuckGoSearch
+**Bases:** 
+<TypeLink type={{"type_str": "_BaseDuckDuckGoSearch", "description": null, "kind": "simple", "doc_identifier": "_BaseDuckDuckGoSearch"}} />
+
+## <ApiType type="Function" path="tools/web/duckduckgo" symbolName="call" /> call
+
+Perform a web search using DuckDuckGo and return formatted results.
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "self",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "str",
+    "description": null,
+    "kind": "simple",
+    "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+  },
+  "description": "Formatted search results if successful, error message if search fails"
+}}
+/>
+
+
+
+## <ApiType type="Class" path="tools/web/duckduckgo" symbolName="AsyncDuckDuckGoSearch" /> AsyncDuckDuckGoSearch
+
+Tool for performing web searches using DuckDuckGo.
+
+Takes search queries and returns relevant search results(Title, URL, Snippet).
+
+**Bases:** 
+<TypeLink type={{"type_str": "_BaseDuckDuckGoSearch", "description": null, "kind": "simple", "doc_identifier": "_BaseDuckDuckGoSearch"}} />
+
+## <ApiType type="Function" path="tools/web/duckduckgo" symbolName="call" /> call
+
+Perform an asynchronous web search using DuckDuckGo and return formatted results.
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "self",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "str",
+    "description": null,
+    "kind": "simple",
+    "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+  },
+  "description": "Formatted search results if successful, error message if search fails"
+}}
+/>
+
 
 
 

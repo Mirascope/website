@@ -6,8 +6,6 @@ description: API documentation for mirascope.core.litellm.call_response
 
 # mirascope.core.litellm.call_response
 
-<ApiType type="Module" />
-
 This module contains the `LiteLLMCallResponse` class.
 
 <Info title="Usage">
@@ -16,33 +14,28 @@ This module contains the `LiteLLMCallResponse` class.
 
 </Info>
 
-## Module Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| LiteLLMCallResponse |  | A simpler wrapper around `OpenAICallResponse`.
-
-Everything is the same except the `cost` property, which has been updated to use
-LiteLLM's cost calculations so that cost tracking works for non-OpenAI models. |
-
-## Classes
-
-### LiteLLMCallResponse
-
-<ApiType type="Class" />
+## <ApiType type="Class" path="core/litellm/call_response" symbolName="LiteLLMCallResponse" /> LiteLLMCallResponse
 
 A simpler wrapper around `OpenAICallResponse`.
 
 Everything is the same except the `cost` property, which has been updated to use
 LiteLLM's cost calculations so that cost tracking works for non-OpenAI models.
 
-**Bases:** OpenAICallResponse
+**Bases:** 
+<TypeLink type={{"type_str": "OpenAICallResponse", "description": null, "kind": "simple", "doc_url": "/docs/mirascope/api/core/openai/call_response#openaicallresponse"}} />
 
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| cost_metadata | CostMetadata |  |
-
+<AttributesTable
+  attributes={[
+  {
+    "name": "cost_metadata",
+    "type_info": {
+      "type_str": "CostMetadata",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "/docs/mirascope/api/core/base/types#costmetadata"
+    }
+  }
+]}
+/>
 
 

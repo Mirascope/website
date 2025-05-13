@@ -6,28 +6,53 @@ description: API documentation for mirascope.core.base.metadata
 
 # mirascope.core.base.metadata
 
-<ApiType type="Module" />
+The `Metadata` typed dictionary for including general metadata.
+
+## <ApiType type="Class" path="core/base/metadata" symbolName="Metadata" /> Metadata
 
 The `Metadata` typed dictionary for including general metadata.
 
-## Module Attributes
+**Bases:** 
+<TypeLink type={{"type_str": "TypedDict", "description": null, "kind": "simple", "doc_url": "https://docs.python.org/3/library/typing.html#typing.TypedDict"}} />
 
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| Metadata |  | The `Metadata` typed dictionary for including general metadata. |
-
-## Class Metadata
-
-<ApiType type="Class" />
-
-The `Metadata` typed dictionary for including general metadata.
-
-**Bases:** TypedDict
-
-### Attributes
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| tags | NotRequired[set[str]] |  |
+<AttributesTable
+  attributes={[
+  {
+    "name": "tags",
+    "type_info": {
+      "type_str": "NotRequired[set[str]]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "NotRequired",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.NotRequired"
+      },
+      "parameters": [
+        {
+          "type_str": "set[str]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "set",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "https://docs.python.org/3/library/stdtypes.html#set"
+          },
+          "parameters": [
+            {
+              "type_str": "str",
+              "description": null,
+              "kind": "simple",
+              "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]}
+/>
 
 

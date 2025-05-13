@@ -6,15 +6,13 @@ description: API documentation for mirascope.core.google.dynamic_config
 
 # mirascope.core.google.dynamic_config
 
-<ApiType type="Module" />
-
 This module defines the function return type for functions as LLM calls.
 
-## Module Attributes
+## <ApiType type="Attribute" path="core/google/dynamic_config" symbolName="GoogleDynamicConfig" /> GoogleDynamicConfig
 
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| GoogleDynamicConfig | None | The function return type for functions wrapped with the `google_call` decorator.
+**Type:** <TypeLink type={{"type_str": "BaseDynamicConfig[ContentListUnion | ContentListUnionDict | BaseMessageParam, GoogleCallParams, Client]", "description": null, "kind": "generic", "base_type": {"type_str": "BaseDynamicConfig", "description": null, "kind": "simple", "doc_url": "/docs/mirascope/api/core/base/dynamic_config#basedynamicconfig"}, "parameters": [{"type_str": "ContentListUnion | ContentListUnionDict | BaseMessageParam", "description": null, "kind": "union", "base_type": {"type_str": "Union", "description": null, "kind": "simple", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"}, "parameters": [{"type_str": "ContentListUnion", "description": null, "kind": "simple", "doc_identifier": "ContentListUnion"}, {"type_str": "ContentListUnionDict", "description": null, "kind": "simple", "doc_identifier": "ContentListUnionDict"}, {"type_str": "BaseMessageParam", "description": null, "kind": "simple", "doc_url": "/docs/mirascope/api/core/base/message_param#basemessageparam"}]}, {"type_str": "GoogleCallParams", "description": null, "kind": "simple", "doc_url": "/docs/mirascope/api/core/google/call_params#googlecallparams"}, {"type_str": "Client", "description": null, "kind": "simple", "doc_identifier": "Client"}]}} />
+
+The function return type for functions wrapped with the `google_call` decorator.
 
 Example:
 
@@ -27,6 +25,6 @@ from mirascope.core.google import GoogleDynamicConfig, google_call
 @prompt_template("Recommend a {capitalized_genre} book")
 def recommend_book(genre: str) -> GoogleDynamicConfig:
     return {"computed_fields": {"capitalized_genre": genre.capitalize()}}
-``` |
+```
 
 
