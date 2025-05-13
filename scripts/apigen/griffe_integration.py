@@ -113,7 +113,9 @@ Please check that all required dependencies are installed.
 """
 
 
-def process_directive_with_error_handling(directive: str, module: Module) -> str:
+def process_directive_with_error_handling(
+    directive: str, module: Module, doc_path: str
+) -> str:
     """Process an API directive with error handling for missing dependencies.
 
     This wrapper catches errors during documentation generation, reports them,
@@ -123,23 +125,25 @@ def process_directive_with_error_handling(directive: str, module: Module) -> str
     Args:
         directive: The directive string (e.g., "::: mirascope.core.anthropic.call")
         module: The pre-loaded Griffe module
+        doc_path: Optional path to the document, used for API component links
 
     Returns:
         The generated documentation content or error placeholder
 
     """
     try:
-        return process_directive(directive, module)
+        return process_directive(directive, module, doc_path)
     except Exception as e:
         object_path = directive.replace("::: ", "")
         return generate_error_placeholder(object_path, e)
 
 
-def document_object(obj: Object | Alias) -> str:
+def document_object(obj: Object | Alias, doc_path: str) -> str:
     """Generate documentation for any supported Griffe object type.
 
     Args:
         obj: The Griffe object to document
+        doc_path: Optional path to the document, used for API component links
 
     Returns:
         MDX documentation with enhanced component usage
@@ -147,26 +151,27 @@ def document_object(obj: Object | Alias) -> str:
     """
     if isinstance(obj, Module):
         processed_obj = process_module(obj)
-        return render_module(processed_obj)
+        return render_module(processed_obj, doc_path)
     elif isinstance(obj, Function):
         processed_obj = process_function(obj)
-        return render_function(processed_obj)
+        return render_function(processed_obj, doc_path)
     elif isinstance(obj, Class):
         processed_obj = process_class(obj)
-        return render_class(processed_obj)
+        return render_class(processed_obj, doc_path)
     elif isinstance(obj, Alias):
         processed_obj = process_alias(obj)
-        return render_alias(processed_obj)
+        return render_alias(processed_obj, doc_path)
     else:
         raise ValueError(f"Unsupported object type: {type(obj)}")
 
 
-def process_directive(directive: str, module: Module) -> str:
+def process_directive(directive: str, module: Module, doc_path: str) -> str:
     """Process an API directive and generate documentation.
 
     Args:
         directive: The directive string (e.g., "::: mirascope.core.anthropic.call")
         module: The pre-loaded Griffe module
+        doc_path: Optional path to the document, used for API component links
 
     Returns:
         The generated documentation content
@@ -195,4 +200,4 @@ def process_directive(directive: str, module: Module) -> str:
             )
 
     # Use the document_object dispatcher function
-    return document_object(current_obj)
+    return document_object(current_obj, doc_path)

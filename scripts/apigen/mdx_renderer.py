@@ -17,11 +17,12 @@ from scripts.apigen.models import (
 from scripts.apigen.type_model import EnumEncoder, ParameterInfo
 
 
-def render_module(processed_module: ProcessedModule) -> str:
+def render_module(processed_module: ProcessedModule, doc_path: str) -> str:
     """Render a processed module into MDX documentation.
 
     Args:
         processed_module: The processed module object to render
+        doc_path: Path to the document, used for API component links
 
     Returns:
         MDX documentation string
@@ -29,8 +30,13 @@ def render_module(processed_module: ProcessedModule) -> str:
     """
     content: list[str] = []
 
-    # Add object type using a component with consistent typing
-    content.append('<ApiType type="Module" />\n')
+    # Get the module name for the heading
+    module_name = processed_module.module_path.split(".")[-1]
+
+    # Add heading with embedded ApiType component
+    content.append(
+        f'## <ApiType type="Module" module="{processed_module.module_path}" path="{doc_path}" symbolName="{module_name}" /> {module_name}\n'
+    )
 
     # Add docstring if available
     if processed_module.docstring:
@@ -42,7 +48,7 @@ def render_module(processed_module: ProcessedModule) -> str:
         content.append("## Functions\n")
         for func in processed_module.functions:
             content.append(f"### {func.name}\n")
-            content.append(render_function(func))
+            content.append(render_function(func, doc_path))
             content.append("")
 
     # If classes are found, document them
@@ -57,29 +63,30 @@ def render_module(processed_module: ProcessedModule) -> str:
             if module_name_parts and class_name.lower() == module_name_parts[-1]:
                 # Document this as the primary class
                 content.append(f"## Class {class_name}\n")
-                content.append(render_class(processed_class))
+                content.append(render_class(processed_class, doc_path))
             else:
                 # Document the class but not as prominently
                 content.append("## Classes\n")
                 content.append(f"### {class_name}\n")
-                content.append(render_class(processed_class))
+                content.append(render_class(processed_class, doc_path))
                 content.append("")
         else:
             # Multiple classes in the module, document all of them
             content.append("## Classes\n")
             for processed_class in processed_module.classes:
                 content.append(f"### {processed_class.name}\n")
-                content.append(render_class(processed_class))
+                content.append(render_class(processed_class, doc_path))
                 content.append("")
 
     return "\n".join(content)
 
 
-def render_function(processed_func: ProcessedFunction) -> str:
+def render_function(processed_func: ProcessedFunction, doc_path: str) -> str:
     """Render a processed function into MDX documentation.
 
     Args:
         processed_func: The processed function object to render
+        doc_path: Path to the document, used for API component links
 
     Returns:
         MDX documentation string
@@ -87,8 +94,10 @@ def render_function(processed_func: ProcessedFunction) -> str:
     """
     content: list[str] = []
 
-    # Add object type using a component with consistent typing
-    content.append('<ApiType type="Function" />\n')
+    # Add heading with embedded ApiType component
+    content.append(
+        f'### <ApiType type="Function" module="{processed_func.module_path}" path="{doc_path}" symbolName="{processed_func.name}" /> {processed_func.name}\n'
+    )
 
     # Add docstring if available
     if processed_func.docstring:
@@ -106,11 +115,12 @@ def render_function(processed_func: ProcessedFunction) -> str:
     return "\n".join(content)
 
 
-def render_class(processed_class: ProcessedClass) -> str:
+def render_class(processed_class: ProcessedClass, doc_path: str) -> str:
     """Render a processed class into MDX documentation.
 
     Args:
         processed_class: The processed class object to render
+        doc_path: Path to the document, used for API component links
 
     Returns:
         MDX documentation string
@@ -118,8 +128,10 @@ def render_class(processed_class: ProcessedClass) -> str:
     """
     content: list[str] = []
 
-    # Add object type using a component with consistent typing
-    content.append('<ApiType type="Class" />\n')
+    # Add heading with embedded ApiType component
+    content.append(
+        f'### <ApiType type="Class" module="{processed_class.module_path}" path="{doc_path}" symbolName="{processed_class.name}" /> {processed_class.name}\n'
+    )
 
     # Add docstring if available
     if processed_class.docstring:
@@ -138,17 +150,23 @@ def render_class(processed_class: ProcessedClass) -> str:
     return "\n".join(content)
 
 
-def render_alias(processed_alias: ProcessedAlias) -> str:
+def render_alias(processed_alias: ProcessedAlias, doc_path: str) -> str:
     """Render a processed alias into MDX documentation.
 
     Args:
         processed_alias: The processed alias object to render
+        doc_path: Path to the document, used for API component links
 
     Returns:
         MDX documentation string
 
     """
     content: list[str] = []
+
+    # Add heading with embedded ApiType component
+    content.append(
+        f'### <ApiType type="Alias" module="{processed_alias.module_path}" path="{doc_path}" symbolName="{processed_alias.name}" /> {processed_alias.name}\n'
+    )
     # Add docstring if available
     if processed_alias.docstring:
         content.append(processed_alias.docstring.strip())
