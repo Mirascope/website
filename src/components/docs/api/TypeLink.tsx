@@ -28,11 +28,12 @@ export function TypeLink({ type }: TypeLinkProps) {
 
     // If we have a documentation URL, make the type clickable
     if (type.doc_url) {
+      // Only use rel="noopener noreferrer" for external links
+      const isExternal = type.doc_url.startsWith("http");
       return (
         <a
           href={type.doc_url}
-          target="_blank"
-          rel="noopener noreferrer"
+          rel={isExternal ? "noopener noreferrer" : undefined}
           className="text-primary font-mono hover:underline"
         >
           {type.type_str}
