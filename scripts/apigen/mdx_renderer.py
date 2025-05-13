@@ -28,6 +28,29 @@ def render_module(processed_module: ProcessedModule, doc_path: str) -> str:
         MDX documentation string
 
     """
+    # Check total number of children across classes and functions
+    total_items = len(processed_module.classes) + len(processed_module.functions)
+
+    # If there's exactly one child item, render the module docstring followed by the item
+    if total_items == 1:
+        content = []
+
+        # Add docstring if available (keeping important usage links)
+        if processed_module.docstring:
+            content.append(processed_module.docstring.strip())
+            content.append("")
+
+        # Add the single item
+        if processed_module.classes:
+            # Single class - render it directly
+            content.append(render_class(processed_module.classes[0], doc_path))
+        elif processed_module.functions:
+            # Single function - render it directly
+            content.append(render_function(processed_module.functions[0], doc_path))
+
+        return "\n".join(content)
+
+    # Otherwise, use the standard module rendering approach
     content: list[str] = []
 
     # Get the module name for the heading
@@ -44,39 +67,13 @@ def render_module(processed_module: ProcessedModule, doc_path: str) -> str:
         content.append("")
 
     # Render module functions if any
-    if processed_module.functions:
-        content.append("## Functions\n")
-        for func in processed_module.functions:
-            content.append(f"### {func.name}\n")
-            content.append(render_function(func, doc_path))
-            content.append("")
+    for func in processed_module.functions:
+        content.append(render_function(func, doc_path))
+        content.append("")
 
-    # If classes are found, document them
-    if processed_module.classes:
-        if len(processed_module.classes) == 1:
-            # If only one class and it has the same name as the last part of the module,
-            # assume it's the primary class for this module
-            processed_class = processed_module.classes[0]
-            class_name = processed_class.name
-            module_name_parts = processed_module.module_path.split(".")
-
-            if module_name_parts and class_name.lower() == module_name_parts[-1]:
-                # Document this as the primary class
-                content.append(f"## Class {class_name}\n")
-                content.append(render_class(processed_class, doc_path))
-            else:
-                # Document the class but not as prominently
-                content.append("## Classes\n")
-                content.append(f"### {class_name}\n")
-                content.append(render_class(processed_class, doc_path))
-                content.append("")
-        else:
-            # Multiple classes in the module, document all of them
-            content.append("## Classes\n")
-            for processed_class in processed_module.classes:
-                content.append(f"### {processed_class.name}\n")
-                content.append(render_class(processed_class, doc_path))
-                content.append("")
+    for processed_class in processed_module.classes:
+        content.append(render_class(processed_class, doc_path))
+        content.append("")
 
     return "\n".join(content)
 
@@ -96,7 +93,7 @@ def render_function(processed_func: ProcessedFunction, doc_path: str) -> str:
 
     # Add heading with embedded ApiType component
     content.append(
-        f'### <ApiType type="Function" module="{processed_func.module_path}" path="{doc_path}" symbolName="{processed_func.name}" /> {processed_func.name}\n'
+        f'## <ApiType type="Function" module="{processed_func.module_path}" path="{doc_path}" symbolName="{processed_func.name}" /> {processed_func.name}\n'
     )
 
     # Add docstring if available
@@ -130,7 +127,7 @@ def render_class(processed_class: ProcessedClass, doc_path: str) -> str:
 
     # Add heading with embedded ApiType component
     content.append(
-        f'### <ApiType type="Class" module="{processed_class.module_path}" path="{doc_path}" symbolName="{processed_class.name}" /> {processed_class.name}\n'
+        f'## <ApiType type="Class" module="{processed_class.module_path}" path="{doc_path}" symbolName="{processed_class.name}" /> {processed_class.name}\n'
     )
 
     # Add docstring if available
@@ -165,7 +162,7 @@ def render_alias(processed_alias: ProcessedAlias, doc_path: str) -> str:
 
     # Add heading with embedded ApiType component
     content.append(
-        f'### <ApiType type="Alias" module="{processed_alias.module_path}" path="{doc_path}" symbolName="{processed_alias.name}" /> {processed_alias.name}\n'
+        f'## <ApiType type="Alias" module="{processed_alias.module_path}" path="{doc_path}" symbolName="{processed_alias.name}" /> {processed_alias.name}\n'
     )
     # Add docstring if available
     if processed_alias.docstring:
