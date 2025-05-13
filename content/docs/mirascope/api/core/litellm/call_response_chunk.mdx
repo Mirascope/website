@@ -14,6 +14,16 @@ This module contains the `LiteLLMCallResponseChunk` class.
 
 </Info>
 
+## <ApiType type="Attribute" path="core/litellm/call_response_chunk" symbolName="LiteLLMCallResponseChunk" /> LiteLLMCallResponseChunk
+
+**Type:** <TypeLink type={{"type_str": "Any", "description": null, "kind": "simple", "doc_identifier": null}} />
+
+A simpler wrapper around `OpenAICallResponse`.
+
+Everything is the same except the `cost` property, which has been updated to use
+LiteLLM's cost calculations so that cost tracking works for non-OpenAI models.
+
+
 ## <ApiType type="Class" path="core/litellm/call_response_chunk" symbolName="LiteLLMCallResponseChunk" /> LiteLLMCallResponseChunk
 
 A simpler wrapper around `OpenAICallResponse`.

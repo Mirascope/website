@@ -16,6 +16,42 @@ This module defines the base class for tools used in LLM calls.
 
 </Info>
 
+## <ApiType type="Attribute" path="core/base/tool" symbolName="ToolConfig" /> ToolConfig
+
+**Type:** <TypeLink type={{"type_str": "Any", "description": null, "kind": "simple", "doc_identifier": null}} />
+
+A base class for tool configurations.
+
+
+## <ApiType type="Attribute" path="core/base/tool" symbolName="GenerateJsonSchemaNoTitles" /> GenerateJsonSchemaNoTitles
+
+**Type:** <TypeLink type={{"type_str": "Any", "description": null, "kind": "simple", "doc_identifier": null}} />
+
+
+## <ApiType type="Attribute" path="core/base/tool" symbolName="BaseTool" /> BaseTool
+
+**Type:** <TypeLink type={{"type_str": "Any", "description": null, "kind": "simple", "doc_identifier": null}} />
+
+A class for defining tools for LLM calls.
+
+Example:
+
+```python
+from mirascope.core import BaseTool
+from pydantic import Field
+
+
+class FormatBook(BaseTool):
+    """Returns a nicely formatted book recommendation."""
+
+    title: str = Field(..., description="The title of the book.")
+    author: str = Field(..., description="The author of the book.")
+
+    def call(self) -> str:
+        return f"{self.title} by {self.author}"
+```
+
+
 ## <ApiType type="Class" path="core/base/tool" symbolName="ToolConfig" /> ToolConfig
 
 A base class for tool configurations.

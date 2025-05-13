@@ -14,6 +14,34 @@ This module contains the `MistralCallResponseChunk` class.
 
 </Info>
 
+## <ApiType type="Attribute" path="core/mistral/call_response_chunk" symbolName="MistralCallResponseChunk" /> MistralCallResponseChunk
+
+**Type:** <TypeLink type={{"type_str": "Any", "description": null, "kind": "simple", "doc_identifier": null}} />
+
+A convenience wrapper around the Mistral `ChatCompletionChunk` streamed chunks.
+
+When calling the Mistral API using a function decorated with `mistral_call` and
+`stream` set to `True`, the stream will contain `MistralResponseChunk` instances with
+properties that allow for more convenient access to commonly used attributes.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.mistral import mistral_call
+
+
+@mistral_call("mistral-large-latest", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+stream = recommend_book("fantasy")  # response is an `MistralStream`
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+```
+
+
 ## <ApiType type="Class" path="core/mistral/call_response_chunk" symbolName="MistralCallResponseChunk" /> MistralCallResponseChunk
 
 A convenience wrapper around the Mistral `ChatCompletionChunk` streamed chunks.
@@ -70,7 +98,7 @@ for chunk, _ in stream:
           "type_str": "FinishReason",
           "description": null,
           "kind": "simple",
-          "doc_identifier": "FinishReason"
+          "doc_url": "/docs/mirascope/api/core/openai/call_response_chunk#finishreason"
         }
       ]
     },

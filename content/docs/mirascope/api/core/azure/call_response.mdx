@@ -14,6 +14,33 @@ This module contains the `AzureCallResponse` class.
 
 </Info>
 
+## <ApiType type="Attribute" path="core/azure/call_response" symbolName="AzureCallResponse" /> AzureCallResponse
+
+**Type:** <TypeLink type={{"type_str": "Any", "description": null, "kind": "simple", "doc_identifier": null}} />
+
+A convenience wrapper around the Azure `ChatCompletion` response.
+
+When calling the Azure API using a function decorated with `azure_call`, the
+response will be an `AzureCallResponse` instance with properties that allow for
+more convenience access to commonly used attributes.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.azure import azure_call
+
+
+@azure_call("gpt-4o")
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+response = recommend_book("fantasy")  # response is an `AzureCallResponse` instance
+print(response.content)
+```
+
+
 ## <ApiType type="Class" path="core/azure/call_response" symbolName="AzureCallResponse" /> AzureCallResponse
 
 A convenience wrapper around the Azure `ChatCompletion` response.
@@ -355,7 +382,7 @@ print(response.content)
               "type_str": "FinishReason",
               "description": null,
               "kind": "simple",
-              "doc_identifier": "FinishReason"
+              "doc_url": "/docs/mirascope/api/core/openai/call_response_chunk#finishreason"
             }
           ]
         },

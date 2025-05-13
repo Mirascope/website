@@ -14,6 +14,34 @@ The `GroqStream` class for convenience around streaming LLM calls.
 
 </Info>
 
+## <ApiType type="Attribute" path="core/groq/stream" symbolName="FinishReason" /> FinishReason
+
+**Type:** <TypeLink type={{"type_str": "None", "description": null, "kind": "simple", "doc_url": "https://docs.python.org/3/library/constants.html#None"}} />
+
+
+## <ApiType type="Attribute" path="core/groq/stream" symbolName="GroqStream" /> GroqStream
+
+**Type:** <TypeLink type={{"type_str": "Any", "description": null, "kind": "simple", "doc_identifier": null}} />
+
+A class for convenience around streaming Groq LLM calls.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.groq import groq_call
+
+
+@groq_call("llama-3.1-8b-instant", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+stream = recommend_book("fantasy")  # returns `GroqStream` instance
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+```
+
+
 ## <ApiType type="Class" path="core/groq/stream" symbolName="GroqStream" /> GroqStream
 
 A class for convenience around streaming Groq LLM calls.

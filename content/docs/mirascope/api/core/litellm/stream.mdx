@@ -14,6 +14,17 @@ The `LiteLLMStream` class for convenience around streaming LLM calls.
 
 </Info>
 
+## <ApiType type="Attribute" path="core/litellm/stream" symbolName="LiteLLMStream" /> LiteLLMStream
+
+**Type:** <TypeLink type={{"type_str": "Any", "description": null, "kind": "simple", "doc_identifier": null}} />
+
+A simple wrapper around `OpenAIStream`.
+
+Everything is the same except updates to the `construct_call_response` method and
+the `cost` property so that cost is properly calculated using LiteLLM's cost
+calculation method. This ensures cost calculation works for non-OpenAI models.
+
+
 ## <ApiType type="Class" path="core/litellm/stream" symbolName="LiteLLMStream" /> LiteLLMStream
 
 A simple wrapper around `OpenAIStream`.

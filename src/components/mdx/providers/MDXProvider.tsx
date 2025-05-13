@@ -22,6 +22,7 @@ import {
   ParametersTable,
   ReturnTable,
   AttributesTable,
+  TypeLink,
 } from "@/src/components/docs/api";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/src/components/ui/tabs";
 import { Button } from "@/src/components/ui/button";
@@ -108,6 +109,7 @@ export const components = {
   AttributesTable,
   ParametersTable,
   ReturnTable,
+  TypeLink,
 
   // UI Components
   Button,
