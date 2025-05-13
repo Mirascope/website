@@ -20,7 +20,7 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
 
   // Base styles for code block container
   const codeBlockBaseStyles =
-    "code-block-wrapper border-card relative m-0 mb-2 rounded-md overflow-hidden border p-0 text-sm";
+    "code-block-wrapper border-card relative m-0 mb-2 rounded-md overflow-hidden border p-0 text-xs";
 
   // Highlight code synchronously during render
   const { lightThemeHtml, darkThemeHtml } = highlightCode(code, language, meta);
@@ -169,13 +169,13 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
 
       {/* Light theme code */}
       <div
-        className="light-theme-code w-full text-sm dark:hidden"
+        className="light-theme-code w-full dark:hidden"
         dangerouslySetInnerHTML={{ __html: lightThemeHtml }}
       />
 
       {/* Dark theme code */}
       <div
-        className="dark-theme-code hidden w-full text-sm dark:block"
+        className="dark-theme-code hidden w-full dark:block"
         dangerouslySetInnerHTML={{ __html: darkThemeHtml }}
       />
     </div>

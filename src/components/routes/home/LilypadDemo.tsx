@@ -57,7 +57,7 @@ function MessageCard({ type, content }: MessageCardProps) {
     type === "user" ? "bg-muted text-muted-foreground" : "bg-primary/10 text-primary";
 
   return (
-    <div className="bg-muted/20 rounded-lg p-3">
+    <div className="bg-muted/20 rounded-lg px-3 py-1">
       <div className="flex flex-col">
         <span
           className={`${badgeClass} mb-1.5 self-start rounded px-1.5 py-0.5 text-xs font-medium`}
@@ -75,7 +75,7 @@ function MessageCard({ type, content }: MessageCardProps) {
 // Component: Header
 function Header({ functionName, version }: HeaderProps) {
   return (
-    <div className="border-border/60 bg-muted flex items-center justify-between border-b px-4 py-2">
+    <div className="border-border/60 bg-muted flex items-center justify-between border-b px-2 py-2">
       <div className="flex items-center gap-2">
         <span className="text-sm font-semibold">{functionName}</span>
         <span className="bg-primary text-primary-foreground rounded-full px-2 py-0.5 text-xs">
@@ -109,23 +109,23 @@ function TraceRow({ trace, isSelected, onSelect }: TraceRowProps) {
       }`}
       onClick={() => onSelect(trace.id)}
     >
-      <div className="border-border/20 w-[15%] flex-shrink-0 border-t px-4 py-2">
+      <div className="border-border/20 w-[15%] flex-shrink-0 border-t px-2 py-2">
         {trace.version}
       </div>
-      <div className="border-border/20 w-[15%] flex-shrink-0 border-t px-4 py-2">
+      <div className="border-border/20 w-[15%] flex-shrink-0 border-t px-2 py-2">
         {trace.label === "pass" ? (
           <CheckCircle2 className="h-4 w-4 text-green-500" />
         ) : (
           <XCircle className="h-4 w-4 text-red-500" />
         )}
       </div>
-      <div className="border-border/20 text-muted-foreground w-[25%] flex-shrink-0 border-t px-4 py-2">
+      <div className="border-border/20 text-muted-foreground w-[25%] flex-shrink-0 border-t px-2 py-2">
         {trace.timestamp}
       </div>
-      <div className="border-border/20 text-muted-foreground w-[20%] flex-shrink-0 border-t px-4 py-2">
+      <div className="border-border/20 text-muted-foreground w-[20%] flex-shrink-0 border-t px-2 py-2">
         ${trace.cost.toFixed(4)}
       </div>
-      <div className="border-border/20 text-muted-foreground w-[15%] flex-shrink-0 border-t px-4 py-2">
+      <div className="border-border/20 text-muted-foreground w-[15%] flex-shrink-0 border-t px-2 py-2">
         {trace.tokens}
       </div>
     </div>
@@ -180,7 +180,7 @@ function MessagesPane({ input, output }: MessagesPaneProps) {
       <div className="border-border/60 bg-muted border-b px-4 py-2">
         <h3 className="text-sm font-semibold">Messages</h3>
       </div>
-      <div className="flex max-h-64 flex-col gap-3 overflow-y-auto p-3">
+      <div className="flex max-h-64 flex-col gap-3 overflow-y-auto p-2">
         <MessageCard type="user" content={input} />
         <MessageCard type="assistant" content={output} />
       </div>
