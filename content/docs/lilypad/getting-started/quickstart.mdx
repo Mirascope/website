@@ -88,11 +88,12 @@ Run your first automatically [traced](/docs/lilypad/observability/traces) and [v
 from google.genai import Client
 import lilypad
 
-lilypad.configure(  # [!code highlight]
-    project_id=os.environ["LILYPAD_PROJECT_ID"],  # [!code highlight]
-    api_key=os.environ["LILYPAD_API_KEY"],  # [!code highlight]
-    auto_llm=True,  # [!code highlight]
-)  # [!code highlight]
+# [!code highlight:6]
+lilypad.configure(  
+    project_id=os.environ["LILYPAD_PROJECT_ID"],
+    api_key=os.environ["LILYPAD_API_KEY"],
+    auto_llm=True,
+)
 client = Client()
 
 @lilypad.trace(versioning="automatic")  # [!code highlight]
@@ -115,11 +116,12 @@ import os
 import lilypad
 from openai import OpenAI
 
-lilypad.configure(  # [!code highlight]
-    project_id=os.environ["LILYPAD_PROJECT_ID"],  # [!code highlight]
-    api_key=os.environ["LILYPAD_API_KEY"],  # [!code highlight]
-    auto_llm=True,  # [!code highlight]
-)  # [!code highlight]
+# [!code highlight:6]
+lilypad.configure(
+    project_id=os.environ["LILYPAD_PROJECT_ID"],
+    api_key=os.environ["LILYPAD_API_KEY"],
+    auto_llm=True,
+)
 client = OpenAI()
 
 @lilypad.trace(versioning="automatic")  # [!code highlight]
@@ -142,11 +144,12 @@ import os
 from anthropic import Anthropic
 import lilypad
 
-lilypad.configure(  # [!code highlight]
-    project_id=os.environ["LILYPAD_PROJECT_ID"],  # [!code highlight]
-    api_key=os.environ["LILYPAD_API_KEY"],  # [!code highlight]
-    auto_llm=True,  # [!code highlight]
-)  # [!code highlight]
+# [!code highlight:6]
+lilypad.configure(
+    project_id=os.environ["LILYPAD_PROJECT_ID"],
+    api_key=os.environ["LILYPAD_API_KEY"],
+    auto_llm=True,
+)
 client = Anthropic()
 
 @lilypad.trace(versioning="automatic")  # [!code highlight]
@@ -171,11 +174,12 @@ import os
 import lilypad
 from mistralai import Mistral
 
-lilypad.configure(  # [!code highlight]
-    project_id=os.environ["LILYPAD_PROJECT_ID"],  # [!code highlight]
-    api_key=os.environ["LILYPAD_API_KEY"],  # [!code highlight]
-    auto_llm=True,  # [!code highlight]
-)  # [!code highlight]
+# [!code highlight:6]
+lilypad.configure(
+    project_id=os.environ["LILYPAD_PROJECT_ID"],
+    api_key=os.environ["LILYPAD_API_KEY"],
+    auto_llm=True,
+)
 client = Mistral(api_key=os.environ["MISTRAL_API_KEY"])
 
 @lilypad.trace(versioning="automatic")  # [!code highlight]
@@ -198,11 +202,12 @@ import os
 from boto3.session import Session
 import lilypad
 
-lilypad.configure(  # [!code highlight]
-    project_id=os.environ["LILYPAD_PROJECT_ID"],  # [!code highlight]
-    api_key=os.environ["LILYPAD_API_KEY"],  # [!code highlight]
-    auto_llm=True,  # [!code highlight]
-)  # [!code highlight]
+# [!code highlight:6]
+lilypad.configure(
+    project_id=os.environ["LILYPAD_PROJECT_ID"],
+    api_key=os.environ["LILYPAD_API_KEY"],
+    auto_llm=True,
+)
 session = Session()
 client = session.client("bedrock-runtime")
 
@@ -229,11 +234,12 @@ from azure.ai.inference import ChatCompletionsClient
 from azure.core.credentials import AzureKeyCredential
 import lilypad
 
-lilypad.configure(  # [!code highlight]
-    project_id=os.environ["LILYPAD_PROJECT_ID"],  # [!code highlight]
-    api_key=os.environ["LILYPAD_API_KEY"],  # [!code highlight]
-    auto_llm=True,  # [!code highlight]
-)  # [!code highlight]
+# [!code highlight:6]
+lilypad.configure(
+    project_id=os.environ["LILYPAD_PROJECT_ID"],
+    api_key=os.environ["LILYPAD_API_KEY"],
+    auto_llm=True,
+)
 client = ChatCompletionsClient(
     endpoint="https://your-endpoint.openai.azure.com/openai/deployments/gpt-4o-mini",
     credential=AzureKeyCredential(key="..."),
@@ -259,11 +265,12 @@ import os
 import lilypad
 import outlines
 
-lilypad.configure(  # [!code highlight]
-    project_id=os.environ["LILYPAD_PROJECT_ID"],  # [!code highlight]
-    api_key=os.environ["LILYPAD_API_KEY"],  # [!code highlight]
-    auto_llm=True,  # [!code highlight]
-)  # [!code highlight]
+# [!code highlight:6]
+lilypad.configure(
+    project_id=os.environ["LILYPAD_PROJECT_ID"],
+    api_key=os.environ["LILYPAD_API_KEY"],
+    auto_llm=True,
+)
 
 @lilypad.trace(versioning="automatic")  # [!code highlight]
 def answer_question(question: str) -> str | None:
