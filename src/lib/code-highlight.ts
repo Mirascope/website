@@ -4,6 +4,10 @@ import { transformerNotationHighlight } from "@shikijs/transformers";
 export type HighlightResult = {
   lightHtml: string;
   darkHtml: string;
+  code: string;
+  language: string;
+  meta: string;
+  highlighted: boolean;
 };
 
 const LIGHT_THEME = "github-light";
@@ -42,7 +46,7 @@ export async function highlightCode(
   const [lightHtml, darkHtml] = await Promise.all([lightPromise, darkPromise]);
 
   // Return both versions for theme switching
-  return { lightHtml, darkHtml };
+  return { lightHtml, darkHtml, code, language, meta, highlighted: true };
 }
 
 // Create singleton highlighters for light and dark themes
@@ -104,13 +108,13 @@ export function highlightCodeSync(code: string, language: string = "text", meta:
     transformers: [transformer],
   });
 
-  return { lightHtml, darkHtml };
+  return { lightHtml, darkHtml, code, language, meta, highlighted: true };
 }
 
 export function fallbackHighlighter(
   code: string,
-  _language: string = "text",
-  _meta: string = ""
+  language: string = "text",
+  meta: string = ""
 ): HighlightResult {
   const escapedCode = stripHighlightMarkers(code)
     .replace(/&/g, "&amp;")
@@ -128,10 +132,55 @@ export function fallbackHighlighter(
   const darkStyle = "background-color:#0d1117;color:#e6edf3";
   const lightHtml = `<pre class="${lightClass}" style=${lightStyle}>${codeHtml}</pre>`;
   const darkHtml = `<pre class="${darkClass}" style=${darkStyle}>${codeHtml}</pre>`;
-  return { lightHtml, darkHtml };
+  return { lightHtml, darkHtml, code, language, meta, highlighted: false };
 }
 
-export const initialHighlight = fallbackHighlighter;
+// Flag to control always using sync highlighter for initial highilght
+let useSyncHighlighterForAllRenders: boolean = false;
+
+export function useSyncHighlighterAlways(bool: boolean): void {
+  useSyncHighlighterForAllRenders = bool;
+}
+
+// Keep track of the current timeout ID
+let syncHighlightingTimeoutId: number | null = null;
+
+export function temporarilyEnableSyncHighlighting(delayMs: number = 100) {
+  // Enable sync highlighting
+  useSyncHighlighterAlways(true);
+
+  // Clear any existing timeout
+  if (syncHighlightingTimeoutId !== null) {
+    clearTimeout(syncHighlightingTimeoutId);
+    syncHighlightingTimeoutId = null;
+  }
+
+  // Set a new timeout - this will be the one that wins
+  syncHighlightingTimeoutId = window.setTimeout(() => {
+    useSyncHighlighterAlways(false);
+    syncHighlightingTimeoutId = null;
+  }, delayMs);
+}
+
+export function isNextHighlightSync(): boolean {
+  return highlighterInitialized && syncHighlighter != null && useSyncHighlighterForAllRenders;
+}
+
+export function initialHighlight(
+  code: string,
+  language: string = "text",
+  meta: string = ""
+): HighlightResult {
+  if (isNextHighlightSync()) {
+    try {
+      return highlightCodeSync(code, language, meta);
+    } catch (error) {
+      console.warn("Failed to use sync highlighter, falling back:", error);
+      // Fall back to the basic highlighter if sync fails
+    }
+  }
+  return fallbackHighlighter(code, language, meta);
+}
 
 /**
  * Strips highlight markers from code for clipboard copying

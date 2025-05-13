@@ -7,6 +7,7 @@ import { routeTree } from "./routeTree.gen";
 
 import "./styles.css";
 import reportWebVitals from "./reportWebVitals.ts";
+import { initializeSynchronousHighlighter } from "./lib/code-highlight";
 
 // Initial theme setup (later handled by ThemeSwitcher component)
 const initializeTheme = () => {
@@ -66,6 +67,10 @@ if (!rootElement) {
 
   // Function to mount the app
   const mountApp = async () => {
+    // Initialize the synchronous highlighter for TabbedSection use
+    // Don't await it - we want it to load in the background
+    initializeSynchronousHighlighter();
+
     if (hasPrerenderedContent) {
       // If we have prerendered content, wait for router to load before replacing it
       // This ensures we have all data ready before switching from SSG content
