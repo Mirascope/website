@@ -18,9 +18,7 @@ from pathlib import Path
 
 from griffe import (
     Alias,
-    Class,
     Extensions,
-    Function,
     GriffeLoader,
     Module,
     Object,
@@ -29,16 +27,10 @@ from griffe import (
 
 from scripts.apigen.doclinks import UpdateDocstringsExtension
 from scripts.apigen.mdx_renderer import (
-    render_alias,
-    render_class,
-    render_function,
-    render_module,
+    render_object,
 )
 from scripts.apigen.models import (
-    process_alias,
-    process_class,
-    process_function,
-    process_module,
+    process_object,
 )
 
 # Default content subpath for documentation
@@ -149,20 +141,11 @@ def document_object(obj: Object | Alias, doc_path: str) -> str:
         MDX documentation with enhanced component usage
 
     """
-    if isinstance(obj, Module):
-        processed_obj = process_module(obj)
-        return render_module(processed_obj, doc_path)
-    elif isinstance(obj, Function):
-        processed_obj = process_function(obj)
-        return render_function(processed_obj, doc_path)
-    elif isinstance(obj, Class):
-        processed_obj = process_class(obj)
-        return render_class(processed_obj, doc_path)
-    elif isinstance(obj, Alias):
-        processed_obj = process_alias(obj)
-        return render_alias(processed_obj, doc_path)
-    else:
-        raise ValueError(f"Unsupported object type: {type(obj)}")
+    processed_obj = process_object(obj)
+    if processed_obj is None:
+        raise ValueError(f"Failed to process object: {obj}")
+
+    return render_object(processed_obj, doc_path)
 
 
 def process_directive(directive: str, module: Module, doc_path: str) -> str:
