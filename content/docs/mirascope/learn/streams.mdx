@@ -43,7 +43,7 @@ This approach offers several benefits:
 5. **Early termination**: If the desired information is found early in the response, processing can be stopped without waiting for the full generation.
 
 <Callout type="api">
-    [`mirascope.core.base.stream`](/docs/mirascope/api)
+    [`mirascope.core.base.stream`](/docs/mirascope/api/core/base/stream)
 </Callout>
 
 ## Basic Usage and Syntax
@@ -98,7 +98,7 @@ In this example:
 ## Handling Streamed Responses
 
 <Callout type="api">
-    [`mirascope.core.base.call_response_chunk`](/docs/mirascope/api)
+    [`mirascope.core.base.call_response_chunk`](/docs/mirascope/api/core/base/call_response_chunk)
 </Callout>
 
 When streaming, the initial response will be a provider-specific [`BaseStream`](/docs/mirascope/api) instance (e.g. `OpenAIStream`), which is a generator that yields tuples `(chunk, tool)` where `chunk` is a provider-specific [`BaseCallResponseChunk`](/docs/mirascope/api) (e.g. `OpenAICallResponseChunk`) that wraps the original chunk in the provider's response. These objects provide a consistent interface across providers while still allowing access to provider-specific details.
