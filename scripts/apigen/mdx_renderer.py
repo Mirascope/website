@@ -149,10 +149,15 @@ def render_class(processed_class: ProcessedClass, doc_path: str) -> str:
         content.append(processed_class.docstring.strip())
         content.append("")
 
-    # Add information about base classes
+    # Add information about base classes with TypeLink
     if processed_class.bases:
-        bases_str = ", ".join(processed_class.bases)
-        content.append(f"**Bases:** {bases_str}\n")
+        content.append("**Bases:** ")
+        base_links = []
+        for base_type in processed_class.bases:
+            # Convert the TypeInfo to JSON for TypeLink
+            base_type_json = json.dumps(base_type.to_dict(), cls=EnumEncoder)
+            base_links.append(f"<TypeLink type={{{base_type_json}}} />")
+        content.append(", ".join(base_links) + "\n")
 
     # Collect all attributes for the attributes table
     attributes = []

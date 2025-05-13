@@ -12,7 +12,8 @@ description: API documentation for mirascope.tools.system._docker_operation
 
 Configuration for `DockerOperationToolKit` toolkit
 
-**Bases:** _ConfigurableToolConfig
+**Bases:** 
+<TypeLink type={{"type_str": "_ConfigurableToolConfig", "description": null, "kind": "simple", "doc_identifier": "_ConfigurableToolConfig"}} />
 
 <AttributesTable
   attributes={[
@@ -51,12 +52,14 @@ Configuration for `DockerOperationToolKit` toolkit
 
 Base class for Docker operations.
 
-**Bases:** ConfigurableTool[DockerOperationToolKitConfig], ABC
+**Bases:** 
+<TypeLink type={{"type_str": "ConfigurableTool[DockerOperationToolKitConfig]", "description": null, "kind": "generic", "base_type": {"type_str": "ConfigurableTool", "description": null, "kind": "simple", "doc_identifier": "ConfigurableTool"}, "parameters": [{"type_str": "DockerOperationToolKitConfig", "description": null, "kind": "simple", "doc_url": "/docs/mirascope/api/tools/system/docker_operation#dockeroperationtoolkitconfig"}]}} />, <TypeLink type={{"type_str": "ABC", "description": null, "kind": "simple", "doc_identifier": "ABC"}} />
 
 
 ## <ApiType type="Class" path="tools/system/docker_operation" symbolName="DockerContainer" /> DockerContainer
 
-**Bases:** BaseModel
+**Bases:** 
+<TypeLink type={{"type_str": "BaseModel", "description": null, "kind": "simple", "doc_url": "https://docs.pydantic.dev/latest/api/base_model/"}} />
 
 <AttributesTable
   attributes={[
@@ -86,7 +89,8 @@ Base class for Docker operations.
 
 ToolKit for executing Python code and shell commands in a Docker container.
 
-**Bases:** ConfigurableToolKit[DockerOperationToolKitConfig]
+**Bases:** 
+<TypeLink type={{"type_str": "ConfigurableToolKit[DockerOperationToolKitConfig]", "description": null, "kind": "generic", "base_type": {"type_str": "ConfigurableToolKit", "description": null, "kind": "simple", "doc_identifier": "ConfigurableToolKit"}, "parameters": [{"type_str": "DockerOperationToolKitConfig", "description": null, "kind": "simple", "doc_url": "/docs/mirascope/api/tools/system/docker_operation#dockeroperationtoolkitconfig"}]}} />
 
 <AttributesTable
   attributes={[
@@ -171,7 +175,8 @@ The method to create the tools.
 
 Tool for executing Python code in a Docker container.
 
-**Bases:** DockerOperation
+**Bases:** 
+<TypeLink type={{"type_str": "DockerOperation", "description": null, "kind": "simple", "doc_url": "/docs/mirascope/api/tools/system/docker_operation#dockeroperation"}} />
 
 <AttributesTable
   attributes={[
@@ -267,7 +272,8 @@ allow_network: {self.__config__.allow_network}
 
 Tool for executing shell commands in a Docker container.
 
-**Bases:** DockerOperation
+**Bases:** 
+<TypeLink type={{"type_str": "DockerOperation", "description": null, "kind": "simple", "doc_url": "/docs/mirascope/api/tools/system/docker_operation#dockeroperation"}} />
 
 <AttributesTable
   attributes={[

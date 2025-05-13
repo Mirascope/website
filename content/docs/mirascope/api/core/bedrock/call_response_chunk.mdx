@@ -40,7 +40,8 @@ for chunk, _ in stream:
     print(chunk.content, end="", flush=True)
 ```
 
-**Bases:** BaseCallResponseChunk[StreamOutputChunk | AsyncStreamOutputChunk, FinishReason]
+**Bases:** 
+<TypeLink type={{"type_str": "BaseCallResponseChunk[StreamOutputChunk | AsyncStreamOutputChunk, FinishReason]", "description": null, "kind": "generic", "base_type": {"type_str": "BaseCallResponseChunk", "description": null, "kind": "simple", "doc_url": "/docs/mirascope/api/core/base/call_response_chunk#basecallresponsechunk"}, "parameters": [{"type_str": "StreamOutputChunk | AsyncStreamOutputChunk", "description": null, "kind": "union", "base_type": {"type_str": "Union", "description": null, "kind": "simple", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"}, "parameters": [{"type_str": "StreamOutputChunk", "description": null, "kind": "simple", "doc_identifier": "StreamOutputChunk"}, {"type_str": "AsyncStreamOutputChunk", "description": null, "kind": "simple", "doc_identifier": "AsyncStreamOutputChunk"}]}, {"type_str": "FinishReason", "description": null, "kind": "simple", "doc_url": "/docs/mirascope/api/core/openai/call_response_chunk#finishreason"}]}} />
 
 <AttributesTable
   attributes={[
