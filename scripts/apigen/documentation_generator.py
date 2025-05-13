@@ -252,6 +252,12 @@ class DocumentationGenerator:
                 "typing",
                 "opentelemetry",
                 "opentelemetry.trace",
+                "openai",
+                "mistralai",
+                "functools",
+                "base64",
+                "typing_extensions",
+                "__future__",
             ]
             for dep in common_dependencies:
                 try:
