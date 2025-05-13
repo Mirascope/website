@@ -14,16 +14,16 @@ const lilypadSpec: ProductSpec = {
           label: "Welcome",
         },
         {
+          slug: "open-source",
+          label: "Open Source",
+        },
+        {
           slug: "getting-started",
           label: "Getting Started",
           children: [
             {
               slug: "quickstart",
               label: "Quickstart",
-            },
-            {
-              slug: "open-source",
-              label: "Open Source",
             },
             {
               slug: "self-hosting",
