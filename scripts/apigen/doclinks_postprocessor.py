@@ -22,6 +22,7 @@ DOC_IDENTIFIER_REGEX = r'"doc_identifier":\s*"([^"]+)"'
 
 # Builtin type mapping from Python docs
 PYTHON_DOCS_BASE = "https://docs.python.org/3/library/"
+PYDANTIC_DOCS_BASE = "https://docs.pydantic.dev/latest/api/"
 BUILTIN_TYPE_URLS: dict[str, str] = {
     # Basic types
     "str": f"{PYTHON_DOCS_BASE}stdtypes.html#str",
@@ -66,6 +67,11 @@ BUILTIN_TYPE_URLS: dict[str, str] = {
     "TypedDict": f"{PYTHON_DOCS_BASE}typing.html#typing.TypedDict",
     "NotRequired": f"{PYTHON_DOCS_BASE}typing.html#typing.NotRequired",
     "Required": f"{PYTHON_DOCS_BASE}typing.html#typing.Required",
+
+    # Pydantic types
+    "BaseModel": f"{PYDANTIC_DOCS_BASE}base_model/",
+    "SkipJsonSchema": f"{PYDANTIC_DOCS_BASE}json_schema/#pydantic.json_schema.SkipJsonSchema",
+    "SkipValidation": f"{PYDANTIC_DOCS_BASE}functional_validators/#pydantic.functional_validators.SkipValidation",
 }
 
 
