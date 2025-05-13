@@ -22,16 +22,16 @@ const lilypadSpec: ProductSpec = {
               label: "Quickstart",
             },
             {
-              slug: "playground",
-              label: "Playground",
-            },
-            {
               slug: "open-source",
               label: "Open Source",
             },
             {
               slug: "self-hosting",
               label: "Self-Hosting",
+            },
+            {
+              slug: "playground",
+              label: "Playground",
             },
           ],
         },
