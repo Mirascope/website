@@ -18,9 +18,8 @@ import lilypad
 
 lilypad.configure()
 
-with lilypad.span("Something") as span:
-    # do something
-    span.log("Did something...")
+with lilypad.span("Something") as span:  # [!code highlight]
+    span.log("Did something...")  # [!code highlight]
 ```
 
 This will automatically capture information such as the latency of the code run within the span, including any calls to `log` that you make inside of the block.
@@ -50,7 +49,7 @@ with lilypad.span("Possible Failure") as span:
         # do something that could error
         raise RuntimeError("For testing.")
     except RuntimeError as e:
-        span.error(f"Runtime exception caught: {e}")
+        span.error(f"Runtime exception caught: {e}")  # [!code highlight]
 ```
 
 \[INSERT IMAGE]
@@ -65,10 +64,10 @@ import lilypad
 lilypad.configure()
 
 with lilypad.span("Structured Metadata") as span:
-    span.metadata({"key": "value"})
+    span.metadata({"key": "value"})  # [!code highlight]
 ```
 
-\[INSERT IMAGE]
+[INSERT IMAGE]
 
 Calling `metadata` multiple times will merge the dictionaries.
 
@@ -83,8 +82,8 @@ lilypad.configure()
 
 with lilypad.span("Parent Span") as parent_span:
     parent_span.log("I'm the parent!")
-    with lilypad.span("Child span") as child_span:
-        child_span.log("I'm the child!")
+    with lilypad.span("Child span") as child_span:  # [!code highlight]
+        child_span.log("I'm the child!")  # [!code highlight]
 ```
 
 The project home page will only display the parent in each row. You can click the dropdown to view the entire collection of spans contained within that trace:
