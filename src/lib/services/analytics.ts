@@ -2,10 +2,7 @@
  * Analytics service to handle all tracking functionality.
  * Integrated with Google Analytics 4 and PostHog.
  */
-import { GA_MEASUREMENT_ID, SITE_VERSION } from "../constants/site";
-
-// PostHog API key - would normally be in constants file
-const POSTHOG_API_KEY = "phc_tnTm56utLwHvtXvjyIwj0rF1AKc6wgfLlczRRZ2dthy";
+import { GA_MEASUREMENT_ID, POSTHOG_PUBLIC_KEY, SITE_VERSION } from "../constants/site";
 
 // Centralized check for browser environment
 export const isBrowser = typeof window !== "undefined";
@@ -35,7 +32,7 @@ export class AnalyticsManager {
 
   constructor(
     gaMeasurementId: string = GA_MEASUREMENT_ID,
-    posthogApiKey: string = POSTHOG_API_KEY,
+    posthogApiKey: string = POSTHOG_PUBLIC_KEY,
     siteVersion: string = SITE_VERSION
   ) {
     this.gaMeasurementId = gaMeasurementId;
