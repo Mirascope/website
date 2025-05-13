@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { highlightCode, stripHighlightMarkers } from "@/src/lib/code-highlight";
 import analyticsManager from "@/src/lib/services/analytics";
 import { Sparkles } from "lucide-react";
@@ -13,55 +13,35 @@ interface CodeBlockProps {
 }
 
 export function CodeBlock({ code, language = "text", meta = "", className = "" }: CodeBlockProps) {
-  const [lightHtml, setLightHtml] = useState<string>("");
-  const [darkHtml, setDarkHtml] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isCopied, setIsCopied] = useState<boolean>(false);
+  const [isCopied, setIsCopied] = useState(false);
   const [funMode, toggleFunMode] = useFunMode();
   const codeRef = useRef<HTMLDivElement>(null);
-  const [isSmallBlock, setIsSmallBlock] = useState<boolean>(false);
+  const [isSmallBlock, setIsSmallBlock] = useState(false);
 
   // Base styles for code block container
   const codeBlockBaseStyles =
     "code-block-wrapper border-card relative m-0 mb-2 rounded-md overflow-hidden border p-0 text-sm";
 
-  useEffect(() => {
-    async function highlight() {
-      setIsLoading(true);
-      try {
-        const { lightThemeHtml, darkThemeHtml } = await highlightCode(code, language, meta);
-        setLightHtml(lightThemeHtml);
-        setDarkHtml(darkThemeHtml);
-      } catch (error) {
-        console.error("Error highlighting code:", error);
-        // Fallback to plain pre/code in case of error
-        const escapedCode = code
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;")
-          .replace(/"/g, "&quot;")
-          .replace(/'/g, "&#039;");
+  // Highlight code synchronously during render
+  const { lightThemeHtml, darkThemeHtml } = highlightCode(code, language, meta);
 
-        const fallbackHtml = `<pre class="language-${language}"><code>${escapedCode}</code></pre>`;
-        setLightHtml(fallbackHtml);
-        setDarkHtml(fallbackHtml);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    highlight();
-  }, [code, language, meta]);
-
-  // Check if code block is small after rendering
-  useEffect(() => {
+  // Check if code block is small after first render
+  const checkBlockSize = () => {
     if (codeRef.current) {
       // Get the height of the code block
       const height = codeRef.current.clientHeight;
       // Consider blocks less than 100px as small
       setIsSmallBlock(height < 100);
     }
-  }, [isLoading, lightHtml, darkHtml]);
+  };
+
+  // Check size after render and when the ref is available
+  useEffect(() => {
+    checkBlockSize();
+    // Add a slight delay to ensure content is fully rendered
+    const timer = setTimeout(checkBlockSize, 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   const copyToClipboard = () => {
     // Strip highlight markers before copying to clipboard
@@ -98,16 +78,7 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
     });
   };
 
-  // If loading, just show the code without syntax highlighting to maintain size
-  if (isLoading) {
-    return (
-      <div className={cn(codeBlockBaseStyles, className)}>
-        <pre className="bg-button-primary m-0 p-4">
-          <code className="opacity-0">{code}</code>
-        </pre>
-      </div>
-    );
-  }
+  // No loading state needed - highlighting is synchronous
 
   return (
     <div
@@ -199,13 +170,13 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
       {/* Light theme code */}
       <div
         className="light-theme-code w-full text-sm dark:hidden"
-        dangerouslySetInnerHTML={{ __html: lightHtml }}
+        dangerouslySetInnerHTML={{ __html: lightThemeHtml }}
       />
 
       {/* Dark theme code */}
       <div
         className="dark-theme-code hidden w-full text-sm dark:block"
-        dangerouslySetInnerHTML={{ __html: darkHtml }}
+        dangerouslySetInnerHTML={{ __html: darkThemeHtml }}
       />
     </div>
   );
