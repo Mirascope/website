@@ -58,10 +58,51 @@ def extract_clean_docstring(obj: Object | Alias) -> str | None:
 
     # Join text sections with newlines
     if text_sections:
-        return "\n\n".join(text_sections)
+        docstring = "\n\n".join(text_sections)
+    else:
+        # Fallback to raw value if no text sections were found
+        docstring = obj.docstring.value.strip() if obj.docstring.value else None
 
-    # Fallback to raw value if no text sections were found
-    return obj.docstring.value.strip() if obj.docstring.value else None
+    if docstring:
+        # Only escape curly braces that might cause issues with JSX
+        # This approach handles common Python f-string and formatting cases
+        # For more complex cases, we might need a more sophisticated parser
+        import re
+
+        # Define patterns to identify string literals and code blocks
+        code_block_pattern = r"```([\s\S]*?)```"
+        backtick_pattern = r"`([^`]*?)`"
+        quote_patterns = [
+            r'"([^"\\]*(?:\\.[^"\\]*)*)"',  # Double quoted strings
+            r"'([^'\\]*(?:\\.[^'\\]*)*)'",  # Single quoted strings
+        ]
+
+        # Find and store all code blocks and string literals
+        placeholders = {}
+        placeholder_counter = 0
+
+        # Replace code blocks with placeholders
+        for pattern in [code_block_pattern, backtick_pattern, *quote_patterns]:
+
+            def replace_with_placeholder(match):
+                nonlocal placeholder_counter
+                placeholder = f"__PLACEHOLDER_{placeholder_counter}__"
+                placeholders[placeholder] = match.group(0)
+                placeholder_counter += 1
+                return placeholder
+
+            docstring = re.sub(
+                pattern, replace_with_placeholder, docstring, flags=re.DOTALL
+            )
+
+        # Now escape the curly braces in the remaining text
+        docstring = docstring.replace("{", "\\{").replace("}", "\\}")
+
+        # Put back the original code blocks and string literals
+        for placeholder, original in placeholders.items():
+            docstring = docstring.replace(placeholder, original)
+
+    return docstring
 
 
 @dataclass
@@ -204,7 +245,9 @@ def process_class(class_obj: Class) -> ProcessedClass:
                 base_type_info = parse_type_string(base_str)
                 bases.append(base_type_info)
             except Exception as e:
-                logger.warning(f"Failed to parse base class type: {base_str}. Error: {e}")
+                logger.warning(
+                    f"Failed to parse base class type: {base_str}. Error: {e}"
+                )
                 # Fallback to simple type
                 bases.append(SimpleType(type_str=base_str))
 
