@@ -35,7 +35,7 @@ export function ReturnTable({ returnType }: ReturnTableProps) {
               {returnType.name && (
                 <td className="border-b px-4 py-2 font-mono">{returnType.name}</td>
               )}
-              <td className="text-primary border-b px-4 py-2">
+              <td className="border-b px-4 py-2">
                 <TypeLink type={returnType.type_info} />
               </td>
               <td className="border-b px-4 py-2">{returnType.description || "-"}</td>
