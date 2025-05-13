@@ -6,34 +6,76 @@ description: API documentation for mirascope.integrations.otel
 
 # mirascope.integrations.otel
 
+## `configure`
+## <ApiType type="Alias" path="integrations/otel" symbolName="configure" /> configure
+
 Configures the OpenTelemetry tracer, this function should only be called once.
 
 <ParametersTable
   parameters={[
   {
     "name": "processors",
-    "type": "Sequence[SpanProcessor] | None",
-    "module_context": "collections.abc",
-    "is_builtin": "false",
+    "type_info": {
+      "type_str": "Sequence[SpanProcessor] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+      },
+      "parameters": [
+        {
+          "type_str": "Sequence[SpanProcessor]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "Sequence",
+            "description": null,
+            "kind": "simple",
+            "doc_identifier": "Sequence"
+          },
+          "parameters": [
+            {
+              "type_str": "SpanProcessor",
+              "description": null,
+              "kind": "simple",
+              "doc_identifier": "SpanProcessor"
+            }
+          ]
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
+        }
+      ]
+    },
     "default": "None",
     "description": "Optional[Sequence[SpanProcessor]]\nThe span processors to use, if None, a console exporter will be used."
   }
 ]}
-  contentSubpath="docs/mirascope"
-  currentModule="mirascope.integrations.otel._utils"
 />
 
-<ReturnType
-  type="Tracer"
-  moduleContext="opentelemetry.trace"
-  isBuiltin={false}
-  contentSubpath="docs/mirascope"
-  currentModule="mirascope.integrations.otel._utils"
-  description="The configured tracer."
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "Tracer",
+    "description": null,
+    "kind": "simple",
+    "doc_identifier": "Tracer"
+  },
+  "description": "The configured tracer."
+}}
 />
 
 
 **Alias to:** `mirascope.integrations.otel._utils.configure`
+
+## `with_otel`
+## <ApiType type="Alias" path="integrations/otel" symbolName="with_otel" /> with_otel
 
 Wraps a Mirascope function with OpenTelemetry.
 
@@ -59,16 +101,92 @@ def recommend_book(genre: str) -> str:
 print(recommend_book("fantasy"))
 ```
 
-<ReturnType
-  type="Callable[[Callable[_P, _R]], Callable[_P, _R]]"
-  moduleContext="collections.abc"
-  isBuiltin={false}
-  contentSubpath="docs/mirascope"
-  currentModule="mirascope.integrations.otel._with_otel"
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "Callable[[Callable[_P, _R]], Callable[_P, _R]]",
+    "description": null,
+    "kind": "callable",
+    "base_type": {
+      "type_str": "Callable",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+    },
+    "parameters": [
+      {
+        "type_str": "[Callable[_P, _R]]",
+        "description": null,
+        "kind": "tuple",
+        "base_type": {
+          "type_str": "tuple",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#tuple"
+        },
+        "parameters": [
+          {
+            "type_str": "Callable[_P, _R]",
+            "description": null,
+            "kind": "callable",
+            "base_type": {
+              "type_str": "Callable",
+              "description": null,
+              "kind": "simple",
+              "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+            },
+            "parameters": [
+              {
+                "type_str": "_P",
+                "description": null,
+                "kind": "simple",
+                "doc_url": "/docs/mirascope/api/core/base/toolkit#p"
+              },
+              {
+                "type_str": "_R",
+                "description": null,
+                "kind": "simple",
+                "doc_identifier": "_R"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type_str": "Callable[_P, _R]",
+        "description": null,
+        "kind": "callable",
+        "base_type": {
+          "type_str": "Callable",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+        },
+        "parameters": [
+          {
+            "type_str": "_P",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "/docs/mirascope/api/core/base/toolkit#p"
+          },
+          {
+            "type_str": "_R",
+            "description": null,
+            "kind": "simple",
+            "doc_identifier": "_R"
+          }
+        ]
+      }
+    ]
+  }
+}}
 />
 
 
 **Alias to:** `mirascope.integrations.otel._with_otel.with_otel`
+
+## `with_hyperdx`
+## <ApiType type="Alias" path="integrations/otel" symbolName="with_hyperdx" /> with_hyperdx
 
 Decorator to wrap a function with hyperdx.
 
@@ -96,12 +214,85 @@ def recommend_book(genre: str) -> str:
 print(recommend_book("fantasy"))
 ```
 
-<ReturnType
-  type="Callable[[Callable[_P, _R]], Callable[_P, _R]]"
-  moduleContext="collections.abc"
-  isBuiltin={false}
-  contentSubpath="docs/mirascope"
-  currentModule="mirascope.integrations.otel._with_hyperdx"
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "Callable[[Callable[_P, _R]], Callable[_P, _R]]",
+    "description": null,
+    "kind": "callable",
+    "base_type": {
+      "type_str": "Callable",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+    },
+    "parameters": [
+      {
+        "type_str": "[Callable[_P, _R]]",
+        "description": null,
+        "kind": "tuple",
+        "base_type": {
+          "type_str": "tuple",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#tuple"
+        },
+        "parameters": [
+          {
+            "type_str": "Callable[_P, _R]",
+            "description": null,
+            "kind": "callable",
+            "base_type": {
+              "type_str": "Callable",
+              "description": null,
+              "kind": "simple",
+              "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+            },
+            "parameters": [
+              {
+                "type_str": "_P",
+                "description": null,
+                "kind": "simple",
+                "doc_url": "/docs/mirascope/api/core/base/toolkit#p"
+              },
+              {
+                "type_str": "_R",
+                "description": null,
+                "kind": "simple",
+                "doc_identifier": "_R"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type_str": "Callable[_P, _R]",
+        "description": null,
+        "kind": "callable",
+        "base_type": {
+          "type_str": "Callable",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+        },
+        "parameters": [
+          {
+            "type_str": "_P",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "/docs/mirascope/api/core/base/toolkit#p"
+          },
+          {
+            "type_str": "_R",
+            "description": null,
+            "kind": "simple",
+            "doc_identifier": "_R"
+          }
+        ]
+      }
+    ]
+  }
+}}
 />
 
 
