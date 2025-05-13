@@ -61,5 +61,36 @@ and returns clean text content from the webpage's main body.
 ]}
 />
 
+## <ApiType type="Function" path="tools/web/parse_url_content" symbolName="call" /> call
+
+Fetch and parse content from the URL.
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "self",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "str",
+    "description": null,
+    "kind": "simple",
+    "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+  },
+  "description": "Cleaned text content from the URL if successful, error message if parsing fails"
+}}
+/>
+
+
 
 

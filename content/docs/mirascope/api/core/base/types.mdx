@@ -8,6 +8,219 @@ description: API documentation for mirascope.core.base.types
 
 ## <ApiType type="Module" path="core/base/types" symbolName="types" /> types
 
+## <ApiType type="Class" path="core/base/types" symbolName="Image" /> Image
+
+## <ApiType type="Class" path="core/base/types" symbolName="Image" /> Image
+
+## <ApiType type="Function" path="core/base/types" symbolName="tobytes" /> tobytes
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "self",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "bytes",
+    "description": null,
+    "kind": "simple",
+    "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes"
+  }
+}}
+/>
+
+
+
+
+## <ApiType type="Class" path="core/base/types" symbolName="AudioSegment" /> AudioSegment
+
+## <ApiType type="Function" path="core/base/types" symbolName="set_frame_rate" /> set_frame_rate
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "self",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  },
+  {
+    "name": "rate",
+    "type_info": {
+      "type_str": "int",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/functions.html#int"
+    }
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "AudioSegment",
+    "description": null,
+    "kind": "simple",
+    "doc_url": "/docs/mirascope/api/core/base/types#audiosegment"
+  }
+}}
+/>
+
+
+## <ApiType type="Function" path="core/base/types" symbolName="set_channels" /> set_channels
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "self",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  },
+  {
+    "name": "channels",
+    "type_info": {
+      "type_str": "int",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/functions.html#int"
+    }
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "AudioSegment",
+    "description": null,
+    "kind": "simple",
+    "doc_url": "/docs/mirascope/api/core/base/types#audiosegment"
+  }
+}}
+/>
+
+
+## <ApiType type="Function" path="core/base/types" symbolName="set_sample_width" /> set_sample_width
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "self",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  },
+  {
+    "name": "sample_width",
+    "type_info": {
+      "type_str": "int",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/functions.html#int"
+    }
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "AudioSegment",
+    "description": null,
+    "kind": "simple",
+    "doc_url": "/docs/mirascope/api/core/base/types#audiosegment"
+  }
+}}
+/>
+
+
+## <ApiType type="Function" path="core/base/types" symbolName="export" /> export
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "self",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  },
+  {
+    "name": "format",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    }
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "FileIO",
+    "description": null,
+    "kind": "simple",
+    "doc_identifier": "FileIO"
+  }
+}}
+/>
+
+
+## <ApiType type="Function" path="core/base/types" symbolName="read" /> read
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "self",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "bytes",
+    "description": null,
+    "kind": "simple",
+    "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes"
+  }
+}}
+/>
+
+
+
 ## <ApiType type="Attribute" path="core/base/types" symbolName="has_pil_module" /> has_pil_module
 
 **Type:** <TypeLink type={{"type_str": "bool", "description": null, "kind": "simple", "doc_url": "https://docs.python.org/3/library/functions.html#bool"}} />
@@ -21,41 +234,6 @@ description: API documentation for mirascope.core.base.types
 ## <ApiType type="Attribute" path="core/base/types" symbolName="FinishReason" /> FinishReason
 
 **Type:** <TypeLink type={{"type_str": "TypeAlias", "description": null, "kind": "simple", "doc_identifier": "TypeAlias"}} />
-
-
-## <ApiType type="Attribute" path="core/base/types" symbolName="JsonableType" /> JsonableType
-
-**Type:** <TypeLink type={{"type_str": "TypeAlias", "description": null, "kind": "simple", "doc_identifier": "TypeAlias"}} />
-
-
-## <ApiType type="Attribute" path="core/base/types" symbolName="Provider" /> Provider
-
-**Type:** <TypeLink type={{"type_str": "TypeAlias", "description": null, "kind": "simple", "doc_identifier": "TypeAlias"}} />
-
-
-## <ApiType type="Attribute" path="core/base/types" symbolName="LocalProvider" /> LocalProvider
-
-**Type:** <TypeLink type={{"type_str": "TypeAlias", "description": null, "kind": "simple", "doc_identifier": "TypeAlias"}} />
-
-
-## <ApiType type="Class" path="core/base/types" symbolName="Image" /> Image
-
-<AttributesTable
-  attributes={[
-  {
-    "name": "Image",
-    "type_info": {
-      "type_str": "Any",
-      "description": null,
-      "kind": "simple",
-      "doc_identifier": null
-    }
-  }
-]}
-/>
-
-
-## <ApiType type="Class" path="core/base/types" symbolName="AudioSegment" /> AudioSegment
 
 
 ## <ApiType type="Class" path="core/base/types" symbolName="Usage" /> Usage
@@ -106,6 +284,11 @@ description: API documentation for mirascope.core.base.types
   }
 ]}
 />
+
+
+## <ApiType type="Attribute" path="core/base/types" symbolName="JsonableType" /> JsonableType
+
+**Type:** <TypeLink type={{"type_str": "TypeAlias", "description": null, "kind": "simple", "doc_identifier": "TypeAlias"}} />
 
 
 ## <ApiType type="Class" path="core/base/types" symbolName="VideoMetadata" /> VideoMetadata
@@ -362,10 +545,10 @@ Metadata required for accurate LLM API cost calculation across all providers.
   {
     "name": "model_config",
     "type_info": {
-      "type_str": "None",
+      "type_str": "ConfigDict(arbitrary_types_allowed=True)",
       "description": null,
       "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/constants.html#None"
+      "doc_identifier": "ConfigDict(arbitrary_types_allowed=True)"
     }
   },
   {
@@ -568,6 +751,16 @@ Metadata required for accurate LLM API cost calculation across all providers.
   }
 ]}
 />
+
+
+## <ApiType type="Attribute" path="core/base/types" symbolName="Provider" /> Provider
+
+**Type:** <TypeLink type={{"type_str": "TypeAlias", "description": null, "kind": "simple", "doc_identifier": "TypeAlias"}} />
+
+
+## <ApiType type="Attribute" path="core/base/types" symbolName="LocalProvider" /> LocalProvider
+
+**Type:** <TypeLink type={{"type_str": "TypeAlias", "description": null, "kind": "simple", "doc_identifier": "TypeAlias"}} />
 
 
 

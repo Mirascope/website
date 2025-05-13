@@ -503,10 +503,10 @@ A base abstract interface for LLM call responses.
   {
     "name": "model_config",
     "type_info": {
-      "type_str": "None",
+      "type_str": "ConfigDict(extra='allow', arbitrary_types_allowed=True)",
       "description": null,
       "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/constants.html#None"
+      "doc_identifier": null
     }
   },
   {
@@ -1041,6 +1041,214 @@ A base abstract interface for LLM call responses.
   }
 ]}
 />
+
+## <ApiType type="Function" path="core/base/call_response" symbolName="serialize_tool_types" /> serialize_tool_types
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "self",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  },
+  {
+    "name": "tool_types",
+    "type_info": {
+      "type_str": "list[type[_BaseToolT]] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+      },
+      "parameters": [
+        {
+          "type_str": "list[type[_BaseToolT]]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "list",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
+          },
+          "parameters": [
+            {
+              "type_str": "type[_BaseToolT]",
+              "description": null,
+              "kind": "generic",
+              "base_type": {
+                "type_str": "type",
+                "description": null,
+                "kind": "simple",
+                "doc_url": "https://docs.python.org/3/library/functions.html#type"
+              },
+              "parameters": [
+                {
+                  "type_str": "_BaseToolT",
+                  "description": null,
+                  "kind": "simple",
+                  "doc_url": "/docs/mirascope/api/core/base/tool#basetool"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
+        }
+      ]
+    }
+  },
+  {
+    "name": "info",
+    "type_info": {
+      "type_str": "FieldSerializationInfo",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": "FieldSerializationInfo"
+    }
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "list[dict[str, str]]",
+    "description": null,
+    "kind": "generic",
+    "base_type": {
+      "type_str": "list",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
+    },
+    "parameters": [
+      {
+        "type_str": "dict[str, str]",
+        "description": null,
+        "kind": "generic",
+        "base_type": {
+          "type_str": "dict",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#dict"
+        },
+        "parameters": [
+          {
+            "type_str": "str",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+          },
+          {
+            "type_str": "str",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+          }
+        ]
+      }
+    ]
+  }
+}}
+/>
+
+
+## <ApiType type="Function" path="core/base/call_response" symbolName="tool_message_params" /> tool_message_params
+
+Returns the tool message parameters for tool call results.
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "cls",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  },
+  {
+    "name": "tools_and_outputs",
+    "type_info": {
+      "type_str": "list[tuple[_BaseToolT, str]]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "list",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
+      },
+      "parameters": [
+        {
+          "type_str": "tuple[_BaseToolT, str]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "tuple",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "https://docs.python.org/3/library/stdtypes.html#tuple"
+          },
+          "parameters": [
+            {
+              "type_str": "_BaseToolT",
+              "description": null,
+              "kind": "simple",
+              "doc_url": "/docs/mirascope/api/core/base/tool#basetool"
+            },
+            {
+              "type_str": "str",
+              "description": null,
+              "kind": "simple",
+              "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+            }
+          ]
+        }
+      ]
+    },
+    "description": "The list of tools and their outputs from which the tool\nmessage parameters should be constructed."
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "list[Any]",
+    "description": null,
+    "kind": "generic",
+    "base_type": {
+      "type_str": "list",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
+    },
+    "parameters": [
+      {
+        "type_str": "Any",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Any"
+      }
+    ]
+  }
+}}
+/>
+
 
 
 

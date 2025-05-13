@@ -6,8 +6,6 @@ description: API documentation for mirascope.core.google.dynamic_config
 
 # mirascope.core.google.dynamic_config
 
-## <ApiType type="Module" path="core/google/dynamic_config" symbolName="dynamic_config" /> dynamic_config
-
 This module defines the function return type for functions as LLM calls.
 
 ## <ApiType type="Attribute" path="core/google/dynamic_config" symbolName="GoogleDynamicConfig" /> GoogleDynamicConfig
@@ -28,6 +26,5 @@ from mirascope.core.google import GoogleDynamicConfig, google_call
 def recommend_book(genre: str) -> GoogleDynamicConfig:
     return {"computed_fields": {"capitalized_genre": genre.capitalize()}}
 ```
-
 
 

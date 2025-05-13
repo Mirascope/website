@@ -15,6 +15,1271 @@ The `BasePrompt` class for better prompt engineering.
 **Type:** <TypeLink type={{"type_str": "['system', 'user', 'assistant']", "description": null, "kind": "tuple", "base_type": {"type_str": "tuple", "description": null, "kind": "simple", "doc_url": "https://docs.python.org/3/library/stdtypes.html#tuple"}, "parameters": [{"type_str": "'system'", "description": null, "kind": "simple", "doc_identifier": "'system'"}, {"type_str": "'user'", "description": null, "kind": "simple", "doc_identifier": "'user'"}, {"type_str": "'assistant'", "description": null, "kind": "simple", "doc_identifier": "'assistant'"}]}} />
 
 
+## <ApiType type="Class" path="core/base/prompt" symbolName="BasePrompt" /> BasePrompt
+
+The base class for engineering prompts.
+
+This class is implemented as the base for all prompting needs. It is intended to
+work across various providers by providing a common prompt interface.
+
+Example:
+
+```python
+from mirascope.core import BasePrompt, metadata, prompt_template
+
+@prompt_template("Recommend a {genre} book")
+@metadata({"tags": {"version:0001", "books"}})
+class BookRecommendationPrompt(BasePrompt):
+    genre: str
+
+prompt = BookRecommendationPrompt(genre="fantasy")
+
+print(prompt)
+# > Recommend a fantasy book
+
+print(prompt.message_params())
+# > [BaseMessageParam(role="user", content="Recommend a fantasy book")]
+
+print(prompt.dump()["metadata"])
+# > {"metadata": {"version:0001", "books"}}
+```
+
+**Bases:** BaseModel
+
+<AttributesTable
+  attributes={[
+  {
+    "name": "prompt_template",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    }
+  }
+]}
+/>
+
+## <ApiType type="Function" path="core/base/prompt" symbolName="message_params" /> message_params
+
+Returns the list of parsed message parameters.
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "self",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "list[BaseMessageParam]",
+    "description": null,
+    "kind": "generic",
+    "base_type": {
+      "type_str": "list",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
+    },
+    "parameters": [
+      {
+        "type_str": "BaseMessageParam",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "/docs/mirascope/api/core/base/message_param#basemessageparam"
+      }
+    ]
+  }
+}}
+/>
+
+
+## <ApiType type="Function" path="core/base/prompt" symbolName="dynamic_config" /> dynamic_config
+
+Returns the dynamic config of the prompt.
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "self",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "BaseDynamicConfig",
+    "description": null,
+    "kind": "simple",
+    "doc_url": "/docs/mirascope/api/core/base/dynamic_config#basedynamicconfig"
+  }
+}}
+/>
+
+
+## <ApiType type="Function" path="core/base/prompt" symbolName="dump" /> dump
+
+Dumps the contents of the prompt into a dictionary.
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "self",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "dict[str, Any]",
+    "description": null,
+    "kind": "generic",
+    "base_type": {
+      "type_str": "dict",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#dict"
+    },
+    "parameters": [
+      {
+        "type_str": "str",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+      },
+      {
+        "type_str": "Any",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Any"
+      }
+    ]
+  }
+}}
+/>
+
+
+## <ApiType type="Function" path="core/base/prompt" symbolName="run" /> run
+
+Returns the response of calling the API of the provided decorator.
+
+Example:
+
+```python
+from mirascope.core import BasePrompt, openai, prompt_template
+
+
+@prompt_template("Recommend a {genre} book")
+class BookRecommendationPrompt(BasePrompt):
+    genre: str
+
+
+prompt = BookRecommendationPrompt(genre="fantasy")
+response = prompt.run(openai.call("gpt-4o-mini"))
+print(response.content)
+```
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "self",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  },
+  {
+    "name": "call_decorator",
+    "type_info": {
+      "type_str": "Callable[[Callable[..., BaseDynamicConfig]], Callable[..., _BaseCallResponseT]] | Callable[[Callable[..., BaseDynamicConfig]], Callable[..., _BaseStreamT]] | Callable[[Callable[..., BaseDynamicConfig]], Callable[..., _ResponseModelT]] | Callable[[Callable[..., BaseDynamicConfig]], Callable[..., Iterable[_ResponseModelT]]]",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+      },
+      "parameters": [
+        {
+          "type_str": "Callable[[Callable[..., BaseDynamicConfig]], Callable[..., _BaseCallResponseT]]",
+          "description": null,
+          "kind": "callable",
+          "base_type": {
+            "type_str": "Callable",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+          },
+          "parameters": [
+            {
+              "type_str": "[Callable[..., BaseDynamicConfig]]",
+              "description": null,
+              "kind": "tuple",
+              "base_type": {
+                "type_str": "tuple",
+                "description": null,
+                "kind": "simple",
+                "doc_url": "https://docs.python.org/3/library/stdtypes.html#tuple"
+              },
+              "parameters": [
+                {
+                  "type_str": "Callable[..., BaseDynamicConfig]",
+                  "description": null,
+                  "kind": "callable",
+                  "base_type": {
+                    "type_str": "Callable",
+                    "description": null,
+                    "kind": "simple",
+                    "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "...",
+                      "description": null,
+                      "kind": "simple",
+                      "doc_identifier": "..."
+                    },
+                    {
+                      "type_str": "BaseDynamicConfig",
+                      "description": null,
+                      "kind": "simple",
+                      "doc_url": "/docs/mirascope/api/core/base/dynamic_config#basedynamicconfig"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type_str": "Callable[..., _BaseCallResponseT]",
+              "description": null,
+              "kind": "callable",
+              "base_type": {
+                "type_str": "Callable",
+                "description": null,
+                "kind": "simple",
+                "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+              },
+              "parameters": [
+                {
+                  "type_str": "...",
+                  "description": null,
+                  "kind": "simple",
+                  "doc_identifier": "..."
+                },
+                {
+                  "type_str": "_BaseCallResponseT",
+                  "description": null,
+                  "kind": "simple",
+                  "doc_url": "/docs/mirascope/api/core/base/call_response#basecallresponse"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type_str": "Callable[[Callable[..., BaseDynamicConfig]], Callable[..., _BaseStreamT]]",
+          "description": null,
+          "kind": "callable",
+          "base_type": {
+            "type_str": "Callable",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+          },
+          "parameters": [
+            {
+              "type_str": "[Callable[..., BaseDynamicConfig]]",
+              "description": null,
+              "kind": "tuple",
+              "base_type": {
+                "type_str": "tuple",
+                "description": null,
+                "kind": "simple",
+                "doc_url": "https://docs.python.org/3/library/stdtypes.html#tuple"
+              },
+              "parameters": [
+                {
+                  "type_str": "Callable[..., BaseDynamicConfig]",
+                  "description": null,
+                  "kind": "callable",
+                  "base_type": {
+                    "type_str": "Callable",
+                    "description": null,
+                    "kind": "simple",
+                    "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "...",
+                      "description": null,
+                      "kind": "simple",
+                      "doc_identifier": "..."
+                    },
+                    {
+                      "type_str": "BaseDynamicConfig",
+                      "description": null,
+                      "kind": "simple",
+                      "doc_url": "/docs/mirascope/api/core/base/dynamic_config#basedynamicconfig"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type_str": "Callable[..., _BaseStreamT]",
+              "description": null,
+              "kind": "callable",
+              "base_type": {
+                "type_str": "Callable",
+                "description": null,
+                "kind": "simple",
+                "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+              },
+              "parameters": [
+                {
+                  "type_str": "...",
+                  "description": null,
+                  "kind": "simple",
+                  "doc_identifier": "..."
+                },
+                {
+                  "type_str": "_BaseStreamT",
+                  "description": null,
+                  "kind": "simple",
+                  "doc_url": "/docs/mirascope/api/core/base/stream#basestream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type_str": "Callable[[Callable[..., BaseDynamicConfig]], Callable[..., _ResponseModelT]]",
+          "description": null,
+          "kind": "callable",
+          "base_type": {
+            "type_str": "Callable",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+          },
+          "parameters": [
+            {
+              "type_str": "[Callable[..., BaseDynamicConfig]]",
+              "description": null,
+              "kind": "tuple",
+              "base_type": {
+                "type_str": "tuple",
+                "description": null,
+                "kind": "simple",
+                "doc_url": "https://docs.python.org/3/library/stdtypes.html#tuple"
+              },
+              "parameters": [
+                {
+                  "type_str": "Callable[..., BaseDynamicConfig]",
+                  "description": null,
+                  "kind": "callable",
+                  "base_type": {
+                    "type_str": "Callable",
+                    "description": null,
+                    "kind": "simple",
+                    "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "...",
+                      "description": null,
+                      "kind": "simple",
+                      "doc_identifier": "..."
+                    },
+                    {
+                      "type_str": "BaseDynamicConfig",
+                      "description": null,
+                      "kind": "simple",
+                      "doc_url": "/docs/mirascope/api/core/base/dynamic_config#basedynamicconfig"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type_str": "Callable[..., _ResponseModelT]",
+              "description": null,
+              "kind": "callable",
+              "base_type": {
+                "type_str": "Callable",
+                "description": null,
+                "kind": "simple",
+                "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+              },
+              "parameters": [
+                {
+                  "type_str": "...",
+                  "description": null,
+                  "kind": "simple",
+                  "doc_identifier": "..."
+                },
+                {
+                  "type_str": "_ResponseModelT",
+                  "description": null,
+                  "kind": "simple",
+                  "doc_identifier": "_ResponseModelT"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type_str": "Callable[[Callable[..., BaseDynamicConfig]], Callable[..., Iterable[_ResponseModelT]]]",
+          "description": null,
+          "kind": "callable",
+          "base_type": {
+            "type_str": "Callable",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+          },
+          "parameters": [
+            {
+              "type_str": "[Callable[..., BaseDynamicConfig]]",
+              "description": null,
+              "kind": "tuple",
+              "base_type": {
+                "type_str": "tuple",
+                "description": null,
+                "kind": "simple",
+                "doc_url": "https://docs.python.org/3/library/stdtypes.html#tuple"
+              },
+              "parameters": [
+                {
+                  "type_str": "Callable[..., BaseDynamicConfig]",
+                  "description": null,
+                  "kind": "callable",
+                  "base_type": {
+                    "type_str": "Callable",
+                    "description": null,
+                    "kind": "simple",
+                    "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "...",
+                      "description": null,
+                      "kind": "simple",
+                      "doc_identifier": "..."
+                    },
+                    {
+                      "type_str": "BaseDynamicConfig",
+                      "description": null,
+                      "kind": "simple",
+                      "doc_url": "/docs/mirascope/api/core/base/dynamic_config#basedynamicconfig"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type_str": "Callable[..., Iterable[_ResponseModelT]]",
+              "description": null,
+              "kind": "callable",
+              "base_type": {
+                "type_str": "Callable",
+                "description": null,
+                "kind": "simple",
+                "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+              },
+              "parameters": [
+                {
+                  "type_str": "...",
+                  "description": null,
+                  "kind": "simple",
+                  "doc_identifier": "..."
+                },
+                {
+                  "type_str": "Iterable[_ResponseModelT]",
+                  "description": null,
+                  "kind": "generic",
+                  "base_type": {
+                    "type_str": "Iterable",
+                    "description": null,
+                    "kind": "simple",
+                    "doc_identifier": "Iterable"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "_ResponseModelT",
+                      "description": null,
+                      "kind": "simple",
+                      "doc_identifier": "_ResponseModelT"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "additional_decorators",
+    "type_info": {
+      "type_str": "Callable[[_T], _T]",
+      "description": null,
+      "kind": "callable",
+      "base_type": {
+        "type_str": "Callable",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+      },
+      "parameters": [
+        {
+          "type_str": "[_T]",
+          "description": null,
+          "kind": "tuple",
+          "base_type": {
+            "type_str": "tuple",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "https://docs.python.org/3/library/stdtypes.html#tuple"
+          },
+          "parameters": [
+            {
+              "type_str": "_T",
+              "description": null,
+              "kind": "simple",
+              "doc_identifier": "_T"
+            }
+          ]
+        },
+        {
+          "type_str": "_T",
+          "description": null,
+          "kind": "simple",
+          "doc_identifier": "_T"
+        }
+      ]
+    },
+    "default": "()"
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "_BaseCallResponseT | _BaseStreamT | _ResponseModelT | Iterable[_ResponseModelT]",
+    "description": null,
+    "kind": "union",
+    "base_type": {
+      "type_str": "Union",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+    },
+    "parameters": [
+      {
+        "type_str": "_BaseCallResponseT",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "/docs/mirascope/api/core/base/call_response#basecallresponse"
+      },
+      {
+        "type_str": "_BaseStreamT",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "/docs/mirascope/api/core/base/stream#basestream"
+      },
+      {
+        "type_str": "_ResponseModelT",
+        "description": null,
+        "kind": "simple",
+        "doc_identifier": "_ResponseModelT"
+      },
+      {
+        "type_str": "Iterable[_ResponseModelT]",
+        "description": null,
+        "kind": "generic",
+        "base_type": {
+          "type_str": "Iterable",
+          "description": null,
+          "kind": "simple",
+          "doc_identifier": "Iterable"
+        },
+        "parameters": [
+          {
+            "type_str": "_ResponseModelT",
+            "description": null,
+            "kind": "simple",
+            "doc_identifier": "_ResponseModelT"
+          }
+        ]
+      }
+    ]
+  }
+}}
+/>
+
+
+## <ApiType type="Function" path="core/base/prompt" symbolName="run_async" /> run_async
+
+Returns the response of calling the API of the provided decorator.
+
+Example:
+
+```python
+import asyncio
+
+from mirascope.core import BasePrompt, openai, prompt_template
+
+
+@prompt_template("Recommend a {genre} book")
+class BookRecommendationPrompt(BasePrompt):
+    genre: str
+
+
+async def run():
+    prompt = BookRecommendationPrompt(genre="fantasy")
+    response = await prompt.run_async(openai.call("gpt-4o-mini"))
+    print(response.content)
+
+
+asyncio.run(run())
+```
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "self",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "doc_identifier": null
+    }
+  },
+  {
+    "name": "call_decorator",
+    "type_info": {
+      "type_str": "Callable[[Callable[..., Awaitable[BaseDynamicConfig]]], Callable[..., Awaitable[_BaseCallResponseT]]] | Callable[[Callable[..., Awaitable[BaseDynamicConfig]]], Callable[..., Awaitable[_BaseStreamT]]] | Callable[[Callable[..., Awaitable[BaseDynamicConfig]]], Callable[..., Awaitable[_ResponseModelT]]] | Callable[[Callable[..., Awaitable[BaseDynamicConfig]]], Callable[..., Awaitable[AsyncIterable[_ResponseModelT]]]]",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+      },
+      "parameters": [
+        {
+          "type_str": "Callable[[Callable[..., Awaitable[BaseDynamicConfig]]], Callable[..., Awaitable[_BaseCallResponseT]]]",
+          "description": null,
+          "kind": "callable",
+          "base_type": {
+            "type_str": "Callable",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+          },
+          "parameters": [
+            {
+              "type_str": "[Callable[..., Awaitable[BaseDynamicConfig]]]",
+              "description": null,
+              "kind": "tuple",
+              "base_type": {
+                "type_str": "tuple",
+                "description": null,
+                "kind": "simple",
+                "doc_url": "https://docs.python.org/3/library/stdtypes.html#tuple"
+              },
+              "parameters": [
+                {
+                  "type_str": "Callable[..., Awaitable[BaseDynamicConfig]]",
+                  "description": null,
+                  "kind": "callable",
+                  "base_type": {
+                    "type_str": "Callable",
+                    "description": null,
+                    "kind": "simple",
+                    "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "...",
+                      "description": null,
+                      "kind": "simple",
+                      "doc_identifier": "..."
+                    },
+                    {
+                      "type_str": "Awaitable[BaseDynamicConfig]",
+                      "description": null,
+                      "kind": "generic",
+                      "base_type": {
+                        "type_str": "Awaitable",
+                        "description": null,
+                        "kind": "simple",
+                        "doc_identifier": "Awaitable"
+                      },
+                      "parameters": [
+                        {
+                          "type_str": "BaseDynamicConfig",
+                          "description": null,
+                          "kind": "simple",
+                          "doc_url": "/docs/mirascope/api/core/base/dynamic_config#basedynamicconfig"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type_str": "Callable[..., Awaitable[_BaseCallResponseT]]",
+              "description": null,
+              "kind": "callable",
+              "base_type": {
+                "type_str": "Callable",
+                "description": null,
+                "kind": "simple",
+                "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+              },
+              "parameters": [
+                {
+                  "type_str": "...",
+                  "description": null,
+                  "kind": "simple",
+                  "doc_identifier": "..."
+                },
+                {
+                  "type_str": "Awaitable[_BaseCallResponseT]",
+                  "description": null,
+                  "kind": "generic",
+                  "base_type": {
+                    "type_str": "Awaitable",
+                    "description": null,
+                    "kind": "simple",
+                    "doc_identifier": "Awaitable"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "_BaseCallResponseT",
+                      "description": null,
+                      "kind": "simple",
+                      "doc_url": "/docs/mirascope/api/core/base/call_response#basecallresponse"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type_str": "Callable[[Callable[..., Awaitable[BaseDynamicConfig]]], Callable[..., Awaitable[_BaseStreamT]]]",
+          "description": null,
+          "kind": "callable",
+          "base_type": {
+            "type_str": "Callable",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+          },
+          "parameters": [
+            {
+              "type_str": "[Callable[..., Awaitable[BaseDynamicConfig]]]",
+              "description": null,
+              "kind": "tuple",
+              "base_type": {
+                "type_str": "tuple",
+                "description": null,
+                "kind": "simple",
+                "doc_url": "https://docs.python.org/3/library/stdtypes.html#tuple"
+              },
+              "parameters": [
+                {
+                  "type_str": "Callable[..., Awaitable[BaseDynamicConfig]]",
+                  "description": null,
+                  "kind": "callable",
+                  "base_type": {
+                    "type_str": "Callable",
+                    "description": null,
+                    "kind": "simple",
+                    "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "...",
+                      "description": null,
+                      "kind": "simple",
+                      "doc_identifier": "..."
+                    },
+                    {
+                      "type_str": "Awaitable[BaseDynamicConfig]",
+                      "description": null,
+                      "kind": "generic",
+                      "base_type": {
+                        "type_str": "Awaitable",
+                        "description": null,
+                        "kind": "simple",
+                        "doc_identifier": "Awaitable"
+                      },
+                      "parameters": [
+                        {
+                          "type_str": "BaseDynamicConfig",
+                          "description": null,
+                          "kind": "simple",
+                          "doc_url": "/docs/mirascope/api/core/base/dynamic_config#basedynamicconfig"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type_str": "Callable[..., Awaitable[_BaseStreamT]]",
+              "description": null,
+              "kind": "callable",
+              "base_type": {
+                "type_str": "Callable",
+                "description": null,
+                "kind": "simple",
+                "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+              },
+              "parameters": [
+                {
+                  "type_str": "...",
+                  "description": null,
+                  "kind": "simple",
+                  "doc_identifier": "..."
+                },
+                {
+                  "type_str": "Awaitable[_BaseStreamT]",
+                  "description": null,
+                  "kind": "generic",
+                  "base_type": {
+                    "type_str": "Awaitable",
+                    "description": null,
+                    "kind": "simple",
+                    "doc_identifier": "Awaitable"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "_BaseStreamT",
+                      "description": null,
+                      "kind": "simple",
+                      "doc_url": "/docs/mirascope/api/core/base/stream#basestream"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type_str": "Callable[[Callable[..., Awaitable[BaseDynamicConfig]]], Callable[..., Awaitable[_ResponseModelT]]]",
+          "description": null,
+          "kind": "callable",
+          "base_type": {
+            "type_str": "Callable",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+          },
+          "parameters": [
+            {
+              "type_str": "[Callable[..., Awaitable[BaseDynamicConfig]]]",
+              "description": null,
+              "kind": "tuple",
+              "base_type": {
+                "type_str": "tuple",
+                "description": null,
+                "kind": "simple",
+                "doc_url": "https://docs.python.org/3/library/stdtypes.html#tuple"
+              },
+              "parameters": [
+                {
+                  "type_str": "Callable[..., Awaitable[BaseDynamicConfig]]",
+                  "description": null,
+                  "kind": "callable",
+                  "base_type": {
+                    "type_str": "Callable",
+                    "description": null,
+                    "kind": "simple",
+                    "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "...",
+                      "description": null,
+                      "kind": "simple",
+                      "doc_identifier": "..."
+                    },
+                    {
+                      "type_str": "Awaitable[BaseDynamicConfig]",
+                      "description": null,
+                      "kind": "generic",
+                      "base_type": {
+                        "type_str": "Awaitable",
+                        "description": null,
+                        "kind": "simple",
+                        "doc_identifier": "Awaitable"
+                      },
+                      "parameters": [
+                        {
+                          "type_str": "BaseDynamicConfig",
+                          "description": null,
+                          "kind": "simple",
+                          "doc_url": "/docs/mirascope/api/core/base/dynamic_config#basedynamicconfig"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type_str": "Callable[..., Awaitable[_ResponseModelT]]",
+              "description": null,
+              "kind": "callable",
+              "base_type": {
+                "type_str": "Callable",
+                "description": null,
+                "kind": "simple",
+                "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+              },
+              "parameters": [
+                {
+                  "type_str": "...",
+                  "description": null,
+                  "kind": "simple",
+                  "doc_identifier": "..."
+                },
+                {
+                  "type_str": "Awaitable[_ResponseModelT]",
+                  "description": null,
+                  "kind": "generic",
+                  "base_type": {
+                    "type_str": "Awaitable",
+                    "description": null,
+                    "kind": "simple",
+                    "doc_identifier": "Awaitable"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "_ResponseModelT",
+                      "description": null,
+                      "kind": "simple",
+                      "doc_identifier": "_ResponseModelT"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type_str": "Callable[[Callable[..., Awaitable[BaseDynamicConfig]]], Callable[..., Awaitable[AsyncIterable[_ResponseModelT]]]]",
+          "description": null,
+          "kind": "callable",
+          "base_type": {
+            "type_str": "Callable",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+          },
+          "parameters": [
+            {
+              "type_str": "[Callable[..., Awaitable[BaseDynamicConfig]]]",
+              "description": null,
+              "kind": "tuple",
+              "base_type": {
+                "type_str": "tuple",
+                "description": null,
+                "kind": "simple",
+                "doc_url": "https://docs.python.org/3/library/stdtypes.html#tuple"
+              },
+              "parameters": [
+                {
+                  "type_str": "Callable[..., Awaitable[BaseDynamicConfig]]",
+                  "description": null,
+                  "kind": "callable",
+                  "base_type": {
+                    "type_str": "Callable",
+                    "description": null,
+                    "kind": "simple",
+                    "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "...",
+                      "description": null,
+                      "kind": "simple",
+                      "doc_identifier": "..."
+                    },
+                    {
+                      "type_str": "Awaitable[BaseDynamicConfig]",
+                      "description": null,
+                      "kind": "generic",
+                      "base_type": {
+                        "type_str": "Awaitable",
+                        "description": null,
+                        "kind": "simple",
+                        "doc_identifier": "Awaitable"
+                      },
+                      "parameters": [
+                        {
+                          "type_str": "BaseDynamicConfig",
+                          "description": null,
+                          "kind": "simple",
+                          "doc_url": "/docs/mirascope/api/core/base/dynamic_config#basedynamicconfig"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type_str": "Callable[..., Awaitable[AsyncIterable[_ResponseModelT]]]",
+              "description": null,
+              "kind": "callable",
+              "base_type": {
+                "type_str": "Callable",
+                "description": null,
+                "kind": "simple",
+                "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+              },
+              "parameters": [
+                {
+                  "type_str": "...",
+                  "description": null,
+                  "kind": "simple",
+                  "doc_identifier": "..."
+                },
+                {
+                  "type_str": "Awaitable[AsyncIterable[_ResponseModelT]]",
+                  "description": null,
+                  "kind": "generic",
+                  "base_type": {
+                    "type_str": "Awaitable",
+                    "description": null,
+                    "kind": "simple",
+                    "doc_identifier": "Awaitable"
+                  },
+                  "parameters": [
+                    {
+                      "type_str": "AsyncIterable[_ResponseModelT]",
+                      "description": null,
+                      "kind": "generic",
+                      "base_type": {
+                        "type_str": "AsyncIterable",
+                        "description": null,
+                        "kind": "simple",
+                        "doc_identifier": "AsyncIterable"
+                      },
+                      "parameters": [
+                        {
+                          "type_str": "_ResponseModelT",
+                          "description": null,
+                          "kind": "simple",
+                          "doc_identifier": "_ResponseModelT"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "additional_decorators",
+    "type_info": {
+      "type_str": "Callable[[_T], _T]",
+      "description": null,
+      "kind": "callable",
+      "base_type": {
+        "type_str": "Callable",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Callable"
+      },
+      "parameters": [
+        {
+          "type_str": "[_T]",
+          "description": null,
+          "kind": "tuple",
+          "base_type": {
+            "type_str": "tuple",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "https://docs.python.org/3/library/stdtypes.html#tuple"
+          },
+          "parameters": [
+            {
+              "type_str": "_T",
+              "description": null,
+              "kind": "simple",
+              "doc_identifier": "_T"
+            }
+          ]
+        },
+        {
+          "type_str": "_T",
+          "description": null,
+          "kind": "simple",
+          "doc_identifier": "_T"
+        }
+      ]
+    },
+    "default": "()"
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "Awaitable[_BaseCallResponseT] | Awaitable[_BaseStreamT] | Awaitable[_ResponseModelT] | Awaitable[AsyncIterable[_ResponseModelT]]",
+    "description": null,
+    "kind": "union",
+    "base_type": {
+      "type_str": "Union",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+    },
+    "parameters": [
+      {
+        "type_str": "Awaitable[_BaseCallResponseT]",
+        "description": null,
+        "kind": "generic",
+        "base_type": {
+          "type_str": "Awaitable",
+          "description": null,
+          "kind": "simple",
+          "doc_identifier": "Awaitable"
+        },
+        "parameters": [
+          {
+            "type_str": "_BaseCallResponseT",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "/docs/mirascope/api/core/base/call_response#basecallresponse"
+          }
+        ]
+      },
+      {
+        "type_str": "Awaitable[_BaseStreamT]",
+        "description": null,
+        "kind": "generic",
+        "base_type": {
+          "type_str": "Awaitable",
+          "description": null,
+          "kind": "simple",
+          "doc_identifier": "Awaitable"
+        },
+        "parameters": [
+          {
+            "type_str": "_BaseStreamT",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "/docs/mirascope/api/core/base/stream#basestream"
+          }
+        ]
+      },
+      {
+        "type_str": "Awaitable[_ResponseModelT]",
+        "description": null,
+        "kind": "generic",
+        "base_type": {
+          "type_str": "Awaitable",
+          "description": null,
+          "kind": "simple",
+          "doc_identifier": "Awaitable"
+        },
+        "parameters": [
+          {
+            "type_str": "_ResponseModelT",
+            "description": null,
+            "kind": "simple",
+            "doc_identifier": "_ResponseModelT"
+          }
+        ]
+      },
+      {
+        "type_str": "Awaitable[AsyncIterable[_ResponseModelT]]",
+        "description": null,
+        "kind": "generic",
+        "base_type": {
+          "type_str": "Awaitable",
+          "description": null,
+          "kind": "simple",
+          "doc_identifier": "Awaitable"
+        },
+        "parameters": [
+          {
+            "type_str": "AsyncIterable[_ResponseModelT]",
+            "description": null,
+            "kind": "generic",
+            "base_type": {
+              "type_str": "AsyncIterable",
+              "description": null,
+              "kind": "simple",
+              "doc_identifier": "AsyncIterable"
+            },
+            "parameters": [
+              {
+                "type_str": "_ResponseModelT",
+                "description": null,
+                "kind": "simple",
+                "doc_identifier": "_ResponseModelT"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}}
+/>
+
+
+
+## <ApiType type="Class" path="core/base/prompt" symbolName="PromptDecorator" /> PromptDecorator
+
+**Bases:** Protocol
+
+
 ## <ApiType type="Function" path="core/base/prompt" symbolName="prompt_template" /> prompt_template
 
 A decorator for setting the `prompt_template` of a `BasePrompt` or `call`.
@@ -88,6 +1353,11 @@ print(recommend_book("fantasy"))
 />
 
 
+## <ApiType type="Class" path="core/base/prompt" symbolName="MetadataDecorator" /> MetadataDecorator
+
+**Bases:** Protocol
+
+
 ## <ApiType type="Function" path="core/base/prompt" symbolName="metadata" /> metadata
 
 A decorator for adding metadata to a `BasePrompt` or `call`.
@@ -138,62 +1408,6 @@ print(response.metadata)
   "description": "The decorator function that updates the `_metadata`\nattribute of the decorated input prompt or call."
 }}
 />
-
-
-## <ApiType type="Class" path="core/base/prompt" symbolName="BasePrompt" /> BasePrompt
-
-The base class for engineering prompts.
-
-This class is implemented as the base for all prompting needs. It is intended to
-work across various providers by providing a common prompt interface.
-
-Example:
-
-```python
-from mirascope.core import BasePrompt, metadata, prompt_template
-
-@prompt_template("Recommend a {genre} book")
-@metadata({"tags": {"version:0001", "books"}})
-class BookRecommendationPrompt(BasePrompt):
-    genre: str
-
-prompt = BookRecommendationPrompt(genre="fantasy")
-
-print(prompt)
-# > Recommend a fantasy book
-
-print(prompt.message_params())
-# > [BaseMessageParam(role="user", content="Recommend a fantasy book")]
-
-print(prompt.dump()["metadata"])
-# > {"metadata": {"version:0001", "books"}}
-```
-
-**Bases:** BaseModel
-
-<AttributesTable
-  attributes={[
-  {
-    "name": "prompt_template",
-    "type_info": {
-      "type_str": "str",
-      "description": null,
-      "kind": "simple",
-      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-    }
-  }
-]}
-/>
-
-
-## <ApiType type="Class" path="core/base/prompt" symbolName="PromptDecorator" /> PromptDecorator
-
-**Bases:** Protocol
-
-
-## <ApiType type="Class" path="core/base/prompt" symbolName="MetadataDecorator" /> MetadataDecorator
-
-**Bases:** Protocol
 
 
 
