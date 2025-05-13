@@ -67,7 +67,6 @@ BUILTIN_TYPE_URLS: dict[str, str] = {
     "TypedDict": f"{PYTHON_DOCS_BASE}typing.html#typing.TypedDict",
     "NotRequired": f"{PYTHON_DOCS_BASE}typing.html#typing.NotRequired",
     "Required": f"{PYTHON_DOCS_BASE}typing.html#typing.Required",
-
     # Pydantic types
     "BaseModel": f"{PYDANTIC_DOCS_BASE}base_model/",
     "SkipJsonSchema": f"{PYDANTIC_DOCS_BASE}json_schema/#pydantic.json_schema.SkipJsonSchema",
