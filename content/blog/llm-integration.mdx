@@ -397,34 +397,34 @@ That’s why having a structured system for tracking, versioning, and iterating 
 
 [Lilypad](/docs/lilypad/) versions and traces your LLM code automatically with every change you make.
 
-You just add a Lilypad decorator `@lilypad.generation` to any function to start automatically versioning any changes that occur:
+You just add a Lilypad decorator `@lilypad.trace` to any function to start automatically versioning any changes that occur:
 
-```python {7}
+```python
 import lilypad
 from openai import OpenAI
  
+lilypad.configure(auto_llm=True)  # [!code highlight]
 client = OpenAI()
- 
 
-@lilypad.generation()
+
+@lilypad.trace(versioning="automatic")  # [!code highlight]
 def answer_question(question: str) -> str:
     completion = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[{"role": "user", "content": question}],
     )
     return str(completion.choices[0].message.content)
- 
-if __name__ == "__main__":
-    lilypad.configure()
-    answer = answer_question("What's the famous question that's answered by '42'?")
-    print(answer)
+
+
+answer = answer_question("What's the famous question that's answered by '42'?")
+print(answer)
 ```
 
 Lilypad versions LLM generations using their function closure, so even changes to functions or classes used within the generation are automatically versioned (as long as they’re user defined).
 
-By adding `lilypad.configure()` to the application (see code above), you also automatically trace all calls made by any function decorated with `@lilypad.generation`. This means every call to an LLM is traced against the version of the code that generated it.
+By adding `lilypad.configure()` to the application (see code above), you also automatically trace all calls made by any function decorated with `@lilypad.trace`. This means every call to an LLM is traced against the version of the code that generated it.
 
-![Lilypad Generation Trace Details Screenshot](/assets/blog/llm-integration/lilypad_generation_details_screenshot.png)
+![Lilypad Trace Details Screenshot](/assets/blog/llm-integration/lilypad_generation_details_screenshot.png)
 
 Lilypad shows traces in real time as LLM calls are made, providing real-time summaries of every call so you can evaluate and improve prompts more quickly.
 

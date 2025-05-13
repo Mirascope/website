@@ -554,20 +554,6 @@ Our prompt engineering framework [Lilypad](/docs/lilypad) lets you:
 
 This ensures that you can engineer your prompts as part of your standard Git workflow without having to worry about manually tracking minor changes during development. Colleagues can also see everything that was tried as well as the differences between prompts.
 
-When installed, Lilypad creates a predefined directory structure as shown below:
-
-```plaintext
-|
-|-- .lilypad/
-|-- |-- config.json
-|-- lily/
-|   |-- __init__.py
-|   |-- {llm_function_name}.py
-|-- pad.db
-```
-
-This creates a prompt management environment that supports collaboration and allows you to centralize prompt development in one place. LLM functions live in the `lily` folder, and automatic versions and traces live in the `pad.db` SQLite database.
-
 By versioning the entire lexical closure and tracing every call automatically, you can continue iterating on your prompts and any other code in your codebase without having to worry about manually tracking the potential impacts of such changes on the outputs of your functions.
 
 If you want to give Mirascope a try, we recommend taking a look at our [documentation](/docs/mirascope). You can also find our source code on [GitHub](https://github.com/mirascope/mirascope). Don't forget to give us a star!

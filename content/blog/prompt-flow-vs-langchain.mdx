@@ -277,77 +277,56 @@ Mirascope offers a sibling library, [`Lilypad`](/docs/lilypad), that versions an
 
 We've purpose built Lilypad for prompt engineering to be simple and easy so you can take your mind off annoying and manual tedium and focus on what really matters: engineering quality prompts. In line with our commitment to open-source, Lilypad is fully open-source and can even be run locally.
 
-The framework structure is simple:
-
-```plaintext
-|
-|-- .lilypad/
-|-- |-- config.json
-|-- lily/
-|   |-- __init__.py
-|   |-- {llm_function_name}.py
-|-- pad.db
-```
-
-- Configuration lives in the `.lilypad/config.json`
-- LLM functions live in the `lily/` folder
-- Versions and traces are stored in `pad.db`
-
-To automatically version and trace LLM functions, you simply wrap the function in the `lilypad.llm_fn` decorator:
+To automatically version and trace LLM functions, you simply wrap the function in the `lilypad.trace` decorator:
 
 ```python
-
-# lily/recommend_book.py
-
 import lilypad
-from mirascope.core import openai
+from mirascope import llm
 
-@lilypad.llm_fn()
-@openai.call("gpt-4o-mini")
+lilypad.configure(auto_llm=True)  # [!code highlight]
+
+
+@lilypad.trace(versioning="automatic")
+@llm.call("openai", "gpt-4o-mini")
 def recommend_book(genre: str) -> str:
     return f"Recommend a {genre} book"
 
-if __name__ == "__main__":
-    output = recommend_book("fantasy")
-    print(output.content)
+
+output = recommend_book("fantasy")
+print(output.content)
 ```
 
-Now the `recommend_book` function will be automatically versioned and traced on every call, and you can easily run the function using the CLI (`lilypad run recommend_book`).
+Now the `recommend_book` function will be automatically versioned and traced on every call.
 
 We also understand that not everyone uses Mirascope, so we've engineered Lilypad to work with using provider SDKs directly:
 
 ```python
-
-# lily/recommend_book.py
-
 import lilypad
 from openai import OpenAI
 
+lilypad.configure(auto_llm=True)
 client = OpenAI()
 
-@lilypad.llm_fn()
+@lilypad.trace(versioning="automatic")
 def recommend_book(genre: str) -> str:
-    completion = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[{"role": "user", "content": f"Recommend a {genre} book"}],
-    )
-    return str(completion.choices[0].message.content)
+    completion = client.chat.completions.create(  # [!code highlight]
+        model="gpt-4o-mini",  # [!code highlight]
+        messages=[{"role": "user", "content": f"Recommend a {genre} book"}],  # [!code highlight]
+    )  # [!code highlight]
+    return str(completion.choices[0].message.content)  # [!code highlight]
 
-if __name__ == "__main__":
-    output = recommend_book("fantasy")
-    print(output)
+
+output = recommend_book("fantasy")
+print(output)
 ```
 
-When using the `lilypad.llm_fn` decorator, the version is determined based on all user-defined code that could impact the prompt. In more technical terms, the version is determined by the entire lexical closure.
+When using the `lilypad.trace` decorator, the version is determined based on all user-defined code that could impact the prompt. In more technical terms, the version is determined by the entire lexical closure.
 
 This means not only that any changes to the function itself will be versioned but also that any changes to user-defined functions used by this function will also update the version:
 
 ```python
-
-# lily/recommend_book.py
-
 import lilypad
-from mirascope.core import openai
+from mirascope import llm
 
 # Changes to this function will also be detected and bump
 
@@ -356,15 +335,15 @@ from mirascope.core import openai
 def get_available_books() -> list[str]:
     return ["The Name of the Wind"]
 
-@lilypad.llm_fn()
-@openai.call("gpt-4o-mini")
+@lilypad.trace(versioning="automatic")
+@llm.call("openai", "gpt-4o-mini")
 def recommend_book(genre: str) -> str:
     books = get_available_books()
     return f"Recommend a {genre} book from this list: {books}"
 
-if __name__ == "__main__":
-    output = recommend_book("fantasy")
-    print(output.content)
+
+output = recommend_book("fantasy")
+print(output.content)
 ```
 
 ## Automatic Data Validation of Prompt Inputs and Outputs
