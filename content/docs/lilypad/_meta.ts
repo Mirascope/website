@@ -75,26 +75,12 @@ const lilypadSpec: ProductSpec = {
             },
           ],
         },
-        {
-          slug: "under-development",
-          label: "Under Development",
-          children: [
-            {
-              slug: "vibe-synthesis",
-              label: "Vibe Synthesis",
-            },
-            {
-              slug: "experiments",
-              label: "Experiments",
-            },
-          ],
-        },
       ],
     },
 
     {
       slug: "api",
-      label: "API",
+      label: "API Reference",
       children: [
         {
           slug: "index",
