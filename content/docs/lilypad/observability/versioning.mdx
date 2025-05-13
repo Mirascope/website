@@ -76,7 +76,12 @@ This ensures that the `.version` method return type-safe function signatures mat
 response = answer_question.version(1)("What is the capital of France?")
 ```
 
-### A/B Testing
+<Info>
+  The `.version` method will have proper type hints when the function is imported but not if used in the same file.
+  This is due to the way that `.pyi` files work in Python.
+</Info>
+
+## A/B Testing
 
 You can use the `.version` method to run different versions of the same function easily. This makes A/B testing quite easy — just run each version for a subset of users and evaluate which one is better.
 
