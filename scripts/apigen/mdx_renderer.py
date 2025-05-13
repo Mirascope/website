@@ -40,6 +40,11 @@ def render_module(processed_module: ProcessedModule, doc_path: str) -> str:
             content.append(processed_module.docstring.strip())
             content.append("")
 
+        # Add module attributes if any
+        for attr in processed_module.attributes:
+            content.append(render_attribute(attr, doc_path))
+            content.append("")
+
         # Add the single item
         if processed_module.classes:
             # Single class - render it directly
@@ -64,6 +69,11 @@ def render_module(processed_module: ProcessedModule, doc_path: str) -> str:
     # Add docstring if available
     if processed_module.docstring:
         content.append(processed_module.docstring.strip())
+        content.append("")
+
+    # Add module attributes if any
+    for attr in processed_module.attributes:
+        content.append(render_attribute(attr, doc_path))
         content.append("")
 
     # Render module functions if any
@@ -143,6 +153,36 @@ def render_class(processed_class: ProcessedClass, doc_path: str) -> str:
     # Document attributes using AttributesTable component
     if processed_class.attributes:
         content.extend(format_attributes_table(processed_class.attributes))
+
+    return "\n".join(content)
+
+
+def render_attribute(processed_attr: ProcessedAttribute, doc_path: str) -> str:
+    """Render a processed attribute into MDX documentation.
+
+    Args:
+        processed_attr: The processed attribute object to render
+        doc_path: Path to the document, used for API component links
+
+    Returns:
+        MDX documentation string
+
+    """
+    content: list[str] = []
+
+    # Add heading with embedded ApiType component
+    content.append(
+        f'## <ApiType type="Attribute" path="{doc_path}" symbolName="{processed_attr.name}" /> {processed_attr.name}\n'
+    )
+
+    # Add type information
+    type_str = json.dumps(processed_attr.type_info.to_dict(), cls=EnumEncoder)
+    content.append(f"**Type:** <TypeLink type={{{type_str}}} />\n")
+
+    # Add description if available
+    if processed_attr.description:
+        content.append(processed_attr.description.strip())
+        content.append("")
 
     return "\n".join(content)
 

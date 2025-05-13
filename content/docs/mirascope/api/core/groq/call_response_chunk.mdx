@@ -14,6 +14,38 @@ This module contains the `GroqCallResponseChunk` class.
 
 </Info>
 
+## <ApiType type="Attribute" path="core/groq/call_response_chunk" symbolName="FinishReason" /> FinishReason
+
+**Type:** <TypeLink type={{"type_str": "None", "description": null, "kind": "simple", "doc_url": "https://docs.python.org/3/library/constants.html#None"}} />
+
+
+## <ApiType type="Attribute" path="core/groq/call_response_chunk" symbolName="GroqCallResponseChunk" /> GroqCallResponseChunk
+
+**Type:** <TypeLink type={{"type_str": "Any", "description": null, "kind": "simple", "doc_identifier": null}} />
+
+A convenience wrapper around the Groq `ChatCompletionChunk` streamed chunks.
+
+When calling the Groq API using a function decorated with `groq_call` and
+`stream` set to `True`, the stream will contain `GroqResponseChunk` instances with
+properties that allow for more convenient access to commonly used attributes.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.groq import groq_call
+
+
+@groq_call("llama-3.1-8b-instant", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+stream = recommend_book("fantasy")  # response is an `GroqStream`
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+```
+
+
 ## <ApiType type="Class" path="core/groq/call_response_chunk" symbolName="GroqCallResponseChunk" /> GroqCallResponseChunk
 
 A convenience wrapper around the Groq `ChatCompletionChunk` streamed chunks.
@@ -69,7 +101,7 @@ for chunk, _ in stream:
           "type_str": "FinishReason",
           "description": null,
           "kind": "simple",
-          "doc_identifier": "FinishReason"
+          "doc_url": "/docs/mirascope/api/core/openai/call_response_chunk#finishreason"
         }
       ]
     },
@@ -249,7 +281,7 @@ for chunk, _ in stream:
               "type_str": "FinishReason",
               "description": null,
               "kind": "simple",
-              "doc_identifier": "FinishReason"
+              "doc_url": "/docs/mirascope/api/core/openai/call_response_chunk#finishreason"
             }
           ]
         },

@@ -14,6 +14,39 @@ This module contains the `OpenAICallResponseChunk` class.
 
 </Info>
 
+## <ApiType type="Attribute" path="core/openai/call_response_chunk" symbolName="FinishReason" /> FinishReason
+
+**Type:** <TypeLink type={{"type_str": "None", "description": null, "kind": "simple", "doc_url": "https://docs.python.org/3/library/constants.html#None"}} />
+
+
+## <ApiType type="Attribute" path="core/openai/call_response_chunk" symbolName="OpenAICallResponseChunk" /> OpenAICallResponseChunk
+
+**Type:** <TypeLink type={{"type_str": "Any", "description": null, "kind": "simple", "doc_identifier": null}} />
+
+A convenience wrapper around the OpenAI `ChatCompletionChunk` streamed chunks.
+
+When calling the OpenAI API using a function decorated with `openai_call` and
+`stream` set to `True`, the stream will contain `OpenAIResponseChunk` instances with
+properties that allow for more convenient access to commonly used attributes.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.openai import openai_call
+
+
+@openai_call("gpt-4o-mini", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+stream = recommend_book("fantasy")  # response is an `OpenAIStream`
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+```
+
+
 ## <ApiType type="Class" path="core/openai/call_response_chunk" symbolName="OpenAICallResponseChunk" /> OpenAICallResponseChunk
 
 A convenience wrapper around the OpenAI `ChatCompletionChunk` streamed chunks.
@@ -92,7 +125,7 @@ for chunk, _ in stream:
           "type_str": "FinishReason",
           "description": null,
           "kind": "simple",
-          "doc_identifier": "FinishReason"
+          "doc_url": "/docs/mirascope/api/core/openai/call_response_chunk#finishreason"
         }
       ]
     },
@@ -330,7 +363,7 @@ for chunk, _ in stream:
               "type_str": "FinishReason",
               "description": null,
               "kind": "simple",
-              "doc_identifier": "FinishReason"
+              "doc_url": "/docs/mirascope/api/core/openai/call_response_chunk#finishreason"
             }
           ]
         },

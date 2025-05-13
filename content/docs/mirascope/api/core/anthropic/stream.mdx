@@ -14,6 +14,35 @@ The `AnthropicStream` class for convenience around streaming LLM calls.
 
 </Info>
 
+## <ApiType type="Attribute" path="core/anthropic/stream" symbolName="FinishReason" /> FinishReason
+
+**Type:** <TypeLink type={{"type_str": "None", "description": null, "kind": "simple", "doc_url": "https://docs.python.org/3/library/constants.html#None"}} />
+
+
+## <ApiType type="Attribute" path="core/anthropic/stream" symbolName="AnthropicStream" /> AnthropicStream
+
+**Type:** <TypeLink type={{"type_str": "Any", "description": null, "kind": "simple", "doc_identifier": null}} />
+
+A class for convenience around streaming Anthropic LLM calls.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.anthropic import anthropic_call
+
+
+@anthropic_call("claude-3-5-sonnet-20240620", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+stream = recommend_book("fantasy")  # returns `AnthropicStream` instance
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+```
+
+
 ## <ApiType type="Class" path="core/anthropic/stream" symbolName="AnthropicStream" /> AnthropicStream
 
 A class for convenience around streaming Anthropic LLM calls.

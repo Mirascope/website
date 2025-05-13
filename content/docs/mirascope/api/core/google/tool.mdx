@@ -14,6 +14,34 @@ The `GoogleTool` class for easy tool usage with Google's Google LLM calls.
 
 </Info>
 
+## <ApiType type="Attribute" path="core/google/tool" symbolName="GoogleTool" /> GoogleTool
+
+**Type:** <TypeLink type={{"type_str": "Any", "description": null, "kind": "simple", "doc_identifier": null}} />
+
+A class for defining tools for Google LLM calls.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.google import google_call
+
+
+def format_book(title: str, author: str) -> str:
+    return f"{title} by {author}"
+
+
+@google_call("google-1.5-flash", tools=[format_book])
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+response = recommend_book("fantasy")
+if tool := response.tool:  # returns an `GoogleTool` instance
+    print(tool.call())
+```
+
+
 ## <ApiType type="Class" path="core/google/tool" symbolName="GoogleTool" /> GoogleTool
 
 A class for defining tools for Google LLM calls.

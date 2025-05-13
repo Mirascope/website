@@ -14,6 +14,35 @@ The `OpenAIStream` class for convenience around streaming LLM calls.
 
 </Info>
 
+## <ApiType type="Attribute" path="core/openai/stream" symbolName="FinishReason" /> FinishReason
+
+**Type:** <TypeLink type={{"type_str": "None", "description": null, "kind": "simple", "doc_url": "https://docs.python.org/3/library/constants.html#None"}} />
+
+
+## <ApiType type="Attribute" path="core/openai/stream" symbolName="OpenAIStream" /> OpenAIStream
+
+**Type:** <TypeLink type={{"type_str": "Any", "description": null, "kind": "simple", "doc_identifier": null}} />
+
+A class for convenience around streaming OpenAI LLM calls.
+
+Example:
+
+```python
+from mirascope.core import prompt_template
+from mirascope.core.openai import openai_call
+
+
+@openai_call("gpt-4o-mini", stream=True)
+def recommend_book(genre: str) -> str:
+    return f"Recommend a {genre} book"
+
+
+stream = recommend_book("fantasy")  # returns `OpenAIStream` instance
+for chunk, _ in stream:
+    print(chunk.content, end="", flush=True)
+```
+
+
 ## <ApiType type="Class" path="core/openai/stream" symbolName="OpenAIStream" /> OpenAIStream
 
 A class for convenience around streaming OpenAI LLM calls.
