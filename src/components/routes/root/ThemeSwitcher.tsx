@@ -105,7 +105,7 @@ export default function ThemeSwitcher() {
           )}
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent className={cn(isLandingPage && "textured-bg-absolute")} align="end">
         <DropdownMenuRadioGroup
           value={theme}
           onValueChange={(value) => handleThemeChange(value as Theme)}

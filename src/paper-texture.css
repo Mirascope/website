@@ -32,7 +32,7 @@ body:not(:has(.watercolor-bg))::before {
   background-image: var(--texture-svg);
   opacity: var(--texture-opacity);
   mix-blend-mode: var(--texture-blend-mode);
-  z-index: 40; /* Lower than header (z-50) to prevent overlay issues */
+  z-index: 9999;
 }
 
 .torn-paper-effect::before {
@@ -44,7 +44,7 @@ body:not(:has(.watercolor-bg))::before {
   opacity: 0.3;
   width: 100%;
   height: 100%;
-  z-index: 1; /* Lower z-index to prevent overlap with interactive elements */
+  z-index: 9999;
 }
 
 .dark {
@@ -68,7 +68,7 @@ body:not(:has(.watercolor-bg))::before {
   background-image: var(--texture-svg);
   opacity: var(--texture-opacity-element);
   mix-blend-mode: var(--texture-blend-mode);
-  z-index: 1;
+  z-index: 9999;
   border-radius: inherit; /* Inherit border radius from parent */
 }
 
@@ -80,6 +80,6 @@ body:not(:has(.watercolor-bg))::before {
   background-image: var(--texture-svg);
   opacity: var(--texture-opacity-element);
   mix-blend-mode: var(--texture-blend-mode);
-  z-index: 1;
+  z-index: 9999;
   border-radius: inherit; /* Inherit border radius from parent */
 }
