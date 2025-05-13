@@ -66,8 +66,8 @@ class SimpleType(BaseTypeInfo):
 
     # Use field with default to ensure kind is always SIMPLE
     kind: TypeKind = field(default=TypeKind.SIMPLE)
-    # Documentation URL for this type, if available
-    doc_url: str | None = None
+    # Documentation identifier for this type, used for post-processing to URLs
+    doc_identifier: str | None = None
 
 
 @dataclass
