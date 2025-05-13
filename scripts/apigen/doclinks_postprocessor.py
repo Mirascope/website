@@ -131,6 +131,48 @@ class DocIdentifierProcessor:
         """
         self.symbol_registry = symbol_registry
 
+    def get_doc_url_for_identifier(self, identifier: str) -> str | None:
+        """Get the documentation URL for a given identifier.
+
+        Applies special case transformations to try to find a match:
+        1. Try the exact identifier first
+        2. Try the identifier with leading underscore removed
+        3. Try the identifier with trailing 'T' removed
+        4. Try the identifier with both leading underscore and trailing 'T' removed
+
+        Args:
+            identifier: The type identifier to find a URL for
+
+        Returns:
+            The documentation URL if found, or None
+
+        """
+        # Try the exact identifier first
+        if identifier in self.symbol_registry:
+            return self.symbol_registry[identifier]
+
+        # Try special case transformations
+
+        # 1. Remove leading underscore if present
+        if identifier.startswith("_"):
+            no_underscore = identifier[1:]
+            if no_underscore in self.symbol_registry:
+                return self.symbol_registry[no_underscore]
+
+        # 2. Remove trailing 'T' if present
+        if identifier.endswith("T"):
+            no_t = identifier[:-1]
+            if no_t in self.symbol_registry:
+                return self.symbol_registry[no_t]
+
+        # 3. Remove both leading underscore and trailing 'T'
+        if identifier.startswith("_") and identifier.endswith("T"):
+            transformed = identifier[1:-1]
+            if transformed in self.symbol_registry:
+                return self.symbol_registry[transformed]
+
+        return None
+
     def process_file(self, file_path: Path) -> bool:
         """Process a single MDX file to resolve doc_identifiers.
 
@@ -150,12 +192,13 @@ class DocIdentifierProcessor:
             for match in re.finditer(DOC_IDENTIFIER_REGEX, content):
                 identifier = match.group(1)
 
-                # Skip if the identifier is not in our registry
-                if identifier not in self.symbol_registry:
-                    continue
+                # Get the URL for this identifier (with special case handling)
+                doc_url = self.get_doc_url_for_identifier(identifier)
 
-                # Get the URL for this identifier
-                doc_url = self.symbol_registry[identifier]
+                # Skip if we couldn't find a URL
+                if not doc_url:
+                    logger.debug(f"No match found for identifier: {identifier}")
+                    continue
 
                 # Replace the doc_identifier with doc_url
                 doc_identifier_str = f'"doc_identifier": "{identifier}"'
@@ -165,7 +208,6 @@ class DocIdentifierProcessor:
                 modified_content = modified_content.replace(
                     doc_identifier_str, doc_url_str
                 )
-
 
             # Only write if changes were made
             if modified_content != content:

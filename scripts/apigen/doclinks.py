@@ -22,7 +22,7 @@ from pymdownx.slugs import slugify
 
 # Configure logger
 logger = logging.getLogger("griffe_doclinks")
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 
 def safe_regex_search(pattern: str, string: str, flags: int = 0) -> re.Match | None:
