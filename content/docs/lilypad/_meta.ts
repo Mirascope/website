@@ -66,12 +66,12 @@ const lilypadSpec: ProductSpec = {
               label: "Cost & Latency",
             },
             {
-              slug: "annotations",
-              label: "Annotations",
-            },
-            {
               slug: "comparisons",
               label: "Comparisons",
+            },
+            {
+              slug: "annotations",
+              label: "Annotations",
             },
           ],
         },
