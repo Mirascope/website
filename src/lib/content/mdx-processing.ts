@@ -1,4 +1,5 @@
 import { ContentError, type ContentType } from "./content";
+import remarkGfm from "remark-gfm";
 
 /**
  * Result of frontmatter parsing
@@ -139,7 +140,12 @@ export async function processMDXContent(
 
     // Dynamically import next-mdx-remote/serialize since it's an ESM module
     const { serialize } = await import("next-mdx-remote/serialize");
-    const mdxSource = await serialize(content, { scope: frontmatter });
+    const mdxSource = await serialize(content, {
+      scope: frontmatter,
+      mdxOptions: {
+        remarkPlugins: [remarkGfm],
+      },
+    });
 
     // Return processed content
     return {
