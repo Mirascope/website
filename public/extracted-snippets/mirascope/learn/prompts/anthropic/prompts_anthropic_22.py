@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 22: Lists
 # Generated for provider: anthropic
-# Source: content/docs/mirascope/learn/prompts.mdx:685
+# Source: content/docs/mirascope/learn/prompts.mdx:630
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import prompt_template

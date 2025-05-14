@@ -147,6 +147,22 @@ The social images template lives at `public/dev/social-card.html`. If you want t
 
 During build, we pre-render every route so we can deliver a working site to viewers on first page load. The logic lives in scripts/lib/prerender.ts. Note that due to difficult-to-debug rehydration issues, we don't rehydrate the content on page load; rather, we wait for the app to fully load, and then replace the prerendered contents entirely.
 
+#### Internal Link Validation
+
+The build process automatically validates that all internal links in the site point to valid routes. This helps catch broken links before they make it to production. The validation is integrated into the prerender step of the build process.
+
+You can also run the link validation manually with:
+
+```bash
+bun run validate-links
+```
+
+This will check all internal links in the prerendered HTML and report any that point to non-existent routes. To skip link validation during prerendering (e.g., for testing), use the `--skip-link-validation` flag:
+
+```bash
+bun run prerender --skip-link-validation
+```
+
 ### Themes
 
 We support three color themes: light, dark, and sunset. The themes are setup using tailwind v4 themes in themes.css, so we have theme-dependent colors like `--color-background`, `--color-foreground`, `--color-muted` which update depending on the theme. When writing new UI code, avoid using hardcoded colors like `--grey-300` (which, if it looks good on dark mode, will probably look bad on light mode, and vice versa). Instead, use the theme colors.

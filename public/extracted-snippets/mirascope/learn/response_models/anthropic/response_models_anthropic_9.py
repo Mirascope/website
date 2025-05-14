@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 9: Accessing Original Call Response On Error
 # Generated for provider: anthropic
-# Source: content/docs/mirascope/learn/response_models.mdx:442
+# Source: content/docs/mirascope/learn/response_models.mdx:318
 # This file is auto-generated; any edits should be made in the source file
 
 from typing import Annotated

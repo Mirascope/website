@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 33: ToolKit
 # Generated for provider: anthropic
-# Source: content/docs/mirascope/learn/tools.mdx:1580
+# Source: content/docs/mirascope/learn/tools.mdx:1454
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import (

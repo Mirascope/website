@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 15: Streaming Response Models
 # Generated for provider: openai
-# Source: content/docs/mirascope/learn/response_models.mdx:639
+# Source: content/docs/mirascope/learn/response_models.mdx:515
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm
