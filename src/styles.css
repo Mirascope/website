@@ -369,11 +369,6 @@ h6 code {
   font-family: "Williams Handwriting", cursive !important;
 }
 
-/* .handwriting-enabled kbd,
-button {
-  font-family: "Williams Handwriting Button", cursive !important;
-} */
-
 /* Font class for Excalifont - used for stylistic elements in mono mode */
 .font-excalifont {
   font-family: "Excalifont", sans-serif !important;
