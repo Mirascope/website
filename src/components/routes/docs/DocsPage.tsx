@@ -1,14 +1,19 @@
 import React from "react";
-import { AppLayout, SEOMeta, LoadingContent, ProviderContextProvider } from "@/src/components";
+import {
+  AppLayout,
+  SEOMeta,
+  LoadingContent,
+  ProviderContextProvider,
+  useProduct,
+} from "@/src/components";
 import TocSidebar from "./TocSidebar";
 import MainContent from "./MainContent";
 import DocsSidebar from "./DocsSidebar";
-import type { DocContent, ProductName } from "@/src/lib/content";
+import type { DocContent } from "@/src/lib/content";
 
 type DocsPageProps = {
   document?: DocContent;
   isLoading?: boolean;
-  product: ProductName;
 };
 
 /**
@@ -17,7 +22,7 @@ type DocsPageProps = {
  * Handles metadata, layout and content rendering for all documentation pages
  * Supports both loaded and loading states
  */
-const DocsPage: React.FC<DocsPageProps> = ({ document, isLoading = false, product }) => {
+const DocsPage: React.FC<DocsPageProps> = ({ document, isLoading = false }) => {
   // Extract metadata for SEO (use defaults when loading)
   const meta = document?.meta || {
     title: "Loading...",
@@ -26,6 +31,7 @@ const DocsPage: React.FC<DocsPageProps> = ({ document, isLoading = false, produc
   };
   const { title, path, description } = meta;
   const urlPath = path ? `/docs/${path}` : "";
+  const product = useProduct();
 
   return (
     <>

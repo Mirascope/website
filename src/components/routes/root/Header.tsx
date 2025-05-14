@@ -9,14 +9,14 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/src/components/ui/navigation-menu";
-import { cn, getProductFromPath } from "@/src/lib/utils";
+import { cn } from "@/src/lib/utils";
 import { getProductRoute } from "@/src/lib/routes";
 import {
   MirascopeLogo,
   LilypadLogo,
   GitHubRepoButton,
   DocsProductSelector,
-  DevProductSelector,
+  useProduct,
 } from "@/src/components/core";
 import ThemeSwitcher from "@/src/components/routes/root/ThemeSwitcher";
 import SearchBar from "@/src/components/routes/root/SearchBar";
@@ -57,8 +57,7 @@ export default function Header() {
   // Determine page type and get the product
   const path = router.location.pathname;
   const isDocsPage = path.startsWith("/docs/");
-  const isDevPage = path.startsWith("/dev");
-  const currentProduct = getProductFromPath(path);
+  const product = useProduct();
 
   // State to track scroll position
   const [scrolled, setScrolled] = useState(false);
@@ -94,7 +93,7 @@ export default function Header() {
           to="/"
           className={cn("relative z-10 flex items-center", isLandingPage ? "invisible" : "visible")}
         >
-          {currentProduct === "lilypad" ? (
+          {product === "lilypad" ? (
             <LilypadLogo
               size="small"
               withText={true}
@@ -128,10 +127,7 @@ export default function Header() {
                   )}
                 >
                   <span className="px-2 py-2">
-                    <Link
-                      to={getProductRoute(getProductFromPath(router.location.pathname))}
-                      className="h-full w-full"
-                    >
+                    <Link to={getProductRoute(product)} className="h-full w-full">
                       Docs
                     </Link>
                   </span>
@@ -217,10 +213,9 @@ export default function Header() {
       </nav>
 
       {/* Product selectors for docs and dev pages */}
-      {currentProduct && (isDocsPage || isDevPage) && (
+      {isDocsPage && (
         <div className="mx-auto flex w-full max-w-7xl pt-3 pb-1">
-          {isDocsPage && <DocsProductSelector currentProduct={currentProduct} />}
-          {isDevPage && <DevProductSelector currentProduct={currentProduct} />}
+          {isDocsPage && <DocsProductSelector />}
         </div>
       )}
 

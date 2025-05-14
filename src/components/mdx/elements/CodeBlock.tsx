@@ -5,10 +5,11 @@ import {
   type HighlightResult,
   initialHighlight,
 } from "@/src/lib/code-highlight";
-import { cn, getProductFromPath } from "@/src/lib/utils";
+import { cn } from "@/src/lib/utils";
 import analyticsManager from "@/src/lib/services/analytics";
 import { Sparkles } from "lucide-react";
 import useFunMode from "@/src/lib/hooks/useFunMode";
+import { useProduct } from "@/src/components/core/providers";
 
 interface CodeBlockProps {
   code: string;
@@ -79,7 +80,7 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
     }
 
     const pagePath = window.location.pathname;
-    const product = getProductFromPath(window.location.pathname);
+    const product = useProduct();
 
     analyticsManager.trackCopyEvent({
       contentType: "code_snippet",

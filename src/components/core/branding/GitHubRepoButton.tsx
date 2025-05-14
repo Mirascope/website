@@ -2,7 +2,7 @@ import React from "react";
 import { useRouterState } from "@tanstack/react-router";
 import { cn } from "@/src/lib/utils";
 import { getProductConfig } from "@/src/lib/constants/site";
-import { getProductFromPath } from "@/src/lib/utils";
+import { useProduct } from "@/src/components";
 
 /**
  * Format star count with appropriate suffix
@@ -27,9 +27,9 @@ const GitHubRepoButton: React.FC<GitHubRepoButtonProps> = ({ className }) => {
   const path = router.location.pathname;
   const isLandingPage = path === "/";
 
-  // Determine which product repo to show based on the current route
-  const currentProduct = getProductFromPath(path);
-  const productConfig = getProductConfig(currentProduct);
+  // Get current product from context
+  const product = useProduct();
+  const productConfig = getProductConfig(product);
 
   if (!productConfig?.github) {
     return null;
@@ -69,7 +69,7 @@ const GitHubRepoButton: React.FC<GitHubRepoButtonProps> = ({ className }) => {
       {/* GitHub icon and product name */}
       <div className="flex items-center gap-1 text-base font-medium">
         {GitHubIcon}
-        <span>{currentProduct}</span>
+        <span>{product}</span>
       </div>
 
       {/* Stats on second line */}
