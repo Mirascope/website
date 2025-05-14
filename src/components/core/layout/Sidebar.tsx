@@ -74,7 +74,7 @@ const SidebarLink = ({
       params={params}
       style={style}
       className={cn(
-        "block rounded-md py-1 text-base",
+        "font-handwriting-descent block rounded-md py-1 text-base",
         className,
         isActive ? activeClass : inactiveClass
       )}
@@ -108,7 +108,7 @@ const SectionTab = ({
       to={to}
       params={params}
       className={cn(
-        "w-full rounded-md px-3 py-1 text-base",
+        "font-handwriting-descent w-full rounded-md px-3 py-1 text-base",
         className,
         isActive ? activeClass : inactiveClass
       )}
