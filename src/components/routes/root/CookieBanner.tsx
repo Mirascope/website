@@ -1,13 +1,12 @@
 import { useState, useEffect, useRef } from "react";
-import { useRouterState } from "@tanstack/react-router";
 import { isBrowser, analyticsManager } from "@/src/lib/services/analytics";
 import { cn } from "@/src/lib/utils";
+import { useIsLandingPage } from "@/src/components/";
 
 export default function CookieBanner() {
   const [isVisible, setIsVisible] = useState(false);
   const bannerRef = useRef<HTMLDivElement>(null);
-  const router = useRouterState();
-  const isLandingPage = router.location.pathname === "/";
+  const isLandingPage = useIsLandingPage();
 
   useEffect(() => {
     // Only run in browser environment

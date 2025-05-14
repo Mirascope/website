@@ -4,6 +4,7 @@ import { Link } from "@tanstack/react-router";
 import { cn } from "@/src/lib/utils";
 import { getSearchService, type SearchResultItem } from "@/src/lib/services/search";
 import { environment } from "@/src/lib/content/environment";
+import { useIsLandingPage } from "@/src/components/core";
 
 // Component for an individual search result
 interface SearchResultProps {
@@ -116,17 +117,10 @@ interface SearchInputProps {
   onFocus: () => void;
   inputRef: React.RefObject<HTMLInputElement | null>;
   isOpen: boolean;
-  isLandingPage?: boolean;
 }
 
-function SearchInput({
-  query,
-  onChange,
-  onFocus,
-  inputRef,
-  isOpen,
-  isLandingPage = false,
-}: SearchInputProps) {
+function SearchInput({ query, onChange, onFocus, inputRef, isOpen }: SearchInputProps) {
+  const isLandingPage = useIsLandingPage();
   return (
     <div
       className={cn(
@@ -521,7 +515,6 @@ export default function SearchBar({ onOpenChange, isLandingPage = false }: Searc
         onFocus={() => setIsOpen(true)}
         inputRef={inputRef}
         isOpen={isOpen}
-        isLandingPage={isLandingPage}
       />
 
       <SearchResultsContainer

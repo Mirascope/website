@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useRouterState } from "@tanstack/react-router";
+import { useIsLandingPage } from "@/src/components";
 
 // Enable this flag to see detailed logs about sunset calculations
 const VERBOSE_LOGGING = false;
@@ -197,8 +197,7 @@ function isAroundSunsetTime(): boolean {
  */
 export function useSunsetTime(): boolean {
   const [isSunsetTime, setIsSunsetTime] = useState(false);
-  const router = useRouterState();
-  const isLandingPage = router.location.pathname === "/";
+  const isLandingPage = useIsLandingPage();
 
   useEffect(() => {
     // Initial check
