@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 17: FromCallArgs
 # Generated for provider: openai
-# Source: content/docs/mirascope/learn/response_models.mdx:718
+# Source: content/docs/mirascope/learn/response_models.mdx:594
 # This file is auto-generated; any edits should be made in the source file
 
 from typing import Annotated

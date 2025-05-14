@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 1: Basic Usage and Syntax
 # Generated for provider: anthropic
-# Source: content/docs/mirascope/learn/json_mode.mdx:85
+# Source: content/docs/mirascope/learn/json_mode.mdx:38
 # This file is auto-generated; any edits should be made in the source file
 
 import json
