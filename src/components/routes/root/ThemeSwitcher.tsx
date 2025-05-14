@@ -8,7 +8,6 @@ import {
   DropdownMenuRadioItem,
 } from "@/src/components/ui/dropdown-menu";
 import { cn } from "@/src/lib/utils";
-import { useRouterState } from "@tanstack/react-router";
 
 type Theme = "light" | "dark" | "system";
 
@@ -37,11 +36,13 @@ const applyTheme = (theme: Theme): void => {
   root.classList.add(effectiveTheme);
 };
 
-export default function ThemeSwitcher() {
+interface ThemeSwitcherProps {
+  isLandingPage?: boolean;
+}
+
+export default function ThemeSwitcher({ isLandingPage = false }: ThemeSwitcherProps) {
   const [theme, setTheme] = useState<Theme>("system");
   const [mounted, setMounted] = useState(false);
-  const router = useRouterState();
-  const isLandingPage = router.location.pathname === "/";
 
   const handleThemeChange = (newTheme: Theme) => {
     setTheme(newTheme);
