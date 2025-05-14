@@ -198,14 +198,14 @@ export default function Header() {
           {/* GitHub and Theme buttons that stay visible */}
           <div className="flex items-center gap-3">
             <GitHubRepoButton />
-            <ThemeSwitcher />
+            <ThemeSwitcher isLandingPage={isLandingPage} />
           </div>
         </div>
 
         {/* Mobile controls: Search + Theme Switcher + Menu Button */}
         <div className="flex items-center gap-2 md:hidden">
           <SearchBar onOpenChange={setIsSearchOpen} isLandingPage={isLandingPage} />
-          <ThemeSwitcher />
+          <ThemeSwitcher isLandingPage={isLandingPage} />
           <button
             className={cn("p-2", isLandingPage ? "text-white" : "text-foreground")}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
