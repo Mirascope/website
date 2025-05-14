@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Button } from "./button";
+import { withProductTheme } from "@/.storybook/ProductThemeDecorator";
 
 const meta = {
   title: "UI/Button",
@@ -23,6 +24,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+// Basic button variants
 export const Default: Story = {
   args: {
     children: "Button",
@@ -50,6 +52,7 @@ export const Link: Story = {
   },
 };
 
+// Size variants
 export const Small: Story = {
   args: {
     size: "sm",
@@ -62,4 +65,26 @@ export const Large: Story = {
     size: "lg",
     children: "Large",
   },
+};
+
+// Theme-specific examples
+export const LilypadButton: Story = {
+  args: {
+    children: "Lilypad Button",
+  },
+  decorators: [withProductTheme("lilypad", "light")],
+};
+
+export const DarkModeButton: Story = {
+  args: {
+    children: "Dark Mode Button",
+  },
+  decorators: [withProductTheme("default", "dark")],
+};
+
+export const LilypadDarkButton: Story = {
+  args: {
+    children: "Lilypad Dark Button",
+  },
+  decorators: [withProductTheme("lilypad", "dark")],
 };
