@@ -3,6 +3,7 @@ import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { Check, ChevronRight, Circle } from "lucide-react";
 
 import { cn } from "@/src/lib/utils";
+import { ProductProvider, useProduct } from "@/src/components/core/providers";
 
 // Basic dropdown components
 const DropdownMenu = DropdownMenuPrimitive.Root;
@@ -40,60 +41,74 @@ DropdownMenuSubTrigger.displayName = DropdownMenuPrimitive.SubTrigger.displayNam
 const DropdownMenuSubContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.SubContent>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubContent>
->(({ className, ...props }, ref) => (
-  <DropdownMenuPrimitive.SubContent
-    ref={ref}
-    className={cn(
-      // Positioning and dimensions
-      "z-50 min-w-[8rem]",
-      // Appearance
-      "bg-background text-primary overflow-hidden rounded-md border p-1 shadow-lg",
-      // Animation states
-      "data-[state=open]:animate-in data-[state=closed]:animate-out",
-      "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
-      "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
-      // Direction-based animations
-      "data-[side=bottom]:slide-in-from-top-2",
-      "data-[side=left]:slide-in-from-right-2",
-      "data-[side=right]:slide-in-from-left-2",
-      "data-[side=top]:slide-in-from-bottom-2",
-      // Custom classes
-      className
-    )}
-    {...props}
-  />
-));
+>(({ className, ...props }, ref) => {
+  // Get the current product to propagate to the portal
+  const product = useProduct();
+
+  return (
+    <ProductProvider product={product}>
+      <DropdownMenuPrimitive.SubContent
+        ref={ref}
+        className={cn(
+          // Positioning and dimensions
+          "z-50 min-w-[8rem]",
+          // Appearance
+          "bg-background text-primary overflow-hidden rounded-md border p-1 shadow-lg",
+          // Animation states
+          "data-[state=open]:animate-in data-[state=closed]:animate-out",
+          "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+          "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
+          // Direction-based animations
+          "data-[side=bottom]:slide-in-from-top-2",
+          "data-[side=left]:slide-in-from-right-2",
+          "data-[side=right]:slide-in-from-left-2",
+          "data-[side=top]:slide-in-from-bottom-2",
+          // Custom classes
+          className
+        )}
+        {...props}
+      />
+    </ProductProvider>
+  );
+});
 DropdownMenuSubContent.displayName = DropdownMenuPrimitive.SubContent.displayName;
 
 const DropdownMenuContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
->(({ className, sideOffset = 4, ...props }, ref) => (
-  <DropdownMenuPrimitive.Portal>
-    <DropdownMenuPrimitive.Content
-      ref={ref}
-      sideOffset={sideOffset}
-      className={cn(
-        // Positioning and dimensions
-        "z-50 min-w-[8rem]",
-        // Appearance
-        "bg-background text-primary overflow-hidden rounded-md border p-1 shadow-md",
-        // Animation states
-        "data-[state=open]:animate-in data-[state=closed]:animate-out",
-        "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
-        "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
-        // Direction-based animations
-        "data-[side=bottom]:slide-in-from-top-2",
-        "data-[side=left]:slide-in-from-right-2",
-        "data-[side=right]:slide-in-from-left-2",
-        "data-[side=top]:slide-in-from-bottom-2",
-        // Custom classes
-        className
-      )}
-      {...props}
-    />
-  </DropdownMenuPrimitive.Portal>
-));
+>(({ className, sideOffset = 4, ...props }, ref) => {
+  // Get the current product and theme to propagate to the portal
+  const product = useProduct();
+
+  return (
+    <DropdownMenuPrimitive.Portal>
+      <ProductProvider product={product}>
+        <DropdownMenuPrimitive.Content
+          ref={ref}
+          sideOffset={sideOffset}
+          className={cn(
+            // Positioning and dimensions
+            "z-50 min-w-[8rem]",
+            // Appearance
+            "bg-background text-primary overflow-hidden rounded-md border p-1 shadow-md",
+            // Animation states
+            "data-[state=open]:animate-in data-[state=closed]:animate-out",
+            "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+            "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
+            // Direction-based animations
+            "data-[side=bottom]:slide-in-from-top-2",
+            "data-[side=left]:slide-in-from-right-2",
+            "data-[side=right]:slide-in-from-left-2",
+            "data-[side=top]:slide-in-from-bottom-2",
+            // Custom classes
+            className
+          )}
+          {...props}
+        />
+      </ProductProvider>
+    </DropdownMenuPrimitive.Portal>
+  );
+});
 DropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName;
 
 const DropdownMenuItem = React.forwardRef<
