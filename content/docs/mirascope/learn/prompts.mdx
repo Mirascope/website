@@ -210,70 +210,15 @@ Recent advancements in Large Language Model architecture has enabled many model 
 
 While Mirascope provides a consistent interface, support varies among providers:
 
-<div className="overflow-x-auto my-4">
-  <table className="min-w-full bg-background border border-border">
-    <thead>
-      <tr className="bg-accent text-accent-foreground">
-        <th className="px-4 py-2 text-left">Type</th>
-        <th className="px-4 py-2 text-center">Anthropic</th>
-        <th className="px-4 py-2 text-center">Cohere</th>
-        <th className="px-4 py-2 text-center">Google Gemini</th>
-        <th className="px-4 py-2 text-center">Groq</th>
-        <th className="px-4 py-2 text-center">Mistral</th>
-        <th className="px-4 py-2 text-center">OpenAI</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr className="border-t border-border">
-        <td className="px-4 py-2 font-medium">text</td>
-        <td className="px-4 py-2 text-center">✓</td>
-        <td className="px-4 py-2 text-center">✓</td>
-        <td className="px-4 py-2 text-center">✓</td>
-        <td className="px-4 py-2 text-center">✓</td>
-        <td className="px-4 py-2 text-center">✓</td>
-        <td className="px-4 py-2 text-center">✓</td>
-      </tr>
-      <tr className="bg-muted border-t border-border">
-        <td className="px-4 py-2 font-medium">image</td>
-        <td className="px-4 py-2 text-center">✓</td>
-        <td className="px-4 py-2 text-center">-</td>
-        <td className="px-4 py-2 text-center">✓</td>
-        <td className="px-4 py-2 text-center">✓</td>
-        <td className="px-4 py-2 text-center">✓</td>
-        <td className="px-4 py-2 text-center">✓</td>
-      </tr>
-      <tr className="border-t border-border">
-        <td className="px-4 py-2 font-medium">audio</td>
-        <td className="px-4 py-2 text-center">-</td>
-        <td className="px-4 py-2 text-center">-</td>
-        <td className="px-4 py-2 text-center">✓</td>
-        <td className="px-4 py-2 text-center">-</td>
-        <td className="px-4 py-2 text-center">-</td>
-        <td className="px-4 py-2 text-center">✓</td>
-      </tr>
-      <tr className="bg-muted border-t border-border">
-        <td className="px-4 py-2 font-medium">video</td>
-        <td className="px-4 py-2 text-center">-</td>
-        <td className="px-4 py-2 text-center">-</td>
-        <td className="px-4 py-2 text-center">✓</td>
-        <td className="px-4 py-2 text-center">-</td>
-        <td className="px-4 py-2 text-center">-</td>
-        <td className="px-4 py-2 text-center">-</td>
-      </tr>
-      <tr className="border-t border-border">
-        <td className="px-4 py-2 font-medium">document</td>
-        <td className="px-4 py-2 text-center">✓</td>
-        <td className="px-4 py-2 text-center">-</td>
-        <td className="px-4 py-2 text-center">-</td>
-        <td className="px-4 py-2 text-center">-</td>
-        <td className="px-4 py-2 text-center">-</td>
-        <td className="px-4 py-2 text-center">-</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+| Type          | Anthropic | Cohere | Google | Groq | Mistral | OpenAI |
+|---------------|:-----------:|:--------:|:---------------:|:------:|:---------:|:--------:|
+| text          | ✓         | ✓      | ✓             | ✓    | ✓       | ✓      |
+| image         | ✓         | —      | ✓             | ✓    | ✓       | ✓      |
+| audio         | —         | —      | ✓             | —    | —       | ✓      |
+| video         | —         | —      | ✓             | —    | —       | —      |
+| document      | ✓         | —      | —             | —    | —       | —      |
 
-<div className="text-sm text-muted-foreground">Legend: ✓ (Supported), - (Not Supported)</div>
+*Legend: ✓ (Supported), — (Not Supported)*
 
 ### Image Inputs
 
