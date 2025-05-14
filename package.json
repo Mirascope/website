@@ -63,6 +63,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "rehype-pretty-code": "^0.14.1",
+    "remark-gfm": "^4.0.1",
     "shiki": "^3.3.0",
     "shikiji": "^0.10.2",
     "tailwind-merge": "^3.0.2",
