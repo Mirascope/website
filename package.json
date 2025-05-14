@@ -10,6 +10,7 @@
     "generate-social": "bun scripts/generate-socials/main.ts",
     "test-prerender-route": "bun run scripts/test-prerender.ts",
     "prerender": "bun run scripts/vite-prerender.ts",
+    "validate-links": "bun run scripts/validate-links.ts",
     "optimize-images": "bun run scripts/optimize-images.ts",
     "prebuild": "bun run preprocess-content",
     "build": "bun run --bun vite build && bun run optimize-images && bun run prerender",
