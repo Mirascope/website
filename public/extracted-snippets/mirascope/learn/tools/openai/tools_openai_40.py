@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 40: Pre-Made ToolKits
 # Generated for provider: openai
-# Source: content/docs/mirascope/learn/tools.mdx:1906
+# Source: content/docs/mirascope/learn/tools.mdx:1719
 # This file is auto-generated; any edits should be made in the source file
 
 from pathlib import Path

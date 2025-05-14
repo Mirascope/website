@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 10: Accessing Original Call Response On Error
 # Generated for provider: openai
-# Source: content/docs/mirascope/learn/response_models.mdx:476
+# Source: content/docs/mirascope/learn/response_models.mdx:352
 # This file is auto-generated; any edits should be made in the source file
 
 from typing import Annotated

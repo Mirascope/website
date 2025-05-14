@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 4: Error Handling and Validation
 # Generated for provider: anthropic
-# Source: content/docs/mirascope/learn/json_mode.mdx:151
+# Source: content/docs/mirascope/learn/json_mode.mdx:104
 # This file is auto-generated; any edits should be made in the source file
 
 import json
