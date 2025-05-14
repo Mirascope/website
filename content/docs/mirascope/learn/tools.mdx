@@ -359,21 +359,21 @@ else:
 While Mirascope provides a consistent interface, type support varies among providers:
 
 |     Type      | OpenAI | Anthropic | Google | Groq | xAI | Mistral | Cohere |
-|---------------|--------|-----------|--------|------|-----|---------|--------|
+|---------------|:--------:|:-----------:|:--------:|:------:|:-----:|:---------:|:--------:|
 |     str       | ✓      | ✓         | ✓      | ✓    | ✓   | ✓       | ✓      |
 |     int       | ✓      | ✓         | ✓      | ✓    | ✓   | ✓       | ✓      |
 |    float      | ✓      | ✓         | ✓      | ✓    | ✓   | ✓       | ✓      |
 |     bool      | ✓      | ✓         | ✓      | ✓    | ✓   | ✓       | ✓      |
-|     bytes     | ✓      | ✓         | -      | ✓    | ✓   | ✓       | ✓      |
+|     bytes     | ✓      | ✓         | —      | ✓    | ✓   | ✓       | ✓      |
 |     list      | ✓      | ✓         | ✓      | ✓    | ✓   | ✓       | ✓      |
-|     set       | ✓      | ✓         | -      | ✓    | ✓   | ✓       | ✓      |
-|     tuple     | -      | ✓         | -      | ✓    | -   | ✓       | ✓      |
-|     dict      | -      | ✓         | ✓      | ✓    | -   | ✓       | ✓      |
+|     set       | ✓      | ✓         | —      | ✓    | ✓   | ✓       | ✓      |
+|     tuple     | —      | ✓         | —      | ✓    | —   | ✓       | ✓      |
+|     dict      | —      | ✓         | ✓      | ✓    | —   | ✓       | ✓      |
 |  Literal/Enum | ✓      | ✓         | ✓      | ✓    | ✓   | ✓       | ✓      |
-|   BaseModel   | ✓      | ✓         | ✓      | ✓    | ✓   | ✓       | -      |
-| Nested ($def) | ✓      | ✓         | ✓      | ✓    | ✓   | ✓       | -      |
+|   BaseModel   | ✓      | ✓         | ✓      | ✓    | ✓   | ✓       | —      |
+| Nested ($def) | ✓      | ✓         | ✓      | ✓    | ✓   | ✓       | —      |
 
-Legend: ✓ (Supported), - (Not Supported)
+*Legend: ✓ (Supported), — (Not Supported)*
 
 Consider provider-specific capabilities when working with advanced type structures. Even for supported types, LLM outputs may sometimes be incorrect or of the wrong type. In such cases, prompt engineering or error handling (like [retries](/docs/mirascope/learn/retries) and [reinserting validation errors](/docs/mirascope/learn/retries#error-reinsertion)) may be necessary.
 
