@@ -1,7 +1,7 @@
-import { Link, useRouter, useRouterState } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { getProductRoute } from "@/src/lib/routes";
-import { setDevProductPreference } from "@/src/lib/utils";
 import { type ProductName } from "@/src/lib/content/spec";
+import { useProduct } from "@/src/components";
 
 // Shared styles and components
 const ProductTitle = ({ product }: { product: ProductName }) => {
@@ -25,7 +25,8 @@ const ProductLink = ({ product }: { product: ProductName }) => {
 /**
  * DocsProductSelector - Shows current product title and link to other product
  */
-export function DocsProductSelector({ currentProduct }: { currentProduct: ProductName }) {
+export function DocsProductSelector() {
+  const currentProduct = useProduct();
   return (
     <div className="flex space-x-4 px-1">
       {currentProduct === "mirascope" ? (
@@ -39,52 +40,6 @@ export function DocsProductSelector({ currentProduct }: { currentProduct: Produc
       ) : (
         <ProductLink product="lilypad" />
       )}
-    </div>
-  );
-}
-
-/**
- * DevProductSelector - Interactive buttons to switch product theme in dev mode
- */
-export function DevProductSelector({ currentProduct }: { currentProduct: ProductName }) {
-  const router = useRouter();
-  const routerState = useRouterState();
-  const path = routerState.location.pathname;
-
-  const handleProductChange = (product: ProductName) => {
-    // Save preference to session storage
-    setDevProductPreference(product);
-
-    // Update URL search params
-    router.navigate({
-      to: path,
-      search: (prev: Record<string, unknown>) => ({ ...prev, product }),
-      replace: true,
-    });
-  };
-
-  return (
-    <div className="flex space-x-6 px-1">
-      <button
-        className={`text-lg font-medium ${
-          currentProduct === "mirascope"
-            ? "text-mirascope-purple"
-            : "text-muted-foreground hover:text-mirascope-purple"
-        }`}
-        onClick={() => handleProductChange("mirascope")}
-      >
-        Mirascope
-      </button>
-      <button
-        className={`text-lg font-medium ${
-          currentProduct === "lilypad"
-            ? "text-lilypad-green"
-            : "text-muted-foreground hover:text-lilypad-green"
-        }`}
-        onClick={() => handleProductChange("lilypad")}
-      >
-        Lilypad
-      </button>
     </div>
   );
 }
