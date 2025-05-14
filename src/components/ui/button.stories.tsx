@@ -79,7 +79,7 @@ export const DarkModeButton: Story = {
   args: {
     children: "Dark Mode Button",
   },
-  decorators: [withProductTheme("default", "dark")],
+  decorators: [withProductTheme("mirascope", "dark")],
 };
 
 export const LilypadDarkButton: Story = {
