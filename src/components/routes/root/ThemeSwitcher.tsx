@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Sun, Moon, Monitor } from "lucide-react";
 import {
   DropdownMenu,
@@ -8,86 +7,27 @@ import {
   DropdownMenuRadioItem,
 } from "@/src/components/ui/dropdown-menu";
 import { cn } from "@/src/lib/utils";
-
-type Theme = "light" | "dark" | "system";
-
-// Pure functions for theme management
-const getStoredTheme = (): Theme => {
-  if (typeof window === "undefined") return "system";
-  return (localStorage.getItem("theme") as Theme) || "system";
-};
-
-const storeTheme = (theme: Theme): void => {
-  localStorage.setItem("theme", theme);
-};
-
-const getEffectiveTheme = (theme: Theme): "light" | "dark" => {
-  if (theme !== "system") return theme;
-
-  if (typeof window === "undefined") return "light";
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-};
-
-const applyTheme = (theme: Theme): void => {
-  const root = document.documentElement;
-  const effectiveTheme = getEffectiveTheme(theme);
-
-  root.classList.remove("light", "dark");
-  root.classList.add(effectiveTheme);
-};
+import { useTheme, type Theme } from "@/src/components/core/providers";
 
 interface ThemeSwitcherProps {
   isLandingPage?: boolean;
 }
 
 export default function ThemeSwitcher({ isLandingPage = false }: ThemeSwitcherProps) {
-  const [theme, setTheme] = useState<Theme>("system");
-  const [mounted, setMounted] = useState(false);
+  const { theme, current, set: setTheme } = useTheme();
 
   const handleThemeChange = (newTheme: Theme) => {
+    // Get current effective theme before change for transition effect
+    const prevEffectiveTheme = current;
+
+    // Set the new theme through the context
     setTheme(newTheme);
-    storeTheme(newTheme);
 
-    if (mounted) {
-      const prevEffectiveTheme = getEffectiveTheme(theme);
-      const newEffectiveTheme = getEffectiveTheme(newTheme);
-
-      applyTheme(newTheme);
-
-      // For theme changes on homepage, update the background transition
-      if (isLandingPage && prevEffectiveTheme !== newEffectiveTheme) {
-        document.body.style.transition = "background-image 0.3s ease";
-      }
+    // For theme changes on homepage, update the background transition
+    if (isLandingPage && prevEffectiveTheme !== (newTheme === "system" ? current : newTheme)) {
+      document.body.style.transition = "background-image 0.3s ease";
     }
   };
-
-  // Initialize on mount
-  useEffect(() => {
-    setMounted(true);
-    const savedTheme = getStoredTheme();
-    setTheme(savedTheme);
-    applyTheme(savedTheme);
-  }, []);
-
-  // Handle system theme changes
-  useEffect(() => {
-    if (!mounted) return;
-
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-
-    const handleSystemThemeChange = () => {
-      if (theme === "system") {
-        applyTheme("system");
-      }
-    };
-
-    mediaQuery.addEventListener("change", handleSystemThemeChange);
-    return () => mediaQuery.removeEventListener("change", handleSystemThemeChange);
-  }, [theme, mounted]);
-
-  if (!mounted) {
-    return null;
-  }
 
   return (
     <DropdownMenu>

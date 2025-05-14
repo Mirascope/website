@@ -21,59 +21,32 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Basic story showing the ThemeSwitcher on the landing page
-export const Landing: Story = {
+export const LandingLight: Story = {
   args: {
     isLandingPage: true,
   },
+  decorators: [withProductTheme("mirascope", "light", true)],
 };
 
-// Story showing the ThemeSwitcher on a non-landing page
-export const NonLanding: Story = {
-  args: {
-    isLandingPage: false,
-  },
-};
-
-// Combined with product theme variations
-export const LilypadLanding: Story = {
+export const LandingDark: Story = {
   args: {
     isLandingPage: true,
   },
+  decorators: [withProductTheme("mirascope", "dark", true)],
+};
+
+export const MirascopeLight: Story = {
+  decorators: [withProductTheme("mirascope", "light")],
+};
+
+export const MirascopeDark: Story = {
+  decorators: [withProductTheme("mirascope", "dark")],
+};
+
+export const LilypadLight: Story = {
   decorators: [withProductTheme("lilypad", "light")],
 };
 
-export const LilypadNonLanding: Story = {
-  args: {
-    isLandingPage: false,
-  },
-  decorators: [withProductTheme("lilypad", "light")],
-};
-
-export const DarkModeLanding: Story = {
-  args: {
-    isLandingPage: true,
-  },
-  decorators: [withProductTheme("default", "dark")],
-};
-
-export const DarkModeNonLanding: Story = {
-  args: {
-    isLandingPage: false,
-  },
-  decorators: [withProductTheme("default", "dark")],
-};
-
-export const LilypadDarkLanding: Story = {
-  args: {
-    isLandingPage: true,
-  },
-  decorators: [withProductTheme("lilypad", "dark")],
-};
-
-export const LilypadDarkNonLanding: Story = {
-  args: {
-    isLandingPage: false,
-  },
+export const LilypadDark: Story = {
   decorators: [withProductTheme("lilypad", "dark")],
 };
