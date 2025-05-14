@@ -24,3 +24,5 @@ public/sitemap.xml
 
 # API docs generation repositories
 .api-generation-repos/
+
+*storybook.log
