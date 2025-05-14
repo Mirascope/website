@@ -239,7 +239,8 @@ function SearchResultsContainer({
       className={cn(
         "search-results absolute top-full z-50 mt-2 w-screen max-w-[32rem] overflow-hidden rounded-lg shadow-2xl [text-shadow:none]",
         "bg-background border-border border transition-opacity duration-300",
-        "right-0 lg:right-auto lg:left-0" // Position from right on small screens, from left on large screens
+        "right-0 lg:right-auto lg:left-0", // Position from right on small screens, from left on large screens
+        isLandingPage ? "textured-bg-absolute" : ""
       )}
       style={{
         opacity: isReallyVisible ? 1 : 0,
