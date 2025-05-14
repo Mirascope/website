@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 16: Chat History
 # Generated for provider: anthropic
-# Source: content/docs/mirascope/learn/prompts.mdx:541
+# Source: content/docs/mirascope/learn/prompts.mdx:486
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import BaseMessageParam, Messages, prompt_template

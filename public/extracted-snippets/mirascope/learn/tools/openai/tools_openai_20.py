@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 20: Streaming Partial Tools
 # Generated for provider: openai
-# Source: content/docs/mirascope/learn/tools.mdx:946
+# Source: content/docs/mirascope/learn/tools.mdx:820
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm, prompt_template

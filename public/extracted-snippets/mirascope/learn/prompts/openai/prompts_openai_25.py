@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 25: Computed Fields (Dynamic Configuration)
 # Generated for provider: openai
-# Source: content/docs/mirascope/learn/prompts.mdx:807
+# Source: content/docs/mirascope/learn/prompts.mdx:752
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import BaseDynamicConfig, Messages, prompt_template

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 23: Tool Message Parameters
 # Generated for provider: anthropic
-# Source: content/docs/mirascope/learn/tools.mdx:1084
+# Source: content/docs/mirascope/learn/tools.mdx:958
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import BaseMessageParam, Messages, llm
