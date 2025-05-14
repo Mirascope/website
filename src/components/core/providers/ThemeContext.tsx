@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { useRouterState } from "@tanstack/react-router";
 
 export type Theme = "light" | "dark" | "system";
 
@@ -10,6 +11,8 @@ interface ThemeAPI {
   current: "light" | "dark";
   // Set specific theme
   set: (theme: Theme) => void;
+  // Whether the current page is the landing page
+  isLandingPage: boolean;
 }
 
 // Create the context with default values
@@ -17,11 +20,17 @@ const ThemeContext = createContext<ThemeAPI>({
   theme: "system",
   current: "light",
   set: () => {},
+  isLandingPage: false,
 });
 
 // Hook for components to use the theme
 export function useTheme() {
   return useContext(ThemeContext);
+}
+
+// Hook specifically for landing page status
+export function useIsLandingPage() {
+  return useContext(ThemeContext).isLandingPage;
 }
 
 // Get stored theme preference from localStorage
@@ -58,6 +67,10 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   const [current, setCurrent] = useState<"light" | "dark">("light");
   // Track if client-side code has run
   const [isHydrated, setIsHydrated] = useState(false);
+
+  // Get router to determine if we're on the landing page
+  const router = useRouterState();
+  const isLandingPage = router.location.pathname === "/";
 
   // Initialize theme on mount
   useEffect(() => {
@@ -110,12 +123,22 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     return <>{children}</>;
   }
 
+  // Add the data-landing-page attribute to the HTML element
+  if (isHydrated && typeof document !== "undefined") {
+    if (isLandingPage) {
+      document.documentElement.setAttribute("data-landing-page", "true");
+    } else {
+      document.documentElement.removeAttribute("data-landing-page");
+    }
+  }
+
   return (
     <ThemeContext.Provider
       value={{
         theme,
         current,
         set: setThemeHandler,
+        isLandingPage,
       }}
     >
       {children}
@@ -128,12 +151,14 @@ interface StorybookThemeProviderProps {
   children: ReactNode;
   initialTheme?: Theme;
   initialCurrent?: "light" | "dark";
+  isLandingPage?: boolean;
 }
 
 export function StorybookThemeProvider({
   children,
   initialTheme = "system",
   initialCurrent = "light",
+  isLandingPage = false,
 }: StorybookThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(initialTheme);
   const [current, setCurrent] = useState<"light" | "dark">(initialCurrent);
@@ -148,12 +173,24 @@ export function StorybookThemeProvider({
     setCurrent(newTheme);
   };
 
+  // Apply data-landing-page attribute in Storybook
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      if (isLandingPage) {
+        document.documentElement.setAttribute("data-landing-page", "true");
+      } else {
+        document.documentElement.removeAttribute("data-landing-page");
+      }
+    }
+  }, [isLandingPage]);
+
   return (
     <ThemeContext.Provider
       value={{
         theme,
         current,
         set: setThemeHandler,
+        isLandingPage,
       }}
     >
       {children}

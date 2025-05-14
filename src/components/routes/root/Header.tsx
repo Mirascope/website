@@ -17,6 +17,7 @@ import {
   GitHubRepoButton,
   DocsProductSelector,
   useProduct,
+  useIsLandingPage,
 } from "@/src/components/core";
 import ThemeSwitcher from "@/src/components/routes/root/ThemeSwitcher";
 import SearchBar from "@/src/components/routes/root/SearchBar";
@@ -30,8 +31,7 @@ interface NavLinkProps {
 }
 
 const NavLink = ({ href, children, className, onClick }: NavLinkProps) => {
-  const router = useRouterState();
-  const isLandingPage = router.location.pathname === "/";
+  const isLandingPage = useIsLandingPage();
 
   return (
     <Link

@@ -1,8 +1,7 @@
 import React from "react";
-import { useRouterState } from "@tanstack/react-router";
 import { cn } from "@/src/lib/utils";
 import { getProductConfig } from "@/src/lib/constants/site";
-import { useProduct } from "@/src/components";
+import { useProduct, useIsLandingPage } from "@/src/components";
 
 /**
  * Format star count with appropriate suffix
@@ -23,9 +22,7 @@ interface GitHubRepoButtonProps {
 }
 
 const GitHubRepoButton: React.FC<GitHubRepoButtonProps> = ({ className }) => {
-  const router = useRouterState();
-  const path = router.location.pathname;
-  const isLandingPage = path === "/";
+  const isLandingPage = useIsLandingPage();
 
   // Get current product from context
   const product = useProduct();

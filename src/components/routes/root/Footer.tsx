@@ -1,9 +1,9 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { cn } from "@/src/lib/utils";
+import { useIsLandingPage } from "@/src/components";
 
 export default function Footer() {
-  const router = useRouterState();
-  const isLandingPage = router.location.pathname === "/";
+  const isLandingPage = useIsLandingPage();
 
   // Define common text styles based on landing page status
   const textStyles = isLandingPage ? "text-white landing-page-text-shadow" : "text-foreground";
