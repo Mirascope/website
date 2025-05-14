@@ -171,70 +171,18 @@ There are also two common methods:
 
 While most LLM providers focus on text outputs, some providers support additional output modalities like audio. The availability of multi-modal outputs varies among providers:
 
-<div className="overflow-x-auto my-4">
-  <table className="min-w-full bg-background border border-border">
-    <thead>
-      <tr className="bg-accent text-accent-foreground">
-        <th className="px-4 py-2 text-left">Provider</th>
-        <th className="px-4 py-2 text-center">Text</th>
-        <th className="px-4 py-2 text-center">Audio</th>
-        <th className="px-4 py-2 text-center">Image</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr className="border-t border-border">
-        <td className="px-4 py-2 font-medium">OpenAI</td>
-        <td className="px-4 py-2 text-center">✓</td>
-        <td className="px-4 py-2 text-center">✓</td>
-        <td className="px-4 py-2 text-center">-</td>
-      </tr>
-      <tr className="bg-muted border-t border-border">
-        <td className="px-4 py-2 font-medium">Anthropic</td>
-        <td className="px-4 py-2 text-center">✓</td>
-        <td className="px-4 py-2 text-center">-</td>
-        <td className="px-4 py-2 text-center">-</td>
-      </tr>
-      <tr className="border-t border-border">
-        <td className="px-4 py-2 font-medium">Mistral</td>
-        <td className="px-4 py-2 text-center">✓</td>
-        <td className="px-4 py-2 text-center">-</td>
-        <td className="px-4 py-2 text-center">-</td>
-      </tr>
-      <tr className="bg-muted border-t border-border">
-        <td className="px-4 py-2 font-medium">Google Gemini</td>
-        <td className="px-4 py-2 text-center">✓</td>
-        <td className="px-4 py-2 text-center">-</td>
-        <td className="px-4 py-2 text-center">-</td>
-      </tr>
-      <tr className="border-t border-border">
-        <td className="px-4 py-2 font-medium">Groq</td>
-        <td className="px-4 py-2 text-center">✓</td>
-        <td className="px-4 py-2 text-center">-</td>
-        <td className="px-4 py-2 text-center">-</td>
-      </tr>
-      <tr className="bg-muted border-t border-border">
-        <td className="px-4 py-2 font-medium">Cohere</td>
-        <td className="px-4 py-2 text-center">✓</td>
-        <td className="px-4 py-2 text-center">-</td>
-        <td className="px-4 py-2 text-center">-</td>
-      </tr>
-      <tr className="border-t border-border">
-        <td className="px-4 py-2 font-medium">LiteLLM</td>
-        <td className="px-4 py-2 text-center">✓</td>
-        <td className="px-4 py-2 text-center">-</td>
-        <td className="px-4 py-2 text-center">-</td>
-      </tr>
-      <tr className="bg-muted border-t border-border">
-        <td className="px-4 py-2 font-medium">Azure AI</td>
-        <td className="px-4 py-2 text-center">✓</td>
-        <td className="px-4 py-2 text-center">-</td>
-        <td className="px-4 py-2 text-center">-</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+| Provider      | Text | Audio | Image |
+|---------------|------|-------|-------|
+| OpenAI        | ✓    | ✓     | -     |
+| Anthropic     | ✓    | -     | -     |
+| Mistral       | ✓    | -     | -     |
+| Google Gemini | ✓    | -     | -     |
+| Groq          | ✓    | -     | -     |
+| Cohere        | ✓    | -     | -     |
+| LiteLLM       | ✓    | -     | -     |
+| Azure AI      | ✓    | -     | -     |
 
-<div className="text-sm text-muted-foreground">Legend: ✓ (Supported), - (Not Supported)</div>
+*Legend: ✓ (Supported), - (Not Supported)*
 
 ### Audio Outputs
 
