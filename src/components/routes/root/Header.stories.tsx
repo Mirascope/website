@@ -2,6 +2,19 @@ import type { Meta, StoryObj } from "@storybook/react";
 import Header from "./Header";
 import { VIEWPORT_PRESETS } from "@/.storybook/preview";
 
+// Helper function to open the search bar for stories
+const openSearchBar = () => {
+  if (typeof document !== "undefined") {
+    setTimeout(() => {
+      const searchInput = document.querySelector('[data-testid="search-input"]');
+      if (searchInput instanceof HTMLElement) {
+        searchInput.click();
+        searchInput.focus();
+      }
+    }, 300); // Small delay to ensure DOM is ready
+  }
+};
+
 const meta = {
   title: "Root/Header",
   component: Header,
@@ -190,4 +203,65 @@ export const LandingPageMobile: Story = {
   args: {
     showProductSelector: false,
   },
+};
+
+// Stories for search bar - one for each viewport size
+export const DesktopSearchOpen: Story = {
+  name: "Desktop with Search Open",
+  parameters: {
+    product: "mirascope",
+    theme: "light",
+    viewport: {
+      defaultViewport: "desktop",
+    },
+  },
+  args: {
+    showProductSelector: false,
+  },
+  play: async () => openSearchBar(),
+};
+
+export const TabletSearchOpen: Story = {
+  name: "Tablet with Search Open",
+  parameters: {
+    product: "mirascope",
+    theme: "light",
+    viewport: {
+      defaultViewport: "tablet",
+    },
+  },
+  args: {
+    showProductSelector: false,
+  },
+  play: async () => openSearchBar(),
+};
+
+export const MobileSearchOpen: Story = {
+  name: "Mobile with Search Open",
+  parameters: {
+    product: "mirascope",
+    theme: "light",
+    viewport: {
+      defaultViewport: "mobile",
+    },
+  },
+  args: {
+    showProductSelector: false,
+  },
+  play: async () => openSearchBar(),
+};
+
+export const MobileSmallSearchOpen: Story = {
+  name: "Mobile Small with Search Open",
+  parameters: {
+    product: "mirascope",
+    theme: "light",
+    viewport: {
+      defaultViewport: "mobileSmall",
+    },
+  },
+  args: {
+    showProductSelector: false,
+  },
+  play: async () => openSearchBar(),
 };

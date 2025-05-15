@@ -142,6 +142,7 @@ function SearchInput({ query, onChange, onFocus, inputRef, isOpen }: SearchInput
       <div className="relative flex h-full items-center overflow-visible">
         <SearchIcon
           size={16}
+          data-testid="search-icon"
           className={cn(
             "transition-all duration-500",
             "nav-icon",
@@ -153,6 +154,7 @@ function SearchInput({ query, onChange, onFocus, inputRef, isOpen }: SearchInput
           readOnly={!isOpen}
           type="text"
           placeholder="Search..."
+          data-testid="search-input"
           className={cn(
             "cursor-pointer overflow-visible bg-transparent py-0 text-sm leading-normal transition-all duration-500 outline-none",
             isLandingPage
