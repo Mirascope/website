@@ -118,3 +118,37 @@ export const MOBILE_MENU_STYLES = {
   // Divider between sections
   divider: "my-2",
 };
+
+/**
+ * Theme switcher component styles
+ */
+export const THEME_SWITCHER_STYLES = {
+  // Button trigger styles
+  trigger: cn(
+    // Base styles
+    "rounded-md p-2 mr-2 cursor-pointer",
+    // Transitions
+    "transition-colors duration-200",
+    // Focus state
+    "focus:outline-none focus:ring-2 focus:ring-primary",
+    // Icon styling from nav (includes default color)
+    "nav-icon",
+    // Hover color change (similar to nav links)
+    "hover:text-primary"
+  ),
+
+  // Dropdown content
+  content: (isLandingPage: boolean) =>
+    cn(
+      // Base styling comes from the UI component
+      // Apply textured background on landing page
+      isLandingPage && "textured-bg-absolute"
+    ),
+
+  // Radio items (inherited from dropdown menu component)
+  radioItem: cn(
+    // Added styles for consistent interaction
+    "transition-colors",
+    "focus:bg-primary/20 data-[highlighted]:bg-primary/20"
+  ),
+};

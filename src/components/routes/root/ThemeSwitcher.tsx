@@ -6,8 +6,8 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
 } from "@/src/components/ui/dropdown-menu";
-import { cn } from "@/src/lib/utils";
 import { useTheme, useIsLandingPage, type Theme } from "@/src/components/core/providers";
+import { THEME_SWITCHER_STYLES } from "./styles";
 
 export default function ThemeSwitcher() {
   const { theme, current, set: setTheme } = useTheme();
@@ -29,32 +29,26 @@ export default function ThemeSwitcher() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button
-          className={cn(
-            "focus:ring-primary mr-2 cursor-pointer rounded-md p-2 transition-colors focus:ring-2 focus:outline-none",
-            "nav-icon"
-          )}
-          aria-label="Select theme"
-        >
+        <button className={THEME_SWITCHER_STYLES.trigger} aria-label="Select theme">
           {theme === "light" && <Sun size={20} />}
           {theme === "dark" && <Moon size={20} />}
           {theme === "system" && <Monitor size={20} />}
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className={cn(isLandingPage && "textured-bg-absolute")} align="end">
+      <DropdownMenuContent className={THEME_SWITCHER_STYLES.content(isLandingPage)} align="end">
         <DropdownMenuRadioGroup
           value={theme}
           onValueChange={(value) => handleThemeChange(value as Theme)}
         >
-          <DropdownMenuRadioItem value="light">
+          <DropdownMenuRadioItem value="light" className={THEME_SWITCHER_STYLES.radioItem}>
             <Sun className="mr-2 h-4 w-4" />
             <span>Light</span>
           </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="dark">
+          <DropdownMenuRadioItem value="dark" className={THEME_SWITCHER_STYLES.radioItem}>
             <Moon className="mr-2 h-4 w-4" />
             <span>Dark</span>
           </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="system">
+          <DropdownMenuRadioItem value="system" className={THEME_SWITCHER_STYLES.radioItem}>
             <Monitor className="mr-2 h-4 w-4" />
             <span>System</span>
           </DropdownMenuRadioItem>
