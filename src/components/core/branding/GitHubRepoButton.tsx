@@ -1,7 +1,7 @@
 import React from "react";
 import { cn } from "@/src/lib/utils";
 import { getProductConfig } from "@/src/lib/constants/site";
-import { useProduct, useIsLandingPage } from "@/src/components";
+import { useProduct } from "@/src/components";
 
 /**
  * Format star count with appropriate suffix
@@ -22,8 +22,6 @@ interface GitHubRepoButtonProps {
 }
 
 const GitHubRepoButton: React.FC<GitHubRepoButtonProps> = ({ className }) => {
-  const isLandingPage = useIsLandingPage();
-
   // Get current product from context
   const product = useProduct();
   const productConfig = getProductConfig(product);
@@ -57,11 +55,7 @@ const GitHubRepoButton: React.FC<GitHubRepoButtonProps> = ({ className }) => {
       href={`https://github.com/${repo}`}
       target="_blank"
       rel="noopener noreferrer"
-      className={cn(
-        "flex flex-col px-2 py-1",
-        isLandingPage ? "nav-text-landing" : "nav-text-regular",
-        className
-      )}
+      className={cn("flex flex-col px-2 py-1", "nav-text", className)}
     >
       {/* GitHub icon and product name */}
       <div className="flex items-center gap-1 text-base font-medium">

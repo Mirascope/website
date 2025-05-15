@@ -32,15 +32,13 @@ export default function ThemeSwitcher() {
         <button
           className={cn(
             "focus:ring-primary mr-2 cursor-pointer rounded-md p-2 transition-colors focus:ring-2 focus:outline-none",
-            isLandingPage ? "nav-icon-landing" : "nav-text-regular"
+            "nav-icon"
           )}
           aria-label="Select theme"
         >
-          {theme === "light" && <Sun size={20} className={cn(isLandingPage && "icon-shadow")} />}
-          {theme === "dark" && <Moon size={20} className={cn(isLandingPage && "icon-shadow")} />}
-          {theme === "system" && (
-            <Monitor size={20} className={cn(isLandingPage && "icon-shadow")} />
-          )}
+          {theme === "light" && <Sun size={20} />}
+          {theme === "dark" && <Moon size={20} />}
+          {theme === "system" && <Monitor size={20} />}
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className={cn(isLandingPage && "textured-bg-absolute")} align="end">

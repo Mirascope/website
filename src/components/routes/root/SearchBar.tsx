@@ -144,7 +144,7 @@ function SearchInput({ query, onChange, onFocus, inputRef, isOpen }: SearchInput
           size={16}
           className={cn(
             "transition-all duration-500",
-            isLandingPage ? "nav-icon-landing" : "nav-icon-regular",
+            "nav-icon",
             isOpen ? "absolute left-3" : "mx-auto lg:absolute lg:left-3" // Center icon when collapsed on small screens
           )}
         />
