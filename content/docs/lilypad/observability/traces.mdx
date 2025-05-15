@@ -123,7 +123,7 @@ Above, `answer_question` only expects `question` as an input — and your editor
 ## Tracing LLM Calls
 
 <Warning>
-Since LLMs are non-deterministic, we recommend [versioning](./versioning) any functions that use them.
+Since LLMs are non-deterministic, we recommend [versioning](/docs/lilypad/observability/versioning) any functions that use them.
 </Warning>
 
 Since Lilypad can create spans for LLM API calls automatically, simple calling the API inside of a `trace`-decorated function will nest that span inside of the parent function:

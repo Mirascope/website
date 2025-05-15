@@ -358,148 +358,22 @@ else:
 
 While Mirascope provides a consistent interface, type support varies among providers:
 
-<div className="overflow-x-auto">
-  <table className="w-full border-collapse">
-    <thead>
-      <tr className="bg-muted/50">
-        <th className="border border-muted p-2 text-left">Type</th>
-        <th className="border border-muted p-2 text-left">OpenAI</th>
-        <th className="border border-muted p-2 text-left">Anthropic</th>
-        <th className="border border-muted p-2 text-left">Google</th>
-        <th className="border border-muted p-2 text-left">Groq</th>
-        <th className="border border-muted p-2 text-left">xAI</th>
-        <th className="border border-muted p-2 text-left">Mistral</th>
-        <th className="border border-muted p-2 text-left">Cohere</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td className="border border-muted p-2">str</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-      </tr>
-      <tr>
-        <td className="border border-muted p-2">int</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-      </tr>
-      <tr>
-        <td className="border border-muted p-2">float</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-      </tr>
-      <tr>
-        <td className="border border-muted p-2">bool</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-      </tr>
-      <tr>
-        <td className="border border-muted p-2">bytes</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">-</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-      </tr>
-      <tr>
-        <td className="border border-muted p-2">list</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-      </tr>
-      <tr>
-        <td className="border border-muted p-2">set</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">-</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-      </tr>
-      <tr>
-        <td className="border border-muted p-2">tuple</td>
-        <td className="border border-muted p-2">-</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">-</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">-</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-      </tr>
-      <tr>
-        <td className="border border-muted p-2">dict</td>
-        <td className="border border-muted p-2">-</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">-</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-      </tr>
-      <tr>
-        <td className="border border-muted p-2">Literal/Enum</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-      </tr>
-      <tr>
-        <td className="border border-muted p-2">BaseModel</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">-</td>
-      </tr>
-      <tr>
-        <td className="border border-muted p-2">Nested ($def)</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">✓</td>
-        <td className="border border-muted p-2">-</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+|     Type      | OpenAI | Anthropic | Google | Groq | xAI | Mistral | Cohere |
+|---------------|:--------:|:-----------:|:--------:|:------:|:-----:|:---------:|:--------:|
+|     str       | ✓      | ✓         | ✓      | ✓    | ✓   | ✓       | ✓      |
+|     int       | ✓      | ✓         | ✓      | ✓    | ✓   | ✓       | ✓      |
+|    float      | ✓      | ✓         | ✓      | ✓    | ✓   | ✓       | ✓      |
+|     bool      | ✓      | ✓         | ✓      | ✓    | ✓   | ✓       | ✓      |
+|     bytes     | ✓      | ✓         | —      | ✓    | ✓   | ✓       | ✓      |
+|     list      | ✓      | ✓         | ✓      | ✓    | ✓   | ✓       | ✓      |
+|     set       | ✓      | ✓         | —      | ✓    | ✓   | ✓       | ✓      |
+|     tuple     | —      | ✓         | —      | ✓    | —   | ✓       | ✓      |
+|     dict      | —      | ✓         | ✓      | ✓    | —   | ✓       | ✓      |
+|  Literal/Enum | ✓      | ✓         | ✓      | ✓    | ✓   | ✓       | ✓      |
+|   BaseModel   | ✓      | ✓         | ✓      | ✓    | ✓   | ✓       | —      |
+| Nested ($def) | ✓      | ✓         | ✓      | ✓    | ✓   | ✓       | —      |
 
-<Info>
-  Legend: ✓ (Supported), - (Not Supported)
-</Info>
+*Legend: ✓ (Supported), — (Not Supported)*
 
 Consider provider-specific capabilities when working with advanced type structures. Even for supported types, LLM outputs may sometimes be incorrect or of the wrong type. In such cases, prompt engineering or error handling (like [retries](/docs/mirascope/learn/retries) and [reinserting validation errors](/docs/mirascope/learn/retries#error-reinsertion)) may be necessary.
 
@@ -1708,49 +1582,12 @@ Mirascope provides several pre-made tools and toolkits to help you get started q
   - [`mirascope.tools.web.Requests`](/docs/mirascope/api/tools/web/requests)
 </Callout>
 
-<div className="overflow-x-auto">
-  <table className="w-full border-collapse">
-    <thead>
-      <tr className="bg-muted/50">
-        <th className="border border-muted p-2 text-left">Tool</th>
-        <th className="border border-muted p-2 text-left">Primary Use</th>
-        <th className="border border-muted p-2 text-left">Dependencies</th>
-        <th className="border border-muted p-2 text-left">Key Features</th>
-        <th className="border border-muted p-2 text-left">Characteristics</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td className="border border-muted p-2">[`DuckDuckGoSearch`](/docs/mirascope/api)</td>
-        <td className="border border-muted p-2">Web Searching</td>
-        <td className="border border-muted p-2">[`duckduckgo-search`](https://pypi.org/project/duckduckgo-search/)</td>
-        <td className="border border-muted p-2">• Multiple query support<br/>• Title/URL/snippet extraction<br/>• Result count control<br/>• Automated formatting</td>
-        <td className="border border-muted p-2">• Privacy-focused search<br/>• Async support (AsyncDuckDuckGoSearch)<br/>• Automatic filtering<br/>• Structured results</td>
-      </tr>
-      <tr>
-        <td className="border border-muted p-2">[`HTTPX`](/docs/mirascope/api)</td>
-        <td className="border border-muted p-2">Advanced HTTP Requests</td>
-        <td className="border border-muted p-2">[`httpx`](https://pypi.org/project/httpx/)</td>
-        <td className="border border-muted p-2">• Full HTTP method support (GET/POST/PUT/DELETE)<br/>• Custom header support<br/>• File upload/download<br/>• Form data handling</td>
-        <td className="border border-muted p-2">• Async support (AsyncHTTPX)<br/>• Configurable timeouts<br/>• Comprehensive error handling<br/>• Redirect control</td>
-      </tr>
-      <tr>
-        <td className="border border-muted p-2">[`ParseURLContent`](/docs/mirascope/api)</td>
-        <td className="border border-muted p-2">Web Content Extraction</td>
-        <td className="border border-muted p-2">[`beautifulsoup4`](https://pypi.org/project/beautifulsoup4/), [`httpx`](https://pypi.org/project/httpx/)</td>
-        <td className="border border-muted p-2">• HTML content fetching<br/>• Main content extraction<br/>• Element filtering<br/>• Text normalization</td>
-        <td className="border border-muted p-2">• Automatic cleaning<br/>• Configurable parser<br/>• Timeout settings<br/>• Error handling</td>
-      </tr>
-      <tr>
-        <td className="border border-muted p-2">[`Requests`](/docs/mirascope/api)</td>
-        <td className="border border-muted p-2">Simple HTTP Requests</td>
-        <td className="border border-muted p-2">[`requests`](https://pypi.org/project/requests/)</td>
-        <td className="border border-muted p-2">• Basic HTTP methods<br/>• Simple API<br/>• Response text retrieval<br/>• Basic authentication</td>
-        <td className="border border-muted p-2">• Minimal configuration<br/>• Intuitive interface<br/>• Basic error handling<br/>• Lightweight implementation</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+| Tool                                                                    | Primary Use            | Dependencies                                                                                             | Key Features                                                                                                                  | Characteristics                                                                                                      |
+|------                                                                   |-------------           |--------------                                                                                            |--------------                                                                                                                 |-----------------                                                                                                     |
+| [`DuckDuckGoSearch`](/docs/mirascope/api/tools/web/duckduckgo)       | Web Searching          | [`duckduckgo-search`](https://pypi.org/project/duckduckgo-search/)                                       | • Multiple query support<br/>• Title/URL/snippet extraction<br/>• Result count control<br/>• Automated formatting                | • Privacy-focused search<br/>• Async support (AsyncDuckDuckGoSearch)<br/>• Automatic filtering<br/>• Structured results |
+| [`HTTPX`](/docs/mirascope/api/tools/web/httpx)                       | Advanced HTTP Requests | [`httpx`](https://pypi.org/project/httpx/)                                                               | • Full HTTP method support (GET/POST/PUT/DELETE)<br/>• Custom header support<br/>• File upload/download<br/>• Form data handling | • Async support (AsyncHTTPX)<br/>• Configurable timeouts<br/>• Comprehensive error handling<br/>• Redirect control      |
+| [`ParseURLContent`](/docs/mirascope/api/tools/web/parse_url_content) | Web Content Extraction | [`beautifulsoup4`](https://pypi.org/project/beautifulsoup4/), [`httpx`](https://pypi.org/project/httpx/) | • HTML content fetching<br/>• Main content extraction<br/>• Element filtering<br/>• Text normalization                           | • Automatic cleaning<br/>• Configurable parser<br/>• Timeout settings<br/>• Error handling                              |
+| [`Requests`](/docs/mirascope/api/tools/web/requests)                 | Simple HTTP Requests   | [`requests`](https://pypi.org/project/requests/)                                                         | • Basic HTTP methods<br/>• Simple API<br/>• Response text retrieval<br/>• Basic authentication                                   | • Minimal configuration<br/>• Intuitive interface<br/>• Basic error handling<br/>• Lightweight implementation           |
 
 Example using DuckDuckGoSearch:
 
@@ -1842,35 +1679,11 @@ if tool := response.tool:
   - [`mirascope.tools.system.DockerOperationToolKit`](/docs/mirascope/api/tools/system/docker_operation)
 </Callout>
 
-<div className="overflow-x-auto">
-  <table className="w-full border-collapse">
-    <thead>
-      <tr className="bg-muted/50">
-        <th className="border border-muted p-2 text-left">ToolKit</th>
-        <th className="border border-muted p-2 text-left">Primary Use</th>
-        <th className="border border-muted p-2 text-left">Dependencies</th>
-        <th className="border border-muted p-2 text-left">Tools and Features</th>
-        <th className="border border-muted p-2 text-left">Characteristics</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td className="border border-muted p-2">[`FileSystemToolKit`](/docs/mirascope/api)</td>
-        <td className="border border-muted p-2">File System Operations</td>
-        <td className="border border-muted p-2">None</td>
-        <td className="border border-muted p-2">• ReadFile: File content reading<br/>• WriteFile: Content writing<br/>• ListDirectory: Directory listing<br/>• CreateDirectory: Directory creation<br/>• DeleteFile: File deletion</td>
-        <td className="border border-muted p-2">• Path traversal protection<br/>• File size limits<br/>• Extension validation<br/>• Robust error handling<br/>• Base directory isolation</td>
-      </tr>
-      <tr>
-        <td className="border border-muted p-2">[`DockerOperationToolKit`](/docs/mirascope/api)</td>
-        <td className="border border-muted p-2">Code & Command Execution</td>
-        <td className="border border-muted p-2">[`docker`](https://pypi.org/project/docker/), [`docker engine`](https://docs.docker.com/engine/install/)</td>
-        <td className="border border-muted p-2">• ExecutePython: Python code execution with optional package installation<br/>• ExecuteShell: Shell command execution</td>
-        <td className="border border-muted p-2">• Docker container isolation<br/>• Memory limits<br/>• Network control<br/>• Security restrictions<br/>• Resource cleanup</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+| ToolKit                                                             | Primary Use              | Dependencies                                                                                             | Tools and Features                                                                                                                                                                 | Characteristics                                                                                                                          |
+|---------                                                            |--------------------------|-------------------------------------------------------------------                                       |-------------------                                                                                                                                                                 |-----------------                                                                                                                         |
+| [`FileSystemToolKit`](/docs/mirascope/api/tools/system/file_system)           | File System Operations   | None                                                                                                     | • ReadFile: File content reading<br/>• WriteFile: Content writing<br/>• ListDirectory: Directory listing<br/>• CreateDirectory: Directory creation<br/>• DeleteFile: File deletion | • Path traversal protection<br/>• File size limits<br/>• Extension validation<br/>• Robust error handling<br/>• Base directory isolation |
+| [`DockerOperationToolKit`](/docs/mirascope/api/tools/system/docker_operation) | Code & Command Execution | [`docker`](https://pypi.org/project/docker/), [`docker engine`](https://docs.docker.com/engine/install/) | • ExecutePython: Python code execution with optional package installation<br/>• ExecuteShell: Shell command execution                                                              | • Docker container isolation<br/>• Memory limits<br/>• Network control<br/>• Security restrictions<br/>• Resource cleanup                |
+
 
 Example using FileSystemToolKit:
 

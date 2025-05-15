@@ -11,10 +11,12 @@ export function ProviderCodeWrapper({
   code,
   language,
   meta,
+  className,
 }: {
   code: string;
   language: string;
   meta?: string;
+  className?: string;
 }) {
   const { provider } = useProvider();
 
@@ -23,5 +25,5 @@ export function ProviderCodeWrapper({
     code = replaceProviderVariables(code, provider);
   }
 
-  return <CodeBlock code={code} language={language} meta={meta} />;
+  return <CodeBlock className={className} code={code} language={language} meta={meta} />;
 }

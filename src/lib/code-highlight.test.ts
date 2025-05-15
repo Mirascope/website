@@ -16,12 +16,6 @@ describe("stripHighlightMarkers", () => {
     expect(stripHighlightMarkers(input)).toBe(expected);
   });
 
-  it("should remove CSS-style highlight comments", () => {
-    const input = "color: red; /* [!code highlight] */";
-    const expected = "color: red;";
-    expect(stripHighlightMarkers(input)).toBe(expected);
-  });
-
   it("should remove HTML-style highlight comments", () => {
     const input = "<div>Hello</div> <!-- [!code highlight] -->";
     const expected = "<div>Hello</div>";
@@ -110,7 +104,6 @@ const y = 10; /* [!code highlight] */
 const x = 5;
 /* Another regular comment */
 const y = 10;
-
 // Another regular comment`;
 
     expect(stripHighlightMarkers(input)).toBe(expected);

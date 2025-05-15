@@ -14,64 +14,17 @@ JSON Mode is a feature in Mirascope that allows you to request structured JSON o
 <Warning title="Not all providers have an official JSON Mode" collapsible={true} defaultOpen={false}>
   For providers with explicit support, Mirascope uses the native JSON Mode feature of the API. For providers without explicit support (e.g. Anthropic), Mirascope implements a pseudo JSON Mode by instructing the model in the prompt to output JSON.
 
-  <div className="overflow-x-auto">
-    <table className="w-full border-collapse">
-      <thead>
-        <tr className="bg-muted/50">
-          <th className="border border-muted p-2 text-left">Provider</th>
-          <th className="border border-muted p-2 text-left">Support Type</th>
-          <th className="border border-muted p-2 text-left">Implementation</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td className="border border-muted p-2">Anthropic</td>
-          <td className="border border-muted p-2">Pseudo</td>
-          <td className="border border-muted p-2">Prompt engineering</td>
-        </tr>
-        <tr>
-          <td className="border border-muted p-2">Azure</td>
-          <td className="border border-muted p-2">Explicit</td>
-          <td className="border border-muted p-2">Native API feature</td>
-        </tr>
-        <tr>
-          <td className="border border-muted p-2">Bedrock</td>
-          <td className="border border-muted p-2">Pseudo</td>
-          <td className="border border-muted p-2">Prompt engineering</td>
-        </tr>
-        <tr>
-          <td className="border border-muted p-2">Cohere</td>
-          <td className="border border-muted p-2">Pseudo</td>
-          <td className="border border-muted p-2">Prompt engineering</td>
-        </tr>
-        <tr>
-          <td className="border border-muted p-2">Google</td>
-          <td className="border border-muted p-2">Explicit</td>
-          <td className="border border-muted p-2">Native API feature</td>
-        </tr>
-        <tr>
-          <td className="border border-muted p-2">Groq</td>
-          <td className="border border-muted p-2">Explicit</td>
-          <td className="border border-muted p-2">Native API feature</td>
-        </tr>
-        <tr>
-          <td className="border border-muted p-2">LiteLLM</td>
-          <td className="border border-muted p-2">Explicit</td>
-          <td className="border border-muted p-2">Native API feature</td>
-        </tr>
-        <tr>
-          <td className="border border-muted p-2">Mistral</td>
-          <td className="border border-muted p-2">Explicit</td>
-          <td className="border border-muted p-2">Native API feature</td>
-        </tr>
-        <tr>
-          <td className="border border-muted p-2">OpenAI</td>
-          <td className="border border-muted p-2">Explicit</td>
-          <td className="border border-muted p-2">Native API feature</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    | Provider  | Support Type | Implementation      |
+    |-----------|--------------|---------------------|
+    | Anthropic | Pseudo       | Prompt engineering  |
+    | Azure     | Explicit     | Native API feature  |
+    | Bedrock   | Pseudo       | Prompt engineering  |
+    | Cohere    | Pseudo       | Prompt engineering  |
+    | Google    | Explicit     | Native API feature  |
+    | Groq      | Explicit     | Native API feature  |
+    | LiteLLM   | Explicit     | Native API feature  |
+    | Mistral   | Explicit     | Native API feature  |
+    | OpenAI    | Explicit     | Native API feature  |
 
   If you'd prefer not to have any internal updates made to your prompt, you can always set JSON mode yourself through `call_params` rather than using the `json_mode` argument, which provides provider-agnostic support but is certainly not required to use JSON mode.
 </Warning>

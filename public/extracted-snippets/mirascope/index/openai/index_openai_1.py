@@ -14,6 +14,7 @@ class Book(BaseModel):
     title: str
     author: str
 
+
 # [!code highlight:6]
 @llm.call(
     provider="openai", 

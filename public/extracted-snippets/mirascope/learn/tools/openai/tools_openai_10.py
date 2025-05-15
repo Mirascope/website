@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 10: Parallel Tool Calls
 # Generated for provider: openai
-# Source: content/docs/mirascope/learn/tools.mdx:548
+# Source: content/docs/mirascope/learn/tools.mdx:422
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import BaseTool, llm, prompt_template

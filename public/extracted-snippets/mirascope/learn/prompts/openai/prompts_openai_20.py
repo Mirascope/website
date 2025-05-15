@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 20: Format Specifiers
 # Generated for provider: openai
-# Source: content/docs/mirascope/learn/prompts.mdx:649
+# Source: content/docs/mirascope/learn/prompts.mdx:594
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import prompt_template

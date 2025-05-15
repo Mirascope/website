@@ -134,7 +134,7 @@ Plus, evaluating the quality and relevance of the data further complicates the p
 
 As we’ve seen, language models are great at learning and representing complex patterns from vast amounts of data.
 
-Below, we walk you through [an example](/docs/mirascope/guides/more_advanced/generating_synthetic_data/) of using OpenAI's GPT-4o-mini to create ecommerce data on home appliances, including attributes like name, price, and inventory.
+Below, we walk you through [an example](/docs/mirascope/guides/more-advanced/generating-synthetic-data/) of using OpenAI's GPT-4o-mini to create ecommerce data on home appliances, including attributes like name, price, and inventory.
 
 The main libraries we’ll use are:
 
@@ -207,9 +207,8 @@ df = df_data.generate_dataframe()
 print(df)
 >
 ```
-
+| | ProductName | Price | Stock |
 |---|---|---|---|
-| 0 | ProductName | Price | Stock |
 | 1 | Leather Jacket | 149.99 | 20 |
 | 2 | Sneakers | 89.99 | 50 |
 
@@ -259,9 +258,8 @@ df_data = generate_additional_df_data(5, df)
 df = df_data.append_dataframe(df)
 print(df)
 ```
-
+|  | ProductName | Price | Stock |
 |---|---|---|---|
-| 0 | ProductName | Price | Stock |
 |1 | Leather Jacket | 149.99 | 20 |
 |2 | Sneakers | 89.99 | 50 |
 |3 | Handbag | 129.99 | 15 |

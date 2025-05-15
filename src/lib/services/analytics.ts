@@ -2,7 +2,7 @@
  * Analytics service to handle all tracking functionality.
  * Integrated with Google Analytics 4 and PostHog.
  */
-import { GA_MEASUREMENT_ID, POSTHOG_PUBLIC_KEY, SITE_VERSION } from "../constants/site";
+import { GA_MEASUREMENT_ID, GTM_ID, POSTHOG_PUBLIC_KEY, SITE_VERSION } from "../constants/site";
 
 // Centralized check for browser environment
 export const isBrowser = typeof window !== "undefined";
@@ -27,15 +27,18 @@ export class AnalyticsManager {
   private gaInitialized = false;
   private phInitialized = false;
   private gaMeasurementId: string;
+  private gtmId: string;
   private posthogApiKey: string;
   private siteVersion: string;
 
   constructor(
     gaMeasurementId: string = GA_MEASUREMENT_ID,
+    gtmId: string = GTM_ID,
     posthogApiKey: string = POSTHOG_PUBLIC_KEY,
     siteVersion: string = SITE_VERSION
   ) {
     this.gaMeasurementId = gaMeasurementId;
+    this.gtmId = gtmId;
     this.posthogApiKey = posthogApiKey;
     this.siteVersion = siteVersion;
   }
@@ -123,6 +126,9 @@ export class AnalyticsManager {
       window.gtag("consent", "update", {
         analytics_storage: "denied",
       });
+
+      // This will also affect GTM since they share the same dataLayer
+      window.dataLayer?.push({ "gtm.consent": "denied" });
     }
 
     // Opt out of PostHog tracking if loaded
@@ -184,7 +190,7 @@ export class AnalyticsManager {
   }
 
   /**
-   * Initialize Google Analytics
+   * Initialize Google Analytics and Google Tag Manager
    */
   private initializeGoogleAnalytics(): void {
     // Prevent duplicate initialization
@@ -193,7 +199,30 @@ export class AnalyticsManager {
       return;
     }
 
-    console.log(`Google Analytics initializing`);
+    console.log(`Google Analytics and Tag Manager initializing`);
+
+    // Initialize dataLayer for both GA4 and GTM
+    window.dataLayer = window.dataLayer || [];
+
+    // Initialize Google Tag Manager
+    if (!document.getElementById("gtm-script")) {
+      try {
+        // Add GTM script to head
+        const gtmScript = document.createElement("script");
+        gtmScript.id = "gtm-script";
+        gtmScript.innerHTML = `
+          (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+          'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+          })(window,document,'script','dataLayer','${this.gtmId}');
+        `;
+        document.head.appendChild(gtmScript);
+        console.log(`Google Tag Manager script added`);
+      } catch (error) {
+        console.error("Failed to load Google Tag Manager script:", error);
+      }
+    }
 
     // Add the Google Analytics script dynamically
     if (!document.getElementById("ga-script")) {
@@ -210,7 +239,6 @@ export class AnalyticsManager {
 
       document.head.appendChild(script);
 
-      window.dataLayer = window.dataLayer || [];
       // Define the gtag function as it is in the official GA4 snippet
       // @ts-ignore - We need to use arguments here which TS doesn't like
       function gtag() {
@@ -293,9 +321,9 @@ export class AnalyticsManager {
   }
 
   /**
-   * Track a page view in Google Analytics
+   * Track a page view in all analytics systems
    */
-  trackGAPageView(path: string): void {
+  trackPageView(path: string): void {
     if (!this.enableAnalytics()) return;
 
     // Send pageview to Google Analytics
@@ -305,14 +333,6 @@ export class AnalyticsManager {
         page_path: path,
       });
     }
-  }
-
-  /**
-   * Track a page view in PostHog
-   */
-  trackPHPageView(path: string): void {
-    if (!this.enableAnalytics()) return;
-
     // Send pageview to PostHog
     if (window.posthog) {
       window.posthog.capture("$pageview", {
@@ -320,14 +340,6 @@ export class AnalyticsManager {
         site_version: this.siteVersion,
       });
     }
-  }
-
-  /**
-   * Track a page view in all analytics systems
-   */
-  trackPageView(path: string): void {
-    this.trackGAPageView(path);
-    this.trackPHPageView(path);
   }
 
   /**
@@ -343,90 +355,30 @@ export class AnalyticsManager {
     };
 
     console.log(`GA Event tracked: ${action}`, eventParams);
-
-    // Send event to Google Analytics
-    if (window.gtag) {
-      // @ts-ignore - Using arguments in the expected way for GA4
-      window.gtag("event", action, eventParams);
-    }
-  }
-
-  /**
-   * Track a custom event in PostHog
-   */
-  trackPHEvent(event: string, properties: EventParams = {}): void {
-    if (!this.enableAnalytics()) return;
-
-    // Add site version to all events
-    const eventProperties = {
-      ...properties,
-      site_version: this.siteVersion,
-    };
-
-    console.log(`PH Event tracked: ${event}`, eventProperties);
-
-    // Send event to PostHog
-    if (window.posthog) {
-      window.posthog.capture(event, eventProperties);
-    }
   }
 
   /**
    * Track a custom event in all analytics systems
    */
-  trackEvent(action: string, params: EventParams = {}): void {
-    this.trackGAEvent(action, params);
-    this.trackPHEvent(action, params);
-  }
+  trackEvent(eventName: string, params: EventParams = {}): void {
+    if (!this.enableAnalytics()) return;
 
-  /**
-   * Track a copy to clipboard event consistently across the site with Google Analytics
-   */
-  trackGACopyEvent({
-    contentType,
-    itemId,
-    product,
-    language,
-  }: {
-    contentType: "blog_markdown" | "document_markdown" | "code_snippet";
-    itemId: string;
-    product: string;
-    language?: string;
-  }): void {
-    const pagePath = window.location.pathname;
+    // Add site version to all events
+    const eventParams = {
+      ...params,
+      site_version: this.siteVersion,
+    };
 
-    this.trackGAEvent("select_content", {
-      content_type: contentType,
-      item_id: itemId,
-      product: product,
-      page_path: pagePath,
-      ...(language && { language }),
-    });
-  }
+    // Send event to Google Analytics
+    if (window.gtag) {
+      // @ts-ignore - Using arguments in the expected way for GA4
+      window.gtag("event", eventName, eventParams);
+    }
 
-  /**
-   * Track a copy to clipboard event consistently across the site with PostHog
-   */
-  trackPHCopyEvent({
-    contentType,
-    itemId,
-    product,
-    language,
-  }: {
-    contentType: "blog_markdown" | "document_markdown" | "code_snippet";
-    itemId: string;
-    product: string;
-    language?: string;
-  }): void {
-    const pagePath = window.location.pathname;
-
-    this.trackPHEvent("select_content", {
-      content_type: contentType,
-      item_id: itemId,
-      product: product,
-      page_path: pagePath,
-      ...(language && { language }),
-    });
+    // Send event to PostHog
+    if (window.posthog) {
+      window.posthog.capture(eventName, eventParams);
+    }
   }
 
   /**
@@ -443,52 +395,25 @@ export class AnalyticsManager {
     product: string;
     language?: string;
   }): void {
-    this.trackGACopyEvent({ contentType, itemId, product, language });
-    this.trackPHCopyEvent({ contentType, itemId, product, language });
+    this.trackEvent("select_content", { contentType, itemId, product, language });
   }
 
   /**
-   * Report web vitals metrics to Google Analytics
+   * Report web vitals metrics to GA / PostHog
    */
-  reportGAWebVital(metric: any): void {
+  reportWebVital(metric: any): void {
     if (!this.enableAnalytics()) return;
 
     console.log(
       `Web vital reported to GA: ${metric.name} - ${Math.round(metric.value * 100) / 100}`
     );
 
-    this.trackGAEvent("web-vitals", {
+    this.trackEvent("web-vitals", {
       event_category: "Web Vitals",
       event_label: metric.id,
       value: Math.round(metric.value * 100) / 100,
       non_interaction: true,
     });
-  }
-
-  /**
-   * Report web vitals metrics to PostHog
-   */
-  reportPHWebVital(metric: any): void {
-    if (!this.enableAnalytics()) return;
-
-    console.log(
-      `Web vital reported to PH: ${metric.name} - ${Math.round(metric.value * 100) / 100}`
-    );
-
-    this.trackPHEvent("web-vitals", {
-      event_category: "Web Vitals",
-      event_label: metric.id,
-      value: Math.round(metric.value * 100) / 100,
-      non_interaction: true,
-    });
-  }
-
-  /**
-   * Report web vitals metrics to all analytics providers
-   */
-  reportWebVital(metric: any): void {
-    this.reportGAWebVital(metric);
-    this.reportPHWebVital(metric);
   }
 }
 

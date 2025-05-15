@@ -368,7 +368,10 @@ export const components = {
     <table className="divide-border my-6 min-w-full divide-y" {...props} />
   ),
   th: (props: React.ComponentPropsWithoutRef<"th">) => (
-    <th className="bg-muted px-4 py-2 text-left text-sm font-medium" {...props} />
+    <th
+      className="bg-card text-card-foreground px-4 py-2 text-left text-sm font-medium"
+      {...props}
+    />
   ),
   td: (props: React.ComponentPropsWithoutRef<"td">) => (
     <td className="border-border border-t px-4 py-2" {...props} />

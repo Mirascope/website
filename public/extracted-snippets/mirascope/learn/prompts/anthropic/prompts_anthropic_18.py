@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 18: Object Attribute Access
 # Generated for provider: anthropic
-# Source: content/docs/mirascope/learn/prompts.mdx:599
+# Source: content/docs/mirascope/learn/prompts.mdx:544
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import prompt_template

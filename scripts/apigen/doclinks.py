@@ -121,7 +121,9 @@ def insert_or_update_api_section(file_path: Path, api_link: str, obj_path: str) 
         logger.warning(traceback.format_exc())
 
 
-def update_links(obj: GriffeObject, content_dir: Path, content_subpath: str, symbol_registry=None) -> None:
+def update_links(
+    obj: GriffeObject, content_dir: Path, content_subpath: str, symbol_registry=None
+) -> None:
     """Update links in the object's docstring.
 
     Args:
@@ -181,7 +183,9 @@ def update_links(obj: GriffeObject, content_dir: Path, content_subpath: str, sym
             else:
                 # Fall back to the traditional approach if not in registry
                 api_link = get_local_api_link(content_subpath, obj.path)
-                logger.debug(f"Symbol {symbol_name} not in registry, using path-based link")
+                logger.debug(
+                    f"Symbol {symbol_name} not in registry, using path-based link"
+                )
         else:
             # Use the traditional approach if no registry provided
             api_link = get_local_api_link(content_subpath, obj.path)
@@ -225,12 +229,14 @@ class UpdateDocstringsExtension(Extension):
         """
         self.content_dir = content_dir
         self.content_subpath = content_subpath.strip("/")
-        
+
         # Build the symbol registry when the extension is initialized
         try:
             registry_builder = SymbolRegistryBuilder(str(content_dir))
             self.symbol_registry = registry_builder.build_registry()
-            logger.info(f"Built symbol registry with {len(self.symbol_registry)} entries")
+            logger.info(
+                f"Built symbol registry with {len(self.symbol_registry)} entries"
+            )
         except Exception as e:
             logger.error(f"Error building symbol registry: {e}")
             self.symbol_registry = {}
@@ -245,7 +251,9 @@ class UpdateDocstringsExtension(Extension):
         try:
             obj = kwargs.get("obj")
             if obj is not None and not obj.is_alias and obj.docstring is not None:
-                update_links(obj, self.content_dir, self.content_subpath, self.symbol_registry)
+                update_links(
+                    obj, self.content_dir, self.content_subpath, self.symbol_registry
+                )
         except Exception as e:
             logger.error(f"Error in UpdateDocstringsExtension: {e!s}")
             logger.debug(traceback.format_exc())

@@ -2,6 +2,7 @@ import React from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/src/components/ui/tabs";
 import { Logo } from "@/src/components/core/branding";
 import { cn } from "@/src/lib/utils";
+import { temporarilyEnableSyncHighlighting } from "@/src/lib/code-highlight";
 
 /**
  * A Tab component to be used within TabbedSection
@@ -80,7 +81,13 @@ export function TabbedSection({
         </div>
       )}
 
-      <Tabs defaultValue={defaultTab} className="w-full">
+      <Tabs
+        defaultValue={defaultTab}
+        className="w-full"
+        onValueChange={() => {
+          temporarilyEnableSyncHighlighting();
+        }}
+      >
         <div className="flex">
           <TabsList className="h-auto gap-x-2 bg-transparent p-0">
             {tabs.map((tab) => (

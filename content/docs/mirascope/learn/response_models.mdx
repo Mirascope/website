@@ -199,146 +199,22 @@ Note that we have no way of attaching `BaseCallResponse` to built-in types, so u
 
 While Mirascope provides a consistent interface, type support varies among providers:
 
-<div className="overflow-x-auto my-4">
-  <table className="min-w-full bg-background border border-border">
-    <thead>
-      <tr className="bg-accent text-accent-foreground">
-        <th className="px-4 py-2 text-left">Type</th>
-        <th className="px-4 py-2 text-center">OpenAI</th>
-        <th className="px-4 py-2 text-center">Anthropic</th>
-        <th className="px-4 py-2 text-center">Google</th>
-        <th className="px-4 py-2 text-center">Groq</th>
-        <th className="px-4 py-2 text-center">xAI</th>
-        <th className="px-4 py-2 text-center">Mistral</th>
-        <th className="px-4 py-2 text-center">Cohere</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr className="border-t border-border">
-        <td className="px-4 py-2 font-medium">str</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-      </tr>
-      <tr className="bg-muted border-t border-border">
-        <td className="px-4 py-2 font-medium">int</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-      </tr>
-      <tr className="border-t border-border">
-        <td className="px-4 py-2 font-medium">float</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-      </tr>
-      <tr className="bg-muted border-t border-border">
-        <td className="px-4 py-2 font-medium">bool</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-      </tr>
-      <tr className="border-t border-border">
-        <td className="px-4 py-2 font-medium">bytes</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">-✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-      </tr>
-      <tr className="bg-muted border-t border-border">
-        <td className="px-4 py-2 font-medium">list</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-      </tr>
-      <tr className="border-t border-border">
-        <td className="px-4 py-2 font-medium">set</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">--</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-      </tr>
-      <tr className="bg-muted border-t border-border">
-        <td className="px-4 py-2 font-medium">tuple</td>
-        <td className="px-4 py-2 text-center">-✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">-✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">-✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-      </tr>
-      <tr className="border-t border-border">
-        <td className="px-4 py-2 font-medium">dict</td>
-        <td className="px-4 py-2 text-center">-✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">-✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-      </tr>
-      <tr className="bg-muted border-t border-border">
-        <td className="px-4 py-2 font-medium">Literal/Enum</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-      </tr>
-      <tr className="border-t border-border">
-        <td className="px-4 py-2 font-medium">BaseModel</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">-✓</td>
-      </tr>
-      <tr className="bg-muted border-t border-border">
-        <td className="px-4 py-2 font-medium">Nested ($def)</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">✓✓</td>
-        <td className="px-4 py-2 text-center">--</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+|     Type      | OpenAI | Anthropic | Google | Groq | xAI | Mistral | Cohere |
+|---------------|--------|-----------|--------|------|-----|---------|--------|
+|     str       |✓✓      |✓✓         |✓✓      |✓✓    |✓✓   |✓✓       |✓✓      |
+|     int       |✓✓      |✓✓         |✓✓      |✓✓    |✓✓   |✓✓       |✓✓      |
+|    float      |✓✓      |✓✓         |✓✓      |✓✓    |✓✓   |✓✓       |✓✓      |
+|     bool      |✓✓      |✓✓         |✓✓      |✓✓    |✓✓   |✓✓       |✓✓      |
+|     bytes     |✓✓      |✓✓         |-✓      |✓✓    |✓✓   |✓✓       |✓✓      |
+|     list      |✓✓      |✓✓         |✓✓      |✓✓    |✓✓   |✓✓       |✓✓      |
+|     set       |✓✓      |✓✓         |--      |✓✓    |✓✓   |✓✓       |✓✓      |
+|     tuple     |-✓      |✓✓         |-✓      |✓✓    |-✓   |✓✓       |✓✓      |
+|     dict      |-✓      |✓✓         |✓✓      |✓✓    |-✓   |✓✓       |✓✓      |
+|  Literal/Enum |✓✓      |✓✓         |✓✓      |✓✓    |✓✓   |✓✓       |✓✓      |
+|   BaseModel   |✓✓      |✓✓         |✓✓      |✓✓    |✓✓   |✓✓       |-✓      |
+| Nested ($def) |✓✓      |✓✓         |✓✓      |✓✓    |✓✓   |✓✓       |--      |
 
-<div className="text-sm text-muted-foreground">Legend: ✓✓ (Fully Supported), -✓ (Only JSON Mode Support), -- (Not Supported)</div>
+✓✓ : Fully Supported, -✓: Only JSON Mode Support, -- : Not supported
 
 ## Validation and Error Handling
 

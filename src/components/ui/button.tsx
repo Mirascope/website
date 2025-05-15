@@ -11,7 +11,7 @@ const buttonVariants = cva(
     "disabled:pointer-events-none disabled:opacity-50",
     "[&_svg]:pointer-events-none [&_svg]:shrink-0",
     "outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
-    "font-handwriting",
+    "font-handwriting-descent",
   ].join(" "),
   {
     variants: {

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 18: Streaming Partial Tools
 # Generated for provider: anthropic
-# Source: content/docs/mirascope/learn/tools.mdx:861
+# Source: content/docs/mirascope/learn/tools.mdx:735
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import BaseTool, llm, prompt_template

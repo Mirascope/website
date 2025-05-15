@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 39: Pre-Made ToolKits
 # Generated for provider: anthropic
-# Source: content/docs/mirascope/learn/tools.mdx:1879
+# Source: content/docs/mirascope/learn/tools.mdx:1692
 # This file is auto-generated; any edits should be made in the source file
 
 from pathlib import Path

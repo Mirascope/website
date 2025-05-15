@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 16: Streaming Tools
 # Generated for provider: anthropic
-# Source: content/docs/mirascope/learn/tools.mdx:767
+# Source: content/docs/mirascope/learn/tools.mdx:641
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm, prompt_template

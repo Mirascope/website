@@ -8,11 +8,14 @@ import fs from "fs";
 import os from "os";
 import { prerenderPage } from "./lib/prerender";
 import { getAllRoutes } from "../src/lib/router-utils";
+import { validateLinks } from "./validate-links";
+import { printHeader, icons, coloredLog } from "./lib/terminal";
 
 async function main() {
   // Get arguments
   const args = process.argv.slice(2);
   const verbose = args.includes("--verbose");
+  const skipLinkValidation = args.includes("--skip-link-validation");
 
   // Define paths
   const distDir = path.join(process.cwd(), "dist");
@@ -20,7 +23,7 @@ async function main() {
 
   // Check if the production build exists
   if (!fs.existsSync(prodTemplatePath)) {
-    console.error("❌ Production build not found! Run `bun run build` first.");
+    coloredLog(`${icons.error} Production build not found! Run \`bun run build\` first.`, "red");
     process.exit(1);
   }
 
@@ -49,7 +52,8 @@ async function main() {
 
     // Get all routes to prerender
     const routes = await getAllRoutes();
-    console.log(`\n🔄 Pre-rendering ${routes.length} routes to production-ready HTML...`);
+    printHeader("Pre-rendering Routes");
+    console.log(`${icons.info} Pre-rendering ${routes.length} routes to production-ready HTML...`);
 
     // Prerender each route directly to dist
     let successCount = 0;
@@ -71,10 +75,20 @@ async function main() {
     }
 
     if (failureCount > 0) {
-      throw new Error(`\n\n❌ Pre-rendering failed for ${failureCount} routes.`);
+      throw new Error(`\n\n${icons.error} Pre-rendering failed for ${failureCount} routes.`);
     } else {
-      console.log(`\n\n✅ Pre-rendering complete!`);
+      coloredLog(`\n\n${icons.success} Pre-rendering complete!`, "green");
       console.log(`   - Successfully pre-rendered: ${successCount} routes`);
+
+      // Run link validation if not skipped
+      if (!skipLinkValidation) {
+        const validationResult = await validateLinks(distDir, verbose);
+        if (!validationResult.valid) {
+          throw new Error(
+            `\n${icons.error} Link validation failed. Fix broken links before deploying.`
+          );
+        }
+      }
     }
   } finally {
     // Restore the original template if it existed

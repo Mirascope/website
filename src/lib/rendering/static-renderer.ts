@@ -13,7 +13,6 @@ import { createMemoryHistory, createRouter, RouterProvider } from "@tanstack/rea
 import { routeTree } from "../../routeTree.gen";
 import { environment } from "../content/environment";
 import type { PageMetadata, RenderResult } from "./types";
-import { initHighlighters } from "../code-highlight";
 
 /**
  * Static fetch implementation for server-side rendering
@@ -108,12 +107,6 @@ export async function renderRouteToString(
   verbose: boolean = false
 ): Promise<RenderResult> {
   if (verbose) console.log(`Rendering route to string: ${route}`);
-
-  // Initialize code highlighters before rendering
-  // This ensures code blocks are highlighted in the pre-rendered output
-  if (verbose) console.log("Initializing code highlighters for pre-rendering...");
-  await initHighlighters();
-  if (verbose) console.log("Highlighters initialized");
 
   // Configure environment
   const env = configureStaticEnvironment();

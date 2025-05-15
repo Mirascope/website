@@ -24,7 +24,7 @@ export function ProviderDropdown({ className }: ProviderDropdownProps) {
             variant="outline"
             size="sm"
             className={cn(
-              "font-handwriting w-full justify-between text-base",
+              "w-full justify-between text-base",
               "text-primary border-primary" // Always show the selected provider in primary color
             )}
           >

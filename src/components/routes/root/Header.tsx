@@ -136,7 +136,12 @@ export default function Header() {
                     </Link>
                   </span>
                 </NavigationMenuTrigger>
-                <NavigationMenuContent className="bg-background p-2 [text-shadow:none]">
+                <NavigationMenuContent
+                  className={cn(
+                    "bg-background p-2 [text-shadow:none]",
+                    isLandingPage ? "textured-bg-absolute" : ""
+                  )}
+                >
                   <ul className="grid w-[300px] grid-cols-1 gap-2 sm:w-[480px] sm:grid-cols-2">
                     <li>
                       <NavigationMenuLink asChild>

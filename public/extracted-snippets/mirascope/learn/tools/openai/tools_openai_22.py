@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 22: Tool Message Parameters
 # Generated for provider: openai
-# Source: content/docs/mirascope/learn/tools.mdx:1040
+# Source: content/docs/mirascope/learn/tools.mdx:914
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import BaseDynamicConfig, BaseMessageParam, BaseTool, llm, prompt_template

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 3: Error Handling and Validation
 # Generated for provider: openai
-# Source: content/docs/mirascope/learn/json_mode.mdx:132
+# Source: content/docs/mirascope/learn/json_mode.mdx:85
 # This file is auto-generated; any edits should be made in the source file
 
 import json

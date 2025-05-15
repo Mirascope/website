@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 5: Common Parameters Across Providers
 # Generated for provider: openai
-# Source: content/docs/mirascope/learn/calls.mdx:287
+# Source: content/docs/mirascope/learn/calls.mdx:235
 # This file is auto-generated; any edits should be made in the source file
 
 from mirascope import llm

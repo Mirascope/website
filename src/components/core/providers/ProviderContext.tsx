@@ -8,6 +8,8 @@ import { providers, providerDefaults } from "@/src/config/providers";
 export type { Provider };
 export { providers, providerDefaults };
 
+import { temporarilyEnableSyncHighlighting } from "@/src/lib/code-highlight";
+
 // Create a context to share the selected provider
 interface ProviderContextType {
   provider: Provider;
@@ -49,6 +51,7 @@ export function ProviderContextProvider({
 
   // Create a wrapper for setProvider that calls the callback and updates localStorage
   const handleProviderChange = (newProvider: Provider) => {
+    temporarilyEnableSyncHighlighting();
     setProvider(newProvider);
 
     // Save to localStorage

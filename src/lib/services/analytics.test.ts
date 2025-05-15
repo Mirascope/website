@@ -23,7 +23,12 @@ describe("AnalyticsManager", () => {
     process.env.NODE_ENV = "production";
 
     // Create fresh analytics manager for each test
-    analyticsManager = new AnalyticsManager("test-ga-id", "test-ph-key", "test-version");
+    analyticsManager = new AnalyticsManager(
+      "test-ga-id",
+      "test-gtm-id",
+      "test-ph-key",
+      "test-version"
+    );
   });
 
   afterEach(() => {
@@ -118,19 +123,19 @@ describe("AnalyticsManager", () => {
     expect(initializeSpy.mock.calls.length).toBe(1);
   });
 
-  test("trackGAPageView only tracks when analytics is enabled", () => {
+  test("trackPageView only tracks when analytics is enabled", () => {
     // When analytics is enabled
     const enableSpy = spyOn(analyticsManager, "enableAnalytics");
     enableSpy.mockImplementation(() => true);
 
-    analyticsManager.trackGAPageView("/test-page");
+    analyticsManager.trackPageView("/test-page");
     expect(window.gtag).toHaveBeenCalled();
 
     // When analytics is disabled
     window.gtag = mock(() => {}); // Reset the mock
     enableSpy.mockImplementation(() => false);
 
-    analyticsManager.trackGAPageView("/test-page");
+    analyticsManager.trackPageView("/test-page");
     expect(window.gtag).not.toHaveBeenCalled();
   });
 });

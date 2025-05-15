@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Example 2: Basic Usage and Syntax
 # Generated for provider: openai
-# Source: content/docs/mirascope/learn/json_mode.mdx:102
+# Source: content/docs/mirascope/learn/json_mode.mdx:55
 # This file is auto-generated; any edits should be made in the source file
 
 import json

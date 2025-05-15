@@ -26,7 +26,7 @@ export const LilypadBlock = ({ onScrollToTop }: LilypadBlockProps) => {
       <div className="mb-2 w-full max-w-3xl">
         <div className="bg-background/60 mb-2 w-full rounded-md">
           <ProviderTabbedSection>
-            <div className="mb-2">
+            <div className="textured-bg mb-2 rounded-md border-0">
               <LilypadDemo />
             </div>
           </ProviderTabbedSection>
