@@ -2,7 +2,7 @@
  * Analytics service to handle all tracking functionality.
  * Integrated with Google Analytics 4 and PostHog.
  */
-import { GA_MEASUREMENT_ID, POSTHOG_PUBLIC_KEY, SITE_VERSION } from "../constants/site";
+import { GA_MEASUREMENT_ID, GTM_ID, POSTHOG_PUBLIC_KEY, SITE_VERSION } from "../constants/site";
 
 // Centralized check for browser environment
 export const isBrowser = typeof window !== "undefined";
@@ -27,15 +27,18 @@ export class AnalyticsManager {
   private gaInitialized = false;
   private phInitialized = false;
   private gaMeasurementId: string;
+  private gtmId: string;
   private posthogApiKey: string;
   private siteVersion: string;
 
   constructor(
     gaMeasurementId: string = GA_MEASUREMENT_ID,
+    gtmId: string = GTM_ID,
     posthogApiKey: string = POSTHOG_PUBLIC_KEY,
     siteVersion: string = SITE_VERSION
   ) {
     this.gaMeasurementId = gaMeasurementId;
+    this.gtmId = gtmId;
     this.posthogApiKey = posthogApiKey;
     this.siteVersion = siteVersion;
   }
@@ -123,6 +126,9 @@ export class AnalyticsManager {
       window.gtag("consent", "update", {
         analytics_storage: "denied",
       });
+
+      // This will also affect GTM since they share the same dataLayer
+      window.dataLayer?.push({ "gtm.consent": "denied" });
     }
 
     // Opt out of PostHog tracking if loaded
@@ -184,7 +190,7 @@ export class AnalyticsManager {
   }
 
   /**
-   * Initialize Google Analytics
+   * Initialize Google Analytics and Google Tag Manager
    */
   private initializeGoogleAnalytics(): void {
     // Prevent duplicate initialization
@@ -193,7 +199,30 @@ export class AnalyticsManager {
       return;
     }
 
-    console.log(`Google Analytics initializing`);
+    console.log(`Google Analytics and Tag Manager initializing`);
+
+    // Initialize dataLayer for both GA4 and GTM
+    window.dataLayer = window.dataLayer || [];
+
+    // Initialize Google Tag Manager
+    if (!document.getElementById("gtm-script")) {
+      try {
+        // Add GTM script to head
+        const gtmScript = document.createElement("script");
+        gtmScript.id = "gtm-script";
+        gtmScript.innerHTML = `
+          (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+          'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+          })(window,document,'script','dataLayer','${this.gtmId}');
+        `;
+        document.head.appendChild(gtmScript);
+        console.log(`Google Tag Manager script added`);
+      } catch (error) {
+        console.error("Failed to load Google Tag Manager script:", error);
+      }
+    }
 
     // Add the Google Analytics script dynamically
     if (!document.getElementById("ga-script")) {
@@ -210,7 +239,6 @@ export class AnalyticsManager {
 
       document.head.appendChild(script);
 
-      window.dataLayer = window.dataLayer || [];
       // Define the gtag function as it is in the official GA4 snippet
       // @ts-ignore - We need to use arguments here which TS doesn't like
       function gtag() {

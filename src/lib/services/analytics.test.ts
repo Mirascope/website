@@ -23,7 +23,12 @@ describe("AnalyticsManager", () => {
     process.env.NODE_ENV = "production";
 
     // Create fresh analytics manager for each test
-    analyticsManager = new AnalyticsManager("test-ga-id", "test-ph-key", "test-version");
+    analyticsManager = new AnalyticsManager(
+      "test-ga-id",
+      "test-gtm-id",
+      "test-ph-key",
+      "test-version"
+    );
   });
 
   afterEach(() => {
