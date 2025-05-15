@@ -11,6 +11,8 @@ import {
 import { cn } from "@/src/lib/utils";
 import { getProductRoute } from "@/src/lib/routes";
 import { useProduct, useIsLandingPage } from "@/src/components/core";
+import { PRODUCT_CONFIGS } from "@/src/lib/constants/site";
+import type { ProductName } from "@/src/lib/content/spec";
 
 // Reusable navigation link component
 interface NavLinkProps {
@@ -19,6 +21,39 @@ interface NavLinkProps {
   className?: string;
   onClick?: () => void;
 }
+
+/**
+ * ProductMenuLink component for product navigation links.
+ * Retrieves product information from global config and applies appropriate styling.
+ */
+interface ProductMenuLinkProps {
+  productName: ProductName;
+}
+
+const ProductMenuLink = ({ productName }: ProductMenuLinkProps) => {
+  const config = PRODUCT_CONFIGS[productName];
+
+  return (
+    <li>
+      <NavigationMenuLink asChild>
+        <Link
+          to={getProductRoute(productName)}
+          className={cn(
+            "bg-background block space-y-1.5 rounded-md p-4 transition-colors",
+            "hover:bg-primary/20 focus:bg-primary/20",
+            "active:bg-primary/60 active:scale-[0.98]",
+            "data-[active=true]:bg-primary/50 data-[active=true]:hover:bg-primary/60",
+            "data-[active=true]:focus:bg-primary/60"
+          )}
+          data-product={productName}
+        >
+          <div className="text-primary text-xl font-medium">{config.title}</div>
+          <p className="text-foreground text-base">{config.tagline}</p>
+        </Link>
+      </NavigationMenuLink>
+    </li>
+  );
+};
 
 const NavLink = ({ href, children, className, onClick }: NavLinkProps) => {
   return (
@@ -78,44 +113,8 @@ export default function DesktopNavigation({ isSearchOpen }: DesktopNavigationPro
               )}
             >
               <ul className="grid w-[300px] grid-cols-1 gap-2 sm:w-[480px] sm:grid-cols-2">
-                <li>
-                  <NavigationMenuLink asChild>
-                    <Link
-                      to={getProductRoute("mirascope")}
-                      className={cn(
-                        "bg-background block space-y-1.5 rounded-md p-4 transition-colors",
-                        "hover:bg-mirascope-purple/20 focus:bg-mirascope-purple/20",
-                        "active:bg-mirascope-purple/60 active:scale-[0.98]",
-                        "data-[active=true]:bg-mirascope-purple/50 data-[active=true]:hover:bg-mirascope-purple/60",
-                        "data-[active=true]:focus:bg-mirascope-purple/60"
-                      )}
-                    >
-                      <div className="text-mirascope-purple text-xl font-medium">Mirascope</div>
-                      <p className="text-foreground text-base">
-                        LLM abstractions that aren't obstructions.
-                      </p>
-                    </Link>
-                  </NavigationMenuLink>
-                </li>
-                <li>
-                  <NavigationMenuLink asChild>
-                    <Link
-                      to={getProductRoute("lilypad")}
-                      className={cn(
-                        "bg-background block space-y-1.5 rounded-md p-4 transition-colors",
-                        "hover:bg-lilypad-green/20 focus:bg-lilypad-green/20",
-                        "active:bg-lilypad-green/60 active:scale-[0.98]",
-                        "data-[active=true]:bg-lilypad-green/50 data-[active=true]:hover:bg-lilypad-green/60",
-                        "data-[active=true]:focus:bg-lilypad-green/60"
-                      )}
-                    >
-                      <div className="text-lilypad-green text-xl font-medium">Lilypad</div>
-                      <p className="text-foreground text-base">
-                        Spin up your data flywheel with one line of code.
-                      </p>
-                    </Link>
-                  </NavigationMenuLink>
-                </li>
+                <ProductMenuLink productName="mirascope" />
+                <ProductMenuLink productName="lilypad" />
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
