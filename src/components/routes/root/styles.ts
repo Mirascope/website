@@ -5,11 +5,22 @@ import { cn } from "@/src/lib/utils";
  */
 export const NAV_LINK_STYLES = {
   // Base styles for desktop navigation links
-  base: "relative flex cursor-pointer items-center px-2 py-2 text-xl font-medium nav-text",
+  base: cn(
+    // Layout and typography
+    "relative flex cursor-pointer items-center px-2 py-2 text-xl font-medium",
+    // Uses the nav-text utility for consistent text styling based on page type
+    "nav-text"
+  ),
 
   // Styles for mobile navigation links
-  mobile:
-    "hover:text-primary relative flex cursor-pointer items-center py-2 text-xl font-medium transition-colors duration-200",
+  mobile: cn(
+    // Base styles
+    "relative flex cursor-pointer items-center py-2 text-xl font-medium",
+    // Transitions
+    "transition-colors duration-200",
+    // Interactive states
+    "hover:text-primary"
+  ),
 };
 
 /**
@@ -41,7 +52,8 @@ export const PRODUCT_LINK_STYLES = {
       // Transitions
       "transition-colors",
       // Interactive states
-      "hover:bg-muted"
+      "hover:bg-primary/20 focus:bg-primary/20",
+      "active:bg-primary/60 active:scale-[0.98]"
     ),
   },
 };
