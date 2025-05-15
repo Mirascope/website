@@ -4,6 +4,7 @@ import { Check, ChevronRight, Circle } from "lucide-react";
 
 import { cn } from "@/src/lib/utils";
 import { ProductProvider, useProduct } from "@/src/components/core/providers";
+import { useTheme } from "@/src/components/core/providers/ThemeContext";
 
 // Basic dropdown components
 const DropdownMenu = DropdownMenuPrimitive.Root;
@@ -44,6 +45,8 @@ const DropdownMenuSubContent = React.forwardRef<
 >(({ className, ...props }, ref) => {
   // Get the current product to propagate to the portal
   const product = useProduct();
+  // Get current theme
+  const { current } = useTheme();
 
   return (
     <ProductProvider product={product}>
@@ -63,6 +66,8 @@ const DropdownMenuSubContent = React.forwardRef<
           "data-[side=left]:slide-in-from-right-2",
           "data-[side=right]:slide-in-from-left-2",
           "data-[side=top]:slide-in-from-bottom-2",
+          // Apply dark theme class when needed
+          current === "dark" && "dark",
           // Custom classes
           className
         )}
@@ -77,8 +82,10 @@ const DropdownMenuContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
 >(({ className, sideOffset = 4, ...props }, ref) => {
-  // Get the current product and theme to propagate to the portal
+  // Get the current product to propagate to the portal
   const product = useProduct();
+  // Get current theme
+  const { current } = useTheme();
 
   return (
     <DropdownMenuPrimitive.Portal>
@@ -100,6 +107,8 @@ const DropdownMenuContent = React.forwardRef<
             "data-[side=left]:slide-in-from-right-2",
             "data-[side=right]:slide-in-from-left-2",
             "data-[side=top]:slide-in-from-bottom-2",
+            // Apply dark theme class when needed
+            current === "dark" && "dark",
             // Custom classes
             className
           )}
