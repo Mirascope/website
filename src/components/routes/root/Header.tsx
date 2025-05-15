@@ -79,9 +79,8 @@ export default function Header() {
     <header
       className={cn(
         "fixed top-0 right-0 left-0 z-50 mb-2 flex w-full flex-col items-center justify-center px-4 py-2 sm:px-6",
-        isLandingPage
-          ? "landing-page-text-shadow bg-transparent text-white"
-          : "bg-background text-foreground",
+        "landing-text landing-page-text-shadow",
+        isLandingPage ? "" : "bg-background",
         scrolled && !isLandingPage ? "border-border border-b shadow-sm" : ""
       )}
     >
@@ -95,14 +94,10 @@ export default function Header() {
               size="small"
               withText={true}
               showBeta={true}
-              textClassName={cn(isLandingPage ? "text-white" : "")}
+              textClassName={cn("landing-text")}
             />
           ) : (
-            <MirascopeLogo
-              size="small"
-              withText={true}
-              textClassName={cn(isLandingPage ? "text-white" : "")}
-            />
+            <MirascopeLogo size="small" withText={true} textClassName={cn("landing-text")} />
           )}
         </Link>
 
