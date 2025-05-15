@@ -1,5 +1,4 @@
 import type { Preview } from "@storybook/react";
-import React from "react";
 import {
   RouterProvider,
   createMemoryHistory,
@@ -8,6 +7,46 @@ import {
 } from "@tanstack/react-router";
 import { withProductTheme } from "./ProductThemeDecorator";
 import "../src/styles.css"; // This imports all other CSS files including themes.css and nav.css
+
+type Viewport = {
+  name: string;
+  styles: {
+    width: string;
+    height: string;
+  };
+};
+
+// Define responsive viewport presets - canonical source of truth for all stories
+export const VIEWPORT_PRESETS: Record<string, Viewport> = {
+  desktop: {
+    name: "Desktop",
+    styles: {
+      width: "1440px",
+      height: "800px",
+    },
+  },
+  tablet: {
+    name: "Tablet",
+    styles: {
+      width: "768px",
+      height: "1024px",
+    },
+  },
+  mobile: {
+    name: "Mobile",
+    styles: {
+      width: "375px",
+      height: "667px",
+    },
+  },
+  mobileSmall: {
+    name: "Mobile Small",
+    styles: {
+      width: "320px",
+      height: "568px",
+    },
+  },
+};
 
 const preview: Preview = {
   parameters: {
@@ -21,6 +60,10 @@ const preview: Preview = {
       disable: true, // Disable default backgrounds since we're using our custom themes
     },
     layout: "fullscreen", // Use full screen layout for all stories by default
+    viewport: {
+      viewports: VIEWPORT_PRESETS,
+      defaultViewport: "desktop",
+    },
     docs: {
       story: {
         inline: false, // Make story embeds use the full width
@@ -65,6 +108,20 @@ const preview: Preview = {
         ],
       },
     },
+    viewport: {
+      name: "Viewport",
+      description: "Viewport size for responsive testing",
+      defaultValue: "desktop",
+      toolbar: {
+        icon: "mobile",
+        items: [
+          { value: "desktop", title: "Desktop (1440px)" },
+          { value: "tablet", title: "Tablet (768px)" },
+          { value: "mobile", title: "Mobile (375px)" },
+          { value: "mobileSmall", title: "Mobile Small (320px)" },
+        ],
+      },
+    },
   },
   decorators: [
     // First wrap in TanStack Router provider to handle router dependencies
@@ -93,6 +150,22 @@ const preview: Preview = {
         context.parameters.landingPage !== undefined
           ? context.parameters.landingPage
           : context.globals.landingPage;
+
+      // Apply viewport based on the global type or story parameter
+      if (context.globals.viewport && context.viewMode !== "docs") {
+        const viewportKey =
+          context.parameters.viewport?.defaultViewport || context.globals.viewport;
+        const viewportValue = VIEWPORT_PRESETS[viewportKey];
+
+        if (viewportValue) {
+          // Set viewport dimensions based on the selected option
+          const { width, height } = viewportValue.styles;
+          if (context.containerRef?.current) {
+            context.containerRef.current.style.width = width;
+            context.containerRef.current.style.height = height;
+          }
+        }
+      }
 
       return withProductTheme(product, theme, landingPage)(Story);
     },

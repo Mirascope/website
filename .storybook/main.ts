@@ -8,6 +8,9 @@ const config: StorybookConfig = {
     name: "@storybook/react-vite",
     options: {},
   },
+  features: {
+    viewportStoryGlobals: true, // Enable viewport persistence between story navigation
+  },
   core: {
     disableTelemetry: true,
     builder: {
