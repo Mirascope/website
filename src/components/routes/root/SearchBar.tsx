@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect, type KeyboardEvent } from "react";
 import { Search as SearchIcon } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { cn } from "@/src/lib/utils";
 import { getSearchService, type SearchResultItem } from "@/src/lib/services/search";
 import { environment } from "@/src/lib/content/environment";
 import { useIsLandingPage } from "@/src/components/core";
+import { SEARCH_BAR_STYLES } from "./styles";
 
 // Component for an individual search result
 interface SearchResultProps {
@@ -29,10 +29,7 @@ function SearchResult({ result, onSelect, isSelected = false, index, onHover }: 
       onClick={onSelect}
       onMouseEnter={() => onHover(index)}
       onMouseMove={() => onHover(index)}
-      className={cn(
-        "border-border/40 flex border-t px-5 py-4 text-sm transition-colors first:border-0",
-        isSelected ? "bg-accent/50" : ""
-      )}
+      className={SEARCH_BAR_STYLES.result(isSelected)}
     >
       <div className="min-w-0 flex-1">
         <div className="mb-2 flex items-center justify-between">
@@ -123,15 +120,7 @@ function SearchInput({ query, onChange, onFocus, inputRef, isOpen }: SearchInput
   const isLandingPage = useIsLandingPage();
   return (
     <div
-      className={cn(
-        "h-9 rounded-full transition-all duration-500",
-        isLandingPage
-          ? "border-0 bg-white/10 hover:bg-white/20"
-          : "border-border bg-background/20 hover:bg-primary/10 hover:border-primary/80 border",
-        isOpen
-          ? "w-80 md:w-[32rem]" // Wider when expanded
-          : "w-9 lg:w-36" // Icon-only on small screens, wider on lg screens
-      )}
+      className={SEARCH_BAR_STYLES.inputContainer(isOpen, isLandingPage)}
       data-testid="search-input"
       style={
         isLandingPage
@@ -141,40 +130,20 @@ function SearchInput({ query, onChange, onFocus, inputRef, isOpen }: SearchInput
       onClick={onFocus}
     >
       <div className="relative flex h-full items-center overflow-visible">
-        <SearchIcon
-          size={16}
-          className={cn(
-            "transition-all duration-500",
-            "nav-icon",
-            isOpen ? "absolute left-3" : "mx-auto lg:absolute lg:left-3" // Center icon when collapsed on small screens
-          )}
-        />
+        <SearchIcon size={16} className={SEARCH_BAR_STYLES.icon(isOpen)} />
         <input
           ref={inputRef}
           readOnly={!isOpen}
           type="text"
           placeholder="Search..."
-          className={cn(
-            "cursor-pointer overflow-visible bg-transparent py-0 text-sm leading-normal transition-all duration-500 outline-none",
-            isLandingPage
-              ? "text-white placeholder:text-white/90"
-              : "text-foreground placeholder:text-foreground",
-            isOpen
-              ? "w-full pr-9 pl-10 opacity-100" // Full width when open
-              : "w-0 opacity-0 lg:w-28 lg:pr-3 lg:pl-10 lg:opacity-80" // Hide text on small screens, show on lg
-          )}
+          className={SEARCH_BAR_STYLES.input(isOpen, isLandingPage)}
           style={{ height: "auto", minHeight: "100%" }}
           value={query}
           onChange={(e) => onChange(e.target.value)}
           onFocus={onFocus}
         />
         {isOpen && (
-          <kbd
-            className={cn(
-              "font-small absolute top-1/2 right-3 hidden h-5 -translate-y-1/2 items-center gap-1 rounded border px-1.5 font-mono text-[10px] opacity-80 lg:flex",
-              isLandingPage ? "bg-white/10 text-white" : "border-border bg-muted text-foreground"
-            )}
-          >
+          <kbd className={SEARCH_BAR_STYLES.kbd(isLandingPage)}>
             <span className="text-xs">⌘</span>K
           </kbd>
         )}
@@ -231,12 +200,7 @@ function SearchResultsContainer({
 
   return (
     <div
-      className={cn(
-        "search-results absolute top-full z-50 mt-2 w-screen max-w-[32rem] overflow-hidden rounded-lg shadow-2xl [text-shadow:none]",
-        "bg-background border-border border transition-opacity duration-300",
-        "right-0 lg:right-auto lg:left-0", // Position from right on small screens, from left on large screens
-        isLandingPage ? "textured-bg-absolute" : ""
-      )}
+      className={SEARCH_BAR_STYLES.resultsContainer(isLandingPage)}
       style={{
         opacity: isReallyVisible ? 1 : 0,
         ...(isLandingPage
@@ -258,7 +222,7 @@ function SearchResultsContainer({
     if (isLoading || isSearching) {
       return (
         <div className="flex justify-center p-4">
-          <div className="border-primary h-6 w-6 animate-spin rounded-full border-t-2 border-b-2"></div>
+          <div className={SEARCH_BAR_STYLES.loadingIndicator}></div>
           <span className="sr-only">Loading results...</span>
         </div>
       );
@@ -307,7 +271,7 @@ function SearchResultsContainer({
 // Component for the keyboard shortcut footer
 function SearchFooter() {
   return (
-    <div className="border-border bg-muted/40 text-muted-foreground flex items-center justify-between border-t p-2 text-xs">
+    <div className={SEARCH_BAR_STYLES.footer}>
       <div className="flex items-center gap-2 px-2">
         <kbd className="border-border rounded border px-1.5 py-0.5 text-[12px]">
           <span className="pr-1 text-xs">⌘</span>
@@ -508,7 +472,7 @@ export default function SearchBar({ onOpenChange }: SearchBarProps = {}) {
   }, [results]);
 
   return (
-    <div className="relative flex justify-end lg:justify-start" ref={searchContainerRef}>
+    <div className={SEARCH_BAR_STYLES.container} ref={searchContainerRef}>
       <SearchInput
         query={query}
         onChange={setQuery}
