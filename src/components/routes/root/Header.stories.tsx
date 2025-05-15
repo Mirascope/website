@@ -1,19 +1,19 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { userEvent, within } from "@storybook/test";
 import Header from "./Header";
 import { VIEWPORT_PRESETS } from "@/.storybook/preview";
 
-// Helper function to open the search bar for stories
-const openSearchBar = () => {
-  if (typeof document !== "undefined") {
-    setTimeout(() => {
-      const searchInput = document.querySelector('[data-testid="search-input"]');
-      if (searchInput instanceof HTMLElement) {
-        searchInput.click();
-        searchInput.focus();
-      }
-    }, 300); // Small delay to ensure DOM is ready
-  }
-};
+async function openSearchBar(canvasElement: HTMLElement) {
+  // Wait for the canvas to be fully rendered
+  // Get the canvas containing the rendered story
+  const canvas = within(canvasElement);
+
+  // Find the search container using the data-testid attribute
+  const searchContainer = canvas.getByTestId("search-input");
+
+  // Click on the search input to open it
+  await userEvent.click(searchContainer);
+}
 
 const meta = {
   title: "Root/Header",
@@ -218,7 +218,7 @@ export const DesktopSearchOpen: Story = {
   args: {
     showProductSelector: false,
   },
-  play: async () => openSearchBar(),
+  play: async ({ canvasElement }) => openSearchBar(canvasElement),
 };
 
 export const TabletSearchOpen: Story = {
@@ -233,7 +233,7 @@ export const TabletSearchOpen: Story = {
   args: {
     showProductSelector: false,
   },
-  play: async () => openSearchBar(),
+  play: async ({ canvasElement }) => openSearchBar(canvasElement),
 };
 
 export const MobileSearchOpen: Story = {
@@ -248,7 +248,7 @@ export const MobileSearchOpen: Story = {
   args: {
     showProductSelector: false,
   },
-  play: async () => openSearchBar(),
+  play: async ({ canvasElement }) => openSearchBar(canvasElement),
 };
 
 export const MobileSmallSearchOpen: Story = {
@@ -263,5 +263,5 @@ export const MobileSmallSearchOpen: Story = {
   args: {
     showProductSelector: false,
   },
-  play: async () => openSearchBar(),
+  play: async ({ canvasElement }) => openSearchBar(canvasElement),
 };
