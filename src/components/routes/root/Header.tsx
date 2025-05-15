@@ -185,32 +185,26 @@ export default function Header({ showProductSelector = false }: HeaderProps) {
           <NavLink href="/pricing">Pricing</NavLink>
         </div>
 
-        {/* Right section with responsive search and controls */}
-        <div className="hidden items-center gap-3 md:flex">
-          {/* Search bar that expands left */}
-          <SearchBar
-            onOpenChange={(isOpen) => {
-              setIsSearchOpen(isOpen);
-            }}
-          />
-
-          {/* GitHub and Theme buttons that stay visible */}
-          <div className="flex items-center gap-3">
-            <GitHubRepoButton />
-            <ThemeSwitcher />
-          </div>
-        </div>
-
-        {/* Mobile controls: Search + Theme Switcher + Menu Button */}
-        <div className="flex items-center gap-2 md:hidden">
+        {/* Right section with responsive controls */}
+        <div className="flex items-center gap-2 md:gap-3">
+          {/* Single search bar instance for all viewport sizes */}
           <SearchBar
             onOpenChange={(isOpen: boolean) => {
               setIsSearchOpen(isOpen);
             }}
           />
+
+          {/* Desktop: GitHub + Theme buttons */}
+          <div className="hidden items-center gap-3 md:flex">
+            <GitHubRepoButton />
+          </div>
+
+          {/* Theme switcher - visible on all screen sizes */}
           <ThemeSwitcher />
+
+          {/* Mobile menu button - hidden on desktop */}
           <button
-            className={cn("p-2", "nav-icon")}
+            className={cn("p-2 md:hidden", "nav-icon")}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle menu"
           >
