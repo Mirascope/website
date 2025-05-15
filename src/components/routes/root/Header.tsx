@@ -2,7 +2,6 @@ import { Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/src/lib/utils";
-import { getProductRoute } from "@/src/lib/routes";
 import {
   ProductLogo,
   GitHubRepoButton,
@@ -12,6 +11,7 @@ import {
 import ThemeSwitcher from "@/src/components/routes/root/ThemeSwitcher";
 import SearchBar from "@/src/components/routes/root/SearchBar";
 import DesktopNavigation from "@/src/components/routes/root/DesktopNavigation";
+import MobileMenu from "@/src/components/routes/root/MobileMenu";
 
 interface HeaderProps {
   /**
@@ -101,42 +101,7 @@ export default function Header({ showProductSelector = false }: HeaderProps) {
       )}
 
       {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="text-foreground bg-background absolute top-full right-4 z-50 mt-2 max-w-xs rounded-lg p-6 shadow-lg [text-shadow:none] md:hidden">
-          <div className="flex flex-col space-y-4">
-            <div className="my-2 text-xl font-medium">Docs</div>
-            <Link
-              to={getProductRoute("mirascope")}
-              className="bg-background text-mirascope-purple hover:bg-muted rounded-md p-3 font-medium transition-colors"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Mirascope
-            </Link>
-            <Link
-              to={getProductRoute("lilypad")}
-              className="bg-background text-lilypad-green hover:bg-muted rounded-md p-3 font-medium transition-colors"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Lilypad
-            </Link>
-            <hr className="my-2" />
-            <Link
-              to="/blog"
-              className="hover:text-primary relative flex cursor-pointer items-center py-2 text-xl font-medium transition-colors duration-200"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Blog
-            </Link>
-            <Link
-              to="/pricing"
-              className="hover:text-primary relative flex cursor-pointer items-center py-2 text-xl font-medium transition-colors duration-200"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Pricing
-            </Link>
-          </div>
-        </div>
-      )}
+      <MobileMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </header>
   );
 }
