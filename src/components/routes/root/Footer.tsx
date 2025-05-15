@@ -8,9 +8,6 @@ export default function Footer() {
   // Define common text styles based on landing page status
   const textStyles = isLandingPage ? "text-white landing-page-text-shadow" : "text-foreground";
 
-  // Define styles based on page type
-  const linkStyles = isLandingPage ? "nav-text-landing" : "nav-text-regular";
-
   return (
     <footer
       className={cn(
@@ -24,10 +21,10 @@ export default function Footer() {
         </div>
 
         <div className="flex gap-4 sm:gap-8">
-          <Link to="/privacy" className={cn("text-sm sm:text-base", linkStyles)}>
+          <Link to="/privacy" className={cn("text-sm sm:text-base", "nav-text")}>
             Privacy Policy
           </Link>
-          <Link to="/terms/use" className={cn("text-sm sm:text-base", linkStyles)}>
+          <Link to="/terms/use" className={cn("text-sm sm:text-base", "nav-text")}>
             Terms of Use
           </Link>
         </div>

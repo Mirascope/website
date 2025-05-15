@@ -17,7 +17,6 @@ import {
   GitHubRepoButton,
   DocsProductSelector,
   useProduct,
-  useIsLandingPage,
 } from "@/src/components/core";
 import ThemeSwitcher from "@/src/components/routes/root/ThemeSwitcher";
 import SearchBar from "@/src/components/routes/root/SearchBar";
@@ -31,14 +30,12 @@ interface NavLinkProps {
 }
 
 const NavLink = ({ href, children, className, onClick }: NavLinkProps) => {
-  const isLandingPage = useIsLandingPage();
-
   return (
     <Link
       to={href}
       className={cn(
         "relative flex cursor-pointer items-center px-2 py-2 text-xl font-medium",
-        isLandingPage ? "nav-text-landing" : "nav-text-regular",
+        "nav-text",
         className
       )}
       onClick={onClick}
@@ -123,7 +120,7 @@ export default function Header() {
                 <NavigationMenuTrigger
                   className={cn(
                     "flex cursor-pointer items-center !bg-transparent p-0 text-xl font-medium transition-colors duration-200 hover:!bg-transparent focus:!bg-transparent data-[state=open]:!bg-transparent data-[state=open]:hover:!bg-transparent",
-                    isLandingPage ? "nav-text-landing" : "nav-text-regular"
+                    "nav-text"
                   )}
                 >
                   <span className="px-2 py-2">
@@ -203,7 +200,7 @@ export default function Header() {
           <SearchBar onOpenChange={setIsSearchOpen} />
           <ThemeSwitcher />
           <button
-            className={cn("p-2", isLandingPage ? "text-white" : "text-foreground")}
+            className={cn("p-2", "nav-icon")}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle menu"
           >
