@@ -252,30 +252,34 @@ export const DESKTOP_NAV_STYLES = {
  * Search bar component styles
  */
 export const SEARCH_BAR_STYLES = {
-  // Container styles
+  // Container styles - responsible for overall width
   container: (isOpen: boolean) =>
     cn(
       "search-container",
       "relative flex justify-end lg:justify-start",
+      // Add transitions to the container for smooth width changes
+      TRANSITION.properties.all,
+      TRANSITION.duration.medium,
+      TRANSITION.timing.default,
+      // Apply all width constraints here as the single source of truth
+      isOpen ? "w-72 max-w-[calc(100vw-120px)] sm:w-80 md:w-[28rem] lg:w-[32rem]" : "w-9 lg:w-36",
       // When open on small screens, allow more space
       isOpen && "sm:flex-grow md:flex-grow-0"
     ),
 
-  // Input container styles
-  inputContainer: (isOpen: boolean, isLandingPage: boolean) =>
+  // Input container styles - matches parent width
+  inputContainer: (isLandingPage: boolean) =>
     cn(
-      // Base styles
-      "h-9 rounded-full relative flex items-center overflow-visible",
       "search-input-container",
+      // Base styles
+      "h-9 rounded-full relative flex items-center overflow-visible w-full",
       // Transitions
       TRANSITION.properties.all,
       TRANSITION.duration.medium,
       // Conditional styles based on page type
       isLandingPage
         ? "border-0 bg-white/10 hover:bg-white/20"
-        : "border-border bg-background/20 hover:bg-primary/10 hover:border-primary/80 border",
-      // Responsive width based on open state
-      isOpen ? SEARCH_STATE_STYLES.open.container : SEARCH_STATE_STYLES.closed.container
+        : "border-border bg-background/20 hover:bg-primary/10 hover:border-primary/80 border"
     ),
 
   // Inline styles for input container based on landing page
@@ -320,7 +324,7 @@ export const SEARCH_BAR_STYLES = {
       isLandingPage ? "bg-white/10 text-white" : "border-border bg-muted text-foreground"
     ),
 
-  // Results container
+  // Results container - matches parent container width
   resultsContainer: (isLandingPage: boolean) =>
     cn(
       // Base styles
@@ -329,8 +333,8 @@ export const SEARCH_BAR_STYLES = {
       // Transitions
       TRANSITION.properties.opacity,
       TRANSITION.duration.medium,
-      // Match width to parent container
-      "w-full max-w-[32rem]",
+      // Match width to parent container (container manages actual width constraints)
+      "w-full",
       // Responsive positioning
       "right-0 lg:right-auto lg:left-0", // Position from right on small screens, from left on large screens
       // Conditional textured background

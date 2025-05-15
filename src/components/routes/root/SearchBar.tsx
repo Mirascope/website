@@ -120,7 +120,7 @@ function SearchInput({ query, onChange, onFocus, inputRef, isOpen }: SearchInput
   const isLandingPage = useIsLandingPage();
   return (
     <div
-      className={SEARCH_BAR_STYLES.inputContainer(isOpen, isLandingPage)}
+      className={SEARCH_BAR_STYLES.inputContainer(isLandingPage)}
       data-testid="search-input"
       style={SEARCH_BAR_STYLES.getInputContainerStyles(isLandingPage)}
       onClick={onFocus}
