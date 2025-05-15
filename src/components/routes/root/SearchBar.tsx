@@ -466,7 +466,7 @@ export default function SearchBar({ onOpenChange }: SearchBarProps = {}) {
   }, [results]);
 
   return (
-    <div className={SEARCH_BAR_STYLES.container} ref={searchContainerRef}>
+    <div className={SEARCH_BAR_STYLES.container(isOpen)} ref={searchContainerRef}>
       <SearchInput
         query={query}
         onChange={setQuery}

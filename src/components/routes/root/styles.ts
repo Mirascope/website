@@ -50,7 +50,12 @@ export const HEADER_STYLES = {
     cn("relative z-10 flex items-center", isLandingPage ? "invisible" : "visible"),
 
   // Right section with controls
-  controls: "flex items-center gap-2 md:gap-3",
+  controls: (isSearchOpen: boolean) =>
+    cn(
+      "flex items-center gap-2 md:gap-3",
+      // Use more space when search is open on smaller screens
+      isSearchOpen && "flex-grow justify-end"
+    ),
 
   // GitHub button container
   githubContainer: "hidden items-center gap-3 md:flex",
@@ -192,7 +197,7 @@ export const SEARCH_STATE_STYLES = {
     icon: "mx-auto lg:absolute lg:left-3",
   },
   open: {
-    container: "w-80 md:w-[32rem]",
+    container: "w-72 max-w-[calc(100vw-120px)] sm:w-80 md:w-[28rem] lg:w-[32rem]", // Responsive width with upper limit
     input: "w-full pr-9 pl-10 opacity-100",
     icon: "absolute left-3",
   },
@@ -248,7 +253,12 @@ export const DESKTOP_NAV_STYLES = {
  */
 export const SEARCH_BAR_STYLES = {
   // Container styles
-  container: "relative flex justify-end lg:justify-start",
+  container: (isOpen: boolean) =>
+    cn(
+      "relative flex justify-end lg:justify-start",
+      // When open on small screens, allow more space
+      isOpen && "sm:flex-grow md:flex-grow-0"
+    ),
 
   // Input container styles
   inputContainer: (isOpen: boolean, isLandingPage: boolean) =>
@@ -312,11 +322,13 @@ export const SEARCH_BAR_STYLES = {
   resultsContainer: (isLandingPage: boolean) =>
     cn(
       // Base styles
-      "search-results absolute top-full z-50 mt-2 w-screen max-w-[32rem] overflow-hidden rounded-lg shadow-2xl [text-shadow:none]",
+      "search-results absolute top-full z-50 mt-2 overflow-hidden rounded-lg shadow-2xl [text-shadow:none]",
       "bg-background border-border border",
       // Transitions
       TRANSITION.properties.opacity,
       TRANSITION.duration.medium,
+      // Match width to parent container
+      "w-full max-w-[32rem]",
       // Responsive positioning
       "right-0 lg:right-auto lg:left-0", // Position from right on small screens, from left on large screens
       // Conditional textured background
