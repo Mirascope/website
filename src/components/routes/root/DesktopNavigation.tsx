@@ -13,6 +13,7 @@ import { getProductRoute } from "@/src/lib/routes";
 import { useProduct, useIsLandingPage } from "@/src/components/core";
 import { PRODUCT_CONFIGS } from "@/src/lib/constants/site";
 import type { ProductName } from "@/src/lib/content/spec";
+import { NAV_LINK_STYLES, PRODUCT_LINK_STYLES } from "./styles";
 
 // Reusable navigation link component
 interface NavLinkProps {
@@ -38,17 +39,11 @@ const ProductMenuLink = ({ productName }: ProductMenuLinkProps) => {
       <NavigationMenuLink asChild>
         <Link
           to={getProductRoute(productName)}
-          className={cn(
-            "bg-background block space-y-1.5 rounded-md p-4 transition-colors",
-            "hover:bg-primary/20 focus:bg-primary/20",
-            "active:bg-primary/60 active:scale-[0.98]",
-            "data-[active=true]:bg-primary/50 data-[active=true]:hover:bg-primary/60",
-            "data-[active=true]:focus:bg-primary/60"
-          )}
+          className={PRODUCT_LINK_STYLES.desktop.container}
           data-product={productName}
         >
-          <div className="text-primary text-xl font-medium">{config.title}</div>
-          <p className="text-foreground text-base">{config.tagline}</p>
+          <div className={PRODUCT_LINK_STYLES.desktop.title}>{config.title}</div>
+          <p className={PRODUCT_LINK_STYLES.desktop.description}>{config.tagline}</p>
         </Link>
       </NavigationMenuLink>
     </li>
@@ -57,15 +52,7 @@ const ProductMenuLink = ({ productName }: ProductMenuLinkProps) => {
 
 const NavLink = ({ href, children, className, onClick }: NavLinkProps) => {
   return (
-    <Link
-      to={href}
-      className={cn(
-        "relative flex cursor-pointer items-center px-2 py-2 text-xl font-medium",
-        "nav-text",
-        className
-      )}
-      onClick={onClick}
-    >
+    <Link to={href} className={cn(NAV_LINK_STYLES.base, className)} onClick={onClick}>
       {children}
     </Link>
   );
