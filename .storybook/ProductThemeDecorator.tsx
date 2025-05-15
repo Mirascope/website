@@ -65,8 +65,11 @@ export const ProductThemeDecorator = ({
       isLandingPage={isLandingPage}
     >
       <ProductProvider product={product}>
+        {/* Add watercolor background for landing pages, just like in __root.tsx */}
+        {isLandingPage && <div className="watercolor-bg"></div>}
+
         <div
-          className={theme}
+          className={`${theme} handwriting-enabled`}
           style={style as React.CSSProperties}
           data-landing-page={isLandingPage ? "true" : undefined}
         >

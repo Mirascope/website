@@ -2,11 +2,12 @@ import type { Meta, StoryObj } from "@storybook/react";
 import Header from "./Header";
 
 const meta = {
-  title: "Routes/Root/Header",
+  title: "Root/Header",
   component: Header,
   parameters: {
     layout: "fullscreen",
   },
+  tags: ["autodocs"],
 } satisfies Meta<typeof Header>;
 
 export default meta;
@@ -60,18 +61,6 @@ export const LilypadProduct: Story = {
 export const LandingPage: Story = {
   parameters: {
     product: "mirascope",
-    theme: "light",
-    landingPage: true,
-  },
-  args: {
-    showProductSelector: false,
-  },
-};
-
-// Lilypad landing page
-export const LilypadLandingPage: Story = {
-  parameters: {
-    product: "lilypad",
     theme: "light",
     landingPage: true,
   },
