@@ -1,6 +1,6 @@
 import type { Preview } from "@storybook/react";
 import { withProductTheme } from "./ProductThemeDecorator";
-import "../src/styles.css";
+import "../src/styles.css"; // This imports all other CSS files including themes.css and nav.css
 
 const preview: Preview = {
   parameters: {
@@ -13,16 +13,17 @@ const preview: Preview = {
     backgrounds: {
       disable: true, // Disable default backgrounds since we're using our custom themes
     },
+    layout: "fullscreen", // Use full screen layout for better display
   },
   globalTypes: {
     product: {
       name: "Product",
       description: "Product theme to use",
-      defaultValue: "default",
+      defaultValue: "mirascope",
       toolbar: {
         icon: "paintbrush",
         items: [
-          { value: "default", title: "Mirascope", right: "🟣" },
+          { value: "mirascope", title: "Mirascope", right: "🟣" },
           { value: "lilypad", title: "Lilypad", right: "🟢" },
         ],
       },

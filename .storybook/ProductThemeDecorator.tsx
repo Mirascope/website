@@ -1,19 +1,24 @@
 import React from "react";
 
-import { StorybookThemeProvider } from "@/src/components/core/providers";
-
-// Define the available products
-export type ProductType = "mirascope" | "lilypad";
+import {
+  StorybookThemeProvider,
+  ProductProvider,
+  type Theme,
+} from "@/src/components/core/providers";
+import type { ProductName } from "@/src/lib/content/spec";
 
 interface ProductThemeDecoratorProps {
   children: React.ReactNode;
-  product?: ProductType;
+  product?: ProductName;
   theme?: "light" | "dark";
   isLandingPage?: boolean;
 }
 
 /**
- * A decorator that applies the specified product theme to its children
+ * A decorator that applies the specified product theme and color theme to its children
+ *
+ * Note: Instead of manipulating the document root (which doesn't work well with
+ * Storybook's iframe-based rendering), we apply classes directly to our container.
  */
 export const ProductThemeDecorator = ({
   children,
@@ -21,8 +26,6 @@ export const ProductThemeDecorator = ({
   theme = "light",
   isLandingPage = false,
 }: ProductThemeDecoratorProps) => {
-  const productAttr = product === "mirascope" ? {} : { "data-product": product };
-
   // Standard style for component theming
   const baseStyle = {
     padding: "1rem",
@@ -41,10 +44,8 @@ export const ProductThemeDecorator = ({
     backgroundPosition: "center",
     color: "white",
     minHeight: "200px",
-    minWidth: "250px",
     display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: "column",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
   };
 
@@ -52,20 +53,32 @@ export const ProductThemeDecorator = ({
   const style = isLandingPage ? landingPageStyle : baseStyle;
 
   return (
-    <div {...productAttr} style={style as React.CSSProperties}>
-      <StorybookThemeProvider initialTheme={theme}>{children}</StorybookThemeProvider>
-    </div>
+    <StorybookThemeProvider
+      initialTheme={theme as Theme}
+      initialCurrent={theme}
+      isLandingPage={isLandingPage}
+    >
+      <ProductProvider product={product}>
+        <div
+          className={theme}
+          style={style as React.CSSProperties}
+          data-landing-page={isLandingPage ? "true" : undefined}
+        >
+          {children}
+        </div>
+      </ProductProvider>
+    </StorybookThemeProvider>
   );
 };
 
 /**
- * Storybook decorator that applies product theme
+ * Storybook decorator that applies product theme and color theme
  * @param product The product theme to apply
  * @param theme Light or dark theme
  * @param isLandingPage Whether to apply landing page styling
  */
 export const withProductTheme =
-  (product: ProductType = "mirascope", theme: "light" | "dark" = "light", isLandingPage = false) =>
+  (product: ProductName = "mirascope", theme: "light" | "dark" = "light", isLandingPage = false) =>
   (Story: any) => {
     return (
       <ProductThemeDecorator product={product} theme={theme} isLandingPage={isLandingPage}>
