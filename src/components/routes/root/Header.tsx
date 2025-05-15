@@ -188,7 +188,11 @@ export default function Header({ showProductSelector = false }: HeaderProps) {
         {/* Right section with responsive search and controls */}
         <div className="hidden items-center gap-3 md:flex">
           {/* Search bar that expands left */}
-          <SearchBar onOpenChange={setIsSearchOpen} />
+          <SearchBar
+            onOpenChange={(isOpen) => {
+              setIsSearchOpen(isOpen);
+            }}
+          />
 
           {/* GitHub and Theme buttons that stay visible */}
           <div className="flex items-center gap-3">
@@ -199,7 +203,11 @@ export default function Header({ showProductSelector = false }: HeaderProps) {
 
         {/* Mobile controls: Search + Theme Switcher + Menu Button */}
         <div className="flex items-center gap-2 md:hidden">
-          <SearchBar onOpenChange={setIsSearchOpen} />
+          <SearchBar
+            onOpenChange={(isOpen: boolean) => {
+              setIsSearchOpen(isOpen);
+            }}
+          />
           <ThemeSwitcher />
           <button
             className={cn("p-2", "nav-icon")}
