@@ -7,14 +7,11 @@ import {
   DropdownMenuRadioItem,
 } from "@/src/components/ui/dropdown-menu";
 import { cn } from "@/src/lib/utils";
-import { useTheme, type Theme } from "@/src/components/core/providers";
+import { useTheme, useIsLandingPage, type Theme } from "@/src/components/core/providers";
 
-interface ThemeSwitcherProps {
-  isLandingPage?: boolean;
-}
-
-export default function ThemeSwitcher({ isLandingPage = false }: ThemeSwitcherProps) {
+export default function ThemeSwitcher() {
   const { theme, current, set: setTheme } = useTheme();
+  const isLandingPage = useIsLandingPage();
 
   const handleThemeChange = (newTheme: Theme) => {
     // Get current effective theme before change for transition effect
