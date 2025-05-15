@@ -101,10 +101,10 @@ export const Route = createRootRoute({
               </div>
               <Footer />
             </div>
-          </ProductProvider>
 
-          {/* Cookie consent banner - positioned in lower left corner */}
-          <CookieBanner />
+            {/* Cookie consent banner - positioned in lower left corner */}
+            <CookieBanner />
+          </ProductProvider>
 
           {/* Dev tools - only visible in development */}
           <TanStackRouterDevtools />
