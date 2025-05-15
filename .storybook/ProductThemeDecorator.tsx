@@ -29,24 +29,30 @@ export const ProductThemeDecorator = ({
   // Standard style for component theming
   const baseStyle = {
     padding: "1rem",
-    minHeight: "100%",
+    width: "100%",
+    height: "100%",
+    minHeight: "50px",
     background: "var(--color-background)",
     color: "var(--color-foreground)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   };
 
   // Landing page background style
   const landingPageStyle = {
     padding: "1.5rem",
-    borderRadius: "0.5rem",
+    width: "100%",
+    height: "100%",
+    minHeight: "50px",
     background: theme === "dark" ? "#6366f1" : "#f5f5f5",
     backgroundImage: `url(/assets/backgrounds/${theme}.png)`,
     backgroundSize: "cover",
     backgroundPosition: "center",
     color: "white",
-    minHeight: "200px",
     display: "flex",
-    flexDirection: "column",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+    alignItems: "center",
+    justifyContent: "center",
   };
 
   // Choose style based on isLandingPage flag
