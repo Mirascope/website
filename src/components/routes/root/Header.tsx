@@ -1,4 +1,4 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import React, { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import {
@@ -17,6 +17,7 @@ import {
   GitHubRepoButton,
   DocsProductSelector,
   useProduct,
+  useIsLandingPage,
 } from "@/src/components/core";
 import ThemeSwitcher from "@/src/components/routes/root/ThemeSwitcher";
 import SearchBar from "@/src/components/routes/root/SearchBar";
@@ -45,15 +46,21 @@ const NavLink = ({ href, children, className, onClick }: NavLinkProps) => {
   );
 };
 
-export default function Header() {
+interface HeaderProps {
+  /**
+   * Whether to show the product selector for docs pages
+   */
+  showProductSelector?: boolean;
+}
+
+export default function Header({ showProductSelector = false }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const router = useRouterState();
-  const isLandingPage = router.location.pathname === "/";
 
-  // Determine page type and get the product
-  const path = router.location.pathname;
-  const isDocsPage = path.startsWith("/docs/");
+  // Use the isLandingPage hook instead of router
+  const isLandingPage = useIsLandingPage();
+
+  // Get the current product
   const product = useProduct();
 
   // State to track scroll position
@@ -205,9 +212,9 @@ export default function Header() {
       </nav>
 
       {/* Product selectors for docs and dev pages */}
-      {isDocsPage && (
+      {showProductSelector && (
         <div className="mx-auto flex w-full max-w-7xl pt-3 pb-1">
-          {isDocsPage && <DocsProductSelector />}
+          <DocsProductSelector />
         </div>
       )}
 
