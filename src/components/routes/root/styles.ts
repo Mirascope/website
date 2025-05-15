@@ -1,5 +1,30 @@
 import { cn } from "@/src/lib/utils";
 
+export const DURATION_FAST = 150;
+export const DURATION_MEDIUM = 300;
+export const DURATION_SLOW = 500;
+
+/**
+ * Animation constants for consistent transitions
+ */
+export const TRANSITION = {
+  duration: {
+    fast: `duration-${DURATION_FAST}`,
+    medium: `duration-${DURATION_MEDIUM}`,
+    slow: `duration-${DURATION_SLOW}`,
+  },
+  timing: {
+    default: "ease-in-out",
+    bounce: "ease-out",
+  },
+  properties: {
+    all: "transition-all",
+    colors: "transition-colors",
+    transform: "transition-transform",
+    opacity: "transition-opacity",
+  },
+};
+
 /**
  * Header styles for main site header
  */
@@ -54,7 +79,8 @@ export const NAV_LINK_STYLES = {
     // Base styles
     "relative flex cursor-pointer items-center py-2 text-xl font-medium",
     // Transitions
-    "transition-colors duration-200",
+    TRANSITION.properties.colors,
+    TRANSITION.duration.medium,
     // Interactive states
     "hover:text-primary"
   ),
@@ -128,7 +154,8 @@ export const THEME_SWITCHER_STYLES = {
     // Base styles
     "rounded-md p-2 mr-2 cursor-pointer",
     // Transitions
-    "transition-colors duration-200",
+    TRANSITION.properties.colors,
+    TRANSITION.duration.medium,
     // Focus state
     "focus:outline-none focus:ring-2 focus:ring-primary",
     // Icon styling from nav (includes default color)
@@ -154,6 +181,22 @@ export const THEME_SWITCHER_STYLES = {
 };
 
 /**
+ * Search state styles for coordinated animations
+ */
+export const SEARCH_STATE_STYLES = {
+  closed: {
+    container: "w-9 lg:w-36",
+    input: "w-0 opacity-0 lg:w-28 lg:pr-3 lg:pl-10 lg:opacity-80",
+    icon: "mx-auto lg:absolute lg:left-3",
+  },
+  open: {
+    container: "w-80 md:w-[32rem]",
+    input: "w-full pr-9 pl-10 opacity-100",
+    icon: "absolute left-3",
+  },
+};
+
+/**
  * Search bar component styles
  */
 export const SEARCH_BAR_STYLES = {
@@ -164,38 +207,51 @@ export const SEARCH_BAR_STYLES = {
   inputContainer: (isOpen: boolean, isLandingPage: boolean) =>
     cn(
       // Base styles
-      "h-9 rounded-full transition-all duration-500",
+      "h-9 rounded-full",
+      // Transitions
+      TRANSITION.properties.all,
+      TRANSITION.duration.medium,
       // Conditional styles based on page type
       isLandingPage
         ? "border-0 bg-white/10 hover:bg-white/20"
         : "border-border bg-background/20 hover:bg-primary/10 hover:border-primary/80 border",
       // Responsive width based on open state
-      isOpen
-        ? "w-80 md:w-[32rem]" // Wider when expanded
-        : "w-9 lg:w-36" // Icon-only on small screens, wider on lg screens
+      isOpen ? SEARCH_STATE_STYLES.open.container : SEARCH_STATE_STYLES.closed.container
     ),
+
+  // Inline styles for input container based on landing page
+  getInputContainerStyles: (isLandingPage: boolean) =>
+    isLandingPage
+      ? { boxShadow: "0 1px 5px rgba(0, 0, 0, 0.15), 0 2px 10px rgba(0, 0, 0, 0.1)" }
+      : undefined,
 
   // Search icon styles
   icon: (isOpen: boolean) =>
     cn(
-      "transition-all duration-500",
+      // Transitions
+      TRANSITION.properties.all,
+      TRANSITION.duration.medium,
+      // Icon styling
       "nav-icon",
-      isOpen ? "absolute left-3" : "mx-auto lg:absolute lg:left-3" // Center icon when collapsed on small screens
+      // Position based on open state
+      isOpen ? SEARCH_STATE_STYLES.open.icon : SEARCH_STATE_STYLES.closed.icon
     ),
 
   // Input field styles
   input: (isOpen: boolean, isLandingPage: boolean) =>
     cn(
       // Base styles
-      "cursor-pointer overflow-visible bg-transparent py-0 text-sm leading-normal transition-all duration-500 outline-none",
+      "cursor-pointer overflow-visible bg-transparent py-0 text-sm leading-normal outline-none",
+      "h-auto min-h-full",
+      // Transitions
+      TRANSITION.properties.all,
+      TRANSITION.duration.medium,
       // Text color based on page type
       isLandingPage
         ? "text-white placeholder:text-white/90"
         : "text-foreground placeholder:text-foreground",
       // Visibility and spacing based on open state
-      isOpen
-        ? "w-full pr-9 pl-10 opacity-100" // Full width when open
-        : "w-0 opacity-0 lg:w-28 lg:pr-3 lg:pl-10 lg:opacity-80" // Hide text on small screens, show on lg
+      isOpen ? SEARCH_STATE_STYLES.open.input : SEARCH_STATE_STYLES.closed.input
     ),
 
   // Keyboard shortcut badge
@@ -210,17 +266,41 @@ export const SEARCH_BAR_STYLES = {
     cn(
       // Base styles
       "search-results absolute top-full z-50 mt-2 w-screen max-w-[32rem] overflow-hidden rounded-lg shadow-2xl [text-shadow:none]",
-      "bg-background border-border border transition-opacity duration-300",
+      "bg-background border-border border",
+      // Transitions
+      TRANSITION.properties.opacity,
+      TRANSITION.duration.medium,
       // Responsive positioning
       "right-0 lg:right-auto lg:left-0", // Position from right on small screens, from left on large screens
       // Conditional textured background
       isLandingPage ? "textured-bg-absolute" : ""
     ),
 
+  // Inline styles for results container based on visibility and page type
+  getResultsContainerStyles: (isVisible: boolean, isLandingPage: boolean) => {
+    const styles = {
+      opacity: isVisible ? 1 : 0,
+    };
+
+    if (isLandingPage) {
+      return {
+        ...styles,
+        boxShadow: "0 1px 5px rgba(0, 0, 0, 0.15), 0 2px 10px rgba(0, 0, 0, 0.1)",
+      };
+    }
+
+    return styles;
+  },
+
   // Search result styles
   result: (isSelected: boolean) =>
     cn(
-      "border-border/40 flex border-t px-5 py-4 text-sm transition-colors first:border-0",
+      // Base styles
+      "border-border/40 flex border-t px-5 py-4 text-sm first:border-0",
+      // Transitions
+      TRANSITION.properties.colors,
+      TRANSITION.duration.fast,
+      // Selected state
       isSelected ? "bg-accent/50" : ""
     ),
 
