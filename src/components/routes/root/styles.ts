@@ -94,3 +94,27 @@ export const PRODUCT_LINK_STYLES = {
     ),
   },
 };
+
+/**
+ * Mobile menu styles for dropdown navigation
+ */
+export const MOBILE_MENU_STYLES = {
+  // Container for the entire mobile menu
+  container: cn(
+    // Positioning and layout
+    "absolute top-full right-4 z-50 mt-2 max-w-xs md:hidden",
+    // Appearance
+    "bg-background text-foreground rounded-lg p-6 shadow-lg",
+    // Reset text shadow from parent header
+    "[text-shadow:none]"
+  ),
+
+  // Content container
+  content: "flex flex-col space-y-4",
+
+  // Section title (e.g. "Docs")
+  sectionTitle: "my-2 text-xl font-medium",
+
+  // Divider between sections
+  divider: "my-2",
+};
