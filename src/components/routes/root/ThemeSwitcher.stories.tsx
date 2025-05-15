@@ -9,29 +9,17 @@ const meta = {
     layout: "centered",
   },
   tags: ["autodocs"],
-  argTypes: {
-    isLandingPage: {
-      control: "boolean",
-      description: "Whether the theme switcher is on the landing page",
-      defaultValue: false,
-    },
-  },
+  argTypes: {},
 } satisfies Meta<typeof ThemeSwitcher>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const LandingLight: Story = {
-  args: {
-    isLandingPage: true,
-  },
   decorators: [withProductTheme("mirascope", "light", true)],
 };
 
 export const LandingDark: Story = {
-  args: {
-    isLandingPage: true,
-  },
   decorators: [withProductTheme("mirascope", "dark", true)],
 };
 

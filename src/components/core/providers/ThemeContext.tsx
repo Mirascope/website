@@ -146,7 +146,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   );
 }
 
-// Mock provider for Storybook usage
+// Provider for Storybook usage
 interface StorybookThemeProviderProps {
   children: ReactNode;
   initialTheme?: Theme;
@@ -154,6 +154,14 @@ interface StorybookThemeProviderProps {
   isLandingPage?: boolean;
 }
 
+/**
+ * A simplified theme provider for Storybook
+ *
+ * This provider doesn't manipulate the document directly as that doesn't
+ * work well with Storybook's iframe-based component rendering. Instead,
+ * we just provide the theme context and let ProductThemeDecorator handle
+ * the DOM elements and styling.
+ */
 export function StorybookThemeProvider({
   children,
   initialTheme = "system",
@@ -163,26 +171,19 @@ export function StorybookThemeProvider({
   const [theme, setTheme] = useState<Theme>(initialTheme);
   const [current, setCurrent] = useState<"light" | "dark">(initialCurrent);
 
+  // Theme switching handler - just update state
   const setThemeHandler = (newTheme: Theme) => {
     setTheme(newTheme);
+
     // In Storybook, we honor the requested theme directly rather than using system settings
     if (newTheme === "system") {
-      // For "system" in Storybook, we use whatever the decorator has set
+      // For "system" in Storybook, we keep the current theme
       return;
     }
-    setCurrent(newTheme);
-  };
 
-  // Apply data-landing-page attribute in Storybook
-  useEffect(() => {
-    if (typeof document !== "undefined") {
-      if (isLandingPage) {
-        document.documentElement.setAttribute("data-landing-page", "true");
-      } else {
-        document.documentElement.removeAttribute("data-landing-page");
-      }
-    }
-  }, [isLandingPage]);
+    // Update the current theme
+    setCurrent(newTheme as "light" | "dark");
+  };
 
   return (
     <ThemeContext.Provider
