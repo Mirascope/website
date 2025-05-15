@@ -8,12 +8,12 @@ import {
   NavigationMenuTrigger,
   NavigationMenuLink,
 } from "@/src/components/ui/navigation-menu";
-import { cn } from "@/src/lib/utils";
 import { getProductRoute } from "@/src/lib/routes";
 import { useProduct, useIsLandingPage } from "@/src/components/core";
 import { PRODUCT_CONFIGS } from "@/src/lib/constants/site";
 import type { ProductName } from "@/src/lib/content/spec";
-import { NAV_LINK_STYLES, PRODUCT_LINK_STYLES } from "./styles";
+import { cn } from "@/src/lib/utils";
+import { NAV_LINK_STYLES, PRODUCT_LINK_STYLES, DESKTOP_NAV_STYLES } from "./styles";
 
 // Reusable navigation link component
 interface NavLinkProps {
@@ -71,35 +71,20 @@ export default function DesktopNavigation({ isSearchOpen }: DesktopNavigationPro
   const isLandingPage = useIsLandingPage();
 
   return (
-    <div
-      className={cn(
-        "absolute left-1/2 z-20 hidden -translate-x-1/2 transform items-center gap-6 transition-opacity duration-300 md:flex",
-        isSearchOpen ? "pointer-events-none opacity-0" : "opacity-100"
-      )}
-    >
+    <div className={DESKTOP_NAV_STYLES.container(isSearchOpen)}>
       {/* Products Menu */}
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <NavigationMenuTrigger
-              className={cn(
-                "flex cursor-pointer items-center !bg-transparent p-0 text-xl font-medium transition-colors duration-200 hover:!bg-transparent focus:!bg-transparent data-[state=open]:!bg-transparent data-[state=open]:hover:!bg-transparent",
-                "nav-text"
-              )}
-            >
+            <NavigationMenuTrigger className={DESKTOP_NAV_STYLES.menuTrigger}>
               <span className="px-2 py-2">
                 <Link to={getProductRoute(product)} className="h-full w-full">
                   Docs
                 </Link>
               </span>
             </NavigationMenuTrigger>
-            <NavigationMenuContent
-              className={cn(
-                "bg-background p-2 [text-shadow:none]",
-                isLandingPage ? "textured-bg-absolute" : ""
-              )}
-            >
-              <ul className="grid w-[300px] grid-cols-1 gap-2 sm:w-[480px] sm:grid-cols-2">
+            <NavigationMenuContent className={DESKTOP_NAV_STYLES.menuContent(isLandingPage)}>
+              <ul className={DESKTOP_NAV_STYLES.productGrid}>
                 <ProductMenuLink productName="mirascope" />
                 <ProductMenuLink productName="lilypad" />
               </ul>
