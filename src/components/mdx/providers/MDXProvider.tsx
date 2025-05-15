@@ -27,7 +27,7 @@ import {
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/src/components/ui/tabs";
 import { Button } from "@/src/components/ui/button";
 import { ButtonLink } from "@/src/components/ui/button-link";
-import { Logo, MirascopeLogo, LilypadLogo } from "@/src/components/core/branding";
+import { ProductLogo, MirascopeLogo, LilypadLogo } from "@/src/components/core/branding";
 import { ProviderCodeWrapper } from "./ProviderCodeWrapper";
 import { ResponsiveImage } from "@/src/components/mdx/providers/ResponsiveImage";
 import { devComponents } from "@/src/components/mdx/elements/DevComponents";
@@ -117,7 +117,7 @@ export const components = {
   TabsList,
   TabsTrigger,
   TabsContent,
-  Logo,
+  ProductLogo,
   MirascopeLogo,
   LilypadLogo,
 

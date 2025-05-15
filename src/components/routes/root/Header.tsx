@@ -12,8 +12,7 @@ import {
 import { cn } from "@/src/lib/utils";
 import { getProductRoute } from "@/src/lib/routes";
 import {
-  MirascopeLogo,
-  LilypadLogo,
+  ProductLogo,
   GitHubRepoButton,
   DocsProductSelector,
   useProduct,
@@ -96,16 +95,7 @@ export default function Header({ showProductSelector = false }: HeaderProps) {
           to="/"
           className={cn("relative z-10 flex items-center", isLandingPage ? "invisible" : "visible")}
         >
-          {product === "lilypad" ? (
-            <LilypadLogo
-              size="small"
-              withText={true}
-              showBeta={true}
-              textClassName={cn("landing-text")}
-            />
-          ) : (
-            <MirascopeLogo size="small" withText={true} textClassName={cn("landing-text")} />
-          )}
+          <ProductLogo size="small" withText={true} textClassName={"landing-text"} />
         </Link>
 
         {/* Desktop Navigation - Perfectly centered, but hidden during search */}

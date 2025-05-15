@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/src/components/ui/tabs";
-import { Logo } from "@/src/components/core/branding";
+import { ProductLogo } from "@/src/components/core/branding";
 import { cn } from "@/src/lib/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import {
@@ -123,7 +123,7 @@ export function ProviderTabbedSection({
         customHeader
       ) : showLogo ? (
         <div className="flex items-center px-1 pb-2">
-          <Logo size="micro" withText={true} />
+          <ProductLogo size="micro" withText={true} />
         </div>
       ) : null}
 

@@ -14,7 +14,7 @@ interface LilypadLogoProps extends BaseLogoProps {
 const LilypadLogo: React.FC<LilypadLogoProps> = ({
   size = "medium",
   withText = true,
-  showBeta = false,
+  showBeta = true,
   className,
   textClassName,
   imgClassName,

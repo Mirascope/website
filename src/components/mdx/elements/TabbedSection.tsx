@@ -1,6 +1,6 @@
 import React from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/src/components/ui/tabs";
-import { Logo } from "@/src/components/core/branding";
+import { ProductLogo } from "@/src/components/core/branding";
 import { cn } from "@/src/lib/utils";
 import { temporarilyEnableSyncHighlighting } from "@/src/lib/code-highlight";
 
@@ -77,7 +77,7 @@ export function TabbedSection({
     >
       {showLogo && (
         <div className="flex items-center px-1 pb-2">
-          <Logo size="micro" withText={true} />
+          <ProductLogo size="micro" withText={true} />
         </div>
       )}
 
