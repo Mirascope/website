@@ -132,6 +132,7 @@ function SearchInput({ query, onChange, onFocus, inputRef, isOpen }: SearchInput
           ? "w-80 md:w-[32rem]" // Wider when expanded
           : "w-9 lg:w-36" // Icon-only on small screens, wider on lg screens
       )}
+      data-testid="search-input"
       style={
         isLandingPage
           ? { boxShadow: "0 1px 5px rgba(0, 0, 0, 0.15), 0 2px 10px rgba(0, 0, 0, 0.1)" }
@@ -142,7 +143,6 @@ function SearchInput({ query, onChange, onFocus, inputRef, isOpen }: SearchInput
       <div className="relative flex h-full items-center overflow-visible">
         <SearchIcon
           size={16}
-          data-testid="search-icon"
           className={cn(
             "transition-all duration-500",
             "nav-icon",
@@ -154,7 +154,6 @@ function SearchInput({ query, onChange, onFocus, inputRef, isOpen }: SearchInput
           readOnly={!isOpen}
           type="text"
           placeholder="Search..."
-          data-testid="search-input"
           className={cn(
             "cursor-pointer overflow-visible bg-transparent py-0 text-sm leading-normal transition-all duration-500 outline-none",
             isLandingPage
