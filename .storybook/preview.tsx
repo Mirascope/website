@@ -1,4 +1,11 @@
 import type { Preview } from "@storybook/react";
+import React from "react";
+import {
+  RouterProvider,
+  createMemoryHistory,
+  createRootRoute,
+  createRouter,
+} from "@tanstack/react-router";
 import { withProductTheme } from "./ProductThemeDecorator";
 import "../src/styles.css"; // This imports all other CSS files including themes.css and nav.css
 
@@ -60,6 +67,24 @@ const preview: Preview = {
     },
   },
   decorators: [
+    // First wrap in TanStack Router provider to handle router dependencies
+    (Story) => {
+      // Create a root route with our Story as the component
+      const RootRoute = createRootRoute({
+        component: () => <Story />,
+      });
+
+      // Create router with memory history
+      const router = createRouter({
+        routeTree: RootRoute,
+        history: createMemoryHistory({
+          initialEntries: ["/"], // Start at the root path
+        }),
+      });
+      return <RouterProvider router={router} />;
+    },
+
+    // Then apply theme decorator
     (Story, context) => {
       // Use story parameters if provided, otherwise use toolbar globals
       const product = context.parameters.product || context.globals.product;
