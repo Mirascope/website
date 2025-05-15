@@ -73,6 +73,28 @@
   --color-chart-5: var(--color-rose-500);
 }
 
+[data-product="mirascope"] {
+  /* Components */
+  --color-button-primary: var(--color-mirascope-purple-dark);
+  --color-primary: var(--color-mirascope-purple);
+
+  --color-accent: rgba(99, 102, 241, 0.6); /* Mirascope purple at 60 opacity */
+  --color-card: rgba(99, 102, 241, 0.2);
+  --color-ring: var(--color-mirascope-purple);
+}
+
+[data-product="lilypad"] {
+  /* Components */
+  --color-button-primary: var(--color-lilypad-green-dark);
+  --color-primary: var(--color-lilypad-green);
+
+  --color-accent: rgba(64, 155, 69, 0.6); /* Lilypad green at 60 opacity */
+  --color-card: rgba(64, 155, 69, 0.2);
+
+  /* Utility */
+  --color-ring: var(--color-lilypad-green);
+}
+
 /* Dark theme variant - Mirascope Dark */
 :is(.dark) {
   /* Theme colors */
@@ -104,17 +126,4 @@
   --color-chart-3: var(--color-violet-400);
   --color-chart-4: var(--color-amber-400);
   --color-chart-5: var(--color-rose-400);
-}
-
-/* Lilypad Light Theme - Scoped Styling */
-[data-product="lilypad"] {
-  /* Components */
-  --color-button-primary: var(--color-lilypad-green-dark);
-  --color-primary: var(--color-lilypad-green);
-
-  --color-accent: rgba(64, 155, 69, 0.6); /* Lilypad green at 60 opacity */
-  --color-card: rgba(64, 155, 69, 0.2);
-
-  /* Utility */
-  --color-ring: var(--color-lilypad-green);
 }
