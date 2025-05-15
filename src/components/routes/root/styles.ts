@@ -197,6 +197,48 @@ export const SEARCH_STATE_STYLES = {
 };
 
 /**
+ * Desktop navigation styles
+ */
+export const DESKTOP_NAV_STYLES = {
+  // Container styles
+  container: (isSearchOpen: boolean) =>
+    cn(
+      // Base styles
+      "absolute left-1/2 z-20 hidden -translate-x-1/2 transform items-center gap-6 md:flex",
+      // Transitions
+      "transition-opacity",
+      TRANSITION.duration.medium,
+      // Visibility based on search state
+      isSearchOpen ? "pointer-events-none opacity-0" : "opacity-100"
+    ),
+
+  // Menu trigger styles
+  menuTrigger: cn(
+    // Base styles
+    "flex cursor-pointer items-center !bg-transparent p-0 text-xl font-medium",
+    // Transitions
+    "transition-colors",
+    TRANSITION.duration.medium,
+    // Interactive states - maintaining transparency
+    "hover:!bg-transparent focus:!bg-transparent data-[state=open]:!bg-transparent data-[state=open]:hover:!bg-transparent",
+    // Text styling consistent with nav
+    "nav-text"
+  ),
+
+  // Menu content styles
+  menuContent: (isLandingPage: boolean) =>
+    cn(
+      // Base styles
+      "bg-background p-2 [text-shadow:none]",
+      // Conditional textured background
+      isLandingPage ? "textured-bg-absolute" : ""
+    ),
+
+  // Product grid styles
+  productGrid: "grid w-[300px] grid-cols-1 gap-2 sm:w-[480px] sm:grid-cols-2",
+};
+
+/**
  * Search bar component styles
  */
 export const SEARCH_BAR_STYLES = {
