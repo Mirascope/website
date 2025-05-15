@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { getProductRoute } from "@/src/lib/routes";
 import { PRODUCT_CONFIGS } from "@/src/lib/constants/site";
 import type { ProductName } from "@/src/lib/content/spec";
+import { NAV_LINK_STYLES, PRODUCT_LINK_STYLES } from "./styles";
 
 interface MobileMenuProps {
   /**
@@ -28,7 +29,7 @@ const MobileProductLink = ({ productName, onClick }: MobileProductLinkProps) => 
   return (
     <Link
       to={getProductRoute(productName)}
-      className="bg-background hover:bg-muted text-primary rounded-md p-3 font-medium transition-colors"
+      className={PRODUCT_LINK_STYLES.mobile.container}
       onClick={onClick}
       data-product={productName}
     >
@@ -50,19 +51,11 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
         <hr className="my-2" />
 
-        <Link
-          to="/blog"
-          className="hover:text-primary relative flex cursor-pointer items-center py-2 text-xl font-medium transition-colors duration-200"
-          onClick={onClose}
-        >
+        <Link to="/blog" className={NAV_LINK_STYLES.mobile} onClick={onClose}>
           Blog
         </Link>
 
-        <Link
-          to="/pricing"
-          className="hover:text-primary relative flex cursor-pointer items-center py-2 text-xl font-medium transition-colors duration-200"
-          onClick={onClose}
-        >
+        <Link to="/pricing" className={NAV_LINK_STYLES.mobile} onClick={onClose}>
           Pricing
         </Link>
       </div>
