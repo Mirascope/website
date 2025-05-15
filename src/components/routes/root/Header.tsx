@@ -56,7 +56,7 @@ export default function Header({ showProductSelector = false }: HeaderProps) {
         <DesktopNavigation isSearchOpen={isSearchOpen} />
 
         {/* Right section with responsive controls */}
-        <div className={HEADER_STYLES.controls}>
+        <div className={HEADER_STYLES.controls(isSearchOpen)}>
           {/* Single search bar instance for all viewport sizes */}
           <SearchBar
             onOpenChange={(isOpen: boolean) => {
