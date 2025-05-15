@@ -152,3 +152,82 @@ export const THEME_SWITCHER_STYLES = {
     "focus:bg-primary/20 data-[highlighted]:bg-primary/20"
   ),
 };
+
+/**
+ * Search bar component styles
+ */
+export const SEARCH_BAR_STYLES = {
+  // Container styles
+  container: "relative flex justify-end lg:justify-start",
+
+  // Input container styles
+  inputContainer: (isOpen: boolean, isLandingPage: boolean) =>
+    cn(
+      // Base styles
+      "h-9 rounded-full transition-all duration-500",
+      // Conditional styles based on page type
+      isLandingPage
+        ? "border-0 bg-white/10 hover:bg-white/20"
+        : "border-border bg-background/20 hover:bg-primary/10 hover:border-primary/80 border",
+      // Responsive width based on open state
+      isOpen
+        ? "w-80 md:w-[32rem]" // Wider when expanded
+        : "w-9 lg:w-36" // Icon-only on small screens, wider on lg screens
+    ),
+
+  // Search icon styles
+  icon: (isOpen: boolean) =>
+    cn(
+      "transition-all duration-500",
+      "nav-icon",
+      isOpen ? "absolute left-3" : "mx-auto lg:absolute lg:left-3" // Center icon when collapsed on small screens
+    ),
+
+  // Input field styles
+  input: (isOpen: boolean, isLandingPage: boolean) =>
+    cn(
+      // Base styles
+      "cursor-pointer overflow-visible bg-transparent py-0 text-sm leading-normal transition-all duration-500 outline-none",
+      // Text color based on page type
+      isLandingPage
+        ? "text-white placeholder:text-white/90"
+        : "text-foreground placeholder:text-foreground",
+      // Visibility and spacing based on open state
+      isOpen
+        ? "w-full pr-9 pl-10 opacity-100" // Full width when open
+        : "w-0 opacity-0 lg:w-28 lg:pr-3 lg:pl-10 lg:opacity-80" // Hide text on small screens, show on lg
+    ),
+
+  // Keyboard shortcut badge
+  kbd: (isLandingPage: boolean) =>
+    cn(
+      "font-small absolute top-1/2 right-3 hidden h-5 -translate-y-1/2 items-center gap-1 rounded border px-1.5 font-mono text-[10px] opacity-80 lg:flex",
+      isLandingPage ? "bg-white/10 text-white" : "border-border bg-muted text-foreground"
+    ),
+
+  // Results container
+  resultsContainer: (isLandingPage: boolean) =>
+    cn(
+      // Base styles
+      "search-results absolute top-full z-50 mt-2 w-screen max-w-[32rem] overflow-hidden rounded-lg shadow-2xl [text-shadow:none]",
+      "bg-background border-border border transition-opacity duration-300",
+      // Responsive positioning
+      "right-0 lg:right-auto lg:left-0", // Position from right on small screens, from left on large screens
+      // Conditional textured background
+      isLandingPage ? "textured-bg-absolute" : ""
+    ),
+
+  // Search result styles
+  result: (isSelected: boolean) =>
+    cn(
+      "border-border/40 flex border-t px-5 py-4 text-sm transition-colors first:border-0",
+      isSelected ? "bg-accent/50" : ""
+    ),
+
+  // Search footer styles
+  footer:
+    "border-border bg-muted/40 text-muted-foreground flex items-center justify-between border-t p-2 text-xs",
+
+  // Loading indicator
+  loadingIndicator: "border-primary h-6 w-6 animate-spin rounded-full border-t-2 border-b-2",
+};
