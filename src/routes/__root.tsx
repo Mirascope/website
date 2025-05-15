@@ -86,7 +86,7 @@ export const Route = createRootRoute({
               }
             >
               {/* Header is fixed, so it's outside the content flow */}
-              <Header />
+              <Header showProductSelector={path.startsWith("/docs/")} />
 
               {/* Content container with padding to account for fixed header */}
               <div
