@@ -36,6 +36,13 @@
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
+/* Landing page text shadow - default for larger hero text */
+[data-landing-page] .landing-page-text-shadow {
+  text-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.3),
+    0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
 /* Landing page box shadow for elements like buttons */
 [data-landing-page] .landing-page-box-shadow {
   box-shadow:

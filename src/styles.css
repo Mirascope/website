@@ -106,13 +106,6 @@ pre {
     "Segoe UI Symbol" !important;
 }
 
-/* Landing page text shadow - default for larger hero text */
-.landing-page-text-shadow {
-  text-shadow:
-    0 2px 6px rgba(0, 0, 0, 0.3),
-    0 4px 14px rgba(0, 0, 0, 0.2);
-}
-
 /* Medium text shadow - create a utility class for medium-sized text */
 .text-shadow-medium {
   text-shadow:
