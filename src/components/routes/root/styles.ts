@@ -255,6 +255,7 @@ export const SEARCH_BAR_STYLES = {
   // Container styles
   container: (isOpen: boolean) =>
     cn(
+      "search-container",
       "relative flex justify-end lg:justify-start",
       // When open on small screens, allow more space
       isOpen && "sm:flex-grow md:flex-grow-0"
@@ -264,7 +265,8 @@ export const SEARCH_BAR_STYLES = {
   inputContainer: (isOpen: boolean, isLandingPage: boolean) =>
     cn(
       // Base styles
-      "h-9 rounded-full",
+      "h-9 rounded-full relative flex items-center overflow-visible",
+      "search-input-container",
       // Transitions
       TRANSITION.properties.all,
       TRANSITION.duration.medium,

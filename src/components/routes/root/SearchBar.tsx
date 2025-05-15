@@ -125,24 +125,22 @@ function SearchInput({ query, onChange, onFocus, inputRef, isOpen }: SearchInput
       style={SEARCH_BAR_STYLES.getInputContainerStyles(isLandingPage)}
       onClick={onFocus}
     >
-      <div className="relative flex h-full items-center overflow-visible">
-        <SearchIcon size={16} className={SEARCH_BAR_STYLES.icon(isOpen)} />
-        <input
-          ref={inputRef}
-          readOnly={!isOpen}
-          type="text"
-          placeholder="Search..."
-          className={SEARCH_BAR_STYLES.input(isOpen, isLandingPage)}
-          value={query}
-          onChange={(e) => onChange(e.target.value)}
-          onFocus={onFocus}
-        />
-        {isOpen && (
-          <kbd className={SEARCH_BAR_STYLES.kbd(isLandingPage)}>
-            <span className="text-xs">⌘</span>K
-          </kbd>
-        )}
-      </div>
+      <SearchIcon size={16} className={SEARCH_BAR_STYLES.icon(isOpen)} />
+      <input
+        ref={inputRef}
+        readOnly={!isOpen}
+        type="text"
+        placeholder="Search..."
+        className={SEARCH_BAR_STYLES.input(isOpen, isLandingPage)}
+        value={query}
+        onChange={(e) => onChange(e.target.value)}
+        onFocus={onFocus}
+      />
+      {isOpen && (
+        <kbd className={SEARCH_BAR_STYLES.kbd(isLandingPage)}>
+          <span className="text-xs">⌘</span>K
+        </kbd>
+      )}
     </div>
   );
 }
