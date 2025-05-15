@@ -77,7 +77,7 @@ export default function DesktopNavigation({ isSearchOpen }: DesktopNavigationPro
         <NavigationMenuList>
           <NavigationMenuItem>
             <NavigationMenuTrigger className={DESKTOP_NAV_STYLES.menuTrigger}>
-              <span className="px-2 py-2">
+              <span className={DESKTOP_NAV_STYLES.triggerText}>
                 <Link to={getProductRoute(product)} className="h-full w-full">
                   Docs
                 </Link>

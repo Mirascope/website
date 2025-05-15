@@ -96,7 +96,8 @@ export const PRODUCT_LINK_STYLES = {
       // Base styles
       "bg-background block space-y-1.5 rounded-md p-4",
       // Transition properties
-      "transition-colors",
+      TRANSITION.properties.colors,
+      TRANSITION.duration.medium,
       // Interactive states
       "hover:bg-primary/20 focus:bg-primary/20",
       "active:bg-primary/60 active:scale-[0.98]",
@@ -113,7 +114,8 @@ export const PRODUCT_LINK_STYLES = {
       // Base styles
       "bg-background text-primary rounded-md p-3 font-medium",
       // Transitions
-      "transition-colors",
+      TRANSITION.properties.colors,
+      TRANSITION.duration.medium,
       // Interactive states
       "hover:bg-primary/20 focus:bg-primary/20",
       "active:bg-primary/60 active:scale-[0.98]"
@@ -236,6 +238,9 @@ export const DESKTOP_NAV_STYLES = {
 
   // Product grid styles
   productGrid: "grid w-[300px] grid-cols-1 gap-2 sm:w-[480px] sm:grid-cols-2",
+
+  // Trigger text container
+  triggerText: "px-2 py-2",
 };
 
 /**
