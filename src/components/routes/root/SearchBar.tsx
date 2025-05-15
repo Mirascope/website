@@ -4,7 +4,7 @@ import { Link } from "@tanstack/react-router";
 import { getSearchService, type SearchResultItem } from "@/src/lib/services/search";
 import { environment } from "@/src/lib/content/environment";
 import { useIsLandingPage } from "@/src/components/core";
-import { SEARCH_BAR_STYLES } from "./styles";
+import { DURATION_MEDIUM, SEARCH_BAR_STYLES } from "./styles";
 
 // Component for an individual search result
 interface SearchResultProps {
@@ -122,11 +122,7 @@ function SearchInput({ query, onChange, onFocus, inputRef, isOpen }: SearchInput
     <div
       className={SEARCH_BAR_STYLES.inputContainer(isOpen, isLandingPage)}
       data-testid="search-input"
-      style={
-        isLandingPage
-          ? { boxShadow: "0 1px 5px rgba(0, 0, 0, 0.15), 0 2px 10px rgba(0, 0, 0, 0.1)" }
-          : undefined
-      }
+      style={SEARCH_BAR_STYLES.getInputContainerStyles(isLandingPage)}
       onClick={onFocus}
     >
       <div className="relative flex h-full items-center overflow-visible">
@@ -137,7 +133,6 @@ function SearchInput({ query, onChange, onFocus, inputRef, isOpen }: SearchInput
           type="text"
           placeholder="Search..."
           className={SEARCH_BAR_STYLES.input(isOpen, isLandingPage)}
-          style={{ height: "auto", minHeight: "100%" }}
           value={query}
           onChange={(e) => onChange(e.target.value)}
           onFocus={onFocus}
@@ -188,9 +183,13 @@ function SearchResultsContainer({
   // When isOpen changes, update visibility with a delay for animation
   useEffect(() => {
     if (isOpen) {
-      // Slight delay to allow search bar to expand first
-      const timer = setTimeout(() => setIsReallyVisible(true), 150);
-      return () => clearTimeout(timer);
+      // Use animation frame for smoother transition
+      // This allows the search bar to expand before showing results
+      const animationFrame = requestAnimationFrame(() => {
+        const timer = setTimeout(() => setIsReallyVisible(true), DURATION_MEDIUM - 100); // Match to duration-medium (300ms) minus some time for perception
+        return () => clearTimeout(timer);
+      });
+      return () => cancelAnimationFrame(animationFrame);
     } else {
       setIsReallyVisible(false);
     }
@@ -201,12 +200,7 @@ function SearchResultsContainer({
   return (
     <div
       className={SEARCH_BAR_STYLES.resultsContainer(isLandingPage)}
-      style={{
-        opacity: isReallyVisible ? 1 : 0,
-        ...(isLandingPage
-          ? { boxShadow: "0 1px 5px rgba(0, 0, 0, 0.15), 0 2px 10px rgba(0, 0, 0, 0.1)" }
-          : {}),
-      }}
+      style={SEARCH_BAR_STYLES.getResultsContainerStyles(isReallyVisible, isLandingPage)}
       ref={resultsRef}
     >
       {renderSearchContent()}
@@ -318,10 +312,10 @@ export default function SearchBar({ onOpenChange }: SearchBarProps = {}) {
       // Hide navigation immediately
       if (onOpenChange) onOpenChange(true);
     } else {
-      // Show navigation after search closes with a delay for smooth transition
+      // Show navigation after search closes with a delay that matches our animation
       const timer = setTimeout(() => {
         if (onOpenChange) onOpenChange(false);
-      }, 500);
+      }, DURATION_MEDIUM); // Match to duration-medium
       return () => clearTimeout(timer);
     }
   }, [isOpen, onOpenChange]);
