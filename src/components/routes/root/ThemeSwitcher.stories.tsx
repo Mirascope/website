@@ -1,12 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import ThemeSwitcher from "./ThemeSwitcher";
-import { withProductTheme } from "@/.storybook/ProductThemeDecorator";
 
 const meta = {
   title: "Root/ThemeSwitcher",
   component: ThemeSwitcher,
   parameters: {
-    layout: "centered",
+    layout: "fullscreen",
   },
   tags: ["autodocs"],
   argTypes: {},
@@ -16,25 +15,49 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const LandingLight: Story = {
-  decorators: [withProductTheme("mirascope", "light", true)],
+  parameters: {
+    product: "mirascope",
+    theme: "light",
+    landingPage: true,
+  },
 };
 
 export const LandingDark: Story = {
-  decorators: [withProductTheme("mirascope", "dark", true)],
+  parameters: {
+    product: "mirascope",
+    theme: "dark",
+    landingPage: true,
+  },
 };
 
 export const MirascopeLight: Story = {
-  decorators: [withProductTheme("mirascope", "light")],
+  parameters: {
+    product: "mirascope",
+    theme: "light",
+    landingPage: false,
+  },
 };
 
 export const MirascopeDark: Story = {
-  decorators: [withProductTheme("mirascope", "dark")],
+  parameters: {
+    product: "mirascope",
+    theme: "dark",
+    landingPage: false,
+  },
 };
 
 export const LilypadLight: Story = {
-  decorators: [withProductTheme("lilypad", "light")],
+  parameters: {
+    product: "lilypad",
+    theme: "light",
+    landingPage: false,
+  },
 };
 
 export const LilypadDark: Story = {
-  decorators: [withProductTheme("lilypad", "dark")],
+  parameters: {
+    product: "lilypad",
+    theme: "dark",
+    landingPage: false,
+  },
 };
