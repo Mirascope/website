@@ -1,6 +1,43 @@
 import { cn } from "@/src/lib/utils";
 
 /**
+ * Header styles for main site header
+ */
+export const HEADER_STYLES = {
+  // Container styles for the header with conditional appearance based on landing page and scroll
+  container: (isLandingPage: boolean, scrolled: boolean) =>
+    cn(
+      // Fixed positioning and layout
+      "fixed top-0 right-0 left-0 z-50 mb-2 flex w-full flex-col items-center justify-center px-4 py-2 sm:px-6",
+      // Text styling for landing page
+      "landing-text landing-page-text-shadow",
+      // Background color (only on non-landing pages)
+      isLandingPage ? "" : "bg-background",
+      // Bottom border and shadow when scrolled (only on non-landing pages)
+      scrolled && !isLandingPage ? "border-border border-b shadow-sm" : ""
+    ),
+
+  // Navigation container
+  nav: "mx-auto flex w-full max-w-7xl flex-row items-center justify-between",
+
+  // Logo link container
+  logo: (isLandingPage: boolean) =>
+    cn("relative z-10 flex items-center", isLandingPage ? "invisible" : "visible"),
+
+  // Right section with controls
+  controls: "flex items-center gap-2 md:gap-3",
+
+  // GitHub button container
+  githubContainer: "hidden items-center gap-3 md:flex",
+
+  // Mobile menu toggle button
+  menuButton: () => cn("p-2 md:hidden", "nav-icon"),
+
+  // Product selector container
+  productSelector: "mx-auto flex w-full max-w-7xl pt-3 pb-1",
+};
+
+/**
  * Shared navigation link styles for desktop and mobile
  */
 export const NAV_LINK_STYLES = {
