@@ -189,19 +189,19 @@ export default function Header() {
         {/* Right section with responsive search and controls */}
         <div className="hidden items-center gap-3 md:flex">
           {/* Search bar that expands left */}
-          <SearchBar onOpenChange={setIsSearchOpen} isLandingPage={isLandingPage} />
+          <SearchBar onOpenChange={setIsSearchOpen} />
 
           {/* GitHub and Theme buttons that stay visible */}
           <div className="flex items-center gap-3">
             <GitHubRepoButton />
-            <ThemeSwitcher isLandingPage={isLandingPage} />
+            <ThemeSwitcher />
           </div>
         </div>
 
         {/* Mobile controls: Search + Theme Switcher + Menu Button */}
         <div className="flex items-center gap-2 md:hidden">
-          <SearchBar onOpenChange={setIsSearchOpen} isLandingPage={isLandingPage} />
-          <ThemeSwitcher isLandingPage={isLandingPage} />
+          <SearchBar onOpenChange={setIsSearchOpen} />
+          <ThemeSwitcher />
           <button
             className={cn("p-2", isLandingPage ? "text-white" : "text-foreground")}
             onClick={() => setIsMenuOpen(!isMenuOpen)}

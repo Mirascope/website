@@ -324,10 +324,9 @@ function SearchFooter() {
 
 interface SearchBarProps {
   onOpenChange?: (isOpen: boolean) => void;
-  isLandingPage?: boolean;
 }
 
-export default function SearchBar({ onOpenChange, isLandingPage = false }: SearchBarProps = {}) {
+export default function SearchBar({ onOpenChange }: SearchBarProps = {}) {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResultItem[]>([]);
@@ -527,7 +526,6 @@ export default function SearchBar({ onOpenChange, isLandingPage = false }: Searc
         results={results}
         resultsRef={resultsRef}
         onResultSelect={handleResultSelect}
-        isLandingPage={isLandingPage}
         selectedIndex={selectedIndex}
         setSelectedIndex={setSelectedIndex}
       />
