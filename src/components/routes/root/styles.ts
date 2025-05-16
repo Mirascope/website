@@ -302,7 +302,10 @@ export const SEARCH_BAR_STYLES = {
   mobileSearchContainer: cn("w-full h-full px-3 flex items-center"),
 
   // Close button for mobile overlay
-  closeButton: cn("ml-2 p-2 text-foreground hover:text-primary", "transition-colors duration-300"),
+  closeButton: cn(
+    "absolute right-3 top-1/2 -translate-y-1/2 p-2 text-foreground hover:text-primary",
+    "transition-colors duration-300"
+  ),
 
   // Input container styles - matches parent width
   inputContainer: (isLandingPage: boolean) =>
@@ -334,7 +337,7 @@ export const SEARCH_BAR_STYLES = {
     ),
 
   // Input field styles
-  input: (isOpen: boolean, isLandingPage: boolean) =>
+  input: (isOpen: boolean, isLandingPage: boolean, isMobile: boolean = false) =>
     cn(
       // Base styles
       "cursor-pointer overflow-visible bg-transparent py-0 text-sm leading-normal outline-none",
@@ -345,8 +348,12 @@ export const SEARCH_BAR_STYLES = {
       isLandingPage
         ? "text-white placeholder:text-white/90"
         : "text-foreground placeholder:text-foreground",
-      // Visibility and spacing based on open state
-      isOpen ? SEARCH_STATE_STYLES.open.input : SEARCH_STATE_STYLES.closed.input
+      // Visibility and spacing based on open state - add extra right padding in mobile mode for close button
+      isOpen
+        ? isMobile
+          ? "w-full pr-8 pl-10 opacity-100"
+          : SEARCH_STATE_STYLES.open.input
+        : SEARCH_STATE_STYLES.closed.input
     ),
 
   // Keyboard shortcut badge

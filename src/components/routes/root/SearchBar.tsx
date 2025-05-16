@@ -139,7 +139,7 @@ function SearchInput({
         readOnly={!isOpen}
         type="text"
         placeholder="Search..."
-        className={SEARCH_BAR_STYLES.input(isOpen, isLandingPage)}
+        className={SEARCH_BAR_STYLES.input(isOpen, isLandingPage, isMobile)}
         value={query}
         onChange={(e) => onChange(e.target.value)}
         onFocus={onFocus}
