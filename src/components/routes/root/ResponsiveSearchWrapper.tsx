@@ -54,9 +54,16 @@ function MobileSearchWrapper({ onOpenChange }: SearchWrapperProps) {
         </button>
       )}
 
-      {/* Mobile search overlay */}
-      <div className={SEARCH_BAR_STYLES.mobileOverlay(isOpen)}>
-        <div className={SEARCH_BAR_STYLES.mobileSearchContainer}>
+      {/* Mobile search overlay - full screen with click-outside behavior */}
+      <div
+        className={SEARCH_BAR_STYLES.mobileOverlay(isOpen)}
+        onClick={handleCloseSearch} // Close when clicking the background overlay
+      >
+        {/* Search container - prevent clicks from bubbling up to the overlay */}
+        <div
+          className={SEARCH_BAR_STYLES.mobileSearchContainer}
+          onClick={(e) => e.stopPropagation()} // Prevent clicks from closing the search
+        >
           {/* SearchBar in the overlay */}
           <div className="relative flex-grow">
             <SearchBar
