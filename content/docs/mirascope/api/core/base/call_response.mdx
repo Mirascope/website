@@ -17,7 +17,7 @@ This module contains the base call response class.
   {
     "name": "fn",
     "type_info": {
-      "type_str": "Callable[[type[_BaseCallResponseT], list[tuple[_BaseToolT, str]]], list[_ToolMessageParamT]]",
+      "type_str": "Callable[[type[_BaseCallResponseT], Sequence[tuple[_BaseToolT, str]]], list[_ToolMessageParamT]]",
       "description": null,
       "kind": "callable",
       "base_type": {
@@ -28,7 +28,7 @@ This module contains the base call response class.
       },
       "parameters": [
         {
-          "type_str": "[type[_BaseCallResponseT], list[tuple[_BaseToolT, str]]]",
+          "type_str": "[type[_BaseCallResponseT], Sequence[tuple[_BaseToolT, str]]]",
           "description": null,
           "kind": "tuple",
           "base_type": {
@@ -58,14 +58,14 @@ This module contains the base call response class.
               ]
             },
             {
-              "type_str": "list[tuple[_BaseToolT, str]]",
+              "type_str": "Sequence[tuple[_BaseToolT, str]]",
               "description": null,
               "kind": "generic",
               "base_type": {
-                "type_str": "list",
+                "type_str": "Sequence",
                 "description": null,
                 "kind": "simple",
-                "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
+                "doc_identifier": "Sequence"
               },
               "parameters": [
                 {
@@ -125,7 +125,7 @@ This module contains the base call response class.
 <ReturnTable
   returnType={{
   "type_info": {
-    "type_str": "Callable[[type[_BaseCallResponseT], list[tuple[_BaseToolT, JsonableType]]], list[_ToolMessageParamT]]",
+    "type_str": "Callable[[type[_BaseCallResponseT], Sequence[tuple[_BaseToolT, JsonableType]]], list[_ToolMessageParamT]]",
     "description": null,
     "kind": "callable",
     "base_type": {
@@ -136,7 +136,7 @@ This module contains the base call response class.
     },
     "parameters": [
       {
-        "type_str": "[type[_BaseCallResponseT], list[tuple[_BaseToolT, JsonableType]]]",
+        "type_str": "[type[_BaseCallResponseT], Sequence[tuple[_BaseToolT, JsonableType]]]",
         "description": null,
         "kind": "tuple",
         "base_type": {
@@ -166,14 +166,14 @@ This module contains the base call response class.
             ]
           },
           {
-            "type_str": "list[tuple[_BaseToolT, JsonableType]]",
+            "type_str": "Sequence[tuple[_BaseToolT, JsonableType]]",
             "description": null,
             "kind": "generic",
             "base_type": {
-              "type_str": "list",
+              "type_str": "Sequence",
               "description": null,
               "kind": "simple",
-              "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
+              "doc_identifier": "Sequence"
             },
             "parameters": [
               {
@@ -997,7 +997,7 @@ A base abstract interface for LLM call responses.
               "type_str": "Tool",
               "description": null,
               "kind": "simple",
-              "doc_identifier": "Tool"
+              "doc_url": "/docs/mirascope/api/llm/tool#tool"
             }
           ]
         },
@@ -1184,14 +1184,14 @@ Returns the tool message parameters for tool call results.
   {
     "name": "tools_and_outputs",
     "type_info": {
-      "type_str": "list[tuple[_BaseToolT, str]]",
+      "type_str": "Sequence[tuple[_BaseToolT, str]]",
       "description": null,
       "kind": "generic",
       "base_type": {
-        "type_str": "list",
+        "type_str": "Sequence",
         "description": null,
         "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
+        "doc_identifier": "Sequence"
       },
       "parameters": [
         {
@@ -1221,7 +1221,7 @@ Returns the tool message parameters for tool call results.
         }
       ]
     },
-    "description": "The list of tools and their outputs from which the tool\nmessage parameters should be constructed."
+    "description": "The sequence of tools and their outputs from which the tool\nmessage parameters should be constructed."
   }
 ]}
 />
