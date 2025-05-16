@@ -60,6 +60,7 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
     }
   }, [highlightedCode]);
 
+  const product = useProduct();
   const copyToClipboard = () => {
     // Strip highlight markers before copying to clipboard
     const cleanCode = stripHighlightMarkers(code);
@@ -80,8 +81,6 @@ export function CodeBlock({ code, language = "text", meta = "", className = "" }
     }
 
     const pagePath = window.location.pathname;
-    const product = useProduct();
-
     analyticsManager.trackCopyEvent({
       contentType: "code_snippet",
       itemId: `${pagePath}#code-${blockPosition}`,
