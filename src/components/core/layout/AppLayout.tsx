@@ -6,7 +6,7 @@ import { ChevronLeft, ChevronRight, X, type LucideIcon } from "lucide-react";
 import { useSidebar, isMobileView } from "./useSidebar";
 
 // Shared positioning for sidebar toggle buttons
-const SIDEBAR_TOGGLE_POSITION = "calc(var(--header-height) - 1.8rem)";
+const SIDEBAR_TOGGLE_POSITION = "calc(var(--header-height) - 1.63rem)";
 
 // Create a context to coordinate sidebar states
 type SidebarContextType = {
