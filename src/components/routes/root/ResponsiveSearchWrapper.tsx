@@ -57,22 +57,22 @@ function MobileSearchWrapper({ onOpenChange }: SearchWrapperProps) {
       {/* Mobile search overlay */}
       <div className={SEARCH_BAR_STYLES.mobileOverlay(isOpen)}>
         <div className={SEARCH_BAR_STYLES.mobileSearchContainer}>
-          {/* Close button */}
-          <button
-            className={SEARCH_BAR_STYLES.closeButton}
-            onClick={handleCloseSearch}
-            aria-label="Close search"
-          >
-            <X size={20} />
-          </button>
-
           {/* SearchBar in the overlay */}
-          <div className="flex-grow">
+          <div className="relative flex-grow">
             <SearchBar
               onOpenChange={handleSearchOpenChange}
               isMobile={true}
               initialIsOpen={true} // Force it to start in open state
             />
+
+            {/* Close button positioned on the right side */}
+            <button
+              className={SEARCH_BAR_STYLES.closeButton}
+              onClick={handleCloseSearch}
+              aria-label="Close search"
+            >
+              <X size={20} />
+            </button>
           </div>
         </div>
       </div>
