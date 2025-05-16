@@ -43,7 +43,7 @@ export const HEADER_STYLES = {
     ),
 
   // Navigation container
-  nav: "mx-auto flex w-full max-w-7xl flex-row items-center justify-between",
+  nav: "mx-auto flex w-full max-w-7xl flex-row items-center space-x-2",
 
   // Logo link container
   logo: (isLandingPage: boolean) =>
@@ -53,12 +53,11 @@ export const HEADER_STYLES = {
     ),
 
   // Right section with controls
-  controls: (isSearchOpen: boolean) =>
-    cn(
-      "flex items-center gap-2 md:gap-3",
-      // Use more space when search is open on smaller screens
-      isSearchOpen && "flex-grow justify-end"
-    ),
+  controls: cn(
+    "flex items-center gap-2 md:gap-3 flex-shrink-0",
+    // Keep controls at the right edge but prevent shrinking
+    "justify-end"
+  ),
 
   // GitHub button container
   githubContainer: "hidden items-center gap-3 md:flex",
@@ -259,15 +258,13 @@ export const SEARCH_BAR_STYLES = {
   container: (isOpen: boolean) =>
     cn(
       "search-container",
-      "relative flex justify-end lg:justify-start",
+      "relative flex items-center",
       // Add transitions to the container for smooth width changes
       TRANSITION.properties.all,
       TRANSITION.duration.medium,
       TRANSITION.timing.default,
-      // Apply all width constraints here as the single source of truth
-      isOpen ? "w-72 max-w-[calc(100vw-120px)] sm:w-80 md:w-[28rem] lg:w-[32rem]" : "w-9 lg:w-36",
-      // When open on small screens, allow more space
-      isOpen && "sm:flex-grow md:flex-grow-0"
+      // Simplified width approach - set ideal width with flex-shrink to respect space
+      isOpen ? "w-[32rem] flex-shrink min-w-[200px] max-w-full" : "w-9 lg:w-36 flex-shrink-0"
     ),
 
   // Input container styles - matches parent width
