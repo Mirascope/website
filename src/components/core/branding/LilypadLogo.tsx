@@ -33,7 +33,9 @@ const LilypadLogo: React.FC<LilypadLogoProps> = ({
   };
 
   const logoContent = (
-    <div className={cn("flex flex-row items-center justify-center", containerClassName)}>
+    <div
+      className={cn("flex flex-shrink-0 flex-row items-center justify-start", containerClassName)}
+    >
       <div className={cn(selectedSize.spacing, imgClassName)}>
         <img src={logoPath} alt="Lilypad Logo" className={cn(selectedSize.img, imgClassName)} />
       </div>
