@@ -184,27 +184,8 @@ function SearchResultsContainer({
   setSelectedIndex,
   isMobile = false,
 }: SearchResultsContainerProps) {
-  // Use a fixed state derived from isOpen with some delayed rendering logic
-  const [isReallyVisible, setIsReallyVisible] = useState(false);
-
-  // When isOpen changes, update visibility with a delay for animation
-  useEffect(() => {
-    if (isOpen) {
-      // Use animation frame for smoother transition
-      // This allows the search bar to expand before showing results
-      const animationFrame = requestAnimationFrame(() => {
-        // Use centralized timing configuration
-        const timer = setTimeout(
-          () => setIsReallyVisible(true),
-          ANIMATION_TIMING.getResultsDelay()
-        );
-        return () => clearTimeout(timer);
-      });
-      return () => cancelAnimationFrame(animationFrame);
-    } else {
-      setIsReallyVisible(false);
-    }
-  }, [isOpen]);
+  // Simplify - directly tie visibility to the isOpen prop
+  // No delay for animation, which simplifies the code and logic
 
   // In mobile mode, we want to show the container immediately when the overlay opens
   // In desktop mode, only show when isOpen is true
@@ -213,7 +194,7 @@ function SearchResultsContainer({
   return (
     <div
       className={SEARCH_BAR_STYLES.resultsContainer(isLandingPage, isMobile)}
-      style={SEARCH_BAR_STYLES.getResultsContainerStyles(isReallyVisible, isLandingPage)}
+      style={SEARCH_BAR_STYLES.getResultsContainerStyles(isOpen, isLandingPage)}
       ref={resultsRef}
     >
       {renderSearchContent()}
