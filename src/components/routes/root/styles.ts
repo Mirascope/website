@@ -1,6 +1,37 @@
 import { cn } from "@/src/lib/utils";
 
 /**
+ * Animation timing configuration
+ * All durations in milliseconds
+ */
+export const ANIMATION_TIMING = {
+  // Phase 1: Logo and text fade out
+  logoFade: {
+    duration: 100,
+  },
+  // Phase 2: Search bar expansion
+  searchExpand: {
+    delay: 0, // Wait for logo to fade
+    duration: 400,
+  },
+  // Phase 3: Search results appearance
+  resultsAppear: {
+    delay: 100,
+    duration: 300,
+  },
+  // Computed total animation duration (for JS timers)
+  getTotalDuration: () =>
+    ANIMATION_TIMING.logoFade.duration +
+    ANIMATION_TIMING.searchExpand.delay +
+    ANIMATION_TIMING.searchExpand.duration,
+  // For results timing
+  getResultsDelay: () =>
+    ANIMATION_TIMING.logoFade.duration +
+    ANIMATION_TIMING.searchExpand.delay +
+    Math.floor(ANIMATION_TIMING.searchExpand.duration / 2),
+};
+
+/**
  * Header styles for main site header
  */
 export const HEADER_STYLES = {
@@ -30,8 +61,8 @@ export const HEADER_STYLES = {
   // Logo text container with fade transition
   logoText: (isSearchOpen: boolean) =>
     cn(
-      // Use direct transition values for consistent timing
-      "transition-all duration-[700ms] ease-in-out",
+      // Use timing from central configuration
+      `transition-all duration-[${ANIMATION_TIMING.logoFade.duration}ms] ease-in-out`,
       // On small screens when search is open, fade out the text but maintain position
       isSearchOpen
         ? "opacity-0 md:opacity-100 w-0 md:w-auto overflow-hidden md:overflow-visible pointer-events-none md:pointer-events-auto translate-x-0"
@@ -239,8 +270,8 @@ export const SEARCH_BAR_STYLES = {
     cn(
       "search-container",
       "relative flex items-center",
-      // Add transitions to the container for smooth width changes
-      "transition-all duration-[700ms] ease-in-out",
+      // Add transitions using centralized timing config
+      `transition-all duration-[${ANIMATION_TIMING.searchExpand.duration}ms] ease-in-out delay-[${ANIMATION_TIMING.searchExpand.delay}ms]`,
       // Simplified width approach - set ideal width with flex-shrink to respect space
       isOpen ? "w-[32rem] flex-shrink min-w-[200px] max-w-full" : "w-9 lg:w-36 flex-shrink-0"
     ),
@@ -266,8 +297,8 @@ export const SEARCH_BAR_STYLES = {
   // Search icon styles
   icon: (isOpen: boolean) =>
     cn(
-      // Transitions with direct values
-      "transition-all duration-[300ms] ease-in-out",
+      // Transitions from central config - match container timing
+      `transition-all duration-[${ANIMATION_TIMING.searchExpand.duration}ms] ease-in-out delay-[${ANIMATION_TIMING.searchExpand.delay}ms]`,
       // Icon styling
       "nav-icon",
       // Position based on open state
@@ -280,8 +311,8 @@ export const SEARCH_BAR_STYLES = {
       // Base styles
       "cursor-pointer overflow-visible bg-transparent py-0 text-sm leading-normal outline-none",
       "h-auto min-h-full",
-      // Transitions with direct values
-      "transition-all duration-[300ms] ease-in-out",
+      // Transitions from central config - match container timing
+      `transition-all duration-[${ANIMATION_TIMING.searchExpand.duration}ms] ease-in-out delay-[${ANIMATION_TIMING.searchExpand.delay}ms]`,
       // Text color based on page type
       isLandingPage
         ? "text-white placeholder:text-white/90"
@@ -303,8 +334,8 @@ export const SEARCH_BAR_STYLES = {
       // Base styles
       "search-results absolute top-full z-50 mt-2 overflow-hidden rounded-lg shadow-2xl [text-shadow:none]",
       "bg-background border-border border",
-      // Transitions
-      "transition-opacity duration-700 ease-in-out",
+      // Transitions from central config with additional delay
+      `transition-opacity duration-[${ANIMATION_TIMING.resultsAppear.duration}ms] ease-in-out delay-[${ANIMATION_TIMING.resultsAppear.delay}ms]`,
       // Match width to parent container (container manages actual width constraints)
       "w-full",
       // Responsive positioning
