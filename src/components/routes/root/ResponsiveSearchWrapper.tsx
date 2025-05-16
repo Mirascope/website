@@ -1,7 +1,13 @@
+import { useState } from "react";
+import { Search as SearchIcon, X } from "lucide-react";
 import { useIsMobile } from "./hooks/useIsMobile";
 import SearchBar from "./SearchBar";
+import { SEARCH_BAR_STYLES } from "./styles";
 
-interface ResponsiveSearchWrapperProps {
+/**
+ * Props for search wrappers
+ */
+interface SearchWrapperProps {
   /**
    * Called when search open state changes
    */
@@ -9,20 +15,84 @@ interface ResponsiveSearchWrapperProps {
 }
 
 /**
- * Responsive wrapper for search functionality
- * Owns the SearchBar component and handles responsive display
+ * Mobile-specific search UI with overlay
  */
-export default function ResponsiveSearchWrapper({ onOpenChange }: ResponsiveSearchWrapperProps) {
+function MobileSearchWrapper({ onOpenChange }: SearchWrapperProps) {
+  // Manage internal state for mobile search
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Open mobile search handler
+  const handleOpenSearch = () => {
+    setIsOpen(true);
+    onOpenChange(true);
+  };
+
+  // Close mobile search handler
+  const handleCloseSearch = () => {
+    setIsOpen(false);
+    onOpenChange(false);
+  };
+
+  // Handle search state changes from SearchBar
+  const handleSearchOpenChange = (open: boolean) => {
+    if (!open) {
+      // Only handle close events from SearchBar
+      handleCloseSearch();
+    }
+  };
+
+  return (
+    <>
+      {/* Mobile search button (only shown when search is closed) */}
+      {!isOpen && (
+        <button
+          className={SEARCH_BAR_STYLES.mobileSearchButton}
+          onClick={handleOpenSearch}
+          aria-label="Open search"
+        >
+          <SearchIcon size={16} />
+        </button>
+      )}
+
+      {/* Mobile search overlay */}
+      <div className={SEARCH_BAR_STYLES.mobileOverlay(isOpen)}>
+        <div className={SEARCH_BAR_STYLES.mobileSearchContainer}>
+          {/* Close button */}
+          <button
+            className={SEARCH_BAR_STYLES.closeButton}
+            onClick={handleCloseSearch}
+            aria-label="Close search"
+          >
+            <X size={20} />
+          </button>
+
+          {/* SearchBar in the overlay */}
+          <div className="flex-grow">
+            <SearchBar
+              onOpenChange={handleSearchOpenChange}
+              isMobile={true}
+              initialIsOpen={true} // Force it to start in open state
+            />
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+/**
+ * Responsive wrapper that renders either mobile or desktop search UI
+ * based on screen size
+ */
+export default function ResponsiveSearchWrapper({ onOpenChange }: SearchWrapperProps) {
   // Use the mobile detection hook
   const isMobile = useIsMobile();
 
-  // Log detection for development verification
-  if (process.env.NODE_ENV === "development") {
-    // eslint-disable-next-line no-console
-    console.log(`[SearchWrapper] isMobile: ${isMobile}`);
+  // Choose the appropriate UI based on screen size
+  if (isMobile) {
+    return <MobileSearchWrapper onOpenChange={onOpenChange} />;
   }
 
-  // For now, just render the search bar directly
-  // Later we'll conditionally render different UIs based on isMobile
+  // Desktop UI - render the SearchBar normally
   return <SearchBar onOpenChange={onOpenChange} />;
 }
