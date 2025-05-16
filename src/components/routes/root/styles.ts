@@ -161,7 +161,7 @@ export const THEME_SWITCHER_STYLES = {
   // Button trigger styles
   trigger: cn(
     // Base styles
-    "rounded-md p-2 mr-2 cursor-pointer",
+    "rounded-md p-2 cursor-pointer",
     // Transitions
     TRANSITION.properties.colors,
     TRANSITION.duration.medium,
