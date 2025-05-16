@@ -1,30 +1,5 @@
 import { cn } from "@/src/lib/utils";
 
-export const DURATION_FAST = 150;
-export const DURATION_MEDIUM = 300;
-export const DURATION_SLOW = 500;
-
-/**
- * Animation constants for consistent transitions
- */
-export const TRANSITION = {
-  duration: {
-    fast: `duration-${DURATION_FAST}`,
-    medium: `duration-${DURATION_MEDIUM}`,
-    slow: `duration-${DURATION_SLOW}`,
-  },
-  timing: {
-    default: "ease-in-out",
-    bounce: "ease-out",
-  },
-  properties: {
-    all: "transition-all",
-    colors: "transition-colors",
-    transform: "transition-transform",
-    opacity: "transition-opacity",
-  },
-};
-
 /**
  * Header styles for main site header
  */
@@ -55,10 +30,8 @@ export const HEADER_STYLES = {
   // Logo text container with fade transition
   logoText: (isSearchOpen: boolean) =>
     cn(
-      // Use the same transition timing as other components for consistency
-      TRANSITION.properties.all,
-      TRANSITION.duration.medium,
-      TRANSITION.timing.default,
+      // Use direct transition values for consistent timing
+      "transition-all duration-[700ms] ease-in-out",
       // On small screens when search is open, fade out the text but maintain position
       isSearchOpen
         ? "opacity-0 md:opacity-100 w-0 md:w-auto overflow-hidden md:overflow-visible pointer-events-none md:pointer-events-auto translate-x-0"
@@ -99,8 +72,7 @@ export const NAV_LINK_STYLES = {
     // Base styles
     "relative flex cursor-pointer items-center py-2 text-xl font-medium",
     // Transitions
-    TRANSITION.properties.colors,
-    TRANSITION.duration.medium,
+    "transition-colors duration-300 ease-in-out",
     // Interactive states
     "hover:text-primary"
   ),
@@ -116,8 +88,7 @@ export const PRODUCT_LINK_STYLES = {
       // Base styles
       "bg-background block space-y-1.5 rounded-md p-4",
       // Transition properties
-      TRANSITION.properties.colors,
-      TRANSITION.duration.medium,
+      "transition-colors duration-300 ease-in-out",
       // Interactive states
       "hover:bg-primary/20 focus:bg-primary/20",
       "active:bg-primary/60 active:scale-[0.98]",
@@ -134,8 +105,7 @@ export const PRODUCT_LINK_STYLES = {
       // Base styles
       "bg-background text-primary rounded-md p-3 font-medium",
       // Transitions
-      TRANSITION.properties.colors,
-      TRANSITION.duration.medium,
+      "transition-colors duration-300 ease-in-out",
       // Interactive states
       "hover:bg-primary/20 focus:bg-primary/20",
       "active:bg-primary/60 active:scale-[0.98]"
@@ -176,8 +146,7 @@ export const THEME_SWITCHER_STYLES = {
     // Base styles
     "rounded-md p-2 cursor-pointer",
     // Transitions
-    TRANSITION.properties.colors,
-    TRANSITION.duration.medium,
+    "transition-colors duration-300 ease-in-out",
     // Focus state
     "focus:outline-none focus:ring-2 focus:ring-primary",
     // Icon styling from nav (includes default color)
@@ -228,8 +197,7 @@ export const DESKTOP_NAV_STYLES = {
       // Base styles
       "absolute left-1/2 z-20 hidden -translate-x-1/2 transform items-center gap-6 md:flex",
       // Transitions
-      "transition-opacity",
-      TRANSITION.duration.medium,
+      "transition-opacity duration-300 ease-in-out",
       // Visibility based on search state
       isSearchOpen ? "pointer-events-none opacity-0" : "opacity-100"
     ),
@@ -239,8 +207,7 @@ export const DESKTOP_NAV_STYLES = {
     // Base styles
     "flex cursor-pointer items-center !bg-transparent p-0 text-xl font-medium",
     // Transitions
-    "transition-colors",
-    TRANSITION.duration.medium,
+    "transition-colors duration-300 ease-in-out",
     // Interactive states - maintaining transparency
     "hover:!bg-transparent focus:!bg-transparent data-[state=open]:!bg-transparent data-[state=open]:hover:!bg-transparent",
     // Text styling consistent with nav
@@ -273,9 +240,7 @@ export const SEARCH_BAR_STYLES = {
       "search-container",
       "relative flex items-center",
       // Add transitions to the container for smooth width changes
-      TRANSITION.properties.all,
-      TRANSITION.duration.medium,
-      TRANSITION.timing.default,
+      "transition-all duration-[700ms] ease-in-out",
       // Simplified width approach - set ideal width with flex-shrink to respect space
       isOpen ? "w-[32rem] flex-shrink min-w-[200px] max-w-full" : "w-9 lg:w-36 flex-shrink-0"
     ),
@@ -286,9 +251,6 @@ export const SEARCH_BAR_STYLES = {
       "search-input-container",
       // Base styles
       "h-9 rounded-full relative flex items-center overflow-visible w-full",
-      // Transitions
-      TRANSITION.properties.all,
-      TRANSITION.duration.medium,
       // Conditional styles based on page type
       isLandingPage
         ? "border-0 bg-white/10 hover:bg-white/20"
@@ -304,9 +266,8 @@ export const SEARCH_BAR_STYLES = {
   // Search icon styles
   icon: (isOpen: boolean) =>
     cn(
-      // Transitions
-      TRANSITION.properties.all,
-      TRANSITION.duration.medium,
+      // Transitions with direct values
+      "transition-all duration-[300ms] ease-in-out",
       // Icon styling
       "nav-icon",
       // Position based on open state
@@ -319,9 +280,8 @@ export const SEARCH_BAR_STYLES = {
       // Base styles
       "cursor-pointer overflow-visible bg-transparent py-0 text-sm leading-normal outline-none",
       "h-auto min-h-full",
-      // Transitions
-      TRANSITION.properties.all,
-      TRANSITION.duration.medium,
+      // Transitions with direct values
+      "transition-all duration-[300ms] ease-in-out",
       // Text color based on page type
       isLandingPage
         ? "text-white placeholder:text-white/90"
@@ -344,8 +304,7 @@ export const SEARCH_BAR_STYLES = {
       "search-results absolute top-full z-50 mt-2 overflow-hidden rounded-lg shadow-2xl [text-shadow:none]",
       "bg-background border-border border",
       // Transitions
-      TRANSITION.properties.opacity,
-      TRANSITION.duration.medium,
+      "transition-opacity duration-700 ease-in-out",
       // Match width to parent container (container manages actual width constraints)
       "w-full",
       // Responsive positioning
@@ -376,8 +335,7 @@ export const SEARCH_BAR_STYLES = {
       // Base styles
       "border-border/40 flex border-t px-5 py-4 text-sm first:border-0",
       // Transitions
-      TRANSITION.properties.colors,
-      TRANSITION.duration.fast,
+      "transition-colors duration-150",
       // Selected state
       isSelected ? "bg-accent/50" : ""
     ),
