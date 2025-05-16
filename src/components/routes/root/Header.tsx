@@ -55,15 +55,18 @@ export default function Header({ showProductSelector = false }: HeaderProps) {
 
         <DesktopNavigation isSearchOpen={isSearchOpen} />
 
-        {/* Right section with responsive controls */}
-        <div className={HEADER_STYLES.controls(isSearchOpen)}>
-          {/* Single search bar instance for all viewport sizes */}
-          <SearchBar
-            onOpenChange={(isOpen: boolean) => {
-              setIsSearchOpen(isOpen);
-            }}
-          />
+        {/* Adding a flex-grow spacer to push elements to edges */}
+        <div className="flex-grow"></div>
 
+        {/* Search bar in the middle with ability to grow/shrink */}
+        <SearchBar
+          onOpenChange={(isOpen: boolean) => {
+            setIsSearchOpen(isOpen);
+          }}
+        />
+
+        {/* Right section with fixed controls */}
+        <div className={HEADER_STYLES.controls}>
           {/* Desktop: GitHub + Theme buttons */}
           <div className={HEADER_STYLES.githubContainer}>
             <GitHubRepoButton />
