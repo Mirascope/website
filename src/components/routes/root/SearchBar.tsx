@@ -128,7 +128,7 @@ function SearchInput({
   const isLandingPage = useIsLandingPage();
   return (
     <div
-      className={SEARCH_BAR_STYLES.inputContainer(isLandingPage)}
+      className={SEARCH_BAR_STYLES.inputContainer(isLandingPage, isMobile)}
       data-testid="search-input"
       style={SEARCH_BAR_STYLES.getInputContainerStyles(isLandingPage)}
       onClick={onFocus}
