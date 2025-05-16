@@ -47,7 +47,10 @@ export const HEADER_STYLES = {
 
   // Logo link container
   logo: (isLandingPage: boolean) =>
-    cn("relative z-10 flex items-center", isLandingPage ? "invisible" : "visible"),
+    cn(
+      "relative z-10 flex items-center flex-shrink-0 mr-2",
+      isLandingPage ? "invisible" : "visible"
+    ),
 
   // Right section with controls
   controls: (isSearchOpen: boolean) =>
