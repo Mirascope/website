@@ -39,7 +39,7 @@ export const HEADER_STYLES = {
   container: (isLandingPage: boolean, scrolled: boolean) =>
     cn(
       // Fixed positioning and layout
-      "fixed top-0 right-0 left-0 z-50 mb-2 flex w-full flex-col items-center justify-center px-3 py-2 md:px-6",
+      "fixed top-0 right-0 left-0 z-100 mb-2 flex w-full flex-col items-center justify-center px-3 py-2 md:px-6",
       // Text styling for landing page
       "landing-text landing-page-text-shadow",
       // Background color (only on non-landing pages)

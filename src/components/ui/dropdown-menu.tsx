@@ -54,7 +54,7 @@ const DropdownMenuSubContent = React.forwardRef<
         ref={ref}
         className={cn(
           // Positioning and dimensions
-          "z-50 min-w-[8rem]",
+          "z-150 min-w-[8rem]",
           // Appearance
           "bg-background text-primary overflow-hidden rounded-md border p-1 shadow-lg",
           // Animation states
@@ -95,7 +95,7 @@ const DropdownMenuContent = React.forwardRef<
           sideOffset={sideOffset}
           className={cn(
             // Positioning and dimensions
-            "z-50 min-w-[8rem]",
+            "z-150 min-w-[8rem]",
             // Appearance
             "bg-background text-primary overflow-hidden rounded-md border p-1 shadow-md",
             // Animation states
