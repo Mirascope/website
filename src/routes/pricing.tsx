@@ -184,14 +184,14 @@ function PricingPage() {
   // Cloud hosted features
   const cloudHostedFeatures = [
     { feature: "Projects", free: "Unlimited", pro: "Unlimited", team: "Unlimited" },
-    { feature: "Users", free: "1", pro: "5", team: "10" },
+    { feature: "Users", free: "2", pro: "10", team: "Unlimited" },
     {
       feature: "Tracing",
       free: "30k spans / month",
       pro: "100k spans / month (thereafter $1 per 10k)",
-      team: "100k spans / month (thereafter $1 per 10k)",
+      team: "1M spans / month (thereafter $1 per 10k)",
     },
-    { feature: "Data Retention", free: "30 days", pro: "90 days", team: "90 days" },
+    { feature: "Data Retention", free: "30 days", pro: "90 days", team: "180 days" },
     { feature: "Versioned Functions", free: true, pro: true, team: true },
     { feature: "Playground", free: true, pro: true, team: true },
     { feature: "Comparisons", free: true, pro: true, team: true },
@@ -199,13 +199,13 @@ function PricingPage() {
     { feature: "Support (Community)", free: true, pro: true, team: true },
     { feature: "Support (Chat / Email)", free: false, pro: true, team: true },
     { feature: "Support (Private Slack)", free: false, pro: false, team: true },
-    { feature: "API Rate Limits", free: "10 / minute", pro: "100 / minute", team: "100 / minute" },
+    { feature: "API Rate Limits", free: "10 / minute", pro: "100 / minute", team: "1000 / minute" },
   ];
 
   // Self-hosted features
   const selfHostedFeatures = [
     { feature: "Projects", free: "Unlimited", pro: "Unlimited", team: "Unlimited" },
-    { feature: "Users", free: "1", pro: "As licensed", team: "As licensed" },
+    { feature: "Users", free: "Unlimited", pro: "As licensed", team: "As licensed" },
     { feature: "Tracing", free: "No limits", pro: "No limits", team: "No limits" },
     { feature: "Data Retention", free: "No limits", pro: "No limits", team: "No limits" },
     { feature: "Versioned Functions", free: true, pro: true, team: true },
