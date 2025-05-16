@@ -114,9 +114,17 @@ interface SearchInputProps {
   onFocus: () => void;
   inputRef: React.RefObject<HTMLInputElement | null>;
   isOpen: boolean;
+  isMobile?: boolean;
 }
 
-function SearchInput({ query, onChange, onFocus, inputRef, isOpen }: SearchInputProps) {
+function SearchInput({
+  query,
+  onChange,
+  onFocus,
+  inputRef,
+  isOpen,
+  isMobile = false,
+}: SearchInputProps) {
   const isLandingPage = useIsLandingPage();
   return (
     <div
@@ -135,6 +143,7 @@ function SearchInput({ query, onChange, onFocus, inputRef, isOpen }: SearchInput
         value={query}
         onChange={(e) => onChange(e.target.value)}
         onFocus={onFocus}
+        autoFocus={isMobile && isOpen} // Auto-focus in mobile mode
       />
       <kbd className={SEARCH_BAR_STYLES.kbd(isLandingPage, isOpen)}>
         <span className="text-xs">⌘</span>K
@@ -157,6 +166,7 @@ interface SearchResultsContainerProps {
   isLandingPage?: boolean;
   selectedIndex: number;
   setSelectedIndex: (index: number) => void;
+  isMobile?: boolean;
 }
 
 function SearchResultsContainer({
@@ -172,6 +182,7 @@ function SearchResultsContainer({
   isLandingPage = false,
   selectedIndex,
   setSelectedIndex,
+  isMobile = false,
 }: SearchResultsContainerProps) {
   // Use a fixed state derived from isOpen with some delayed rendering logic
   const [isReallyVisible, setIsReallyVisible] = useState(false);
@@ -199,7 +210,7 @@ function SearchResultsContainer({
 
   return (
     <div
-      className={SEARCH_BAR_STYLES.resultsContainer(isLandingPage)}
+      className={SEARCH_BAR_STYLES.resultsContainer(isLandingPage, isMobile)}
       style={SEARCH_BAR_STYLES.getResultsContainerStyles(isReallyVisible, isLandingPage)}
       ref={resultsRef}
     >
@@ -258,7 +269,7 @@ function SearchResultsContainer({
       );
     }
 
-    return <div className="text-muted-foreground p-4 text-center">Type to start searching</div>;
+    return <div className="text-muted-foreground p-4 text-center">Type to search</div>;
   }
 }
 
@@ -282,11 +293,28 @@ function SearchFooter() {
 }
 
 interface SearchBarProps {
+  /**
+   * Called when search open state changes
+   */
   onOpenChange?: (isOpen: boolean) => void;
+
+  /**
+   * Whether the search bar is being rendered in mobile mode
+   */
+  isMobile?: boolean;
+
+  /**
+   * Initial open state (useful for mobile overlay)
+   */
+  initialIsOpen?: boolean;
 }
 
-export default function SearchBar({ onOpenChange }: SearchBarProps = {}) {
-  const [isOpen, setIsOpen] = useState(false);
+export default function SearchBar({
+  onOpenChange,
+  isMobile = false,
+  initialIsOpen = false,
+}: SearchBarProps = {}) {
+  const [isOpen, setIsOpen] = useState(initialIsOpen);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResultItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -303,11 +331,17 @@ export default function SearchBar({ onOpenChange }: SearchBarProps = {}) {
 
   // Focus input when search is opened
   useEffect(() => {
-    if (isOpen && inputRef.current) {
-      inputRef.current.focus();
+    if ((isOpen || initialIsOpen) && inputRef.current) {
+      inputRef.current?.focus();
     }
 
-    // Use a slight delay to toggle visibility
+    // For mobile mode, don't call onOpenChange from within this effect
+    // to avoid circular callback chain
+    if (isMobile) {
+      return;
+    }
+
+    // Only for desktop: Use a slight delay to toggle visibility
     if (isOpen) {
       // Hide navigation immediately
       if (onOpenChange) onOpenChange(true);
@@ -318,7 +352,7 @@ export default function SearchBar({ onOpenChange }: SearchBarProps = {}) {
       }, ANIMATION_TIMING.getTotalDuration()); // Use centralized timing
       return () => clearTimeout(timer);
     }
-  }, [isOpen, onOpenChange]);
+  }, [isOpen, initialIsOpen, onOpenChange, isMobile]);
 
   // Handle keyboard shortcuts
   useEffect(() => {
@@ -465,18 +499,24 @@ export default function SearchBar({ onOpenChange }: SearchBarProps = {}) {
     setSelectedIndex(0);
   }, [results]);
 
+  // For mobile mode, use a simpler container without animations
+  const containerClassName = isMobile
+    ? "relative flex items-center w-full" // Full width, no transitions
+    : SEARCH_BAR_STYLES.container(isOpen);
+
   return (
-    <div className={SEARCH_BAR_STYLES.container(isOpen)} ref={searchContainerRef}>
+    <div className={containerClassName} ref={searchContainerRef}>
       <SearchInput
         query={query}
         onChange={setQuery}
         onFocus={() => setIsOpen(true)}
         inputRef={inputRef}
-        isOpen={isOpen}
+        isOpen={isOpen || isMobile} // Always show as open in mobile mode
+        isMobile={isMobile}
       />
 
       <SearchResultsContainer
-        isOpen={isOpen}
+        isOpen={isOpen || (isMobile && query.trim().length > 0)} // Always show in mobile with query
         isLoading={isLoading}
         isSearching={isSearching}
         isPagefindLoaded={isPagefindLoaded}
@@ -487,6 +527,7 @@ export default function SearchBar({ onOpenChange }: SearchBarProps = {}) {
         onResultSelect={handleResultSelect}
         selectedIndex={selectedIndex}
         setSelectedIndex={setSelectedIndex}
+        isMobile={isMobile}
       />
     </div>
   );

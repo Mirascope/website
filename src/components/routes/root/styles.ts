@@ -151,7 +151,7 @@ export const MOBILE_MENU_STYLES = {
   // Container for the entire mobile menu
   container: cn(
     // Positioning and layout
-    "absolute top-full right-4 z-50 mt-2 max-w-xs md:hidden",
+    "absolute top-full right-4 z-90 mt-2 max-w-xs md:hidden",
     // Appearance
     "bg-background text-foreground rounded-lg p-6 shadow-lg",
     // Reset text shadow from parent header
@@ -276,6 +276,34 @@ export const SEARCH_BAR_STYLES = {
       isOpen ? SEARCH_STATE_STYLES.open.container : SEARCH_STATE_STYLES.closed.container
     ),
 
+  // Mobile search button
+  mobileSearchButton: cn(
+    "relative flex items-center justify-center w-9 h-9 rounded-full border border-border",
+    "bg-background/20 hover:bg-primary/10 hover:border-primary/80",
+    "transition-colors duration-300"
+  ),
+
+  // Mobile search overlay container
+  mobileOverlay: (isOpen: boolean) =>
+    cn(
+      // Positioning and layout
+      "fixed inset-x-0 top-0 z-90 flex flex-col",
+      // Height for overlay - only cover header area
+      "h-[var(--header-height-base)]",
+      // Background color
+      "bg-background/95 backdrop-blur-sm",
+      // Transition properties
+      `transition-all duration-[${ANIMATION_TIMING.searchExpand.duration}ms] ease-in-out`,
+      // Visibility based on search state
+      isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+    ),
+
+  // Mobile search inner container
+  mobileSearchContainer: cn("w-full h-full px-3 flex items-center"),
+
+  // Close button for mobile overlay
+  closeButton: cn("ml-2 p-2 text-foreground hover:text-primary", "transition-colors duration-300"),
+
   // Input container styles - matches parent width
   inputContainer: (isLandingPage: boolean) =>
     cn(
@@ -338,17 +366,19 @@ export const SEARCH_BAR_STYLES = {
     ),
 
   // Results container - matches parent container width
-  resultsContainer: (isLandingPage: boolean) =>
+  resultsContainer: (isLandingPage: boolean, isMobile: boolean = false) =>
     cn(
       // Base styles
-      "search-results absolute top-full z-50 mt-2 overflow-hidden rounded-lg shadow-2xl [text-shadow:none]",
+      "search-results overflow-hidden rounded-lg shadow-2xl [text-shadow:none]",
       "bg-background border-border border",
       // Transitions from central config with additional delay
       `transition-opacity duration-[${ANIMATION_TIMING.resultsAppear.duration}ms] ease-in-out delay-[${ANIMATION_TIMING.resultsAppear.delay}ms]`,
       // Match width to parent container (container manages actual width constraints)
       "w-full",
-      // Responsive positioning
-      "right-0 lg:right-auto lg:left-0", // Position from right on small screens, from left on large screens
+      // Mobile vs desktop positioning
+      isMobile
+        ? "fixed top-[var(--header-height-base)] left-0 right-0 z-90 max-h-[calc(100vh-var(--header-height-base))]" // Mobile: fixed beneath the header
+        : "absolute top-full z-50 mt-2 right-0 lg:right-auto lg:left-0", // Desktop: dropdown below
       // Conditional textured background
       isLandingPage ? "textured-bg-absolute" : ""
     ),
