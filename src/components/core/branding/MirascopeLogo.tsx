@@ -30,15 +30,11 @@ const MirascopeLogo: React.FC<BaseLogoProps> = ({
       </div>
 
       {withText && (
-        <h1
-          className={cn(
-            selectedSize.text,
-            "text-mirascope-purple font-handwriting mb-0",
-            textClassName
-          )}
-        >
-          Mirascope
-        </h1>
+        <div className={cn("flex items-center", textClassName)}>
+          <h1 className={cn(selectedSize.text, "text-mirascope-purple font-handwriting mb-0")}>
+            Mirascope
+          </h1>
+        </div>
       )}
     </div>
   );
