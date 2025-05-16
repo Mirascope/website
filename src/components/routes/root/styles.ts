@@ -303,10 +303,13 @@ export const SEARCH_BAR_STYLES = {
   mobileSearchContainer: cn("w-full px-3 py-2 flex items-center"),
 
   // Close button for mobile overlay
-  closeButton: cn(
-    "absolute right-3 top-1/2 -translate-y-1/2 p-2 text-foreground hover:text-primary",
-    "transition-colors duration-300"
-  ),
+  closeButton: (isLandingPage: boolean) =>
+    cn(
+      "absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full",
+      "transition-colors duration-300",
+      "cursor-pointer",
+      isLandingPage ? "text-white" : "text-foreground"
+    ),
 
   // Input container styles - matches parent width
   inputContainer: (isLandingPage: boolean) =>
