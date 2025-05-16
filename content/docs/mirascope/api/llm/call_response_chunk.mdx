@@ -6,11 +6,95 @@ description: API documentation for mirascope.llm.call_response_chunk
 
 # mirascope.llm.call_response_chunk
 
+Call response chunk module.
 
-## Error Processing Documentation
+## <ApiType type="Class" path="llm/call_response_chunk" symbolName="CallResponseChunk" /> CallResponseChunk
 
-An error occurred while generating documentation for `mirascope.llm.call_repsonse_chunk`: Could not find mirascope.llm.call_repsonse_chunk in the module.
+**Bases:** 
+<TypeLink type={{"type_str": "BaseCallResponseChunk[Any, FinishReason]", "description": null, "kind": "generic", "base_type": {"type_str": "BaseCallResponseChunk", "description": null, "kind": "simple", "doc_url": "/docs/mirascope/api/core/base/call_response_chunk#basecallresponsechunk"}, "parameters": [{"type_str": "Any", "description": null, "kind": "simple", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Any"}, {"type_str": "FinishReason", "description": null, "kind": "simple", "doc_url": "/docs/mirascope/api/core/openai/call_response_chunk#finishreason"}]}} />
 
-Please check that all required dependencies are installed.
+<AttributesTable
+  attributes={[
+  {
+    "name": "finish_reasons",
+    "type_info": {
+      "type_str": "list[FinishReason] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+      },
+      "parameters": [
+        {
+          "type_str": "list[FinishReason]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "list",
+            "description": null,
+            "kind": "simple",
+            "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
+          },
+          "parameters": [
+            {
+              "type_str": "FinishReason",
+              "description": null,
+              "kind": "simple",
+              "doc_url": "/docs/mirascope/api/core/openai/call_response_chunk#finishreason"
+            }
+          ]
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
+        }
+      ]
+    }
+  },
+  {
+    "name": "usage",
+    "type_info": {
+      "type_str": "Usage | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+      },
+      "parameters": [
+        {
+          "type_str": "Usage",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "/docs/mirascope/api/core/base/types#usage"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
+        }
+      ]
+    }
+  },
+  {
+    "name": "cost_metadata",
+    "type_info": {
+      "type_str": "CostMetadata",
+      "description": null,
+      "kind": "simple",
+      "doc_url": "/docs/mirascope/api/core/base/types#costmetadata"
+    },
+    "description": "Get metadata required for cost calculation."
+  }
+]}
+/>
 
 

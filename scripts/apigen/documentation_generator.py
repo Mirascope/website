@@ -38,16 +38,13 @@ class DocumentationGenerator:
     Attributes:
         config: Configuration for the documentation source
         project_root: Root directory of the project
-        version: Version of the package to document
         repo_path: Path to the cloned repository
         module: Loaded Griffe module
         organized_files: Dictionary of files organized by directory
 
     """
 
-    def __init__(
-        self, config: ApiSourceConfig, project_root: Path, version: str | None = None
-    ) -> None:
+    def __init__(self, config: ApiSourceConfig, project_root: Path) -> None:
         """Initialize the DocumentationGenerator.
 
         Args:
@@ -58,7 +55,6 @@ class DocumentationGenerator:
         """
         self.config = config
         self.project_root = project_root
-        self.version = version
         self.repo_path: Path | None = None
         self.module: Any | None = None
         self.organized_files: dict[str, list[Path]] | None = None
@@ -206,17 +202,16 @@ class DocumentationGenerator:
                 check=True,
             )
 
-        # Checkout the tag or branch that matches the version
-        if self.version:
-            try:
-                subprocess.run(
-                    ["git", "-C", str(repo_path), "checkout", f"v{self.version}"],
-                    check=True,
-                    capture_output=True,
-                )
-                print(f"Checked out v{self.version}")
-            except subprocess.CalledProcessError:
-                print(f"Warning: Could not checkout v{self.version}, using main branch")
+        # Checkout origin/main
+
+        try:
+            subprocess.run(
+                ["git", "-C", str(repo_path), "checkout", "origin/main"],
+                check=True,
+                capture_output=True,
+            )
+        except subprocess.CalledProcessError:
+            print("Warning: Could not checkout origin/mainh")
 
         return repo_path
 
