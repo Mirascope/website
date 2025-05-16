@@ -413,14 +413,14 @@ Returns the tool message parameters for tool call results.
   {
     "name": "tools_and_outputs",
     "type_info": {
-      "type_str": "list[tuple[GroqTool, str]]",
+      "type_str": "Sequence[tuple[GroqTool, str]]",
       "description": null,
       "kind": "generic",
       "base_type": {
-        "type_str": "list",
+        "type_str": "Sequence",
         "description": null,
         "kind": "simple",
-        "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
+        "doc_identifier": "Sequence"
       },
       "parameters": [
         {
@@ -450,7 +450,7 @@ Returns the tool message parameters for tool call results.
         }
       ]
     },
-    "description": "The list of tools and their outputs from which the tool\nmessage parameters should be constructed."
+    "description": "The sequence of tools and their outputs from which the tool\nmessage parameters should be constructed."
   }
 ]}
 />

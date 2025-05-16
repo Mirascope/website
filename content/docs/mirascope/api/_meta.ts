@@ -432,38 +432,60 @@ export const apiMeta: SectionSpec = {
       ],
     },
     {
-      slug: "integrations",
-      label: "Integrations",
-      children: [
-        {
-          slug: "langfuse",
-          label: "Langfuse",
-        },
-        {
-          slug: "logfire",
-          label: "Logfire",
-        },
-        {
-          slug: "middleware",
-          label: "Middleware",
-        },
-        {
-          slug: "otel",
-          label: "Otel",
-        },
-        {
-          slug: "tenacity",
-          label: "Tenacity",
-        },
-      ],
-    },
-    {
       slug: "llm",
       label: "Llm",
       children: [
         {
           slug: "call",
           label: "Call",
+        },
+        {
+          slug: "call_response",
+          label: "Call Response",
+        },
+        {
+          slug: "call_response_chunk",
+          label: "Call Response Chunk",
+        },
+        {
+          slug: "context",
+          label: "Context",
+        },
+        {
+          slug: "override",
+          label: "Override",
+        },
+        {
+          slug: "stream",
+          label: "Stream",
+        },
+        {
+          slug: "tool",
+          label: "Tool",
+        },
+      ],
+    },
+    {
+      slug: "mcp",
+      label: "Mcp",
+      children: [
+        {
+          slug: "client",
+          label: "Client",
+        },
+      ],
+    },
+    {
+      slug: "retries",
+      label: "Retries",
+      children: [
+        {
+          slug: "fallback",
+          label: "Fallback",
+        },
+        {
+          slug: "tenacity",
+          label: "Tenacity",
         },
       ],
     },

@@ -1,13 +1,14 @@
 ---
 # AUTO-GENERATED API DOCUMENTATION - DO NOT EDIT
-title: mirascope.integrations.tenacity
-description: API documentation for mirascope.integrations.tenacity
+title: mirascope.retries.tenacity
+description: API documentation for mirascope.retries.tenacity
 ---
 
-# mirascope.integrations.tenacity
+# mirascope.retries.tenacity
 
-## `collect_errors`
-## <ApiType type="Alias" path="integrations/tenacity" symbolName="collect_errors" /> collect_errors
+Utitlies for more easily using Tenacity to reinsert errors on failed API calls.
+
+## <ApiType type="Function" path="retries/tenacity" symbolName="collect_errors" /> collect_errors
 
 Collects specified errors into an `errors` keyword argument.
 
@@ -35,7 +36,7 @@ except RetryError:
 <ParametersTable
   parameters={[
   {
-    "name": "*args",
+    "name": "args",
     "type_info": {
       "type_str": "type[Exception]",
       "description": null,
@@ -55,8 +56,7 @@ except RetryError:
         }
       ]
     },
-    "default": "()",
-    "description": "The `Exception` types to catch."
+    "default": "()"
   }
 ]}
 />
@@ -104,6 +104,4 @@ except RetryError:
 }}
 />
 
-
-**Alias to:** `mirascope.retries.tenacity.collect_errors`
 
