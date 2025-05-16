@@ -52,7 +52,7 @@ API_SOURCES: ApiSourcesDict = {
     "mirascope": ApiSourceConfig(
         repo="https://github.com/Mirascope/mirascope.git",
         package="mirascope",
-        docs_path="docs/api",
+        docs_path="api_ref",
         content_subpath="docs/mirascope",
         target_path="content/docs/mirascope/api",
     ),
