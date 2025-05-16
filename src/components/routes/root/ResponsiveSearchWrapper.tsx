@@ -3,6 +3,7 @@ import { Search as SearchIcon, X } from "lucide-react";
 import { useIsMobile } from "./hooks/useIsMobile";
 import SearchBar from "./SearchBar";
 import { SEARCH_BAR_STYLES } from "./styles";
+import { useIsLandingPage } from "@/src/components/core";
 
 /**
  * Props for search wrappers
@@ -20,6 +21,7 @@ interface SearchWrapperProps {
 function MobileSearchWrapper({ onOpenChange }: SearchWrapperProps) {
   // Manage internal state for mobile search
   const [isOpen, setIsOpen] = useState(false);
+  const isLandingPage = useIsLandingPage();
 
   // Open mobile search handler
   const handleOpenSearch = () => {
@@ -46,7 +48,7 @@ function MobileSearchWrapper({ onOpenChange }: SearchWrapperProps) {
       {/* Mobile search button (only shown when search is closed) */}
       {!isOpen && (
         <button
-          className={SEARCH_BAR_STYLES.mobileSearchButton}
+          className={SEARCH_BAR_STYLES.mobileSearchButton(isLandingPage)}
           onClick={handleOpenSearch}
           aria-label="Open search"
         >
