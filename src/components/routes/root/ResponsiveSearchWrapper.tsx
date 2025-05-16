@@ -49,6 +49,7 @@ function MobileSearchWrapper({ onOpenChange }: SearchWrapperProps) {
       {!isOpen && (
         <button
           className={SEARCH_BAR_STYLES.mobileSearchButton(isLandingPage)}
+          style={SEARCH_BAR_STYLES.getInputContainerStyles(isLandingPage)}
           onClick={handleOpenSearch}
           aria-label="Open search"
         >
