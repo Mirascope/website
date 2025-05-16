@@ -1,4 +1,5 @@
 import type { PropsWithChildren } from "react";
+import { useIsMobile } from "./hooks/useIsMobile";
 
 interface ResponsiveSearchWrapperProps extends PropsWithChildren {
   isOpen: boolean;
@@ -7,15 +8,24 @@ interface ResponsiveSearchWrapperProps extends PropsWithChildren {
 
 /**
  * Responsive wrapper for search functionality
- * Initially just passes through children, but will later
- * conditionally render mobile or desktop versions
+ * Determines whether to show mobile or desktop search UI
+ * Initially just passes through children
  */
 export default function ResponsiveSearchWrapper({
   children,
-  // These props will be used later once we implement mobile functionality
-  isOpen: _isOpen,
-  onClose: _onClose,
+  isOpen: _isOpen, // Will use in next phase
+  onClose: _onClose, // Will use in next phase
 }: ResponsiveSearchWrapperProps) {
-  // Initially, just pass through the children
+  // Use the mobile detection hook
+  const isMobile = useIsMobile();
+
+  // Log detection for development verification
+  if (process.env.NODE_ENV === "development") {
+    // eslint-disable-next-line no-console
+    console.log(`[SearchWrapper] isMobile: ${isMobile}`);
+  }
+
+  // For now, just pass through the children
+  // Later we'll conditionally render different UIs based on isMobile
   return <>{children}</>;
 }
