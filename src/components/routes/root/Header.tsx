@@ -12,6 +12,7 @@ import SearchBar from "@/src/components/routes/root/SearchBar";
 import DesktopNavigation from "@/src/components/routes/root/DesktopNavigation";
 import MobileMenu from "@/src/components/routes/root/MobileMenu";
 import { HEADER_STYLES } from "./styles";
+import { cn } from "@/src/lib/utils";
 
 interface HeaderProps {
   /**
@@ -56,7 +57,13 @@ export default function Header({ showProductSelector = false }: HeaderProps) {
         <DesktopNavigation isSearchOpen={isSearchOpen} />
 
         {/* Adding a flex-grow spacer to push elements to edges */}
-        <div className="flex-grow"></div>
+        <div
+          className={cn(
+            "flex-grow transition-all duration-300",
+            // When search is open on small screens, reduce the spacer size to give more room to search
+            isSearchOpen && "md:flex-grow lg:flex-grow-0"
+          )}
+        ></div>
 
         {/* Search bar in the middle with ability to grow/shrink */}
         <SearchBar
