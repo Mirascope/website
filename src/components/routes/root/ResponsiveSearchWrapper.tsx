@@ -1,21 +1,18 @@
-import type { PropsWithChildren } from "react";
 import { useIsMobile } from "./hooks/useIsMobile";
+import SearchBar from "./SearchBar";
 
-interface ResponsiveSearchWrapperProps extends PropsWithChildren {
-  isOpen: boolean;
-  onClose: () => void;
+interface ResponsiveSearchWrapperProps {
+  /**
+   * Called when search open state changes
+   */
+  onOpenChange: (isOpen: boolean) => void;
 }
 
 /**
  * Responsive wrapper for search functionality
- * Determines whether to show mobile or desktop search UI
- * Initially just passes through children
+ * Owns the SearchBar component and handles responsive display
  */
-export default function ResponsiveSearchWrapper({
-  children,
-  isOpen: _isOpen, // Will use in next phase
-  onClose: _onClose, // Will use in next phase
-}: ResponsiveSearchWrapperProps) {
+export default function ResponsiveSearchWrapper({ onOpenChange }: ResponsiveSearchWrapperProps) {
   // Use the mobile detection hook
   const isMobile = useIsMobile();
 
@@ -25,7 +22,7 @@ export default function ResponsiveSearchWrapper({
     console.log(`[SearchWrapper] isMobile: ${isMobile}`);
   }
 
-  // For now, just pass through the children
+  // For now, just render the search bar directly
   // Later we'll conditionally render different UIs based on isMobile
-  return <>{children}</>;
+  return <SearchBar onOpenChange={onOpenChange} />;
 }

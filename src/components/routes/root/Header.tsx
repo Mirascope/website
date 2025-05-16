@@ -8,7 +8,6 @@ import {
   useIsLandingPage,
 } from "@/src/components/core";
 import ThemeSwitcher from "@/src/components/routes/root/ThemeSwitcher";
-import SearchBar from "@/src/components/routes/root/SearchBar";
 import DesktopNavigation from "@/src/components/routes/root/DesktopNavigation";
 import MobileMenu from "@/src/components/routes/root/MobileMenu";
 import ResponsiveSearchWrapper from "@/src/components/routes/root/ResponsiveSearchWrapper";
@@ -65,13 +64,11 @@ export default function Header({ showProductSelector = false }: HeaderProps) {
         <div className="flex-grow"></div>
 
         {/* Search bar in the middle with ability to grow/shrink */}
-        <ResponsiveSearchWrapper isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)}>
-          <SearchBar
-            onOpenChange={(isOpen: boolean) => {
-              setIsSearchOpen(isOpen);
-            }}
-          />
-        </ResponsiveSearchWrapper>
+        <ResponsiveSearchWrapper
+          onOpenChange={(isOpen: boolean) => {
+            setIsSearchOpen(isOpen);
+          }}
+        />
 
         {/* Right section with fixed controls */}
         <div className={HEADER_STYLES.controls}>
