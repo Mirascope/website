@@ -11,6 +11,7 @@ import ThemeSwitcher from "@/src/components/routes/root/ThemeSwitcher";
 import SearchBar from "@/src/components/routes/root/SearchBar";
 import DesktopNavigation from "@/src/components/routes/root/DesktopNavigation";
 import MobileMenu from "@/src/components/routes/root/MobileMenu";
+import ResponsiveSearchWrapper from "@/src/components/routes/root/ResponsiveSearchWrapper";
 import { HEADER_STYLES } from "./styles";
 import { cn } from "@/src/lib/utils";
 
@@ -64,11 +65,13 @@ export default function Header({ showProductSelector = false }: HeaderProps) {
         <div className="flex-grow"></div>
 
         {/* Search bar in the middle with ability to grow/shrink */}
-        <SearchBar
-          onOpenChange={(isOpen: boolean) => {
-            setIsSearchOpen(isOpen);
-          }}
-        />
+        <ResponsiveSearchWrapper isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)}>
+          <SearchBar
+            onOpenChange={(isOpen: boolean) => {
+              setIsSearchOpen(isOpen);
+            }}
+          />
+        </ResponsiveSearchWrapper>
 
         {/* Right section with fixed controls */}
         <div className={HEADER_STYLES.controls}>
