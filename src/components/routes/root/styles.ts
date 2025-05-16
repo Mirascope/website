@@ -388,7 +388,7 @@ export const SEARCH_BAR_STYLES = {
       "w-full",
       // Mobile vs desktop positioning
       isMobile
-        ? "absolute top-[var(--header-height-base)] left-0 right-0 z-90 max-h-[calc(100vh-var(--header-height-base)*1.2)]" // Mobile: now part of the overlay
+        ? "absolute top-full mt-4 left-0 right-0 z-90 max-h-[calc(100vh-var(--header-height-base)*1.2)]" // Mobile: now part of the overlay
         : "absolute top-full z-50 mt-2 right-0 lg:right-auto lg:left-0", // Desktop: dropdown below
       // Conditional textured background
       isLandingPage ? "textured-bg-absolute" : ""
