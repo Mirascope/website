@@ -19,7 +19,7 @@ const MirascopeLogo: React.FC<BaseLogoProps> = ({
 
   const logoContent = (
     <div
-      className={cn("flex flex-shrink-0 flex-row items-center justify-center", containerClassName)}
+      className={cn("flex flex-shrink-0 flex-row items-center justify-start", containerClassName)}
     >
       <div className={cn(selectedSize.spacing, "flex-shrink-0", imgClassName)}>
         <img

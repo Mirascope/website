@@ -51,19 +51,17 @@ export default function Header({ showProductSelector = false }: HeaderProps) {
     <header className={HEADER_STYLES.container(isLandingPage, scrolled)}>
       <nav className={HEADER_STYLES.nav}>
         <Link to="/" className={HEADER_STYLES.logo(isLandingPage)}>
-          <ProductLogo size="small" withText={true} textClassName={"landing-text"} />
+          <ProductLogo
+            size="small"
+            withText={true}
+            textClassName={cn("landing-text", HEADER_STYLES.logoText(isSearchOpen))}
+          />
         </Link>
 
         <DesktopNavigation isSearchOpen={isSearchOpen} />
 
         {/* Adding a flex-grow spacer to push elements to edges */}
-        <div
-          className={cn(
-            "flex-grow transition-all duration-300",
-            // When search is open on small screens, reduce the spacer size to give more room to search
-            isSearchOpen && "md:flex-grow lg:flex-grow-0"
-          )}
-        ></div>
+        <div className="flex-grow"></div>
 
         {/* Search bar in the middle with ability to grow/shrink */}
         <SearchBar

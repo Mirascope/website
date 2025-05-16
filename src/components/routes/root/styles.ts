@@ -52,6 +52,19 @@ export const HEADER_STYLES = {
       isLandingPage ? "invisible" : "visible"
     ),
 
+  // Logo text container with fade transition
+  logoText: (isSearchOpen: boolean) =>
+    cn(
+      // Use the same transition timing as other components for consistency
+      TRANSITION.properties.all,
+      TRANSITION.duration.medium,
+      TRANSITION.timing.default,
+      // On small screens when search is open, fade out the text but maintain position
+      isSearchOpen
+        ? "opacity-0 md:opacity-100 w-0 md:w-auto overflow-hidden md:overflow-visible pointer-events-none md:pointer-events-auto translate-x-0"
+        : "opacity-100 w-auto overflow-visible pointer-events-auto translate-x-0"
+    ),
+
   // Right section with controls
   controls: cn(
     "flex items-center gap-2 md:gap-3 flex-shrink-0",
