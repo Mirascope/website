@@ -207,12 +207,12 @@ export const THEME_SWITCHER_STYLES = {
  */
 export const SEARCH_STATE_STYLES = {
   closed: {
-    container: "w-9 lg:w-36",
+    container: "w-9 lg:w-36 flex-shrink-0",
     input: "w-0 opacity-0 lg:w-28 lg:pr-3 lg:pl-10 lg:opacity-80",
     icon: "mx-auto lg:absolute lg:left-3",
   },
   open: {
-    container: "w-72 max-w-[calc(100vw-120px)] sm:w-80 md:w-[28rem] lg:w-[32rem]", // Responsive width with upper limit
+    container: "w-[40rem] flex-shrink min-w-[200px] max-w-full",
     input: "w-full pr-9 pl-10 opacity-100",
     icon: "absolute left-3",
   },
@@ -273,7 +273,7 @@ export const SEARCH_BAR_STYLES = {
       // Add transitions using centralized timing config
       `transition-all duration-[${ANIMATION_TIMING.searchExpand.duration}ms] ease-in-out delay-[${ANIMATION_TIMING.searchExpand.delay}ms]`,
       // Simplified width approach - set ideal width with flex-shrink to respect space
-      isOpen ? "w-[32rem] flex-shrink min-w-[200px] max-w-full" : "w-9 lg:w-36 flex-shrink-0"
+      isOpen ? SEARCH_STATE_STYLES.open.container : SEARCH_STATE_STYLES.closed.container
     ),
 
   // Input container styles - matches parent width
