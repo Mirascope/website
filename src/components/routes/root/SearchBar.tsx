@@ -206,7 +206,9 @@ function SearchResultsContainer({
     }
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  // In mobile mode, we want to show the container immediately when the overlay opens
+  // In desktop mode, only show when isOpen is true
+  if (!isOpen && !isMobile) return null;
 
   return (
     <div
@@ -331,8 +333,11 @@ export default function SearchBar({
 
   // Focus input when search is opened
   useEffect(() => {
-    if ((isOpen || initialIsOpen) && inputRef.current) {
-      inputRef.current?.focus();
+    if ((isOpen || initialIsOpen || isMobile) && inputRef.current) {
+      // Use a short timeout to ensure the DOM is ready and focus works reliably
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 50);
     }
 
     // For mobile mode, don't call onOpenChange from within this effect
