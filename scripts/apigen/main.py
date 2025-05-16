@@ -13,38 +13,12 @@ Usage:
 
 import argparse
 import os
-import re
 import sys
 from pathlib import Path
-
-import tomli
 
 from scripts.apigen.config import ApiSourceConfig, ApiSourcesDict
 from scripts.apigen.doclinks_postprocessor import process_doc_links
 from scripts.apigen.documentation_generator import DocumentationGenerator
-
-
-def get_mirascope_version(pyproject_path: Path) -> str:
-    """Get the Mirascope version from pyproject.toml.
-
-    Args:
-        pyproject_path: Path to pyproject.toml
-
-    Returns:
-        The Mirascope version string
-
-    """
-    with open(pyproject_path, "rb") as f:
-        pyproject = tomli.load(f)
-
-    for dep in pyproject.get("project", {}).get("dependencies", []):
-        if dep.startswith("mirascope"):
-            match = re.search(r"mirascope>=([0-9.]+)", dep)
-            if match:
-                return match.group(1)
-
-    raise ValueError("Mirascope dependency not found in pyproject.toml")
-
 
 # Configuration for API documentation sources
 # Maps repository/package to documentation target directory
@@ -52,7 +26,7 @@ API_SOURCES: ApiSourcesDict = {
     "mirascope": ApiSourceConfig(
         repo="https://github.com/Mirascope/mirascope.git",
         package="mirascope",
-        docs_path="docs/api",
+        docs_path="api_ref",
         content_subpath="docs/mirascope",
         target_path="content/docs/mirascope/api",
     ),
@@ -89,13 +63,8 @@ def process_source(
 
     """
     try:
-        # Get the package version from pyproject.toml
-        pyproject_path = project_root / "pyproject.toml"
-        version = get_mirascope_version(pyproject_path)
-        print(f"Found {source_name} version: {version}")
-
         # Initialize the documentation generator
-        generator = DocumentationGenerator(source_config, project_root, version)
+        generator = DocumentationGenerator(source_config, project_root)
         generator.setup()
 
         # Generate documentation

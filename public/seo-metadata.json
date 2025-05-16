@@ -689,35 +689,55 @@
     "title": "mirascope.core.xai.tool | Mirascope",
     "description": "API documentation for mirascope.core.xai.tool"
   },
-  "/docs/mirascope/api/integrations/langfuse": {
-    "route": "/docs/mirascope/api/integrations/langfuse",
-    "title": "mirascope.integrations.langfuse | Mirascope",
-    "description": "API documentation for mirascope.integrations.langfuse"
-  },
-  "/docs/mirascope/api/integrations/logfire": {
-    "route": "/docs/mirascope/api/integrations/logfire",
-    "title": "mirascope.integrations.logfire | Mirascope",
-    "description": "API documentation for mirascope.integrations.logfire"
-  },
-  "/docs/mirascope/api/integrations/middleware": {
-    "route": "/docs/mirascope/api/integrations/middleware",
-    "title": "mirascope.integrations.middleware | Mirascope",
-    "description": "API documentation for mirascope.integrations.middleware"
-  },
-  "/docs/mirascope/api/integrations/otel": {
-    "route": "/docs/mirascope/api/integrations/otel",
-    "title": "mirascope.integrations.otel | Mirascope",
-    "description": "API documentation for mirascope.integrations.otel"
-  },
-  "/docs/mirascope/api/integrations/tenacity": {
-    "route": "/docs/mirascope/api/integrations/tenacity",
-    "title": "mirascope.integrations.tenacity | Mirascope",
-    "description": "API documentation for mirascope.integrations.tenacity"
-  },
   "/docs/mirascope/api/llm/call": {
     "route": "/docs/mirascope/api/llm/call",
     "title": "mirascope.llm.call | Mirascope",
     "description": "API documentation for mirascope.llm.call"
+  },
+  "/docs/mirascope/api/llm/call_response": {
+    "route": "/docs/mirascope/api/llm/call_response",
+    "title": "mirascope.llm.call_response | Mirascope",
+    "description": "API documentation for mirascope.llm.call_response"
+  },
+  "/docs/mirascope/api/llm/call_response_chunk": {
+    "route": "/docs/mirascope/api/llm/call_response_chunk",
+    "title": "mirascope.llm.call_response_chunk | Mirascope",
+    "description": "API documentation for mirascope.llm.call_response_chunk"
+  },
+  "/docs/mirascope/api/llm/context": {
+    "route": "/docs/mirascope/api/llm/context",
+    "title": "mirascope.llm.context | Mirascope",
+    "description": "API documentation for mirascope.llm.context"
+  },
+  "/docs/mirascope/api/llm/override": {
+    "route": "/docs/mirascope/api/llm/override",
+    "title": "mirascope.llm.override | Mirascope",
+    "description": "API documentation for mirascope.llm.override"
+  },
+  "/docs/mirascope/api/llm/stream": {
+    "route": "/docs/mirascope/api/llm/stream",
+    "title": "mirascope.llm.stream | Mirascope",
+    "description": "API documentation for mirascope.llm.stream"
+  },
+  "/docs/mirascope/api/llm/tool": {
+    "route": "/docs/mirascope/api/llm/tool",
+    "title": "mirascope.llm.tool | Mirascope",
+    "description": "API documentation for mirascope.llm.tool"
+  },
+  "/docs/mirascope/api/mcp/client": {
+    "route": "/docs/mirascope/api/mcp/client",
+    "title": "mirascope.mcp.client | Mirascope",
+    "description": "API documentation for mirascope.mcp.client"
+  },
+  "/docs/mirascope/api/retries/fallback": {
+    "route": "/docs/mirascope/api/retries/fallback",
+    "title": "mirascope.retries.fallback | Mirascope",
+    "description": "API documentation for mirascope.retries.fallback"
+  },
+  "/docs/mirascope/api/retries/tenacity": {
+    "route": "/docs/mirascope/api/retries/tenacity",
+    "title": "mirascope.retries.tenacity | Mirascope",
+    "description": "API documentation for mirascope.retries.tenacity"
   },
   "/docs/mirascope/api/tools/system/docker_operation": {
     "route": "/docs/mirascope/api/tools/system/docker_operation",
