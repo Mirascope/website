@@ -4,7 +4,7 @@ import { Link } from "@tanstack/react-router";
 import { getSearchService, type SearchResultItem } from "@/src/lib/services/search";
 import { environment } from "@/src/lib/content/environment";
 import { useIsLandingPage } from "@/src/components/core";
-import { SEARCH_BAR_STYLES } from "./styles";
+import { SEARCH_BAR_STYLES, ANIMATION_TIMING } from "./styles";
 
 // Component for an individual search result
 interface SearchResultProps {
@@ -184,7 +184,11 @@ function SearchResultsContainer({
       // Use animation frame for smoother transition
       // This allows the search bar to expand before showing results
       const animationFrame = requestAnimationFrame(() => {
-        const timer = setTimeout(() => setIsReallyVisible(true), 200); // 300ms for transition minus 100ms for perception
+        // Use centralized timing configuration
+        const timer = setTimeout(
+          () => setIsReallyVisible(true),
+          ANIMATION_TIMING.getResultsDelay()
+        );
         return () => clearTimeout(timer);
       });
       return () => cancelAnimationFrame(animationFrame);
@@ -313,7 +317,7 @@ export default function SearchBar({ onOpenChange }: SearchBarProps = {}) {
       // Show navigation after search closes with a delay that matches our animation
       const timer = setTimeout(() => {
         if (onOpenChange) onOpenChange(false);
-      }, 300); // Match to the 300ms transition duration
+      }, ANIMATION_TIMING.getTotalDuration()); // Use centralized timing
       return () => clearTimeout(timer);
     }
   }, [isOpen, onOpenChange]);
