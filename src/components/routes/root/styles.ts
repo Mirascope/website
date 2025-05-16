@@ -277,11 +277,14 @@ export const SEARCH_BAR_STYLES = {
     ),
 
   // Mobile search button
-  mobileSearchButton: cn(
-    "relative flex items-center justify-center w-9 h-9 rounded-full border border-border",
-    "bg-background/20 hover:bg-primary/10 hover:border-primary/80",
-    "transition-colors duration-300"
-  ),
+  mobileSearchButton: (isLandingPage: boolean) =>
+    cn(
+      "relative flex items-center justify-center w-9 h-9 rounded-full",
+      "transition-colors duration-300",
+      isLandingPage
+        ? "border-0 bg-white/10 hover:bg-white/20"
+        : "bg-background/20 hover:bg-primary/10 hover:border-primary/80 border"
+    ),
 
   // Mobile search overlay container
   mobileOverlay: (isOpen: boolean) =>
@@ -297,7 +300,7 @@ export const SEARCH_BAR_STYLES = {
     ),
 
   // Mobile search inner container
-  mobileSearchContainer: cn("w-full px-3 py-2 flex items-center", "shadow-sm"),
+  mobileSearchContainer: cn("w-full px-3 py-2 flex items-center"),
 
   // Close button for mobile overlay
   closeButton: cn(
