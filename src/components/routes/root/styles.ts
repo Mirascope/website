@@ -322,9 +322,18 @@ export const SEARCH_BAR_STYLES = {
     ),
 
   // Keyboard shortcut badge
-  kbd: (isLandingPage: boolean) =>
+  kbd: (isLandingPage: boolean, isOpen: boolean = false) =>
     cn(
-      "font-small absolute top-1/2 right-3 hidden h-5 -translate-y-1/2 items-center gap-1 rounded border px-1.5 font-mono text-[10px] opacity-80 lg:flex",
+      "font-small absolute top-1/2 right-3 h-5 -translate-y-1/2 items-center gap-1 rounded border px-1.5 font-mono text-[10px]",
+      // Make it always hidden on mobile
+      "hidden lg:flex",
+      // Add transition with a slight delay to let search bar expand first
+      `transition-all duration-[300ms] ease-in-out delay-[${ANIMATION_TIMING.searchExpand.delay + 200}ms]`,
+      // Dynamic appearance based on search state
+      isOpen
+        ? "opacity-80 translate-x-0 scale-100"
+        : "opacity-0 translate-x-4 scale-90 pointer-events-none",
+      // Background color based on page type
       isLandingPage ? "bg-white/10 text-white" : "border-border bg-muted text-foreground"
     ),
 

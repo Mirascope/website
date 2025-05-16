@@ -136,11 +136,9 @@ function SearchInput({ query, onChange, onFocus, inputRef, isOpen }: SearchInput
         onChange={(e) => onChange(e.target.value)}
         onFocus={onFocus}
       />
-      {isOpen && (
-        <kbd className={SEARCH_BAR_STYLES.kbd(isLandingPage)}>
-          <span className="text-xs">⌘</span>K
-        </kbd>
-      )}
+      <kbd className={SEARCH_BAR_STYLES.kbd(isLandingPage, isOpen)}>
+        <span className="text-xs">⌘</span>K
+      </kbd>
     </div>
   );
 }
