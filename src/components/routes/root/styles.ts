@@ -312,7 +312,7 @@ export const SEARCH_BAR_STYLES = {
     ),
 
   // Input container styles - matches parent width
-  inputContainer: (isLandingPage: boolean) =>
+  inputContainer: (isLandingPage: boolean, isMobile: boolean) =>
     cn(
       "search-input-container",
       // Base styles
@@ -320,7 +320,8 @@ export const SEARCH_BAR_STYLES = {
       // Conditional styles based on page type
       isLandingPage
         ? "border-0 bg-white/10 hover:bg-white/20"
-        : "border-border bg-background/20 hover:bg-primary/10 hover:border-primary/80 border"
+        : "border-border bg-background/20 hover:bg-primary/10 hover:border-primary/80 border",
+      isMobile && !isLandingPage ? "bg-background" : ""
     ),
 
   // Inline styles for input container based on landing page
