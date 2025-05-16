@@ -286,12 +286,10 @@ export const SEARCH_BAR_STYLES = {
   // Mobile search overlay container
   mobileOverlay: (isOpen: boolean) =>
     cn(
-      // Positioning and layout
-      "fixed inset-x-0 top-0 z-90 flex flex-col",
-      // Height for overlay - only cover header area
-      "h-[var(--header-height-base)]",
-      // Background color
-      "bg-background/95 backdrop-blur-sm",
+      // Positioning and layout - cover entire screen
+      "fixed inset-0 z-90 flex flex-col",
+      // More transparent background with subtle blur effect
+      "bg-background/10 mr-0 backdrop-blur-[2px]",
       // Transition properties
       `transition-all duration-[${ANIMATION_TIMING.searchExpand.duration}ms] ease-in-out`,
       // Visibility based on search state
@@ -299,7 +297,10 @@ export const SEARCH_BAR_STYLES = {
     ),
 
   // Mobile search inner container
-  mobileSearchContainer: cn("w-full h-full px-3 flex items-center"),
+  mobileSearchContainer: cn(
+    "w-full px-3 py-2 flex items-center h-[var(--header-height-base)]",
+    "bg-background shadow-md"
+  ),
 
   // Close button for mobile overlay
   closeButton: cn(
@@ -384,7 +385,7 @@ export const SEARCH_BAR_STYLES = {
       "w-full",
       // Mobile vs desktop positioning
       isMobile
-        ? "fixed top-[var(--header-height-base)] left-0 right-0 z-90 max-h-[calc(100vh-var(--header-height-base))]" // Mobile: fixed beneath the header
+        ? "absolute top-[var(--header-height-base)] left-0 right-0 z-90 max-h-[calc(100vh-var(--header-height-base)*1.2)]" // Mobile: now part of the overlay
         : "absolute top-full z-50 mt-2 right-0 lg:right-auto lg:left-0", // Desktop: dropdown below
       // Conditional textured background
       isLandingPage ? "textured-bg-absolute" : ""
