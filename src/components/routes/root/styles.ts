@@ -297,10 +297,7 @@ export const SEARCH_BAR_STYLES = {
     ),
 
   // Mobile search inner container
-  mobileSearchContainer: cn(
-    "w-full px-3 py-2 flex items-center h-[var(--header-height-base)]",
-    "bg-background shadow-md"
-  ),
+  mobileSearchContainer: cn("w-full px-3 py-2 flex items-center", "shadow-sm"),
 
   // Close button for mobile overlay
   closeButton: cn(
