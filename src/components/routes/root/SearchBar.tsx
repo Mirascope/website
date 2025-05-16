@@ -184,17 +184,10 @@ function SearchResultsContainer({
   setSelectedIndex,
   isMobile = false,
 }: SearchResultsContainerProps) {
-  // Simplify - directly tie visibility to the isOpen prop
-  // No delay for animation, which simplifies the code and logic
-
-  // In mobile mode, we want to show the container immediately when the overlay opens
-  // In desktop mode, only show when isOpen is true
-  if (!isOpen && !isMobile) return null;
-
   return (
     <div
-      className={SEARCH_BAR_STYLES.resultsContainer(isLandingPage, isMobile)}
-      style={SEARCH_BAR_STYLES.getResultsContainerStyles(isOpen, isLandingPage)}
+      className={SEARCH_BAR_STYLES.resultsContainer(isLandingPage, isMobile, isOpen)}
+      style={SEARCH_BAR_STYLES.getResultsContainerStyles(isLandingPage)}
       ref={resultsRef}
     >
       {renderSearchContent()}

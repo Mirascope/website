@@ -378,13 +378,18 @@ export const SEARCH_BAR_STYLES = {
     ),
 
   // Results container - matches parent container width
-  resultsContainer: (isLandingPage: boolean, isMobile: boolean = false) =>
+  resultsContainer: (
+    isLandingPage: boolean,
+    isMobile: boolean = false,
+    isVisible: boolean = false
+  ) =>
     cn(
       // Base styles
       "search-results overflow-hidden rounded-lg shadow-2xl [text-shadow:none]",
       "bg-background border-border border",
-      // Transitions from central config with additional delay
-      `transition-opacity duration-[${ANIMATION_TIMING.resultsAppear.duration}ms] ease-in-out delay-[${ANIMATION_TIMING.resultsAppear.delay}ms]`,
+      "transition-opacity duration-300 ease-in-out",
+      // Use Tailwind's animation utilities for better control with a subtle slide effect
+      isVisible ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0",
       // Match width to parent container (container manages actual width constraints)
       "w-full",
       // Mobile vs desktop positioning
@@ -395,20 +400,16 @@ export const SEARCH_BAR_STYLES = {
       isLandingPage ? "textured-bg-absolute" : ""
     ),
 
-  // Inline styles for results container based on visibility and page type
-  getResultsContainerStyles: (isVisible: boolean, isLandingPage: boolean) => {
-    const styles = {
-      opacity: isVisible ? 1 : 0,
-    };
-
+  // Inline styles for results container based on page type
+  // No longer controlling opacity here since it's handled by classes
+  getResultsContainerStyles: (isLandingPage: boolean) => {
     if (isLandingPage) {
       return {
-        ...styles,
         boxShadow: "0 1px 5px rgba(0, 0, 0, 0.15), 0 2px 10px rgba(0, 0, 0, 0.1)",
       };
     }
 
-    return styles;
+    return {};
   },
 
   // Search result styles
