@@ -76,7 +76,7 @@ function MobileSearchWrapper({ onOpenChange }: SearchWrapperProps) {
 
             {/* Close button positioned on the right side */}
             <button
-              className={SEARCH_BAR_STYLES.closeButton}
+              className={SEARCH_BAR_STYLES.closeButton(isLandingPage)}
               onClick={handleCloseSearch}
               aria-label="Close search"
             >
