@@ -321,7 +321,7 @@ export const SEARCH_BAR_STYLES = {
       isLandingPage
         ? "border-0 bg-white/10 hover:bg-white/20"
         : "border-border bg-background/20 hover:bg-primary/10 hover:border-primary/80 border",
-      isMobile && !isLandingPage ? "bg-background" : ""
+      isMobile && !isLandingPage ? "bg-background hover:bg-background" : ""
     ),
 
   // Inline styles for input container based on landing page

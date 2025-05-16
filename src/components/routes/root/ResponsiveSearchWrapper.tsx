@@ -43,20 +43,21 @@ function MobileSearchWrapper({ onOpenChange }: SearchWrapperProps) {
     }
   };
 
+  if (!isOpen) {
+    return (
+      <button
+        className={SEARCH_BAR_STYLES.mobileSearchButton(isLandingPage)}
+        style={SEARCH_BAR_STYLES.getInputContainerStyles(isLandingPage)}
+        onClick={handleOpenSearch}
+        aria-label="Open search"
+      >
+        <SearchIcon size={16} />
+      </button>
+    );
+  }
+
   return (
     <>
-      {/* Mobile search button (only shown when search is closed) */}
-      {!isOpen && (
-        <button
-          className={SEARCH_BAR_STYLES.mobileSearchButton(isLandingPage)}
-          style={SEARCH_BAR_STYLES.getInputContainerStyles(isLandingPage)}
-          onClick={handleOpenSearch}
-          aria-label="Open search"
-        >
-          <SearchIcon size={16} />
-        </button>
-      )}
-
       {/* Mobile search overlay - full screen with click-outside behavior */}
       <div
         className={SEARCH_BAR_STYLES.mobileOverlay(isOpen)}
