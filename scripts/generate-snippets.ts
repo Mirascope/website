@@ -29,9 +29,6 @@ import { processFile } from "./lib/snippet-extractor";
 // Import doc meta types and data
 import { getAllDocInfo } from "@/src/lib/content";
 
-// Provider list to generate examples for
-const PROVIDERS = ["openai", "anthropic"];
-
 // Root directory for extracted snippets (changed to .extracted-snippets)
 const SNIPPETS_ROOT = path.join(process.cwd(), ".extracted-snippets");
 
@@ -79,38 +76,26 @@ function findExtractableDocs(): ExtractableDoc[] {
 }
 
 /**
- * Generate snippets for a single doc with specified providers
+ * Generate snippets for a single doc
  */
-function generateDocSnippets(doc: ExtractableDoc, providers: string[], verbose = false): boolean {
-  let allSuccessful = true;
+function generateDocSnippets(doc: ExtractableDoc, verbose = false): boolean {
+  try {
+    // Extract new snippets
+    const files = processFile(doc.filePath);
 
-  for (const provider of providers) {
-    try {
-      // Extract new snippets
-      const files = processFile(doc.filePath, provider);
-
-      if (files.length > 0) {
-        if (verbose) {
-          console.log(
-            `Generated ${files.length} snippets for ${doc.filePath} with provider ${provider}`
-          );
-        }
-      } else {
-        console.warn(
-          `Warning: No snippets extracted from ${doc.filePath} for provider ${provider}`
-        );
-        allSuccessful = false;
+    if (files.length > 0) {
+      if (verbose) {
+        console.log(`Generated ${files.length} snippets for ${doc.filePath}`);
       }
-    } catch (error) {
-      console.error(
-        `Error generating snippets for ${doc.filePath} with provider ${provider}:`,
-        error
-      );
-      allSuccessful = false;
+      return true;
+    } else {
+      console.warn(`Warning: No snippets extracted from ${doc.filePath}`);
+      return false;
     }
+  } catch (error) {
+    console.error(`Error generating snippets for ${doc.filePath}:`, error);
+    return false;
   }
-
-  return allSuccessful;
 }
 
 /**
@@ -159,7 +144,7 @@ function main(): number {
   // Generate snippets for each doc
   let allSuccessful = true;
   for (const doc of docs) {
-    const success = generateDocSnippets(doc, PROVIDERS, verbose);
+    const success = generateDocSnippets(doc, verbose);
     allSuccessful = allSuccessful && success;
   }
 
