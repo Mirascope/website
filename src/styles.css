@@ -351,6 +351,13 @@ h6 code {
   min-width: 800px;
 }
 
+/* Table container with horizontal scrolling */
+.mdx-content .table-container {
+  width: 100%;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
 /* Blog post headers styling - base styles */
 .blog-content h1,
 .blog-content h2,

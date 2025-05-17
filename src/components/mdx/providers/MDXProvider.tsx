@@ -363,7 +363,9 @@ export const components = {
     <blockquote className="border-border my-4 border-l-4 pl-4 italic" {...props} />
   ),
   table: (props: React.ComponentPropsWithoutRef<"table">) => (
-    <table className="divide-border my-6 min-w-full divide-y" {...props} />
+    <div className="table-container">
+      <table className="divide-border my-6 min-w-full divide-y" {...props} />
+    </div>
   ),
   th: (props: React.ComponentPropsWithoutRef<"th">) => (
     <th
