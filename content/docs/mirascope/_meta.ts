@@ -10,7 +10,6 @@ const docsSection: SectionSpec = {
     {
       slug: "index",
       label: "Welcome",
-      hasExtractableSnippets: true,
     },
     {
       slug: "getting-started",
@@ -20,12 +19,10 @@ const docsSection: SectionSpec = {
         {
           slug: "quickstart",
           label: "Quickstart",
-          hasExtractableSnippets: true,
         },
         {
           slug: "why",
           label: "Why Mirascope?",
-          hasExtractableSnippets: true,
         },
         {
           slug: "help",
@@ -53,67 +50,54 @@ const docsSection: SectionSpec = {
         {
           slug: "prompts",
           label: "Prompts",
-          hasExtractableSnippets: true,
         },
         {
           slug: "calls",
           label: "Calls",
-          hasExtractableSnippets: true,
         },
         {
           slug: "streams",
           label: "Streams",
-          hasExtractableSnippets: true,
         },
         {
           slug: "chaining",
           label: "Chaining",
-          hasExtractableSnippets: true,
         },
         {
           slug: "response_models",
           label: "Response Models",
-          hasExtractableSnippets: true,
         },
         {
           slug: "json_mode",
           label: "JSON Mode",
-          hasExtractableSnippets: true,
         },
         {
           slug: "output_parsers",
           label: "Output Parsers",
-          hasExtractableSnippets: true,
         },
         {
           slug: "tools",
           label: "Tools",
-          hasExtractableSnippets: true,
         },
         {
           slug: "agents",
           label: "Agents",
-          hasExtractableSnippets: true,
         },
         {
           slug: "evals",
           label: "Evals",
-          hasExtractableSnippets: true,
         },
         {
           slug: "async",
           label: "Async",
-          hasExtractableSnippets: true,
         },
         {
           slug: "retries",
           label: "Retries",
-          hasExtractableSnippets: true,
         },
         {
           slug: "local_models",
           label: "Local Models",
-          hasExtractableSnippets: true,
         },
       ],
     },
@@ -124,12 +108,10 @@ const docsSection: SectionSpec = {
         {
           slug: "openai",
           label: "OpenAI",
-          hasExtractableSnippets: true,
         },
         {
           slug: "anthropic",
           label: "Anthropic",
-          hasExtractableSnippets: true,
         },
       ],
     },
@@ -140,7 +122,6 @@ const docsSection: SectionSpec = {
         {
           slug: "middleware",
           label: "Middleware",
-          hasExtractableSnippets: true,
         },
         {
           slug: "custom_provider",
@@ -155,7 +136,6 @@ const docsSection: SectionSpec = {
         {
           slug: "client",
           label: "Client",
-          hasExtractableSnippets: true,
         },
       ],
     },

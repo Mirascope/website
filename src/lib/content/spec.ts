@@ -19,7 +19,6 @@ export interface DocInfo {
   slug: string;
   type: "docs";
   product: ProductName; // Product this doc belongs to
-  hasExtractableSnippets: boolean; // Whether this doc has extractable snippets
   searchWeight: number; // Computed weight based on hierarchical position
 }
 
@@ -30,7 +29,6 @@ export interface DocSpec {
   slug: Slug; // URL slug component (no slashes)
   label: string; // Display name in sidebar
   children?: DocSpec[]; // Child items (if this is a folder)
-  hasExtractableSnippets?: boolean;
   weight?: number; // Search weight for this item (multiplicative with parent weights)
 }
 
@@ -107,7 +105,6 @@ export function processDocSpec(
       routePath,
       type: "docs",
       product,
-      hasExtractableSnippets: docSpec.hasExtractableSnippets || false,
       searchWeight: currentWeight,
     });
   }
