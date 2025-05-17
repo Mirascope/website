@@ -587,6 +587,16 @@ mark,
   margin-bottom: 0 !important;
 }
 
+/* Fix for ordered lists with double-digit numbers */
+.mdx-content ol {
+  padding-left: 2rem !important; /* Increase padding to accommodate double digits */
+}
+
+/* Ensure proper indentation for nested lists */
+.mdx-content ol ol {
+  padding-left: 2rem !important;
+}
+
 /* Code block styling */
 .mdx-content pre {
   padding: 0.5rem !important;
