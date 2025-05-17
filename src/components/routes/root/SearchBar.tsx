@@ -283,11 +283,6 @@ interface SearchBarProps {
   onOpenChange?: (isOpen: boolean) => void;
 
   /**
-   * Whether the search bar is being rendered in mobile mode
-   */
-  isMobile?: boolean;
-
-  /**
    * Initial open state (useful for mobile overlay)
    */
   initialIsOpen?: boolean;
@@ -301,7 +296,6 @@ interface SearchBarProps {
 
 export default function SearchBar({
   onOpenChange,
-  isMobile = false,
   initialIsOpen = false,
   onResultSelect,
 }: SearchBarProps = {}) {
@@ -316,6 +310,7 @@ export default function SearchBar({
   const resultsRef = useRef<HTMLDivElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const [isPagefindLoaded, setIsPagefindLoaded] = useState(false);
+  const isMobile = useIsMobile();
 
   // Get the search service
   const searchService = getSearchService();
