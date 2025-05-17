@@ -6,7 +6,7 @@ import { ChevronLeft, ChevronRight, X, type LucideIcon } from "lucide-react";
 import { useSidebar, isMobileView } from "./useSidebar";
 
 // Shared positioning for sidebar toggle buttons
-const SIDEBAR_TOGGLE_POSITION = "calc(var(--header-height) - 2.25rem)";
+const SIDEBAR_TOGGLE_POSITION = "calc(var(--header-height) - 1.63rem)";
 
 // Create a context to coordinate sidebar states
 type SidebarContextType = {
@@ -72,7 +72,7 @@ const SidebarToggle = ({
       onClick={onClick}
       className={cn(
         "z-80 rounded-full border-1 p-0 shadow-md",
-        "h-8 w-8",
+        "h-6 w-6",
         isOpen ? "bg-muted" : "bg-background",
         className
       )}
@@ -81,7 +81,7 @@ const SidebarToggle = ({
       aria-expanded={isOpen}
       aria-controls={ariaControls}
     >
-      <Icon className="h-6 w-6" />
+      <Icon className="h-5 w-5" />
     </Button>
   );
 };

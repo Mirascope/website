@@ -39,7 +39,7 @@ export function SEOMeta(props: SEOProps) {
   const pageTitle = title ? `${title} | ${siteTitle}` : siteTitle;
 
   const metaDescription =
-    description || (product ? PRODUCT_CONFIGS[product].description : DEFAULT_DESCRIPTION);
+    description || (product ? PRODUCT_CONFIGS[product].tagline : DEFAULT_DESCRIPTION);
 
   // Generate image path if not provided
   const computedImage = useMemo(() => {
