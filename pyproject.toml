@@ -68,7 +68,7 @@ dev-dependencies = [
 
 [tool.pyright]
 include = [
-    "public/extracted-snippets",
+    ".extracted-snippets",
     "public/examples",
     "scripts/apigen"
 ]

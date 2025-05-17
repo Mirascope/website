@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 permissions:
   contents: read
@@ -14,52 +14,52 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Setup Bun
-      uses: oven-sh/setup-bun@v1
-      with:
-        bun-version: latest
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
 
-    - name: Install dependencies
-      # Use clean install to work around dependency issues on Linux
-      run: |
-        rm -rf node_modules bun.lock
-        bun install
+      - name: Install dependencies
+        # Use clean install to work around dependency issues on Linux
+        run: |
+          rm -rf node_modules bun.lock
+          bun install
 
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.10'
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
 
-    - name: Install uv
-      run: |
-        curl -LsSf https://astral.sh/uv/install.sh | sh
-        echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+      - name: Install uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
 
-    - name: Create Python virtual environment
-      run: uv venv
+      - name: Create Python virtual environment
+        run: uv venv
 
-    - name: TypeScript Check
-      run: bun run typecheck
+      - name: TypeScript Check
+        run: bun run typecheck
 
-    - name: Prettier Check
-      run: bun run lint:format
+      - name: Prettier Check
+        run: bun run lint:format
 
-    - name: MDX Validation
-      run: bun run lint:mdx
+      - name: MDX Validation
+        run: bun run lint:mdx
 
-    - name: Check & Validate apigen module
-      run: bun run lint:python
-      
-    - name: Check & Validate snippets
-      run: bun run lint:snippets
-      
-    - name: Social Metadata Check
-      run: bun run lint:social
-      
-    - name: Run Tests
-      run: bun test
+      - name: Check & Validate apigen module
+        run: bun run lint:python
 
-    - name: Build
-      run: bun run build
+      - name: Extract & validate snippets
+        run: bun run lint:snippets
+
+      - name: Social Metadata Check
+        run: bun run lint:social
+
+      - name: Run Tests
+        run: bun test
+
+      - name: Build
+        run: bun run build

@@ -21,6 +21,7 @@ __pycache__/
 # Generated files
 public/static/
 public/sitemap.xml
+.extracted-snippets/
 
 # API docs generation repositories
 .api-generation-repos/
