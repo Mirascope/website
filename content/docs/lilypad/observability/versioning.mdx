@@ -43,6 +43,11 @@ This means that changing the code to an existing version will automatically atta
 It also means that changes to anything that would change how the function is executed will be captured:
 
 ```python
+import lilypad
+from google.genai import Client
+
+client = Client()
+
 # This function will be included in the version and any changes
 # to it will result in a new version of `answer_question`
 def answer_question_prompt(question: str) -> str:  # [!code highlight]
@@ -72,7 +77,7 @@ lilypad sync
 
 This ensures that the `.version` method return type-safe function signatures matching the expected arguments for that version, which you can then run in a sandbox:
 
-```python
+```python-snippet-concat
 response = answer_question.version(1)("What is the capital of France?")
 ```
 

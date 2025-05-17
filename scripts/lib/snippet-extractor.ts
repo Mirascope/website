@@ -2,125 +2,82 @@
  * Snippet extraction module.
  *
  * This module provides low-level functions for extracting code snippets from MDX files
- * and generating runnable Python examples for different providers.
+ * and generating runnable Python examples.
  */
 
 import * as fs from "fs";
 import * as path from "path";
 // Import from shared provider config
-import { replaceProviderVariables } from "../../src/config/providers";
-import type { Provider } from "../../src/config/providers";
-
-/**
- * Interface for snippet with line number information
- */
-export interface Snippet {
-  code: string;
-  lineNumber: number;
-}
+import { replaceProviderVariables } from "@/src/config/providers";
 
 /**
  * Extract Python snippets from an MDX file
  */
-export function extractSnippets(filePath: string): Snippet[] {
+export function extractSnippets(filePath: string): string[] {
   const content = fs.readFileSync(filePath, "utf-8");
 
-  // Match all Python code blocks
-  const regex = /```python\n([\s\S]*?)```/g;
-  const snippets: Snippet[] = [];
+  // First, check for any python-* blocks that aren't our supported types
+  const pythonPrefixRegex = /```(python-[^`\n]+)\n/g;
+  let prefixMatch;
+  while ((prefixMatch = pythonPrefixRegex.exec(content)) !== null) {
+    const blockType = prefixMatch[1];
+    // Only allow python-snippet-concat and python-snippet-skip
+    if (blockType !== "python-snippet-concat" && blockType !== "python-snippet-skip") {
+      throw new Error(
+        `Unsupported Python block type "${blockType}" in file ${filePath}. Only python, python-snippet-concat, and python-snippet-skip are allowed.`
+      );
+    }
+  }
+
+  // Match Python blocks (regular), python-snippet-concat blocks, and python-snippet-skip blocks
+  const snippetRegex = /```(python|python-snippet-concat|python-snippet-skip)\n([\s\S]*?)```/g;
+  const snippets: string[] = [];
+
+  let lastSnippet: string | null = null;
 
   // Count lines up to each match
   let match;
-  while ((match = regex.exec(content)) !== null) {
-    // Calculate line number by counting newlines up to the match start
-    const textBeforeMatch = content.substring(0, match.index);
-    const lineNumber = (textBeforeMatch.match(/\n/g) || []).length + 1;
+  while ((match = snippetRegex.exec(content)) !== null) {
+    const blockType = match[1];
+    const codeContent = match[2].trim();
 
-    snippets.push({
-      code: match[1].trim(),
-      lineNumber: lineNumber,
-    });
+    if (blockType === "python-snippet-skip") {
+      continue;
+    }
+
+    if (blockType === "python-snippet-concat" && lastSnippet) {
+      // Append to the previous snippet
+      lastSnippet += "\n\n" + codeContent;
+    } else {
+      // Create a new snippet
+      lastSnippet = codeContent;
+      snippets.push(lastSnippet);
+    }
   }
 
   return snippets;
 }
 
 /**
- * Extract heading above the code block
- */
-export function extractHeadings(filePath: string): string[] {
-  const content = fs.readFileSync(filePath, "utf-8");
-  const headings: string[] = [];
-
-  // Find all code blocks (any language, not just Python)
-  const allCodeBlocksRegex = /```(?:\w*)\n([\s\S]*?)```/g;
-  const blockLocations: { start: number; end: number }[] = [];
-
-  // Map all code block locations
-  let codeBlockMatch;
-  while ((codeBlockMatch = allCodeBlocksRegex.exec(content)) !== null) {
-    blockLocations.push({
-      start: codeBlockMatch.index,
-      end: codeBlockMatch.index + codeBlockMatch[0].length,
-    });
-  }
-
-  // Reset and find Python code blocks specifically
-  const pythonCodeBlockRegex = /```python\n([\s\S]*?)```/g;
-  let match;
-
-  while ((match = pythonCodeBlockRegex.exec(content)) !== null) {
-    // Look for the closest heading before the match
-    const contentBeforeMatch = content.substring(0, match.index);
-    const headingRegex = /#{1,6}\s+(.+)$/gm;
-
-    let lastHeading = "";
-    let headingMatch;
-
-    while ((headingMatch = headingRegex.exec(contentBeforeMatch)) !== null) {
-      // Check if this potential heading is inside any code block
-      const headingPosition = headingMatch.index;
-      const insideCodeBlock = blockLocations.some(
-        (block) => headingPosition > block.start && headingPosition < block.end
-      );
-
-      // Only use this heading if it's not inside a code block
-      if (!insideCodeBlock) {
-        lastHeading = headingMatch[1].trim();
-      }
-    }
-
-    headings.push(lastHeading || "Example");
-  }
-
-  return headings;
-}
-
-/**
  * Generate a runnable Python file for a single snippet
  */
 export function generatePythonFile(
-  snippet: Snippet,
-  provider: string,
+  snippet: string,
   outputDir: string,
   index: number,
-  heading: string,
   baseName: string = "example",
   sourceFilePath: string = ""
 ): string {
-  // Convert provider to lowercase for case-insensitive matching
-  const providerKey = provider.toLowerCase() as Provider;
-
   // Replace provider variables using shared function
-  const processedSnippet = replaceProviderVariables(snippet.code, providerKey);
+  const processedSnippet = replaceProviderVariables(snippet, "openai");
 
   // Ensure the output directory exists
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
   }
 
-  // Create the output file name with provider and index
-  const fileName = `${baseName}_${provider}_${index + 1}.py`;
+  // Create the output file name with index (provider is always OpenAI)
+  const fileName = `${baseName}_${index + 1}.py`;
   const outputFile = path.join(outputDir, fileName);
 
   // Create the output file content
@@ -130,10 +87,8 @@ export function generatePythonFile(
     ? sourceFilePath.substring(projectRoot.length + 1) // +1 to remove the leading slash
     : sourceFilePath;
 
-  const content = `#!/usr/bin/env python3
-# Example ${index + 1}: ${heading}
-# Generated for provider: ${provider}
-# Source: ${relativePath}:${snippet.lineNumber}
+  const content = `# Example ${index + 1}
+# Source: ${relativePath}
 # This file is auto-generated; any edits should be made in the source file
 
 ${processedSnippet}
@@ -148,11 +103,7 @@ ${processedSnippet}
 /**
  * Process a single MDX file for a given provider
  */
-export function processFile(
-  mdxFile: string,
-  provider: string,
-  customOutputDir: string | null = null
-): string[] {
+export function processFile(mdxFile: string): string[] {
   if (!fs.existsSync(mdxFile)) {
     console.error(`Error: File ${mdxFile} not found`);
     return [];
@@ -160,44 +111,35 @@ export function processFile(
 
   // Extract snippets and headings
   const snippets = extractSnippets(mdxFile);
-  const headings = extractHeadings(mdxFile);
 
   if (snippets.length === 0) {
-    console.warn("No Python snippets found in the file.");
     return [];
   }
 
-  // Determine output directory
+  // Get the base filename without extension
   const baseName = path.basename(mdxFile, path.extname(mdxFile));
-  const dirName = path.dirname(mdxFile);
 
-  let outputDir;
-  if (customOutputDir) {
-    // Use custom output directory if provided
-    outputDir = path.resolve(customOutputDir);
-  } else {
-    // Create examples under .extracted-snippets directory to make them accessible
-    // Structure: .extracted-snippets/mirascope/getting-started/quickstart/openai/
-    // Get the relative path part after content/docs/
-    const relativePath = dirName.includes("content/docs/")
-      ? dirName.split("content/docs/")[1]
-      : path.basename(dirName);
+  // Find the path relative to the content directory
+  const contentDirPath = path.join(process.cwd(), "content"); // Assuming content is at the root
+  let relativePath = path.relative(contentDirPath, path.dirname(mdxFile));
 
-    outputDir = path.join(process.cwd(), ".extracted-snippets", relativePath, baseName, provider);
+  // Handle case where the file isn't in the content directory
+  if (relativePath.startsWith("..")) {
+    console.warn(`Warning: File ${mdxFile} is not within the content directory`);
+    // Fallback to just using the immediate parent directory
+    relativePath = path.basename(path.dirname(mdxFile));
   }
+
+  // Create the output directory with the full relative path structure preserved
+  const outputDir = path.join(process.cwd(), ".extracted-snippets", relativePath, baseName);
+
+  // Ensure the output directory exists
+  fs.mkdirSync(outputDir, { recursive: true });
 
   // Generate a separate Python file for each snippet
   const generatedFiles: string[] = [];
   snippets.forEach((snippet, index) => {
-    const file = generatePythonFile(
-      snippet,
-      provider,
-      outputDir,
-      index,
-      headings[index],
-      baseName,
-      mdxFile
-    );
+    const file = generatePythonFile(snippet, outputDir, index, baseName, mdxFile);
     generatedFiles.push(file);
   });
 

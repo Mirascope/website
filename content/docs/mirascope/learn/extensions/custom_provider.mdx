@@ -30,7 +30,7 @@ Let's go through each of these components.
 
 Define a class that inherits from `BaseCallParams` to specify the parameters for your custom provider's API calls.
 
-```python-no-extract
+```python-snippet-skip
 from typing_extensions import NotRequired
 
 from mirascope.core.base import BaseCallParams
@@ -46,7 +46,7 @@ class CustomProviderCallParams(BaseCallParams):
 
 Create a class that inherits from `BaseCallResponse` to handle the response from your custom provider's API.
 
-```python-no-extract
+```python-snippet-skip
 from mirascope.core.base import BaseCallResponse, BaseMessageParam
 
 
@@ -67,7 +67,7 @@ class CustomProviderCallResponse(BaseCallResponse[...]):  # provide types for ge
 
 For streaming support, create a class that inherits from `BaseCallResponseChunk`.
 
-```python-no-extract
+```python-snippet-skip
 from mirascope.core.base import BaseCallResponseChunk
 
 
@@ -88,7 +88,7 @@ class CustomProviderCallResponseChunk(BaseCallResponseChunk[...]):  # provide ty
 
 Define a type for dynamic configuration using `BaseDynamicConfig`.
 
-```python-no-extract
+```python-snippet-skip
 from mirascope.core.base import BaseDynamicConfig
 from .call_params import CustomProviderCallParams
 
@@ -99,7 +99,7 @@ CustomProviderDynamicConfig = BaseDynamicConfig[BaseMessageParam, CustomProvider
 
 Implement a stream class that inherits from `BaseStream` for handling streaming responses.
 
-```python-no-extract
+```python-snippet-skip
 from mirascope.core.base import BaseStream
 
 class CustomProviderStream(BaseStream):
@@ -119,7 +119,7 @@ class CustomProviderStream(BaseStream):
 
 Create a tool class that inherits from `BaseTool` for defining custom tools.
 
-```python-no-extract
+```python-snippet-skip
 from mirascope.core.base import BaseTool
 
 class CustomProviderTool(BaseTool):
@@ -137,7 +137,7 @@ class CustomProviderTool(BaseTool):
 
 Implement utility functions for setup, JSON output handling, and stream handling.
 
-```python-no-extract
+```python-snippet-skip
 from typing import Any, Callable, Awaitable
 
 def setup_call(
@@ -187,7 +187,7 @@ async def handle_stream_async(
 
 Finally, use the `call_factory` to create your custom provider's call decorator.
 
-```python-no-extract
+```python-snippet-skip
 from mirascope.core.base import call_factory
 
 custom_provider_call = call_factory(
@@ -209,7 +209,7 @@ custom_provider_call = call_factory(
 
 After implementing your custom provider, you can use it like any other Mirascope provider:
 
-```python-no-extract
+```python-snippet-skip
 from mirascope.core import prompt_template
 
 @custom_provider_call(model="your-custom-model")

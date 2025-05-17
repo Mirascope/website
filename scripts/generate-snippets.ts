@@ -3,12 +3,9 @@
 /**
  * Generate Python code snippets from MDX documentation.
  *
- * This script extracts executable Python code snippets from MDX files
- * that are marked with hasExtractableSnippets in _meta.ts.
- *
  * It always:
  * - Cleans the output directory
- * - Extracts all snippets from marked docs
+ * - Extracts all snippets from mdx files in the content directory
  * - Outputs to .extracted-snippets directory (not checked into git)
  *
  * Usage:
@@ -26,91 +23,86 @@ import * as path from "path";
 // Import our low-level extraction functions
 import { processFile } from "./lib/snippet-extractor";
 
-// Import doc meta types and data
-import { getAllDocInfo } from "@/src/lib/content";
-
-// Provider list to generate examples for
-const PROVIDERS = ["openai", "anthropic"];
-
 // Root directory for extracted snippets (changed to .extracted-snippets)
 const SNIPPETS_ROOT = path.join(process.cwd(), ".extracted-snippets");
 
 // Docs root directory
 const CONTENT_ROOT = path.join(process.cwd(), "content");
 
-/**
- * Interface for a document with extractable snippets
- */
-interface ExtractableDoc {
-  logicalPath: string;
-  filePath: string;
-}
+const IGNORED_PATHS = [
+  "content/blog", // 434 errors
+  "content/docs/mirascope/guides/getting-started", // 62 errors
+  "content/docs/mirascope/guides/agents", // 197 errors
+  "content/docs/mirascope/guides/evals", // 117 errors
+  "content/docs/mirascope/guides/more-advanced", // 281 errors
+  "content/docs/mirascope/guides/prompt-engineering", // 86 errors
+  "content/docs/mirascope/guides/langgraph-vs-mirascope", // 111 errors
+  "content/docs/mirascope/api", // 76 errors
+  "content/dev",
+];
 
 /**
- * Find all docs marked with hasExtractableSnippets flag
+ * Recursively find all MDX files in a directory
  */
-function findExtractableDocs(): ExtractableDoc[] {
-  const extractableDocs: ExtractableDoc[] = [];
+function findMdxFilesRecursive(directory: string, relativePath: string = ""): string[] {
+  const paths: string[] = [];
 
-  // Get all docs from metadata
-  const allDocs = getAllDocInfo();
+  // Read all entries in the directory
+  const entries = fs.readdirSync(directory, { withFileTypes: true });
 
-  // Filter to only those marked as extractable
-  for (const doc of allDocs) {
-    if (doc.hasExtractableSnippets) {
-      // Construct the file path from the document path
-      const filePath = path.join(CONTENT_ROOT, "docs", `${doc.path}.mdx`);
+  for (const entry of entries) {
+    const fullPath = path.join(directory, entry.name);
+    const relPath = relativePath ? path.join(relativePath, entry.name) : entry.name;
 
-      if (fs.existsSync(filePath)) {
-        // Extract the logical path from path
-        // This is the path without the leading /content/docs/ and trailing .mdx
-        const logicalPath = doc.path;
-        extractableDocs.push({
-          logicalPath,
-          filePath,
-        });
-      } else {
-        console.warn(`Warning: Doc marked as extractable but file not found: ${filePath}`);
+    if (entry.isDirectory()) {
+      // Skip node_modules and hidden directories
+      if (entry.name === "node_modules" || entry.name.startsWith(".")) {
+        continue;
       }
+
+      // Recursively scan subdirectories
+      paths.push(...findMdxFilesRecursive(fullPath, relPath));
+    } else if (entry.isFile() && entry.name.endsWith(".mdx")) {
+      paths.push(fullPath);
     }
   }
 
-  return extractableDocs;
+  return paths;
 }
 
 /**
- * Generate snippets for a single doc with specified providers
+ * Generate snippets for a single doc
  */
-function generateDocSnippets(doc: ExtractableDoc, providers: string[], verbose = false): boolean {
-  let allSuccessful = true;
+function generateDocSnippets(filePath: string, verbose = false): boolean {
+  try {
+    // Extract new snippets
+    const files = processFile(filePath);
 
-  for (const provider of providers) {
-    try {
-      // Extract new snippets
-      const files = processFile(doc.filePath, provider);
-
-      if (files.length > 0) {
-        if (verbose) {
-          console.log(
-            `Generated ${files.length} snippets for ${doc.filePath} with provider ${provider}`
-          );
-        }
-      } else {
-        console.warn(
-          `Warning: No snippets extracted from ${doc.filePath} for provider ${provider}`
-        );
-        allSuccessful = false;
+    if (files.length > 0) {
+      if (verbose) {
+        console.log(`Generated ${files.length} snippets for ${filePath}`);
       }
-    } catch (error) {
-      console.error(
-        `Error generating snippets for ${doc.filePath} with provider ${provider}:`,
-        error
-      );
-      allSuccessful = false;
+      return true;
+    } else {
+      if (verbose) {
+        // Since we try generating snippets for every mdx file, this is expected.
+        console.log(`No snippets found in ${filePath}`);
+      }
+      return true;
     }
+  } catch (error) {
+    if (error instanceof Error && error.message.includes("Unsupported Python block type")) {
+      // Provide a clearer error message for unsupported block types
+      console.error(`Error in ${filePath}: ${error.message}`);
+      console.error("Make sure to use only these block types:");
+      console.error("  ```python           - Standard Python block for extraction");
+      console.error("  ```python-snippet-concat - To concat with the previous Python block");
+      console.error("  ```python-snippet-skip   - Python code that should not be extracted");
+    } else {
+      console.error(`Error generating snippets for ${filePath}:`, error);
+    }
+    return false;
   }
-
-  return allSuccessful;
 }
 
 /**
@@ -146,20 +138,26 @@ function main(): number {
   cleanOutputDirectory();
 
   // Find all extractable docs
-  const docs = findExtractableDocs();
+  const paths = findMdxFilesRecursive(CONTENT_ROOT);
 
-  if (docs.length === 0) {
-    console.warn("No documents marked with hasExtractableSnippets flag found.");
+  if (paths.length === 0) {
+    console.warn("No MDX documents found in content directory.");
     return 0; // Exit success, since there's nothing to do
   }
 
-  console.log(`Found ${docs.length} docs with extractable snippets.`);
+  console.log(`Found ${paths.length} MDX documents for snippet extraction.`);
   console.log("Generating snippets...");
 
   // Generate snippets for each doc
   let allSuccessful = true;
-  for (const doc of docs) {
-    const success = generateDocSnippets(doc, PROVIDERS, verbose);
+  for (const path of paths) {
+    if (IGNORED_PATHS.some((ignoredPath) => path.includes(ignoredPath))) {
+      if (verbose) {
+        console.log(`Skipping ignored path: ${path}`);
+      }
+      continue;
+    }
+    const success = generateDocSnippets(path, verbose);
     allSuccessful = allSuccessful && success;
   }
 

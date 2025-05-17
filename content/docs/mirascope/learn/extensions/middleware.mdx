@@ -8,7 +8,7 @@ description: Learn how to create custom middleware for Mirascope using the middl
 `middleware_factory` is a helper function to assist in helping you wrap any Mirascope call.
 We will be creating an example decorator `with_saving` that saves some metadata after a Mirascope call using [SQLModel](https://sqlmodel.tiangolo.com/). We will be using this table for demonstrative purposes in our example:
 
-```python-no-extract
+```python-snippet-skip
 class CallResponseTable(SQLModel, table=True):
     """CallResponse model"""
 
@@ -28,7 +28,7 @@ This table should be adjusted and tailored to your needs depending on your SQL D
 
 ## Writing the decorator
 
-```python-no-extract
+```python-snippet-skip
 from mirascope.integrations import middleware_factory
 
 def with_saving():
@@ -57,7 +57,7 @@ Let's go over each of the different functions used to create the custom middlewa
 
 We start off with the `custom_context_manager` function, which will be relevant to all the handlers. You can define your own context manager where the yielded value is passed to each of the handlers.
 
-```python-no-extract
+```python-snippet-skip
 from contextlib import contextmanager
 from typing import Any, cast
 
@@ -77,7 +77,7 @@ All of the following handlers are then wrapped by this context manager.
 
 These functions must have the following signature (where async should be async) and will be called after making a standard Mirascope call. Here is a sample implementation of the sync version:
 
-```python-no-extract
+```python-snippet-skip
 from collections.abc import Callable, Generator
 
 from mirascope.core.base import BaseCallResponse, BaseType
@@ -120,7 +120,7 @@ The function arguments are (with no strict naming for the arguments):
 
 These functions must have the following signature (where async should be async) and will be called after streaming a Mirascope call. Here is a sample implementation of the sync version:
 
-```python-no-extract
+```python-snippet-skip
 from collections.abc import Callable, Generator
 
 from mirascope.core.base.stream import BaseStream
@@ -160,7 +160,7 @@ The first argument will be a provider-specific `BaseStream` instance. All other 
 
 These functions must have the following signature (where async should be async) and will be called after making a Mirascope call with `response_model` set. Here is a sample implementation of the sync version:
 
-```python-no-extract
+```python-snippet-skip
 from collections.abc import Callable, Generator
 
 from mirascope.core.base import BaseCallResponse, BaseType
@@ -210,7 +210,7 @@ However, this information is not available for primitives `BaseType`, so we use 
 
 These functions must have the following signature (where async should be async) and will be called after streaming a Mirascope call with `response_model` set. Here is a sample implementation of the sync version:
 
-```python-no-extract
+```python-snippet-skip
 from collections.abc import Callable, Generator
 
 from mirascope.core.base.structured_stream import BaseStructuredStream
@@ -252,7 +252,7 @@ The first argument will be a Mirascope `StructuredStream` of the provider you ar
 
 `handle_error` and `handle_error_async` are called when an error occurs during the Mirascope call. This is useful for handling and recording common errors like validation errors or API failures:
 
-```python-no-extract
+```python-snippet-skip
 def handle_error(e: Exception, fn: Callable, session: Session | None) -> None:
     """Handle errors that occur during a Mirascope call"""
     if not session:
@@ -290,7 +290,7 @@ There may be existing libraries that already have a decorator implemented. You c
 
 Now that you have defined your and created your `with_saving` decorator, you can wrap any Mirascope call, like so:
 
-```python-no-extract
+```python-snippet-skip
 from mirascope.core import anthropic
 
 @with_saving()
