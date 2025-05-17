@@ -72,7 +72,6 @@ function MobileSearchWrapper({ onOpenChange }: SearchWrapperProps) {
           <div className="relative flex-grow">
             <SearchBar
               onOpenChange={handleSearchOpenChange}
-              isMobile={true}
               initialIsOpen={true} // Force it to start in open state
               onResultSelect={handleCloseSearch} // Close the overlay when a result is selected
             />
