@@ -30,9 +30,14 @@ const SNIPPETS_ROOT = path.join(process.cwd(), ".extracted-snippets");
 const CONTENT_ROOT = path.join(process.cwd(), "content");
 
 const IGNORED_PATHS = [
-  "content/blog",
-  "content/docs/mirascope/guides",
-  "content/docs/mirascope/api",
+  "content/blog", // 434 errors
+  "content/docs/mirascope/guides/getting-started", // 62 errors
+  "content/docs/mirascope/guides/agents", // 197 errors
+  "content/docs/mirascope/guides/evals", // 117 errors
+  "content/docs/mirascope/guides/more-advanced", // 281 errors
+  "content/docs/mirascope/guides/prompt-engineering", // 86 errors
+  "content/docs/mirascope/guides/langgraph-vs-mirascope", // 111 errors
+  "content/docs/mirascope/api", // 76 errors
   "content/dev",
 ];
 
