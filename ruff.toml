@@ -50,6 +50,15 @@ ignore = [
     "PL",    # ignore pylint
     "RUF",   # ignore ruff rules
 ]
+".extracted-snippets/**/*.py" = [
+    "E501",  # ignore line too long
+    "I",     # ignore isort for examples
+    "D",     # ignore docstring issues
+    "T",     # ignore type checking issues
+    "B905",  # ignore zip() without strict parameter
+    "PL",    # ignore pylint
+    "RUF",   # ignore ruff rules
+]
 "scripts/apigen/**/*.py" = [
     "D103",  # missing docstring in public function
     "E501",  # line too long

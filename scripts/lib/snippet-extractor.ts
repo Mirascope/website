@@ -176,21 +176,14 @@ export function processFile(
     // Use custom output directory if provided
     outputDir = path.resolve(customOutputDir);
   } else {
-    // Create examples under public/extracted-snippets directory to make them accessible
-    // Structure: public/extracted-snippets/mirascope/getting-started/quickstart/openai/
+    // Create examples under .extracted-snippets directory to make them accessible
+    // Structure: .extracted-snippets/mirascope/getting-started/quickstart/openai/
     // Get the relative path part after content/docs/
     const relativePath = dirName.includes("content/docs/")
       ? dirName.split("content/docs/")[1]
       : path.basename(dirName);
 
-    outputDir = path.join(
-      process.cwd(),
-      "public",
-      "extracted-snippets",
-      relativePath,
-      baseName,
-      provider
-    );
+    outputDir = path.join(process.cwd(), ".extracted-snippets", relativePath, baseName, provider);
   }
 
   // Generate a separate Python file for each snippet

@@ -21,12 +21,11 @@
     "lint:social": "bun run generate-social --check",
     "typecheck": "bun run tsc --noEmit",
     "lint:mdx": "bun run scripts/validate-mdx.ts",
-    "lint:snippets": "uv pip install -e '.[mirascope-all]' && bun run scripts/update-snippets.ts --check && uv run pyright public/examples/ public/extracted-snippets/ && uv run ruff check public/examples/ public/extracted-snippets/",
+    "lint:snippets": "uv pip install -e '.[mirascope-all]' && bun run scripts/generate-snippets.ts && uv run pyright public/examples/ .extracted-snippets && uv run ruff check public/examples/ .extracted-snippets/",
     "lint:python": "uv pip install -e '.' && uv run pyright scripts/apigen/ && uv run ruff check scripts/apigen/ && uv run pytest && echo \"Lint successful\"",
     "lint:format": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\"",
-    "fix": "bun run fix:format && bun run fix:snippets && bun run fix:python",
+    "fix": "bun run fix:format && bun run fix:python",
     "fix:format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\"",
-    "fix:snippets": "bun run scripts/update-snippets.ts",
     "fix:python": "uv pip install -e '.' && uv run ruff format scripts/apigen/ && uv run ruff check --fix scripts/apigen/ && uv run pytest scripts/apigen/",
     "apigen": "uv pip install -e \".[mirascope-all]\" && uv run -m scripts.apigen.main",
     "prepare": "husky",
@@ -40,11 +39,9 @@
       "node scripts/check-ts.js"
     ],
     "*.mdx": [
-      "bun run lint:mdx",
-      "bun run scripts/update-snippets.ts --check"
+      "bun run lint:mdx"
     ],
-    "scripts/apigen/**/*.py": "bun run lint:python",
-    "public/**/*.py": "bun run lint:snippets"
+    "scripts/apigen/**/*.py": "bun run lint:python"
   },
   "dependencies": {
     "@mdx-js/react": "^3.1.0",

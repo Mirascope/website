@@ -22,7 +22,7 @@ bun run start
 
 This project is mostly Typescript/React/etc (as stated above). However, there is a small amount of Python code:
 - In the public/examples directory. This includes example Python code which is incorporated into the documentation, and typechecked for safety.
-- In the public/extracted-snippets directory. This includes example Python code that is automatically extracted from the mdx content, and is typechecked for safety. This should not be edited by hand.
+- In the .extracted-snippets directory. This includes example Python code that is automatically extracted from the mdx content, and is typechecked for safety. This should not be edited by hand.
 - In the scripts/apigen module, which contains custom Python code for generating API docs for mirascope/mirascope and other libraries.
 
 ### Commands
@@ -43,11 +43,10 @@ This project is mostly Typescript/React/etc (as stated above). However, there is
 - `bun run lint:mdx` - Validate MDX files
 - `bun run lint:social` - Check if generated social cards (OG images) are up to date
 - `bun run generate-social` - Update generated social cards and metadata
-- `bun run lint:snippets` - Validate code snippets (update check and type/style checking)
+- `bun run lint:snippets` - Validate code snippets (using pyright and ruff for type/style checking)
 - `bun run lint:python` - Run typechecking and linting on the apigen module only
 - `bun run lint:format` - Check formatting with Prettier
 - `bun run fix:format` - Format all files with Prettier
-- `bun run fix:snippets` - Update extractable code snippets
 - `bun run fix:python` - Fix Python code in the scripts/apigen module
 
 ### Pre-commit Hooks
@@ -106,16 +105,11 @@ The documentation contains Python code snippets that are automatically extracted
 1. In `content/docs/_meta.ts`, docs with extractable snippets are marked with `hasExtractableSnippets: true`
 2. The extraction system pulls Python code blocks from these MDX files
 3. For each provider (OpenAI, Anthropic), it generates runnable example files with substituted variables
-4. Examples are stored in `public/extracted-snippets/` with an organized directory structure
+4. Examples are stored in `.extracted-snippets/` with an organized directory structure
 
 #### Working with Snippets
 
-- `bun run fix:snippets` - Update all extractable snippets for all providers
-- `bun run lint:snippets` - Check if snippets are up-to-date
-- You can also use the original script with more options:
-  - `bun run scripts/update-snippets.ts --path=<file-path>` - Update snippets for a specific file
-  - `bun run scripts/update-snippets.ts --check --path=<file-path>` - Check if snippets for a specific file are up-to-date
-  - `bun run scripts/update-snippets.ts --help` - View all available options
+- `bun run lint:snippets` - Re-extract snippets and run typechecking and linting
 
 #### Handling Partial Code Examples
 
@@ -133,7 +127,7 @@ This prevents these partial examples from being extracted as standalone snippets
 
 #### CI Integration
 
-Our CI workflow automatically verifies that all code is properly formatted, type-checked, and that extracted snippets are up-to-date with the source documentation. If you modify MDX files with code snippets, make sure to run `bun run fix` before committing to update all snippets and formatting.
+Our CI workflow automatically verifies that all code is properly formatted, type-checked, and that extracted snippets are up-to-date with the source documentation. 
 
 ### Social Images Generation
 
