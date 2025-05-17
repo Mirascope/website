@@ -6,7 +6,12 @@ import { getProductFromPath } from "../lib/utils";
 
 import { Header, Footer, CookieBanner, DevToolsButton } from "@/src/components/routes/root";
 import analyticsManager from "@/src/lib/services/analytics";
-import { FunModeProvider, ThemeProvider, ProductProvider } from "@/src/components";
+import {
+  FunModeProvider,
+  ThemeProvider,
+  ProductProvider,
+  TabbedSectionMemoryProvider,
+} from "@/src/components";
 
 export const Route = createRootRoute({
   beforeLoad: ({ location }) => {
@@ -94,9 +99,11 @@ export const Route = createRootRoute({
                 style={{ paddingTop: "var(--header-height)" }}
               >
                 <FunModeProvider>
-                  <main className="flex-grow">
-                    <Outlet />
-                  </main>
+                  <TabbedSectionMemoryProvider>
+                    <main className="flex-grow">
+                      <Outlet />
+                    </main>
+                  </TabbedSectionMemoryProvider>
                 </FunModeProvider>
               </div>
               <Footer />
