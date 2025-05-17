@@ -351,6 +351,13 @@ h6 code {
   min-width: 800px;
 }
 
+/* Table container with horizontal scrolling */
+.mdx-content .table-container {
+  width: 100%;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
 /* Blog post headers styling - base styles */
 .blog-content h1,
 .blog-content h2,
@@ -585,6 +592,16 @@ mark,
 .mdx-content ul li:last-child,
 .mdx-content ol li:last-child {
   margin-bottom: 0 !important;
+}
+
+/* Fix for ordered lists with double-digit numbers */
+.mdx-content ol {
+  padding-left: 2rem !important; /* Increase padding to accommodate double digits */
+}
+
+/* Ensure proper indentation for nested lists */
+.mdx-content ol ol {
+  padding-left: 2rem !important;
 }
 
 /* Code block styling */

@@ -16,9 +16,7 @@ This recipe demonstrates how to implement the Chain of Verification technique us
 </Info>
 
 <Note title="Background">
-<p>
 <a href="https://arxiv.org/pdf/2309.11495">Chain of Verification</a> is a prompt engineering technique where one takes a prompt and its initial LLM response then generates a checklist of questions that can be used to verify the initial answer. Each of these questions are then answered individually with separate LLM calls, and the results of each verification question are used to edit the final answer. LLMs are often more truthful when asked to verify a particular fact rather than use it in their own answer, so this technique is effective in reducing hallucinations.
-</p>
 </Note>
 
 
