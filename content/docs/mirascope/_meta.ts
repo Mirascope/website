@@ -159,33 +159,6 @@ const docsSection: SectionSpec = {
         },
       ],
     },
-    {
-      slug: "integrations",
-      label: "Integrations",
-
-      children: [
-        {
-          slug: "otel",
-          label: "OpenTelemetry",
-          hasExtractableSnippets: true,
-        },
-        {
-          slug: "hyperdx",
-          label: "HyperDX",
-          hasExtractableSnippets: true,
-        },
-        {
-          slug: "logfire",
-          label: "Logfire",
-          hasExtractableSnippets: true,
-        },
-        {
-          slug: "langfuse",
-          label: "Langfuse",
-          hasExtractableSnippets: true,
-        },
-      ],
-    },
   ],
 };
 
