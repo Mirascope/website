@@ -16,9 +16,7 @@ Mixture of Reasoning is a prompt engineering technique where you set up multiple
 </Info>
 
 <Note title="Background">
-<p>
 In the <a href="https://users.umiacs.umd.edu/~jbg/docs/2023_findings_more.pdf">original paper</a>, a trained classifier is used to determine the best answer, but since we do not have access to that, we will use an LLM to evaluate the best answer instead. To get a clean separation between the reasoning and the actual output, we'll use <code>response_model</code> in our final evaluation call.
-</p>
 </Note>
 
 ## Implementation
