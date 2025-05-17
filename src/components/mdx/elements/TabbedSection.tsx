@@ -3,6 +3,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/src/components/ui/ta
 import { ProductLogo } from "@/src/components/core/branding";
 import { cn } from "@/src/lib/utils";
 import { temporarilyEnableSyncHighlighting } from "@/src/lib/code-highlight";
+import { useTabMemory } from "@/src/components/core/providers/TabbedSectionMemoryContext";
 
 /**
  * A Tab component to be used within TabbedSection
@@ -56,9 +57,23 @@ export function TabbedSection({
     }
   });
 
-  // Set the default tab (first tab if not specified)
+  // Get the tab options for memory
+  const tabOptions = tabs.map((tab) => tab.value);
   const firstTabValue = tabs.length > 0 ? tabs[0].value : "";
-  defaultTab = defaultTab || firstTabValue;
+
+  // Use the tab memory if available
+  let savedTab: string | undefined;
+  let saveTab: ((value: string) => void) | undefined;
+  try {
+    const { getTabValue, setTabValue } = useTabMemory();
+    savedTab = getTabValue(tabOptions);
+    saveTab = (value: string) => setTabValue(tabOptions, value);
+  } catch (e) {
+    // TabMemory context not available, will use default behavior
+  }
+
+  // Determine the active tab value (memory > defaultTab > firstTab)
+  const activeTab = savedTab || defaultTab || firstTabValue;
 
   if (tabs.length === 0) {
     return (
@@ -82,9 +97,13 @@ export function TabbedSection({
       )}
 
       <Tabs
-        defaultValue={defaultTab}
+        value={activeTab}
+        defaultValue={firstTabValue}
         className="w-full"
-        onValueChange={() => {
+        onValueChange={(newValue) => {
+          if (saveTab) {
+            saveTab(newValue);
+          }
           temporarilyEnableSyncHighlighting();
         }}
       >
