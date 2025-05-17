@@ -19,6 +19,24 @@ Evals, short for evaluations, are methods used to assess the quality, accuracy, 
   The following documentation uses examples that are more general in their evaluation criteria. It is extremely important that you tailor your own evaluations to your specific task. While general evaluation templates can act as a good way to get started, we do not recommend relying on such criteria to evaluate the quality of your outputs. Instead, focus on engineering your evaluations such that they match your specific task and criteria to maximize the chance you are successfully measuring quality.
 </Warning>
 
+## Manual Annotation
+
+> *You can’t automate what you can’t do manually*.
+
+Before you can automate the evaluation of your LLM outputs, you need to have a clear understanding of what constitutes a good or bad output.
+
+If you have clearly defined, fixed metrics that can be computed with deterministic code (e.g. exact match), then you can skip to the section on [Hardcoded Evaluation Criteria](#hardcoded-evaluation-criteria).
+
+In most cases, however, you will need to start with a manual annotation process to determine the quality of your LLM outputs. This process involves human (domain expert) annotators reviewing the outputs and assigning scores or labels based on predefined criteria. This will then bootstrap future automated evaluations.
+
+You can get started with around 20 examples, but we generally recommend manually annotating at least 100-200 examples before thinking about automating your evaluation process.
+
+<Success>
+    Looking to learn more about evaluation and annotation?
+    
+    We recommend checking out [Lilypad](/docs/lilypad) and it's [annotation](/docs/lilypad/evaluation/annotations) tooling.
+</Success>
+
 ## LLM Evaluators
 
 One powerful approach to evaluating LLM outputs is to use other LLMs as evaluators. This method leverages the language understanding capabilities of LLMs to perform nuanced evaluations that might be difficult to achieve with hardcoded criteria.
