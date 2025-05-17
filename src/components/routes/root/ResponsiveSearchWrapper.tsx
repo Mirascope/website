@@ -74,6 +74,7 @@ function MobileSearchWrapper({ onOpenChange }: SearchWrapperProps) {
               onOpenChange={handleSearchOpenChange}
               isMobile={true}
               initialIsOpen={true} // Force it to start in open state
+              onResultSelect={handleCloseSearch} // Close the overlay when a result is selected
             />
 
             {/* Close button positioned on the right side */}

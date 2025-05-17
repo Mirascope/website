@@ -291,12 +291,19 @@ interface SearchBarProps {
    * Initial open state (useful for mobile overlay)
    */
   initialIsOpen?: boolean;
+
+  /**
+   * Called when a search result is selected
+   * Useful for mobile mode to close the overlay
+   */
+  onResultSelect?: () => void;
 }
 
 export default function SearchBar({
   onOpenChange,
   isMobile = false,
   initialIsOpen = false,
+  onResultSelect,
 }: SearchBarProps = {}) {
   const [isOpen, setIsOpen] = useState(initialIsOpen);
   const [query, setQuery] = useState("");
@@ -459,6 +466,11 @@ export default function SearchBar({
   const handleResultSelect = () => {
     setIsOpen(false);
     setQuery("");
+
+    // For mobile mode, call the onResultSelect prop to close the overlay
+    if (isMobile && onResultSelect) {
+      onResultSelect();
+    }
   };
 
   // Initialize the search service
