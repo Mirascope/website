@@ -57,6 +57,7 @@ mirascope-all = [
     # Additional dependencies
     "sqlmodel>=0.0.14,<0.1",
     "sqlalchemy>=2.0.0,<3.0",
+    "fastapi>=0.115.12,<1",
 ]
 
 [tool.uv]
