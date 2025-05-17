@@ -70,7 +70,6 @@ For example, you might want to enable passthrough annotation so that your users 
 ```python
 from google.genai import Client
 import lilypad
-from lilypad.lib.traces import Annotation
 
 client = Client()
 lilypad.configure()
@@ -87,7 +86,7 @@ trace: lilypad.Trace[str | None] = answer_question("What is the capital of Franc
 print(trace.response)  # original response
 # > The capital of France is Paris.
 
-annotation = Annotation(  # [!code highlight]
+annotation = lilypad.Annotation(  # [!code highlight]
     label="pass",  # [!code highlight]
     reasoning="The answer was correct",  # [!code highlight]
     data=None,  # [!code highlight]

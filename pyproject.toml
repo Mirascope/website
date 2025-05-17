@@ -13,7 +13,7 @@ dependencies = [
     "griffe>=1.7.2",
     "tomli>=2.2.1",
     "pymdown-extensions>=10.5.0",
-    "lilypad-sdk>=0.2.2",
+    "lilypad-sdk>=0.2.3",
 ]
 
 [project.optional-dependencies]
