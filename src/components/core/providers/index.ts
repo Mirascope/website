@@ -9,3 +9,4 @@ export {
   type Theme,
 } from "./ThemeContext";
 export { ProductProvider, useProduct, type ProductName } from "./ProductContext";
+export { TabbedSectionMemoryProvider, useTabMemory } from "./TabbedSectionMemoryContext";
