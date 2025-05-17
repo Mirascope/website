@@ -145,7 +145,7 @@ Let's break down the key components of this example:
 
 1. First, we create a `Realtime` instance with the specified model:
 
-```python-no-extract
+```python-snippet-skip
 app = Realtime(
     "gpt-4o-realtime-preview-2024-10-01",
 )
@@ -153,7 +153,7 @@ app = Realtime(
 
 2. We define two receivers using the `@app.receiver` decorator:
 
-```python-no-extract
+```python-snippet-skip
 @app.receiver("audio")
 async def receive_audio(response: AudioSegment, context: dict[str, Any]) -> None:
     play(response)
@@ -168,7 +168,7 @@ The first receiver handles audio responses by playing them, while the second rec
 
 3. We define a sender using the `@app.sender` decorator:
 
-```python-no-extract
+```python-snippet-skip
 async def send_audio_as_stream(
     context: dict[str, Any],
 ) -> AsyncGenerator[BytesIO, None]:
@@ -181,7 +181,7 @@ This sender function streams audio data to the model using the `record_as_stream
 
 4. Finally, we run the application:
 
-```python-no-extract
+```python-snippet-skip
 asyncio.run(app.run())
 ```
 

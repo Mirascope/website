@@ -11,103 +11,65 @@ import * as path from "path";
 import { replaceProviderVariables } from "@/src/config/providers";
 
 /**
- * Interface for snippet with line number information
- */
-export interface Snippet {
-  code: string;
-  lineNumber: number;
-}
-
-/**
  * Extract Python snippets from an MDX file
  */
-export function extractSnippets(filePath: string): Snippet[] {
+export function extractSnippets(filePath: string): string[] {
   const content = fs.readFileSync(filePath, "utf-8");
 
-  // Match all Python code blocks but exclude python-no-extract blocks
-  const regex = /```python\n([\s\S]*?)```/g;
-  const snippets: Snippet[] = [];
+  // First, check for any python-* blocks that aren't our supported types
+  const pythonPrefixRegex = /```(python-[^`\n]+)\n/g;
+  let prefixMatch;
+  while ((prefixMatch = pythonPrefixRegex.exec(content)) !== null) {
+    const blockType = prefixMatch[1];
+    // Only allow python-snippet-concat and python-snippet-skip
+    if (blockType !== "python-snippet-concat" && blockType !== "python-snippet-skip") {
+      throw new Error(
+        `Unsupported Python block type "${blockType}" in file ${filePath}. Only python, python-snippet-concat, and python-snippet-skip are allowed.`
+      );
+    }
+  }
+
+  // Match Python blocks (regular), python-snippet-concat blocks, and python-snippet-skip blocks
+  const snippetRegex = /```(python|python-snippet-concat|python-snippet-skip)\n([\s\S]*?)```/g;
+  const snippets: string[] = [];
+
+  let lastSnippet: string | null = null;
 
   // Count lines up to each match
   let match;
-  while ((match = regex.exec(content)) !== null) {
-    // Calculate line number by counting newlines up to the match start
-    const textBeforeMatch = content.substring(0, match.index);
-    const lineNumber = (textBeforeMatch.match(/\n/g) || []).length + 1;
+  while ((match = snippetRegex.exec(content)) !== null) {
+    const blockType = match[1];
+    const codeContent = match[2].trim();
 
-    snippets.push({
-      code: match[1].trim(),
-      lineNumber: lineNumber,
-    });
+    if (blockType === "python-snippet-skip") {
+      continue;
+    }
+
+    if (blockType === "python-snippet-concat" && lastSnippet) {
+      // Append to the previous snippet
+      lastSnippet += "\n\n" + codeContent;
+    } else {
+      // Create a new snippet
+      lastSnippet = codeContent;
+      snippets.push(lastSnippet);
+    }
   }
 
   return snippets;
 }
 
 /**
- * Extract heading above the code block
- */
-export function extractHeadings(filePath: string): string[] {
-  const content = fs.readFileSync(filePath, "utf-8");
-  const headings: string[] = [];
-
-  // Find all code blocks (any language, not just Python)
-  const allCodeBlocksRegex = /```(?:\w*)\n([\s\S]*?)```/g;
-  const blockLocations: { start: number; end: number }[] = [];
-
-  // Map all code block locations
-  let codeBlockMatch;
-  while ((codeBlockMatch = allCodeBlocksRegex.exec(content)) !== null) {
-    blockLocations.push({
-      start: codeBlockMatch.index,
-      end: codeBlockMatch.index + codeBlockMatch[0].length,
-    });
-  }
-
-  // Reset and find Python code blocks specifically
-  const pythonCodeBlockRegex = /```python\n([\s\S]*?)```/g;
-  let match;
-
-  while ((match = pythonCodeBlockRegex.exec(content)) !== null) {
-    // Look for the closest heading before the match
-    const contentBeforeMatch = content.substring(0, match.index);
-    const headingRegex = /#{1,6}\s+(.+)$/gm;
-
-    let lastHeading = "";
-    let headingMatch;
-
-    while ((headingMatch = headingRegex.exec(contentBeforeMatch)) !== null) {
-      // Check if this potential heading is inside any code block
-      const headingPosition = headingMatch.index;
-      const insideCodeBlock = blockLocations.some(
-        (block) => headingPosition > block.start && headingPosition < block.end
-      );
-
-      // Only use this heading if it's not inside a code block
-      if (!insideCodeBlock) {
-        lastHeading = headingMatch[1].trim();
-      }
-    }
-
-    headings.push(lastHeading || "Example");
-  }
-
-  return headings;
-}
-
-/**
  * Generate a runnable Python file for a single snippet
  */
 export function generatePythonFile(
-  snippet: Snippet,
+  snippet: string,
   outputDir: string,
   index: number,
-  heading: string,
   baseName: string = "example",
   sourceFilePath: string = ""
 ): string {
   // Replace provider variables using shared function
-  const processedSnippet = replaceProviderVariables(snippet.code, "openai");
+  const processedSnippet = replaceProviderVariables(snippet, "openai");
 
   // Ensure the output directory exists
   if (!fs.existsSync(outputDir)) {
@@ -125,8 +87,8 @@ export function generatePythonFile(
     ? sourceFilePath.substring(projectRoot.length + 1) // +1 to remove the leading slash
     : sourceFilePath;
 
-  const content = `# Example ${index + 1}: ${heading}
-# Source: ${relativePath}:${snippet.lineNumber}
+  const content = `# Example ${index + 1}
+# Source: ${relativePath}
 # This file is auto-generated; any edits should be made in the source file
 
 ${processedSnippet}
@@ -149,7 +111,6 @@ export function processFile(mdxFile: string): string[] {
 
   // Extract snippets and headings
   const snippets = extractSnippets(mdxFile);
-  const headings = extractHeadings(mdxFile);
 
   if (snippets.length === 0) {
     return [];
@@ -178,7 +139,7 @@ export function processFile(mdxFile: string): string[] {
   // Generate a separate Python file for each snippet
   const generatedFiles: string[] = [];
   snippets.forEach((snippet, index) => {
-    const file = generatePythonFile(snippet, outputDir, index, headings[index], baseName, mdxFile);
+    const file = generatePythonFile(snippet, outputDir, index, baseName, mdxFile);
     generatedFiles.push(file);
   });
 
