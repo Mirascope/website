@@ -8,8 +8,7 @@
 import * as fs from "fs";
 import * as path from "path";
 // Import from shared provider config
-import { replaceProviderVariables } from "../../src/config/providers";
-import type { Provider } from "../../src/config/providers";
+import { replaceProviderVariables } from "@/src/config/providers";
 
 /**
  * Interface for snippet with line number information
@@ -101,26 +100,22 @@ export function extractHeadings(filePath: string): string[] {
  */
 export function generatePythonFile(
   snippet: Snippet,
-  provider: string,
   outputDir: string,
   index: number,
   heading: string,
   baseName: string = "example",
   sourceFilePath: string = ""
 ): string {
-  // Convert provider to lowercase for case-insensitive matching
-  const providerKey = provider.toLowerCase() as Provider;
-
   // Replace provider variables using shared function
-  const processedSnippet = replaceProviderVariables(snippet.code, providerKey);
+  const processedSnippet = replaceProviderVariables(snippet.code, "openai");
 
   // Ensure the output directory exists
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
   }
 
-  // Create the output file name with provider and index
-  const fileName = `${baseName}_${provider}_${index + 1}.py`;
+  // Create the output file name with index (provider is always OpenAI)
+  const fileName = `${baseName}_${index + 1}.py`;
   const outputFile = path.join(outputDir, fileName);
 
   // Create the output file content
@@ -130,9 +125,7 @@ export function generatePythonFile(
     ? sourceFilePath.substring(projectRoot.length + 1) // +1 to remove the leading slash
     : sourceFilePath;
 
-  const content = `#!/usr/bin/env python3
-# Example ${index + 1}: ${heading}
-# Generated for provider: ${provider}
+  const content = `# Example ${index + 1}: ${heading}
 # Source: ${relativePath}:${snippet.lineNumber}
 # This file is auto-generated; any edits should be made in the source file
 
@@ -148,11 +141,7 @@ ${processedSnippet}
 /**
  * Process a single MDX file for a given provider
  */
-export function processFile(
-  mdxFile: string,
-  provider: string,
-  customOutputDir: string | null = null
-): string[] {
+export function processFile(mdxFile: string, customOutputDir: string | null = null): string[] {
   if (!fs.existsSync(mdxFile)) {
     console.error(`Error: File ${mdxFile} not found`);
     return [];
@@ -183,21 +172,13 @@ export function processFile(
       ? dirName.split("content/docs/")[1]
       : path.basename(dirName);
 
-    outputDir = path.join(process.cwd(), ".extracted-snippets", relativePath, baseName, provider);
+    outputDir = path.join(process.cwd(), ".extracted-snippets", relativePath, baseName);
   }
 
   // Generate a separate Python file for each snippet
   const generatedFiles: string[] = [];
   snippets.forEach((snippet, index) => {
-    const file = generatePythonFile(
-      snippet,
-      provider,
-      outputDir,
-      index,
-      headings[index],
-      baseName,
-      mdxFile
-    );
+    const file = generatePythonFile(snippet, outputDir, index, headings[index], baseName, mdxFile);
     generatedFiles.push(file);
   });
 
