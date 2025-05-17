@@ -27,6 +27,7 @@ Agent-based systems in AI involve creating autonomous agents that can perform ta
 
 ```mermaid
 flowchart TD
+    %% Define nodes with descriptive IDs
     AE[Agent Executor]
     R[Researcher.research]
     WID[_write_initial_draft]
@@ -38,25 +39,29 @@ flowchart TD
         PW[Parse Webpage]
     end
     
+    %% Define connections
     AE --> R
     AE --> WID
     R --> RA
     RA --> WS
     RA --> PW
     
+    %% Define dashed connections
     WS -.-> OAPI
     PW -.-> OAPI
     RA -.-> OAPI
     WID -.-> OAPI
     AE -.-> OAPI
 
-    classDef agent fill:#e1d5e7,stroke:#9673a6,stroke-width:2px;
-    classDef tool fill:#fff2cc,stroke:#d6b656,stroke-width:2px;
-    classDef api fill:#dae8fc,stroke:#6c8ebf,stroke-width:2px;
+    %% Define empty classes (styling will be applied via CSS)
+    classDef primary fill:#6366f1
+    classDef secondary fill:#00b49c
+    classDef tertiary fill:#db6656
     
-    class AE,RA agent;
-    class R,WID,WS,PW tool;
-    class OAPI api;
+    %% Assign classes to nodes
+    class AE,RA primary
+    class R,WID,WS,PW secondary
+    class OAPI tertiary
 ```
 
 ## Setup
