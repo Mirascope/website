@@ -339,6 +339,10 @@ export default function SearchBar({
       // Close on escape key
       if (e.key === "Escape") {
         setIsOpen(false);
+        // Explicitly call onOpenChange for mobile mode to close the overlay
+        if (isMobile && onOpenChange) {
+          onOpenChange(false);
+        }
       }
 
       // Open on Cmd+K or Ctrl+K
