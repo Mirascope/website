@@ -86,7 +86,16 @@ function generateDocSnippets(filePath: string, verbose = false): boolean {
       return true;
     }
   } catch (error) {
-    console.error(`Error generating snippets for ${filePath}:`, error);
+    if (error instanceof Error && error.message.includes("Unsupported Python block type")) {
+      // Provide a clearer error message for unsupported block types
+      console.error(`Error in ${filePath}: ${error.message}`);
+      console.error("Make sure to use only these block types:");
+      console.error("  ```python           - Standard Python block for extraction");
+      console.error("  ```python-snippet-concat - To concat with the previous Python block");
+      console.error("  ```python-snippet-skip   - Python code that should not be extracted");
+    } else {
+      console.error(`Error generating snippets for ${filePath}:`, error);
+    }
     return false;
   }
 }

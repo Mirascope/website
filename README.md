@@ -106,10 +106,10 @@ To run snippet validation, use `bun run lint:snippets`.
 
 #### Handling Partial Code Examples
 
-For code blocks that represent partial snippets (not meant to be valid on their own), use the `python-no-extract` language tag instead of `python`:
+For code blocks that represent partial snippets (not meant to be valid on their own), use the `python-snippet-skip` language tag instead of `python`:
 
 ```markdown
->  ```python-no-extract
+>  ```python-snippet-skip
 >  @app.receiver("audio")
 >  async def receive_audio(response: AudioSegment, context: dict[str, Any]) -> None:
 >      play(response)

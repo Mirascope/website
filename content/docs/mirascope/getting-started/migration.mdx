@@ -61,7 +61,7 @@ The most significant change in v1 is the shift from class-based to decorator-bas
 
 Before (v0):
 
-```python-no-extract
+```python-snippet-skip
 from mirascope.openai import OpenAICall
 
 
@@ -182,7 +182,7 @@ It's evident that `genre` and `history` are state of the `Librarian` class, and 
 
 Before (v0):
 
-```python-no-extract
+```python-snippet-skip
 import asyncio
 
 from mirascope.openai import OpenAICall
@@ -223,7 +223,7 @@ asyncio.run(main())
 
 Before (v0):
 
-```python-no-extract
+```python-snippet-skip
 from mirascope.openai import OpenAICall
 
 
@@ -258,7 +258,7 @@ for chunk, _ in stream:
 
 Before (v0):
 
-```python-no-extract
+```python-snippet-skip
 from mirascope.openai import OpenAICall, OpenAICallParams, OpenAITool
 
 
@@ -324,7 +324,7 @@ If you were using functions as tools, these can still be used as tools in the sa
 
 Before (v0):
 
-```python-no-extract
+```python-snippet-skip
 from mirascope.openai import OpenAICall, OpenAICallParams, OpenAIToolStream
 
 
@@ -379,7 +379,7 @@ for chunk, tool in stream:
 
 Before (v0):
 
-```python-no-extract
+```python-snippet-skip
 from mirascope.openai import OpenAIExtractor
 from pydantic import BaseModel
 
@@ -429,7 +429,7 @@ print(book)
 
 Before (v0):
 
-```python-no-extract
+```python-snippet-skip
 from mirascope.openai import OpenAICallParams, OpenAIExtractor
 from pydantic import BaseModel
 
@@ -479,7 +479,7 @@ print(book)
 
 Before (v0)
 
-```python-no-extract
+```python-snippet-skip
 from mirascope.openai import OpenAIExtractor
 from pydantic import BaseModel
 
@@ -527,7 +527,7 @@ for partial_book in book_stream:
 
 Before (v0):
 
-```python-no-extract
+```python-snippet-skip
 from mirascope.openai import OpenAICall
 from pydantic import computed_field
 
@@ -589,7 +589,7 @@ print(response.fn_args["author"])
 
 Before (v0):
 
-```python-no-extract
+```python-snippet-skip
 from mirascope.openai import OpenAICall
 
 
@@ -622,7 +622,7 @@ print(response.model_dump())
 
 Before (v0):
 
-```python-no-extract
+```python-snippet-skip
 from mirascope.openai import OpenAICall
 from openai.types.chat import ChatCompletionMessageParam
 
@@ -676,7 +676,7 @@ print(response.content)
 
 Before (v0):
 
-```python-no-extract
+```python-snippet-skip
 from fastapi import FastAPI
 from mirascope.openai import OpenAIExtractor
 from pydantic import BaseModel

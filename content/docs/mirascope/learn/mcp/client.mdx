@@ -54,7 +54,7 @@ This example demonstrates:
 
 To connect to an MCP server, use the `stdio_client` context manager with appropriate server parameters:
 
-```python-no-extract
+```python-snippet-skip
 server_file = Path(__file__).parent / "server.py" # [!code highlight]
 
 server_params = StdioServerParameters( # [!code highlight]
@@ -77,7 +77,7 @@ The `StdioServerParameters` specify how to launch and connect to the server proc
 
 You can also use the `sse_client` instead to connect to an MCP server side event endpoint:
 
-```python-no-extract
+```python-snippet-skip
 from mirascope.mcp import sse_client
 
 
@@ -90,7 +90,7 @@ async with sse_client("http://localhost:8000") as client: # [!code highlight]
 
 You can list available prompts and get prompt templates from the server:
 
-```python-no-extract
+```python-snippet-skip
         prompts = await client.list_prompts()
         print(prompts[0])
         # name='recommend_book' description='Get book recommendations by genre.' arguments=[PromptArgument(name='genre', description='Genre of book to recommend (fantasy, mystery, sci-fi, etc.)', required=True)]
@@ -106,7 +106,7 @@ The client automatically converts server prompts into Mirascope-compatible promp
 
 Resources can be listed and read from the server:
 
-```python-no-extract
+```python-snippet-skip
         resources = await client.list_resources()
         resource = await client.read_resource(resources[0].uri)
         print(resources[0])
@@ -126,7 +126,7 @@ If the resource is text, it will be converted into a `TextPart` instance. Otherw
 
 Tools from the server can be used with Mirascope's standard call decorators:
 
-```python-no-extract
+```python-snippet-skip
         tools = await client.list_tools() # [!code highlight]
 
         @llm.call(
