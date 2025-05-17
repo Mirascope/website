@@ -5,6 +5,7 @@ import { getSearchService, type SearchResultItem } from "@/src/lib/services/sear
 import { environment } from "@/src/lib/content/environment";
 import { useIsLandingPage } from "@/src/components/core";
 import { SEARCH_BAR_STYLES, ANIMATION_TIMING } from "./styles";
+import { useIsMobile } from "./hooks/useIsMobile";
 
 // Component for an individual search result
 interface SearchResultProps {
@@ -251,6 +252,13 @@ function SearchResultsContainer({
 
 // Component for the keyboard shortcut footer
 function SearchFooter() {
+  const isMobile = useIsMobile();
+
+  // Hide footer completely on mobile
+  if (isMobile) {
+    return null;
+  }
+
   return (
     <div className={SEARCH_BAR_STYLES.footer}>
       <div className="flex items-center gap-2 px-2">
