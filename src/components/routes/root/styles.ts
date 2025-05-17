@@ -345,7 +345,8 @@ export const SEARCH_BAR_STYLES = {
   input: (isOpen: boolean, isLandingPage: boolean, isMobile: boolean = false) =>
     cn(
       // Base styles
-      "cursor-pointer overflow-visible bg-transparent py-0 text-sm leading-normal outline-none",
+      "cursor-pointer overflow-visible bg-transparent py-0 outline-none",
+      "!text-[16px] leading-normal", // Use 16px font to avoid zoom on mobile
       "h-auto min-h-full",
       // Transitions from central config - match container timing
       `transition-all duration-[${ANIMATION_TIMING.searchExpand.duration}ms] ease-in-out delay-[${ANIMATION_TIMING.searchExpand.delay}ms]`,
