@@ -1355,7 +1355,7 @@ wheels = [
 
 [[package]]
 name = "lilypad-sdk"
-version = "0.2.2"
+version = "0.2.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "anyio" },
@@ -1373,9 +1373,9 @@ dependencies = [
     { name = "sniffio" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/84/5a/70079da46f9cc7a75bed576409aa893a99f3edfe0f65bbe7ea5953c1ed9d/lilypad_sdk-0.2.2.tar.gz", hash = "sha256:11b824eeecc02a8bf0ec4fa0e6c9a9079c3a5ea988021e932b54e25f4068bb98", size = 240146 }
+sdist = { url = "https://files.pythonhosted.org/packages/0e/3a/ed0f1ac8e9b4ca44ac6ddc910a5b1a77e27abd4cb79e50961daf4941afb1/lilypad_sdk-0.2.3.tar.gz", hash = "sha256:86c36483c677c91eb97a38d10d1a41d8c26b7ba427db4361606a9cd154f2c064", size = 240143 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e4/af/de12208784318cd863b4f2a2ba8e6304af4cbd1f43201ef0ee8946b41250/lilypad_sdk-0.2.2-py3-none-any.whl", hash = "sha256:84eeea49ec08e99f44b286d96d224222c90fa6e232796381ef6f836d1b2bdd79", size = 269083 },
+    { url = "https://files.pythonhosted.org/packages/68/2f/a33c8c4007118d4f4c2ab90fa928a8aa69ee07d63a220a35c683cfc2be44/lilypad_sdk-0.2.3-py3-none-any.whl", hash = "sha256:535a0f652e77dd97b6abb3cc27fe75fd23ea33a24e274f4d58e8dcccbf649be7", size = 269093 },
 ]
 
 [[package]]
@@ -1569,7 +1569,7 @@ requires-dist = [
     { name = "google-generativeai", marker = "extra == 'mirascope-all'", specifier = ">=0.4.0,<1" },
     { name = "griffe", specifier = ">=1.7.2" },
     { name = "groq", marker = "extra == 'mirascope-all'", specifier = ">=0.9.0,<1" },
-    { name = "lilypad-sdk", specifier = ">=0.2.2" },
+    { name = "lilypad-sdk", specifier = ">=0.2.3" },
     { name = "litellm", marker = "extra == 'mirascope-all'", specifier = ">=1.42.12,<2" },
     { name = "mcp", marker = "extra == 'mirascope-all'", specifier = ">=1.6.0" },
     { name = "mirascope", specifier = ">=1.23.4" },
