@@ -85,6 +85,8 @@ Run your first automatically [traced](/docs/lilypad/observability/traces) and [v
 <TabbedSection>
 <Tab value="Google">
 ```python
+import os
+
 from google.genai import Client
 import lilypad
 
@@ -188,7 +190,11 @@ def answer_question(question: str) -> str | None:
         model="mistral-small-latest",
         messages=[{"role": "user", "content": f"Answer this question: {question}"}],
     )
-    return response.choices[0].message.content
+    choices = response.choices
+    if not choices:
+        return None
+    content = choices[0].message.content
+    return str(content) if content is not None and content != "" else None
     
 response = answer_question("What is the capital of France?")
 print(response)
@@ -219,7 +225,7 @@ def answer_question(question: str) -> str | None:
             {"role": "user", "content": [{"text": f"Answer this question: {question}"}]}
         ],
     )
-    return response["output"]["message"]["content"][0]["text"]
+    return response["output"]["message"]["content"][0]["text"] # type: ignore[reportTypedDictNotRequiredAccess]
 
 response = answer_question("What is the capital of France?")
 print(response)
@@ -253,35 +259,6 @@ def answer_question(question: str) -> str | None:
     )
     return response.choices[0].message.content
     
-response = answer_question("What is the capital of France?")
-print(response)
-# > The capital of France is Paris.
-```
-</Tab>
-<Tab value="Outlines">
-```python
-import os
-
-import lilypad
-import outlines
-
-# [!code highlight:6]
-lilypad.configure(
-    project_id=os.environ["LILYPAD_PROJECT_ID"],
-    api_key=os.environ["LILYPAD_API_KEY"],
-    auto_llm=True,
-)
-
-@lilypad.trace(versioning="automatic")  # [!code highlight]
-def answer_question(question: str) -> str | None:
-    model = outlines.models.transformers(
-        "microsoft/Phi-3-mini-4k-instruct",
-        device="cuda"  # optional device argument, default is cpu
-    )
-    generator = outlines.generate.text(model)
-    response = generator(f"Answer this question: {question}")
-    return response
-
 response = answer_question("What is the capital of France?")
 print(response)
 # > The capital of France is Paris.

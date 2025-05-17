@@ -33,7 +33,6 @@ const IGNORED_PATHS = [
   "content/blog",
   "content/docs/mirascope/guides",
   "content/docs/mirascope/api",
-  "content/docs/lilypad",
   "content/dev",
 ];
 
