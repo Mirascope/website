@@ -6,7 +6,7 @@ import { getProductFromPath } from "../lib/utils";
 
 import { Header, Footer, CookieBanner, DevToolsButton } from "@/src/components/routes/root";
 import analyticsManager from "@/src/lib/services/analytics";
-import { FunModeProvider } from "@/src/components";
+import { FunModeProvider, ThemeProvider, ProductProvider } from "@/src/components";
 
 export const Route = createRootRoute({
   beforeLoad: ({ location }) => {
@@ -72,42 +72,44 @@ export const Route = createRootRoute({
         {/* Fixed background for landing page */}
         {isLandingPage && <div className="watercolor-bg"></div>}
 
-        <div
-          data-product={getProductFromPath(path)}
-          className="handwriting-enabled flex min-h-screen flex-col px-2"
-          style={
-            {
-              "--header-height":
-                path.startsWith("/docs/") || path.startsWith("/dev")
-                  ? "var(--header-height-with-selector)"
-                  : "var(--header-height-base)",
-              "--footer-height": "60px", // Add CSS variable for footer height
-            } as React.CSSProperties
-          }
-        >
-          {/* Header is fixed, so it's outside the content flow */}
-          <Header />
+        <ThemeProvider>
+          <ProductProvider product={getProductFromPath(path)}>
+            <div
+              className="handwriting-enabled flex min-h-screen flex-col px-2"
+              style={
+                {
+                  "--header-height": path.startsWith("/docs/")
+                    ? "var(--header-height-with-selector)"
+                    : "var(--header-height-base)",
+                  "--footer-height": "60px", // Add CSS variable for footer height
+                } as React.CSSProperties
+              }
+            >
+              {/* Header is fixed, so it's outside the content flow */}
+              <Header showProductSelector={path.startsWith("/docs/")} />
 
-          {/* Content container with padding to account for fixed header */}
-          <div
-            className="mx-auto w-full max-w-7xl flex-grow"
-            style={{ paddingTop: "var(--header-height)" }}
-          >
-            <FunModeProvider>
-              <main className="flex-grow">
-                <Outlet />
-              </main>
-            </FunModeProvider>
-          </div>
-          <Footer />
-        </div>
+              {/* Content container with padding to account for fixed header */}
+              <div
+                className="mx-auto w-full max-w-7xl flex-grow"
+                style={{ paddingTop: "var(--header-height)" }}
+              >
+                <FunModeProvider>
+                  <main className="flex-grow">
+                    <Outlet />
+                  </main>
+                </FunModeProvider>
+              </div>
+              <Footer />
+            </div>
 
-        {/* Cookie consent banner - positioned in lower left corner */}
-        <CookieBanner />
+            {/* Cookie consent banner - positioned in lower left corner */}
+            <CookieBanner />
+          </ProductProvider>
 
-        {/* Dev tools - only visible in development */}
-        <TanStackRouterDevtools />
-        <DevToolsButton className="fixed bottom-10 left-2 z-50" />
+          {/* Dev tools - only visible in development */}
+          <TanStackRouterDevtools />
+          <DevToolsButton className="fixed bottom-10 left-2 z-50" />
+        </ThemeProvider>
       </>
     );
   },

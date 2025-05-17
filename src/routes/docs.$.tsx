@@ -1,9 +1,8 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import { DocsPage } from "@/src/components/routes/docs";
-import { getDocContent, docRegistry, type ProductName } from "@/src/lib/content";
+import { getDocContent, docRegistry } from "@/src/lib/content";
 import { environment } from "@/src/lib/content/environment";
 import { ContentErrorHandler } from "@/src/components";
-import { getProductFromPath } from "@/src/lib/utils";
 
 /**
  * Content loader that uses a reverse index from route paths to DocInfo
@@ -39,11 +38,8 @@ export const Route = createFileRoute("/docs/$")({
   loader: contentPathLoader,
 
   // Configure loading state
-  pendingComponent: ({ params }) => {
-    // Determine product from the URL path during loading
-    const path = `/docs/${params._splat}`;
-    const product = getProductFromPath(path);
-    return <DocsPage isLoading product={product} />;
+  pendingComponent: ({}) => {
+    return <DocsPage isLoading />;
   },
 
   errorComponent: ({ error }) => {
@@ -64,9 +60,6 @@ function DocsContentPage() {
     structuralSharing: false,
   });
 
-  // Extract product from document metadata
-  const product = document.meta.product as ProductName;
-
   // Use the shared DocsPage component
-  return <DocsPage document={document} product={product} />;
+  return <DocsPage document={document} />;
 }

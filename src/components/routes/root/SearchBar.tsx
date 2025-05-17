@@ -1,9 +1,11 @@
 import { useState, useRef, useEffect, type KeyboardEvent } from "react";
 import { Search as SearchIcon } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { cn } from "@/src/lib/utils";
 import { getSearchService, type SearchResultItem } from "@/src/lib/services/search";
 import { environment } from "@/src/lib/content/environment";
+import { useIsLandingPage } from "@/src/components/core";
+import { SEARCH_BAR_STYLES, ANIMATION_TIMING } from "./styles";
+import { useIsMobile } from "./hooks/useIsMobile";
 
 // Component for an individual search result
 interface SearchResultProps {
@@ -28,10 +30,7 @@ function SearchResult({ result, onSelect, isSelected = false, index, onHover }: 
       onClick={onSelect}
       onMouseEnter={() => onHover(index)}
       onMouseMove={() => onHover(index)}
-      className={cn(
-        "border-border/40 flex border-t px-5 py-4 text-sm transition-colors first:border-0",
-        isSelected ? "bg-accent/50" : ""
-      )}
+      className={SEARCH_BAR_STYLES.result(isSelected)}
     >
       <div className="min-w-0 flex-1">
         <div className="mb-2 flex items-center justify-between">
@@ -116,7 +115,7 @@ interface SearchInputProps {
   onFocus: () => void;
   inputRef: React.RefObject<HTMLInputElement | null>;
   isOpen: boolean;
-  isLandingPage?: boolean;
+  isMobile?: boolean;
 }
 
 function SearchInput({
@@ -125,65 +124,31 @@ function SearchInput({
   onFocus,
   inputRef,
   isOpen,
-  isLandingPage = false,
+  isMobile = false,
 }: SearchInputProps) {
+  const isLandingPage = useIsLandingPage();
   return (
     <div
-      className={cn(
-        "h-9 rounded-full transition-all duration-500",
-        isLandingPage
-          ? "border-0 bg-white/10 hover:bg-white/20"
-          : "border-border bg-background/20 hover:bg-primary/10 hover:border-primary/80 border",
-        isOpen
-          ? "w-80 md:w-[32rem]" // Wider when expanded
-          : "w-9 lg:w-36" // Icon-only on small screens, wider on lg screens
-      )}
-      style={
-        isLandingPage
-          ? { boxShadow: "0 1px 5px rgba(0, 0, 0, 0.15), 0 2px 10px rgba(0, 0, 0, 0.1)" }
-          : undefined
-      }
+      className={SEARCH_BAR_STYLES.inputContainer(isLandingPage, isMobile)}
+      data-testid="search-input"
+      style={SEARCH_BAR_STYLES.getInputContainerStyles(isLandingPage)}
       onClick={onFocus}
     >
-      <div className="relative flex h-full items-center overflow-visible">
-        <SearchIcon
-          size={16}
-          className={cn(
-            "transition-all duration-500",
-            isLandingPage ? "nav-icon-landing" : "nav-icon-regular",
-            isOpen ? "absolute left-3" : "mx-auto lg:absolute lg:left-3" // Center icon when collapsed on small screens
-          )}
-        />
-        <input
-          ref={inputRef}
-          readOnly={!isOpen}
-          type="text"
-          placeholder="Search..."
-          className={cn(
-            "cursor-pointer overflow-visible bg-transparent py-0 text-sm leading-normal transition-all duration-500 outline-none",
-            isLandingPage
-              ? "text-white placeholder:text-white/90"
-              : "text-foreground placeholder:text-foreground",
-            isOpen
-              ? "w-full pr-9 pl-10 opacity-100" // Full width when open
-              : "w-0 opacity-0 lg:w-28 lg:pr-3 lg:pl-10 lg:opacity-80" // Hide text on small screens, show on lg
-          )}
-          style={{ height: "auto", minHeight: "100%" }}
-          value={query}
-          onChange={(e) => onChange(e.target.value)}
-          onFocus={onFocus}
-        />
-        {isOpen && (
-          <kbd
-            className={cn(
-              "font-small absolute top-1/2 right-3 hidden h-5 -translate-y-1/2 items-center gap-1 rounded border px-1.5 font-mono text-[10px] opacity-80 lg:flex",
-              isLandingPage ? "bg-white/10 text-white" : "border-border bg-muted text-foreground"
-            )}
-          >
-            <span className="text-xs">⌘</span>K
-          </kbd>
-        )}
-      </div>
+      <SearchIcon size={16} className={SEARCH_BAR_STYLES.icon(isOpen)} />
+      <input
+        ref={inputRef}
+        readOnly={!isOpen}
+        type="text"
+        placeholder="Search..."
+        className={SEARCH_BAR_STYLES.input(isOpen, isLandingPage, isMobile)}
+        value={query}
+        onChange={(e) => onChange(e.target.value)}
+        onFocus={onFocus}
+        autoFocus={isMobile && isOpen} // Auto-focus in mobile mode
+      />
+      <kbd className={SEARCH_BAR_STYLES.kbd(isLandingPage, isOpen)}>
+        <span className="text-xs">⌘</span>K
+      </kbd>
     </div>
   );
 }
@@ -202,6 +167,7 @@ interface SearchResultsContainerProps {
   isLandingPage?: boolean;
   selectedIndex: number;
   setSelectedIndex: (index: number) => void;
+  isMobile?: boolean;
 }
 
 function SearchResultsContainer({
@@ -217,37 +183,12 @@ function SearchResultsContainer({
   isLandingPage = false,
   selectedIndex,
   setSelectedIndex,
+  isMobile = false,
 }: SearchResultsContainerProps) {
-  // Use a fixed state derived from isOpen with some delayed rendering logic
-  const [isReallyVisible, setIsReallyVisible] = useState(false);
-
-  // When isOpen changes, update visibility with a delay for animation
-  useEffect(() => {
-    if (isOpen) {
-      // Slight delay to allow search bar to expand first
-      const timer = setTimeout(() => setIsReallyVisible(true), 150);
-      return () => clearTimeout(timer);
-    } else {
-      setIsReallyVisible(false);
-    }
-  }, [isOpen]);
-
-  if (!isOpen) return null;
-
   return (
     <div
-      className={cn(
-        "search-results absolute top-full z-50 mt-2 w-screen max-w-[32rem] overflow-hidden rounded-lg shadow-2xl [text-shadow:none]",
-        "bg-background border-border border transition-opacity duration-300",
-        "right-0 lg:right-auto lg:left-0", // Position from right on small screens, from left on large screens
-        isLandingPage ? "textured-bg-absolute" : ""
-      )}
-      style={{
-        opacity: isReallyVisible ? 1 : 0,
-        ...(isLandingPage
-          ? { boxShadow: "0 1px 5px rgba(0, 0, 0, 0.15), 0 2px 10px rgba(0, 0, 0, 0.1)" }
-          : {}),
-      }}
+      className={SEARCH_BAR_STYLES.resultsContainer(isLandingPage, isMobile, isOpen)}
+      style={SEARCH_BAR_STYLES.getResultsContainerStyles(isLandingPage)}
       ref={resultsRef}
     >
       {renderSearchContent()}
@@ -263,7 +204,7 @@ function SearchResultsContainer({
     if (isLoading || isSearching) {
       return (
         <div className="flex justify-center p-4">
-          <div className="border-primary h-6 w-6 animate-spin rounded-full border-t-2 border-b-2"></div>
+          <div className={SEARCH_BAR_STYLES.loadingIndicator}></div>
           <span className="sr-only">Loading results...</span>
         </div>
       );
@@ -305,14 +246,21 @@ function SearchResultsContainer({
       );
     }
 
-    return <div className="text-muted-foreground p-4 text-center">Type to start searching</div>;
+    return <div className="text-muted-foreground p-4 text-center">Type to search</div>;
   }
 }
 
 // Component for the keyboard shortcut footer
 function SearchFooter() {
+  const isMobile = useIsMobile();
+
+  // Hide footer completely on mobile
+  if (isMobile) {
+    return null;
+  }
+
   return (
-    <div className="border-border bg-muted/40 text-muted-foreground flex items-center justify-between border-t p-2 text-xs">
+    <div className={SEARCH_BAR_STYLES.footer}>
       <div className="flex items-center gap-2 px-2">
         <kbd className="border-border rounded border px-1.5 py-0.5 text-[12px]">
           <span className="pr-1 text-xs">⌘</span>
@@ -329,12 +277,29 @@ function SearchFooter() {
 }
 
 interface SearchBarProps {
+  /**
+   * Called when search open state changes
+   */
   onOpenChange?: (isOpen: boolean) => void;
-  isLandingPage?: boolean;
+
+  /**
+   * Initial open state (useful for mobile overlay)
+   */
+  initialIsOpen?: boolean;
+
+  /**
+   * Called when a search result is selected
+   * Useful for mobile mode to close the overlay
+   */
+  onResultSelect?: () => void;
 }
 
-export default function SearchBar({ onOpenChange, isLandingPage = false }: SearchBarProps = {}) {
-  const [isOpen, setIsOpen] = useState(false);
+export default function SearchBar({
+  onOpenChange,
+  initialIsOpen = false,
+  onResultSelect,
+}: SearchBarProps = {}) {
+  const [isOpen, setIsOpen] = useState(initialIsOpen);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResultItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -345,28 +310,38 @@ export default function SearchBar({ onOpenChange, isLandingPage = false }: Searc
   const resultsRef = useRef<HTMLDivElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const [isPagefindLoaded, setIsPagefindLoaded] = useState(false);
+  const isMobile = useIsMobile();
 
   // Get the search service
   const searchService = getSearchService();
 
   // Focus input when search is opened
   useEffect(() => {
-    if (isOpen && inputRef.current) {
-      inputRef.current.focus();
+    if ((isOpen || initialIsOpen || isMobile) && inputRef.current) {
+      // Use a short timeout to ensure the DOM is ready and focus works reliably
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 50);
     }
 
-    // Use a slight delay to toggle visibility
+    // For mobile mode, don't call onOpenChange from within this effect
+    // to avoid circular callback chain
+    if (isMobile) {
+      return;
+    }
+
+    // Only for desktop: Use a slight delay to toggle visibility
     if (isOpen) {
       // Hide navigation immediately
       if (onOpenChange) onOpenChange(true);
     } else {
-      // Show navigation after search closes with a delay for smooth transition
+      // Show navigation after search closes with a delay that matches our animation
       const timer = setTimeout(() => {
         if (onOpenChange) onOpenChange(false);
-      }, 500);
+      }, ANIMATION_TIMING.getTotalDuration()); // Use centralized timing
       return () => clearTimeout(timer);
     }
-  }, [isOpen, onOpenChange]);
+  }, [isOpen, initialIsOpen, onOpenChange, isMobile]);
 
   // Handle keyboard shortcuts
   useEffect(() => {
@@ -374,6 +349,10 @@ export default function SearchBar({ onOpenChange, isLandingPage = false }: Searc
       // Close on escape key
       if (e.key === "Escape") {
         setIsOpen(false);
+        // Explicitly call onOpenChange for mobile mode to close the overlay
+        if (isMobile && onOpenChange) {
+          onOpenChange(false);
+        }
       }
 
       // Open on Cmd+K or Ctrl+K
@@ -482,6 +461,11 @@ export default function SearchBar({ onOpenChange, isLandingPage = false }: Searc
   const handleResultSelect = () => {
     setIsOpen(false);
     setQuery("");
+
+    // For mobile mode, call the onResultSelect prop to close the overlay
+    if (isMobile && onResultSelect) {
+      onResultSelect();
+    }
   };
 
   // Initialize the search service
@@ -513,19 +497,24 @@ export default function SearchBar({ onOpenChange, isLandingPage = false }: Searc
     setSelectedIndex(0);
   }, [results]);
 
+  // For mobile mode, use a simpler container without animations
+  const containerClassName = isMobile
+    ? "relative flex items-center w-full" // Full width, no transitions
+    : SEARCH_BAR_STYLES.container(isOpen);
+
   return (
-    <div className="relative flex justify-end lg:justify-start" ref={searchContainerRef}>
+    <div className={containerClassName} ref={searchContainerRef}>
       <SearchInput
         query={query}
         onChange={setQuery}
         onFocus={() => setIsOpen(true)}
         inputRef={inputRef}
-        isOpen={isOpen}
-        isLandingPage={isLandingPage}
+        isOpen={isOpen || isMobile} // Always show as open in mobile mode
+        isMobile={isMobile}
       />
 
       <SearchResultsContainer
-        isOpen={isOpen}
+        isOpen={isOpen || (isMobile && query.trim().length > 0)} // Always show in mobile with query
         isLoading={isLoading}
         isSearching={isSearching}
         isPagefindLoaded={isPagefindLoaded}
@@ -534,9 +523,9 @@ export default function SearchBar({ onOpenChange, isLandingPage = false }: Searc
         results={results}
         resultsRef={resultsRef}
         onResultSelect={handleResultSelect}
-        isLandingPage={isLandingPage}
         selectedIndex={selectedIndex}
         setSelectedIndex={setSelectedIndex}
+        isMobile={isMobile}
       />
     </div>
   );

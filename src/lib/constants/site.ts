@@ -26,7 +26,7 @@ export interface GithubInfo {
 
 export interface ProductConfig {
   title: string;
-  description: string;
+  tagline: string;
   github: GithubInfo;
 }
 
@@ -34,7 +34,7 @@ export interface ProductConfig {
 export const PRODUCT_CONFIGS: Record<ProductName, ProductConfig> = {
   mirascope: {
     title: "Mirascope",
-    description: "LLM abstractions that aren't obstructions.",
+    tagline: "LLM abstractions that aren't obstructions.",
     github: {
       repo: "Mirascope/mirascope",
       stars: githubStats.mirascope.stars,
@@ -43,7 +43,7 @@ export const PRODUCT_CONFIGS: Record<ProductName, ProductConfig> = {
   },
   lilypad: {
     title: "Lilypad",
-    description: "Start building your data flywheel in one line of code.",
+    tagline: "Spin up your data flywheel with one line of code.",
     github: {
       repo: "Mirascope/lilypad",
       stars: githubStats.lilypad.stars,

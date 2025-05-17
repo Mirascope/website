@@ -18,8 +18,10 @@ const MirascopeLogo: React.FC<BaseLogoProps> = ({
   const logoPath = "/assets/branding/mirascope-logo.svg";
 
   const logoContent = (
-    <div className={cn("flex flex-row items-center justify-center", containerClassName)}>
-      <div className={cn(selectedSize.spacing, imgClassName)}>
+    <div
+      className={cn("flex flex-shrink-0 flex-row items-center justify-start", containerClassName)}
+    >
+      <div className={cn(selectedSize.spacing, "flex-shrink-0", imgClassName)}>
         <img
           src={logoPath}
           alt="Mirascope Frog Logo"
@@ -28,15 +30,11 @@ const MirascopeLogo: React.FC<BaseLogoProps> = ({
       </div>
 
       {withText && (
-        <h1
-          className={cn(
-            selectedSize.text,
-            "text-mirascope-purple font-handwriting mb-0",
-            textClassName
-          )}
-        >
-          Mirascope
-        </h1>
+        <div className={cn("flex items-center", textClassName)}>
+          <h1 className={cn(selectedSize.text, "text-mirascope-purple font-handwriting mb-0")}>
+            Mirascope
+          </h1>
+        </div>
       )}
     </div>
   );

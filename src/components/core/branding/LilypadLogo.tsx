@@ -14,7 +14,7 @@ interface LilypadLogoProps extends BaseLogoProps {
 const LilypadLogo: React.FC<LilypadLogoProps> = ({
   size = "medium",
   withText = true,
-  showBeta = false,
+  showBeta = true,
   className,
   textClassName,
   imgClassName,
@@ -33,20 +33,16 @@ const LilypadLogo: React.FC<LilypadLogoProps> = ({
   };
 
   const logoContent = (
-    <div className={cn("flex flex-row items-center justify-center", containerClassName)}>
+    <div
+      className={cn("flex flex-shrink-0 flex-row items-center justify-start", containerClassName)}
+    >
       <div className={cn(selectedSize.spacing, imgClassName)}>
         <img src={logoPath} alt="Lilypad Logo" className={cn(selectedSize.img, imgClassName)} />
       </div>
 
       {withText && (
-        <div className="flex items-center">
-          <h1
-            className={cn(
-              selectedSize.text,
-              "text-lilypad-green font-handwriting mb-0",
-              textClassName
-            )}
-          >
+        <div className={cn("flex items-center", textClassName)}>
+          <h1 className={cn(selectedSize.text, "text-lilypad-green font-handwriting mb-0")}>
             Lilypad
           </h1>
 

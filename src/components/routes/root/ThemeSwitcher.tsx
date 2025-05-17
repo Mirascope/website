@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Sun, Moon, Monitor } from "lucide-react";
 import {
   DropdownMenu,
@@ -7,118 +6,49 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
 } from "@/src/components/ui/dropdown-menu";
-import { cn } from "@/src/lib/utils";
-import { useRouterState } from "@tanstack/react-router";
-
-type Theme = "light" | "dark" | "system";
-
-// Pure functions for theme management
-const getStoredTheme = (): Theme => {
-  if (typeof window === "undefined") return "system";
-  return (localStorage.getItem("theme") as Theme) || "system";
-};
-
-const storeTheme = (theme: Theme): void => {
-  localStorage.setItem("theme", theme);
-};
-
-const getEffectiveTheme = (theme: Theme): "light" | "dark" => {
-  if (theme !== "system") return theme;
-
-  if (typeof window === "undefined") return "light";
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-};
-
-const applyTheme = (theme: Theme): void => {
-  const root = document.documentElement;
-  const effectiveTheme = getEffectiveTheme(theme);
-
-  root.classList.remove("light", "dark");
-  root.classList.add(effectiveTheme);
-};
+import { useTheme, useIsLandingPage, type Theme } from "@/src/components/core/providers";
+import { THEME_SWITCHER_STYLES } from "./styles";
 
 export default function ThemeSwitcher() {
-  const [theme, setTheme] = useState<Theme>("system");
-  const [mounted, setMounted] = useState(false);
-  const router = useRouterState();
-  const isLandingPage = router.location.pathname === "/";
+  const { theme, current, set: setTheme } = useTheme();
+  const isLandingPage = useIsLandingPage();
 
   const handleThemeChange = (newTheme: Theme) => {
+    // Get current effective theme before change for transition effect
+    const prevEffectiveTheme = current;
+
+    // Set the new theme through the context
     setTheme(newTheme);
-    storeTheme(newTheme);
 
-    if (mounted) {
-      const prevEffectiveTheme = getEffectiveTheme(theme);
-      const newEffectiveTheme = getEffectiveTheme(newTheme);
-
-      applyTheme(newTheme);
-
-      // For theme changes on homepage, update the background transition
-      if (isLandingPage && prevEffectiveTheme !== newEffectiveTheme) {
-        document.body.style.transition = "background-image 0.3s ease";
-      }
+    // For theme changes on homepage, update the background transition
+    if (isLandingPage && prevEffectiveTheme !== (newTheme === "system" ? current : newTheme)) {
+      document.body.style.transition = "background-image 0.3s ease";
     }
   };
-
-  // Initialize on mount
-  useEffect(() => {
-    setMounted(true);
-    const savedTheme = getStoredTheme();
-    setTheme(savedTheme);
-    applyTheme(savedTheme);
-  }, []);
-
-  // Handle system theme changes
-  useEffect(() => {
-    if (!mounted) return;
-
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-
-    const handleSystemThemeChange = () => {
-      if (theme === "system") {
-        applyTheme("system");
-      }
-    };
-
-    mediaQuery.addEventListener("change", handleSystemThemeChange);
-    return () => mediaQuery.removeEventListener("change", handleSystemThemeChange);
-  }, [theme, mounted]);
-
-  if (!mounted) {
-    return null;
-  }
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button
-          className={cn(
-            "focus:ring-primary mr-2 cursor-pointer rounded-md p-2 transition-colors focus:ring-2 focus:outline-none",
-            isLandingPage ? "nav-icon-landing" : "nav-text-regular"
-          )}
-          aria-label="Select theme"
-        >
-          {theme === "light" && <Sun size={20} className={cn(isLandingPage && "icon-shadow")} />}
-          {theme === "dark" && <Moon size={20} className={cn(isLandingPage && "icon-shadow")} />}
-          {theme === "system" && (
-            <Monitor size={20} className={cn(isLandingPage && "icon-shadow")} />
-          )}
+        <button className={THEME_SWITCHER_STYLES.trigger} aria-label="Select theme">
+          {theme === "light" && <Sun size={20} />}
+          {theme === "dark" && <Moon size={20} />}
+          {theme === "system" && <Monitor size={20} />}
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className={cn(isLandingPage && "textured-bg-absolute")} align="end">
+      <DropdownMenuContent className={THEME_SWITCHER_STYLES.content(isLandingPage)} align="end">
         <DropdownMenuRadioGroup
           value={theme}
           onValueChange={(value) => handleThemeChange(value as Theme)}
         >
-          <DropdownMenuRadioItem value="light">
+          <DropdownMenuRadioItem value="light" className={THEME_SWITCHER_STYLES.radioItem}>
             <Sun className="mr-2 h-4 w-4" />
             <span>Light</span>
           </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="dark">
+          <DropdownMenuRadioItem value="dark" className={THEME_SWITCHER_STYLES.radioItem}>
             <Moon className="mr-2 h-4 w-4" />
             <span>Dark</span>
           </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="system">
+          <DropdownMenuRadioItem value="system" className={THEME_SWITCHER_STYLES.radioItem}>
             <Monitor className="mr-2 h-4 w-4" />
             <span>System</span>
           </DropdownMenuRadioItem>
