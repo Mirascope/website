@@ -28,7 +28,6 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/src/components/ui/ta
 import { Button } from "@/src/components/ui/button";
 import { ButtonLink } from "@/src/components/ui/button-link";
 import { Logo, MirascopeLogo, LilypadLogo } from "@/src/components/core/branding";
-import { Underline } from "./Underline";
 import { ProviderCodeWrapper } from "./ProviderCodeWrapper";
 import { ResponsiveImage } from "@/src/components/mdx/providers/ResponsiveImage";
 import { devComponents } from "@/src/components/mdx/elements/DevComponents";
@@ -127,7 +126,6 @@ export const components = {
 
   // Shorthand components
   Install: InstallSnippet,
-  U: Underline,
 
   // Standard HTML elements
   h1: ({ children, ...props }: React.ComponentPropsWithoutRef<"h1">) => {
