@@ -98,18 +98,11 @@ For a detailed overview of the content system architecture, please see [Content 
 
 ### Code Snippet Extraction
 
-The documentation contains Python code snippets that are automatically extracted to create runnable example files. These examples are stored in the repository and verified by CI to ensure they stay in sync with the documentation.
+The documentation contains Python code snippets that are automatically extracted to create runnable example files. These examples are stored in the repository and verified by CI to ensure they stay in sync with the documentation. We find all files matching `content/**/*.mdx`, and process all Python code blocks in such files into snippets. We then substitute in `openai` as as the provider (for `$PROVIDER`/`$MODEL` substitution), and typecheck the examples.
 
-#### How it works
+Files or directories may be excluded from snippet processing by modifying the `IGNORED_PATHS` variable at the top of `generate-snippets.ts`.
 
-1. In `content/docs/_meta.ts`, docs with extractable snippets are marked with `hasExtractableSnippets: true`
-2. The extraction system pulls Python code blocks from these MDX files
-3. For each provider (OpenAI, Anthropic), it generates runnable example files with substituted variables
-4. Examples are stored in `.extracted-snippets/` with an organized directory structure
-
-#### Working with Snippets
-
-- `bun run lint:snippets` - Re-extract snippets and run typechecking and linting
+To run snippet validation, use `bun run lint:snippets`.
 
 #### Handling Partial Code Examples
 

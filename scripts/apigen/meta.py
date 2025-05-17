@@ -58,9 +58,6 @@ class DocSpec:
         if self.weight is not None:
             result["weight"] = self.weight
 
-        if self.has_extractable_snippets is not None:
-            result["hasExtractableSnippets"] = self.has_extractable_snippets
-
         if self.children is not None:
             result["children"] = [child.to_dict() for child in self.children]
 

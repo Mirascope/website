@@ -2,7 +2,7 @@
  * Snippet extraction module.
  *
  * This module provides low-level functions for extracting code snippets from MDX files
- * and generating runnable Python examples for different providers.
+ * and generating runnable Python examples.
  */
 
 import * as fs from "fs";
@@ -24,7 +24,7 @@ export interface Snippet {
 export function extractSnippets(filePath: string): Snippet[] {
   const content = fs.readFileSync(filePath, "utf-8");
 
-  // Match all Python code blocks
+  // Match all Python code blocks but exclude python-no-extract blocks
   const regex = /```python\n([\s\S]*?)```/g;
   const snippets: Snippet[] = [];
 
@@ -141,7 +141,7 @@ ${processedSnippet}
 /**
  * Process a single MDX file for a given provider
  */
-export function processFile(mdxFile: string, customOutputDir: string | null = null): string[] {
+export function processFile(mdxFile: string): string[] {
   if (!fs.existsSync(mdxFile)) {
     console.error(`Error: File ${mdxFile} not found`);
     return [];
@@ -152,28 +152,28 @@ export function processFile(mdxFile: string, customOutputDir: string | null = nu
   const headings = extractHeadings(mdxFile);
 
   if (snippets.length === 0) {
-    console.warn("No Python snippets found in the file.");
     return [];
   }
 
-  // Determine output directory
+  // Get the base filename without extension
   const baseName = path.basename(mdxFile, path.extname(mdxFile));
-  const dirName = path.dirname(mdxFile);
 
-  let outputDir;
-  if (customOutputDir) {
-    // Use custom output directory if provided
-    outputDir = path.resolve(customOutputDir);
-  } else {
-    // Create examples under .extracted-snippets directory to make them accessible
-    // Structure: .extracted-snippets/mirascope/getting-started/quickstart/openai/
-    // Get the relative path part after content/docs/
-    const relativePath = dirName.includes("content/docs/")
-      ? dirName.split("content/docs/")[1]
-      : path.basename(dirName);
+  // Find the path relative to the content directory
+  const contentDirPath = path.join(process.cwd(), "content"); // Assuming content is at the root
+  let relativePath = path.relative(contentDirPath, path.dirname(mdxFile));
 
-    outputDir = path.join(process.cwd(), ".extracted-snippets", relativePath, baseName);
+  // Handle case where the file isn't in the content directory
+  if (relativePath.startsWith("..")) {
+    console.warn(`Warning: File ${mdxFile} is not within the content directory`);
+    // Fallback to just using the immediate parent directory
+    relativePath = path.basename(path.dirname(mdxFile));
   }
+
+  // Create the output directory with the full relative path structure preserved
+  const outputDir = path.join(process.cwd(), ".extracted-snippets", relativePath, baseName);
+
+  // Ensure the output directory exists
+  fs.mkdirSync(outputDir, { recursive: true });
 
   // Generate a separate Python file for each snippet
   const generatedFiles: string[] = [];
