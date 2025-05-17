@@ -87,7 +87,6 @@ export interface ContentMeta {
 // Type-specific metadata extensions
 export interface DocMeta extends ContentMeta {
   product: string;
-  hasExtractableSnippets: boolean;
 }
 
 export interface BlogMeta extends ContentMeta {
@@ -146,7 +145,6 @@ export interface DocSpec {
   slug: Slug;
   label: string;
   children?: DocSpec[];
-  hasExtractableSnippets?: boolean;
 }
 
 export interface SectionSpec {

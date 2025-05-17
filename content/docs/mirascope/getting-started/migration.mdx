@@ -61,7 +61,7 @@ The most significant change in v1 is the shift from class-based to decorator-bas
 
 Before (v0):
 
-```python
+```python-snippet-skip
 from mirascope.openai import OpenAICall
 
 
@@ -78,7 +78,7 @@ print(response.content)
 After (v1):
 
 ```python
-from mirascope.core import openai, prompt_template
+from mirascope.core import openai
 
 
 @openai.call("gpt-4o-mini")
@@ -182,7 +182,7 @@ It's evident that `genre` and `history` are state of the `Librarian` class, and 
 
 Before (v0):
 
-```python
+```python-snippet-skip
 import asyncio
 
 from mirascope.openai import OpenAICall
@@ -192,10 +192,12 @@ class BookRecommender(OpenAICall):
     prompt_template = "Recommend a {genre} book."
     genre: str
 
+def main():
+    recommender = BookRecommender(genre="fantasy")
+    response = await recommender.call_async()
+    print(response.content)
 
-recommender = BookRecommender(genre="fantasy")
-response = asyncio.run(recommender.call_async())
-print(response.content)
+asyncio.run(main())
 ```
 
 After (v1):
@@ -203,23 +205,25 @@ After (v1):
 ```python
 import asyncio
 
-from mirascope.core import openai, prompt_template
+from mirascope.core import openai
 
 
 @openai.call("gpt-4o-mini")
 async def recommend_book(genre: str) -> str:
     return f"Recommend a {genre} book."
 
+async def main():
+    response = await recommend_book("fantasy") 
+    print(response.content)
 
-response = asyncio.run(recommend_book("fantasy"))
-print(response.content)
+asyncio.run(main())
 ```
 
 ### Streaming
 
 Before (v0):
 
-```python
+```python-snippet-skip
 from mirascope.openai import OpenAICall
 
 
@@ -237,7 +241,7 @@ for chunk in stream:
 After (v1):
 
 ```python
-from mirascope.core import openai, prompt_template
+from mirascope.core import openai
 
 
 @openai.call("gpt-4o-mini", stream=True)
@@ -254,7 +258,7 @@ for chunk, _ in stream:
 
 Before (v0):
 
-```python
+```python-snippet-skip
 from mirascope.openai import OpenAICall, OpenAICallParams, OpenAITool
 
 
@@ -285,7 +289,7 @@ else:
 After (v1):
 
 ```python
-from mirascope.core import BaseTool, openai, prompt_template
+from mirascope.core import BaseTool, openai
 
 
 class FormatBook(BaseTool):
@@ -320,7 +324,7 @@ If you were using functions as tools, these can still be used as tools in the sa
 
 Before (v0):
 
-```python
+```python-snippet-skip
 from mirascope.openai import OpenAICall, OpenAICallParams, OpenAIToolStream
 
 
@@ -345,7 +349,7 @@ for tool in tool_stream:
 After (v1):
 
 ```python
-from mirascope.core import openai, prompt_template
+from mirascope.core import openai
 
 
 def format_book(title: str, author: str):
@@ -375,7 +379,7 @@ for chunk, tool in stream:
 
 Before (v0):
 
-```python
+```python-snippet-skip
 from mirascope.openai import OpenAIExtractor
 from pydantic import BaseModel
 
@@ -402,7 +406,7 @@ print(book)
 After (v1):
 
 ```python
-from mirascope.core import openai, prompt_template
+from mirascope.core import openai
 from pydantic import BaseModel
 
 
@@ -425,7 +429,7 @@ print(book)
 
 Before (v0):
 
-```python
+```python-snippet-skip
 from mirascope.openai import OpenAICallParams, OpenAIExtractor
 from pydantic import BaseModel
 
@@ -453,7 +457,7 @@ print(book)
 After (v1):
 
 ```python
-from mirascope.core import openai, prompt_template
+from mirascope.core import openai
 from pydantic import BaseModel
 
 
@@ -475,7 +479,7 @@ print(book)
 
 Before (v0)
 
-```python
+```python-snippet-skip
 from mirascope.openai import OpenAIExtractor
 from pydantic import BaseModel
 
@@ -500,7 +504,7 @@ for partial_book in book_stream:
 After (v1)
 
 ```python
-from mirascope.core import openai, prompt_template
+from mirascope.core import openai
 from pydantic import BaseModel
 
 
@@ -523,7 +527,7 @@ for partial_book in book_stream:
 
 Before (v0):
 
-```python
+```python-snippet-skip
 from mirascope.openai import OpenAICall
 from pydantic import computed_field
 
@@ -585,7 +589,7 @@ print(response.fn_args["author"])
 
 Before (v0):
 
-```python
+```python-snippet-skip
 from mirascope.openai import OpenAICall
 
 
@@ -602,7 +606,7 @@ print(response.dump())
 After (v1):
 
 ```python
-from mirascope.core import openai, prompt_template
+from mirascope.core import openai
 
 
 @openai.call("gpt-4o-mini")
@@ -618,7 +622,7 @@ print(response.model_dump())
 
 Before (v0):
 
-```python
+```python-snippet-skip
 from mirascope.openai import OpenAICall
 from openai.types.chat import ChatCompletionMessageParam
 
@@ -672,7 +676,7 @@ print(response.content)
 
 Before (v0):
 
-```python
+```python-snippet-skip
 from fastapi import FastAPI
 from mirascope.openai import OpenAIExtractor
 from pydantic import BaseModel
@@ -702,7 +706,7 @@ After (v1):
 
 ```python
 from fastapi import FastAPI
-from mirascope.core import openai, prompt_template
+from mirascope.core import openai
 from pydantic import BaseModel
 
 app = FastAPI()

@@ -385,7 +385,6 @@ export class ContentPreprocessor {
           title: frontmatter.title,
           description: frontmatter.description,
           product,
-          hasExtractableSnippets: frontmatter.hasExtractableSnippets || false,
           searchWeight: docInfo.searchWeight,
         } as Partial<DocMeta>;
         break;

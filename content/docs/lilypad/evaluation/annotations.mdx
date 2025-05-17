@@ -68,8 +68,10 @@ Setting `mode="wrap"` in the `trace` decorator converts the original return type
 For example, you might want to enable passthrough annotation so that your users can annotate traces directly:
 
 ```python
+from google.genai import Client
 import lilypad
 
+client = Client()
 lilypad.configure()
 
 @lilypad.trace(name="Answer Question", versioning="automatic", mode="wrap")  # [!code highlight]
@@ -84,5 +86,11 @@ trace: lilypad.Trace[str | None] = answer_question("What is the capital of Franc
 print(trace.response)  # original response
 # > The capital of France is Paris.
 
-trace.annotate(label="PASS", reason="The answer was correct")  # [!code highlight]
+annotation = lilypad.Annotation(  # [!code highlight]
+    label="pass",  # [!code highlight]
+    reasoning="The answer was correct",  # [!code highlight]
+    data=None,  # [!code highlight]
+    type=None,  # [!code highlight]
+)  # [!code highlight]
+trace.annotate(annotation)  # [!code highlight]
 ```

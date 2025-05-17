@@ -28,7 +28,7 @@ client = Lilypad(
 traces = client.projects.traces.list(
     project_uuid=os.environ["LILYPAD_PROJECT_ID"],
 )
-print(traces["items"][0])
+print(traces.items[0])
 # > {'span_id': '...', ...}
 ```
 </Tab>
@@ -48,7 +48,7 @@ async def main():
     traces = await client.projects.traces.list(
         project_uuid=os.environ["LILYPAD_PROJECT_ID"],
     )
-    print(traces["items"][0])
+    print(traces.items[0])
     # > {'span_id': '...', ...}
 
 
