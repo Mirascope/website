@@ -1,502 +1,262 @@
 ---
 title: "Five Tools to Help You Leverage Prompt Versioning in Your LLM Workflow"
-description: "Complex prompts require adequate prompt versioning. This article explores five tools to help you track changes in your LLM prompts."
-date: "2024-05-03"
+description: "Complex prompts require complete versioning and tracing. This article explores five tools to help you track changes in your LLM prompts."
+date: "2025-05-18"
 readTime: "18 min read"
 author: "William Bakst"
 ---
+ 
 
-In our experience, fine-tuning inputs to coax the right answers out of language models requires some level of prompt versioning, otherwise it becomes extremely difficult to keep track of changes past a couple of versions.
+# Five Tools to Help You Leverage Prompt Versioning in Your LLM Workflow
 
-**So the next question becomes:** What kind of versioning system or tool is best?
+Prompt versioning means giving each iteration of a prompt its own identifier, so you can tweak and test different versions without losing track. It lets you compare results, roll back to earlier versions, and see what actually works over time.
 
-You’ll want a versioning system that’s adequate to the complexity of your prompts. For prompts that are simple-like pure text or even f-strings containing a placeholder or two-you could consider existing structures and tools such as:
+In regular coding, versioning is standard, but with prompts for language models, it's even more important. That’s because LLMs are non-deterministic, and **don’t always behave the same way, even if you feed them the exact same input**.
 
-- Lists and nested dictionaries for defining a base prompt, inserting variables as needed from another dictionary, with some rudimentary versioning thrown in.‍
-- Git, or external configurations like environment variables.
+The results also change based on things like model settings, system messages, or temperature. So if you want consistent, high-quality outputs, you need to track every piece of the puzzle.
 
-These methods could work for simpler prompts, but they’re not terribly efficient and may break down at scale because of growing overhead, or because they’re not well integrated with whatever prompt engineering tool or workflow you’re using.
+That’s where prompt versioning comes in. It helps you treat prompting like a real optimization problem, not just trial and error. You can start isolating variables, testing what matters, and getting repeatable results.
 
-We’d even argue that, due to their highly iterative and experimental nature, prompts deserve special management. They require a versioning system that’s specifically designed to handle the dynamic nature of prompt development, where each variation needs to be tracked, compared, and reverted in order to quickly refine prompts and deploy them in a controlled, traceable manner.
+One way we do this is by wrapping prompts inside Python functions and decorating them with `@lilypad.trace`. This lets us cleanly separate prompt logic from the rest of the code and track every change. It’s an effective way to measure what’s really influencing the model’s output.
 
-In fact, our experience suggests that any prompt management system should, at a minimum:
+Ultimately, when your code isn’t well structured, **you end up having to think through the optimization process rather than just improving it**. That’s why we built Lilypad, an open-source framework that views prompt engineering as an optimization problem that should be addressed using best practices in software development.
 
-- Organize a central workspace (whether that workspace is local or located on a remote hub) for managing prompts.
-- Offer a structured and intuitive versioning system, along with a way to document changes that were made in each version.
-- Enable easy navigation between different versions, and the ability to retrieve any specific version.
-- Provide an audit trail of who made changes, when these changes were made, and why.
-- Be well integrated with your prompt development tool, which in turn either integrates with, or supports LLM pipeline functionalities.
+In the rest of this article, we’ll walk you through five top frameworks (including Lilypad) for managing prompt versioning and optimization.
 
-**Below, we list five different [prompting tools](/blog/prompt-engineering-tools) that implement prompt management**, starting with an in depth discussion on how we designed [Mirascope](https://github.com/mirascope/mirascope) and Lilypad, our own toolkit and framework, respectively, for developing robust LLM applications, with respect to the discussion above.
+* [Lilypad](#1-lilypad-structuring-ai-development-for-continuous-improvement) — software developer-inspired prompt engineering, versioning, and management.  
+* [LangSmith](#2.-langsmith-—-prompt-versioning-from-a-central-hub) — prompt versioning from a central hub.  
+* [Langfuse](#3.-langfuse-—-direct-integration-with-llms-without-a-proxy-layer) —  direct integration with LLMs without a proxy layer.  
+* [Weave](#4.-weave-—-suite-of-ai-tools-and-custom-models) —  suite of AI tools and custom models.  
+* [PromptHub](#5.-prompthub-—-user-friendly-collaborations-for-team-members) — user-friendly collaborations for team members.
 
-1. [**Mirascope and Lilypad**](#1-mirascope-and-lilypadprompt-engineering-and-management-for-software-engineers)-software engineering-inspired prompt engineering, versioning, and management.
-2. [**LangSmith**](#2-langsmithprompt-versioning-from-a-central-hub)-prompt versioning from a central hub.
-3. [**Agenta**](#3-agentawide-compatibility-with-llm-app-frameworks)-wide compatibility with LLM app frameworks.
-4. [**Pezzo**](#4-pezzovisual-prompt-management-and-testing)-visual prompt management and testing.
-5. [**PromptHub**](#5-prompthubfor-collaboration-between-tech-and-non-tech-roles)-for collaboration between tech and non-tech roles.
+## 1. Lilypad — Structuring AI Development for Continuous Improvement
 
-## 1. Mirascope and Lilypad-Prompt Engineering and Management For Software Engineers
+![Lilypad Homepage](/assets/blog/prompt-versioning/lilypad-homepage.png)
 
-![Mirascope homepage: LLM abstractions that aren't obstructions](/assets/blog/langchain-alternatives/mirascope_homepage_screenshot.png)
+[Lilypad](/docs/lilypad) addresses the challenges of working with non-deterministic LLM outputs by providing open source tools for automatic versioning and tracing of LLM calls, allowing you to manage and evaluate prompts.
 
-[Mirascope](https://github.com/mirascope/mirascope) is a lightweight Python toolkit for building production-grade LLM applications. We built Mirascope as a modular library with scalability in mind. For example, we provide a prompt template decorator so you can write prompts as Python functions, rather than a host of prompt templates for every conceivable use case. Our library recommends native Python for many tasks rather than offering complex abstractions that require a learning curve.
+Lilypad supports prompt engineering as an optimization process by:
 
-Our prompt management and versioning framework, [Lilypad](/docs/lilypad), system works along similar lines. Among other things, we:
+* Automatically versioning code every time it runs so you can properly track and measure every LLM interaction.  
+* Annotation tooling purpose built for kickstarting your data flywheel.  
+* Making it as simple as possible for (non-technical) domain experts to collaborate in prompt development, including labeling and evaluating prompts.  
+* Integrating into existing workflows through its compatibility with various LLM providers and frameworks (e.g., LangChain, Mirascope, etc.), making it provider and tool agnostic.  
+* Flexible enough to handle any aspect of prompt engineering, even retrieval for RAG applications.  
+* First-class type-safety.
 
-- Enable using the tool locally with your LLM prompts
-- Provide version control and prompt management best practices, automatically
-- Group everything that affects the quality of an LLM call, including the prompt, together as one cohesive unit (colocation) so it can all be versioned together.
-- Assure the integrity of inputs to your prompts.
+We dive into how Lilypad implements these key features.
 
-These principles are described in detail in the list of Mirascope features below:
+### Structure Your Code for Complete Traceability
 
-### Track Changes in Prompts to Efficiently Manage Them
+Lilypad promotes traceability and software developer best practices starting with the way it encapsulates LLM calls, including all inputs and parameters needed for that call, within functions.
 
-In the following sections, we describe how we make it as easy as possible to track changes to your prompt code by colocating prompts with LLM calls, and by managing prompts with Lilypad.
+This colocates everything required for tracking prompts, model configurations, and function logic, like the prompt template, any pre- or postprocessing steps, etc.
 
-#### Colocating Prompts with LLM Calls
+It also prevents mixing of elements together with business logic, which would make it harder to isolate variables and track changes.
 
-In previous experiences working with prompts, we found that it’s easy to lose oversight if you scatter everything that affects the quality of the LLM call (like the model parameters or other relevant prompt code) throughout the codebase.
+Below is an example of an LLM call, along with all relevant parameters, wrapped in a function:
 
-We find this to be a common issue with other frameworks and libraries that don’t enforce colocation, since it becomes harder to trace the effects of changes made to one part of your code, and introduces unnecessary complexity.
-
-**Mirascope therefore makes the LLM call the [central primitive](/blog/engineers-should-handle-prompting-llms)** around which everything, including the prompt, is versioned. It’s hard to overstate the advantages to the developer experience in doing this, especially when your library is making over 100 LLM calls within an enterprise-level LLM application.
-
-An example of colocation is shown below; `call_params` encapsulates parameters needed for making an OpenAI API call within the context of the `get_song_review()` call.
-
-```python
-from mirascope import openai, prompt_template
-
-@openai.call("gpt-4o-mini", call_params={"temperature": 0.4})
-@prompt_template(
-    """
-    SYSTEM:
-    You are an acclaimed music producer.
-
-    USER:
-    I'm working on a new song. What do you think?
-    {song_lyrics}
-    """
-)
-def review_song(song_lyrics: str): ...
-
-song_lyrics = "I woke up feeling oh so great, I cooked some food that I ate"
-response = review_song(song_lyrics)
-
-print(response.model_dump())
-
-# {
-
-#     "metadata": {},
-
-#     "response": {
-
-#         "id": "chatcmpl-9uO3BPd58TzVWjRejHJxagctE6OSi",
-
-#         "choices": [
-
-#             {
-
-#                 "finish_reason": "stop",
-
-#                 "index": 0,
-
-#                 "logprobs": None,
-
-#                 "message": {
-
-#                     "content": 'That’s a solid start! The positive vibe in those lines is infectious. You might want to build on that feeling of joy and satisfaction. Consider adding some imagery or details about the food or the morning to create a more vivid scene. Here’s a suggestion for how you might expand it:\n\n"I woke up feeling oh so great,  \nSunshine streaming, can\'t be late,  \nI cooked some food that I ate,  \nPancakes flipping, can’t wait!"\n\nThis keeps the upbeat energy and adds a bit more texture. What direction are you thinking of taking the song?',
-
-#                     "refusal": None,
-
-#                     "role": "assistant",
-
-#                     "function_call": None,
-
-#                     "tool_calls": None,
-
-#                 },
-
-#             }
-
-#         ],
-
-#         "created": 1723225845,
-
-#         "model": "gpt-4o-mini-2024-07-18",
-
-#         "object": "chat.completion",
-
-#         "service_tier": None,
-
-#         "system_fingerprint": "fp_507c9469a1",
-
-#         "usage": {"completion_tokens": 116, "prompt_tokens": 45, "total_tokens": 161},
-
-#     },
-
-#     "tool_types": [],
-
-#     "prompt_template": "\n    SYSTEM:\n    You are an acclaimed music producer.\n    \n    USER:\n    I'm working on a new song. What do you think?\n    {song_lyrics}\n    ",
-
-#     "fn_args": {
-
-#         "song_lyrics": "I woke up feeling oh so great, I cooked some food that i ate"
-
-#     },
-
-#     "dynamic_config": None,
-
-#     "messages": [
-
-#         {"role": "system", "content": "You are an acclaimed music producer."},
-
-#         {
-
-#             "role": "user",
-
-#             "content": "I'm working on a new song. What do you think?\nI woke up feeling oh so great, I cooked some food that i ate",
-
-#         },
-
-#     ],
-
-#     "call_params": {"temperature": 0.4},
-
-#     "call_kwargs": {
-
-#         "temperature": 0.4,
-
-#         "model": "gpt-4o-mini",
-
-#         "messages": [
-
-#             {"role": "system", "content": "You are an acclaimed music producer."},
-
-#             {
-
-#                 "role": "user",
-
-#                 "content": "I'm working on a new song. What do you think?\nI woke up feeling oh so great, I cooked some food that i ate",
-
-#             },
-
-#         ],
-
-#     },
-
-#     "user_message_param": {
-
-#         "content": "I'm working on a new song. What do you think?\nI woke up feeling oh so great, I cooked some food that i ate",
-
-#         "role": "user",
-
-#     },
-
-#     "start_time": 1723225844872.8289,
-
-#     "end_time": 1723225846620.729,
-
-#     "message_param": {
-
-#         "content": 'That’s a solid start! The positive vibe in those lines is infectious. You might want to build on that feeling of joy and satisfaction. Consider adding some imagery or details about the food or the morning to create a more vivid scene. Here’s a suggestion for how you might expand it:\n\n"I woke up feeling oh so great,  \nSunshine streaming, can\'t be late,  \nI cooked some food that I ate,  \nPancakes flipping, can’t wait!"\n\nThis keeps the upbeat energy and adds a bit more texture. What direction are you thinking of taking the song?',
-
-#         "refusal": None,
-
-#         "role": "assistant",
-
-#         "tool_calls": None,
-
-#     },
-
-#     "tools": None,
-
-#     "tool": None,
-
-# }
-
-```
-
-Even when using the official provider's SDK, we recommend colocating everything inside what we call an "LLM function":
-
-```python
+```python{7-14}
+import lilypad
 from openai import OpenAI
 
-client = OpenAI()
-
-def review_song(song_lyrics: str) -> str:
-    completion = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": "You are an acclaimed music producer."},
-            {"role": "user", "content": f"I'm working on a new song. What do you think?\n{song_lyrics}"}
-        ]
-    )
-    return str(completion.choices[0].message.content)
-```
-
-This is extremely important for versioning everything together as a single unit.
-
-#### Managing Prompts with Lilypad
-
-Lilypad offers a [prompt management and versioning](/docs/lilypad) framework that versions and traces every LLM function call automatically. This helps you iterate faster on prompts and their calls rather than worrying about the tedium of versioning and tracing things manually. Ultimately, this provides a more structured way to refine and tests prompts easily while maintaining a clean and organized environment.
-
-The automatically version and trace, all you need to do is add the `lilypad.trace` decorator on top of your LLM function:
-
-```python
-import lilypad
-from mirascope import llm
-
-lilypad.configure(auto_llm=True)  # [!code highlight] 
-
-
-@lilypad.trace(versioning="automatic")  # [!code highlight]
-@llm.call("openai", "gpt-4o-mini")
-def recommend_book(genre: str) -> str:
-    return f"Recommend a {genre} book"
-
-if __name__ == "__main__":
-    output = recommend_book("fantasy")
-    print(output.content)
-```
-
-We include the `if __name__` bit so that you can run `recommend_book` easily during development in isolation. The above example shows using Lilypad with Mirascope, but Lilypad also works with the official provider SDKs (e.g. the previous OpenAI SDK example).
-
-When using the `lilypad.trace` decorator, the version is determined based on all user-defined code that could impact the prompt. In more technical terms, the version is determined by the entire lexical closure.
-
-This means not only that any changes to the function itself will be versioned but also that any changes to user-defined functions used by this function will also update the version:
-
-```python
-import lilypad
-from mirascope import llm
-
 lilypad.configure(auto_llm=True)
-
-# Changes to this function will also be detected and bump
-
-# the version of the LLM function :)
-
-def get_available_books() -> list[str]:    # [!code highlight]
-    return ["The Name of the Wind"]    # [!code highlight]
+client = OpenAI()
 
 
 @lilypad.trace(versioning="automatic")
-@llm.call("openai", "gpt-4o-mini")
 def recommend_book(genre: str) -> str:
-    books = get_available_books()    # [!code highlight]
-    return f"Recommend a {genre} book from this list: {books}"
+    completion = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": f"Recommend a {genre} book"}],
+    )
+    return str(completion.choices[0].message.content)
+
+if __name__ == "__main__":
+    response = recommend_book("science fiction")
+    print(response)
+```
+
+Note the function is decorated by `@lilypad.trace(versioning="automatic")`. This structures the LLM API call as a non-deterministic function that takes a set of inputs (i.e., the function's arguments) and returns a final, generated output (i.e., the function's return value). The `@lilypad.trace` decorator tells Lilypad that this function should be traced every time it executes so we can capture things like the input arguments and output (as well as latency, cost, etc.). 
+
+By specifying `versioning="automatic"` , **we're telling Lilypad that this function should be automatically versioned every time it executes**. This makes it easy to compare different versions of your prompts by comparing the two different function versions and their outputs.
+
+And it does this using only a few lines of code. So by adding the `trace` decorator to a function, you're ensuring that any and all changes get automatically versioned and traced every time you run the code. And the output will show up in Lilypad:
+
+![Answer Question Version 1 Trace](/assets/blog/prompt-versioning/answer-question-v1.png)
+
+Note the version numbers: Lilypad assigns this initial version as V1. To the right you see a panel with all of the trace information, such as the output. Running the same function again will capture that execution's trace against the same version.
+
+When we change the model type in the call to `gpt-4o`, Lilypad automatically increments it to V2:
+
+![Answer Question V2 Trace](/assets/blog/prompt-versioning/answer-question-v2.png)
+
+Changing any aspect of the function automatically increments the version number. In fact, Lilypad will automatically detect the correct version so you can simply revert and not worry about properly tracing everything. And if a change is identical to a previous version, Lilypad won’t create a new version because it will detect the existing version automatically.
+
+This makes comparing versions extremely easy:
+
+![Answer Question V1 & V2 Comparison](/assets/blog/prompt-versioning/answer-question-v1-v2-comparison.png)
+
+Lilypad versions LLM calls using their function closure, which means any user-defined functions or classes it interacts with (that are within scope) **are also logged and tracked automatically**. 
+
+For example, we may decide that we want to structure our outputs, which will affect the return type of our function:
+
+```python{8-10,14}
+import lilypad
+from openai import OpenAI
+from pydantic import BaseModel
+
+lilypad.configure(auto_llm=True)
+client = OpenAI()
+
+class Answer(BaseModel):
+    reason: str
+    answer: str
+
+
+@lilypad.trace(versioning="automatic")
+def answer_question(question: str) -> Answer | None:
+    completion = client.beta.chat.completions.parse(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": f"Answer this question: {question}"}],
+        response_format=Answer,
+    )
+    return completion.choices[0].message.parsed
 
 
 if __name__ == "__main__":
-    output = recommend_book("fantasy")
-    print(output.content)
+    response = answer_question("What is the capital of France?")
+    print(response)
 ```
 
-### Consistently Ensure Prompt Quality with Built-in Validation
+Now even changes to the return type will be correctly captured as a new version:  
 
-We aim to reduce the amount of potential errors where feasible by implementing automatic data validation, in particular type safety in prompts.
+![Answer Question V3 Structured](/assets/blog/prompt-versioning/answer-question-v3-structured.png)
 
-to accomplish this, our `prompt_template` and `call` decorators enable writing prompts and LLM functions as standard Python functions to ensure reliable linting and error handling is simple and easy rather than requiring you to build custom validation logic. For example, you can use Pydantic's [`validate_call`](https://docs.pydantic.dev/latest/concepts/validation_decorator/) decorator to validate inputs to any LLM function automatically.
+The `auto_llm=True` setting ensures Lilypad also traces and logs every LLM call made (using the [OpenTelemetry Gen AI spec](https://opentelemetry.io/) to make observability easier) to give you an exact snapshot of each LLM output to help you monitor the performance of prompts over time:
 
-Also, documentation, linting, and autocomplete for Mirascope are first-class and available in your IDE to make your development workflows more efficient.
+![Answer Question Auto LLM OpenTelemetry Span](/assets/blog/prompt-versioning/answer-question-auto-llm-span.png)
 
-**A missing argument in a Mirascope class:**
+Any of these spans will properly appear nested inside of whichever other span or trace contains their execution.
 
-![Mirascope Prompt Function Missing Argument](/assets/blog/langchain-structured-output/mirascope_prompt_missing_arg.png)
+### Collaboration with Non-Technical Experts
 
-**Autosuggestion proposal:**
+Managing and iterating on prompts in collaborative workflows presents several challenges:
 
-![Mirascope Prompt Function Autocomplete](/assets/blog/langchain-structured-output/mirascope_prompt_autocomplete.png)
+* Prompt changes normally force developers to modify and redeploy the codebase, slowing down development.  
+* (Non-technical) domain experts often lack the technical skills to modify prompts directly in the codebase, making them reliant on developers for even minor changes.  
+* Without a dedicated environment, it's difficult for domain experts to test and evaluate prompts independently (again, without needing help from developers).
 
-You can additionally add custom validation, for example, in cases where you’d like the LLM to do certain validation tasks that would be harder to accomplish with just manual coding.
+As described in the last section, Lilypad provides a playground that allows non-technical team members to iterate on prompts (and run them) through an intuitive GUI, reducing the need for direct engineering involvement:
 
-For instance, you could ensure that certain generated content maintains a consistent brand voice by using the LLM to make the determination, and then adding [Pydantic’s `AfterValidator`](https://docs.pydantic.dev/latest/api/functional_validators/#pydantic.functional_validators.ModelAfterValidator) to the extracted output:
+![Answer Question Playground](/assets/blog/prompt-versioning/answer-question-playground.png)
 
-```python
-from enum import Enum
-from typing import Annotated
+The playground attaches to a versioned function, and every time it runs it will be traced and versioned automatically against that function. 
 
-from mirascope.core import openai
-from pydantic import AfterValidator, BaseModel, ValidationError
+This means that domain experts can create, change, and iterate on prompts autonomously without requiring the usual back-and-forth with developers, who can separately use the matching code, the `.version` method, or the `.remote` method to use exactly that version of the function downstream to integrate it with their application.
 
-class Label(Enum):
-    ON_BRAND = "on brand"
-    OFF_BRAND = "off brand"
-
-@openai.call("gpt-4o-mini", response_model=Label)
-def check_brand_compliance(text: str) -> str:
-    return f"Does this content adhere to brand guidelines? {text}"
-
-def validate_brand_compliance(content: str) -> str:
-    """Check if the content follows the brand guidelines."""
-    label = check_brand_compliance(content)
-    assert label == Label.ON_BRAND, "Content did not adhere to brand guidelines."
-    return content
-
-@openai.call(
-    "gpt-4o-mini",
-    response_model=Annotated[str, AfterValidator(validate_brand_compliance)],
-)
-def generate_content() -> str:
-    return "Generate content for our new marketing campaign"
-
-try:
-    content = generate_content()
-    print(content)
-except ValidationError as e:
-    print(e)
-    # > 1 validation error for BrandCompliantContent
-
-    #   content
-
-    #     Assertion failed, Content did not adhere to brand guidelines. [type=assertion_error, input_value="The generated marketing copy...", input_type=str]
-
-    #       For further information visit https://errors.pydantic.dev/2.6/v/assertion_error
-
+```py
+# runs the remotely deployed version
+recommend_book.remote("fantasy")
 ```
 
-In the code above, `generate_content` uses an annotated `response_model` to run `validate_brand_compliance` as an `AfterValidator`, ensuring that the generated content adheres to the company's brand guidelines.
+The playground shows details of prompts and outputs, including:
 
-Using Pydantic with Mirascope makes writing even more complex validation logic straightforward and simple.
+* Markdown-supported prompt templates, and any Python function associated with it  
+* Call settings, like provider, model, and temperature  
+* Prompt arguments and values (Lilypad uses type-safe function signatures for the variables used in prompt templates — see the screenshot further down below)  
+* LLM outputs, including raw outputs and traces  
+* Metadata like token usage and cumulative costs, as shown below
 
-### Test and Evaluate Prompts
+![Answer Question Playground Trace](/assets/blog/prompt-versioning/answer-question-playground-trace.png)
 
-Effective prompt management involves not only tracking changes to prompts over time, but also testing them for performance and improving them based on those results.
+In the prompt template below, we provide type-safe function signatures for the variable values:
 
-The first step when evaluating prompts is to look at your data and annotate it. You can use Lilypad to [annotate traces](/docs/lilypad/evaluation/annotations) directly in the UI or through code.
+This ensures that the code running in the playground can be used 1:1 exactly as run downstream in your application, and that running that code will trace it against the correct version automatically.
 
-### Track Prompt Evolution Through Comprehensive Data Logging
+### Evaluate Non-Deterministic LLM Outputs
 
-Since Mirascope's responses are built on top of Pydantic's `BaseModel` class, you can use `model_dump()` to track all inputs and outputs and other configuration parameters of the LLM function call, ensuring reproducibility of results on similar experimental conditions. Lilypad uses this functionality to provide first-class support for automatically versioning and tracing Mirascope functions.
+Prompt versioning and evaluation go hand-in-hand, as versioning lets you measure the effectiveness of iterations in a structured way to see which one yields the most desirable result.
 
-With Lilypad, you can better understand how changes to input values or parameters affect the models' responses without having to worry about manually tracking the dump. For example, for a given prompt, the function might output:
+The fact we’re versioning inputs that produce non-deterministic outputs makes this challenging as we can't just define a bunch of test cases and call it a day.
 
-```python
-# {
-#     "metadata": {},
-#     "response": {
-#         "id": "chatcmpl-9uO3BPd58TzVWjRejHJxagctE6OSi",
-#         "choices": [
-#             {
-#                 "finish_reason": "stop",
-#                 "index": 0,
-#                 "logprobs": None,
-#                 "message": {
-#                     "content": 'That’s a solid start! The positive vibe in those lines is infectious. You might want to build on that feeling of joy and satisfaction. Consider adding some imagery or details about the food or the morning to create a more vivid scene. Here’s a suggestion for how you might expand it:\n\n"I woke up feeling oh so great,  \nSunshine streaming, can\'t be late,  \nI cooked some food that I ate,  \nPancakes flipping, can’t wait!"\n\nThis keeps the upbeat energy and adds a bit more texture. What direction are you thinking of taking the song?',
-#                     "refusal": None,
-#                     "role": "assistant",
-#                     "function_call": None,
-#                     "tool_calls": None,
-#                 },
-#             }
-#         ],
-#         "created": 1723225845,
-#         "model": "gpt-4o-mini-2024-07-18",
-#         "object": "chat.completion",
-#         "service_tier": None,
-#         "system_fingerprint": "fp_507c9469a1",
-#         "usage": {"completion_tokens": 116, "prompt_tokens": 45, "total_tokens": 161},
-#     },
-#     "tool_types": [],
-#     "prompt_template": "\n    SYSTEM:\n    You are an acclaimed music producer.\n    \n    USER:\n    I'm working on a new song. What do you think?\n    {song_lyrics}\n    ",
-#     "fn_args": {
-#         "song_lyrics": "I woke up feeling oh so great, I cooked some food that i ate"
-#     },
-#     "dynamic_config": None,
-#     "messages": [
-#         {"role": "system", "content": "You are an acclaimed music producer."},
-#         {
-#             "role": "user",
-#             "content": "I'm working on a new song. What do you think?\nI woke up feeling oh so great, I cooked some food that i ate",
-#         },
-#     ],
-#     "call_params": {"temperature": 0.4},
-#     "call_kwargs": {
-#         "temperature": 0.4,
-#         "model": "gpt-4o-mini",
-#         "messages": [
-#             {"role": "system", "content": "You are an acclaimed music producer."},
-#             {
-#                 "role": "user",
-#                 "content": "I'm working on a new song. What do you think?\nI woke up feeling oh so great, I cooked some food that i ate",
-#             },
-#         ],
-#     },
-#     "user_message_param": {
-#         "content": "I'm working on a new song. What do you think?\nI woke up feeling oh so great, I cooked some food that i ate",
-#         "role": "user",
-#     },
-#     "start_time": 1723225844872.8289,
-#     "end_time": 1723225846620.729,
-#     "message_param": {
-#         "content": 'That’s a solid start! The positive vibe in those lines is infectious. You might want to build on that feeling of joy and satisfaction. Consider adding some imagery or details about the food or the morning to create a more vivid scene. Here’s a suggestion for how you might expand it:\n\n"I woke up feeling oh so great,  \nSunshine streaming, can\'t be late,  \nI cooked some food that I ate,  \nPancakes flipping, can’t wait!"\n\nThis keeps the upbeat energy and adds a bit more texture. What direction are you thinking of taking the song?',
-#         "refusal": None,
-#         "role": "assistant",
-#         "tool_calls": None,
-#     },
-#     "tools": None,
-#     "tool": None,
-# }
-```
+Instead, evaluating LLM outputs often involves subjective judgment. Determining whether an output is "good enough" depends on the specific use case, the desired quality bar, and the nuances of human language.
 
-Each prompt iteration might involve tweaks to the prompt structure, changes in the parameters fed into the model, or adjustments in how the data is processed before being sent to the model. The `model_dump()` function serializes these changes into a structured format that can be logged and tracked over time, and Lilypad enables automatically versioning and tracing all of this information into a nice and readable interface so you don't have to worry about it.
+For example, if you're trying to extract user info, the metric you want to optimize for is often just correctness. So in this case, "was the extraction correct?" would be a good enough metric to measure progress and detect regressions, rather than using an overly complex scoring system.
 
-Again, this is why we've implemented Mirascope prompt and LLM calls as functions rather than classes with unnecessary abstraction. By implementing things this way, we make versioning and tracing easy, even if you don't use Lilypad.
+Even a granular scoring for instance (e.g., a scale from one to five) can be tricky as it’s often unclear what a "3" vs. a "4" really means or where to draw the line on what’s considered good enough.
 
-An example of calling `model_dump()` for a Mirascope call is shown below:
+We therefore find pass/fail metrics to be mostly efficient in allowing you to track the reasons for failures and successes, and to use that information to improve your outputs.
 
-```python
+When it comes to collaborative evaluation, Lilypad makes this easy by allowing non-technical teams to annotate LLM outputs using pass/fail criteria to indicate the most effective prompts.
 
-from mirascope.core import openai
+You just choose a particular trace to evaluate:
 
-@openai.call(model="gpt-4o-mini")
-def recommend_book(genre: str) -> str:
-    return f"Recommend a {genre} book"
+![Select Trace For Annotation](/assets/blog/prompt-versioning/select-trace-for-annotation.png)
 
-response = recommend_book(genre="fantasy")
-print(response.model_dump())
-```
+And then mark the trace as “Pass” or “Fail” with an optional reason:
 
-## 2. LangSmith-Prompt Versioning from a Central Hub
+![Add Annotation Criteria](/assets/blog/prompt-versioning/add-annotation-criteria.png)
 
-![LangSmith homepage: Get your LLM app from prototype to production](/assets/blog/prompt-versioning/langsmith_homepage.png)
+You'll notice that we also utilize the discussions to provide additional unstructured metadata for other team members.
 
-[LangSmith](https://www.langchain.com/langsmith) is a tool for managing and optimizing the performance of chains and intelligent agents in LLM applications. Its parent framework is [LangChain](/blog/langchain-alternatives), with which it integrates, although you can use LangSmith on its own.
+Bootstrapping the evaluation in this way with a human evaluator with enough domain expertise to properly annotate and kickstart the system allows you to later automate it using a system like LLM-as-a-judge, which we’re intending to launch in the future.
 
-LangSmith offers a hub (LangChain Hub) that’s a centralized prompt repository, with functionality for archiving and versioning prompts. To use prompts that are saved to LangSmith Hub, you typically use the `pull` command specifying the prompt to download, along with its commit hash (version).
+Using LLM-as-a-judge would then move the majority of the work from labeling to verification, which promises to make the process more manageable. You can then verify the accuracy of the judge with a human-in-the-loop, continuing to improve the judge until you need to intervene less thanks to a high level of confidence in the judge’s accuracy.
 
-The hub is a prompt management environment to which you push prompts and their changes to it. It also lets you manage and run chains containing the prompts.
+In the meantime, consistently annotating outputs lets you know whether they're improving or not and helps you build data sets against which you can test future versions of your application.
+
+It’s nonetheless important to look at your data with your own eyes as that's the best way to identify where things are failing and how to improve them. **We recommend you always do this, even if using an LLM judge**, in order to identify outputs where the judge lacks confidence.
+
+### Manage Your Prompts with Confidence
+
+Lilypad simplifies prompt versioning so you can experiment with ease. With built-in tracking, collaboration tools, and seamless version control, you’ll always know what changed, why it changed, and how to improve your LLM outputs.
+
+[Get started with Lilypad](/docs/lilypad) by opening a free account using your [GitHub](https://github.com/Mirascope/lilypad) credentials. Lilypad also supports [Mirascope](/#mirascope), our lightweight toolkit for building AI agents.
+
+## 2. LangSmith — Prompt Versioning from a Central Hub
+
+![LangSmith Website](/assets/blog/prompt-versioning/langsmith-homepage.png)
+
+[LangSmith](https://www.langchain.com/langsmith) is a closed-source tool for managing and optimizing the performance of chains and intelligent agents in LLM applications. Its parent framework is LangChain, with which it integrates, although you can use LangSmith on its own or with other tools besides LangChain. Note however, that while LangSmith is able to trace calls made by third-party tools, it’s less likely to version them.
+
+LangSmith offers a centralized prompt repository (LangChain Hub) with functionality for archiving and versioning prompts. To use prompts that are saved to LangSmith Hub, you typically use its `pull` command specifying the prompt to download, along with its commit hash (version).
+
+While the hub is a prompt management environment to which you push prompts and their changes to it, it also lets you manage and run chains containing the prompts.
 
 You can find more information about how to manage prompts in LangChain Hub in its documentation and on its website.
 
-## 3. Agenta-Wide Compatibility with LLM App Frameworks
+## 3. Langfuse — Direct Integration with LLMs Without a Proxy Layer
 
-![Agenta homepage: Your Collaborative AI Development Platform](/assets/blog/prompt-versioning/agenta_homepage.png)
+![Langfuse Homepage](/assets/blog/prompt-versioning/langfuse-homepage.png)
 
-‍[Agenta](https://agenta.ai/) is an open source LLM application development platform that offers a suite of tools for prompt management and evaluation.
+[Langfuse](https://langfuse.com/) is an open-source LLM platform that helps teams collaboratively debug, analyze, and iterate on their LLM applications. 
 
-The platform decouples prompts and the model (together known as the configuration, or prompt management system, which is managed on the backend) from the logic of the LLM application. This allows you to separately test different configurations (using JSON-based test sets) without having to modify your application codebase.
+It offers a prompt CMS (content management system) for managing and versioning your prompts, allowing non-technical users to work with prompts while not requiring you to redeploy your application. 
 
-Agenta offers a playground where you can experiment with prompts and applications (which are treated as microservices). You can version each of these combinations, known as application variants, to ease application development.
+Langfuse lets users link prompts with traces to understand performance in the context of LLM applications, and monitor which prompt versions were used in specific traces.
 
-For more information on how Agenta’s prompt management works, you can consult its user documentation or see details on GitHub.
+You can also generally track usage statistics and manage execution logs.
 
-## 4. Pezzo-Visual Prompt Management and Testing
+It supports integration with LangChain, Vercel AI SDK, and OpenAI functions and allows for quick rollbacks to previous prompt versions if needed.
 
-![Pezzo homepage: The Developer-First AI Platform](/assets/blog/prompt-versioning/pezzo_homepage.png)
+For more information on how Langfuse’s prompt management works, you can consult its user documentation or see details on GitHub.
 
-[Pezzo](https://pezzo.ai/) is an open source LLMOps platform designed for prompt engineering, and offers a number of GUI-based prompt management features.
+##  4. Weave — Suite of AI Tools and Custom Models
 
-- You create prompts by using the Prompt Editor GUI, and specify settings such as temperature and max response length.
-- The platform allows you to test prompts to assess results such as cost, token usage, and completion duration.
-- You can version prompts by committing them and publishing the version to a given environment, like a production environment. Pezzo uses SHA hashes as version numbers.
-- Once versioned, you can revert a prompt to a previous version or view the version history of a prompt.
+![Weave Homepage](/assets/blog/prompt-versioning/weave-homepage.png)
 
-Pezzo describes its prompt management capabilities in its documentation on its website.
+[Weights & Biases Weave](https://wandb.ai/site/weave/) is a framework for tracking, experimenting with, evaluating, deploying, and improving LLM\-based applications. It allows users to choose from a variety of AI models to work with, and to create, save, and iterate on different types of prompts, such as StringPrompt and MessagesPrompt, which can be easily formatted and parameterized.
 
-## 5. PromptHub-For Collaboration Between Tech and Non-Tech Roles
+Weave also allows users to compare different versions and revert to previous ones if needed, as well as to set up custom workflows for tasks like generating game content, creating chatbots, and implementing AI agents.
 
-![PromptHub homepage: Level up your prompt management](/assets/blog/prompt-versioning/prompt_hub_homepage.png)
+It provides a comprehensive API allowing developers to interact with its features using languages like JavaScript, Python, and Java, and you can create custom dashboards from these APIs and functions.
+
+You can find more information on Weave’s prompt management in its documentation and on its website.
+
+## 5. PromptHub — User-Friendly Collaborations for Team Members
+
+![Prompthub Homepage](/assets/blog/prompt-versioning/prompthub-homepage.png)
 
 [PromptHub](https://www.prompthub.us/) is a prompt management platform for teams. It lets you test, collaborate, and deploy prompts, and features built-in prompt versioning, comparison, and approval workflows.
 
@@ -506,8 +266,8 @@ All changes are logged and team members are automatically notified. PromptHub al
 
 You can find more information on PromptHub in its documentation and on its website.
 
-## Discover the Benefits of Developer-Friendly Prompt Management
+## Upgrade Your Prompt Engineering Process
 
 Lilypad's prompt versioning and management functionality was built from the ground up with software engineering best practices in mind. It offers an accessible interface for you to easily track changes across different versions of prompts to improve collaboration, and to support ongoing prompt experimentation and iteration.
 
-Want to learn more? You can find more Lilypad code samples on both our [documentation site](/docs/lilypad) and [GitHub](https://github.com/Mirascope/lilypad). You can also learn more about [Mirascope](https://www.mirsacope.com), for which Lilypad has first-class support.
+Want to learn more? You can find more Lilypad code samples on both our [documentation site](/docs/lilypad) and [GitHub](https://github.com/Mirascope/lilypad). Lilypad offers first-class support for [Mirascope](/#mirascope), our lightweight toolkit for building AI agents.
