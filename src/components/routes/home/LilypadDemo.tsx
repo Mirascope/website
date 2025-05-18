@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { CheckCircle2, XCircle } from "lucide-react";
-import { CodeBlock } from "@/src/components/mdx/elements/CodeBlock";
 import { useProvider } from "@/src/components/mdx/providers";
 import { replaceProviderVariables } from "@/src/config/providers";
 import { LilypadLogo } from "@/src/components/core/branding";
+import { AnalyticsCodeBlock } from "@/src/components/mdx/elements/AnalyticsCodeBlock";
 
 // Types
 interface MessageCardProps {
@@ -94,7 +94,7 @@ function CodePane({ code }: CodePaneProps) {
   return (
     <div className="border-border/60 border-b">
       <div className="max-h-64 overflow-y-auto">
-        <CodeBlock code={code} language="python" className="rounded-none border-none" />
+        <AnalyticsCodeBlock code={code} language="python" className="rounded-none border-none" />
       </div>
     </div>
   );

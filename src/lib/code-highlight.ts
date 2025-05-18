@@ -1,17 +1,16 @@
+import { transformerNotationDiff, transformerNotationHighlight } from "@shikijs/transformers";
 import { codeToHtml, createHighlighter } from "shiki";
-import { transformerNotationHighlight } from "@shikijs/transformers";
 
 export type HighlightResult = {
-  lightHtml: string;
-  darkHtml: string;
+  themeHtml: string;
   code: string;
   language: string;
   meta: string;
   highlighted: boolean;
 };
 
-const LIGHT_THEME = "github-light";
-const DARK_THEME = "github-dark-default";
+const THEME_LIGHT = "github-light";
+const THEME_DARK = "github-dark-default";
 // Use the v1 matching algorithm to ensure we highlight bare comment lines
 // See: https://github.com/shikijs/shiki/issues/1006
 // Note: If ever migrating to the v3 algorithm, it will create an off-by-one
@@ -20,33 +19,63 @@ const DARK_THEME = "github-dark-default";
 // motivation for the v3 algorithm.) So change with care.
 const MATCH_ALGORITHM = "v1";
 
+function getTransformers() {
+  return [
+    transformerNotationHighlight({ matchAlgorithm: MATCH_ALGORITHM }),
+    transformerNotationDiff({ matchAlgorithm: MATCH_ALGORITHM }),
+  ];
+}
+
+// Generate HTML for highlighted code
 export async function highlightCode(
+  code: string,
+  language = "text",
+  meta = ""
+): Promise<HighlightResult> {
+  try {
+    // Process the code with meta information for line highlighting
+    const processedCode = processCodeWithMetaHighlighting(code.trim(), meta, language);
+
+    // Generate HTML for both light and dark themes
+    // Using direct codeToHtml call from shiki
+    const themeHtml = await codeToHtml(processedCode, {
+      lang: language || "text",
+      themes: {
+        light: THEME_LIGHT,
+        dark: THEME_DARK,
+      },
+      transformers: getTransformers(),
+    });
+
+    // Return both versions for theme switching
+    return { code, language, meta, themeHtml, highlighted: true };
+  } catch (error) {
+    console.error(`Error highlighting code with language "${language}":`, error);
+
+    return fallbackHighlighter(code, language, meta);
+  }
+}
+
+export function fallbackHighlighter(
   code: string,
   language: string = "text",
   meta: string = ""
-): Promise<HighlightResult> {
-  // Process the code with meta information for line highlighting
-  const processedCode = processCodeWithMetaHighlighting(code.trim(), meta, language);
+): HighlightResult {
+  const escapedCode = stripHighlightMarkers(code)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 
-  const transformer = () => transformerNotationHighlight({ matchAlgorithm: MATCH_ALGORITHM });
+  const lines = escapedCode.split("\n").map((s) => `<span class="line">${s}`);
+  const codeHtml = `<code>${lines.join("\n")}</code>`;
 
-  // Generate HTML for both light and dark themes
-  // Using direct codeToHtml call from shiki
-  const lightPromise = codeToHtml(processedCode, {
-    lang: language,
-    theme: LIGHT_THEME,
-    transformers: [transformer()],
-  });
-
-  const darkPromise = codeToHtml(processedCode, {
-    lang: language,
-    theme: DARK_THEME,
-    transformers: [transformer()],
-  });
-  const [lightHtml, darkHtml] = await Promise.all([lightPromise, darkPromise]);
-
-  // Return both versions for theme switching
-  return { lightHtml, darkHtml, code, language, meta, highlighted: true };
+  const shikiClass = `shiki shiki-themes ${THEME_LIGHT} ${THEME_DARK} has-highlighted`;
+  const shikiBgStyle = "background-color:#fff;--shiki-dark-bg:#0d1117;";
+  const shikiColorStyle = "color:#24292e;--shiki-dark-color:#e6edf3;";
+  const fallbackHtml = `<pre class="${shikiClass}" style="${shikiBgStyle}${shikiColorStyle}">${codeHtml}</pre>`;
+  return { themeHtml: fallbackHtml, code, language, meta, highlighted: false };
 }
 
 // Create singleton highlighters for light and dark themes
@@ -67,7 +96,7 @@ export const initializeSynchronousHighlighter = async (): Promise<void> => {
     try {
       // Create the light theme highlighter with Python only
       syncHighlighter = await createHighlighter({
-        themes: [LIGHT_THEME, DARK_THEME],
+        themes: [THEME_LIGHT, THEME_DARK],
         langs,
       });
       // Mark as initialized
@@ -92,48 +121,20 @@ export function highlightCodeSync(code: string, language: string = "text", meta:
     throw new Error("Tried to highlight code, but highlighter not initialized");
   }
 
-  // Use the pre-initialized highlighters synchronously
-  // Apply the transformer for highlight notation inline
-  const transformer = transformerNotationHighlight({ matchAlgorithm: MATCH_ALGORITHM });
-
-  const lightHtml = syncHighlighter.codeToHtml(processedCode, {
+  const themeHtml = syncHighlighter.codeToHtml(processedCode, {
     lang: language,
-    theme: LIGHT_THEME,
-    transformers: [transformer],
+    themes: {
+      light: THEME_LIGHT,
+      dark: THEME_DARK,
+    },
+    transformers: getTransformers(),
   });
 
-  const darkHtml = syncHighlighter.codeToHtml(processedCode, {
-    lang: language,
-    theme: DARK_THEME,
-    transformers: [transformer],
-  });
-
-  return { lightHtml, darkHtml, code, language, meta, highlighted: true };
+  return { themeHtml, code, language, meta, highlighted: true };
 }
 
-export function fallbackHighlighter(
-  code: string,
-  language: string = "text",
-  meta: string = ""
-): HighlightResult {
-  const escapedCode = stripHighlightMarkers(code)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-
-  const lines = escapedCode.split("\n").map((s) => `<span class="line">${s}`);
-  const codeHtml = `<code>${lines.join("\n")}</code>`;
-
-  const lightClass = "shiki github-light-default has-highlighted";
-  const darkClass = "shiki github-dark-default has-highlighted";
-  const lightStyle = "background-color:#fff;color:#24292e";
-  const darkStyle = "background-color:#0d1117;color:#e6edf3";
-  const lightHtml = `<pre class="${lightClass}" style=${lightStyle}>${codeHtml}</pre>`;
-  const darkHtml = `<pre class="${darkClass}" style=${darkStyle}>${codeHtml}</pre>`;
-  return { lightHtml, darkHtml, code, language, meta, highlighted: false };
-}
+// Keep track of the current timeout ID
+let syncHighlightingTimeoutId: number | null = null;
 
 // Flag to control always using sync highlighter for initial highilght
 let useSyncHighlighterForAllRenders: boolean = false;
@@ -141,9 +142,6 @@ let useSyncHighlighterForAllRenders: boolean = false;
 export function useSyncHighlighterAlways(bool: boolean): void {
   useSyncHighlighterForAllRenders = bool;
 }
-
-// Keep track of the current timeout ID
-let syncHighlightingTimeoutId: number | null = null;
 
 export function temporarilyEnableSyncHighlighting(delayMs: number = 100) {
   // Enable sync highlighting
@@ -238,7 +236,7 @@ export function processCodeWithMetaHighlighting(
   }
 
   // Extract highlight information from meta: language{lines}
-  const highlightMatch = meta.match(/{([^}]+)}/);
+  const highlightMatch = /{([^}]+)}/.exec(meta);
   if (!highlightMatch) return code;
 
   const highlightInfo = highlightMatch[1];
