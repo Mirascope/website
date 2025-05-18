@@ -1,6 +1,6 @@
 // No need to import React with JSX transform
 import { useProvider } from "@/src/components/mdx/providers";
-import { CodeBlock } from "@/src/components/mdx/elements";
+import { AnalyticsCodeBlock } from "@/src/components/mdx/elements/AnalyticsCodeBlock";
 import { replaceProviderVariables } from "@/src/config/providers";
 
 /**
@@ -25,5 +25,5 @@ export function ProviderCodeWrapper({
     code = replaceProviderVariables(code, provider);
   }
 
-  return <CodeBlock className={className} code={code} language={language} meta={meta} />;
+  return <AnalyticsCodeBlock className={className} code={code} language={language} meta={meta} />;
 }

@@ -1,6 +1,6 @@
 import { useProvider } from "@/src/components/mdx/providers";
 import type { Provider } from "@/src/components/mdx/providers";
-import { CodeBlock } from "./CodeBlock";
+import { AnalyticsCodeBlock } from "@/src/components/mdx/elements/AnalyticsCodeBlock";
 import { cn } from "@/src/lib/utils";
 import { TabbedSection, Tab } from "./TabbedSection";
 
@@ -59,7 +59,7 @@ export function InstallSnippet({ className = "" }: InstallSnippetProps) {
     <TabbedSection className={cn(className)}>
       {operatingSystems.map((os) => (
         <Tab key={os} value={os}>
-          <CodeBlock code={generateCommand(os)} language="bash" />
+          <AnalyticsCodeBlock code={generateCommand(os)} language="bash" />
         </Tab>
       ))}
     </TabbedSection>
