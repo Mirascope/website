@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { LoadingContent } from "@/src/components/core/feedback";
 import mermaid, { type MermaidConfig } from "mermaid";
+import styles from "./MermaidDiagram.module.css";
 
 interface MermaidDiagramProps {
   chart: string;
   className?: string;
 }
 
-type ThemeName = "dark" | "sunset" | "default";
+type ThemeName = "dark" | "default";
 
 /**
  * Renders mermaid diagrams in MDX content
@@ -26,8 +27,6 @@ export function MermaidDiagram({ chart, className = "" }: MermaidDiagramProps) {
     }
     if (document.documentElement.classList.contains("dark")) {
       return "dark";
-    } else if (document.documentElement.classList.contains("sunset")) {
-      return "sunset";
     } else {
       return "default";
     }
@@ -45,57 +44,12 @@ export function MermaidDiagram({ chart, className = "" }: MermaidDiagramProps) {
       return {
         ...baseConfig,
         theme: "dark",
-        themeVariables: {
-          primaryColor: "#6366F1", // Brand purple
-          primaryTextColor: "#F3F4F6",
-          primaryBorderColor: "#818CF8", // Lighter purple
-          lineColor: "#818CF8", // Lighter purple
-          secondaryColor: "#1F2937",
-          tertiaryColor: "#111827",
-          mainBkg: "#312E81", // Dark indigo
-          secondaryBorderColor: "#4F46E5", // Darker purple
-          textColor: "#E5E7EB",
-          nodeBorder: "#6366F1", // Brand purple
-          noteTextColor: "#d1d5db",
-          noteBkgColor: "#4338CA", // Darker indigo
-          noteBorderColor: "#6366F1", // Brand purple
-        },
-      };
-    } else if (themeName === "sunset") {
-      return {
-        ...baseConfig,
-        theme: "base",
-        themeVariables: {
-          primaryColor: "#F97316", // Orange
-          primaryTextColor: "#1E293B", // Dark text
-          primaryBorderColor: "#FDBA74", // Light orange
-          lineColor: "#C2410C", // Dark orange
-          secondaryColor: "#FEF3C7", // Light yellow
-          tertiaryColor: "#FFF7ED", // Light orange background
-          mainBkg: "#FFEDD5", // Light orange background
-          secondaryBorderColor: "#FB923C", // Medium orange
-          textColor: "#7C2D12", // Dark orange text
-          nodeBorder: "#F97316", // Orange
-          noteTextColor: "#7C2D12", // Dark orange text
-          noteBkgColor: "#FED7AA", // Very light orange
-          noteBorderColor: "#FB923C", // Medium orange
-          edgeLabelBackground: "#FEF3C7", // Light yellow
-        },
       };
     } else {
       // Default light theme
       return {
         ...baseConfig,
         theme: "default",
-        themeVariables: {
-          primaryColor: "#6366F1", // Brand purple
-          primaryTextColor: "#1E293B", // Slate text
-          primaryBorderColor: "#818CF8", // Lighter purple
-          lineColor: "#6366F1", // Brand purple
-          secondaryColor: "#F1F5F9", // Light slate
-          tertiaryColor: "#F8FAFC", // Extra light slate
-          edgeLabelBackground: "#F8FAFC", // Extra light slate
-        },
       };
     }
   }
@@ -170,10 +124,7 @@ export function MermaidDiagram({ chart, className = "" }: MermaidDiagramProps) {
   }
 
   return (
-    <div
-      className={`mermaid-diagram bg-background my-6 overflow-x-auto rounded-md p-4 ${className}`}
-      ref={mermaidRef}
-    >
+    <div className={`mermaid-diagram ${styles.mermaidWrapper} ${className}`} ref={mermaidRef}>
       {svgContent ? (
         <div dangerouslySetInnerHTML={{ __html: svgContent }} />
       ) : (
