@@ -36,7 +36,7 @@ function TabsTrigger({ className, ...props }: React.ComponentProps<typeof TabsPr
           variant: "ghost",
           size: "sm",
         }),
-        "font-handwriting data-[state=active]:bg-primary data-[state=active]:text-primary-foreground cursor-pointer",
+        "data-[state=active]:bg-primary data-[state=active]:text-primary-foreground cursor-pointer",
         className
       )}
       {...props}

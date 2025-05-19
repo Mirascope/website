@@ -42,9 +42,9 @@ const LilypadLogo: React.FC<LilypadLogoProps> = ({
 
       {withText && (
         <div className={cn("flex items-center", textClassName)}>
-          <h1 className={cn(selectedSize.text, "text-lilypad-green font-handwriting mb-0")}>
+          <span className={cn(selectedSize.text, "text-lilypad-green font-handwriting mb-0")}>
             Lilypad
-          </h1>
+          </span>
 
           {showBeta && (
             <span
