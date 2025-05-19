@@ -2,6 +2,14 @@ import { Link } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
 import { type BlogMeta } from "@/src/lib/content";
 import { SEOMeta, LoadingContent } from "@/src/components";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/src/components/ui/pagination";
 
 // Posts per page
 const POSTS_PER_PAGE = 4;
@@ -53,6 +61,50 @@ interface BlogIndexPageProps {
    * Blog posts metadata
    */
   posts: BlogMeta[];
+}
+
+interface BlogPaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}
+
+function BlogPagination({ currentPage, totalPages, onPageChange }: BlogPaginationProps) {
+  return (
+    <Pagination>
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationPrevious
+            onClick={() => onPageChange(currentPage - 1)}
+            tabIndex={currentPage === 1 ? -1 : 0}
+            className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+          />
+        </PaginationItem>
+
+        {Array.from({ length: totalPages }, (_, i) => (
+          <PaginationItem key={i + 1}>
+            <PaginationLink
+              onClick={() => onPageChange(i + 1)}
+              isActive={currentPage === i + 1}
+              className="cursor-pointer"
+            >
+              {i + 1}
+            </PaginationLink>
+          </PaginationItem>
+        ))}
+
+        <PaginationItem>
+          <PaginationNext
+            onClick={() => onPageChange(currentPage + 1)}
+            tabIndex={currentPage === totalPages ? -1 : 0}
+            className={
+              currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"
+            }
+          />
+        </PaginationItem>
+      </PaginationContent>
+    </Pagination>
+  );
 }
 
 export function BlogIndexPage({ posts }: BlogIndexPageProps) {
@@ -126,39 +178,11 @@ export function BlogIndexPage({ posts }: BlogIndexPageProps) {
 
         {posts.length > 0 && (
           <div className="w-full border-t pt-4 pb-8">
-            <div className="flex justify-center">
-              <nav className="flex gap-2">
-                <button
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className={`border-border rounded border px-3 py-1 font-medium ${currentPage === 1 ? "cursor-not-allowed opacity-50" : "hover:bg-muted cursor-pointer"}`}
-                >
-                  Previous
-                </button>
-
-                {Array.from({ length: Math.max(1, totalPages) }, (_, i) => (
-                  <button
-                    key={i + 1}
-                    onClick={() => handlePageChange(i + 1)}
-                    className={`flex h-8 w-8 items-center justify-center rounded font-medium ${
-                      currentPage === i + 1
-                        ? "bg-primary text-primary-foreground"
-                        : "border-border hover:bg-muted border"
-                    }`}
-                  >
-                    {i + 1}
-                  </button>
-                ))}
-
-                <button
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className={`border-border rounded border px-3 py-1 font-medium ${currentPage === totalPages ? "cursor-not-allowed opacity-50" : "hover:bg-muted cursor-pointer"}`}
-                >
-                  Next
-                </button>
-              </nav>
-            </div>
+            <BlogPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
           </div>
         )}
       </BlogLayout>
