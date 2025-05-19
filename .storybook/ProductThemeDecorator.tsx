@@ -69,7 +69,7 @@ export const ProductThemeDecorator = ({
         {isLandingPage && <div className="watercolor-bg"></div>}
 
         <div
-          className={`${theme} handwriting-enabled`}
+          className={theme}
           style={style as React.CSSProperties}
           data-landing-page={isLandingPage ? "true" : undefined}
         >

@@ -245,7 +245,9 @@ function SearchResultsContainer({
       );
     }
 
-    return <div className="text-muted-foreground p-4 text-center">Type to search</div>;
+    return (
+      <div className="text-muted-foreground font-handwriting p-4 text-center">Type to search</div>
+    );
   }
 }
 

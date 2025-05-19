@@ -123,7 +123,11 @@ const SectionTab = ({
  */
 const GroupLabel = ({ label }: { label: string }) => {
   return (
-    <div className={cn("text-primary block cursor-default px-3 py-1 font-semibold")}>{label}</div>
+    <div
+      className={cn("text-primary font-handwriting block cursor-default px-3 py-1 font-semibold")}
+    >
+      {label}
+    </div>
   );
 };
 
