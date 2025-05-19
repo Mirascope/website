@@ -160,4 +160,62 @@ def invalid():
       'Unsupported Python block type "python-unsupported"'
     );
   });
+
+  test("handles meta directives (no spaces)", () => {
+    const mdxContent = `
+# Test Markdown
+
+Start:
+
+\`\`\`python{1,2}
+foo = 1
+\`\`\`
+
+\`\`\`python-snippet-concat{3}
+bar = 2
+\`\`\`
+
+\`\`\`python-snippet-skip{4}
+zod = 3
+\`\`\`
+
+\`\`\`python{1}
+qux = 4
+\`\`\`
+`;
+
+    const snippets = extractSnippetsFromContent(mdxContent);
+    expect(snippets.length).toBe(2);
+    expect(snippets[0]).toBe("foo = 1\n\nbar = 2");
+    expect(snippets[1]).toBe("qux = 4");
+  });
+
+  test("handles meta directives (with spaces)", () => {
+    const mdxContent = `
+# Test Markdown
+
+Start:
+
+\`\`\`python {1,2}
+foo = 1
+\`\`\`
+
+\`\`\`python-snippet-concat {3}
+bar = 2
+\`\`\`
+
+\`\`\`python-snippet-skip {4}
+zod = 3
+\`\`\`
+
+\`\`\`python {1}
+qux = 4
+\`\`\`
+`;
+
+    const snippets = extractSnippetsFromContent(mdxContent);
+    expect(snippets.length).toBe(2);
+    expect(snippets[0]).toBe("foo = 1\n\nbar = 2");
+    expect(snippets[1]).toBe("qux = 4");
+  });
 });
