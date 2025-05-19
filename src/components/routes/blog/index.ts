@@ -1,2 +1,2 @@
 export { BlogPostPage } from "./BlogPostPage";
-export { BlogIndexPage } from "./BlogIndexPage";
+export { BlogIndexPage, BlogLayout, BlogLoadingState } from "./BlogIndexPage";
