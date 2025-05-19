@@ -1,4 +1,3 @@
-export { CodeSnippet } from "./CodeSnippet";
 export { InstallSnippet } from "./InstallSnippet";
 export { MermaidDiagram } from "./MermaidDiagram";
 export { ProviderCodeBlock } from "./ProviderCodeBlock";
