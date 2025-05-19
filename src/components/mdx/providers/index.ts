@@ -1,4 +1,4 @@
-export { MDXProviderWrapper, components } from "./MDXProvider";
+export { MDXProvider, components } from "./MDXProvider";
 export { MDXRenderer } from "./MDXRenderer";
 export { ProviderCodeWrapper } from "./ProviderCodeWrapper";
 export { useProvider } from "@/src/components/core/providers/ProviderContext";

@@ -1,4 +1,4 @@
-import { MDXProviderWrapper, components } from "./MDXProvider";
+import { MDXProvider, components } from "./MDXProvider";
 import { MDXRemote } from "next-mdx-remote";
 import { LoadingContent } from "@/src/components/core/feedback";
 
@@ -36,10 +36,10 @@ export function MDXRenderer({ code, frontmatter }: MDXRendererProps) {
     };
 
     return (
-      <div className="mdx-content prose max-w-none">
-        <MDXProviderWrapper>
+      <div className="mdx-content prose max-w-none overflow-y-auto" id="mdx-container">
+        <MDXProvider components={components}>
           <MDXRemote {...mdxProps} />
-        </MDXProviderWrapper>
+        </MDXProvider>
       </div>
     );
   } catch (error) {
