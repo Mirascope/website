@@ -1,5 +1,6 @@
-import { MDXProvider, components } from "./MDXProvider";
+import { components } from "./mdxComponentRegistry";
 import { MDXRemote } from "next-mdx-remote";
+import { MDXProvider } from "@mdx-js/react";
 import { LoadingContent } from "@/src/components/core/feedback";
 
 interface MDXRendererProps {

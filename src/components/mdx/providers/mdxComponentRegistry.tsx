@@ -1,5 +1,4 @@
 import React from "react";
-import { MDXProvider as BaseMDXProvider } from "@mdx-js/react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Link as LinkIcon } from "lucide-react";
 import {
@@ -32,6 +31,10 @@ import { ProviderCodeWrapper } from "./ProviderCodeWrapper";
 import { ResponsiveImage } from "@/src/components/mdx/providers/ResponsiveImage";
 import { devComponents } from "@/src/components/mdx/elements/DevComponents";
 import { slugify } from "@/src/lib/utils";
+
+// -----------------------------------------------------------------------------
+// Helper Components
+// -----------------------------------------------------------------------------
 
 // MDX-specific ButtonLink wrapper that bypasses type checking at the MDX boundary
 // and handles nested paragraph tags that MDX generates
@@ -86,8 +89,11 @@ const HeadingAnchor = ({ id }: { id?: string }) => {
   );
 };
 
-// Custom components that will be available in MDX files
-export const components = {
+// -----------------------------------------------------------------------------
+// Custom Components & UI Elements
+// -----------------------------------------------------------------------------
+
+const customComponents = {
   // Custom components for docs
   InstallSnippet,
   CodeSnippet,
@@ -123,11 +129,13 @@ export const components = {
 
   // Dev components
   ...devComponents,
+};
 
-  // Shorthand components
-  Install: InstallSnippet,
+// -----------------------------------------------------------------------------
+// HTML Elements
+// -----------------------------------------------------------------------------
 
-  // Standard HTML elements
+const headingElements = {
   h1: ({ children, ...props }: React.ComponentPropsWithoutRef<"h1">) => {
     // Generate an ID from the text content if not provided
     const id = props.id || (typeof children === "string" ? slugify(children) : undefined);
@@ -194,7 +202,50 @@ export const components = {
       </h5>
     );
   },
+};
+
+const textElements = {
   p: (props: React.ComponentPropsWithoutRef<"p">) => <p className="my-3 text-base" {...props} />,
+  strong: (props: React.ComponentPropsWithoutRef<"strong">) => <strong {...props} />,
+  em: (props: React.ComponentPropsWithoutRef<"em">) => <em {...props} />,
+  blockquote: (props: React.ComponentPropsWithoutRef<"blockquote">) => (
+    <blockquote className="border-border my-4 border-l-4 pl-4 italic" {...props} />
+  ),
+  hr: (props: React.ComponentPropsWithoutRef<"hr">) => (
+    <hr className="border-border my-6" {...props} />
+  ),
+};
+
+const listElements = {
+  ul: (props: React.ComponentPropsWithoutRef<"ul">) => (
+    <ul className="my-4 list-disc pl-5" {...props} />
+  ),
+  ol: (props: React.ComponentPropsWithoutRef<"ol">) => (
+    <ol className="my-4 list-decimal pl-5" {...props} />
+  ),
+  li: (props: React.ComponentPropsWithoutRef<"li">) => <li className="mb-2" {...props} />,
+};
+
+const tableElements = {
+  table: (props: React.ComponentPropsWithoutRef<"table">) => (
+    <div className="table-container">
+      <table className="divide-border my-6 min-w-full divide-y" {...props} />
+    </div>
+  ),
+  th: (props: React.ComponentPropsWithoutRef<"th">) => (
+    <th
+      className="bg-card text-card-foreground px-4 py-2 text-left text-sm font-medium"
+      {...props}
+    />
+  ),
+  td: (props: React.ComponentPropsWithoutRef<"td">) => (
+    <td className="border-border border-t px-4 py-2" {...props} />
+  ),
+};
+
+const mediaElements = {
+  // Responsive image component
+  img: (props: React.ComponentPropsWithoutRef<"img">) => <ResponsiveImage {...props} />,
   a: (props: React.ComponentPropsWithoutRef<"a">) => {
     // Check if the link is internal
     const { href, ...rest } = props;
@@ -216,15 +267,9 @@ export const components = {
     // Use regular <a> for external links or anchor links
     return <a className="text-primary text-base no-underline hover:underline" {...props} />;
   },
-  ul: (props: React.ComponentPropsWithoutRef<"ul">) => (
-    <ul className="my-4 list-disc pl-5" {...props} />
-  ),
-  ol: (props: React.ComponentPropsWithoutRef<"ol">) => (
-    <ol className="my-4 list-decimal pl-5" {...props} />
-  ),
-  li: (props: React.ComponentPropsWithoutRef<"li">) => <li className="mb-2" {...props} />,
-  // Responsive image component
-  img: (props: React.ComponentPropsWithoutRef<"img">) => <ResponsiveImage {...props} />,
+};
+
+const codeElements = {
   // Inline code - this is only for inline elements, not code blocks
   code: (props: React.ComponentPropsWithoutRef<"code">) => {
     // Don't apply inline code styling to code blocks (which are children of pre tags)
@@ -357,36 +402,27 @@ export const components = {
       />
     );
   },
-  strong: (props: React.ComponentPropsWithoutRef<"strong">) => <strong {...props} />,
-  em: (props: React.ComponentPropsWithoutRef<"em">) => <em {...props} />,
-  blockquote: (props: React.ComponentPropsWithoutRef<"blockquote">) => (
-    <blockquote className="border-border my-4 border-l-4 pl-4 italic" {...props} />
-  ),
-  table: (props: React.ComponentPropsWithoutRef<"table">) => (
-    <div className="table-container">
-      <table className="divide-border my-6 min-w-full divide-y" {...props} />
-    </div>
-  ),
-  th: (props: React.ComponentPropsWithoutRef<"th">) => (
-    <th
-      className="bg-card text-card-foreground px-4 py-2 text-left text-sm font-medium"
-      {...props}
-    />
-  ),
-  td: (props: React.ComponentPropsWithoutRef<"td">) => (
-    <td className="border-border border-t px-4 py-2" {...props} />
-  ),
-  hr: (props: React.ComponentPropsWithoutRef<"hr">) => (
-    <hr className="border-border my-6" {...props} />
-  ),
 };
 
-interface MDXProviderProps {
-  children: React.ReactNode;
-  components: Record<string, React.ComponentType<any>>;
-}
+// -----------------------------------------------------------------------------
+// Shorthand Aliases
+// -----------------------------------------------------------------------------
 
-// Export the MDXProvider directly
-export function MDXProvider({ children, components }: MDXProviderProps) {
-  return <BaseMDXProvider components={components}>{children}</BaseMDXProvider>;
-}
+const shorthandComponents = {
+  Install: InstallSnippet,
+};
+
+// -----------------------------------------------------------------------------
+// Complete Component Registry
+// -----------------------------------------------------------------------------
+
+export const components = {
+  ...customComponents,
+  ...headingElements,
+  ...textElements,
+  ...listElements,
+  ...tableElements,
+  ...mediaElements,
+  ...codeElements,
+  ...shorthandComponents,
+};
