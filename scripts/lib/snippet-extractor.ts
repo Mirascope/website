@@ -15,7 +15,7 @@ import { replaceProviderVariables } from "@/src/config/providers";
  */
 export function extractSnippetsFromContent(content: string): string[] {
   // First, check for any python-* blocks that aren't our supported types
-  const pythonPrefixRegex = /```(python-[^`\n]+)\n/g;
+  const pythonPrefixRegex = /```(python-[^`\n \{]+)(?:\s*\{[^\}]+\})?\n/g;
   let prefixMatch;
   while ((prefixMatch = pythonPrefixRegex.exec(content)) !== null) {
     const blockType = prefixMatch[1];
@@ -28,7 +28,9 @@ export function extractSnippetsFromContent(content: string): string[] {
   }
 
   // Match Python blocks (regular), python-snippet-concat blocks, and python-snippet-skip blocks
-  const snippetRegex = /```(python|python-snippet-concat|python-snippet-skip)\n([\s\S]*?)```/g;
+  // Also handles meta directives like ```python{1,2} or ```python {1,2}
+  const snippetRegex =
+    /```(python|python-snippet-concat|python-snippet-skip)(?:\s*\{[^\}]+\})?\n([\s\S]*?)```/g;
   const snippets: string[] = [];
 
   // Count lines up to each match
