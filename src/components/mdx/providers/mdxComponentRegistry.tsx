@@ -405,14 +405,6 @@ const codeElements = {
 };
 
 // -----------------------------------------------------------------------------
-// Shorthand Aliases
-// -----------------------------------------------------------------------------
-
-const shorthandComponents = {
-  Install: InstallSnippet,
-};
-
-// -----------------------------------------------------------------------------
 // Complete Component Registry
 // -----------------------------------------------------------------------------
 
@@ -424,5 +416,4 @@ export const components = {
   ...tableElements,
   ...mediaElements,
   ...codeElements,
-  ...shorthandComponents,
 };
