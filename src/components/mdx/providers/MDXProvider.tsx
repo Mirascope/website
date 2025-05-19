@@ -1,5 +1,5 @@
 import React from "react";
-import { MDXProvider } from "@mdx-js/react";
+import { MDXProvider as BaseMDXProvider } from "@mdx-js/react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Link as LinkIcon } from "lucide-react";
 import {
@@ -381,14 +381,12 @@ export const components = {
   ),
 };
 
-interface MDXProviderWrapperProps {
+interface MDXProviderProps {
   children: React.ReactNode;
+  components: Record<string, React.ComponentType<any>>;
 }
 
-export function MDXProviderWrapper({ children }: MDXProviderWrapperProps) {
-  return (
-    <div className="mdx-content overflow-y-auto" id="mdx-container">
-      <MDXProvider components={components}>{children}</MDXProvider>
-    </div>
-  );
+// Export the MDXProvider directly
+export function MDXProvider({ children, components }: MDXProviderProps) {
+  return <BaseMDXProvider components={components}>{children}</BaseMDXProvider>;
 }
