@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { LoadingContent } from "@/src/components/core/feedback";
 import { useProvider } from "@/src/components/mdx/providers";
-import { CodeBlock } from "./CodeBlock";
-
+import { AnalyticsCodeBlock } from "./AnalyticsCodeBlock";
 interface ProviderCodeBlockProps {
   examplePath: string; // Path relative to public/examples
   language?: string;
@@ -82,7 +81,7 @@ export function ProviderCodeBlock({
           Example for {provider} not available yet.
         </div>
       )}
-      {currentProviderCode && <CodeBlock code={currentProviderCode} language={language} />}
+      {currentProviderCode && <AnalyticsCodeBlock code={currentProviderCode} language={language} />}
     </>
   );
 }
