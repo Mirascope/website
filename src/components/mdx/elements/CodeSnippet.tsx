@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { useProvider } from "@/src/components/mdx/providers";
-import { CodeBlock } from "./CodeBlock";
+import { AnalyticsCodeBlock } from "@/src/components/mdx/elements/AnalyticsCodeBlock";
 import { replaceProviderVariables } from "@/src/config/providers";
 
 interface CodeSnippetProps {
@@ -56,7 +56,7 @@ export function CodeSnippet({
 
   return (
     <div className={`my-4 ${className}`}>
-      <CodeBlock code={processedContent} language={language} />
+      <AnalyticsCodeBlock code={processedContent} language={language} />
     </div>
   );
 }
