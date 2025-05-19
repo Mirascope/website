@@ -164,7 +164,6 @@ interface SearchResultsContainerProps {
   results: SearchResultItem[];
   resultsRef: React.RefObject<HTMLDivElement | null>;
   onResultSelect: () => void;
-  isLandingPage?: boolean;
   selectedIndex: number;
   setSelectedIndex: (index: number) => void;
   isMobile?: boolean;
@@ -180,11 +179,11 @@ function SearchResultsContainer({
   results,
   resultsRef,
   onResultSelect,
-  isLandingPage = false,
   selectedIndex,
   setSelectedIndex,
   isMobile = false,
 }: SearchResultsContainerProps) {
+  const isLandingPage = useIsLandingPage();
   return (
     <div
       className={SEARCH_BAR_STYLES.resultsContainer(isLandingPage, isMobile, isOpen)}
