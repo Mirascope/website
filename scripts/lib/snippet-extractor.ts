@@ -11,29 +11,27 @@ import * as path from "path";
 import { replaceProviderVariables } from "@/src/config/providers";
 
 /**
- * Extract Python snippets from an MDX file
+ * Extract Python snippets from MDX content string
  */
-export function extractSnippets(filePath: string): string[] {
-  const content = fs.readFileSync(filePath, "utf-8");
-
+export function extractSnippetsFromContent(content: string): string[] {
   // First, check for any python-* blocks that aren't our supported types
-  const pythonPrefixRegex = /```(python-[^`\n]+)\n/g;
+  const pythonPrefixRegex = /```(python-[^`\n \{]+)(?:\s*\{[^\}]+\})?\n/g;
   let prefixMatch;
   while ((prefixMatch = pythonPrefixRegex.exec(content)) !== null) {
     const blockType = prefixMatch[1];
     // Only allow python-snippet-concat and python-snippet-skip
     if (blockType !== "python-snippet-concat" && blockType !== "python-snippet-skip") {
       throw new Error(
-        `Unsupported Python block type "${blockType}" in file ${filePath}. Only python, python-snippet-concat, and python-snippet-skip are allowed.`
+        `Unsupported Python block type "${blockType}". Only python, python-snippet-concat, and python-snippet-skip are allowed.`
       );
     }
   }
 
   // Match Python blocks (regular), python-snippet-concat blocks, and python-snippet-skip blocks
-  const snippetRegex = /```(python|python-snippet-concat|python-snippet-skip)\n([\s\S]*?)```/g;
+  // Also handles meta directives like ```python{1,2} or ```python {1,2}
+  const snippetRegex =
+    /```(python|python-snippet-concat|python-snippet-skip)(?:\s*\{[^\}]+\})?\n([\s\S]*?)```/g;
   const snippets: string[] = [];
-
-  let lastSnippet: string | null = null;
 
   // Count lines up to each match
   let match;
@@ -45,17 +43,33 @@ export function extractSnippets(filePath: string): string[] {
       continue;
     }
 
-    if (blockType === "python-snippet-concat" && lastSnippet) {
+    if (blockType === "python-snippet-concat" && snippets.length > 0) {
       // Append to the previous snippet
-      lastSnippet += "\n\n" + codeContent;
+      snippets[snippets.length - 1] += "\n\n" + codeContent;
     } else {
       // Create a new snippet
-      lastSnippet = codeContent;
-      snippets.push(lastSnippet);
+      snippets.push(codeContent);
     }
   }
 
   return snippets;
+}
+
+/**
+ * Extract Python snippets from an MDX file
+ */
+export function extractSnippets(filePath: string): string[] {
+  const content = fs.readFileSync(filePath, "utf-8");
+
+  try {
+    return extractSnippetsFromContent(content);
+  } catch (error) {
+    // Enhance error message with file information
+    if (error instanceof Error) {
+      throw new Error(`${error.message} (in file ${filePath})`);
+    }
+    throw error;
+  }
 }
 
 /**
