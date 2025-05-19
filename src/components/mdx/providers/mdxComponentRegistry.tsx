@@ -3,7 +3,6 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { Link as LinkIcon } from "lucide-react";
 import {
   InstallSnippet,
-  CodeSnippet,
   ProviderCodeBlock,
   Callout,
   Note,
@@ -96,7 +95,6 @@ const HeadingAnchor = ({ id }: { id?: string }) => {
 const customComponents = {
   // Custom components for docs
   InstallSnippet,
-  CodeSnippet,
   ProviderCodeBlock,
   TabbedSection,
   Tab,
