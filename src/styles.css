@@ -528,8 +528,12 @@ mark,
 /* Code block styling */
 .mdx-content pre {
   padding: 0.5rem !important;
-  background-color: var(--color-code-background) !important;
   overflow-x: auto !important;
+}
+
+/* Code block styling */
+.mdx-content pre.shiki {
+  background-color: var(--color-code-background) !important;
 }
 
 /* Hide scrollbar but maintain scrolling functionality */
