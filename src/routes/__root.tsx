@@ -80,7 +80,7 @@ export const Route = createRootRoute({
         <ThemeProvider>
           <ProductProvider product={getProductFromPath(path)}>
             <div
-              className="handwriting-enabled flex min-h-screen flex-col px-2"
+              className="flex min-h-screen flex-col px-2"
               style={
                 {
                   "--header-height": path.startsWith("/docs/")

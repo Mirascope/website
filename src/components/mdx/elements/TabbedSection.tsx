@@ -99,7 +99,7 @@ export function TabbedSection({
       <Tabs
         value={activeTab}
         defaultValue={firstTabValue}
-        className="w-full"
+        className="font-handwriting w-full"
         onValueChange={(newValue) => {
           if (saveTab) {
             saveTab(newValue);

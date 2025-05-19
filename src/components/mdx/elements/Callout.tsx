@@ -124,7 +124,7 @@ export function Callout({
           <div className={cn("flex h-6 w-6 items-center justify-center rounded-full", iconClass)}>
             {customIcon || <Icon className={cn("h-4 w-4")} />}
           </div>
-          <div className="font-handwriting flex-1 text-base font-medium">{displayTitle}</div>
+          <div className="flex-1 text-base font-medium">{displayTitle}</div>
           {collapsible && (
             <div className="text-foreground">
               <ChevronDown

@@ -31,9 +31,9 @@ const MirascopeLogo: React.FC<BaseLogoProps> = ({
 
       {withText && (
         <div className={cn("flex items-center", textClassName)}>
-          <h1 className={cn(selectedSize.text, "text-mirascope-purple font-handwriting mb-0")}>
+          <span className={cn(selectedSize.text, "text-mirascope-purple font-handwriting mb-0")}>
             Mirascope
-          </h1>
+          </span>
         </div>
       )}
     </div>
