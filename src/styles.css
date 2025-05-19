@@ -55,7 +55,6 @@
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   --font-handwriting: "Williams Handwriting", cursive;
   --font-handwriting-descent: "Williams Handwriting Descent", cursive;
-  --font-excalifont: "Excalifont", sans-serif;
 }
 
 @theme inline {
@@ -107,10 +106,6 @@ pre {
   font-family: var(--font-handwriting-descent) !important;
 }
 
-.font-excalifont {
-  font-family: var(--font-excalifont) !important;
-}
-
 /* Handwriting mode overrides for content areas */
 .handwriting-enabled .mdx-content,
 .handwriting-enabled #doc-content,
@@ -123,10 +118,6 @@ pre {
 /* Special styling for hero text in different modes */
 .handwriting-enabled .hero-font {
   font-family: var(--font-handwriting) !important;
-}
-
-.mono-enabled .hero-font {
-  font-family: var(--font-excalifont) !important;
 }
 
 /* Blog content uses alt font */
