@@ -48,11 +48,11 @@ export default function CookieBanner() {
       tabIndex={-1}
     >
       <div className="flex flex-col gap-2">
-        <div className="text-muted-foreground font-handwriting text-center text-base">
-          <h2 id="cookie-title" className="sr-only">
+        <div className="text-muted-foreground text-center">
+          <h2 id="cookie-title" className="sr-onl text-lg font-bold">
             Cookie Consent
           </h2>
-          <p id="cookie-description">We use cookies to track usage and improve the site.</p>
+          <p id="cookie-description text-xs">We use cookies to track usage and improve the site.</p>
         </div>
         <div className="flex justify-center gap-2">
           <button
@@ -60,7 +60,7 @@ export default function CookieBanner() {
             aria-label="Reject cookies"
             className={cn(
               "rounded-md px-2 py-1 text-sm font-medium transition-colors focus:ring-2 focus:outline-none",
-              "font-handwriting text-muted-foreground",
+              "text-muted-foreground",
               "hover:bg-accent focus:ring-ring cursor-pointer",
               isLandingPage ? "bg-muted/60" : "bg-muted"
             )}
@@ -72,7 +72,7 @@ export default function CookieBanner() {
             aria-label="Accept cookies"
             className={cn(
               "rounded-md px-2 py-1 text-sm font-medium transition-colors focus:ring-2 focus:outline-none",
-              "font-handwriting text-primary-foreground",
+              "text-primary-foreground",
               "hover:bg-primary/90 focus:ring-ring cursor-pointer",
               isLandingPage ? "bg-primary/80" : "bg-primary"
             )}

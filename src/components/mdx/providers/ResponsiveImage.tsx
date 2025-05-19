@@ -131,7 +131,7 @@ export const ResponsiveImage: React.FC<ResponsiveImageProps> = ({
             </picture>
             <button
               onClick={toggleExpanded}
-              className="font-handwriting absolute top-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-xl leading-none font-medium text-white transition-colors hover:bg-black/70"
+              className="absolute top-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-xl leading-none font-medium text-white transition-colors hover:bg-black/70"
               aria-label="Close expanded image"
             >
               X

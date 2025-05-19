@@ -1,6 +1,5 @@
 /* Google Fonts Import */
-@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 
 @import "tailwindcss";
 
@@ -35,20 +34,36 @@
   descent-override: 10%;
 }
 
+/* Font stack variables for consistent use throughout the codebase */
+:root {
+  /* Layout & sizing variables */
+  --radius: 0.625rem;
+  --header-height-base: 86px; /* Standard header without selector (measured) */
+  --header-height-with-selector: 126px; /* Header with product selector (measured) */
+  --header-height: var(--header-height-base); /* Default value */
+  --footer-height: 60px;
+
+  /* Font stacks */
+  --font-sans:
+    "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
+    "Open Sans", "Helvetica Neue", sans-serif;
+  --font-mono:
+    "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  --font-handwriting: "Williams Handwriting", cursive;
+  --font-handwriting-descent: "Williams Handwriting Descent", cursive;
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
 body {
   @apply m-0;
-  font-family:
-    "Geist Sans",
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    "Open Sans",
-    "Helvetica Neue",
-    sans-serif;
+  font-family: var(--font-handwriting);
   font-weight: 400; /* Normal weight */
   letter-spacing: 0.01em; /* Slight letter spacing */
   -webkit-font-smoothing: antialiased;
@@ -60,50 +75,21 @@ code,
 kbd,
 samp,
 pre {
-  font-family:
-    "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-    "Courier New", monospace;
+  font-family: var(--font-mono);
   font-size: var(--text-code) !important;
 }
 
-/* MDX content always uses monospace for all text and code blocks */
-.mdx-content {
-  font-family:
-    "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-    "Courier New", monospace !important;
+/* Font mode class definitions */
+.font-sans {
+  font-family: var(--font-sans) !important;
 }
 
-.handwriting-enabled .mdx-content,
-.handwriting-enabled #doc-content,
-.handwriting-enabled .mdx-container,
-.handwriting-enabled .blog-content .mdx-content,
-.handwriting-enabled .prose {
-  font-family:
-    "Roboto",
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Helvetica,
-    Arial,
-    sans-serif,
-    "Apple Color Emoji",
-    "Segoe UI Emoji",
-    "Segoe UI Symbol" !important;
+.font-handwriting {
+  font-family: var(--font-handwriting) !important;
 }
 
-/* Additional rule to specifically target blog content */
-.blog-content {
-  font-family:
-    "Roboto",
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Helvetica,
-    Arial,
-    sans-serif,
-    "Apple Color Emoji",
-    "Segoe UI Emoji",
-    "Segoe UI Symbol" !important;
+.font-handwriting-descent {
+  font-family: var(--font-handwriting-descent) !important;
 }
 
 /* Medium text shadow - create a utility class for medium-sized text */
@@ -214,20 +200,6 @@ h6 code {
   }
 }
 
-:root {
-  --radius: 0.625rem;
-  --header-height-base: 86px; /* Standard header without selector (measured) */
-  --header-height-with-selector: 126px; /* Header with product selector (measured) */
-  --header-height: var(--header-height-base); /* Default value */
-}
-
-@theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-}
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -235,100 +207,6 @@ h6 code {
   body {
     @apply bg-background text-foreground;
   }
-}
-
-/* Font for site content - active when mono-enabled class is present */
-.font-mono,
-.mono-enabled {
-  font-family:
-    "Roboto",
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Helvetica,
-    Arial,
-    sans-serif,
-    "Apple Color Emoji",
-    "Segoe UI Emoji",
-    "Segoe UI Symbol" !important;
-}
-
-/* Font for site content when handwriting is enabled */
-.handwriting-enabled {
-  font-family: "Williams Handwriting", cursive !important;
-}
-
-/* Font class for Excalifont - used for stylistic elements in mono mode */
-.font-excalifont {
-  font-family: "Excalifont", sans-serif !important;
-}
-
-/* Special styling for hero text in different modes */
-.handwriting-enabled .hero-font {
-  font-family: "Williams Handwriting", cursive !important;
-}
-
-.mono-enabled .hero-font {
-  font-family: "Excalifont", sans-serif !important;
-}
-
-/* Font class for sans */
-.font-sans {
-  font-family:
-    "Geist Sans",
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    "Open Sans",
-    "Helvetica Neue",
-    sans-serif !important;
-}
-
-/* Font toggle button styling - consistent across all pages */
-.font-toggle-button {
-  font-family:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
-    "Helvetica Neue", sans-serif !important;
-  line-height: 1.5 !important;
-  font-weight: 500 !important;
-  letter-spacing: 0.01em !important;
-  transition: all 0.2s ease-in-out !important;
-  white-space: nowrap !important;
-  color: black !important;
-  background-color: white !important;
-}
-
-/* Font classes for use in menu options */
-.font-mono {
-  font-family:
-    "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-    "Courier New", monospace !important;
-}
-
-.font-handwriting {
-  font-family: "Williams Handwriting", cursive !important;
-}
-
-.font-handwriting-descent {
-  font-family: "Williams Handwriting Descent", cursive !important;
-}
-
-/* Font menu option sizing */
-
-/* Ensure font dropdown text is always black regardless of page */
-.font-dropdown,
-.font-dropdown button,
-.font-dropdown span {
-  color: #000 !important;
-}
-
-/* Remove default Radix chevron */
-.font-toggle-button svg {
-  display: none !important;
 }
 
 /* Homepage headings styling */
@@ -342,6 +220,10 @@ h6 code {
 /* Pricing table adjustments */
 .grid.grid-cols-3 {
   min-width: 800px;
+}
+
+.mdx-content {
+  font-family: var(--font-sans);
 }
 
 /* Table container with horizontal scrolling */
@@ -458,55 +340,18 @@ mark,
   }
 }
 
-/* Styles moved from MDXProvider.tsx */
-/* Base styles for content - Sans-serif font */
-.mdx-content {
-  font-family:
-    "Roboto",
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Helvetica,
-    Arial,
-    sans-serif,
-    "Apple Color Emoji",
-    "Segoe UI Emoji",
-    "Segoe UI Symbol" !important;
+/* Headings and links use handwriting font */
+h1 {
+  font-family: var(--font-handwriting) !important;
+  @apply text-4xl;
 }
 
-/* All standard text elements use sans font in normal mode */
-.mdx-content h1,
-.mdx-content h2,
-.mdx-content h3,
-.mdx-content h4,
-.mdx-content h5,
-.mdx-content h6,
-.mdx-content p,
-.mdx-content a,
-.mdx-content li,
-.mdx-content blockquote,
-.mdx-content table {
-  font-family:
-    "Roboto",
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Helvetica,
-    Arial,
-    sans-serif,
-    "Apple Color Emoji",
-    "Segoe UI Emoji",
-    "Segoe UI Symbol" !important;
-}
-
-.mdx-content h1,
-.mdx-content h2,
-.mdx-content h3,
-.mdx-content h4,
-.mdx-content h5,
-.mdx-content h6,
-.mdx-content a {
-  font-family: "Williams Handwriting", cursive !important;
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-handwriting) !important;
 }
 
 /* Additional list styling */

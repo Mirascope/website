@@ -38,7 +38,7 @@ export function ProviderDropdown({ className }: ProviderDropdownProps) {
               key={p}
               onClick={() => setProvider(p)}
               className={cn(
-                "font-handwriting text-foreground cursor-pointer text-base",
+                "text-foreground cursor-pointer text-base",
                 provider === p && "text-primary font-medium"
               )}
             >

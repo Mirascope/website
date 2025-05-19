@@ -389,6 +389,7 @@ export const SEARCH_BAR_STYLES = {
       "search-results overflow-hidden rounded-lg shadow-2xl [text-shadow:none]",
       "bg-background border-border border",
       "transition-opacity duration-300 ease-in-out",
+      "font-sans",
       // Use Tailwind's animation utilities for better control with a subtle slide effect
       isVisible ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0",
       // Match width to parent container (container manages actual width constraints)
@@ -426,7 +427,7 @@ export const SEARCH_BAR_STYLES = {
 
   // Search footer styles
   footer:
-    "border-border bg-muted/40 text-muted-foreground flex items-center justify-between border-t p-2 text-xs",
+    "border-border bg-muted/40 text-muted-foreground flex items-center justify-between border-t p-2 text-xs font-handwriting",
 
   // Loading indicator
   loadingIndicator: "border-primary h-6 w-6 animate-spin rounded-full border-t-2 border-b-2",
