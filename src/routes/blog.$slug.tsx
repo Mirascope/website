@@ -51,6 +51,7 @@ export const Route = createFileRoute("/blog/$slug")({
       mdx: {
         code: "",
         frontmatter: {},
+        tableOfContents: [],
       },
     };
 

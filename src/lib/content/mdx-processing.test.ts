@@ -1,5 +1,5 @@
 import { describe, test, expect } from "bun:test";
-import { parseFrontmatter, mergeFrontmatter } from "./mdx-processing";
+import { parseFrontmatter, mergeFrontmatter, extractTableOfContents } from "./mdx-processing";
 
 describe("Frontmatter Parser", () => {
   describe("parseFrontmatter", () => {
@@ -147,6 +147,204 @@ Content after malformed frontmatter.`;
       const result = mergeFrontmatter(target, source);
 
       expect(result).toEqual(source);
+    });
+  });
+});
+
+describe("Table of Contents Extraction", () => {
+  describe("extractTableOfContents", () => {
+    test("extracts headings with correct levels", () => {
+      const content = `
+# Heading 1
+Content here
+## Heading 2
+More content
+### Heading 3
+Even more content
+`;
+
+      const toc = extractTableOfContents(content);
+
+      expect(toc).toHaveLength(3);
+      expect(toc[0]).toEqual({
+        id: "heading-1",
+        text: "Heading 1",
+        level: 1,
+      });
+      expect(toc[1]).toEqual({
+        id: "heading-2",
+        text: "Heading 2",
+        level: 2,
+      });
+      expect(toc[2]).toEqual({
+        id: "heading-3",
+        text: "Heading 3",
+        level: 3,
+      });
+    });
+
+    test("handles headings with explicit IDs", () => {
+      const content = `
+# Introduction {#intro}
+## Getting Started {#getting-started}
+## Advanced Usage {#advanced}
+`;
+
+      const toc = extractTableOfContents(content);
+
+      expect(toc).toHaveLength(3);
+      expect(toc[0].id).toBe("intro");
+      expect(toc[1].id).toBe("getting-started");
+      expect(toc[2].id).toBe("advanced");
+    });
+
+    test("generates proper IDs from heading text", () => {
+      const content = `
+# Special Characters: @#$%^&*()!
+## Multiple   Spaces Here
+### Uppercase HEADINGS
+`;
+
+      const toc = extractTableOfContents(content);
+
+      expect(toc).toHaveLength(3);
+      expect(toc[0].id).toBe("special-characters");
+      expect(toc[1].id).toBe("multiple-spaces-here");
+      expect(toc[2].id).toBe("uppercase-headings");
+    });
+
+    test("handles headings with mixed content", () => {
+      const content = `
+Here is some text.
+
+# First Heading
+Content after first heading.
+
+Some more text...
+
+## Second Heading
+
+More content...
+
+This is not a heading.
+### This is a heading
+`;
+
+      const toc = extractTableOfContents(content);
+
+      expect(toc).toHaveLength(3);
+      expect(toc[0].text).toBe("First Heading");
+      expect(toc[1].text).toBe("Second Heading");
+      expect(toc[2].text).toBe("This is a heading");
+    });
+
+    test("returns empty array for content with no headings", () => {
+      const content = `
+This is a document with no headings.
+
+Just paragraphs of text.
+
+No heading structures at all.
+      `;
+
+      const toc = extractTableOfContents(content);
+
+      expect(toc).toHaveLength(0);
+    });
+
+    test("handles non-english characters in headings", () => {
+      const content = `
+# 你好世界
+## Über die Anwendung
+### حالة المشروع
+`;
+
+      const toc = extractTableOfContents(content);
+
+      expect(toc).toHaveLength(3);
+      expect(toc[0].text).toBe("你好世界");
+      expect(toc[1].text).toBe("Über die Anwendung");
+      expect(toc[2].text).toBe("حالة المشروع");
+
+      // IDs should be normalized
+      expect(toc[0].id).not.toContain("你好世界");
+      expect(toc[1].id).not.toContain("Über");
+      expect(toc[2].id).not.toContain("حالة");
+    });
+
+    test("handles code content", () => {
+      const content = `
+\`\`\`
+# This is a comment, not a Heading.
+\`\`\`
+`;
+
+      const toc = extractTableOfContents(content);
+
+      expect(toc).toHaveLength(0);
+    });
+
+    test("handles component content", () => {
+      const content = `
+<CustomComponent>
+# By virtue of being nested inside a custom component, this is not a heading.
+</CustomComponent>
+
+`;
+
+      const toc = extractTableOfContents(content);
+
+      expect(toc).toHaveLength(0);
+    });
+
+    test("handles nested components", () => {
+      const content = `
+
+# First Heading
+<CustomComponent>
+# By virtue of being nested inside a custom component, this is not a heading.
+  <SubComponent>
+  # This is still not a heading.
+  </SubComponent>
+</CustomComponent>
+
+<InlineComponent />
+
+# Second Heading
+`;
+
+      const toc = extractTableOfContents(content);
+
+      expect(toc).toHaveLength(2);
+      expect(toc[0].text).toBe("First Heading");
+      expect(toc[1].text).toBe("Second Heading");
+    });
+
+    test("handles realistic case", () => {
+      const content = `
+# Mirascope 
+
+## Getting Started
+
+Install Mirascope, specifying the provider you intend to use, and set your API key:
+
+<InstallSnippet className="mt-4" />
+
+## Mirascope API
+
+Mirascope provides a consistent, easy-to-use API across all providers:
+
+## Provider SDK Equivalent
+
+For comparison, here's how you would achieve the same result using the provider's native SDK:
+
+<Info title="Official SDK" collapsible={true}>
+</Info>
+`;
+
+      const toc = extractTableOfContents(content);
+
+      expect(toc).toHaveLength(4);
     });
   });
 });
