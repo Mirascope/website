@@ -297,35 +297,40 @@ const codeElements = {
 
   // Code blocks - use our custom CodeBlock component with provider substitution
   pre: (props: React.ComponentPropsWithoutRef<"pre">) => {
-    // Direct extraction approach that works with MDX's structure
+    // Get meta information from our data attribute or initialize to empty
+    let meta = (props as any)["data-meta"] || "";
+
+    // Initialize variables for code content and language
     let codeContent = "";
     let language = "txt";
-    let meta = "";
 
-    // If no success with direct props, try to handle React children structure
-    if (!codeContent && props.children) {
+    // Process children to find code content and language
+    if (props.children) {
       const children = React.Children.toArray(props.children);
 
-      // Loop through children to find code content
+      // Loop through children to find code content (typically there's only one child)
       for (const child of children) {
         if (!React.isValidElement(child)) continue;
 
-        // Try to find language info in child's className
-        // Use type assertion to ensure we can access props
-        const childProps =
-          (child.props as
-            | {
-                className?: string;
-                children?: React.ReactNode | string;
-              }
-            | undefined) || {};
+        // Check if this is a code element or has code-like properties
+        const childProps = child.props as {
+          className?: string;
+          children?: React.ReactNode | string;
+        };
 
+        // Extract language from className
         if (childProps.className?.includes("language-")) {
-          language = (childProps.className.match(/language-(\w+)/) || [])[1] || "";
-          const metaMatch = childProps.className.match(/\{([^}]+)\}/);
-          meta = metaMatch ? `{${metaMatch[1]}}` : "";
+          language = (childProps.className.match(/language-(\w+)/) || [])[1] || "txt";
+
+          // Also check for meta in className (legacy approach)
+          // This looks for patterns like {1-3} or {1,3} after the language
+          if (!meta) {
+            const metaMatch = childProps.className.match(/\{([^}]+)\}/);
+            meta = metaMatch ? `{${metaMatch[1]}}` : "";
+          }
         }
-        // Extract code content from child
+
+        // Get code content
         if (typeof childProps.children === "string") {
           codeContent = childProps.children;
           break;
