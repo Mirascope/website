@@ -5,7 +5,7 @@ import { MDXRenderer } from "@/src/components/mdx/providers";
 import { CopyMarkdownButton } from "@/src/components/ui/copy-markdown-button";
 
 import { LoadingContent } from "@/src/components/core/feedback";
-import { TableOfContents } from "@/src/components/core/navigation";
+import { DomExtractedTableOfContents } from "@/src/components/core/navigation";
 import { SEOMeta } from "@/src/components/core/meta";
 import { PagefindMeta } from "@/src/components/core/meta";
 import type { BlogContent } from "@/src/lib/content";
@@ -116,7 +116,7 @@ export function BlogPostPage({ post, slug, isLoading = false }: BlogPostPageProp
       </div>
 
       <div className="flex-grow overflow-y-auto pr-4 pb-6 pl-4">
-        <TableOfContents contentId="blog-content" path={path} />
+        <DomExtractedTableOfContents contentId="blog-content" path={path} />
       </div>
     </div>
   );

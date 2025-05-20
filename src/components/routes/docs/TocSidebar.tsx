@@ -1,5 +1,5 @@
 import React from "react";
-import { TableOfContents } from "@/src/components";
+import { DomExtractedTableOfContents } from "@/src/components";
 import { Server } from "lucide-react";
 import { ProviderDropdown } from "@/src/components/mdx/providers";
 import { type DocContent } from "@/src/lib/content";
@@ -41,7 +41,7 @@ const TocSidebar: React.FC<TocSidebarProps> = ({ document }) => {
 
           <h4 className="text-muted-foreground mt-4 text-sm font-medium">On this page</h4>
         </div>
-        <TableOfContents contentId="doc-content" path={document?.meta.path || ""} />
+        <DomExtractedTableOfContents contentId="doc-content" path={document?.meta.path || ""} />
       </div>
     </div>
   );
