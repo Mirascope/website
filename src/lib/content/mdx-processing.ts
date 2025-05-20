@@ -1,5 +1,7 @@
 import { ContentError, type ContentType } from "./content";
 import remarkGfm from "remark-gfm";
+import { compile } from "@mdx-js/mdx";
+import { rehypeCodeMeta } from "./rehype-code-meta";
 
 /**
  * Result of frontmatter parsing
@@ -138,20 +140,19 @@ export async function processMDXContent(
     // Extract frontmatter
     const { frontmatter, content } = parseFrontmatter(rawContent);
 
-    // Dynamically import next-mdx-remote/serialize since it's an ESM module
-    const { serialize } = await import("next-mdx-remote/serialize");
-    const mdxSource = await serialize(content, {
-      scope: frontmatter,
-      mdxOptions: {
-        remarkPlugins: [remarkGfm],
-      },
+    const compiledResult = await compile(content, {
+      outputFormat: "function-body",
+      providerImportSource: "@mdx-js/react",
+      development: process.env.NODE_ENV !== "production",
+      remarkPlugins: [remarkGfm],
+      rehypePlugins: [rehypeCodeMeta],
     });
 
     // Return processed content
     return {
       content,
       frontmatter,
-      code: mdxSource.compiledSource,
+      code: String(compiledResult),
     };
   } catch (error) {
     // Throw a ContentError instead of returning an error component
