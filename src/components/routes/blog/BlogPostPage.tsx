@@ -60,7 +60,7 @@ export function BlogPostPage({ post, slug, isLoading = false }: BlogPostPageProp
   }, [slug, isLoading]);
 
   // Extract metadata for easier access
-  const { title, date, readTime, author, lastUpdated, path } = post.meta;
+  const { title, date, readTime, author, lastUpdated } = post.meta;
 
   // Main content
   const mainContent = isLoading ? (
@@ -116,7 +116,7 @@ export function BlogPostPage({ post, slug, isLoading = false }: BlogPostPageProp
       </div>
 
       <div className="flex-grow overflow-y-auto pr-4 pb-6 pl-4">
-        <TableOfContents contentId="blog-content" path={path} />
+        <TableOfContents headings={post.mdx?.tableOfContents || []} observeHeadings={true} />
       </div>
     </div>
   );

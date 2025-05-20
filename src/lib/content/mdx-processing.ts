@@ -2,6 +2,7 @@ import { ContentError, type ContentType } from "./content";
 import remarkGfm from "remark-gfm";
 import { compile } from "@mdx-js/mdx";
 import { rehypeCodeMeta } from "./rehype-code-meta";
+import type { TOCItem } from "@/src/components/core/navigation/TableOfContents";
 
 /**
  * Result of frontmatter parsing
@@ -18,6 +19,7 @@ export interface ProcessedContent {
   content: string;
   frontmatter: Record<string, any>;
   code: string;
+  tableOfContents: TOCItem[];
 }
 
 /**
@@ -117,6 +119,83 @@ export function mergeFrontmatter(
 }
 
 /**
+ * Extract table of contents items from markdown content
+ *
+ * @param content - The markdown content to process
+ * @returns Array of TOCItem objects
+ */
+export function extractTableOfContents(content: string): TOCItem[] {
+  const headings: TOCItem[] = [];
+
+  // Process content line by line
+  const lines = content.split("\n");
+
+  // Track state of being inside code blocks or component tags
+  let inCodeBlock = false;
+  let componentNestingLevel = 0;
+
+  // Heading pattern to match
+  const headingPattern = /^(#{1,6})\s+(.+?)(?:\s+\{#([a-zA-Z0-9_-]+)\})?$/;
+
+  for (const line of lines) {
+    // Handle code blocks (```code```)
+    if (line.trim().startsWith("```")) {
+      inCodeBlock = !inCodeBlock;
+      continue;
+    }
+
+    // Skip content inside code blocks
+    if (inCodeBlock) {
+      continue;
+    }
+
+    // Handle MDX component opening tags
+    const openTagMatches = line.match(/<[\w.-]+[^>/]*(?:\s+[^>/]*)*>/g);
+    if (openTagMatches) {
+      componentNestingLevel += openTagMatches.length;
+    }
+
+    // Handle MDX component closing tags
+    const closeTagMatches = line.match(/<\/[\w.-]+>/g);
+    if (closeTagMatches) {
+      componentNestingLevel -= closeTagMatches.length;
+    }
+
+    // Make sure nesting level doesn't go below 0
+    componentNestingLevel = Math.max(0, componentNestingLevel);
+
+    // Only process lines that are not inside component tags
+    if (componentNestingLevel === 0) {
+      // Try to extract headings from this line
+      const match = line.match(headingPattern);
+      if (match) {
+        const level = match[1].length;
+        const text = match[2].trim();
+
+        // Use explicit ID if provided in the format {#id}
+        let id = match[3];
+
+        // If no explicit ID, generate one from the text
+        if (!id) {
+          id = text
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-|-$/g, "");
+        }
+
+        headings.push({
+          id,
+          text,
+          level,
+        });
+      }
+    }
+  }
+
+  return headings;
+}
+
+/**
  * MDX processing that parses frontmatter and compiles MDX content
  *
  * @param rawContent - Raw content string with frontmatter
@@ -140,6 +219,9 @@ export async function processMDXContent(
     // Extract frontmatter
     const { frontmatter, content } = parseFrontmatter(rawContent);
 
+    // Extract table of contents
+    const tableOfContents = extractTableOfContents(content);
+
     const compiledResult = await compile(content, {
       outputFormat: "function-body",
       providerImportSource: "@mdx-js/react",
@@ -153,6 +235,7 @@ export async function processMDXContent(
       content,
       frontmatter,
       code: String(compiledResult),
+      tableOfContents,
     };
   } catch (error) {
     // Throw a ContentError instead of returning an error component
