@@ -15,6 +15,7 @@
 import { environment } from "./environment";
 import { processMDXContent } from "./mdx-processing";
 import { docRegistry, type DocInfo } from "./doc-registry";
+import { type TOCItem } from "@/src/components/core/navigation";
 
 // Re-export docRegistry for convenience
 export { docRegistry };
@@ -56,6 +57,7 @@ export interface Content<T extends ContentMeta = ContentMeta> {
   mdx: {
     code: string; // Compiled MDX code
     frontmatter: Record<string, any>; // Extracted frontmatter
+    tableOfContents: TOCItem[]; // Table of contents extracted from headings
   };
 }
 
@@ -296,6 +298,7 @@ export async function loadContent<T extends ContentMeta>(
       mdx: {
         code: processed.code,
         frontmatter: processed.frontmatter,
+        tableOfContents: processed.tableOfContents,
       },
     };
   } catch (error) {
