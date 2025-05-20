@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { cn } from "@/src/lib/utils";
+import { TableOfContents, type TOCItem } from "./TableOfContents";
 
-type TOCItem = {
-  id: string;
-  text: string;
-  level: number;
-};
-
-type TableOfContentsProps = {
+type DomExtractedTableOfContentsProps = {
   contentId: string;
   path: string;
 };
 
-const TableOfContents: React.FC<TableOfContentsProps> = ({ contentId, path }) => {
+/**
+ * Legacy table of contents component that extracts headings from the DOM.
+ * Uses the new props-based TableOfContents component for rendering.
+ */
+const DomExtractedTableOfContents: React.FC<DomExtractedTableOfContentsProps> = ({
+  contentId,
+  path,
+}) => {
   const [headings, setHeadings] = useState<TOCItem[]>([]);
   const [activeId, setActiveId] = useState<string>("");
 
@@ -78,7 +79,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ contentId, path }) =>
       clearTimeout(initialTimer);
       observer.disconnect();
     };
-  }, [contentId, path]);
+  }, [contentId, path, headings]);
 
   // Second effect: Set up observer for active heading tracking
   useEffect(() => {
@@ -113,38 +114,8 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ contentId, path }) =>
     };
   }, [headings, contentId]);
 
-  if (headings.length === 0) {
-    return <p className="text-muted-foreground pl-5 text-sm italic">No headings found</p>;
-  }
-
-  return (
-    <div className="max-h-[calc(100vh-18rem)] overflow-y-auto">
-      <div className="pl-4">
-        <nav className="space-y-1">
-          {headings.map((heading) => (
-            <a
-              key={heading.id}
-              href={`#${heading.id}`}
-              className={cn(
-                "-ml-[1px] block truncate border-l-2 py-1 text-[13px] transition-colors",
-                heading.level === 1 && "pl-2",
-                heading.level === 2 && "pl-2",
-                heading.level === 3 && "pl-4",
-                heading.level === 4 && "pl-6",
-                heading.level === 5 && "pl-8",
-                heading.level === 6 && "pl-10",
-                activeId === heading.id
-                  ? "border-primary text-primary font-medium"
-                  : "text-muted-foreground hover:bg-muted border-transparent hover:rounded-md"
-              )}
-            >
-              {heading.text}
-            </a>
-          ))}
-        </nav>
-      </div>
-    </div>
-  );
+  // Use the new TableOfContents component to render
+  return <TableOfContents headings={headings} activeId={activeId} />;
 };
 
-export default TableOfContents;
+export default DomExtractedTableOfContents;
