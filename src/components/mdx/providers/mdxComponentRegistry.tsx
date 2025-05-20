@@ -297,81 +297,43 @@ const codeElements = {
 
   // Code blocks - use our custom CodeBlock component with provider substitution
   pre: (props: React.ComponentPropsWithoutRef<"pre">) => {
-    // Direct extraction approach that works with MDX's structure
+    // Get meta information from our data attribute or initialize to empty
+    let meta = (props as any)["data-meta"] || "";
+
+    // Initialize variables for code content and language
     let codeContent = "";
-    let language = "";
-    let meta = "";
+    let language = "txt";
 
-    // First try to extract from props directly
-    if (props.className?.includes("language-")) {
-      language = (props.className.match(/language-(\w+)/) || [])[1] || "";
-      const metaMatch = props.className.match(/\{([^}]+)\}/);
-      meta = metaMatch ? `{${metaMatch[1]}}` : "";
-
-      if (typeof props.children === "string") {
-        codeContent = props.children;
-      }
-    }
-
-    // If no success with direct props, try to handle React children structure
-    if (!codeContent && props.children) {
+    // Process children to find code content and language
+    if (props.children) {
       const children = React.Children.toArray(props.children);
 
-      // Loop through children to find code content
+      // Loop through children to find code content (typically there's only one child)
       for (const child of children) {
         if (!React.isValidElement(child)) continue;
 
-        // Try to find language info in child's className
-        // Use type assertion to ensure we can access props
-        const childProps =
-          (child.props as
-            | {
-                className?: string;
-                children?: React.ReactNode | string;
-              }
-            | undefined) || {};
+        // Check if this is a code element or has code-like properties
+        const childProps = child.props as {
+          className?: string;
+          children?: React.ReactNode | string;
+        };
 
+        // Extract language from className
         if (childProps.className?.includes("language-")) {
-          language = (childProps.className.match(/language-(\w+)/) || [])[1] || "";
-          const metaMatch = childProps.className.match(/\{([^}]+)\}/);
-          meta = metaMatch ? `{${metaMatch[1]}}` : "";
+          language = (childProps.className.match(/language-(\w+)/) || [])[1] || "txt";
 
-          // Extract code content from child
-          if (typeof childProps.children === "string") {
-            codeContent = childProps.children;
-            break;
+          // Also check for meta in className (legacy approach)
+          // This looks for patterns like {1-3} or {1,3} after the language
+          if (!meta) {
+            const metaMatch = childProps.className.match(/\{([^}]+)\}/);
+            meta = metaMatch ? `{${metaMatch[1]}}` : "";
           }
         }
 
-        // If child itself doesn't have the class but has children, try those
-        if (!codeContent && childProps.children) {
-          const grandchildren = React.Children.toArray(childProps.children);
-
-          for (const grandchild of grandchildren) {
-            if (!React.isValidElement(grandchild)) continue;
-
-            // Type assertion for grandchild props
-            const grandchildProps =
-              (grandchild.props as
-                | {
-                    className?: string;
-                    children?: React.ReactNode | string;
-                  }
-                | undefined) || {};
-
-            if (grandchildProps.className?.includes("language-")) {
-              language = (grandchildProps.className.match(/language-(\w+)/) || [])[1] || "";
-              const metaMatch = grandchildProps.className.match(/\{([^}]+)\}/);
-              meta = metaMatch ? `{${metaMatch[1]}}` : "";
-
-              if (typeof grandchildProps.children === "string") {
-                codeContent = grandchildProps.children;
-                break;
-              }
-            }
-          }
-
-          if (codeContent) break;
+        // Get code content
+        if (typeof childProps.children === "string") {
+          codeContent = childProps.children;
+          break;
         }
       }
     }
@@ -381,23 +343,8 @@ const codeElements = {
       return <MermaidDiagram chart={codeContent.trim()} />;
     }
 
-    // If we found code content and a language, use our ProviderCodeWrapper component
-    if (codeContent) {
-      return (
-        <ProviderCodeWrapper
-          code={codeContent.replace(/\n$/, "")}
-          language={language}
-          meta={meta}
-        />
-      );
-    }
-
-    // Fallback to standard pre if not a code block or couldn't extract content
     return (
-      <pre
-        className="bg-muted border-border my-6 overflow-x-auto rounded-lg border p-4"
-        {...props}
-      />
+      <ProviderCodeWrapper code={codeContent.replace(/\n$/, "")} language={language} meta={meta} />
     );
   },
 };
