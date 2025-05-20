@@ -1,117 +1,73 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { cn } from "@/src/lib/utils";
 
-type TOCItem = {
+export type TOCItem = {
   id: string;
   text: string;
   level: number;
 };
 
-type TableOfContentsProps = {
-  contentId: string;
-  path: string;
-};
+export interface TableOfContentsProps {
+  headings: TOCItem[];
+  activeId?: string;
 
-const TableOfContents: React.FC<TableOfContentsProps> = ({ contentId, path }) => {
-  const [headings, setHeadings] = useState<TOCItem[]>([]);
-  const [activeId, setActiveId] = useState<string>("");
+  /**
+   * Enable automatic tracking of the active heading by observing heading elements in the DOM.
+   * When true, the component will use an IntersectionObserver to track which headings
+   * are currently visible and update the active heading accordingly.
+   * This overrides the activeId prop.
+   */
+  observeHeadings?: boolean;
 
-  // First effect: Heading extraction
+  /**
+   * Options for the IntersectionObserver when observeHeadings is true.
+   */
+  observerOptions?: IntersectionObserverInit;
+}
+
+/**
+ * A table of contents component that renders a list of headings.
+ * Takes explicit props instead of extracting content from the DOM.
+ * Can optionally track which heading is currently active by observing heading elements.
+ */
+export const TableOfContents: React.FC<TableOfContentsProps> = ({
+  headings,
+  activeId: initialActiveId = "",
+  observeHeadings = false,
+  observerOptions = {
+    rootMargin: "-100px 0px -70% 0px",
+    threshold: 0,
+  },
+}) => {
+  const [internalActiveId, setInternalActiveId] = useState<string>(initialActiveId);
+
+  // The active ID is either controlled externally or tracked internally
+  const activeId = observeHeadings ? internalActiveId : initialActiveId;
+
+  // Set up heading observation if enabled
   useEffect(() => {
-    // Helper function to extract headings
-    const extractHeadings = () => {
-      const contentElement = document.getElementById(contentId);
-      if (!contentElement) {
-        console.log(`TableOfContents: Content element with ID "${contentId}" not found`);
-        return;
-      }
-
-      // Find all heading elements with IDs
-      const headingElements = Array.from(
-        contentElement.querySelectorAll("h1, h2, h3, h4, h5, h6")
-      ).filter((el) => el.id); // Only include headings with IDs
-
-      if (headingElements.length === 0) {
-        console.log(`TableOfContents: No headings with IDs found in element "${contentId}"`);
-        return;
-      }
-
-      // Create TOCItems from the heading elements
-      const items: TOCItem[] = headingElements.map((heading) => ({
-        id: heading.id,
-        text: heading.textContent || "",
-        level: parseInt(heading.tagName.substring(1)), // Get the heading level (1-6)
-      }));
-
-      // Only update state if we have new headings that are different from current ones
-      if (items.length > 0 && JSON.stringify(items) !== JSON.stringify(headings)) {
-        setHeadings(items);
-      }
-    };
-
-    // Initial extraction after a brief delay to ensure content is rendered
-    const initialTimer = setTimeout(extractHeadings, 300);
-
-    // Add a mutation observer to detect when heading IDs might be added dynamically
-    const observer = new MutationObserver((mutations) => {
-      // Check if any mutations involve element attributes (like adding an ID)
-      const shouldExtract = mutations.some(
-        (mutation) => mutation.type === "attributes" || mutation.type === "childList"
-      );
-
-      if (shouldExtract) {
-        setTimeout(extractHeadings, 100);
-      }
-    });
-
-    const contentElement = document.getElementById(contentId);
-    if (contentElement) {
-      observer.observe(contentElement, {
-        attributes: true,
-        childList: true,
-        subtree: true,
-      });
-    }
-
-    // Clean up timers and observers
-    return () => {
-      clearTimeout(initialTimer);
-      observer.disconnect();
-    };
-  }, [contentId, path]);
-
-  // Second effect: Set up observer for active heading tracking
-  useEffect(() => {
-    if (headings.length === 0) return;
-
-    const contentElement = document.getElementById(contentId);
-    if (!contentElement) return;
+    if (!observeHeadings || headings.length === 0) return;
 
     // Set up intersection observer for tracking active heading
-    const observerOptions = {
-      rootMargin: "-100px 0px -70% 0px",
-      threshold: 0,
-    };
-
     const headingObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          setActiveId(entry.target.id);
+          setInternalActiveId(entry.target.id);
         }
       });
     }, observerOptions);
 
     // Observe all heading elements
-    const elements = headings.map((heading) => document.getElementById(heading.id)).filter(Boolean);
+    const elements = headings
+      .map((heading) => document.getElementById(heading.id))
+      .filter(Boolean) as HTMLElement[];
 
-    elements.forEach((el) => {
-      if (el) headingObserver.observe(el);
-    });
+    elements.forEach((el) => headingObserver.observe(el));
 
     return () => {
       headingObserver.disconnect();
     };
-  }, [headings, contentId]);
+  }, [headings, observeHeadings, observerOptions]);
 
   if (headings.length === 0) {
     return <p className="text-muted-foreground pl-5 text-sm italic">No headings found</p>;
@@ -146,5 +102,3 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ contentId, path }) =>
     </div>
   );
 };
-
-export default TableOfContents;

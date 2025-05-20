@@ -1,2 +1,2 @@
 export * from "./ProductSelectors";
-export { default as TableOfContents } from "./TableOfContents";
+export { TableOfContents, type TOCItem } from "./TableOfContents";
