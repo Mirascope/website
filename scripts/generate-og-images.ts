@@ -11,10 +11,10 @@
  * --help                 : Show help
  */
 
-import { colorize, coloredLog } from "../lib/terminal";
-import { generateOgImages } from "./social-card-generator";
-import { getAllRoutes, getProjectRoot } from "../../src/lib/router-utils";
-import { renderRouteToString } from "../../src/lib/rendering";
+import { colorize, coloredLog } from "./lib/terminal";
+import { generateOgImages } from "./lib/social-card-generator";
+import { getAllRoutes, getProjectRoot } from "../src/lib/router-utils";
+import { renderRouteToString } from "../src/lib/rendering";
 import fs from "fs";
 import path from "path";
 

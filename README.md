@@ -42,7 +42,7 @@ This project is mostly Typescript/React/etc (as stated above). However, there is
 
 - `bun run lint:mdx` - Validate MDX files
 - `bun run lint:social` - Check if generated social cards (OG images) are up to date
-- `bun run generate-social` - Regenerate og images for social preview cards
+- `bun run generate-og-images` - Regenerate og images for social preview cards. Also updates seo-metadata.json for the metadata audit dev route.
 - `bun run lint:snippets` - Validate code snippets (using pyright and ruff for type/style checking)
 - `bun run lint:python` - Run typechecking and linting on the apigen module only
 - `bun run lint:format` - Check formatting with Prettier
@@ -124,7 +124,7 @@ Our CI workflow automatically verifies that all code is properly formatted, type
 
 ### Social Images Generation
 
-The og social cards (preview images for each route) are automatically generated at build time. You can use `bun run generate-social` to regenerate them by hand, and you can use the metadata audit page at http://localhost:3000/dev/audit-metadata to see all of the generated cards.
+The og social cards (preview images for each route) are automatically generated at build time. You can use `bun run generate-og-images` to regenerate them by hand, and you can use the metadata audit page at http://localhost:3000/dev/audit-metadata to see all of the generated cards.
 
 ### SSG Pre-rendering
 

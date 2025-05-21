@@ -257,16 +257,9 @@ if the build succeeds, then the site is likely in good shape.
 If you make a change to the content system and wish to test it, you can do the following:
 - Use `bun run start` to test the dev build. Try looking at one of every content type (e.g. docs index, a docs page, blog index, a blog page, and one of the policy pages).
 - Use `bun run build && bun run serve` to test the prod build. `bun run build` will prerender every page which is a comprehensive check that all routes are okay.
-- Use `bun run generate-social --update` as a convenient way to see if any routes have disappeared (if so it will produce changes to the metadata and delete some social cards)
 
 ## Common Tasks
 
-### When adding any new content
-
-When adding new content pages, you will need to update the cached seo metadata as well.
-Use `bun run generate-social --update` to do so.
-You can audit the metadata and the OG images by turning on the dev server and navigating to 
-`http://localhost:3000/dev/audit-metadata`.
 
 ### Adding a New Document to the Docs
 
