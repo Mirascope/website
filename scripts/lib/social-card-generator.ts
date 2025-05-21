@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import { getProjectRoot } from "../../src/lib/router-utils";
 import { routeToFilename } from "../../src/lib/utils";
-import { coloredLog } from "../lib/terminal";
+import { coloredLog } from "./terminal";
 
 /**
  * Options for configuring the social card generator
