@@ -12,6 +12,19 @@ import { renderToString } from "react-dom/server";
 import { createMemoryHistory, createRouter, RouterProvider } from "@tanstack/react-router";
 import { routeTree } from "../../routeTree.gen";
 import { environment } from "../content/environment";
+
+// Import utilities for metadata extraction and rendering
+import { deserializeMetadata, unifyMetadata } from "@/src/components/core/meta/utils";
+import { generateMetadataHtml } from "@/src/components/core/meta/renderer";
+import type { UnifiedMetadata } from "@/src/components/core/meta/types";
+
+// Initialize HappyDOM for server-side rendering if not already loaded
+if (typeof window === "undefined" && typeof document === "undefined") {
+  // HappyDOM is expected to be loaded globally via happydom.ts
+  // This will make document, window, etc. available
+  // We don't need to do anything here because GlobalRegistrator.register() is called in happydom.ts
+  require("@/happydom");
+}
 import type { PageMetadata, RenderResult } from "./types";
 
 /**
@@ -64,36 +77,57 @@ export function configureStaticEnvironment() {
 }
 
 /**
- * Helper function to decode HTML entities
+ * Extract metadata from serialized divs in the rendered HTML
+ * Ensures there is exactly one instance of each serialized metadata div
  */
-export function decodeHtmlEntities(text: string): string {
-  const entities: { [key: string]: string } = {
-    "&lt;": "<",
-    "&gt;": ">",
-    "&amp;": "&",
-    "&quot;": '"',
-    "&#x27;": "'",
-    "&#39;": "'",
-    "&ndash;": "–",
-    "&mdash;": "—",
-  };
+export function extractSerializedMetadata(html: string): UnifiedMetadata {
+  // Extract all instances of serialized metadata
+  const baseMetaMatches = html.match(/data-base-meta="([^"]*)"/g);
+  const routeMetaMatches = html.match(/data-route-meta="([^"]*)"/g);
 
-  return text.replace(/&[^;]+;/g, (entity) => {
-    return entities[entity] || entity;
-  });
-}
+  // Validate base metadata
+  if (!baseMetaMatches) {
+    throw new Error("Failed to extract base metadata from rendered HTML");
+  }
 
-/**
- * Helper function to extract description from meta tags string
- */
-export function extractDescription(metaString: string): string | null {
-  const descriptionMatches =
-    metaString.match(/name="description"[^>]*content="([^"]*)"/) ||
-    metaString.match(/property="og:description"[^>]*content="([^"]*)"/) ||
-    metaString.match(/name="twitter:description"[^>]*content="([^"]*)"/) ||
-    null;
+  if (baseMetaMatches.length > 1) {
+    throw new Error(
+      `Found ${baseMetaMatches.length} instances of base metadata, expected exactly 1`
+    );
+  }
 
-  return descriptionMatches ? decodeHtmlEntities(descriptionMatches[1]) : null;
+  // Validate route metadata
+  if (!routeMetaMatches) {
+    throw new Error("Failed to extract route metadata from rendered HTML");
+  }
+
+  if (routeMetaMatches.length > 1) {
+    throw new Error(
+      `Found ${routeMetaMatches.length} instances of route metadata, expected exactly 1`
+    );
+  }
+
+  // Extract the actual encoded strings
+  const baseMetaEncodedMatch = baseMetaMatches[0].match(/data-base-meta="([^"]*)"/);
+  const routeMetaEncodedMatch = routeMetaMatches[0].match(/data-route-meta="([^"]*)"/);
+
+  if (!baseMetaEncodedMatch || !baseMetaEncodedMatch[1]) {
+    throw new Error("Failed to extract base metadata encoded string");
+  }
+
+  if (!routeMetaEncodedMatch || !routeMetaEncodedMatch[1]) {
+    throw new Error("Failed to extract route metadata encoded string");
+  }
+
+  const baseMetaEncoded = baseMetaEncodedMatch[1];
+  const routeMetaEncoded = routeMetaEncodedMatch[1];
+
+  // Deserialize the metadata
+  const baseMetadata = deserializeMetadata(baseMetaEncoded);
+  const routeMetadata = deserializeMetadata(routeMetaEncoded);
+
+  // Unify the metadata
+  return unifyMetadata(baseMetadata, routeMetadata);
 }
 
 /**
@@ -179,37 +213,28 @@ export async function renderRouteToString(route: string): Promise<RenderResult> 
     console.error("Error rendering app:", ...renderError);
     throw new Error("Error rendering: " + renderError.join(" "));
   }
-  // Extract title tag from the rendered HTML
-  const titleMatch = appHtml.match(/<title[^>]*>(.*?)<\/title>/);
-  const title = titleMatch ? decodeHtmlEntities(titleMatch[1]) : null;
-  if (!title) {
-    throw new Error("No title found in the rendered HTML");
+  // Extract metadata from serialized divs
+  try {
+    // Extract and unify metadata from serialized divs
+    const unifiedMetadata = extractSerializedMetadata(appHtml);
+
+    // Generate HTML for the metadata using our DOM-based renderer
+    const metadataHtml = generateMetadataHtml(unifiedMetadata);
+
+    // Create metadata object for the page
+    const metadata: PageMetadata = {
+      title: unifiedMetadata.title,
+      description: unifiedMetadata.description,
+      meta: metadataHtml.meta,
+      link: metadataHtml.link,
+    };
+
+    return { html: appHtml, metadata };
+  } catch (err) {
+    const error = err as Error;
+    console.error("Error extracting metadata:", error);
+    throw new Error(`Failed to extract metadata: ${error.message}`);
   }
-
-  // Extract all meta tags
-  const metaTagsRegex = /<meta[^>]*>/g;
-  const metaTags = appHtml.match(metaTagsRegex) || [];
-  const metaTagsString = metaTags.join("\n");
-
-  // Extract all link tags
-  const linkTagsRegex = /<link[^>]*>/g;
-  const linkTags = appHtml.match(linkTagsRegex) || [];
-  const linkTagsString = linkTags.join("\n");
-
-  // Extract description from meta tags
-  const description = extractDescription(metaTagsString);
-
-  // Create metadata object
-  const metadata: PageMetadata = {
-    title,
-    description,
-    meta: metaTagsString,
-    link: linkTagsString,
-    htmlAttributes: "",
-    bodyAttributes: "",
-  };
-
-  return { html: appHtml, metadata };
 }
 
 /**
