@@ -58,6 +58,7 @@ export function configureStaticEnvironment() {
   environment.fetch = staticFetch;
   environment.isDev = () => false;
   environment.isProd = () => true;
+  environment.isPrerendering = true;
 
   return environment;
 }

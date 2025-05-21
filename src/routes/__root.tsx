@@ -11,6 +11,7 @@ import {
   ThemeProvider,
   ProductProvider,
   TabbedSectionMemoryProvider,
+  BaseMeta,
 } from "@/src/components";
 
 export const Route = createRootRoute({
@@ -45,8 +46,8 @@ export const Route = createRootRoute({
 
     return (
       <>
-        {/* Only essential HTML tags - SEO is handled by SEOMeta */}
-        <head>
+        {/* Base metadata for site (charset, viewport, favicons, etc) */}
+        <BaseMeta>
           <meta charSet="UTF-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -72,7 +73,7 @@ export const Route = createRootRoute({
           {/* Other important tags */}
           <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
           <link rel="manifest" href="/manifest.json" />
-        </head>
+        </BaseMeta>
 
         {/* Fixed background for landing page */}
         {isLandingPage && <div className="watercolor-bg"></div>}

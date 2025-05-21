@@ -2,7 +2,9 @@ import { useMemo } from "react";
 import { BASE_URL, PRODUCT_CONFIGS } from "@/src/lib/constants/site";
 import { useRouterState } from "@tanstack/react-router";
 import { routeToFilename } from "@/src/lib/utils";
+import { RouteMeta } from "./RouteMeta";
 
+// Keep the interface for backward compatibility
 interface SEOProps {
   title?: string;
   description?: string;
@@ -63,7 +65,7 @@ export function SEOMeta(props: SEOProps) {
     : `${BASE_URL}${computedImage.startsWith("/") ? computedImage : `/${computedImage}`}`;
 
   return (
-    <>
+    <RouteMeta>
       <title>{pageTitle}</title>
       <meta name="description" content={metaDescription} />
       {robots && <meta name="robots" content={robots} />}
@@ -97,7 +99,7 @@ export function SEOMeta(props: SEOProps) {
         article.tags.map((tag, index) => (
           <meta key={`tag-${index}`} property="article:tag" content={tag} />
         ))}
-    </>
+    </RouteMeta>
   );
 }
 
