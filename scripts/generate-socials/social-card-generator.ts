@@ -4,7 +4,6 @@ import path from "path";
 import { getProjectRoot } from "../../src/lib/router-utils";
 import { routeToFilename } from "../../src/lib/utils";
 import { coloredLog } from "../lib/terminal";
-import type { SEOMetadata } from "./metadata";
 
 /**
  * Options for configuring the social card generator
@@ -211,7 +210,7 @@ export class SocialCardGenerator {
   /**
    * Generate all social card images from metadata
    */
-  async generateAll(metadata: SEOMetadata[]): Promise<void> {
+  async generateAll(metadata: { route: string; title: string }[]): Promise<void> {
     if (metadata.length === 0) {
       if (this.options.verbose) {
         coloredLog("No routes to process for image generation", "yellow");
@@ -293,7 +292,10 @@ export class SocialCardGenerator {
  * Generate OG images for multiple routes
  * Simplified wrapper for backward compatibility
  */
-export async function generateOgImages(metadata: SEOMetadata[], verbose = true): Promise<void> {
+export async function generateOgImages(
+  metadata: { route: string; title: string }[],
+  verbose = true
+): Promise<void> {
   if (metadata.length === 0) {
     if (verbose) {
       coloredLog("No routes to process for image generation", "yellow");

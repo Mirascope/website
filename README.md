@@ -42,7 +42,7 @@ This project is mostly Typescript/React/etc (as stated above). However, there is
 
 - `bun run lint:mdx` - Validate MDX files
 - `bun run lint:social` - Check if generated social cards (OG images) are up to date
-- `bun run generate-social` - Update generated social cards and metadata
+- `bun run generate-social` - Regenerate og images for social preview cards
 - `bun run lint:snippets` - Validate code snippets (using pyright and ruff for type/style checking)
 - `bun run lint:python` - Run typechecking and linting on the apigen module only
 - `bun run lint:format` - Check formatting with Prettier
@@ -124,11 +124,7 @@ Our CI workflow automatically verifies that all code is properly formatted, type
 
 ### Social Images Generation
 
-The og social cards (preview images for each route) are pre-generated and checked in at `public/social-cards`, rather than running on build, so as to save time. If you add a new route (e.g. a new blog post), you'll need to generate a new social card. You can use `bun run generate-social --update` for this purpose. CI will fail if you don't add a social card.
-
-#### Modifying Social Images
-
-The social images template lives at `public/dev/social-card.html`. If you want to update it, navigate to the private dev routes `/dev/social-card` and `dev/audit-metadata`. The social-card route will let you see how the template looks in a tight feedback cycle, and audit-metadata can be used to check how the currently generated social cards look for every route. 
+The og social cards (preview images for each route) are automatically generated at build time. You can use `bun run generate-social` to regenerate them by hand, and you can use the metadata audit page at http://localhost:3000/dev/audit-metadata to see all of the generated cards.
 
 ### SSG Pre-rendering
 
@@ -176,7 +172,7 @@ The content management system has a design doc at lib/content/DESIGN.md.
 
 ### When Adding a Route
 
-You can add new routes implicitly (by adding a new piece of mdx content that is covered by an existing route) or explicitly (by adding a new route to src/routes). In either case, it will get included in sitemap and the static build automatically, and you will need to generate a new social image for it via `bun run generate-social --update` (or `bun run generate-social --route /your/route`).
+You can add new routes implicitly (by adding a new piece of mdx content that is covered by an existing route) or explicitly (by adding a new route to src/routes). In either case, it will get included in sitemap and the static build automatically.
 
 When adding a new explicitly, there are some considerations, please add an `onError` handler to the route as follows:
 
