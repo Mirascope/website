@@ -102,12 +102,7 @@ export function extractDescription(metaString: string): string | null {
  * @param verbose Whether to log detailed information
  * @returns The rendered HTML string and extracted metadata
  */
-export async function renderRouteToString(
-  route: string,
-  verbose: boolean = false
-): Promise<RenderResult> {
-  if (verbose) console.log(`Rendering route to string: ${route}`);
-
+export async function renderRouteToString(route: string): Promise<RenderResult> {
   // Configure environment
   const env = configureStaticEnvironment();
   let loadError: Error | null = null;
