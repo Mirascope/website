@@ -20,8 +20,7 @@ import {
   checkMetadata,
   type SEOMetadata,
 } from "./metadata";
-import { withDevEnvironment } from "./server";
-import { generateOgImages as generateImages } from "./images";
+import { generateOgImages } from "./social-card-generator";
 import { getAllRoutes, getProjectRoot } from "../../src/lib/router-utils";
 import { routeToFilename } from "../../src/lib/utils";
 import { preprocessContent } from "../preprocess-content";
@@ -75,15 +74,14 @@ if (enabledOptions > 1) {
  */
 async function regenerate() {
   try {
-    await withDevEnvironment(async (_, browser) => {
-      const record = await extractAllMetadata(true);
+    // Extract all metadata
+    const record = await extractAllMetadata(true);
 
-      // Generate images for all routes (needs browser)
-      await generateImages(browser, Object.values(record));
+    // Generate images for all routes
+    await generateOgImages(Object.values(record));
 
-      // Save metadata after successful image generation
-      saveMetadataToFile(record);
-    });
+    // Save metadata after successful image generation
+    saveMetadataToFile(record);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     console.error(`${colorize("Failed to generate images:", "red")} ${errorMessage}`);
@@ -99,112 +97,107 @@ async function updateChangedMetadata() {
   try {
     const oldRecord = loadMetadataFromFile();
 
-    await withDevEnvironment(async (_, browser) => {
-      // Extract metadata using static rendering
-      const newRecord = await extractAllMetadata(true);
+    // Extract metadata using static rendering
+    const newRecord = await extractAllMetadata(true);
 
-      // Track routes needing different types of updates
-      const routesNeedingImageRegen: string[] = [];
-      const routesNeedingMetadataUpdate: string[] = [];
-      const removedRoutes: string[] = [];
+    // Track routes needing different types of updates
+    const routesNeedingImageRegen: string[] = [];
+    const routesNeedingMetadataUpdate: string[] = [];
+    const removedRoutes: string[] = [];
 
-      // Check for new or modified routes
-      for (const [route, newItem] of Object.entries(newRecord)) {
-        // If the route doesn't exist in old record, it's new
-        if (!oldRecord[route]) {
-          routesNeedingImageRegen.push(route);
-          continue;
-        }
-
-        const oldItem = oldRecord[route];
-
-        // Only regenerate images if title changed (title appears in the image)
-        if (oldItem.title !== newItem.title) {
-          routesNeedingImageRegen.push(route);
-        }
-        // If only description changed, just update metadata without regenerating image
-        else if (oldItem.description !== newItem.description) {
-          routesNeedingMetadataUpdate.push(route);
-        }
+    // Check for new or modified routes
+    for (const [route, newItem] of Object.entries(newRecord)) {
+      // If the route doesn't exist in old record, it's new
+      if (!oldRecord[route]) {
+        routesNeedingImageRegen.push(route);
+        continue;
       }
 
-      // Combine routes needing any kind of update
-      const changedRoutes = [...routesNeedingImageRegen, ...routesNeedingMetadataUpdate];
+      const oldItem = oldRecord[route];
 
-      // Check for removed routes
-      for (const [route, _] of Object.entries(oldRecord)) {
-        if (!newRecord[route]) {
-          removedRoutes.push(route);
-        }
+      // Only regenerate images if title changed (title appears in the image)
+      if (oldItem.title !== newItem.title) {
+        routesNeedingImageRegen.push(route);
+      }
+      // If only description changed, just update metadata without regenerating image
+      else if (oldItem.description !== newItem.description) {
+        routesNeedingMetadataUpdate.push(route);
+      }
+    }
+
+    // Combine routes needing any kind of update
+    const changedRoutes = [...routesNeedingImageRegen, ...routesNeedingMetadataUpdate];
+
+    // Check for removed routes
+    for (const [route, _] of Object.entries(oldRecord)) {
+      if (!newRecord[route]) {
+        removedRoutes.push(route);
+      }
+    }
+
+    // Log a summary of changes
+    if (changedRoutes.length > 0 || removedRoutes.length > 0) {
+      printHeader("Route Changes", "green");
+
+      if (changedRoutes.length > 0) {
+        coloredLog(`${changedRoutes.length} routes added or updated:`, "green");
+        changedRoutes.forEach((route) => {
+          console.log(`  ${icons.success} ${route}`);
+        });
       }
 
-      // Log a summary of changes
-      if (changedRoutes.length > 0 || removedRoutes.length > 0) {
-        printHeader("Route Changes", "green");
+      if (removedRoutes.length > 0) {
+        coloredLog(`${removedRoutes.length} routes removed:`, "yellow");
+        removedRoutes.forEach((route) => {
+          console.log(`  ${icons.warning} ${route}`);
 
-        if (changedRoutes.length > 0) {
-          coloredLog(`${changedRoutes.length} routes added or updated:`, "green");
-          changedRoutes.forEach((route) => {
-            console.log(`  ${icons.success} ${route}`);
-          });
-        }
+          // Clean up any existing social card images for removed routes
+          const projectRoot = getProjectRoot();
+          const filename = routeToFilename(route);
+          const imagePath = path.join(projectRoot, "public", "social-cards", `${filename}.webp`);
 
-        if (removedRoutes.length > 0) {
-          coloredLog(`${removedRoutes.length} routes removed:`, "yellow");
-          removedRoutes.forEach((route) => {
-            console.log(`  ${icons.warning} ${route}`);
-
-            // Clean up any existing social card images for removed routes
-            const projectRoot = getProjectRoot();
-            const filename = routeToFilename(route);
-            const imagePath = path.join(projectRoot, "public", "social-cards", `${filename}.webp`);
-
-            if (fs.existsSync(imagePath)) {
-              try {
-                fs.unlinkSync(imagePath);
-                console.log(`    ${icons.warning} Removed social card image`);
-              } catch (error) {
-                console.error(`    ${icons.error} Failed to remove social card image: ${error}`);
-              }
+          if (fs.existsSync(imagePath)) {
+            try {
+              fs.unlinkSync(imagePath);
+              console.log(`    ${icons.warning} Removed social card image`);
+            } catch (error) {
+              console.error(`    ${icons.error} Failed to remove social card image: ${error}`);
             }
-          });
-        }
-
-        // Handle routes that need updates
-        if (changedRoutes.length > 0) {
-          // Generate images only for routes that need image regeneration
-          if (routesNeedingImageRegen.length > 0) {
-            // Extract only the items that need image regeneration
-            const itemsNeedingImages = routesNeedingImageRegen.map((route) => newRecord[route]);
-
-            // Generate images only for routes that need it
-            await generateImages(browser, itemsNeedingImages);
-
-            // Only save metadata after successful image generation to maintain consistency
-            saveMetadataToFile(newRecord);
-
-            coloredLog(
-              `Regenerated ${routesNeedingImageRegen.length} images and updated metadata for all ${changedRoutes.length} routes.`,
-              "green"
-            );
-          } else if (routesNeedingMetadataUpdate.length > 0) {
-            // If we only have metadata updates (no image regeneration needed)
-            saveMetadataToFile(newRecord);
-            coloredLog(
-              `Updated metadata for ${routesNeedingMetadataUpdate.length} routes.`,
-              "green"
-            );
           }
-        } else {
-          // If we only removed routes (no additions/changes), we can safely update metadata
+        });
+      }
+
+      // Handle routes that need updates
+      if (changedRoutes.length > 0) {
+        // Generate images only for routes that need image regeneration
+        if (routesNeedingImageRegen.length > 0) {
+          // Extract only the items that need image regeneration
+          const itemsNeedingImages = routesNeedingImageRegen.map((route) => newRecord[route]);
+
+          // Generate images only for routes that need it
+          await generateOgImages(itemsNeedingImages);
+
+          // Only save metadata after successful image generation to maintain consistency
           saveMetadataToFile(newRecord);
-          coloredLog("Routes removed and metadata updated.", "green");
+
+          coloredLog(
+            `Regenerated ${routesNeedingImageRegen.length} images and updated metadata for all ${changedRoutes.length} routes.`,
+            "green"
+          );
+        } else if (routesNeedingMetadataUpdate.length > 0) {
+          // If we only have metadata updates (no image regeneration needed)
+          saveMetadataToFile(newRecord);
+          coloredLog(`Updated metadata for ${routesNeedingMetadataUpdate.length} routes.`, "green");
         }
       } else {
-        // No changes detected
-        coloredLog("No routes have changed. No updates needed.", "green");
+        // If we only removed routes (no additions/changes), we can safely update metadata
+        saveMetadataToFile(newRecord);
+        coloredLog("Routes removed and metadata updated.", "green");
       }
-    });
+    } else {
+      // No changes detected
+      coloredLog("No routes have changed. No updates needed.", "green");
+    }
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     console.error(`${colorize("Failed to update metadata:", "red")} ${errorMessage}`);
@@ -220,9 +213,7 @@ async function regenerateImages() {
     const record = loadMetadataFromFile();
     const items = Object.values(record);
 
-    await withDevEnvironment(async (_, browser) => {
-      await generateImages(browser, items);
-    });
+    await generateOgImages(items);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     console.error(`${colorize("Failed to regenerate images:", "red")} ${errorMessage}`);
@@ -244,33 +235,31 @@ async function handleSpecificRoute(route: string, verbose = true) {
   }
 
   try {
-    await withDevEnvironment(async (_, browser) => {
-      // Get metadata for this specific route using static rendering
-      const routeItems = await extractMetadataForRoutes([route], verbose);
+    // Get metadata for this specific route using static rendering
+    const routeItems = await extractMetadataForRoutes([route], verbose);
 
-      if (routeItems.length === 0) {
-        console.error(`${colorize("Failed to extract metadata for route:", "red")} ${route}`);
-        process.exit(1);
-      }
+    if (routeItems.length === 0) {
+      console.error(`${colorize("Failed to extract metadata for route:", "red")} ${route}`);
+      process.exit(1);
+    }
 
-      // Generate images for this route - we only update metadata if this succeeds
-      await generateImages(browser, routeItems, verbose);
+    // Generate images for this route - we only update metadata if this succeeds
+    await generateOgImages(routeItems, verbose);
 
-      // Now that image generation has succeeded, we can safely update the metadata
-      // Update the metadata record with this new/updated route
-      const existingRecord = loadMetadataFromFile();
+    // Now that image generation has succeeded, we can safely update the metadata
+    // Update the metadata record with this new/updated route
+    const existingRecord = loadMetadataFromFile();
 
-      // Add or update the route in the record
-      const item = routeItems[0];
-      existingRecord[route] = item;
+    // Add or update the route in the record
+    const item = routeItems[0];
+    existingRecord[route] = item;
 
-      // Save the updated metadata
-      saveMetadataToFile(existingRecord);
+    // Save the updated metadata
+    saveMetadataToFile(existingRecord);
 
-      if (verbose) {
-        coloredLog(`Successfully updated metadata and images for route: ${route}`, "green");
-      }
-    });
+    if (verbose) {
+      coloredLog(`Successfully updated metadata and images for route: ${route}`, "green");
+    }
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     console.error(`${colorize("Error processing route:", "red")} ${errorMessage}`);
@@ -380,28 +369,26 @@ async function processMissingRoutes() {
     coloredLog(`Found ${missingRoutes.length} missing routes to process`, "blue");
 
     // Process each missing route
-    await withDevEnvironment(async (_, browser) => {
-      // Extract metadata for missing routes using static rendering
-      const newItems = await extractMetadataForRoutes(missingRoutes, true);
+    // Extract metadata for missing routes using static rendering
+    const newItems = await extractMetadataForRoutes(missingRoutes, true);
 
-      if (newItems.length === 0) {
-        coloredLog("No metadata could be extracted for missing routes", "yellow");
-        return;
-      }
+    if (newItems.length === 0) {
+      coloredLog("No metadata could be extracted for missing routes", "yellow");
+      return;
+    }
 
-      // Generate images for the new routes (still needs browser)
-      await generateImages(browser, newItems);
+    // Generate images for the new routes (still needs browser)
+    await generateOgImages(newItems);
 
-      // Update the metadata record
-      for (const item of newItems) {
-        record[item.route] = item;
-      }
+    // Update the metadata record
+    for (const item of newItems) {
+      record[item.route] = item;
+    }
 
-      // Save updated metadata
-      saveMetadataToFile(record);
+    // Save updated metadata
+    saveMetadataToFile(record);
 
-      coloredLog(`Successfully processed ${newItems.length} missing routes`, "green");
-    });
+    coloredLog(`Successfully processed ${newItems.length} missing routes`, "green");
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     console.error(`${colorize("Failed to process missing routes:", "red")} ${errorMessage}`);

@@ -18,7 +18,7 @@ export async function prerenderPage(
   if (verbose) console.log(`Pre-rendering route: ${route}`);
 
   // Use the shared rendering utility to render the route
-  const { html: appHtml, metadata } = await renderRouteToString(route, verbose);
+  const { html: appHtml, metadata } = await renderRouteToString(route);
 
   // Create the full HTML document
   const html = createHtmlDocument(appHtml, metadata);

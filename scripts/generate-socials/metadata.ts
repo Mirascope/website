@@ -29,10 +29,10 @@ export interface MetadataOptions {
 /**
  * Extract SEO metadata using static rendering with React and Helmet
  */
-async function extractPageMetadata(route: string, verbose: boolean = false): Promise<SEOMetadata> {
+async function extractPageMetadata(route: string): Promise<SEOMetadata> {
   try {
     // Use the shared rendering utility to render the route and extract metadata
-    const { metadata } = await renderRouteToString(route, verbose);
+    const { metadata } = await renderRouteToString(route);
 
     // If we don't have a title, that's a critical error
     if (!metadata.title) {
@@ -111,7 +111,7 @@ export async function extractMetadataForRoutes(
       }
 
       try {
-        const pageMetadata = await extractPageMetadata(route, verbose);
+        const pageMetadata = await extractPageMetadata(route);
         metadata.push(pageMetadata);
 
         if (verbose) {
