@@ -193,14 +193,7 @@ export function unifyMetadata(base: RawMetadata, route: RawMetadata): UnifiedMet
  */
 export function serializeMetadata(metadata: RawMetadata): string {
   const jsonString = JSON.stringify(metadata);
-
-  // Use Buffer in Node.js environment
-  if (typeof window === "undefined") {
-    return Buffer.from(jsonString).toString("base64");
-  }
-
-  // Use btoa in browser environment
-  return btoa(jsonString);
+  return Buffer.from(jsonString).toString("base64");
 }
 
 /**
@@ -211,15 +204,6 @@ export function serializeMetadata(metadata: RawMetadata): string {
  * @returns Parsed metadata object
  */
 export function deserializeMetadata(serialized: string): RawMetadata {
-  let jsonString: string;
-
-  // Use Buffer in Node.js environment
-  if (typeof window === "undefined") {
-    jsonString = Buffer.from(serialized, "base64").toString("utf-8");
-  } else {
-    // Use atob in browser environment
-    jsonString = atob(serialized);
-  }
-
+  const jsonString = Buffer.from(serialized, "base64").toString("utf-8");
   return JSON.parse(jsonString);
 }
