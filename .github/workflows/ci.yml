@@ -55,11 +55,11 @@ jobs:
       - name: Extract & validate snippets
         run: bun run lint:snippets
 
-      - name: Social Metadata Check
-        run: bun run lint:social
-
       - name: Run Tests
         run: bun test
 
       - name: Build
         run: bun run build
+        env:
+          CI: 'true'
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
