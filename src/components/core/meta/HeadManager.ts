@@ -67,6 +67,11 @@ function updateDocumentHead(metadata: UnifiedMetadata): void {
   elements.link.forEach((element) => {
     document.head.appendChild(element);
   });
+
+  // Add JSON-LD script tags
+  elements.script.forEach((element) => {
+    document.head.appendChild(element);
+  });
 }
 
 export const HeadManager = {

@@ -1,6 +1,6 @@
 # Mirascope Website
 
-URL: [https://beta.mirascope.com](https://beta.mirascope.com)
+URL: [https://mirascope.com](https://mirascope.com)
 
 ## Development
 

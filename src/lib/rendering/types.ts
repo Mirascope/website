@@ -10,6 +10,7 @@ export interface PageMetadata {
   description: string;
   meta: string;
   link: string;
+  jsonLdScripts: string;
 }
 
 /**
