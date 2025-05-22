@@ -10,7 +10,7 @@
     "generate-og-images": "bun scripts/generate-og-images.ts",
     "test-prerender-route": "bun run scripts/test-prerender.ts",
     "prerender": "bun run scripts/vite-prerender.ts",
-    "validate-links": "bun run scripts/validate-links.ts",
+    "validate-assets": "bun run scripts/validate-assets.ts",
     "optimize-images": "bun run scripts/optimize-images.ts",
     "prebuild": "bun run preprocess-content",
     "build": "bun run generate-og-images && bun run --bun vite build && bun run optimize-images && bun run prerender",
