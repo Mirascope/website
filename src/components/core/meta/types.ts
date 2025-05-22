@@ -1,5 +1,3 @@
-import type { ProductName } from "@/src/lib/content/spec";
-
 /**
  * Metadata System Types
  *
@@ -52,39 +50,6 @@ export type UnifiedMetadata = {
   metaTags: MetaTag[];
   linkTags: LinkTag[];
 };
-
-/**
- * Props for BaseMeta component
- */
-export interface BaseMetaProps {
-  children?: React.ReactNode;
-}
-
-/**
- * Props for RouteMeta component
- */
-export interface RouteMetaProps {
-  children?: React.ReactNode;
-}
-
-/**
- * Props for PageMeta component (high-level API)
- */
-export interface PageMetaProps {
-  title?: string;
-  description?: string;
-  image?: string;
-  url?: string;
-  type?: "website" | "article";
-  product?: ProductName;
-  robots?: string;
-  article?: {
-    publishedTime?: string;
-    modifiedTime?: string;
-    author?: string;
-    tags?: string[];
-  };
-}
 
 /**
  * Internal Type for Serialized Metadata
