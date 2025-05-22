@@ -33,13 +33,13 @@ Both the tools above, along with LangChain, do similar things in helping you bui
 
 ### LangChain: Uses Abstractions in Chaining Together Data and Tools
 
-As the framework’s name suggests, chains are a major part of LangChain’s architecture and are mainly used to orchestrate sequences of LLM calls. LangChain makes available different kinds of abstractions for working with its chains, starting with [LangChain Expression Language (LCEL)](https://js.langchain.com/docs/expression_language), its tool for declaratively building and linking chains that support synchronous and asynchronous operations, as well as data streaming.
+As the framework’s name suggests, chains are a major part of LangChain’s architecture and are mainly used to orchestrate sequences of LLM calls. LangChain makes available different kinds of abstractions for working with its chains, starting with [LangChain Expression Language (LCEL)](https://js.langchain.com/docs/how_to/#langchain-expression-language-lcel), its tool for declaratively building and linking chains that support synchronous and asynchronous operations, as well as data streaming.
 
 Below, we describe two other kinds of LangChain abstractions you use in conjunction with LCEL.
 
 #### Chain Abstractions For Specific Use Cases
 
-LangChain offers a number of off-the-shelf [LCEL chain constructors](https://python.langchain.com/docs/modules/chains/) for different use cases, such as generating a SQL query from a question ([`create_sql_query_chain`](https://api.python.langchain.com/en/latest/chains/langchain.chains.sql_database.query.create_sql_query_chain.html#langchain.chains.sql_database.query.create_sql_query_chain)). The idea is you choose a constructor from their list and repurpose it with minimal hassle.
+LangChain offers a number of off-the-shelf [LCEL chain constructors](https://python.langchain.com/docs/versions/migrating_chains/) for different use cases, such as generating a SQL query from a question ([`create_sql_query_chain`](https://api.python.langchain.com/en/latest/chains/langchain.chains.sql_database.query.create_sql_query_chain.html#langchain.chains.sql_database.query.create_sql_query_chain)). The idea is you choose a constructor from their list and repurpose it with minimal hassle.
 
 On the surface, these offer convenience. They’re readily available and remove the decision making from the hands of developers, lowering entry barriers for LLM newcomers and seemingly reducing complexity. On the other hand, they entail a loss of flexibility and control. And there’s a steeper learning curve, as people need to spend time getting acquainted with how these abstractions work, especially when debugging errors.
 
@@ -47,9 +47,9 @@ On the surface, these offer convenience. They’re readily available and remove 
 
 Another important LCEL abstraction is LangChain’s **Runnable** , which is a Python object that manages data processing tasks. It can apply transformations to single or multiple data inputs, and stream results while executing these operations in parallel or asynchronously.
 
-It’s also [characterized as an interface](https://python.langchain.com/docs/expression_language/interface/) because of the functionalities it exposes, such as `stream`, `invoke`, and `batch`.
+It’s also [characterized as an interface](https://python.langchain.com/docs/concepts/runnables/) because of the functionalities it exposes, such as `stream`, `invoke`, and `batch`.
 
-Each Runnable in a chain accepts input, performs an action, and passes its output to the next Runnable in the chain. Understood as a whole, runnables facilitate the orchestration and execution of tasks. The code below illustrates this, showing an example of [`RunnablePassthrough()`](https://python.langchain.com/docs/expression_language/primitives/passthrough/) (which allows you to pass inputs unchanged):
+Each Runnable in a chain accepts input, performs an action, and passes its output to the next Runnable in the chain. Understood as a whole, runnables facilitate the orchestration and execution of tasks. The code below illustrates this, showing an example of [`RunnablePassthrough()`](https://python.langchain.com/docs/how_to/passthrough/) (which allows you to pass inputs unchanged):
 
 ```python
 from langchain_community.vectorstores import FAISS
@@ -145,7 +145,7 @@ Relying on native Python for structuring sequences of steps keeps the developmen
 
 In LangChain, you’re free to make LLM calls wherever convenient, and so calls end up scattered in different places around the codebase, with the risk that changing the code in one place may have unforeseen changes in another.
 
-LangChain also allows you to [bind arguments](https://python.langchain.com/docs/expression_language/primitives/binding/) (such as tools and model ID) to the call at runtime to dynamically specify call parameters. For example:
+LangChain also allows you to [bind arguments](https://python.langchain.com/docs/how_to/binding/) (such as tools and model ID) to the call at runtime to dynamically specify call parameters. For example:
 
 ```python
 tools = [
