@@ -65,7 +65,7 @@ Many real-world use cases benefit from few-shot learning, for instance:
 - **An automated fact checking tool** where you provide different few-shot examples where the model is shown how to verify information, ask follow-up questions if necessary, and conclude whether a statement is true or false.
 - **A technical support and troubleshooting guide** that assists users in diagnosing and solving issues with products or software, where the `FewShotPromptTemplate` could contain examples of common troubleshooting steps, including how to ask the user for specific system details, interpret symptoms, and guide them through the solution process.
 
-The [`FewShotPromptTemplate`](https://python.langchain.com/docs/modules/model_io/prompts/few_shot_examples) class takes a list of (question-and-answer) dictionaries as input, before asking a new question:
+The [`FewShotPromptTemplate`](https://python.langchain.com/docs/how_to/few_shot_examples/) class takes a list of (question-and-answer) dictionaries as input, before asking a new question:
 
 ```python
 from langchain.prompts.few_shot import FewShotPromptTemplate
