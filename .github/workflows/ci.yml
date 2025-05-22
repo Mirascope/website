@@ -60,3 +60,6 @@ jobs:
 
       - name: Build
         run: bun run build
+        env:
+          CI: 'true'
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
