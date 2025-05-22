@@ -9,14 +9,24 @@ The metadata system provides a unified approach to managing document `<head>` co
 1. Moving metadata out of the React component tree and into the document's canonical `<head>`
 2. Ensuring consistency between server-side generated metadata and client-side updates
 3. Providing a clean, JSX-based API for declaring metadata
-4. Supporting both base (site-wide) and route-specific metadata
+4. Supporting both core (site-wide) and route-specific metadata
 5. Validating metadata presence during build time
 
 ## Components
 
 ### BaseMeta
 
-`BaseMeta` defines site-wide metadata that remains consistent across all pages:
+`BaseMeta` is the shared base implementation that both CoreMeta and RouteMeta inherit from. It handles:
+
+- Serialization of metadata during prerendering
+- Integration with HeadManager during client-side rendering
+- Extraction of metadata from JSX children
+
+This is an internal component not meant to be used directly.
+
+### CoreMeta
+
+`CoreMeta` defines site-wide metadata that remains consistent across all pages:
 
 - Character encoding, viewport settings
 - Favicon definitions
@@ -46,16 +56,16 @@ This component is used once per route.
 
 In the browser:
 
-1. Both `BaseMeta` and `RouteMeta` render nothing in the DOM
+1. Both `CoreMeta` and `RouteMeta` render nothing in the DOM
 2. On mount, they call `HeadManager` to update the document's `<head>`
 3. On prop changes, they trigger head updates with new metadata
-4. On unmount, they clean up any route-specific tags
+4. The HeadManager handles removing previous tags and adding new ones
 
 ## Server-Side Implementation
 
 During static site generation (SSG):
 
-1. `BaseMeta` and `RouteMeta` render invisible div elements with serialized metadata
+1. `CoreMeta` and `RouteMeta` render invisible div elements with serialized metadata
 2. The build process validates exactly one of each exists
 3. The build process extracts metadata from these divs
 4. The extracted metadata is used to inject proper tags into the document `<head>`
@@ -65,12 +75,12 @@ During static site generation (SSG):
 
 The system works through these key interactions:
 
-1. **Component Declaration**: `BaseMeta` and `RouteMeta` components declare metadata via JSX
+1. **Component Declaration**: `CoreMeta` and `RouteMeta` components declare metadata via JSX
 2. **Serialization**: During SSG, metadata is serialized to JSON and base64 encoded in hidden divs
 3. **Extraction**: Build process extracts and validates the serialized metadata
 4. **Injection**: Extracted metadata is injected into the document head in the final HTML
 5. **Client Hydration**: On the client, components update the document head via `HeadManager`
-6. **Navigation**: On client-side navigation, route-specific metadata updates while base metadata remains
+6. **Navigation**: On client-side navigation, route-specific metadata updates while core metadata remains
 
 ## Implementation Details
 
@@ -131,11 +141,11 @@ The build process:
 
 ```jsx
 // In root layout:
-<BaseMeta>
+<CoreMeta>
   <meta charSet="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="/favicon.png" />
-</BaseMeta>
+</CoreMeta>
 
 // In a route component:
 <RouteMeta>
@@ -159,7 +169,7 @@ The build process:
 
 2. **Serialization Approach**: Base64 encoding is used to avoid HTML escaping issues with quotes and special characters in metadata.
 
-3. **Component Splitting**: `BaseMeta` and `RouteMeta` are separate components to enforce the "exactly one of each" rule and make validation clearer.
+3. **Component Splitting**: `CoreMeta` and `RouteMeta` are separate components to enforce the "exactly one of each" rule and make validation clearer.
 
 4. **Validation**: The build process strictly validates metadata presence to ensure good SEO practices across the site.
 

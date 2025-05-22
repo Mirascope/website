@@ -1,21 +1,26 @@
 /**
  * BaseMeta Component
  *
- * Defines site-wide metadata that remains consistent across all pages:
- * - Character encoding, viewport settings
- * - Favicon definitions
- * - Font preloading
- * - Web manifest links
- * - Other global meta tags
+ * Shared base implementation for CoreMeta and RouteMeta components.
+ * Handles:
+ * - Serialized metadata extraction in prerendering mode
+ * - HeadManager integration in client mode
  */
 
 import { useEffect } from "react";
-import type { BaseMetaProps } from "./types";
 import { environment } from "@/src/lib/content/environment";
 import { extractMetadata, serializeMetadata } from "./utils";
 import { HeadManager } from "./HeadManager";
+import type { MetadataSource } from "./HeadManager";
 
-export function BaseMeta({ children }: BaseMetaProps) {
+export interface BaseMetaProps {
+  children?: React.ReactNode;
+  metaType: MetadataSource;
+  dataAttribute: string;
+  testId: string;
+}
+
+export function BaseMeta({ children, metaType, dataAttribute, testId }: BaseMetaProps) {
   // In prerendering mode, we only output a hidden div with serialized metadata
   if (environment.isPrerendering) {
     // Extract metadata
@@ -24,26 +29,24 @@ export function BaseMeta({ children }: BaseMetaProps) {
     // Serialize metadata for extraction during build
     const serializedMetadata = serializeMetadata(metadata);
 
-    return (
-      // Only output a hidden div with serialized metadata during prerendering
-      <div
-        data-base-meta={serializedMetadata}
-        style={{ display: "none" }}
-        data-testid="base-meta-serialized"
-      />
-    );
+    // Create data attribute with dynamic name
+    const divProps: Record<string, any> = {
+      [dataAttribute]: serializedMetadata,
+      style: { display: "none" },
+      "data-testid": testId,
+    };
+
+    return <div {...divProps} />;
   }
 
   // In client mode, register with HeadManager
   useEffect(() => {
     if (typeof document !== "undefined") {
       const metadata = extractMetadata(children);
-      HeadManager.update("base", metadata);
+      HeadManager.update(metaType, metadata);
     }
-  }, [children]);
+  }, [children, metaType]);
 
   // Don't render anything in the DOM
   return null;
 }
-
-export default BaseMeta;

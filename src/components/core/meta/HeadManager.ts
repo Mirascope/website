@@ -2,7 +2,7 @@
  * HeadManager
  *
  * A simple client-side manager for document head updates based on metadata.
- * Manages both base (site-wide) and route (page-specific) metadata.
+ * Manages both core (site-wide) and route (page-specific) metadata.
  */
 
 import type { RawMetadata, UnifiedMetadata } from "./types";
@@ -10,14 +10,14 @@ import { unifyMetadata } from "./utils";
 import { createMetadataElements } from "./renderer";
 
 // Simple module-level state
-let baseMetadata: RawMetadata | null = null;
+let coreMetadata: RawMetadata | null = null;
 let routeMetadata: RawMetadata | null = null;
 
 // Types for update source
-type MetadataSource = "base" | "route";
+export type MetadataSource = "core" | "route";
 
 /**
- * Updates metadata from either base or route source
+ * Updates metadata from either core or route source
  * Then attempts to unify and update the document head
  */
 function update(source: MetadataSource, metadata: RawMetadata): void {
@@ -25,16 +25,16 @@ function update(source: MetadataSource, metadata: RawMetadata): void {
   if (typeof document === "undefined") return;
 
   // Update the appropriate metadata store
-  if (source === "base") {
-    baseMetadata = metadata;
+  if (source === "core") {
+    coreMetadata = metadata;
   } else {
     routeMetadata = metadata;
   }
 
   // Try to create unified metadata if we have both pieces
-  if (baseMetadata && routeMetadata) {
+  if (coreMetadata && routeMetadata) {
     try {
-      const unified = unifyMetadata(baseMetadata, routeMetadata);
+      const unified = unifyMetadata(coreMetadata, routeMetadata);
       updateDocumentHead(unified);
     } catch (error) {
       console.error("Failed to unify metadata:", error);
@@ -72,5 +72,5 @@ function updateDocumentHead(metadata: UnifiedMetadata): void {
 export const HeadManager = {
   update,
   // For testing and debugging
-  getState: () => ({ baseMetadata, routeMetadata }),
+  getState: () => ({ coreMetadata, routeMetadata }),
 };

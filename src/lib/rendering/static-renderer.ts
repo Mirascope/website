@@ -82,17 +82,17 @@ export function configureStaticEnvironment() {
  */
 export function extractSerializedMetadata(html: string): UnifiedMetadata {
   // Extract all instances of serialized metadata
-  const baseMetaMatches = html.match(/data-base-meta="([^"]*)"/g);
+  const coreMetaMatches = html.match(/data-core-meta="([^"]*)"/g);
   const routeMetaMatches = html.match(/data-route-meta="([^"]*)"/g);
 
-  // Validate base metadata
-  if (!baseMetaMatches) {
-    throw new Error("Failed to extract base metadata from rendered HTML");
+  // Validate core metadata
+  if (!coreMetaMatches) {
+    throw new Error("Failed to extract core metadata from rendered HTML");
   }
 
-  if (baseMetaMatches.length > 1) {
+  if (coreMetaMatches.length > 1) {
     throw new Error(
-      `Found ${baseMetaMatches.length} instances of base metadata, expected exactly 1`
+      `Found ${coreMetaMatches.length} instances of core metadata, expected exactly 1`
     );
   }
 
@@ -108,26 +108,26 @@ export function extractSerializedMetadata(html: string): UnifiedMetadata {
   }
 
   // Extract the actual encoded strings
-  const baseMetaEncodedMatch = baseMetaMatches[0].match(/data-base-meta="([^"]*)"/);
+  const coreMetaEncodedMatch = coreMetaMatches[0].match(/data-core-meta="([^"]*)"/);
   const routeMetaEncodedMatch = routeMetaMatches[0].match(/data-route-meta="([^"]*)"/);
 
-  if (!baseMetaEncodedMatch || !baseMetaEncodedMatch[1]) {
-    throw new Error("Failed to extract base metadata encoded string");
+  if (!coreMetaEncodedMatch || !coreMetaEncodedMatch[1]) {
+    throw new Error("Failed to extract core metadata encoded string");
   }
 
   if (!routeMetaEncodedMatch || !routeMetaEncodedMatch[1]) {
     throw new Error("Failed to extract route metadata encoded string");
   }
 
-  const baseMetaEncoded = baseMetaEncodedMatch[1];
+  const coreMetaEncoded = coreMetaEncodedMatch[1];
   const routeMetaEncoded = routeMetaEncodedMatch[1];
 
   // Deserialize the metadata
-  const baseMetadata = deserializeMetadata(baseMetaEncoded);
+  const coreMetadata = deserializeMetadata(coreMetaEncoded);
   const routeMetadata = deserializeMetadata(routeMetaEncoded);
 
   // Unify the metadata
-  return unifyMetadata(baseMetadata, routeMetadata);
+  return unifyMetadata(coreMetadata, routeMetadata);
 }
 
 /**
