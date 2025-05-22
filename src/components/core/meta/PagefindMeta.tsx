@@ -7,9 +7,8 @@ interface PagefindMetaProps {
   section?: string;
 }
 
-function clampWeight(x: number) {
-  return Math.max(0, Math.min(x, 10));
-}
+const TITLE_WEIGHT = 4;
+const DESCRIPTION_WEIGHT = 3;
 
 /**
  * PagefindMeta wraps content and adds metadata for Pagefind indexing.
@@ -24,13 +23,14 @@ function clampWeight(x: number) {
  * The section parameter can be used to track hierarchy (e.g., "docs>mirascope>learn")
  * The sectionWeight parameter applies a multiplier to all weights for section-based boosting
  */
-export function PagefindMeta({ children }: PagefindMetaProps) {
-  // Calculate effective weights with section multiplier
-  const contentWeight = clampWeight(1);
-
+export function PagefindMeta({ children, title, description }: PagefindMetaProps) {
   return (
     <div data-pagefind-body>
-      <div data-pagefind-weight={contentWeight}>{children}</div>
+      {children}
+      <div style={{ display: "none" }}>
+        <div data-pagefind-weight={TITLE_WEIGHT}>{title}</div>
+        <div data-pagefind-weight={DESCRIPTION_WEIGHT}>{description}</div>
+      </div>
     </div>
   );
 }
