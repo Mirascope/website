@@ -9,15 +9,14 @@
  * - Other route-specific meta tags
  */
 
+import { useEffect } from "react";
 import type { RouteMetaProps } from "./types";
 import { environment } from "@/src/lib/content/environment";
 import { extractMetadata, serializeMetadata } from "./utils";
+import { HeadManager } from "./HeadManager";
 
 export function RouteMeta({ children }: RouteMetaProps) {
   // In prerendering mode, we only output a hidden div with serialized metadata
-  // In client mode, we render the children directly (for now)
-  // Later, we'll integrate with HeadManager
-
   if (environment.isPrerendering) {
     // Extract metadata
     const metadata = extractMetadata(children);
@@ -35,9 +34,16 @@ export function RouteMeta({ children }: RouteMetaProps) {
     );
   }
 
-  // In client mode, just render the children directly
-  // Later this will be replaced with HeadManager integration
-  return <>{children}</>;
+  // In client mode, register with HeadManager
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      const metadata = extractMetadata(children);
+      HeadManager.update("route", metadata);
+    }
+  }, [children]);
+
+  // Don't render anything in the DOM
+  return null;
 }
 
 export default RouteMeta;
