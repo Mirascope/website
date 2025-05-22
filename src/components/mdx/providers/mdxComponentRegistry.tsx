@@ -29,7 +29,7 @@ import { ProductLogo, MirascopeLogo, LilypadLogo } from "@/src/components/core/b
 import { ProviderCodeWrapper } from "./ProviderCodeWrapper";
 import { ResponsiveImage } from "@/src/components/mdx/providers/ResponsiveImage";
 import { devComponents } from "@/src/components/mdx/elements/DevComponents";
-import { slugify } from "@/src/lib/utils";
+import { idSlugFromChildren } from "@/src/lib/mdx/heading-utils";
 
 // -----------------------------------------------------------------------------
 // Helper Components
@@ -136,7 +136,7 @@ const customComponents = {
 const headingElements = {
   h1: ({ children, ...props }: React.ComponentPropsWithoutRef<"h1">) => {
     // Generate an ID from the text content if not provided
-    const id = props.id || (typeof children === "string" ? slugify(children) : undefined);
+    const id = props.id || idSlugFromChildren(children);
     return (
       <h1
         id={id}
@@ -149,7 +149,7 @@ const headingElements = {
     );
   },
   h2: ({ children, ...props }: React.ComponentPropsWithoutRef<"h2">) => {
-    const id = props.id || (typeof children === "string" ? slugify(children) : undefined);
+    const id = props.id || idSlugFromChildren(children);
     return (
       <h2
         id={id}
@@ -162,7 +162,7 @@ const headingElements = {
     );
   },
   h3: ({ children, ...props }: React.ComponentPropsWithoutRef<"h3">) => {
-    const id = props.id || (typeof children === "string" ? slugify(children) : undefined);
+    const id = props.id || idSlugFromChildren(children);
     return (
       <h3
         id={id}
@@ -175,7 +175,7 @@ const headingElements = {
     );
   },
   h4: ({ children, ...props }: React.ComponentPropsWithoutRef<"h4">) => {
-    const id = props.id || (typeof children === "string" ? slugify(children) : undefined);
+    const id = props.id || idSlugFromChildren(children);
     return (
       <h4
         id={id}
@@ -188,7 +188,7 @@ const headingElements = {
     );
   },
   h5: ({ children, ...props }: React.ComponentPropsWithoutRef<"h5">) => {
-    const id = props.id || (typeof children === "string" ? slugify(children) : undefined);
+    const id = props.id || idSlugFromChildren(children);
     return (
       <h5
         id={id}
