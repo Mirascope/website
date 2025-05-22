@@ -60,6 +60,8 @@ export function PageMeta(props: PageMetaProps) {
     ? computedImage
     : `${BASE_URL}${computedImage.startsWith("/") ? computedImage : `/${computedImage}`}`;
 
+  //We don't need this anymore as we're adding the script element directly to the RouteMeta
+
   return (
     <RouteMeta>
       <title>{pageTitle}</title>
@@ -68,6 +70,42 @@ export function PageMeta(props: PageMetaProps) {
 
       {/* Canonical URL - self-referencing to prevent duplicate content issues */}
       <link rel="canonical" href={canonicalUrl} />
+
+      {/* Article schema as JSON-LD */}
+      {type === "article" && article && (
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            headline: title,
+            description: description,
+            image: ogImage,
+            url: canonicalUrl,
+            mainEntityOfPage: {
+              "@type": "WebPage",
+              "@id": canonicalUrl,
+            },
+            publisher: {
+              "@type": "Organization",
+              name: siteTitle,
+              logo: {
+                "@type": "ImageObject",
+                url: `${BASE_URL}/favicon.png`,
+              },
+            },
+            ...(article.publishedTime ? { datePublished: article.publishedTime } : {}),
+            ...(article.modifiedTime ? { dateModified: article.modifiedTime } : {}),
+            ...(article.author
+              ? {
+                  author: {
+                    "@type": "Person",
+                    name: article.author,
+                  },
+                }
+              : {}),
+          })}
+        </script>
+      )}
 
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />

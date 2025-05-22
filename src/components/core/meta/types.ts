@@ -38,6 +38,7 @@ export type RawMetadata = {
   description?: string;
   metaTags: MetaTag[];
   linkTags: LinkTag[];
+  jsonLdScripts: string[]; // JSON-LD script contents
 };
 
 /**
@@ -49,6 +50,7 @@ export type UnifiedMetadata = {
   description: string; // Required
   metaTags: MetaTag[];
   linkTags: LinkTag[];
+  jsonLdScripts: string[]; // JSON-LD script contents
 };
 
 /**

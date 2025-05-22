@@ -73,6 +73,16 @@ export function elementToString(element: Element): string {
 }
 
 /**
+ * Creates a script element for JSON-LD data
+ */
+export function createScriptElement(content: string): HTMLScriptElement {
+  const element = document.createElement("script");
+  element.setAttribute("type", "application/ld+json");
+  element.textContent = content;
+  return element;
+}
+
+/**
  * Creates all metadata DOM elements for the given unified metadata
  */
 export function createMetadataElements(metadata: UnifiedMetadata) {
@@ -94,10 +104,18 @@ export function createMetadataElements(metadata: UnifiedMetadata) {
     return element;
   });
 
+  // Create JSON-LD script elements if present
+  const scriptElements = (metadata.jsonLdScripts || []).map((content) => {
+    const element = createScriptElement(content);
+    element.setAttribute("data-head-manager", "true");
+    return element;
+  });
+
   return {
     title: titleElement,
     meta: metaElements,
     link: linkElements,
+    script: scriptElements,
   };
 }
 
@@ -112,6 +130,11 @@ export function generateMetadataHtml(metadata: UnifiedMetadata) {
     title: elementToString(elements.title),
     meta: elements.meta.map(elementToString).join("\n"),
     link: elements.link.map(elementToString).join("\n"),
+    script: elements.script
+      .map((script) => {
+        return `<script type="application/ld+json">${script.textContent}</script>`;
+      })
+      .join("\n"),
   };
 }
 

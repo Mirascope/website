@@ -227,6 +227,7 @@ export async function renderRouteToString(route: string): Promise<RenderResult> 
       description: unifiedMetadata.description,
       meta: metadataHtml.meta,
       link: metadataHtml.link,
+      jsonLdScripts: metadataHtml.script || "",
     };
 
     return { html: appHtml, metadata };
@@ -258,6 +259,7 @@ export function createHtmlDocument(
     `<title data-head-manager="true">${metadata.title}</title>
     ${metadata.meta}
     ${metadata.link}
+    ${metadata.jsonLdScripts}
   </head>`
   );
 
