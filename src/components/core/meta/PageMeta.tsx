@@ -52,6 +52,9 @@ export function PageMeta(props: PageMetaProps) {
       : `${BASE_URL}${url.startsWith("/") ? url : `/${url}`}`
     : `${BASE_URL}${currentPath}`;
 
+  // Create canonical URL with trailing slash removed for all URLs
+  const canonicalUrl = ogUrl.endsWith("/") ? ogUrl.slice(0, -1) : ogUrl;
+
   // Create absolute image URL
   const ogImage = computedImage.startsWith("http")
     ? computedImage
@@ -62,6 +65,9 @@ export function PageMeta(props: PageMetaProps) {
       <title>{pageTitle}</title>
       <meta name="description" content={description} />
       {robots && <meta name="robots" content={robots} />}
+
+      {/* Canonical URL - self-referencing to prevent duplicate content issues */}
+      <link rel="canonical" href={canonicalUrl} />
 
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />
