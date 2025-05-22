@@ -180,7 +180,7 @@ In the above chain, the inputs are dynamically provided content (i.e., context f
 
 ### Forwarding Data Unchanged
 
-The example also illustrates LangChain’s [`RunnablePassthrough`](https://python.langchain.com/docs/expression_language/how_to/passthrough/), an object that forwards input data without changes, if these are already in the desired format.
+The example also illustrates LangChain’s [`RunnablePassthrough`](https://python.langchain.com/docs/how_to/passthrough/), an object that forwards input data without changes, if these are already in the desired format.
 
 In the example, `RunnablePassthrough` takes the input from the preceding part of the pipeline-namely, the outputs of `retriever` and the input `question`-and forwards these unaltered to `prompt` for further processing.
 

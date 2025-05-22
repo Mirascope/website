@@ -46,8 +46,42 @@ const URL_ALLOWLIST = new Set([
   "https://www.linkedin.com/in/wbakst/",
   "https://twitter.com/WilliamBakst",
   "https://www.uber.com/en-GB/blog/generative-ai-for-high-quality-mobile-testing/",
+  "https://openai.com/*",
+  "https://platform.openai.com/*",
+  "https://direct.mit.edu/tacl/article/doi/10.1162/tacl_a_00324/96460/How-Can-We-Know-What-Language-Models-Know",
+
   // If needed, allowlist domains that we know are valid but block requests
 ]);
+
+/**
+ * Check if a URL matches any entry in the allowlist, supporting wildcards
+ * @param url The URL to check
+ * @param allowlist The set of allowlisted URLs (may contain wildcards with *)
+ * @returns boolean indicating if the URL is allowlisted
+ */
+function isUrlAllowlisted(url: string, allowlist: Set<string>): boolean {
+  // First check for exact match
+  if (allowlist.has(url)) {
+    return true;
+  }
+
+  // Then check for wildcard patterns
+  for (const pattern of allowlist) {
+    if (pattern.includes("*")) {
+      // Convert the wildcard pattern to a regex
+      const regexPattern = pattern
+        .replace(/[-[\]{}()+?.,\\^$|#\s]/g, "\\$&") // Escape special regex chars except *
+        .replace(/\*/g, ".*"); // Convert * to regex .*
+
+      const regex = new RegExp(`^${regexPattern}$`);
+      if (regex.test(url)) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
 
 /**
  * Check if a URL is reachable with retry logic
@@ -65,8 +99,8 @@ async function checkUrl(
     const parsedUrl = new URL(url);
     const domain = parsedUrl.hostname;
 
-    // Skip URLs that are in the allowlist
-    if (URL_ALLOWLIST.has(url)) {
+    // Check if URL matches any entry in the allowlist (including wildcards)
+    if (isUrlAllowlisted(url, URL_ALLOWLIST)) {
       return { url, status: 200 }; // Assume it's valid
     }
 
