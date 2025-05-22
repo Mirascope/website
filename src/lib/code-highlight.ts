@@ -1,7 +1,7 @@
 import {
-  transformerMetaHighlight,
   transformerNotationDiff,
   transformerNotationHighlight,
+  transformerMetaHighlight,
 } from "@shikijs/transformers";
 import { codeToHtml, createHighlighter } from "shiki";
 
@@ -38,6 +38,8 @@ export async function highlightCode(
   meta = ""
 ): Promise<HighlightResult> {
   try {
+    // Process the code with meta information for line highlighting
+
     // Generate HTML for both light and dark themes
     // Using direct codeToHtml call from shiki
     const themeHtml = await codeToHtml(code.trim(), {
@@ -46,8 +48,8 @@ export async function highlightCode(
         light: THEME_LIGHT,
         dark: THEME_DARK,
       },
-      meta: { __raw: meta },
       transformers: getTransformers(),
+      meta: { __raw: meta },
     });
 
     // Return both versions for theme switching
@@ -64,7 +66,7 @@ export function fallbackHighlighter(
   language: string = "text",
   meta: string = ""
 ): HighlightResult {
-  // Then strip highlight markers (this helps with consistent behavior)
+  // Strip highlight markers (this helps with consistent behavior)
   const escapedCode = stripHighlightMarkers(code.trim())
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -142,8 +144,8 @@ export function highlightCodeSync(code: string, language: string = "text", meta:
       light: THEME_LIGHT,
       dark: THEME_DARK,
     },
-    meta: { __raw: meta },
     transformers: getTransformers(),
+    meta: { __raw: meta },
   });
 
   return { themeHtml, code, language, meta, highlighted: true };
