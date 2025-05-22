@@ -99,12 +99,12 @@
     "postcss": "^8.5.3",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
-    "puppeteer": "^24.6.1",
+    "puppeteer": "^24.9.0",
     "sharp": "^0.34.1",
     "storybook": "^8.6.12",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.3",
-    "typescript": "^5.7.2",
+    "typescript": "^5.8.3",
     "vite": "^6.1.0",
     "web-vitals": "^4.2.4"
   }

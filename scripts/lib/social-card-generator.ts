@@ -191,9 +191,15 @@ export class SocialCardGenerator {
     // Brief delay to ensure rendering is complete
     await new Promise((resolve) => setTimeout(resolve, 100));
 
+    // Ensure output path ends with correct extension to satisfy TypeScript
+    // The newer version of Puppeteer has stricter type checking on the path parameter
+    if (!outputPath.endsWith(".webp")) {
+      throw new Error(`Output path ${outputPath} must end with .webp extension`);
+    }
+
     // Take screenshot with WebP compression
     await this.page.screenshot({
-      path: outputPath,
+      path: outputPath as `${string}.webp`, // Type assertion to match Puppeteer's expected format
       type: "webp",
       quality: 80,
       clip: {
