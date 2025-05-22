@@ -90,7 +90,7 @@ export function PageMeta(props: PageMetaProps) {
               name: siteTitle,
               logo: {
                 "@type": "ImageObject",
-                url: `${BASE_URL}/favicon.png`,
+                url: `${BASE_URL}/assets/branding/mirascope-logo.svg`,
               },
             },
             ...(article.publishedTime ? { datePublished: article.publishedTime } : {}),
