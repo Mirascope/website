@@ -78,7 +78,7 @@ Similar to LlamaIndex, LangChain offers a number of [prompt templates](/blog/lan
 
 LangChain encourages you to customize these templates, though you’re free to code your own prompts. You can also merge different LangChain templates as needed.
 
-An example of a `FewShotPromptTemplate` from [LangChain’s documentation](https://python.langchain.com/docs/modules/model_io/prompts/few_shot_examples/):
+An example of a `FewShotPromptTemplate` from [LangChain’s documentation](https://python.langchain.com/docs/how_to/few_shot_examples/):
 
 ```python
 from langchain_core.prompts.few_shot import FewShotPromptTemplate
@@ -239,7 +239,7 @@ Such abstractions let you build data pipelines for handling large volumes of dat
 
 ### LangChain: Offers Abstractions for Indexing, Storage, and Retrieval
 
-LangChain offers similar abstractions to that of LlamaIndex for building data pipelines for [RAG applications](https://python.langchain.com/docs/use_cases/question_answering/quickstart/). These abstractions correspond to two broad phases:
+LangChain offers similar abstractions to that of LlamaIndex for building data pipelines for [RAG applications](https://python.langchain.com/docs/tutorials/rag/). These abstractions correspond to two broad phases:
 
 - An **indexing phase** , where data is loaded (via document loaders), split into separate chunks, and stored in a vector store and embedding model.
 - A **retrieval and generation phase** , where embeddings relevant to a query are retrieved, passed to the LLM, and responses generated.

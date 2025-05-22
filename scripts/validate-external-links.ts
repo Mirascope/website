@@ -45,6 +45,7 @@ const domainLastAccessed = new Map<string, number>();
 const URL_ALLOWLIST = new Set([
   "https://www.linkedin.com/in/wbakst/",
   "https://twitter.com/WilliamBakst",
+  "https://www.uber.com/en-GB/blog/generative-ai-for-high-quality-mobile-testing/",
   // If needed, allowlist domains that we know are valid but block requests
 ]);
 

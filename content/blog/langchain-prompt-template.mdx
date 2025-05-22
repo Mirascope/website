@@ -52,7 +52,7 @@ print(formatted_prompt)
 
 It contains all the elements needed to create the prompt, but doesn’t feature autocomplete for the variables `dish` and `flavor`.
 
-LangChain’s templates use Python’s [`str.format`](https://docs.python.org/3/library/stdtypes.html#str.format) by default, but for complex prompts you can also use [jinja2](https://palletsprojects.com/p/jinja/).
+LangChain’s templates use Python’s [`str.format`](https://docs.python.org/3/library/stdtypes.html#str.format) by default, but for complex prompts you can also use [jinja2](https://palletsprojects.com/projects/jinja/).
 
 ### `FewShotPromptTemplate`
 
@@ -65,7 +65,7 @@ Many real-world use cases benefit from few-shot learning, for instance:
 - **An automated fact checking tool** where you provide different few-shot examples where the model is shown how to verify information, ask follow-up questions if necessary, and conclude whether a statement is true or false.
 - **A technical support and troubleshooting guide** that assists users in diagnosing and solving issues with products or software, where the `FewShotPromptTemplate` could contain examples of common troubleshooting steps, including how to ask the user for specific system details, interpret symptoms, and guide them through the solution process.
 
-The [`FewShotPromptTemplate`](https://python.langchain.com/docs/modules/model_io/prompts/few_shot_examples) class takes a list of (question-and-answer) dictionaries as input, before asking a new question:
+The [`FewShotPromptTemplate`](https://python.langchain.com/docs/how_to/few_shot_examples/) class takes a list of (question-and-answer) dictionaries as input, before asking a new question:
 
 ```python
 from langchain.prompts.few_shot import FewShotPromptTemplate
@@ -180,7 +180,7 @@ In the above chain, the inputs are dynamically provided content (i.e., context f
 
 ### Forwarding Data Unchanged
 
-The example also illustrates LangChain’s [`RunnablePassthrough`](https://python.langchain.com/docs/expression_language/how_to/passthrough), an object that forwards input data without changes, if these are already in the desired format.
+The example also illustrates LangChain’s [`RunnablePassthrough`](https://python.langchain.com/docs/expression_language/how_to/passthrough/), an object that forwards input data without changes, if these are already in the desired format.
 
 In the example, `RunnablePassthrough` takes the input from the preceding part of the pipeline-namely, the outputs of `retriever` and the input `question`-and forwards these unaltered to `prompt` for further processing.
 
