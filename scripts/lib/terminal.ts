@@ -64,4 +64,5 @@ export const icons = {
   error: colorize("✗", "red"),
   info: colorize("ℹ", "blue"),
   arrow: colorize("→", "cyan"),
+  dot: colorize("•", "magenta"),
 };
