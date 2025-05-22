@@ -247,10 +247,7 @@ export function createHtmlDocument(
   templatePath: string = path.join(process.cwd(), "index.html")
 ): string {
   // Start with the original template
-  const indexHtml = fs.readFileSync(templatePath, "utf-8");
-
-  // First cleanup any placeholder comments in head
-  let html = indexHtml.replace("<!-- {{metadata}} -->", "");
+  let html = fs.readFileSync(templatePath, "utf-8");
 
   // Inject all metadata before </head>
   // The HTML will already include data-head-manager attributes from generateMetadataHtml
