@@ -48,11 +48,9 @@ interface SEOMetadataItem {
   ogImage?: string;
 }
 
-type MetadataRecord = Record<string, SEOMetadataItem>;
-
 function AuditMetadata() {
   const { devPages } = useLoaderData({ from: "/dev/audit-metadata" });
-  const [metadata, setMetadata] = useState<MetadataRecord>({});
+  const [metadata, setMetadata] = useState<SEOMetadataItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -84,8 +82,8 @@ function AuditMetadata() {
       return <div className="text-red-500">Error: {error}</div>;
     }
 
-    // Convert the record to an array for rendering
-    const metadataItems = Object.keys(metadata).map((key) => metadata[key]);
+    // Use the metadata array directly
+    const metadataItems = metadata;
 
     return (
       <>

@@ -1,6 +1,6 @@
 /**
  * Script to fetch GitHub repository stats (stars, latest version)
- * Run with: ts-node --project tsconfig.scripts.json scripts/fetch-github-stats.ts
+ * Run with: bun run scripts/fetch-github-stats.ts
  */
 
 import fs from "fs";

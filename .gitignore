@@ -18,6 +18,8 @@ __pycache__/
 # Generated files
 public/static/
 public/sitemap.xml
+public/social-cards/
+public/seo-metadata.json
 .extracted-snippets/
 
 # API docs generation repositories
