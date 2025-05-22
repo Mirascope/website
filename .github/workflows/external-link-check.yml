@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
@@ -26,14 +26,14 @@ jobs:
         run: bun run scripts/validate-external-links.ts
         
       - name: Upload JSON report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: links-report-json
           path: links-report.json
           if-no-files-found: ignore
       
       - name: Upload Markdown report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: links-report-md
           path: links-report.md
