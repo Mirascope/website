@@ -124,7 +124,10 @@ export class SocialCardGenerator {
     }
 
     // Launch browser
-    this.browser = await puppeteer.launch({ headless: true });
+    this.browser = await puppeteer.launch({
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
     this.page = await this.browser.newPage();
 
     // Configure viewport
