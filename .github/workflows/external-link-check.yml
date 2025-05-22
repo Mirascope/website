@@ -28,24 +28,26 @@ jobs:
       - name: Upload JSON report
         uses: actions/upload-artifact@v3
         with:
-          name: external-link-report-json
-          path: external-links-report.json
+          name: links-report-json
+          path: links-report.json
           if-no-files-found: ignore
       
       - name: Upload Markdown report
         uses: actions/upload-artifact@v3
         with:
-          name: external-link-report-md
-          path: external-links-report.md
+          name: links-report-md
+          path: links-report.md
           if-no-files-found: ignore
       
-      # Create or update an issue if broken links found
-      - name: Create issue for broken links
-        if: ${{ steps.check-links.outputs.has_broken_links == 'true' }}
+      # Update the dedicated link validation issue (#207)
+      - name: Update link validation issue
+        if: ${{ steps.check-links.outputs.has_broken_links == 'true' || steps.check-links.outputs.redirected_link_count > 0 }}
         uses: peter-evans/create-issue-from-file@v4
         with:
-          title: External Broken Links Report
-          content-filepath: ./external-links-report.md
-          labels: report, maintenance
+          title: Link Validation Report
+          content-filepath: ./links-report.md
+          labels: report, maintenance, link-validation
+          issue-number: 207
+          token: ${{ secrets.GITHUB_TOKEN }}
           # If you want to update an existing issue instead of creating a new one:
           # issue-number: ${{ steps.find-issue.outputs.issue-number }}

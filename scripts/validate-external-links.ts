@@ -14,13 +14,15 @@ interface LinkCheckResult {
   status: number | null;
   error?: string;
   retries?: number;
+  redirectUrl?: string;
   pageFound: string[];
 }
 
 interface ValidationResult {
   valid: boolean;
-  checkedLinks: number;
+  nLinksChecked: number;
   brokenLinks: LinkCheckResult[];
+  redirectedLinks: LinkCheckResult[];
 }
 
 // Cache to avoid checking the same URL multiple times
@@ -92,7 +94,11 @@ async function checkUrl(
       });
 
       clearTimeout(timeoutId);
-      return { url, status: response.status };
+
+      // Track redirects by comparing final URL with original URL
+      const redirectUrl = response.url !== url ? response.url : undefined;
+
+      return { url, status: response.status, redirectUrl };
     } catch (e: any) {
       // If HEAD request fails, try a GET (some servers don't support HEAD)
       if (e.name === "AbortError") {
@@ -111,7 +117,11 @@ async function checkUrl(
         });
 
         clearTimeout(getTimeoutId);
-        return { url, status: response.status };
+
+        // Track redirects by comparing final URL with original URL
+        const redirectUrl = response.url !== url ? response.url : undefined;
+
+        return { url, status: response.status, redirectUrl };
       } catch (getError: any) {
         clearTimeout(getTimeoutId);
         throw getError;
@@ -297,7 +307,27 @@ async function validateExternalLinks(
   // Filter broken links (status >= 400 or errors)
   const brokenLinks = results.filter((result) => result.status === null || result.status >= 400);
 
-  // Output results
+  // Find redirected links
+  const redirectedLinks = results.filter(
+    (result) => result.redirectUrl && result.status && result.status < 400
+  );
+
+  // Console output for redirects
+  if (redirectedLinks.length > 0) {
+    coloredLog(`\n${icons.info} Found ${redirectedLinks.length} redirected links:`, "blue");
+
+    redirectedLinks.forEach(({ url, redirectUrl, pageFound }) => {
+      console.log(`${icons.arrow} ${url}`);
+      console.log(`  ${icons.success} Redirects to: ${colorize(redirectUrl || "", "green")}`);
+      if (pageFound.length > 0) {
+        console.log(
+          `  ${icons.dot} Found on: ${pageFound.length > 1 ? pageFound.length + " pages" : pageFound[0]}`
+        );
+      }
+    });
+  }
+
+  // Console output for broken links
   if (brokenLinks.length > 0) {
     coloredLog(`\n${icons.error} Found ${brokenLinks.length} broken external links:`, "red");
 
@@ -317,84 +347,142 @@ async function validateExternalLinks(
       links.forEach(({ url, pageFound }) => {
         console.log(`  ${icons.arrow} ${colorize(url, "red")}`);
         pageFound.forEach((page) => {
-          console.log(`    ${icons.error} Found on: ${page}`);
+          console.log(`    ${icons.dot} Found on: ${page}`);
         });
       });
     });
+  }
 
-    // Create a JSON report
-    const reportPath = path.join(process.cwd(), "external-links-report.json");
-    fs.writeFileSync(
-      reportPath,
-      JSON.stringify(
-        {
-          date: new Date().toISOString(),
-          brokenLinks,
-        },
-        null,
-        2
-      )
-    );
-    console.log(`\nDetailed report saved to: ${reportPath}`);
+  // Create a combined JSON report with all link data
+  const jsonReportPath = path.join(process.cwd(), "links-report.json");
+  fs.writeFileSync(
+    jsonReportPath,
+    JSON.stringify(
+      {
+        date: new Date().toISOString(),
+        totalChecked: results.length,
+        brokenLinks,
+        redirectedLinks,
+      },
+      null,
+      2
+    )
+  );
+  console.log(`\nDetailed JSON report saved to: ${jsonReportPath}`);
 
-    // Create a markdown report
-    const mdReportPath = path.join(process.cwd(), "external-links-report.md");
-    const mdReport = generateMarkdownReport(brokenLinks, results.length);
-    fs.writeFileSync(mdReportPath, mdReport);
-    console.log(`Markdown report saved to: ${mdReportPath}`);
+  // Create a combined markdown report
+  const mdReportPath = path.join(process.cwd(), "links-report.md");
+  const mdReport = generateMarkdownReport(brokenLinks, redirectedLinks, results.length);
+  fs.writeFileSync(mdReportPath, mdReport);
+  console.log(`Markdown report saved to: ${mdReportPath}`);
 
-    return { valid: false, checkedLinks: results.length, brokenLinks };
+  if (brokenLinks.length > 0) {
+    return {
+      valid: false,
+      nLinksChecked: results.length,
+      brokenLinks,
+      redirectedLinks,
+    };
   } else {
-    coloredLog(`\n${icons.success} All ${results.length} external links are valid!`, "green");
-    return { valid: true, checkedLinks: results.length, brokenLinks: [] };
+    coloredLog(`\n${icons.success} All links validated, no broken links found!`, "green");
+    return {
+      valid: true,
+      nLinksChecked: results.length,
+      brokenLinks: [],
+      redirectedLinks,
+    };
   }
 }
 
 /**
- * Generate a markdown report of broken links
+ * Generate a combined markdown report with both broken and redirected links
  */
-function generateMarkdownReport(brokenLinks: LinkCheckResult[], totalChecked: number): string {
+function generateMarkdownReport(
+  brokenLinks: LinkCheckResult[],
+  redirectedLinks: LinkCheckResult[],
+  totalChecked: number
+): string {
   const date = new Date().toISOString().split("T")[0];
-  let report = `# External Link Check Report - ${date}\n\n`;
+  let report = `# Link Validation Report - ${date}\n\n`;
 
+  // Summary section
   report += `## Summary\n`;
   report += `- Total links checked: ${totalChecked}\n`;
-  report += `- Broken links found: ${brokenLinks.length}\n\n`;
+  report += `- Broken links found: ${brokenLinks.length}\n`;
+  report += `- Redirected links found: ${redirectedLinks.length}\n\n`;
 
-  if (brokenLinks.length === 0) {
-    report += `All external links are working properly! 🎉\n`;
-    return report;
+  // Broken links section
+  if (brokenLinks.length > 0) {
+    report += `## Broken Links\n\n`;
+
+    // Group by status code or error type
+    const byStatus = brokenLinks.reduce(
+      (acc, link) => {
+        // Create more specific categories for retry failures
+        let key;
+        if (link.status) {
+          key = `Status ${link.status}`;
+        } else if (link.error?.includes("timeout") || link.error?.includes("AbortError")) {
+          key = "Error: Request Timeout";
+        } else {
+          key = `Error: ${link.error}`;
+        }
+        if (!acc[key]) acc[key] = [];
+        acc[key].push(link);
+        return acc;
+      },
+      {} as Record<string, LinkCheckResult[]>
+    );
+
+    Object.entries(byStatus).forEach(([status, links]) => {
+      report += `### ${status}\n\n`;
+
+      links.forEach((link) => {
+        const { url, pageFound, retries } = link;
+        const retryInfo = retries ? ` (failed after ${retries} retries)` : "";
+        report += `- ${url}${retryInfo}\n`;
+        report += `  - Found on pages:\n`;
+        pageFound.forEach((page) => {
+          report += `    - ${page}\n`;
+        });
+        report += `\n`;
+      });
+    });
+  } else {
+    report += `## Broken Links\n\nNo broken links found. All links are working properly! 🎉\n\n`;
   }
 
-  report += `## Broken Links\n\n`;
+  // Redirected links section
+  if (redirectedLinks.length > 0) {
+    report += `## Redirected Links\n\n`;
+    report += `| Original URL | Redirects To | Found On |\n`;
+    report += `|-------------|-------------|----------|\n`;
 
-  // Group by status code
-  const byStatus = brokenLinks.reduce(
-    (acc, link) => {
-      const key = link.status ? `Status ${link.status}` : `Error: ${link.error}`;
-      if (!acc[key]) acc[key] = [];
-      acc[key].push(link);
-      return acc;
-    },
-    {} as Record<string, LinkCheckResult[]>
-  );
+    redirectedLinks.forEach(({ url, redirectUrl, pageFound }) => {
+      const pages =
+        pageFound.length > 3
+          ? pageFound.slice(0, 2).join(", ") + `, and ${pageFound.length - 2} more`
+          : pageFound.join(", ");
 
-  Object.entries(byStatus).forEach(([status, links]) => {
-    report += `### ${status}\n\n`;
-
-    links.forEach(({ url, pageFound }) => {
-      report += `- ${url}\n`;
-      report += `  - Found on pages:\n`;
-      pageFound.forEach((page) => {
-        report += `    - ${page}\n`;
-      });
-      report += `\n`;
+      report += `| ${url} | ${redirectUrl} | ${pages} |\n`;
     });
-  });
+    report += `\n`;
+  } else {
+    report += `## Redirected Links\n\nNo redirected links found.\n\n`;
+  }
 
-  report += `\n## Next Steps\n\n`;
-  report += `- Review and fix the broken links above\n`;
-  report += `- Consider adding domains to the allowlist if they're known to be valid but block requests\n`;
+  // Next steps section
+  report += `## Next Steps\n\n`;
+
+  if (brokenLinks.length > 0) {
+    report += `- Review and fix the broken links above\n`;
+  }
+
+  if (redirectedLinks.length > 0) {
+    report += `- Consider updating redirected links to point directly to their destinations for better performance\n`;
+  }
+
+  report += `- Consider adding problematic domains to the allowlist if they're known to be valid but block requests\n`;
   report += `- Run the check again after fixing issues\n`;
 
   return report;
@@ -418,10 +506,11 @@ async function main() {
   try {
     const result = await validateExternalLinks(distDir, verbose, concurrentRequests);
 
-    // Don't exit with error code - we want this to be informational only
-    // External sites can go down temporarily, so we don't want to fail builds
     console.log(
-      `\nExternal link check complete. Found ${result.brokenLinks.length} issues out of ${result.checkedLinks} links.`
+      `\nExternal link check complete.\n` +
+        `- Checked ${result.nLinksChecked} links\n` +
+        `- Found ${result.brokenLinks.length} broken links\n` +
+        `- Found ${result.redirectedLinks.length} redirected links`
     );
 
     // Set output for GitHub Actions
@@ -433,6 +522,10 @@ async function main() {
       fs.appendFileSync(
         process.env.GITHUB_OUTPUT,
         `broken_link_count=${result.brokenLinks.length}\n`
+      );
+      fs.appendFileSync(
+        process.env.GITHUB_OUTPUT,
+        `redirected_link_count=${result.redirectedLinks.length}\n`
       );
     }
   } catch (error) {
