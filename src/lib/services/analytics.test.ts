@@ -211,4 +211,41 @@ describe("AnalyticsManager", () => {
     analyticsManager.trackPageView("/test-page");
     expect(gtagMock).not.toHaveBeenCalled();
   });
+
+  test("trackEvent sends events to both GA and PostHog when enabled", () => {
+    // Create fresh mocks for this test
+    const gtagMock = mock((_command: string, _action: string, _params?: any) => {});
+    window.gtag = gtagMock;
+
+    const posthogCaptureMock = mock((_eventName: string, _properties?: Record<string, any>) => {});
+    window.posthog = {
+      ...window.posthog!,
+      capture: posthogCaptureMock,
+    };
+
+    // Enable analytics
+    const enableSpy = spyOn(analyticsManager, "enableAnalytics");
+    enableSpy.mockImplementation(() => true);
+
+    // Track event
+    analyticsManager.trackEvent("test_event", { test_property: "value" });
+
+    // Verify both analytics services were called
+    expect(gtagMock).toHaveBeenCalled();
+    expect(posthogCaptureMock).toHaveBeenCalled();
+
+    // Reset mocks for the second part of the test
+    gtagMock.mockReset();
+    posthogCaptureMock.mockReset();
+
+    // Disable analytics
+    enableSpy.mockImplementation(() => false);
+
+    // Track event with analytics disabled
+    analyticsManager.trackEvent("test_event", { test_property: "value" });
+
+    // Verify neither service was called
+    expect(gtagMock).not.toHaveBeenCalled();
+    expect(posthogCaptureMock).not.toHaveBeenCalled();
+  });
 });
