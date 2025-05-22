@@ -16,16 +16,8 @@ import { environment } from "../content/environment";
 // Import utilities for metadata extraction and rendering
 import { deserializeMetadata, unifyMetadata } from "@/src/components/core/meta/utils";
 import { generateMetadataHtml } from "@/src/components/core/meta/renderer";
-import type { UnifiedMetadata } from "@/src/components/core/meta/types";
-
-// Initialize HappyDOM for server-side rendering if not already loaded
-if (typeof window === "undefined" && typeof document === "undefined") {
-  // HappyDOM is expected to be loaded globally via happydom.ts
-  // This will make document, window, etc. available
-  // We don't need to do anything here because GlobalRegistrator.register() is called in happydom.ts
-  require("@/happydom");
-}
 import type { PageMetadata, RenderResult } from "./types";
+import type { UnifiedMetadata } from "@/src/components/core/meta/types";
 
 /**
  * Static fetch implementation for server-side rendering
@@ -67,6 +59,14 @@ export async function staticFetch(url: string) {
  * Configures the environment for static rendering
  */
 export function configureStaticEnvironment() {
+  // Initialize HappyDOM for server-side rendering if not already loaded
+  if (typeof window === "undefined" && typeof document === "undefined") {
+    // HappyDOM is expected to be loaded globally via happydom.ts
+    // This will make document, window, etc. available
+    // We don't need to do anything here because GlobalRegistrator.register() is called in happydom.ts
+    require("@/happydom");
+  }
+
   // @ts-ignore
   environment.fetch = staticFetch;
   environment.isDev = () => false;
