@@ -137,6 +137,9 @@ export function extractTableOfContents(content: string): TOCItem[] {
   // Heading pattern to match
   const headingPattern = /^(#{1,6})\s+(.+?)(?:\s+\{#([a-zA-Z0-9_-]+)\})?$/;
 
+  // ApiType component pattern to match
+  const apiTypePattern = /<ApiType\s+type="([^"]+)"[^>]*?\/>/;
+
   for (const line of lines) {
     // Handle code blocks (```code```)
     if (line.trim().startsWith("```")) {
@@ -170,14 +173,24 @@ export function extractTableOfContents(content: string): TOCItem[] {
       const match = line.match(headingPattern);
       if (match) {
         const level = match[1].length;
-        const text = match[2].trim();
+        let text = match[2].trim();
+
+        // Process ApiType components in headings
+        // Handle the self-closing tag pattern: <ApiType type="X" ... />
+        const apiTypeMatches = text.match(apiTypePattern);
+        if (apiTypeMatches && apiTypeMatches[1]) {
+          // Replace the matched ApiType component with the badge text
+          text = text.replace(apiTypeMatches[0], `[${apiTypeMatches[1]}] `);
+        }
 
         // Use explicit ID if provided in the format {#id}
         let id = match[3];
 
         // If no explicit ID, generate one from the text
         if (!id) {
-          id = text
+          // For ID generation, use text with ApiType components stripped
+          const idText = text.replace(apiTypePattern, "").trim();
+          id = idText
             .toLowerCase()
             .replace(/[^a-z0-9]+/g, "-")
             .replace(/^-|-$/g, "");
