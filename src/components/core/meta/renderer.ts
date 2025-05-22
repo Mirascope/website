@@ -78,12 +78,21 @@ export function elementToString(element: Element): string {
 export function createMetadataElements(metadata: UnifiedMetadata) {
   // Create title element
   const titleElement = createTitleElement(metadata.title);
+  titleElement.setAttribute("data-head-manager", "true");
 
   // Create meta elements
-  const metaElements = metadata.metaTags.map(createMetaElement);
+  const metaElements = metadata.metaTags.map((tag) => {
+    const element = createMetaElement(tag);
+    element.setAttribute("data-head-manager", "true");
+    return element;
+  });
 
   // Create link elements
-  const linkElements = metadata.linkTags.map(createLinkElement);
+  const linkElements = metadata.linkTags.map((tag) => {
+    const element = createLinkElement(tag);
+    element.setAttribute("data-head-manager", "true");
+    return element;
+  });
 
   return {
     title: titleElement,
