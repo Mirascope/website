@@ -3,13 +3,12 @@
  */
 
 import { describe, test, expect } from "bun:test";
+const { renderRouteToString } = await import("../static-renderer");
 
 describe("Static Renderer", () => {
   // This test renders an actual route and verifies expected metadata
   test("renderRouteToString renders index route with correct metadata", async () => {
     // Import only when we need it to avoid side effects
-    const { renderRouteToString } = await import("../static-renderer");
-
     // Render the index route
     const result = await renderRouteToString("/");
 
@@ -29,8 +28,6 @@ describe("Static Renderer", () => {
   });
 
   test("renders home route with mirascope product attribute", async () => {
-    const { renderRouteToString } = await import("../static-renderer");
-
     // Render the index route
     const result = await renderRouteToString("/");
 
@@ -39,8 +36,6 @@ describe("Static Renderer", () => {
   });
 
   test("renders pricing route with lilypad product attribute", async () => {
-    const { renderRouteToString } = await import("../static-renderer");
-
     // Render the pricing route
     const result = await renderRouteToString("/pricing");
 

@@ -9,41 +9,21 @@
  * - Other route-specific meta tags
  */
 
-import { useEffect } from "react";
-import type { RouteMetaProps } from "./types";
-import { environment } from "@/src/lib/content/environment";
-import { extractMetadata, serializeMetadata } from "./utils";
-import { HeadManager } from "./HeadManager";
+import { BaseMeta } from "./BaseMeta";
+
+export interface RouteMetaProps {
+  children?: React.ReactNode;
+}
 
 export function RouteMeta({ children }: RouteMetaProps) {
-  // In prerendering mode, we only output a hidden div with serialized metadata
-  if (environment.isPrerendering) {
-    // Extract metadata
-    const metadata = extractMetadata(children);
-
-    // Serialize metadata for extraction during build
-    const serializedMetadata = serializeMetadata(metadata);
-
-    return (
-      // Only output a hidden div with serialized metadata during prerendering
-      <div
-        data-route-meta={serializedMetadata}
-        style={{ display: "none" }}
-        data-testid="route-meta-serialized"
-      />
-    );
-  }
-
-  // In client mode, register with HeadManager
-  useEffect(() => {
-    if (typeof document !== "undefined") {
-      const metadata = extractMetadata(children);
-      HeadManager.update("route", metadata);
-    }
-  }, [children]);
-
-  // Don't render anything in the DOM
-  return null;
+  return (
+    <BaseMeta
+      children={children}
+      metaType="route"
+      dataAttribute="data-route-meta"
+      testId="route-meta-serialized"
+    />
+  );
 }
 
 export default RouteMeta;
