@@ -1,0 +1,387 @@
+#!/usr/bin/env bun
+/**
+ * Script to validate external links in the prerendered HTML
+ * This ensures external links don't lead to 404s or other errors
+ */
+import fs from "fs";
+import path from "path";
+import { JSDOM } from "jsdom";
+import { glob } from "glob";
+import { colorize, printHeader, icons, coloredLog } from "./lib/terminal";
+
+interface LinkCheckResult {
+  url: string;
+  status: number | null;
+  error?: string;
+  pageFound: string[];
+}
+
+interface ValidationResult {
+  valid: boolean;
+  checkedLinks: number;
+  brokenLinks: LinkCheckResult[];
+}
+
+// Cache to avoid checking the same URL multiple times
+const linkCache = new Map<string, LinkCheckResult>();
+
+// Default timeout for requests (5 seconds)
+const DEFAULT_TIMEOUT = 5000;
+
+// Rate limiting: wait this many ms between requests to the same domain
+const RATE_LIMIT_MS = 1000;
+const domainLastAccessed = new Map<string, number>();
+
+// Domain allowlist - domains we know are valid but might block our requests
+const DOMAIN_ALLOWLIST = new Set([
+  "localhost",
+  "127.0.0.1",
+  "example.com",
+  "twitter.com",
+  "x.com",
+  // Add other domains that you know are valid but might block our requests
+]);
+
+/**
+ * Check if a URL is reachable
+ */
+async function checkUrl(
+  url: string,
+  timeout = DEFAULT_TIMEOUT
+): Promise<Omit<LinkCheckResult, "pageFound">> {
+  try {
+    // Parse the URL to get the domain for rate limiting
+    const parsedUrl = new URL(url);
+    const domain = parsedUrl.hostname;
+
+    // Skip URLs that are in the allowlist
+    if (DOMAIN_ALLOWLIST.has(domain)) {
+      return { url, status: 200 }; // Assume it's valid
+    }
+
+    // Apply rate limiting
+    const now = Date.now();
+    const lastAccessed = domainLastAccessed.get(domain) || 0;
+    const timeSinceLastAccess = now - lastAccessed;
+
+    if (timeSinceLastAccess < RATE_LIMIT_MS) {
+      // Wait to respect rate limit
+      await new Promise((resolve) => setTimeout(resolve, RATE_LIMIT_MS - timeSinceLastAccess));
+    }
+
+    // Update last accessed time
+    domainLastAccessed.set(domain, Date.now());
+
+    // Use HEAD request to avoid downloading the full page
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+    try {
+      const response = await fetch(url, {
+        method: "HEAD",
+        redirect: "follow",
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+      return { url, status: response.status };
+    } catch (e: any) {
+      // If HEAD request fails, try a GET (some servers don't support HEAD)
+      if (e.name === "AbortError") {
+        throw new Error("Request timeout");
+      }
+
+      // Try with GET request as fallback
+      const getController = new AbortController();
+      const getTimeoutId = setTimeout(() => getController.abort(), timeout);
+
+      try {
+        const response = await fetch(url, {
+          method: "GET",
+          redirect: "follow",
+          signal: getController.signal,
+        });
+
+        clearTimeout(getTimeoutId);
+        return { url, status: response.status };
+      } catch (getError: any) {
+        clearTimeout(getTimeoutId);
+        throw getError;
+      }
+    }
+  } catch (error: any) {
+    return {
+      url,
+      status: null,
+      error: error.message || "Unknown error",
+    };
+  }
+}
+
+async function validateExternalLinks(
+  distDir: string,
+  verbose: boolean = false,
+  concurrentRequests: number = 5
+): Promise<ValidationResult> {
+  printHeader("Validating External Links");
+
+  // Find all HTML files in the dist directory
+  const htmlFiles = await glob(`${distDir}/**/index.html`);
+  console.log(`${icons.info} Found ${htmlFiles.length} HTML files to check`);
+
+  // Collect all external links
+  const externalLinks = new Map<string, string[]>();
+
+  // Process each HTML file to collect external links
+  for (const htmlFile of htmlFiles) {
+    const content = fs.readFileSync(htmlFile, "utf-8");
+    const dom = new JSDOM(content);
+    const links = dom.window.document.querySelectorAll("a[href]");
+
+    // Get the relative path for reporting
+    const relativePath = path.relative(distDir, htmlFile);
+    // Convert dist/some/path/index.html to /some/path
+    const currentPage = "/" + relativePath.replace(/\/index\.html$/, "");
+
+    // Check each link
+    links.forEach((link: Element) => {
+      const href = link.getAttribute("href") as string;
+
+      // Skip internal links (those starting with /)
+      if (href.startsWith("/") || href.startsWith("#")) {
+        return;
+      }
+
+      // Skip non-http(s) links like mailto:, tel:, etc.
+      if (!href.startsWith("http://") && !href.startsWith("https://")) {
+        return;
+      }
+
+      // Add to the external links map
+      if (!externalLinks.has(href)) {
+        externalLinks.set(href, []);
+      }
+      externalLinks.get(href)?.push(currentPage);
+    });
+  }
+
+  if (verbose) {
+    console.log(`Found ${externalLinks.size} unique external links to check`);
+  }
+
+  // Check the links with concurrency limit
+  const results: LinkCheckResult[] = [];
+  const urlsToCheck = Array.from(externalLinks.keys());
+  let processed = 0;
+
+  // Process in batches
+  for (let i = 0; i < urlsToCheck.length; i += concurrentRequests) {
+    const batch = urlsToCheck.slice(i, i + concurrentRequests);
+    const batchPromises = batch.map(async (url) => {
+      // Check if we've already seen this URL
+      if (linkCache.has(url)) {
+        const cachedResult = linkCache.get(url)!;
+        return {
+          ...cachedResult,
+          pageFound: externalLinks.get(url) || [],
+        };
+      }
+
+      try {
+        const result = await checkUrl(url);
+        processed++;
+
+        if (verbose || result.status === null || result.status >= 400) {
+          const status = result.status ? result.status : "Error";
+          const message = result.error ? `: ${result.error}` : "";
+          console.log(`[${processed}/${urlsToCheck.length}] ${url} - ${status}${message}`);
+        } else if (processed % 10 === 0) {
+          // Print progress every 10 links
+          console.log(`[${processed}/${urlsToCheck.length}] Checked ${processed} links...`);
+        }
+
+        // Cache the result
+        linkCache.set(url, { ...result, pageFound: [] });
+
+        return {
+          ...result,
+          pageFound: externalLinks.get(url) || [],
+        };
+      } catch (error: any) {
+        console.error(`Error checking ${url}:`, error);
+        processed++;
+
+        const result = {
+          url,
+          status: null,
+          error: error.message || "Unknown error",
+          pageFound: externalLinks.get(url) || [],
+        };
+
+        // Cache the error result
+        linkCache.set(url, { ...result, pageFound: [] });
+
+        return result;
+      }
+    });
+
+    // Wait for the batch to complete
+    const batchResults = await Promise.all(batchPromises);
+    results.push(...batchResults);
+  }
+
+  // Filter broken links (status >= 400 or errors)
+  const brokenLinks = results.filter((result) => result.status === null || result.status >= 400);
+
+  // Output results
+  if (brokenLinks.length > 0) {
+    coloredLog(`\n${icons.error} Found ${brokenLinks.length} broken external links:`, "red");
+
+    // Group by status code for easier readability
+    const byStatus = brokenLinks.reduce(
+      (acc, link) => {
+        const key = link.status ? `Status ${link.status}` : `Error: ${link.error}`;
+        if (!acc[key]) acc[key] = [];
+        acc[key].push(link);
+        return acc;
+      },
+      {} as Record<string, LinkCheckResult[]>
+    );
+
+    Object.entries(byStatus).forEach(([status, links]) => {
+      console.log(`\n${colorize(`${status}:`, "yellow")}`);
+      links.forEach(({ url, pageFound }) => {
+        console.log(`  ${icons.arrow} ${colorize(url, "red")}`);
+        pageFound.forEach((page) => {
+          console.log(`    ${icons.error} Found on: ${page}`);
+        });
+      });
+    });
+
+    // Create a JSON report
+    const reportPath = path.join(process.cwd(), "external-links-report.json");
+    fs.writeFileSync(
+      reportPath,
+      JSON.stringify(
+        {
+          date: new Date().toISOString(),
+          brokenLinks,
+        },
+        null,
+        2
+      )
+    );
+    console.log(`\nDetailed report saved to: ${reportPath}`);
+
+    // Create a markdown report
+    const mdReportPath = path.join(process.cwd(), "external-links-report.md");
+    const mdReport = generateMarkdownReport(brokenLinks, results.length);
+    fs.writeFileSync(mdReportPath, mdReport);
+    console.log(`Markdown report saved to: ${mdReportPath}`);
+
+    return { valid: false, checkedLinks: results.length, brokenLinks };
+  } else {
+    coloredLog(`\n${icons.success} All ${results.length} external links are valid!`, "green");
+    return { valid: true, checkedLinks: results.length, brokenLinks: [] };
+  }
+}
+
+/**
+ * Generate a markdown report of broken links
+ */
+function generateMarkdownReport(brokenLinks: LinkCheckResult[], totalChecked: number): string {
+  const date = new Date().toISOString().split("T")[0];
+  let report = `# External Link Check Report - ${date}\n\n`;
+
+  report += `## Summary\n`;
+  report += `- Total links checked: ${totalChecked}\n`;
+  report += `- Broken links found: ${brokenLinks.length}\n\n`;
+
+  if (brokenLinks.length === 0) {
+    report += `All external links are working properly! 🎉\n`;
+    return report;
+  }
+
+  report += `## Broken Links\n\n`;
+
+  // Group by status code
+  const byStatus = brokenLinks.reduce(
+    (acc, link) => {
+      const key = link.status ? `Status ${link.status}` : `Error: ${link.error}`;
+      if (!acc[key]) acc[key] = [];
+      acc[key].push(link);
+      return acc;
+    },
+    {} as Record<string, LinkCheckResult[]>
+  );
+
+  Object.entries(byStatus).forEach(([status, links]) => {
+    report += `### ${status}\n\n`;
+
+    links.forEach(({ url, pageFound }) => {
+      report += `- ${url}\n`;
+      report += `  - Found on pages:\n`;
+      pageFound.forEach((page) => {
+        report += `    - ${page}\n`;
+      });
+      report += `\n`;
+    });
+  });
+
+  report += `\n## Next Steps\n\n`;
+  report += `- Review and fix the broken links above\n`;
+  report += `- Consider adding domains to the allowlist if they're known to be valid but block requests\n`;
+  report += `- Run the check again after fixing issues\n`;
+
+  return report;
+}
+
+// When run directly
+async function main() {
+  const args = process.argv.slice(2);
+  const verbose = args.includes("--verbose");
+  const concurrentRequests = parseInt(
+    args.find((arg) => arg.startsWith("--concurrency="))?.split("=")[1] || "5"
+  );
+  const distDir = path.join(process.cwd(), "dist");
+
+  // Check if dist directory exists
+  if (!fs.existsSync(distDir)) {
+    coloredLog(`${icons.error} Dist directory not found! Run \`bun run build\` first.`, "red");
+    process.exit(1);
+  }
+
+  try {
+    const result = await validateExternalLinks(distDir, verbose, concurrentRequests);
+
+    // Don't exit with error code - we want this to be informational only
+    // External sites can go down temporarily, so we don't want to fail builds
+    console.log(
+      `\nExternal link check complete. Found ${result.brokenLinks.length} issues out of ${result.checkedLinks} links.`
+    );
+
+    // Set output for GitHub Actions
+    if (process.env.GITHUB_OUTPUT) {
+      fs.appendFileSync(
+        process.env.GITHUB_OUTPUT,
+        `has_broken_links=${result.brokenLinks.length > 0}\n`
+      );
+      fs.appendFileSync(
+        process.env.GITHUB_OUTPUT,
+        `broken_link_count=${result.brokenLinks.length}\n`
+      );
+    }
+  } catch (error) {
+    coloredLog(`${icons.error} Error validating links:`, "red");
+    console.error(error);
+    process.exit(1);
+  }
+}
+
+// Run the script if invoked directly
+if (import.meta.path === Bun.main) {
+  await main();
+}
+
+// Export for use in other scripts
+export { validateExternalLinks };
