@@ -11,7 +11,7 @@
  * --help                 : Show help
  */
 
-import { colorize, coloredLog } from "./lib/terminal";
+import { colorize, coloredLog, printHeader } from "./lib/terminal";
 import { generateOgImages } from "./lib/social-card-generator";
 import { getAllRoutes, getProjectRoot } from "../src/lib/router-utils";
 import { renderRouteToString } from "../src/lib/rendering";
@@ -71,8 +71,19 @@ function saveMetadataToFile(metadata: RouteMetadata[], verbose = false): string 
  * Main function
  */
 async function main() {
+  printHeader("SOCIAL CARD GENERATION", "magenta");
+
   // Get all routes
+  const routesStart = performance.now();
   const allRoutes = await getAllRoutes();
+  coloredLog(
+    `Found ${allRoutes.length} routes (${((performance.now() - routesStart) / 1000).toFixed(2)}s)`,
+    "cyan"
+  );
+
+  // Extract metadata
+  printHeader("METADATA EXTRACTION", "blue");
+  const metadataStart = performance.now();
 
   // Map to title for social card generation
   const socialCardPromises = allRoutes.map((route) => extractRouteMetadata(route));
@@ -80,13 +91,27 @@ async function main() {
   // Wait for all metadata to be extracted
   const metadataList = await Promise.all(socialCardPromises);
 
+  // Calculate metadata extraction time
+  const metadataTime = (performance.now() - metadataStart) / 1000;
+  coloredLog(
+    `Metadata extraction complete for ${metadataList.length} routes (${metadataTime.toFixed(2)}s)`,
+    "green"
+  );
+
   // Save full metadata (with descriptions) to file
   saveMetadataToFile(metadataList, true);
 
-  console.log(`Generated metadata for ${metadataList.length} routes`);
-
   // Generate social card images (only needs route and title)
+  printHeader("IMAGE GENERATION", "blue");
+  const imagesStart = performance.now();
   await generateOgImages(metadataList);
+  const imagesTime = (performance.now() - imagesStart) / 1000;
+  coloredLog(`Image generation complete (${imagesTime.toFixed(2)}s)`, "green");
+
+  // Total time
+  const totalTime = (performance.now() - routesStart) / 1000;
+  printHeader("PROCESS COMPLETE", "green");
+  coloredLog(`Total processing time: ${totalTime.toFixed(2)}s`, "cyan");
 }
 
 // Run the main function
