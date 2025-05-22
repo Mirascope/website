@@ -5,7 +5,6 @@ interface PagefindMetaProps {
   description: string;
   children: ReactNode;
   section?: string;
-  searchWeight?: number;
 }
 
 function clampWeight(x: number) {
@@ -25,9 +24,9 @@ function clampWeight(x: number) {
  * The section parameter can be used to track hierarchy (e.g., "docs>mirascope>learn")
  * The sectionWeight parameter applies a multiplier to all weights for section-based boosting
  */
-export function PagefindMeta({ children, searchWeight = 1.0 }: PagefindMetaProps) {
+export function PagefindMeta({ children }: PagefindMetaProps) {
   // Calculate effective weights with section multiplier
-  const contentWeight = clampWeight(searchWeight);
+  const contentWeight = clampWeight(1);
 
   return (
     <div data-pagefind-body>
