@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
 import { type BlogMeta } from "@/src/lib/content";
-import { SEOMeta, LoadingContent } from "@/src/components";
+import { PageMeta, LoadingContent } from "@/src/components";
 import { BlogPagination } from "./BlogPagination";
 
 // Posts per page
@@ -74,7 +74,7 @@ export function BlogIndexPage({ posts }: BlogIndexPageProps) {
 
   return (
     <>
-      <SEOMeta
+      <PageMeta
         title="Blog"
         description="The latest news, updates, and insights about Mirascope and LLM application development."
         url="/blog"

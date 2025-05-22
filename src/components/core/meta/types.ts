@@ -1,3 +1,5 @@
+import type { ProductName } from "@/src/lib/content/spec";
+
 /**
  * Metadata System Types
  *
@@ -74,7 +76,7 @@ export interface PageMetaProps {
   image?: string;
   url?: string;
   type?: "website" | "article";
-  product?: string; // Will reference product configs
+  product?: ProductName;
   robots?: string;
   article?: {
     publishedTime?: string;

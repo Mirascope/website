@@ -1,6 +1,6 @@
 import React from "react";
 import ErrorContent from "./ErrorContent";
-import { SEOMeta } from "@/src/components/core/meta";
+import { PageMeta } from "@/src/components/core/meta";
 import { DocumentNotFoundError, ContentError, type ContentType } from "@/src/lib/content/content";
 
 interface ContentErrorHandlerProps {
@@ -54,7 +54,7 @@ const ContentErrorHandler: React.FC<ContentErrorHandlerProps> = ({ error, conten
   return (
     <div className="relative">
       {/* SEO metadata */}
-      <SEOMeta
+      <PageMeta
         title={isNotFound ? `404 - ${config.title}` : config.title}
         description={message}
         robots="noindex, nofollow"

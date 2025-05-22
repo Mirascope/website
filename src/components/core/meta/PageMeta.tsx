@@ -3,23 +3,7 @@ import { BASE_URL, PRODUCT_CONFIGS } from "@/src/lib/constants/site";
 import { useRouterState } from "@tanstack/react-router";
 import { routeToFilename } from "@/src/lib/utils";
 import { RouteMeta } from "./RouteMeta";
-
-// Keep the interface for backward compatibility
-interface SEOProps {
-  title?: string;
-  description?: string;
-  image?: string;
-  url?: string;
-  type?: "website" | "article";
-  product?: keyof typeof PRODUCT_CONFIGS;
-  robots?: string;
-  article?: {
-    publishedTime?: string;
-    modifiedTime?: string;
-    author?: string;
-    tags?: string[];
-  };
-}
+import type { PageMetaProps } from "./types";
 
 const DEFAULT_DESCRIPTION = "Mirascope provides LLM abstractions that aren't obstructions.";
 const DEFAULT_IMAGE = "/social-cards/index.webp";
@@ -30,7 +14,7 @@ export function routeToImagePath(route: string): string {
   return `/social-cards/${filename}.webp`;
 }
 
-export function SEOMeta(props: SEOProps) {
+export function PageMeta(props: PageMetaProps) {
   const router = useRouterState();
   const currentPath = router.location.pathname;
 
@@ -103,4 +87,4 @@ export function SEOMeta(props: SEOProps) {
   );
 }
 
-export default SEOMeta;
+export default PageMeta;

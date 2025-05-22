@@ -3,7 +3,7 @@ import PolicyPage, {
   PolicyPageLoading,
   PolicyPageError,
 } from "@/src/components/routes/policy/PolicyPage";
-import { SEOMeta } from "@/src/components/";
+import { PageMeta } from "@/src/components/";
 import { createPolicyLoader } from "@/src/lib/content";
 import type { PolicyContent } from "@/src/lib/content";
 import { environment } from "@/src/lib/content/environment";
@@ -33,7 +33,7 @@ function PrivacyPage() {
 
   return (
     <>
-      <SEOMeta
+      <PageMeta
         title={content?.meta?.title || "Privacy Policy"}
         description={
           content?.mdx?.frontmatter?.description ||
