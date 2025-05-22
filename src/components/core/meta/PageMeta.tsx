@@ -3,7 +3,22 @@ import { BASE_URL, PRODUCT_CONFIGS } from "@/src/lib/constants/site";
 import { useRouterState } from "@tanstack/react-router";
 import { routeToFilename } from "@/src/lib/utils";
 import { RouteMeta } from "./RouteMeta";
-import type { PageMetaProps } from "./types";
+import type { ProductName } from "@/src/lib/content/spec";
+export interface PageMetaProps {
+  title?: string;
+  description?: string;
+  image?: string;
+  url?: string;
+  type?: "website" | "article";
+  product?: ProductName;
+  robots?: string;
+  article?: {
+    publishedTime?: string;
+    modifiedTime?: string;
+    author?: string;
+    tags?: string[];
+  };
+}
 
 // Helper function to convert a route path to a consistent image path
 export function routeToImagePath(route: string): string {
