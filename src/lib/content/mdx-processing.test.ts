@@ -346,5 +346,29 @@ For comparison, here's how you would achieve the same result using the provider'
 
       expect(toc).toHaveLength(4);
     });
+
+    test("processes APIType correctly", () => {
+      const content = `
+# mirascope.llm.call
+
+## <ApiType type="Alias" path="llm/call" symbolName="call" /> call
+
+A decorator for making provider-agnostic LLM API calls with a typed function.
+
+<Info title="Usage">
+
+# Not a heading
+
+[Calls](/docs/mirascope/learn/calls)
+
+</Info>
+`;
+
+      const toc = extractTableOfContents(content);
+
+      expect(toc).toHaveLength(2);
+      expect(toc[0].text).toBe("mirascope.llm.call");
+      expect(toc[1].text).toBe("[Alias] call");
+    });
   });
 });
