@@ -140,9 +140,16 @@ export function extractTableOfContents(content: string): TOCItem[] {
   // ApiType component pattern to match
   const apiTypePattern = /<ApiType\s+type="([^"]+)"[^>]*?\/>/;
 
+  // Use a simpler regex for opening and closing tags - this is much faster
+  const openTagsSimpleRegex = /<[^/][^>]*>/g;
+  const closeTagsRegex = /<\/[^>]+>/g;
+  const selfClosingTagRegex = /<[^>]*\/>/g;
+
   for (const line of lines) {
-    // Handle code blocks (```code```)
-    if (line.trim().startsWith("```")) {
+    const trimmedLine = line.trim();
+
+    // Fast check for code blocks
+    if (trimmedLine.startsWith("```")) {
       inCodeBlock = !inCodeBlock;
       continue;
     }
@@ -152,35 +159,52 @@ export function extractTableOfContents(content: string): TOCItem[] {
       continue;
     }
 
-    // Handle MDX component opening tags
-    const openTagMatches = line.match(/<[\w.-]+[^>/]*(?:\s+[^>/]*)*>/g);
-    if (openTagMatches) {
-      componentNestingLevel += openTagMatches.length;
+    // Process component tags first - need to update nesting level before checking headings
+    if (line.includes("<")) {
+      // Handle self-closing tags first so they don't affect nesting level
+      let processedLine = line;
+      if (line.includes("/>")) {
+        // Temporarily remove self-closing tags for tag counting
+        const selfClosingMatches = line.match(selfClosingTagRegex) || [];
+        for (const match of selfClosingMatches) {
+          processedLine = processedLine.replace(match, "");
+        }
+      }
+
+      // Count opening tags
+      if (processedLine.includes("<") && !processedLine.includes("</")) {
+        const openMatches = processedLine.match(openTagsSimpleRegex);
+        if (openMatches) {
+          componentNestingLevel += openMatches.length;
+        }
+      }
+
+      // Count closing tags
+      if (processedLine.includes("</")) {
+        const closeMatches = processedLine.match(closeTagsRegex);
+        if (closeMatches) {
+          componentNestingLevel -= closeMatches.length;
+        }
+      }
+
+      // Make sure nesting level doesn't go below 0
+      componentNestingLevel = Math.max(0, componentNestingLevel);
     }
 
-    // Handle MDX component closing tags
-    const closeTagMatches = line.match(/<\/[\w.-]+>/g);
-    if (closeTagMatches) {
-      componentNestingLevel -= closeTagMatches.length;
-    }
-
-    // Make sure nesting level doesn't go below 0
-    componentNestingLevel = Math.max(0, componentNestingLevel);
-
-    // Only process lines that are not inside component tags
-    if (componentNestingLevel === 0) {
-      // Try to extract headings from this line
-      const match = line.match(headingPattern);
+    // Now process headings if we're not inside a component
+    if (componentNestingLevel === 0 && trimmedLine.startsWith("#")) {
+      const match = trimmedLine.match(headingPattern);
       if (match) {
         const level = match[1].length;
         let text = match[2].trim();
 
         // Process ApiType components in headings
-        // Handle the self-closing tag pattern: <ApiType type="X" ... />
-        const apiTypeMatches = text.match(apiTypePattern);
-        if (apiTypeMatches && apiTypeMatches[1]) {
-          // Replace the matched ApiType component with the badge text
-          text = text.replace(apiTypeMatches[0], `[${apiTypeMatches[1]}] `);
+        if (text.includes("<ApiType")) {
+          const apiTypeMatches = text.match(apiTypePattern);
+          if (apiTypeMatches && apiTypeMatches[1]) {
+            // Replace the matched ApiType component with the badge text
+            text = text.replace(apiTypeMatches[0], `[${apiTypeMatches[1]}]`);
+          }
         }
 
         // Use explicit ID if provided in the format {#id}
@@ -189,7 +213,11 @@ export function extractTableOfContents(content: string): TOCItem[] {
         // If no explicit ID, generate one from the text
         if (!id) {
           // For ID generation, use text with ApiType components stripped
-          const idText = text.replace(apiTypePattern, "").trim();
+          let idText = text;
+          if (text.includes("<ApiType")) {
+            idText = text.replace(apiTypePattern, "").trim();
+          }
+
           id = idText
             .toLowerCase()
             .replace(/[^a-z0-9]+/g, "-")
