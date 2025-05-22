@@ -3,7 +3,7 @@ import { Check, X } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/src/components/ui/tabs";
 import { ButtonLink } from "@/src/components/ui/button-link";
 import { cn } from "@/src/lib/utils";
-import { SEOMeta } from "@/src/components";
+import { PageMeta } from "@/src/components";
 import { environment } from "@/src/lib/content/environment";
 
 export const Route = createFileRoute("/pricing")({
@@ -220,7 +220,7 @@ function PricingPage() {
 
   return (
     <>
-      <SEOMeta
+      <PageMeta
         title="Lilypad Pricing"
         description="Lilypad's pricing plans and features"
         product="lilypad"

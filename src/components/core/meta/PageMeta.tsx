@@ -2,14 +2,15 @@ import { useMemo } from "react";
 import { BASE_URL, PRODUCT_CONFIGS } from "@/src/lib/constants/site";
 import { useRouterState } from "@tanstack/react-router";
 import { routeToFilename } from "@/src/lib/utils";
-
-interface SEOProps {
+import { RouteMeta } from "./RouteMeta";
+import type { ProductName } from "@/src/lib/content/spec";
+export interface PageMetaProps {
   title?: string;
   description?: string;
   image?: string;
   url?: string;
   type?: "website" | "article";
-  product?: keyof typeof PRODUCT_CONFIGS;
+  product?: ProductName;
   robots?: string;
   article?: {
     publishedTime?: string;
@@ -19,16 +20,13 @@ interface SEOProps {
   };
 }
 
-const DEFAULT_DESCRIPTION = "Mirascope provides LLM abstractions that aren't obstructions.";
-const DEFAULT_IMAGE = "/social-cards/index.webp";
-
 // Helper function to convert a route path to a consistent image path
 export function routeToImagePath(route: string): string {
   const filename = routeToFilename(route);
   return `/social-cards/${filename}.webp`;
 }
 
-export function SEOMeta(props: SEOProps) {
+export function PageMeta(props: PageMetaProps) {
   const router = useRouterState();
   const currentPath = router.location.pathname;
 
@@ -38,16 +36,13 @@ export function SEOMeta(props: SEOProps) {
   const siteTitle = product ? `${PRODUCT_CONFIGS[product].title}` : "Mirascope";
   const pageTitle = title ? `${title} | ${siteTitle}` : siteTitle;
 
-  const metaDescription =
-    description || (product ? PRODUCT_CONFIGS[product].tagline : DEFAULT_DESCRIPTION);
-
   // Generate image path if not provided
   const computedImage = useMemo(() => {
     if (image) return image;
 
     // Use the generated social image path for this route
     const generatedImage = routeToImagePath(currentPath);
-    return generatedImage || DEFAULT_IMAGE;
+    return generatedImage;
   }, [image, currentPath]);
 
   // Handle URL construction
@@ -63,23 +58,23 @@ export function SEOMeta(props: SEOProps) {
     : `${BASE_URL}${computedImage.startsWith("/") ? computedImage : `/${computedImage}`}`;
 
   return (
-    <>
+    <RouteMeta>
       <title>{pageTitle}</title>
-      <meta name="description" content={metaDescription} />
+      <meta name="description" content={description} />
       {robots && <meta name="robots" content={robots} />}
 
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />
       <meta property="og:url" content={ogUrl} />
       <meta property="og:title" content={pageTitle} />
-      <meta property="og:description" content={metaDescription} />
+      <meta property="og:description" content={description} />
       <meta property="og:image" content={ogImage} />
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:url" content={ogUrl} />
       <meta name="twitter:title" content={pageTitle} />
-      <meta name="twitter:description" content={metaDescription} />
+      <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={ogImage} />
 
       {/* Article specific metadata */}
@@ -97,8 +92,8 @@ export function SEOMeta(props: SEOProps) {
         article.tags.map((tag, index) => (
           <meta key={`tag-${index}`} property="article:tag" content={tag} />
         ))}
-    </>
+    </RouteMeta>
   );
 }
 
-export default SEOMeta;
+export default PageMeta;

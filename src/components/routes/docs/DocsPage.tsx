@@ -1,7 +1,7 @@
 import React from "react";
 import {
   AppLayout,
-  SEOMeta,
+  PageMeta,
   LoadingContent,
   ProviderContextProvider,
   useProduct,
@@ -35,7 +35,7 @@ const DocsPage: React.FC<DocsPageProps> = ({ document, isLoading = false }) => {
 
   return (
     <>
-      <SEOMeta title={title} description={description} url={urlPath} product={product} />
+      <PageMeta title={title} description={description} url={urlPath} product={product} />
 
       <ProviderContextProvider>
         <AppLayout>
