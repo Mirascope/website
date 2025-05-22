@@ -15,7 +15,7 @@ import type { RawMetadata, UnifiedMetadata, MetaTag, LinkTag } from "./types";
  */
 export function extractMetadata(children: React.ReactNode): RawMetadata {
   if (!children) {
-    return { metaTags: [], linkTags: [] };
+    return { metaTags: [], linkTags: [], jsonLdScripts: [] };
   }
 
   let title: string | undefined;
@@ -44,6 +44,9 @@ export function extractMetadata(children: React.ReactNode): RawMetadata {
     crossOrigin?: string;
     as?: string;
   };
+
+  // Track JSON-LD scripts
+  const jsonLdScripts: string[] = [];
 
   // Generic props with children
   type ElementProps = {
@@ -93,6 +96,18 @@ export function extractMetadata(children: React.ReactNode): RawMetadata {
             as: linkProps.as,
           });
           break;
+        case "script":
+          // Extract JSON-LD scripts
+          const scriptProps = element.props as { type?: string; children?: React.ReactNode };
+          if (scriptProps.type === "application/ld+json" && scriptProps.children) {
+            // Add to jsonLdScripts collection
+            const scriptContent =
+              typeof scriptProps.children === "string"
+                ? scriptProps.children
+                : JSON.stringify(scriptProps.children);
+            jsonLdScripts.push(scriptContent);
+          }
+          break;
       }
     }
 
@@ -111,6 +126,7 @@ export function extractMetadata(children: React.ReactNode): RawMetadata {
     description,
     metaTags,
     linkTags,
+    jsonLdScripts,
   };
 }
 
@@ -139,6 +155,7 @@ export function unifyMetadata(base: RawMetadata, route: RawMetadata): UnifiedMet
   // Start with base meta tags
   const metaTags = [...base.metaTags];
   const linkTags = [...base.linkTags];
+  const jsonLdScripts = [...base.jsonLdScripts];
 
   // Track existing meta tags by name/property to avoid duplicates
   const existingMetaKeys = new Set(
@@ -176,11 +193,17 @@ export function unifyMetadata(base: RawMetadata, route: RawMetadata): UnifiedMet
     }
   });
 
+  // Combine JSON-LD scripts from route
+  if (route.jsonLdScripts) {
+    jsonLdScripts.push(...route.jsonLdScripts);
+  }
+
   return {
     title,
     description,
     metaTags,
     linkTags,
+    jsonLdScripts,
   };
 }
 

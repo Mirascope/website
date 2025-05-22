@@ -55,11 +55,11 @@ jobs:
       - name: Extract & validate snippets
         run: bun run lint:snippets
 
-      - name: Run Tests
-        run: bun test
-
       - name: Build
         run: bun run build
         env:
-          CI: 'true'
-          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
+          CI: "true"
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+
+      - name: Run Tests
+        run: bun test
