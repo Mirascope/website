@@ -47,7 +47,7 @@ On the surface, these offer convenience. They’re readily available and remove 
 
 Another important LCEL abstraction is LangChain’s **Runnable** , which is a Python object that manages data processing tasks. It can apply transformations to single or multiple data inputs, and stream results while executing these operations in parallel or asynchronously.
 
-It’s also [characterized as an interface](https://python.langchain.com/docs/expression_language/interface/) because of the functionalities it exposes, such as `stream`, `invoke`, and `batch`.
+It’s also [characterized as an interface](https://python.langchain.com/docs/concepts/runnables/) because of the functionalities it exposes, such as `stream`, `invoke`, and `batch`.
 
 Each Runnable in a chain accepts input, performs an action, and passes its output to the next Runnable in the chain. Understood as a whole, runnables facilitate the orchestration and execution of tasks. The code below illustrates this, showing an example of [`RunnablePassthrough()`](https://python.langchain.com/docs/how_to/passthrough/) (which allows you to pass inputs unchanged):
 

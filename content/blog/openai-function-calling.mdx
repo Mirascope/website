@@ -60,7 +60,7 @@ The `tools` parameter of OpenAI’s [Chat Completion API](https://platform.opena
 
 The `tools` array takes multiple functions that you define. The more detailed your `description` above is in terms of the situations in which it can and should call the function, the better. Note, however, that function descriptions are part of the [prompt](/blog/langchain-prompt-template) and so consume tokens all the same.
 
-The `parameters` field above describe the parameters your function takes and must conform to the [JSON specification](https://json-schema.org/understanding-json-schema).
+The `parameters` field above describe the parameters your function takes and must conform to the [JSON specification](https://json-schema.org/understanding-json-schema/reference).
 
 After specifying your function call signature(s), you send the prompt to the LLM (using your `openai_api_key`) for the function(s) to be part of its context window and for the model to decide the appropriate function a future response should refer to.
 
@@ -381,7 +381,7 @@ class GetStockPriceInCurrency(BaseTool):
     )
 ```
 
-Mirascope lets you write the schema in a pythonic way that’s easier to write and read compared with coding the JSON yourself. Under the hood, the underlying JSON is reliably generated using [Pydantic](https://docs.pydantic.dev/). Our prompt classes also extend Pydantic’s `BaseModel` class, saving you from having to write your own error-checking boilerplate.
+Mirascope lets you write the schema in a pythonic way that’s easier to write and read compared with coding the JSON yourself. Under the hood, the underlying JSON is reliably generated using [Pydantic](https://docs.pydantic.dev/latest/). Our prompt classes also extend Pydantic’s `BaseModel` class, saving you from having to write your own error-checking boilerplate.
 
 Generating tool definitions as part of function calling (or even parallel function calling) is thus rolled up into your [prompt engineering workflow](/blog/prompt-engineering-best-practices), allowing you to focus on building your application rather than painstakingly formatting tool definitions so they conform to the JSON specification.
 
