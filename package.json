@@ -13,7 +13,7 @@
     "validate-links": "bun run scripts/validate-links.ts",
     "optimize-images": "bun run scripts/optimize-images.ts",
     "prebuild": "bun run preprocess-content",
-    "build": "bun run --bun vite build && bun run optimize-images && bun run generate-og-images && bun run prerender",
+    "build": "bun run generate-og-images && bun run --bun vite build && bun run optimize-images && bun run prerender",
     "postbuild": "pagefind --site dist --output-path dist/_pagefind --root-selector '[data-pagefind-body=\"true\"]' --",
     "serve": "bun scripts/serve-static.js",
     "test": "bun test",
