@@ -13,6 +13,7 @@ interface LinkCheckResult {
   url: string;
   status: number | null;
   error?: string;
+  retries?: number;
   pageFound: string[];
 }
 
@@ -28,26 +29,33 @@ const linkCache = new Map<string, LinkCheckResult>();
 // Default timeout for requests (5 seconds)
 const DEFAULT_TIMEOUT = 5000;
 
+// Maximum retry attempts for timeouts and certain errors
+const MAX_RETRIES = 3;
+
+// Exponential backoff base (ms) for retries
+const RETRY_BACKOFF_BASE = 1000;
+
 // Rate limiting: wait this many ms between requests to the same domain
 const RATE_LIMIT_MS = 1000;
 const domainLastAccessed = new Map<string, number>();
 
 // Domain allowlist - domains we know are valid but might block our requests
-const DOMAIN_ALLOWLIST = new Set([
-  "localhost",
-  "127.0.0.1",
-  "example.com",
-  "twitter.com",
-  "x.com",
-  // Add other domains that you know are valid but might block our requests
+const URL_ALLOWLIST = new Set([
+  "https://www.linkedin.com/in/wbakst/",
+  "https://twitter.com/WilliamBakst",
+  // If needed, allowlist domains that we know are valid but block requests
 ]);
 
 /**
- * Check if a URL is reachable
+ * Check if a URL is reachable with retry logic
+ * @param url The URL to check
+ * @param timeout Timeout in milliseconds
+ * @param retryCount Current retry attempt (used internally for recursion)
  */
 async function checkUrl(
   url: string,
-  timeout = DEFAULT_TIMEOUT
+  timeout = DEFAULT_TIMEOUT,
+  retryCount = 0
 ): Promise<Omit<LinkCheckResult, "pageFound">> {
   try {
     // Parse the URL to get the domain for rate limiting
@@ -55,7 +63,7 @@ async function checkUrl(
     const domain = parsedUrl.hostname;
 
     // Skip URLs that are in the allowlist
-    if (DOMAIN_ALLOWLIST.has(domain)) {
+    if (URL_ALLOWLIST.has(url)) {
       return { url, status: 200 }; // Assume it's valid
     }
 
@@ -110,10 +118,35 @@ async function checkUrl(
       }
     }
   } catch (error: any) {
+    // Implement retry logic for timeouts and certain temporary errors
+    const isTimeout = error.message === "Request timeout" || error.name === "AbortError";
+    const isNetworkError =
+      error.message?.includes("fetch failed") ||
+      error.message?.includes("network") ||
+      error.message?.includes("ECONNREFUSED") ||
+      error.message?.includes("ETIMEDOUT");
+
+    if ((isTimeout || isNetworkError) && retryCount < MAX_RETRIES) {
+      // Calculate exponential backoff delay
+      const backoffDelay = RETRY_BACKOFF_BASE * Math.pow(2, retryCount);
+
+      // Log retry attempt
+      console.log(
+        `Retrying ${url} (attempt ${retryCount + 1}/${MAX_RETRIES}) after ${backoffDelay}ms delay...`
+      );
+
+      // Wait for backoff period
+      await new Promise((resolve) => setTimeout(resolve, backoffDelay));
+
+      // Retry with incremented counter and longer timeout
+      return checkUrl(url, timeout * 1.5, retryCount + 1);
+    }
+
     return {
       url,
       status: null,
       error: error.message || "Unknown error",
+      retries: retryCount,
     };
   }
 }
