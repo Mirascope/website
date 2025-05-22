@@ -16,7 +16,7 @@
     "build": "bun run generate-og-images && bun run --bun vite build && bun run optimize-images && bun run prerender",
     "postbuild": "pagefind --site dist --output-path dist/_pagefind --root-selector '[data-pagefind-body=\"true\"]' --",
     "serve": "bun scripts/serve-static.js",
-    "test": "bun test",
+    "test": "bun run preprocess-content && bun test",
     "lint": "bun run typecheck && bun run lint:mdx && bun run lint:snippets && bun run lint:python && bun run lint:format",
     "typecheck": "bun run tsc --noEmit",
     "lint:mdx": "bun run scripts/validate-mdx.ts",
