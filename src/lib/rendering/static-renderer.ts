@@ -250,7 +250,7 @@ export function createHtmlDocument(
   const indexHtml = fs.readFileSync(templatePath, "utf-8");
 
   // First cleanup any placeholder comments in head
-  let html = indexHtml.replace("<!-- Minimal head - React Helmet will manage all metadata -->", "");
+  let html = indexHtml.replace("<!-- {{metadata}} -->", "");
 
   // Inject all metadata before </head>
   // The HTML will already include data-head-manager attributes from generateMetadataHtml
