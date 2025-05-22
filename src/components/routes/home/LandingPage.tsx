@@ -1,4 +1,4 @@
-import { SEOMeta } from "@/src/components/";
+import { PageMeta } from "@/src/components/";
 import { useSunsetTime } from "@/src/lib/hooks/useSunsetTime";
 import { useGradientFadeOnScroll } from "@/src/lib/hooks/useGradientFadeOnScroll";
 import { useRef, useState, useEffect } from "react";
@@ -145,7 +145,7 @@ export function LandingPage() {
 
   return (
     <>
-      <SEOMeta title="Home" description="The AI Engineer's Developer Stack" />
+      <PageMeta title="Home" description="The AI Engineer's Developer Stack" />
       <ProviderContextProvider>
         <div className="flex w-full flex-col">
           {/* Hero section */}

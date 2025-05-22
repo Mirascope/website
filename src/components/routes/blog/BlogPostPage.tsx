@@ -6,7 +6,7 @@ import { CopyMarkdownButton } from "@/src/components/ui/copy-markdown-button";
 
 import { LoadingContent } from "@/src/components/core/feedback";
 import { TableOfContents } from "@/src/components/core/navigation";
-import { SEOMeta } from "@/src/components/core/meta";
+import { PageMeta } from "@/src/components/core/meta";
 import { PagefindMeta } from "@/src/components/core/meta";
 import type { BlogContent } from "@/src/lib/content";
 import { AppLayout } from "@/src/components/core/layout";
@@ -123,7 +123,7 @@ export function BlogPostPage({ post, slug, isLoading = false }: BlogPostPageProp
 
   return (
     <>
-      <SEOMeta
+      <PageMeta
         title={title}
         description={post.meta.description || post.mdx?.frontmatter?.excerpt}
         image={ogImage}
