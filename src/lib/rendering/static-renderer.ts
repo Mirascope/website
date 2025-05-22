@@ -227,7 +227,7 @@ export async function renderRouteToString(route: string): Promise<RenderResult> 
       description: unifiedMetadata.description,
       meta: metadataHtml.meta,
       link: metadataHtml.link,
-      jsonLdScripts: metadataHtml.script || "",
+      jsonLdScripts: metadataHtml.script,
     };
 
     return { html: appHtml, metadata };
