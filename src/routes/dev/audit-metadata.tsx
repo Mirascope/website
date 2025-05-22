@@ -38,7 +38,7 @@ export const Route = createFileRoute("/dev/audit-metadata")({
   },
 });
 
-interface SEOMetadataItem {
+interface PageMetadataItem {
   route: string;
   title: string;
   description: string | null;
@@ -50,7 +50,7 @@ interface SEOMetadataItem {
 
 function AuditMetadata() {
   const { devPages } = useLoaderData({ from: "/dev/audit-metadata" });
-  const [metadata, setMetadata] = useState<SEOMetadataItem[]>([]);
+  const [metadata, setMetadata] = useState<PageMetadataItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -87,10 +87,10 @@ function AuditMetadata() {
 
     return (
       <>
-        <h1 className="mb-6 text-3xl font-bold">SEO Metadata Audit</h1>
+        <h1 className="mb-6 text-3xl font-bold">Page Metadata Audit</h1>
 
         <p className="text-muted-foreground mb-6">
-          This page displays all routes with their SEO metadata for auditing purposes.
+          This page displays all routes with their page metadata for auditing purposes.
         </p>
 
         <div className="space-y-6">

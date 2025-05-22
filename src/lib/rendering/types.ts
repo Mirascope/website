@@ -7,11 +7,9 @@
  */
 export interface PageMetadata {
   title: string;
-  description: string | null;
+  description: string;
   meta: string;
   link: string;
-  htmlAttributes: string;
-  bodyAttributes: string;
 }
 
 /**
