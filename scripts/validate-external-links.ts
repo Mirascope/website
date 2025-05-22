@@ -202,66 +202,97 @@ async function validateExternalLinks(
     console.log(`Found ${externalLinks.size} unique external links to check`);
   }
 
-  // Check the links with concurrency limit
+  // Create a worker pool for parallel processing
   const results: LinkCheckResult[] = [];
   const urlsToCheck = Array.from(externalLinks.keys());
   let processed = 0;
+  let running = 0;
+  let index = 0;
 
-  // Process in batches
-  for (let i = 0; i < urlsToCheck.length; i += concurrentRequests) {
-    const batch = urlsToCheck.slice(i, i + concurrentRequests);
-    const batchPromises = batch.map(async (url) => {
-      // Check if we've already seen this URL
-      if (linkCache.has(url)) {
-        const cachedResult = linkCache.get(url)!;
-        return {
-          ...cachedResult,
-          pageFound: externalLinks.get(url) || [],
-        };
+  // Create a synchronized counter for progress tracking
+  const incrementProcessed = () => {
+    processed++;
+    if (processed % 10 === 0 || processed === urlsToCheck.length) {
+      console.log(`[${processed}/${urlsToCheck.length}] Checked ${processed} links...`);
+    }
+  };
+
+  // Process a single URL and return its result
+  const processUrl = async (url: string): Promise<LinkCheckResult> => {
+    // Check if we've already seen this URL
+    if (linkCache.has(url)) {
+      const cachedResult = linkCache.get(url)!;
+      incrementProcessed();
+      return {
+        ...cachedResult,
+        pageFound: externalLinks.get(url) || [],
+      };
+    }
+
+    try {
+      const result = await checkUrl(url);
+      incrementProcessed();
+
+      if (verbose || result.status === null || result.status >= 400) {
+        const status = result.status ? result.status : "Error";
+        const message = result.error ? `: ${result.error}` : "";
+        const retryInfo = result.retries ? ` (after ${result.retries} retries)` : "";
+        console.log(
+          `[${processed}/${urlsToCheck.length}] ${url} - ${status}${message}${retryInfo}`
+        );
       }
 
-      try {
-        const result = await checkUrl(url);
-        processed++;
+      // Cache the result
+      linkCache.set(url, { ...result, pageFound: [] });
 
-        if (verbose || result.status === null || result.status >= 400) {
-          const status = result.status ? result.status : "Error";
-          const message = result.error ? `: ${result.error}` : "";
-          console.log(`[${processed}/${urlsToCheck.length}] ${url} - ${status}${message}`);
-        } else if (processed % 10 === 0) {
-          // Print progress every 10 links
-          console.log(`[${processed}/${urlsToCheck.length}] Checked ${processed} links...`);
-        }
+      return {
+        ...result,
+        pageFound: externalLinks.get(url) || [],
+      };
+    } catch (error: any) {
+      console.error(`Error checking ${url}:`, error);
+      incrementProcessed();
 
-        // Cache the result
-        linkCache.set(url, { ...result, pageFound: [] });
+      const result = {
+        url,
+        status: null,
+        error: error.message || "Unknown error",
+        pageFound: externalLinks.get(url) || [],
+      };
 
-        return {
-          ...result,
-          pageFound: externalLinks.get(url) || [],
-        };
-      } catch (error: any) {
-        console.error(`Error checking ${url}:`, error);
-        processed++;
+      // Cache the error result
+      linkCache.set(url, { ...result, pageFound: [] });
 
-        const result = {
-          url,
-          status: null,
-          error: error.message || "Unknown error",
-          pageFound: externalLinks.get(url) || [],
-        };
+      return result;
+    }
+  };
 
-        // Cache the error result
-        linkCache.set(url, { ...result, pageFound: [] });
+  // Process URLs with true parallelism
+  const runNextWorker = async () => {
+    if (index >= urlsToCheck.length) return;
 
-        return result;
-      }
-    });
+    const url = urlsToCheck[index++];
+    running++;
 
-    // Wait for the batch to complete
-    const batchResults = await Promise.all(batchPromises);
-    results.push(...batchResults);
+    try {
+      const result = await processUrl(url);
+      results.push(result);
+    } catch (e) {
+      console.error(`Worker error processing ${url}:`, e);
+    }
+
+    running--;
+    await runNextWorker();
+  };
+
+  // Start workers up to concurrency limit
+  const workers: Promise<void>[] = [];
+  for (let i = 0; i < concurrentRequests; i++) {
+    workers.push(runNextWorker());
   }
+
+  // Wait for all workers to complete
+  await Promise.all(workers);
 
   // Filter broken links (status >= 400 or errors)
   const brokenLinks = results.filter((result) => result.status === null || result.status >= 400);
