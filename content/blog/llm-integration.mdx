@@ -379,11 +379,11 @@ print(response.temperature, response.condition)  # Fully structured, type-safe o
 
 A major benefit of Mirascope’s response models is they’re also fully integrated into your IDE, instantly showing you expected return types of LLM outputs:
 
-![Mirascope Type Hints](/assets/blog/llm-integration/mirascope_type_hints.png)
+![Mirascope Type Hints](/assets/blog/llm-integration/mirascope_type_hints.webp)
 
 It also shows auto-suggestions:
 
-![Mirascope Autocomplete](/assets/blog/llm-integration/mirascope_autocomplete.png)
+![Mirascope Autocomplete](/assets/blog/llm-integration/mirascope_autocomplete.webp)
 
 #### Untracked Prompts
 
@@ -424,7 +424,7 @@ Lilypad versions LLM generations using their function closure, so even changes t
 
 By adding `lilypad.configure()` to the application (see code above), you also automatically trace all calls made by any function decorated with `@lilypad.trace`. This means every call to an LLM is traced against the version of the code that generated it.
 
-![Lilypad Trace Details Screenshot](/assets/blog/llm-integration/lilypad_generation_details_screenshot.png)
+![Lilypad Trace Details Screenshot](/assets/blog/llm-integration/lilypad_generation_details_screenshot.webp)
 
 Lilypad shows traces in real time as LLM calls are made, providing real-time summaries of every call so you can evaluate and improve prompts more quickly.
 

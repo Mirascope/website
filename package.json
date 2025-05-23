@@ -10,7 +10,8 @@
     "generate-og-images": "bun scripts/generate-og-images.ts",
     "test-prerender-route": "bun run scripts/test-prerender.ts",
     "prerender": "bun run scripts/vite-prerender.ts",
-    "validate-links": "bun run scripts/validate-links.ts",
+    "validate-assets": "bun run scripts/validate-assets.ts",
+    "convert-to-webp": "bun run scripts/convert-to-webp.ts",
     "optimize-images": "bun run scripts/optimize-images.ts",
     "prebuild": "bun run preprocess-content",
     "build": "bun run generate-og-images && bun run --bun vite build && bun run optimize-images && bun run prerender",
@@ -41,7 +42,10 @@
     "*.mdx": [
       "bun run lint:mdx"
     ],
-    "scripts/apigen/**/*.py": "bun run lint:python"
+    "scripts/apigen/**/*.py": "bun run lint:python",
+    "public/assets/**/*.{png,jpg,jpeg}": [
+      "bun -e \"console.error('❌ ERROR: PNG/JPG files are not allowed.\\nPlease convert to WebP using: bun run convert-to-webp'); process.exit(1);\""
+    ]
   },
   "dependencies": {
     "@mdx-js/react": "^3.1.0",

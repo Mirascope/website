@@ -24,7 +24,7 @@ with lilypad.span("Something") as span:  # [!code highlight]
 
 This will automatically capture information such as the latency of the code run within the span, including any calls to `log` that you make inside of the block.
 
-![Basic Span](/assets/docs/lilypad/observability/spans/basic-span.png)
+![Basic Span](/assets/docs/lilypad/observability/spans/basic-span.webp)
 
 ## Logging Levels
 
@@ -52,7 +52,7 @@ with lilypad.span("Possible Failure") as span:
         span.error(f"Runtime exception caught: {e}")  # [!code highlight]
 ```
 
-![Error Span](/assets/docs/lilypad/observability/spans/error-span.png)
+![Error Span](/assets/docs/lilypad/observability/spans/error-span.webp)
 
 ## Metadata
 
@@ -67,7 +67,7 @@ with lilypad.span("Structured Metadata") as span:
     span.metadata({"key": "value"})  # [!code highlight]
 ```
 
-![Metadata Span](/assets/docs/lilypad/observability/spans/metadata-span.png)
+![Metadata Span](/assets/docs/lilypad/observability/spans/metadata-span.webp)
 
 Calling `metadata` multiple times will merge the dictionaries.
 
@@ -88,4 +88,4 @@ with lilypad.span("Parent Span") as parent_span:
 
 The project home page will only display the parent in each row. You can click the dropdown to view the entire collection of spans contained within that trace:
 
-![Nested Spans](/assets/docs/lilypad/observability/spans/nested-spans.png)
+![Nested Spans](/assets/docs/lilypad/observability/spans/nested-spans.webp)

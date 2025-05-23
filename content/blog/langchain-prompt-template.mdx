@@ -318,11 +318,11 @@ chain.invoke({"topic": "pandas"})
 
 LangChain doesn’t offer editor support for `topic` since the input to `invoke` is a dict with string keys. So you could indeed enter `topics` (plural) in the invocation dictionary and the editor would give you no warning or error message, as shown below.
 
-![Chain = prompt | model | output_parser](/assets/blog/langchain-prompt-template/langchain_invoke_dict_no_error.png)
+![Chain = prompt | model | output_parser](/assets/blog/langchain-prompt-template/langchain_invoke_dict_no_error.webp)
 
 The error would only be shown at runtime:
 
-![KeyError: Input to ChatPromptTemplate is missing variables](/assets/blog/langchain-prompt-template/langchain_invoke_dict_runtime_error.png)
+![KeyError: Input to ChatPromptTemplate is missing variables](/assets/blog/langchain-prompt-template/langchain_invoke_dict_runtime_error.webp)
 
 In contrast, the following [`prompt_template`](/docs/mirascope/learn/prompts) example from Mirascope shows how `storyline` is defined as a fixed word and string attribute, and so passing in, say, a plural form of the word would automatically generate an error, thanks to Python:
 
@@ -354,11 +354,11 @@ print(messages)
 
 In our IDE, trying to pass in `storylines` as a non-string generates an error:
 
-![Mirascope Prompt Function Incorrect Type Error](/assets/blog/langchain-prompt-template/mirascope_prompt_fn_incorrect_type_error.png)
+![Mirascope Prompt Function Incorrect Type Error](/assets/blog/langchain-prompt-template/mirascope_prompt_fn_incorrect_type_error.webp)
 
 And autocompletion is also provided for the attribute:
 
-![Mirascope Prompt Template Function Autocomplete](/assets/blog/langchain-prompt-template/mirascope_prompt_fn_autocomplete.png)
+![Mirascope Prompt Template Function Autocomplete](/assets/blog/langchain-prompt-template/mirascope_prompt_fn_autocomplete.webp)
 
 The catch here is that in the case of LangChain, if you haven’t defined your own error handling logic, it might take you a while to figure out from where bugs originate. Mirascope warns you immediately of such errors.
 
