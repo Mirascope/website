@@ -20,6 +20,7 @@ public/static/
 public/sitemap.xml
 public/social-cards/
 public/seo-metadata.json
+public/llms/
 .extracted-snippets/
 debug-output
 

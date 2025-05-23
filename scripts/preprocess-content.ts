@@ -1,18 +1,26 @@
 import fs from "fs";
 import path from "path";
 import { ContentPreprocessor } from "@/src/lib/content/preprocess";
+import { TemplateProcessor, type TemplateFile } from "@/src/lib/content/templates";
 import { SITE_URL, getAllRoutes } from "@/src/lib/router-utils";
 import type { BlogMeta } from "@/src/lib/content";
 
 /**
- * Main processing function that generates static JSON files for all MDX content
- * and creates a sitemap.xml file
+ * Main processing function that generates static JSON files for all MDX content,
+ * processes template files, and creates a sitemap.xml file
  */
 export async function preprocessContent(verbose = true): Promise<void> {
   try {
     const preprocessor = new ContentPreprocessor(process.cwd(), verbose);
     await preprocessor.processAllContent();
-    await generateSitemap(preprocessor.getMetadataByType().blog);
+
+    // Process templates after regular content processing (templates depend on docs content)
+    if (verbose) console.log("Processing templates...");
+    const templateProcessor = new TemplateProcessor();
+    const outputDir = path.join(process.cwd(), "public", "llms");
+    const templates = templateProcessor.generateTemplates(outputDir);
+
+    await generateSitemap(preprocessor.getMetadataByType().blog, templates);
     return;
   } catch (error) {
     console.error("Error during preprocessing:", error);
@@ -23,7 +31,7 @@ export async function preprocessContent(verbose = true): Promise<void> {
 /**
  * Generate sitemap.xml file based on the processed content
  */
-async function generateSitemap(blogPosts: BlogMeta[]): Promise<void> {
+async function generateSitemap(blogPosts: BlogMeta[], templates: TemplateFile[]): Promise<void> {
   console.log("Generating sitemap.xml...");
 
   // Get all routes using our centralized utility
@@ -43,12 +51,24 @@ async function generateSitemap(blogPosts: BlogMeta[]): Promise<void> {
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
   xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
 
-  // Add llms_full.txt to the sitemap
-  xml += "  <url>\n";
-  xml += `    <loc>${SITE_URL}/llms_full.txt</loc>\n`;
-  xml += `    <lastmod>${today}</lastmod>\n`;
-  xml += "    <changefreq>daily</changefreq>\n";
-  xml += "  </url>\n";
+  // Add template URLs to the sitemap
+  templates.forEach((template) => {
+    // Add the .mdx file
+    xml += "  <url>\n";
+    xml += `    <loc>${SITE_URL}/llms/${template.slug}.mdx</loc>\n`;
+    xml += `    <lastmod>${today}</lastmod>\n`;
+    xml += "    <changefreq>daily</changefreq>\n";
+    xml += "  </url>\n";
+
+    // Add the .txt redirect for full.mdx
+    if (template.slug === "full") {
+      xml += "  <url>\n";
+      xml += `    <loc>${SITE_URL}/llms_full.txt</loc>\n`;
+      xml += `    <lastmod>${today}</lastmod>\n`;
+      xml += "    <changefreq>daily</changefreq>\n";
+      xml += "  </url>\n";
+    }
+  });
 
   // Add each URL
   uniqueRoutes.forEach((route) => {
@@ -83,7 +103,10 @@ async function generateSitemap(blogPosts: BlogMeta[]): Promise<void> {
   const outFile = path.join(process.cwd(), "public", "sitemap.xml");
   fs.writeFileSync(outFile, xml);
 
-  console.log(`Sitemap generated with ${uniqueRoutes.length + 1} URLs (including llms_full.txt)`);
+  const templateUrlCount = templates.length + (templates.some((t) => t.slug === "full") ? 1 : 0); // +1 for .txt redirect
+  console.log(
+    `Sitemap generated with ${uniqueRoutes.length + templateUrlCount} URLs (including ${templates.length} template files)`
+  );
 }
 
 // Vite server interface for TypeScript
@@ -98,8 +121,8 @@ interface ViteDevServer {
 }
 
 export function contentPreprocessPlugin(options = { verbose: true }) {
-  // Get all content directories
-  const contentDirs = ["blog", "docs", "policy", "dev"].map((type) =>
+  // Get all content directories (including llms for template files)
+  const contentDirs = ["blog", "docs", "policy", "dev", "llms"].map((type) =>
     path.join(process.cwd(), "content", type)
   );
 
