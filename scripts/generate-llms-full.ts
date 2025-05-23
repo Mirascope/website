@@ -75,15 +75,32 @@ function filterDocsByRoutes(docs: DocInfo[], routePatterns: string[]): DocInfo[]
 
 /**
  * Check if a doc path matches a route pattern
- * Pattern format: "mirascope/learn/*" matches docs under mirascope/learn/
+ * Pattern formats:
+ * - "mirascope/learn/*" - matches docs under mirascope/learn/ (including subdirectories)
+ * - "mirascope/learn/*.mdx" - matches only direct files in mirascope/learn/, not subdirectories
+ * - "mirascope/index" - exact match
  */
 function matchesRoutePattern(docPath: string, pattern: string): boolean {
   // Remove leading/trailing slashes and normalize
   const normalizedPath = docPath.replace(/^\/+|\/+$/g, "");
   const normalizedPattern = pattern.replace(/^\/+|\/+$/g, "");
 
-  if (normalizedPattern.endsWith("/*")) {
-    // Pattern with wildcard: check if path starts with the prefix
+  if (normalizedPattern.endsWith("/*.mdx")) {
+    // Pattern for direct files only (no subdirectories)
+    const prefix = normalizedPattern.slice(0, -6); // Remove "/*.mdx"
+
+    // Check if path starts with the prefix
+    if (!normalizedPath.startsWith(prefix)) {
+      return false;
+    }
+
+    // Get the remaining part after the prefix
+    const remainder = normalizedPath.slice(prefix.length);
+
+    // Should start with "/" and not contain any more "/" (direct child only)
+    return remainder.startsWith("/") && !remainder.slice(1).includes("/");
+  } else if (normalizedPattern.endsWith("/*")) {
+    // Pattern with wildcard: check if path starts with the prefix (includes subdirectories)
     const prefix = normalizedPattern.slice(0, -2); // Remove "/*"
     return normalizedPath.startsWith(prefix);
   } else {

@@ -1,9 +1,8 @@
 {
   "docs_routes": [
-    "mirascope/index/*",
-    "mirascope/getting-started/*",
-    "mirascope/learn/*",
-    "lilypad/*",
-    "mirascope/api/*"
+    "mirascope/index.mdx",
+    "mirascope/guides/getting-started/quickstart.mdx",
+    "mirascope/learn/*.mdx",
+    "lilypad/*"
   ]
 }
