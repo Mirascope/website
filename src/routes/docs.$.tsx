@@ -9,6 +9,7 @@ import { ContentErrorHandler } from "@/src/components";
  * for robust path resolution regardless of trailing slashes
  */
 async function contentPathLoader({ params }: { params: { _splat: string } }) {
+  console.log("Content Path Loader", params);
   // Construct the full route path from the splat parameter
   const splat = params._splat;
   let routePath = `/docs/${splat}`;

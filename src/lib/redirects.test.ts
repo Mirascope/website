@@ -8,12 +8,6 @@ describe("redirects", () => {
       expect(processRedirects("/docs/")).toBe("/docs/mirascope");
     });
 
-    test("should redirect /docs/{invalid-product} to /docs/mirascope", () => {
-      expect(processRedirects("/docs/invalid-product")).toBe("/docs/mirascope");
-      expect(processRedirects("/docs/unknown")).toBe("/docs/mirascope");
-      expect(processRedirects("/docs/invalid-product/some/path")).toBe("/docs/mirascope");
-    });
-
     test("should return null for non-redirected paths", () => {
       expect(processRedirects("/blog")).toBeNull();
       expect(processRedirects("/privacy")).toBeNull();

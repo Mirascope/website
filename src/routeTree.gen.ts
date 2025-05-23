@@ -22,6 +22,7 @@ import { Route as DevIndexImport } from './routes/dev/index'
 import { Route as BlogIndexImport } from './routes/blog.index'
 import { Route as TermsUseImport } from './routes/terms/use'
 import { Route as TermsServiceImport } from './routes/terms/service'
+import { Route as DocsLlmsFullImport } from './routes/docs.llms-full'
 import { Route as DocsSplatImport } from './routes/docs.$'
 import { Route as DevSocialCardImport } from './routes/dev/social-card'
 import { Route as DevLayoutTestImport } from './routes/dev/layout-test'
@@ -94,6 +95,12 @@ const TermsUseRoute = TermsUseImport.update({
 const TermsServiceRoute = TermsServiceImport.update({
   id: '/terms/service',
   path: '/terms/service',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DocsLlmsFullRoute = DocsLlmsFullImport.update({
+  id: '/docs/llms-full',
+  path: '/docs/llms-full',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -214,6 +221,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DocsSplatImport
       parentRoute: typeof rootRoute
     }
+    '/docs/llms-full': {
+      id: '/docs/llms-full'
+      path: '/docs/llms-full'
+      fullPath: '/docs/llms-full'
+      preLoaderRoute: typeof DocsLlmsFullImport
+      parentRoute: typeof rootRoute
+    }
     '/terms/service': {
       id: '/terms/service'
       path: '/terms/service'
@@ -291,6 +305,7 @@ export interface FileRoutesByFullPath {
   '/dev/layout-test': typeof DevLayoutTestRoute
   '/dev/social-card': typeof DevSocialCardRoute
   '/docs/$': typeof DocsSplatRoute
+  '/docs/llms-full': typeof DocsLlmsFullRoute
   '/terms/service': typeof TermsServiceRoute
   '/terms/use': typeof TermsUseRoute
   '/blog': typeof BlogIndexRoute
@@ -310,6 +325,7 @@ export interface FileRoutesByTo {
   '/dev/layout-test': typeof DevLayoutTestRoute
   '/dev/social-card': typeof DevSocialCardRoute
   '/docs/$': typeof DocsSplatRoute
+  '/docs/llms-full': typeof DocsLlmsFullRoute
   '/terms/service': typeof TermsServiceRoute
   '/terms/use': typeof TermsUseRoute
   '/blog': typeof BlogIndexRoute
@@ -331,6 +347,7 @@ export interface FileRoutesById {
   '/dev/layout-test': typeof DevLayoutTestRoute
   '/dev/social-card': typeof DevSocialCardRoute
   '/docs/$': typeof DocsSplatRoute
+  '/docs/llms-full': typeof DocsLlmsFullRoute
   '/terms/service': typeof TermsServiceRoute
   '/terms/use': typeof TermsUseRoute
   '/blog/': typeof BlogIndexRoute
@@ -353,6 +370,7 @@ export interface FileRouteTypes {
     | '/dev/layout-test'
     | '/dev/social-card'
     | '/docs/$'
+    | '/docs/llms-full'
     | '/terms/service'
     | '/terms/use'
     | '/blog'
@@ -371,6 +389,7 @@ export interface FileRouteTypes {
     | '/dev/layout-test'
     | '/dev/social-card'
     | '/docs/$'
+    | '/docs/llms-full'
     | '/terms/service'
     | '/terms/use'
     | '/blog'
@@ -390,6 +409,7 @@ export interface FileRouteTypes {
     | '/dev/layout-test'
     | '/dev/social-card'
     | '/docs/$'
+    | '/docs/llms-full'
     | '/terms/service'
     | '/terms/use'
     | '/blog/'
@@ -407,6 +427,7 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   BlogSlugRoute: typeof BlogSlugRoute
   DocsSplatRoute: typeof DocsSplatRoute
+  DocsLlmsFullRoute: typeof DocsLlmsFullRoute
   TermsServiceRoute: typeof TermsServiceRoute
   TermsUseRoute: typeof TermsUseRoute
   BlogIndexRoute: typeof BlogIndexRoute
@@ -422,6 +443,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   BlogSlugRoute: BlogSlugRoute,
   DocsSplatRoute: DocsSplatRoute,
+  DocsLlmsFullRoute: DocsLlmsFullRoute,
   TermsServiceRoute: TermsServiceRoute,
   TermsUseRoute: TermsUseRoute,
   BlogIndexRoute: BlogIndexRoute,
@@ -446,6 +468,7 @@ export const routeTree = rootRoute
         "/privacy",
         "/blog/$slug",
         "/docs/$",
+        "/docs/llms-full",
         "/terms/service",
         "/terms/use",
         "/blog/",
@@ -496,6 +519,9 @@ export const routeTree = rootRoute
     },
     "/docs/$": {
       "filePath": "docs.$.tsx"
+    },
+    "/docs/llms-full": {
+      "filePath": "docs.llms-full.tsx"
     },
     "/terms/service": {
       "filePath": "terms/service.tsx"
