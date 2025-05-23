@@ -17,10 +17,6 @@ const docsSection: SectionSpec = {
       weight: 2,
       children: [
         {
-          slug: "quickstart",
-          label: "Quickstart",
-        },
-        {
           slug: "why",
           label: "Why Mirascope?",
         },

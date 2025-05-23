@@ -80,6 +80,8 @@
 /tutorials/*          /docs/mirascope/guides/:splat       301
 /api/*                /docs/mirascope/api/:splat          301
 
+# Legacy from moving quickstart around
+/docs/mirascope/getting-started/quickstart /docs/mirascope/guides/getting-started/quickstart 301
 
 # Old blog paths
 /post/*               /blog/:splat                       301
