@@ -2,10 +2,10 @@
 /**
  * Image Optimization Script
  *
- * This script optimizes images in the public directory:
- * 1. Converts PNG & JPG images to WebP format
- * 2. Creates responsive versions of specific image types
- * 3. Preserves original files (for browsers that don't support WebP)
+ * This script optimizes WebP images in the public directory:
+ * 1. Verifies all images are WebP format (fails if not)
+ * 2. Creates medium and small responsive versions of WebP images
+ * 3. Assumes base WebP files already exist (using convert-to-webp.ts)
  */
 
 import path from "path";
@@ -18,20 +18,13 @@ const CONFIG = {
   // Base directory to process - these are the built assets in dist
   baseDirectory: "dist/assets",
 
-  // Quality settings
-  quality: {
-    webp: 80,
-    jpeg: 85,
-    png: 85,
-  },
-
   // Responsive image configurations based on path patterns
   responsiveConfigs: [
     {
-      // Background images get three sizes with larger medium breakpoint
+      // Background images get larger medium breakpoint
       pattern: /\/backgrounds\//,
+      quality: 95,
       sizes: [
-        { name: "large", width: null }, // Original size
         { name: "medium", width: 1200 },
         { name: "small", width: 800 },
       ],
@@ -39,8 +32,8 @@ const CONFIG = {
     {
       // Default responsive sizes for all other images
       pattern: /.*/, // Match all paths
+      quality: 80,
       sizes: [
-        { name: "large", width: null }, // Original size
         { name: "medium", width: 1024 },
         { name: "small", width: 640 },
       ],
@@ -56,12 +49,10 @@ let stats = {
   processed: 0,
   skipped: 0,
   errors: 0,
-  sizeBefore: 0,
-  sizeAfter: 0,
 };
 
 /**
- * Get responsive image sizes based on file path
+ * Get responsive image config based on file path
  * Returns the most specific pattern match first
  */
 function getResponsiveConfig(filePath: string) {
@@ -70,12 +61,12 @@ function getResponsiveConfig(filePath: string) {
   for (let i = 0; i < CONFIG.responsiveConfigs.length - 1; i++) {
     const config = CONFIG.responsiveConfigs[i];
     if (config.pattern.test(filePath)) {
-      return config.sizes;
+      return config;
     }
   }
 
   // Use default pattern if no specific matches
-  return CONFIG.responsiveConfigs[CONFIG.responsiveConfigs.length - 1].sizes;
+  return CONFIG.responsiveConfigs[CONFIG.responsiveConfigs.length - 1];
 }
 
 /**
@@ -87,11 +78,21 @@ function shouldSkipFile(filePath: string): boolean {
     return true;
   }
 
-  // Skip SVG and GIF files - we don't want to convert these to WebP
+  // Skip SVG and GIF files - we don't want to create responsive versions for these
   // They should be served as-is
   const extension = path.extname(filePath).toLowerCase();
   if ([".svg", ".gif"].includes(extension)) {
     return true;
+  }
+
+  // Check that the file is WebP, fail otherwise
+  if (extension !== ".webp") {
+    throw new Error(
+      `Non-WebP image found: ${filePath}\n` +
+        `All images must be WebP format before running image optimization.\n` +
+        `Please convert this image using 'bun run convert-to-webp'.\n` +
+        `Run 'bun run validate-assets --skip-dist-check' to identify all PNG/JPG files that need conversion.`
+    );
   }
 
   return false;
@@ -112,45 +113,20 @@ async function processImage(filePath: string) {
     const fileExt = path.extname(filePath).toLowerCase();
     const baseName = path.basename(filePath, fileExt);
     const dirName = path.dirname(filePath);
-    const responsiveSizes = getResponsiveConfig(filePath);
+    const config = getResponsiveConfig(filePath);
 
     console.log(`🖼️  Optimizing: ${filePath}`);
 
-    // Get original file size
-    const fileStats = fs.statSync(filePath);
-    stats.sizeBefore += fileStats.size;
-
-    // Create webp versions in all appropriate sizes
-    for (const size of responsiveSizes) {
-      const resizeOptions = size.width ? { width: size.width } : undefined;
-      const suffix = size.name === "large" ? "" : `-${size.name}`;
+    for (const size of config.sizes) {
+      const suffix = `-${size.name}`;
       const outputPath = path.join(dirName, `${baseName}${suffix}.webp`);
 
-      // Process the image
       try {
         let sharpInstance = sharp(filePath);
-        const metadata = await sharpInstance.metadata();
 
-        // Determine if resize is needed
-        const needsResize =
-          resizeOptions &&
-          resizeOptions.width &&
-          metadata.width &&
-          resizeOptions.width < metadata.width;
+        sharpInstance = sharpInstance.resize({ width: size.width });
 
-        // Apply resize if needed
-        if (needsResize) {
-          sharpInstance = sharpInstance.resize(resizeOptions);
-        }
-
-        // Always output as WebP with quality setting
-        await sharpInstance.webp({ quality: CONFIG.quality.webp }).toFile(outputPath);
-
-        // Track size of the original-sized WebP (large) for stats
-        if (size.name === "large") {
-          const webpStats = fs.statSync(outputPath);
-          stats.sizeAfter += webpStats.size;
-        }
+        await sharpInstance.webp({ quality: config.quality }).toFile(outputPath);
       } catch (error) {
         console.error(`❌  Error processing ${outputPath}:`, error);
         stats.errors++;
@@ -196,21 +172,13 @@ async function main() {
   const endTime = Date.now();
   const durationSeconds = ((endTime - startTime) / 1000).toFixed(2);
 
-  // Calculate savings
-  const savingsBytes = stats.sizeBefore - stats.sizeAfter;
-  const savingsPercent = stats.sizeBefore
-    ? ((savingsBytes / stats.sizeBefore) * 100).toFixed(1)
-    : "0";
-  const sizeBefore = (stats.sizeBefore / (1024 * 1024)).toFixed(2);
-  const sizeAfter = (stats.sizeAfter / (1024 * 1024)).toFixed(2);
-
   // Log results
-  console.log("\n🎉 Image optimization complete!");
+  console.log("\n🎉 Responsive WebP generation complete!");
   console.log(`⏱️  Duration: ${durationSeconds}s`);
   console.log(
     `📊 Processed: ${stats.processed} images, Skipped: ${stats.skipped}, Errors: ${stats.errors}`
   );
-  console.log(`💾 Size reduction: ${sizeBefore} MB → ${sizeAfter} MB (${savingsPercent}% saved)`);
+  console.log(`🔍 Created ${stats.processed * 2} responsive versions (medium and small sizes)`);
 
   if (stats.errors > 0) {
     process.exit(1);
