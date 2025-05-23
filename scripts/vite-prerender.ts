@@ -8,7 +8,7 @@ import fs from "fs";
 import os from "os";
 import { prerenderPage } from "./lib/prerender";
 import { getAllRoutes } from "../src/lib/router-utils";
-import { validateLinks } from "./validate-links";
+import { validateLinksAndImages } from "./validate-assets";
 import { printHeader, icons, coloredLog } from "./lib/terminal";
 
 async function main() {
@@ -80,12 +80,12 @@ async function main() {
       coloredLog(`\n\n${icons.success} Pre-rendering complete!`, "green");
       console.log(`   - Successfully pre-rendered: ${successCount} routes`);
 
-      // Run link validation if not skipped
+      // Run link and image validation if not skipped
       if (!skipLinkValidation) {
-        const validationResult = await validateLinks(distDir, verbose);
+        const validationResult = await validateLinksAndImages(distDir, verbose);
         if (!validationResult.valid) {
           throw new Error(
-            `\n${icons.error} Link validation failed. Fix broken links before deploying.`
+            `\n${icons.error} Link and image validation failed. Fix broken links and images before deploying.`
           );
         }
       }
