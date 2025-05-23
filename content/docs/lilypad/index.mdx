@@ -103,7 +103,7 @@ The next step is to look at real (or synthetic) data and systematically label it
 
 With Lilypad, you annotate the data right where you look at it. This makes it seamless.
 
-![Lilypad Annotation Queue](/assets/docs/lilypad/welcome/annotation-queue.png)
+![Lilypad Annotation Queue](/assets/docs/lilypad/welcome/annotation-queue.webp)
 
 It's also extremely important that we annotate not just the inputs/outputs but also everything about the trace. This includes the code, the prompt, the call parameters, the cost, the latency — everything you might need to know if you'd consider it "good enough" or not.
 
@@ -111,7 +111,7 @@ It's also extremely important that we annotate not just the inputs/outputs but a
 
 Once you've annotated enough data, it's time to look for trends — common failure points. Compare outputs from different versions on the same input. Did the changes help?
 
-![Lilypad Trace Annotation](/assets/docs/lilypad/welcome/trace-annotation.png)
+![Lilypad Trace Annotation](/assets/docs/lilypad/welcome/trace-annotation.webp)
 
 Distilling your annotations into action items makes for much easier optimization.
 
@@ -121,7 +121,7 @@ Now we can apply our analysis and update the system to improve it.
 
 For example, we can identify the most common points of failure and work to resolve those first. Consider our earlier example. We identify that there are a lot of longer answers and we really want single word answers, so we add "in one word" to the prompt and run the process again.
 
-![Lilypad Versioned Function Comparison](/assets/docs/lilypad/welcome/optimization-comparison.png)
+![Lilypad Versioned Function Comparison](/assets/docs/lilypad/welcome/optimization-comparison.webp)
 
 This step is just the systematic version of our earlier "vibe check" process that results in real data and actionable insights.
 

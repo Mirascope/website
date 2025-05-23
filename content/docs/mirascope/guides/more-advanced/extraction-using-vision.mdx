@@ -96,7 +96,7 @@ import base64
 
 import httpx
 
-image_url = "https://www.receiptfont.com/wp-content/uploads/template-mcdonalds-1-screenshot-fit.png"
+image_url = "https://www.receiptfont.com/wp-content/uploads/template-mcdonalds-1-screenshot-fit.webp"
 
 image_media_type = "image/png"
 image_data = base64.b64encode(httpx.get(image_url).content).decode("utf-8")

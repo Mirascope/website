@@ -14,6 +14,7 @@ interface ValidationResult {
   valid: boolean;
   brokenLinks: { page: string; link: string; text: string }[];
   brokenImages: { page: string; src: string; alt: string }[];
+  disallowedAssets: string[]; // Paths to PNG images that should be WebP
 }
 
 async function validateLinksAndImages(
@@ -202,10 +203,45 @@ async function validateLinksAndImages(
     coloredLog(`\n${icons.success} All ${totalImages} internal images are valid!`, "green");
   }
 
+  // Check for PNG files in the source public directory that should be WebP
+  const disallowedAssets: string[] = [];
+  const sourceAssetsDir = path.join(process.cwd(), "public/assets");
+
+  // Find all PNG/JPG images in the source directory
+  const pngFiles = await glob(`${sourceAssetsDir}/**/*.{png,jpg,jpeg}`, { absolute: true });
+
+  // Add all found PNG/JPG files to disallowed assets
+  for (const pngFile of pngFiles) {
+    // Get the relative path for reporting
+    const relativePath = path.relative(process.cwd(), pngFile);
+    disallowedAssets.push(relativePath);
+  }
+
+  // Output results for disallowed assets
+  if (disallowedAssets.length > 0) {
+    isValid = false;
+    coloredLog(
+      `\n${icons.error} Found ${disallowedAssets.length} PNG/JPG images that should be converted to WebP:`,
+      "red"
+    );
+
+    disallowedAssets.forEach((assetPath) => {
+      console.log(`  ${icons.arrow} ${colorize(assetPath, "red")}`);
+    });
+
+    coloredLog(
+      `\nPlease run 'bun run convert-to-webp' to convert these images to WebP format.`,
+      "yellow"
+    );
+  } else {
+    coloredLog(`\n${icons.success} No disallowed image formats found in source assets!`, "green");
+  }
+
   return {
     valid: isValid,
     brokenLinks,
     brokenImages,
+    disallowedAssets,
   };
 }
 
@@ -213,21 +249,43 @@ async function validateLinksAndImages(
 async function main() {
   const args = process.argv.slice(2);
   const verbose = args.includes("--verbose");
+  const ignoreDisallowed = args.includes("--ignore-disallowed");
   const distDir = path.join(process.cwd(), "dist");
+  const skipDistCheck = args.includes("--skip-dist-check");
 
-  // Check if dist directory exists
-  if (!fs.existsSync(distDir)) {
+  // Check if dist directory exists (unless skipped)
+  if (!skipDistCheck && !fs.existsSync(distDir)) {
     coloredLog(`${icons.error} Dist directory not found! Run \`bun run build\` first.`, "red");
+    coloredLog(
+      `To validate source assets only, use \`bun run validate-assets --skip-dist-check\``,
+      "yellow"
+    );
     process.exit(1);
   }
 
   try {
-    const result = await validateLinksAndImages(distDir, verbose);
-    if (!result.valid) {
+    const result = await validateLinksAndImages(skipDistCheck ? process.cwd() : distDir, verbose);
+
+    // Determine if we should fail the validation
+    let shouldFail = false;
+
+    // Always fail on broken links or images
+    if (result.brokenLinks.length > 0 || result.brokenImages.length > 0) {
+      shouldFail = true;
+    }
+
+    // Only fail on disallowed assets if not ignored
+    if (!ignoreDisallowed && result.disallowedAssets.length > 0) {
+      shouldFail = true;
+      coloredLog(`\nTo convert PNG/JPG to WebP: \`bun run convert-to-webp\``, "cyan");
+      coloredLog(`To ignore this check: \`bun run validate-assets --ignore-disallowed\``, "cyan");
+    }
+
+    if (shouldFail) {
       process.exit(1);
     }
   } catch (error) {
-    coloredLog(`${icons.error} Error validating links and images:`, "red");
+    coloredLog(`${icons.error} Error validating assets:`, "red");
     console.error(error);
     process.exit(1);
   }

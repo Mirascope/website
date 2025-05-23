@@ -125,13 +125,13 @@ We provide full linting and editor support for warnings and errors as you code, 
 
 In the example below, `response` is set to the output of an OpenAI call that returns a stream, and so hovering the cursor over the `response` object shows it to be defined as an `OpenAIStream` object type.
 
-![OpenAIStream Object Type example](/assets/blog/langchain-sucks/mirascope_stream_type_hint.png)
+![OpenAIStream Object Type example](/assets/blog/langchain-sucks/mirascope_stream_type_hint.webp)
 
 Mirascope’s focus on developer experience makes it easy to set what you want the model’s response to be in terms of, for example, stream, string, response model, etc., as well as to know what the return type is whenever you call that function anywhere in your codebase. And since the call decorator is working on a function, you can add type hints to the input arguments for the function to improve your own developer experience.
 
 This is in contrast to LangChain’s implementation of calls, where (for example), its `invoke()` method takes a data dictionary as input but little else in the way of type hints. **It will require a failure at runtime to identify, for example, an improper key in the invocation dictionary.**
 
-![LangChain Implementation of Calls example](/assets/blog/langchain-sucks/langchain_invoke_no_type_hints.png)
+![LangChain Implementation of Calls example](/assets/blog/langchain-sucks/langchain_invoke_no_type_hints.webp)
 
 ## Chaining LLM Calls Together in LangChain
 
@@ -264,7 +264,7 @@ To understand how this integration works, let’s first review the (very general
 - First, we import relevant information (e.g., a dataset in JSON like company data, private data, etc.), into a vector database, using tools like a text splitter and chunker for data preprocessing.
 - Later, the system sends the information and metadata acquired in the previous step as extra context to the user’s or application’s query, which are all sent together to the LLM to generate relevant responses.
 
-![Embedding Model example](/assets/blog/langchain-sucks/embedding_model_diagram.png)
+![Embedding Model example](/assets/blog/langchain-sucks/embedding_model_diagram.webp)
 
 To use LangChain’s functionality together with Mirascope, we basically take the information (i.e., the context) acquired using LangChain’s modules and a third-party vector store like Chroma or Pinecone and inject this into a Mirascope call.
 
