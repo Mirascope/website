@@ -43,6 +43,13 @@ async function generateSitemap(blogPosts: BlogMeta[]): Promise<void> {
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
   xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
 
+  // Add llms_full.txt to the sitemap
+  xml += "  <url>\n";
+  xml += `    <loc>${SITE_URL}/llms_full.txt</loc>\n`;
+  xml += `    <lastmod>${today}</lastmod>\n`;
+  xml += "    <changefreq>daily</changefreq>\n";
+  xml += "  </url>\n";
+
   // Add each URL
   uniqueRoutes.forEach((route) => {
     xml += "  <url>\n";
@@ -76,7 +83,7 @@ async function generateSitemap(blogPosts: BlogMeta[]): Promise<void> {
   const outFile = path.join(process.cwd(), "public", "sitemap.xml");
   fs.writeFileSync(outFile, xml);
 
-  console.log(`Sitemap generated with ${uniqueRoutes.length} URLs`);
+  console.log(`Sitemap generated with ${uniqueRoutes.length + 1} URLs (including llms_full.txt)`);
 }
 
 // Vite server interface for TypeScript
