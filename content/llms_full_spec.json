@@ -1,0 +1,9 @@
+{
+  "docs_routes": [
+    "mirascope/index/*",
+    "mirascope/getting-started/*",
+    "mirascope/learn/*",
+    "lilypad/*",
+    "mirascope/api/*"
+  ]
+}
