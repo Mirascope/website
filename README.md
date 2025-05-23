@@ -30,12 +30,13 @@ This project is mostly Typescript/React/etc (as stated above). However, there is
 #### Main Commands
 
 - `bun run start [port]` - Start development server
-- `bun run build` - Build for production
-- `bun run serve` - Preview production build
-- `bun run typecheck` - Check typescript
-- `bun test` - Run tests with Bun's built-in Jest-compatible test runner
-- `bun run lint` - All lint checks
-- `bun run fix` - All automated fixes (e.g. running prettier)
+- `bun run build`        - Build for production, except expensive image generation/optimization (and seo-metadata.json generation)
+- `bun run build:full`   - Full build including og image generation. Runs in cloudflare.
+- `bun run serve`        - Preview production build
+- `bun run typecheck`    - Check typescript
+- `bun test`             - Run tests with Bun's built-in Jest-compatible test runner
+- `bun run lint`         - All lint checks
+- `bun run fix`          - All automated fixes (e.g. running prettier)
 
 
 #### Specialized Commands
@@ -98,7 +99,10 @@ For a detailed overview of the content system architecture, please see [Content 
 
 ### Code Snippet Extraction
 
-The documentation contains Python code snippets that are automatically extracted to create runnable example files. These examples are stored in the repository and verified by CI to ensure they stay in sync with the documentation. We find all files matching `content/**/*.mdx`, and process all Python code blocks in such files into snippets. We then substitute in `openai` as as the provider (for `$PROVIDER`/`$MODEL` substitution), and typecheck the examples.
+The documentation contains Python code snippets that are automatically extracted to create runnable example files.
+These examples are stored in the repository and verified by CI to ensure they stay in sync with the documentation.
+We find all files matching `content/**/*.mdx`, and process all Python code blocks in such files into snippets.
+We then substitute in `openai` as as the provider (for `$PROVIDER`/`$MODEL` substitution), and typecheck the examples.
 
 Files or directories may be excluded from snippet processing by modifying the `IGNORED_PATHS` variable at the top of `generate-snippets.ts`.
 
@@ -116,23 +120,30 @@ For code blocks that represent partial snippets (not meant to be valid on their 
 >  ```
 ```
 
-This prevents these partial examples from being extracted as standalone snippets and avoids validation errors for code that's missing imports or context. The syntax highlighting still works correctly in the rendered documentation.
+This prevents these partial examples from being extracted as standalone snippets and avoids validation errors for code that's missing imports or context.
+The syntax highlighting still works correctly in the rendered documentation.
 
 #### CI Integration
 
-Our CI workflow automatically verifies that all code is properly formatted, type-checked, and that extracted snippets are up-to-date with the source documentation. 
+Our CI workflow automatically verifies that all code is properly formatted, type-checked, and that extracted snippets are up-to-date with the source documentation.
 
 ### Social Images Generation
 
-The og social cards (preview images for each route) are automatically generated at build time. You can use `bun run generate-og-images` to regenerate them by hand, and you can use the metadata audit page at http://localhost:3000/dev/audit-metadata to see all of the generated cards.
+The og social cards (preview images for each route) are automatically generated at build time, when running `bun run build:full`.
+You can use `bun run generate-og-images` to regenerate them by hand, and you can use the metadata audit page at http://localhost:3000/dev/audit-metadata to see all of the generated cards.
 
 ### SSG Pre-rendering
 
-During build, we pre-render every route so we can deliver a working site to viewers on first page load. The logic lives in scripts/lib/prerender.ts. Note that due to difficult-to-debug rehydration issues, we don't rehydrate the content on page load; rather, we wait for the app to fully load, and then replace the prerendered contents entirely.
+During build, we pre-render every route so we can deliver a working site to viewers on first page load.
+The logic lives in scripts/lib/prerender.ts.
+Note that due to difficult-to-debug rehydration issues, we don't rehydrate the content on page load;
+rather, we wait for the app to fully load, and then replace the prerendered contents entirely.
 
 #### Internal Link Validation
 
-The build process automatically validates that all internal links in the site point to valid routes. This helps catch broken links before they make it to production. The validation is integrated into the prerender step of the build process.
+The build process automatically validates that all internal links in the site point to valid routes.
+This helps catch broken links before they make it to production.
+The validation is integrated into the prerender step of the build process.
 
 You can also run the link validation manually with:
 
@@ -140,7 +151,8 @@ You can also run the link validation manually with:
 bun run validate-links
 ```
 
-This will check all internal links in the prerendered HTML and report any that point to non-existent routes. To skip link validation during prerendering (e.g., for testing), use the `--skip-link-validation` flag:
+This will check all internal links in the prerendered HTML and report any that point to non-existent routes.
+To skip link validation during prerendering (e.g., for testing), use the `--skip-link-validation` flag:
 
 ```bash
 bun run prerender --skip-link-validation
@@ -148,7 +160,10 @@ bun run prerender --skip-link-validation
 
 ### Themes
 
-We support three color themes: light, dark, and sunset. The themes are setup using tailwind v4 themes in themes.css, so we have theme-dependent colors like `--color-background`, `--color-foreground`, `--color-muted` which update depending on the theme. When writing new UI code, avoid using hardcoded colors like `--grey-300` (which, if it looks good on dark mode, will probably look bad on light mode, and vice versa). Instead, use the theme colors.
+We support three color themes: light, dark, and sunset. The themes are setup using tailwind v4 themes in themes.css,
+so we have theme-dependent colors like `--color-background`, `--color-foreground`, `--color-muted` which update depending on the theme.
+When writing new UI code, avoid using hardcoded colors like `--grey-300` (which, if it looks good on dark mode,
+will probably look bad on light mode, and vice versa). Instead, use the theme colors.
 
 ### MDX Content
 
@@ -178,9 +193,9 @@ When adding a new explicitly, there are some considerations, please add an `onEr
 
 `onError: (error: Error) => environment.onError(error),`
 
-This is important, as it is the only way the static build will know if the component failed to render. This is because the Tanstack router automatically catches all errors and does not repropagate them, so otherwise the static build will seem to succeed but will prerender broken content. 
+This is important, as it is the only way the static build will know if the component failed to render. This is because the Tanstack router automatically catches all errors and does not repropagate them, so otherwise the static build will seem to succeed but will prerender broken content.
 
-Also, make sure you include a SEOHelmet component in the component served by your new route, so we'll have proper SEO metadata for that route. 
+Also, make sure you include a SEOHelmet component in the component served by your new route, so we'll have proper SEO metadata for that route.
 
 ### Cloudflare Integrations
 
@@ -191,7 +206,7 @@ We have a Cloudflare worker that does some request pre-processing for us, e.g. t
 Python API docs (e.g. for mirascope) are generated by the scripts/apigen module.
 It depends on the target repo maintaining an api doc folder with markdown folders containing autodoc directives for documentation generation, and uses that folder's structure as the source of truth for the documentation structure.
 
-Api docs are autogenerated (do not modify by hand), and they can be regenerated via `bun run apigen`. 
+Api docs are autogenerated (do not modify by hand), and they can be regenerated via `bun run apigen`.
 
 You can regenerate specific files with:
 ```bash
