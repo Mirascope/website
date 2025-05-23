@@ -17,6 +17,10 @@ const guidesMeta: SectionSpec = {
       label: "Getting Started",
       children: [
         {
+          slug: "quickstart",
+          label: "Quickstart",
+        },
+        {
           slug: "structured-outputs",
           label: "Structured Outputs",
         },
