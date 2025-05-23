@@ -9,7 +9,7 @@
 /CONTRIBUTING         /docs/mirascope/getting-started/contributing 301
 /learn                /docs/mirascope/learn                        301
 
-/llms_full.txt        /llms/full.mdx   301
+/llms-full.txt        /docs/llms-full.txt   200
 
 # Legacy from moving quickstart around
 /docs/mirascope/getting-started/quickstart /docs/mirascope/guides/getting-started/quickstart 301
