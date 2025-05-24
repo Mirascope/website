@@ -65,7 +65,7 @@ function ContentSection({ contentSection, toRelativeUrl }: ContentSectionProps) 
       {/* Content section header */}
       <div
         id={sectionId}
-        className="border-border mb-6 border-t pt-6"
+        className="border-border mb-6 border-b pt-2"
         style={{ scrollMarginTop: "var(--header-height)" }}
       >
         <div className="mb-4 flex items-center justify-between">
@@ -132,10 +132,10 @@ function DocumentHeader({ document, txtPath }: DocumentHeaderProps) {
           <ContentActions
             item={document}
             toRelativeUrl={toRelativeUrl}
-            variant="outline"
+            variant="ghost"
             showDocs={false}
           />
-          <ButtonLink href={txtPath} external variant="outline" size="sm">
+          <ButtonLink href={txtPath} external variant="ghost" size="sm">
             Raw
           </ButtonLink>
         </div>
@@ -168,11 +168,7 @@ export default function MainContent({ document, txtPath }: MainContentProps) {
           {document.children.map((item) => {
             if ("content" in item) {
               // IncludedDocument
-              return (
-                <div key={item.id} className="mb-8">
-                  <IncludedDocument document={item} toRelativeUrl={toRelativeUrl} />
-                </div>
-              );
+              return <IncludedDocument document={item} toRelativeUrl={toRelativeUrl} />;
             } else {
               // ContentContainer
               return (
