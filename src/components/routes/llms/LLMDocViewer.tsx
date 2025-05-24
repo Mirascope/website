@@ -83,7 +83,7 @@ export default function LLMDocViewer({ document, txtPath }: LLMDocViewerProps) {
   return (
     <AppLayout>
       <AppLayout.Content>
-        <div className="bg-background container mx-auto min-h-screen px-4 py-8">
+        <div className="bg-background container mx-auto min-h-screen px-4 py-4">
           {/* Single continuous document view with integrated header */}
           <div className="bg-card/20 border-border relative overflow-hidden rounded-lg border">
             {/* Document header - integrated into the card */}

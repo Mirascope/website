@@ -15,6 +15,8 @@ The LLM Documents system generates concatenated MDX documentation files optimize
 
 ### Content Organization
 
+
+(Out of date: I moved the llms stuff into content/llms and the route to /llms-full, havent updated.)
 ```
 content/docs/
 ├── _meta.ts                    # Regular documentation structure
