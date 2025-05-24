@@ -1,17 +1,21 @@
-import { countTokens, formatTokenCount } from "@/src/lib/token-counter";
 import { ButtonLink } from "@/src/components/ui/button-link";
 import { Button } from "@/src/components/ui/button";
 
 interface ContentSectionProps {
   title: string;
   description?: string;
-  url?: string;
+  url: string;
   content: string;
+  tokenCount: number;
 }
 
-export default function ContentSection({ title, description, url, content }: ContentSectionProps) {
-  const tokenCount = countTokens(content);
-
+export default function ContentSection({
+  title,
+  description,
+  url,
+  content,
+  tokenCount,
+}: ContentSectionProps) {
   const handleCopySection = () => {
     navigator.clipboard.writeText(content);
   };
@@ -25,16 +29,14 @@ export default function ContentSection({ title, description, url, content }: Con
         </div>
         <div className="flex items-center gap-3">
           <span className="bg-secondary text-secondary-foreground rounded-full px-3 py-1 text-xs font-medium">
-            {formatTokenCount(tokenCount)} tokens
+            {tokenCount.toLocaleString()} tokens
           </span>
           <Button onClick={handleCopySection} variant="outline" size="sm">
             Copy Section
           </Button>
-          {url && (
-            <ButtonLink href={url} variant="ghost" size="sm">
-              View Docs
-            </ButtonLink>
-          )}
+          <ButtonLink href={url} variant="ghost" size="sm">
+            View Docs
+          </ButtonLink>
         </div>
       </div>
       <div className="bg-card border-border rounded-lg border p-4">

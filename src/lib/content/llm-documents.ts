@@ -94,6 +94,13 @@ export class LLMDocument {
   }
 
   /**
+   * Deserialize from JSON
+   */
+  static fromJSON(data: any): LLMDocument {
+    return new LLMDocument(data.metadata, data.sections);
+  }
+
+  /**
    * Generate .txt file content
    */
   toString(): string {

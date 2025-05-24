@@ -2,6 +2,7 @@ import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import { LLMDocViewer } from "@/src/components/routes/docs";
 import { environment } from "@/src/lib/content/environment";
 import { ContentErrorHandler } from "@/src/components";
+import { LLMDocument } from "@/src/lib/content/llm-documents";
 
 /**
  * Loader for LLM document viewer routes
@@ -10,26 +11,28 @@ import { ContentErrorHandler } from "@/src/components";
 async function llmDocLoader() {
   console.log("LLM Doc Loader - llms-full");
 
-  // Construct the path to the .txt file
+  // Construct paths to both JSON and TXT files
+  const jsonPath = `/static/content/docs/llms-full.json`;
   const txtPath = `/docs/llms-full.txt`;
 
   try {
-    // Fetch the raw .txt content
-    const response = await fetch(txtPath);
+    // Fetch the processed JSON data
+    const response = await fetch(jsonPath);
 
     if (!response.ok) {
-      throw new Error(`LLM document not found: ${txtPath}`);
+      throw new Error(`LLM document not found: ${jsonPath}`);
     }
 
-    const content = await response.text();
+    const data = await response.json();
+    const document = LLMDocument.fromJSON(data);
 
     return {
-      content,
+      document,
       txtPath,
       viewerPath: `/docs/llms-full`,
     };
   } catch (error) {
-    console.error(`Error loading LLM doc: ${txtPath}`, error);
+    console.error(`Error loading LLM doc: ${jsonPath}`, error);
     throw error;
   }
 }

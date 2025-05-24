@@ -1,16 +1,15 @@
-import { countTokens, formatTokenCount } from "@/src/lib/token-counter";
 import { Button } from "@/src/components/ui/button";
 import { ButtonLink } from "@/src/components/ui/button-link";
-import { parseContentSections } from "@/src/lib/parse-content-sections";
+import { LLMDocument } from "@/src/lib/content/llm-documents";
 import ContentSection from "./ContentSection";
 
 interface LLMDocViewerProps {
-  content: string;
+  document: LLMDocument;
   txtPath: string;
 }
 
-export default function LLMDocViewer({ content, txtPath }: LLMDocViewerProps) {
-  const { header, sections } = parseContentSections(content);
+export default function LLMDocViewer({ document, txtPath }: LLMDocViewerProps) {
+  const content = document.toString();
 
   return (
     <div className="bg-background min-h-screen">
@@ -33,30 +32,20 @@ export default function LLMDocViewer({ content, txtPath }: LLMDocViewerProps) {
           </div>
 
           <div className="text-muted-foreground mb-4 text-sm">
-            Total Tokens: {formatTokenCount(countTokens(content))}
+            Total Tokens: {document.metadata.totalTokens.toLocaleString()}
           </div>
         </div>
 
-        {/* Header section */}
-        {header && (
-          <div className="mb-8">
-            <div className="bg-card border-border rounded-lg border p-6">
-              <pre className="text-foreground overflow-auto font-mono text-sm whitespace-pre-wrap">
-                {header}
-              </pre>
-            </div>
-          </div>
-        )}
-
-        {/* Content sections */}
+        {/* All sections */}
         <div className="space-y-6">
-          {sections.map((section, index) => (
+          {document.sections.map((section) => (
             <ContentSection
-              key={index}
+              key={section.id}
               title={section.title}
               description={section.description}
               url={section.url}
               content={section.content}
+              tokenCount={section.tokenCount}
             />
           ))}
         </div>
