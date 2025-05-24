@@ -17,6 +17,9 @@ const formatTokenCount = (count: number): string => {
   return `${rounded}k`;
 };
 
+const tokenBadge =
+  "bg-secondary text-secondary-foreground rounded-md px-2 py-0.5 text-xs font-medium";
+
 // Inline SectionHeader component
 interface SectionHeaderProps {
   section: ContentSectionType;
@@ -29,18 +32,18 @@ function SectionHeader({ section, url }: SectionHeaderProps) {
   };
 
   return (
-    <div className="bg-card/95 border-border sticky top-4 z-10 mb-2 flex items-center justify-between rounded-lg border p-3 shadow-sm backdrop-blur-sm">
-      <div className="flex-1">
-        <h2 className="font-sans text-lg font-semibold">{section.title}</h2>
+    <div className="border-border mb-4 flex items-center justify-between border-b pb-2">
+      <div className="flex items-center gap-3">
+        <h2 className="text-foreground rounded-md px-2 py-1 text-base font-bold">
+          {section.title}
+        </h2>
       </div>
       <div className="flex items-center gap-2">
-        <span className="bg-secondary text-secondary-foreground rounded-full px-2 py-1 text-xs font-medium">
-          {formatTokenCount(section.tokenCount)} tokens
-        </span>
-        <Button onClick={handleCopySection} variant="outline" size="sm">
+        <span className={tokenBadge}>{formatTokenCount(section.tokenCount)} tokens</span>
+        <Button onClick={handleCopySection} variant="ghost" size="sm" className="text-xs">
           Copy
         </Button>
-        <ButtonLink href={url} variant="default" size="sm">
+        <ButtonLink href={url} variant="ghost" size="sm" className="text-xs">
           Docs
         </ButtonLink>
       </div>
@@ -67,10 +70,8 @@ export default function LLMDocViewer({ document, txtPath }: LLMDocViewerProps) {
       id: section.id,
       content: (
         <div className="flex items-center gap-2">
-          <div className="flex w-8 justify-end">
-            <span className="bg-secondary text-secondary-foreground rounded-md px-1.5 py-1 text-xs font-light">
-              {formatTokenCount(section.tokenCount)}
-            </span>
+          <div className="flex w-10 justify-end">
+            <span className={tokenBadge}>{formatTokenCount(section.tokenCount)}</span>
           </div>
           <span>{section.title}</span>
         </div>
@@ -83,58 +84,63 @@ export default function LLMDocViewer({ document, txtPath }: LLMDocViewerProps) {
     <AppLayout>
       <AppLayout.Content>
         <div className="bg-background container mx-auto min-h-screen px-4 py-8">
-          <div className="mb-8">
-            <h1
-              className="mb-4 text-3xl font-bold"
-              id="top"
-              style={{ scrollMarginTop: "var(--header-height)" }}
-            >
-              {document.metadata.title}
-            </h1>
-            <p>
-              This page contains concatenated documentation content, intended for easy consumption
-              by Large Language Models. You can use the copy it using the buttons below, or navigate
-              to the raw document directly at{" "}
-              <a href={txtPath} className="text-primary underline">
-                {txtPath}
-              </a>
-              .
-            </p>
-
-            <div className="my-6 flex gap-4">
-              <Button onClick={() => navigator.clipboard.writeText(content)} variant="default">
-                Copy Content
-              </Button>
-
-              <ButtonLink href={txtPath} external variant="outline" download>
-                Download .txt
-              </ButtonLink>
-
-              <ButtonLink href={txtPath} external variant="outline">
-                View Raw
-              </ButtonLink>
-            </div>
-
-            <div className="text-muted-foreground mb-4 text-sm">
-              Total Tokens: {formatTokenCount(document.metadata.totalTokens)} tokens
-            </div>
-          </div>
-
-          {/* Single continuous document view */}
-          <div className="bg-card/20 border-border relative rounded-lg border p-6">
-            {document.sections.map((section) => (
-              <div
-                key={section.id}
-                id={section.id}
-                className="mb-6"
-                style={{ scrollMarginTop: "var(--header-height)" }}
-              >
-                <SectionHeader section={section} url={toRelativeUrl(section.url)} />
-                <pre className="text-foreground overflow-auto font-mono text-sm whitespace-pre-wrap">
-                  {section.content}
-                </pre>
+          {/* Single continuous document view with integrated header */}
+          <div className="bg-card/20 border-border relative overflow-hidden rounded-lg border">
+            {/* Document header - integrated into the card */}
+            <div className="bg-primary/10 border-border border-b p-6">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <h1
+                    className="mb-2 text-2xl font-bold"
+                    id="top"
+                    style={{ scrollMarginTop: "var(--header-height)" }}
+                  >
+                    {document.metadata.title}
+                  </h1>
+                  <p className="text-muted-foreground text-sm">
+                    This page contains concatenated documentation content, intended for easy
+                    consumption by Large Language Models. You can copy it using the buttons, or
+                    navigate to the raw document at{" "}
+                    <a href={txtPath} className="text-primary underline">
+                      {txtPath}
+                    </a>
+                    .
+                  </p>
+                </div>
+                <div className="ml-4 flex items-center gap-2">
+                  <span className={tokenBadge}>
+                    {formatTokenCount(document.metadata.totalTokens)} tokens
+                  </span>
+                  <Button
+                    onClick={() => navigator.clipboard.writeText(content)}
+                    variant="outline"
+                    size="sm"
+                  >
+                    Copy
+                  </Button>
+                  <ButtonLink href={txtPath} external variant="outline" size="sm">
+                    Raw
+                  </ButtonLink>
+                </div>
               </div>
-            ))}
+            </div>
+
+            {/* Document content */}
+            <div className="p-6">
+              {document.sections.map((section) => (
+                <div
+                  key={section.id}
+                  id={section.id}
+                  className="mb-6"
+                  style={{ scrollMarginTop: "var(--header-height)" }}
+                >
+                  <SectionHeader section={section} url={toRelativeUrl(section.url)} />
+                  <pre className="text-foreground overflow-auto font-mono text-sm whitespace-pre-wrap">
+                    {section.content}
+                  </pre>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </AppLayout.Content>

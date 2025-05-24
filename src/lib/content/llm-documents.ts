@@ -262,7 +262,7 @@ ${toc}`;
 
     return {
       id: "header",
-      title: directive.title,
+      title: "Table of Contents",
       description: directive.description,
       url: `${BASE_URL}/${directive.routePath}`, // Human-readable viewer URL
       type: "header",
