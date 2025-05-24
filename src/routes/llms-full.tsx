@@ -15,7 +15,7 @@ async function llmDocLoader() {
 
   try {
     // Fetch the processed JSON data
-    const response = await fetch(jsonPath);
+    const response = await environment.fetch(jsonPath);
 
     if (!response.ok) {
       throw new Error(`LLM document not found: ${jsonPath}`);
