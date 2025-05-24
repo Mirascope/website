@@ -1,5 +1,5 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
-import { LLMDocViewer } from "@/src/components/routes/llms";
+import { DocPage } from "@/src/components/routes/llms";
 import { environment } from "@/src/lib/content/environment";
 import { ContentErrorHandler } from "@/src/components";
 import { LLMDocument } from "@/src/lib/content/llm-documents";
@@ -61,5 +61,5 @@ function LLMDocViewerPage() {
     structuralSharing: false,
   });
 
-  return <LLMDocViewer {...data} />;
+  return <DocPage {...data} />;
 }

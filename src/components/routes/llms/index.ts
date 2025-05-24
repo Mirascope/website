@@ -1,1 +1,1 @@
-export { default as LLMDocViewer } from "./LLMDocViewer";
+export { default as DocPage } from "./DocPage";
