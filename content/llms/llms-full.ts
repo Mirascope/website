@@ -16,13 +16,15 @@ export default defineLLMDocDirective({
         // Learning Mirascope
         include.glob("mirascope/learn/*.mdx"),
       ],
-      "Unified abstractions for building with LLMs"
+      "Unified abstractions for building with LLMs",
+      "/docs/mirascope"
     ),
 
     section(
       "Lilypad",
       [include.wildcard("lilypad/*")],
-      "Observability and evaluation platform for LLM applications"
+      "Observability and evaluation platform for LLM applications",
+      "/docs/lilypad"
     ),
   ],
 });

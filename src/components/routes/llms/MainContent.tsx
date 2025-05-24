@@ -51,7 +51,7 @@ function IncludedDocument({ document, toRelativeUrl }: IncludedDocumentProps) {
             Copy
           </Button>
           <ButtonLink
-            href={toRelativeUrl(document.url)}
+            href={toRelativeUrl(`${BASE_URL}${document.routePath}`)}
             variant="ghost"
             size="sm"
             className="text-xs"

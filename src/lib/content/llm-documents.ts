@@ -16,7 +16,6 @@ import fs from "fs";
 import path from "path";
 import { getAllDocInfo } from "./content";
 import { parseFrontmatter } from "./mdx-processing";
-import { BASE_URL } from "../constants/site";
 import type { DocInfo } from "./spec";
 import meta from "@/content/llms/_llms-meta";
 import type { LLMDocDirective, IncludeDirective, SectionDirective } from "./llm-directives";
@@ -28,6 +27,7 @@ import type { LLMDocDirective, IncludeDirective, SectionDirective } from "./llm-
 export interface ContentItem {
   title: string;
   description?: string;
+  routePath: string;
   tokenCount: number;
   getContent(): string;
 }
@@ -37,7 +37,6 @@ export interface ContentItem {
  */
 export interface IncludedDocument extends ContentItem {
   id: string; // "docs-mirascope-learn-calls" etc
-  url: string;
   content: string; // includes <ContentSection> wrapper for content sections
   getContent(): string;
 }
@@ -81,6 +80,10 @@ export class LLMDocument implements ContentItem {
 
   get description(): string | undefined {
     return this.metadata.description;
+  }
+
+  get routePath(): string {
+    return this.metadata.routePath;
   }
 
   get tokenCount(): number {
@@ -280,7 +283,7 @@ export class LLMDocumentProcessor {
       id: generateSectionId(doc.routePath),
       title: frontmatter.title || doc.path,
       description: frontmatter.description,
-      url: `${BASE_URL}${doc.routePath}`,
+      routePath: doc.routePath,
       content: wrappedContent,
       tokenCount: countTokens(wrappedContent),
       getContent: () => wrappedContent,
@@ -339,7 +342,7 @@ ${toc}`;
       id: "header",
       title: "Table of Contents",
       description: directive.description,
-      url: `${BASE_URL}/${directive.routePath}`, // Human-readable viewer URL
+      routePath: `/${directive.routePath}`, // Human-readable viewer URL
       content: headerContent,
       tokenCount: countTokens(headerContent),
       getContent: () => headerContent,
@@ -390,6 +393,9 @@ ${toc}`;
       const contentSection: ContentSection = {
         title: sectionDirective.title,
         description: sectionDirective.description,
+        routePath:
+          sectionDirective.routePath ||
+          `#${sectionDirective.title.toLowerCase().replace(/\s+/g, "-")}`,
         documents: sectionDocs,
         tokenCount: sectionTokenCount,
         getContent: () => sectionDocs.map((doc) => doc.getContent()).join("\n\n"),

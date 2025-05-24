@@ -17,6 +17,7 @@ export interface IncludeDirective {
 export interface SectionDirective {
   title: string;
   description?: string;
+  routePath?: string;
   includes: IncludeDirective[];
 }
 
@@ -43,11 +44,13 @@ export interface LLMDocMeta {
 export function section(
   title: string,
   includes: IncludeDirective[],
-  description?: string
+  description?: string,
+  routePath?: string
 ): SectionDirective {
   return {
     title,
     description,
+    routePath,
     includes,
   };
 }
