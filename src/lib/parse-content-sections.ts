@@ -1,4 +1,4 @@
-interface ParsedContentSection {
+interface ParsedIncludedDocument {
   title: string;
   description?: string;
   url?: string;
@@ -7,7 +7,7 @@ interface ParsedContentSection {
 
 interface ParsedContent {
   header: string;
-  sections: ParsedContentSection[];
+  sections: ParsedIncludedDocument[];
 }
 
 export function parseContentSections(content: string): ParsedContent {
@@ -18,7 +18,7 @@ export function parseContentSections(content: string): ParsedContent {
   const header = parts[0].trim();
 
   // Process each section
-  const sections: ParsedContentSection[] = [];
+  const sections: ParsedIncludedDocument[] = [];
 
   for (let i = 1; i < parts.length; i++) {
     const part = parts[i];

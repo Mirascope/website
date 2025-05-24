@@ -2,7 +2,7 @@ import { Button } from "@/src/components/ui/button";
 import { ButtonLink } from "@/src/components/ui/button-link";
 import {
   LLMDocument,
-  type ContentSection as ContentSectionType,
+  type IncludedDocument as IncludedDocumentType,
 } from "@/src/lib/content/llm-documents";
 import { BASE_URL } from "@/src/lib/constants/site";
 import AppLayout from "@/src/components/core/layout/AppLayout";
@@ -22,7 +22,7 @@ const tokenBadge =
 
 // Inline SectionHeader component
 interface SectionHeaderProps {
-  section: ContentSectionType;
+  section: IncludedDocumentType;
   url: string;
 }
 

@@ -23,9 +23,9 @@ import type { LLMDocDirective, IncludeDirective } from "./llm-directives";
 /* ========== CORE TYPES =========== */
 
 /**
- * Content section in processed LLM document
+ * Individual document included in processed LLM document
  */
-export interface ContentSection {
+export interface IncludedDocument {
   id: string; // "header" | "docs-mirascope-learn-calls" etc
   title: string;
   description?: string;
@@ -47,9 +47,9 @@ export class LLMDocument {
     generatedAt: string;
     sectionsCount: number;
   };
-  public sections: ContentSection[];
+  public sections: IncludedDocument[];
 
-  constructor(metadata: LLMDocument["metadata"], sections: ContentSection[]) {
+  constructor(metadata: LLMDocument["metadata"], sections: IncludedDocument[]) {
     this.metadata = metadata;
     this.sections = sections;
   }
@@ -189,9 +189,9 @@ export class LLMDocumentProcessor {
   }
 
   /**
-   * Generate content section from a doc
+   * Generate included document from a doc
    */
-  generateContentSection(doc: DocInfo): ContentSection {
+  generateIncludedDocument(doc: DocInfo): IncludedDocument {
     const filePath = path.join(this.docsRoot, `${doc.path}.mdx`);
 
     if (!fs.existsSync(filePath)) {
@@ -229,12 +229,12 @@ export class LLMDocumentProcessor {
   }
 
   /**
-   * Generate table of contents XML from content sections
+   * Generate table of contents XML from included documents
    */
-  generateTableOfContents(contentSections: ContentSection[]): string {
+  generateTableOfContents(includedDocs: IncludedDocument[]): string {
     let xml = "<table_of_contents>\n";
 
-    for (const section of contentSections) {
+    for (const section of includedDocs) {
       xml += `  <section title="${section.title}" id="${section.id}"`;
       if (section.description) {
         xml += ` description="${section.description}"`;
@@ -247,13 +247,13 @@ export class LLMDocumentProcessor {
   }
 
   /**
-   * Generate header section from directive and content sections
+   * Generate header section from directive and included documents
    */
   generateHeaderSection(
     directive: LLMDocDirective,
-    contentSections: ContentSection[]
-  ): ContentSection {
-    const toc = this.generateTableOfContents(contentSections);
+    includedDocs: IncludedDocument[]
+  ): IncludedDocument {
+    const toc = this.generateTableOfContents(includedDocs);
     const headerContent = `# ${directive.title}
 
 ${directive.description}
@@ -280,24 +280,24 @@ ${toc}`;
 
     // Check for ID collisions
     const ids = new Set<string>();
-    const contentSections: ContentSection[] = [];
+    const includedDocs: IncludedDocument[] = [];
 
     for (const doc of resolvedDocs) {
-      const section = this.generateContentSection(doc);
+      const section = this.generateIncludedDocument(doc);
 
       if (ids.has(section.id)) {
         throw new Error(`ID collision detected: ${section.id} (from ${doc.routePath})`);
       }
 
       ids.add(section.id);
-      contentSections.push(section);
+      includedDocs.push(section);
     }
 
     // Generate header section with table of contents
-    const headerSection = this.generateHeaderSection(directive, contentSections);
+    const headerSection = this.generateHeaderSection(directive, includedDocs);
 
     // Combine all sections
-    const allSections = [headerSection, ...contentSections];
+    const allSections = [headerSection, ...includedDocs];
 
     // Calculate total tokens
     const totalTokens = allSections.reduce((sum, section) => sum + section.tokenCount, 0);
