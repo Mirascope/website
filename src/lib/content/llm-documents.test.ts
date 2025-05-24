@@ -1,5 +1,5 @@
 import { test, expect } from "bun:test";
-import { include, defineLLMDocTemplate } from "./llm-documents";
+import { include, defineLLMDocDirective } from "./llm-documents";
 import type { DocInfo } from "./spec";
 
 test("include helpers create correct directive types", () => {
@@ -19,54 +19,47 @@ test("include helpers create correct directive types", () => {
   });
 });
 
-test("defineLLMDocTemplate validates required fields", () => {
-  const validTemplate = {
-    metadata: {
-      slug: "test-doc",
-      title: "Test Document",
-      description: "A test document",
-    },
-    sections: [
-      {
-        title: "Test Section",
-        includes: [include.exact("mirascope/index.mdx")],
-      },
-    ],
+test("defineLLMDocDirective validates required fields", () => {
+  const validDirective = {
+    title: "Test Document",
+    description: "A test document",
+    routePath: "docs/test-doc",
+    includes: [include.exact("mirascope/index.mdx")],
   };
 
-  expect(() => defineLLMDocTemplate(validTemplate)).not.toThrow();
-
-  // Missing slug
-  expect(() =>
-    defineLLMDocTemplate({
-      ...validTemplate,
-      metadata: { ...validTemplate.metadata, slug: "" },
-    })
-  ).toThrow("LLM document must have a slug");
+  expect(() => defineLLMDocDirective(validDirective)).not.toThrow();
 
   // Missing title
   expect(() =>
-    defineLLMDocTemplate({
-      ...validTemplate,
-      metadata: { ...validTemplate.metadata, title: "" },
+    defineLLMDocDirective({
+      ...validDirective,
+      title: "",
     })
   ).toThrow("LLM document must have a title");
 
   // Missing description
   expect(() =>
-    defineLLMDocTemplate({
-      ...validTemplate,
-      metadata: { ...validTemplate.metadata, description: "" },
+    defineLLMDocDirective({
+      ...validDirective,
+      description: "",
     })
   ).toThrow("LLM document must have a description");
 
-  // Missing sections
+  // Missing routePath
   expect(() =>
-    defineLLMDocTemplate({
-      ...validTemplate,
-      sections: [],
+    defineLLMDocDirective({
+      ...validDirective,
+      routePath: "",
     })
-  ).toThrow("LLM document must have at least one section");
+  ).toThrow("LLM document must have a routePath");
+
+  // Missing includes
+  expect(() =>
+    defineLLMDocDirective({
+      ...validDirective,
+      includes: [],
+    })
+  ).toThrow("LLM document must have at least one include directive");
 });
 
 test("pattern matching works correctly", () => {

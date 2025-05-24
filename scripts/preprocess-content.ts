@@ -17,14 +17,41 @@ export async function preprocessContent(verbose = true): Promise<void> {
     // Process LLM documents after regular content processing (LLM docs depend on docs content)
     if (verbose) console.log("Processing LLM documents...");
     const llmDocProcessor = new LLMDocumentProcessor();
-    const outputDir = path.join(process.cwd(), "public", "docs");
-    const llmDocs = await llmDocProcessor.generateLLMDocuments(outputDir);
+    const llmDocs = await llmDocProcessor.processAllDocuments();
+
+    // Write LLM document files
+    await writeLLMDocuments(llmDocs, verbose);
 
     await generateSitemap(preprocessor.getMetadataByType().blog, llmDocs);
     return;
   } catch (error) {
     console.error("Error during preprocessing:", error);
     throw error; // Let the caller handle the error
+  }
+}
+
+/**
+ * Write LLM documents to disk as JSON and TXT files
+ */
+async function writeLLMDocuments(llmDocs: LLMDocument[], verbose = true): Promise<void> {
+  const publicDir = path.join(process.cwd(), "public");
+
+  for (const doc of llmDocs) {
+    const routePath = doc.metadata.routePath;
+
+    // Write JSON file for viewer consumption at public/static/content/{routePath}.json
+    const jsonPath = path.join(publicDir, "static", "content", `${routePath}.json`);
+    fs.mkdirSync(path.dirname(jsonPath), { recursive: true });
+    fs.writeFileSync(jsonPath, JSON.stringify(doc.toJSON(), null, 2));
+
+    // Write TXT file for direct LLM consumption at public/{routePath}.txt
+    const txtPath = path.join(publicDir, `${routePath}.txt`);
+    fs.mkdirSync(path.dirname(txtPath), { recursive: true });
+    fs.writeFileSync(txtPath, doc.toString());
+
+    if (verbose) {
+      console.log(`Generated LLM document: ${routePath} (${doc.metadata.totalTokens} tokens)`);
+    }
   }
 }
 
@@ -53,9 +80,9 @@ async function generateSitemap(blogPosts: BlogMeta[], llmDocs: LLMDocument[]): P
 
   // Add LLM document URLs to the sitemap
   llmDocs.forEach((llmDoc) => {
-    // Add the .txt file
+    // Add the .txt file (routePath already includes "docs/")
     xml += "  <url>\n";
-    xml += `    <loc>${SITE_URL}/docs/${llmDoc.routePath}.txt</loc>\n`;
+    xml += `    <loc>${SITE_URL}/${llmDoc.metadata.routePath}.txt</loc>\n`;
     xml += `    <lastmod>${today}</lastmod>\n`;
     xml += "    <changefreq>daily</changefreq>\n";
     xml += "  </url>\n";
