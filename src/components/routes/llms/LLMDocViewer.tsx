@@ -5,9 +5,7 @@ import {
   type IncludedDocument as IncludedDocumentType,
 } from "@/src/lib/content/llm-documents";
 import { BASE_URL } from "@/src/lib/constants/site";
-import AppLayout from "@/src/components/core/layout/AppLayout";
-import { TableOfContents, type TOCItem } from "@/src/components/core/navigation/TableOfContents";
-
+import { AppLayout, PageMeta, TableOfContents, type TOCItem } from "@/src/components";
 // Format token count with approximation (OpenAI tokenizer)
 const formatTokenCount = (count: number): string => {
   if (count < 1000) {
@@ -123,130 +121,140 @@ export default function LLMDocViewer({ document, txtPath }: LLMDocViewerProps) {
   }
 
   return (
-    <AppLayout>
-      <AppLayout.Content>
-        <div className="bg-background container mx-auto min-h-screen px-4 py-4">
-          {/* Single continuous document view with integrated header */}
-          <div className="bg-card/20 border-border relative overflow-hidden rounded-lg border">
-            {/* Document header - integrated into the card */}
-            <div className="bg-primary/10 border-border border-b p-6">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <h1
-                    className="mb-2 text-2xl font-bold"
-                    id="top"
-                    style={{ scrollMarginTop: "var(--header-height)" }}
-                  >
-                    {document.metadata.title}
-                  </h1>
-                  <p className="text-muted-foreground text-sm">
-                    This page contains concatenated documentation content, intended for easy
-                    consumption by Large Language Models. You can copy it using the buttons, or
-                    navigate to the raw document at{" "}
-                    <a href={txtPath} className="text-primary underline">
-                      {txtPath}
-                    </a>
-                    .
-                  </p>
-                </div>
-                <div className="ml-4 flex items-center gap-2">
-                  <span className={tokenBadge}>
-                    {formatTokenCount(document.metadata.totalTokens)} tokens
-                  </span>
-                  <Button
-                    onClick={() => navigator.clipboard.writeText(content)}
-                    variant="outline"
-                    size="sm"
-                  >
-                    Copy
-                  </Button>
-                  <ButtonLink href={txtPath} external variant="outline" size="sm">
-                    Raw
-                  </ButtonLink>
+    <>
+      <PageMeta
+        title={document.metadata.title}
+        description={document.metadata.description}
+        url={document.metadata.routePath}
+      />
+      <AppLayout>
+        <AppLayout.Content>
+          <div className="bg-background container mx-auto min-h-screen px-4 py-4">
+            {/* Single continuous document view with integrated header */}
+            <div className="bg-card/20 border-border relative overflow-hidden rounded-lg border">
+              {/* Document header - integrated into the card */}
+              <div className="bg-primary/10 border-border border-b p-6">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <h1
+                      className="mb-2 text-2xl font-bold"
+                      id="top"
+                      style={{ scrollMarginTop: "var(--header-height)" }}
+                    >
+                      {document.metadata.title}
+                    </h1>
+                    <p className="text-muted-foreground text-sm">
+                      This page contains concatenated documentation content, intended for easy
+                      consumption by Large Language Models. You can copy it using the buttons, or
+                      navigate to the raw document at{" "}
+                      <a href={txtPath} className="text-primary underline">
+                        {txtPath}
+                      </a>
+                      .
+                    </p>
+                  </div>
+                  <div className="ml-4 flex items-center gap-2">
+                    <span className={tokenBadge}>
+                      {formatTokenCount(document.metadata.totalTokens)} tokens
+                    </span>
+                    <Button
+                      onClick={() => navigator.clipboard.writeText(content)}
+                      variant="outline"
+                      size="sm"
+                    >
+                      Copy
+                    </Button>
+                    <ButtonLink href={txtPath} external variant="outline" size="sm">
+                      Raw
+                    </ButtonLink>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Document content */}
-            <div className="p-6">
-              {/* Header section */}
-              {(() => {
-                const headerSection = document.sections.find((s) => s.type === "header");
-                return headerSection ? (
-                  <div
-                    key={headerSection.id}
-                    id={headerSection.id}
-                    className="mb-8"
-                    style={{ scrollMarginTop: "var(--header-height)" }}
-                  >
-                    <SectionHeader section={headerSection} url={toRelativeUrl(headerSection.url)} />
-                    <pre className="text-foreground overflow-auto font-mono text-sm whitespace-pre-wrap">
-                      {headerSection.content}
-                    </pre>
-                  </div>
-                ) : null;
-              })()}
+              {/* Document content */}
+              <div className="p-6">
+                {/* Header section */}
+                {(() => {
+                  const headerSection = document.sections.find((s) => s.type === "header");
+                  return headerSection ? (
+                    <div
+                      key={headerSection.id}
+                      id={headerSection.id}
+                      className="mb-8"
+                      style={{ scrollMarginTop: "var(--header-height)" }}
+                    >
+                      <SectionHeader
+                        section={headerSection}
+                        url={toRelativeUrl(headerSection.url)}
+                      />
+                      <pre className="text-foreground overflow-auto font-mono text-sm whitespace-pre-wrap">
+                        {headerSection.content}
+                      </pre>
+                    </div>
+                  ) : null;
+                })()}
 
-              {/* Content sections with documents */}
-              {document.contentSections &&
-                document.sectionMap &&
-                document.contentSections.map((contentSection) => {
-                  const sectionDocs = document.sectionMap!.get(contentSection.title) || [];
-                  const sectionId = `content-section-${contentSection.title.toLowerCase().replace(/\s+/g, "-")}`;
+                {/* Content sections with documents */}
+                {document.contentSections &&
+                  document.sectionMap &&
+                  document.contentSections.map((contentSection) => {
+                    const sectionDocs = document.sectionMap!.get(contentSection.title) || [];
+                    const sectionId = `content-section-${contentSection.title.toLowerCase().replace(/\s+/g, "-")}`;
 
-                  return (
-                    <div key={sectionId} className="mb-8">
-                      {/* Content section header */}
-                      <div
-                        id={sectionId}
-                        className="border-border mb-6 border-t pt-6"
-                        style={{ scrollMarginTop: "var(--header-height)" }}
-                      >
-                        <div className="mb-4 flex items-center gap-3">
-                          <h2 className="px-2 text-2xl font-bold">{contentSection.title}</h2>
-                          {contentSection.description && (
-                            <span className="text-muted-foreground text-sm">
-                              {contentSection.description}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Documents in this section */}
-                      {sectionDocs.map((doc) => (
+                    return (
+                      <div key={sectionId} className="mb-8">
+                        {/* Content section header */}
                         <div
-                          key={doc.id}
-                          id={doc.id}
-                          className="mb-6"
+                          id={sectionId}
+                          className="border-border mb-6 border-t pt-6"
                           style={{ scrollMarginTop: "var(--header-height)" }}
                         >
-                          <SectionHeader section={doc} url={toRelativeUrl(doc.url)} />
-                          <pre className="text-foreground overflow-auto font-mono text-sm whitespace-pre-wrap">
-                            {doc.content}
-                          </pre>
+                          <div className="mb-4 flex items-center gap-3">
+                            <h2 className="px-2 text-2xl font-bold">{contentSection.title}</h2>
+                            {contentSection.description && (
+                              <span className="text-muted-foreground text-sm">
+                                {contentSection.description}
+                              </span>
+                            )}
+                          </div>
                         </div>
-                      ))}
-                    </div>
-                  );
-                })}
+
+                        {/* Documents in this section */}
+                        {sectionDocs.map((doc) => (
+                          <div
+                            key={doc.id}
+                            id={doc.id}
+                            className="mb-6"
+                            style={{ scrollMarginTop: "var(--header-height)" }}
+                          >
+                            <SectionHeader section={doc} url={toRelativeUrl(doc.url)} />
+                            <pre className="text-foreground overflow-auto font-mono text-sm whitespace-pre-wrap">
+                              {doc.content}
+                            </pre>
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  })}
+              </div>
             </div>
           </div>
-        </div>
-      </AppLayout.Content>
+        </AppLayout.Content>
 
-      <AppLayout.RightSidebar mobileCollapsible>
-        <div className="py-6">
-          <h3 className="mb-4 text-sm font-semibold">
-            <button
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              className="text-muted-foreground hover:text-foreground font-inherit cursor-pointer border-none bg-transparent p-0 transition-colors"
-            >
-              Table of Contents
-            </button>
-          </h3>
-          <TableOfContents headings={tocItems} observeHeadings />
-        </div>
-      </AppLayout.RightSidebar>
-    </AppLayout>
+        <AppLayout.RightSidebar mobileCollapsible>
+          <div className="py-6">
+            <h3 className="mb-4 text-sm font-semibold">
+              <button
+                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                className="text-muted-foreground hover:text-foreground font-inherit cursor-pointer border-none bg-transparent p-0 transition-colors"
+              >
+                Table of Contents
+              </button>
+            </h3>
+            <TableOfContents headings={tocItems} observeHeadings />
+          </div>
+        </AppLayout.RightSidebar>
+      </AppLayout>
+    </>
   );
 }
