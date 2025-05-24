@@ -3,6 +3,7 @@ import { ButtonLink } from "@/src/components/ui/button-link";
 import type { ContentItem } from "@/src/lib/content/llm-documents";
 import { BASE_URL } from "@/src/lib/constants/site";
 import { formatTokenCount, tokenBadge } from "./utils";
+import { Clipboard, Rocket } from "lucide-react";
 
 interface ContentActionsProps {
   item: ContentItem;
@@ -28,6 +29,7 @@ export default function ContentActions({
         size={size}
         className="text-xs"
       >
+        <Clipboard className="mr-1 h-4 w-4" />
         Copy
       </Button>
       {showDocs && (
@@ -37,6 +39,7 @@ export default function ContentActions({
           size={size}
           className="text-xs"
         >
+          <Rocket className="mr-1 h-4 w-4" />
           Docs
         </ButtonLink>
       )}

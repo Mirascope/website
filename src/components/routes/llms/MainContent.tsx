@@ -6,7 +6,7 @@ import {
   type ContentContainer,
 } from "@/src/lib/content/llm-documents";
 import { BASE_URL } from "@/src/lib/constants/site";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronRight, Binary } from "lucide-react";
 import ContentActions from "./ContentActions";
 
 interface IncludedDocumentProps {
@@ -136,6 +136,7 @@ function DocumentHeader({ document, txtPath }: DocumentHeaderProps) {
             showDocs={false}
           />
           <ButtonLink href={txtPath} external variant="ghost" size="sm">
+            <Binary className="mr-1 h-4 w-4" />
             Raw
           </ButtonLink>
         </div>
