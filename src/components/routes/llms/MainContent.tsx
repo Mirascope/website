@@ -71,12 +71,11 @@ function IncludedDocument({ document, toRelativeUrl }: IncludedDocumentProps) {
 }
 
 interface ContentSectionProps {
-  contentSection: { title: string; description?: string };
-  documents: IncludedDocumentType[];
+  contentSection: { title: string; description?: string; documents: IncludedDocumentType[] };
   toRelativeUrl: (url: string) => string;
 }
 
-function ContentSection({ contentSection, documents, toRelativeUrl }: ContentSectionProps) {
+function ContentSection({ contentSection, toRelativeUrl }: ContentSectionProps) {
   const sectionId = `content-section-${contentSection.title.toLowerCase().replace(/\s+/g, "-")}`;
 
   return (
@@ -96,7 +95,7 @@ function ContentSection({ contentSection, documents, toRelativeUrl }: ContentSec
       </div>
 
       {/* Documents in this section */}
-      {documents.map((doc) => (
+      {contentSection.documents.map((doc) => (
         <IncludedDocument key={doc.id} document={doc} toRelativeUrl={toRelativeUrl} />
       ))}
     </div>
@@ -172,20 +171,26 @@ export default function MainContent({ document, txtPath }: MainContentProps) {
 
         {/* Document content */}
         <div className="p-6">
-          {/* Content sections with documents */}
-          {document.contentSections &&
-            document.sectionMap &&
-            document.contentSections.map((contentSection) => {
-              const sectionDocs = document.sectionMap!.get(contentSection.title) || [];
+          {/* Render content items */}
+          {document.content.map((item) => {
+            if ("content" in item) {
+              // IncludedDocument
+              return (
+                <div key={item.id} className="mb-8">
+                  <IncludedDocument document={item} toRelativeUrl={toRelativeUrl} />
+                </div>
+              );
+            } else {
+              // ContentSection
               return (
                 <ContentSection
-                  key={contentSection.title}
-                  contentSection={contentSection}
-                  documents={sectionDocs}
+                  key={item.title}
+                  contentSection={item}
                   toRelativeUrl={toRelativeUrl}
                 />
               );
-            })}
+            }
+          })}
         </div>
       </div>
     </div>

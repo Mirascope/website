@@ -10,28 +10,41 @@ export default function TocSidebar({ document }: TocSidebarProps) {
   // Convert to hierarchical TOC items
   const tocItems: TOCItem[] = [];
 
-  // Add content sections with their documents
-  if (document.contentSections && document.sectionMap) {
-    for (const contentSection of document.contentSections) {
-      // Add the content section header
-      const sectionDocs = document.sectionMap.get(contentSection.title) || [];
-      const sectionTokens = sectionDocs.reduce((sum, doc) => sum + doc.tokenCount, 0);
+  // Process content items
+  for (const item of document.content) {
+    if ("content" in item) {
+      // IncludedDocument (e.g., Table of Contents)
+      tocItems.push({
+        id: item.id,
+        content: (
+          <div className="flex items-center gap-2">
+            <div className="flex w-10 justify-end">
+              <span className={tokenBadge}>{formatTokenCount(item.tokenCount)}</span>
+            </div>
+            <span className="font-medium">{item.title}</span>
+          </div>
+        ),
+        level: 1,
+      });
+    } else {
+      // ContentSection
+      const sectionTokens = item.documents.reduce((sum, doc) => sum + doc.tokenCount, 0);
 
       tocItems.push({
-        id: `content-section-${contentSection.title.toLowerCase().replace(/\s+/g, "-")}`,
+        id: `content-section-${item.title.toLowerCase().replace(/\s+/g, "-")}`,
         content: (
           <div className="flex items-center gap-2">
             <div className="flex w-10 justify-end">
               <span className={tokenBadge}>{formatTokenCount(sectionTokens)}</span>
             </div>
-            <span className="font-medium">{contentSection.title}</span>
+            <span className="font-medium">{item.title}</span>
           </div>
         ),
         level: 1,
       });
 
-      // Add documents under this content section
-      for (const doc of sectionDocs) {
+      // Add documents under this section
+      for (const doc of item.documents) {
         tocItems.push({
           id: doc.id,
           content: (

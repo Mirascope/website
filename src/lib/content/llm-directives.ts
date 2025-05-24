@@ -12,9 +12,9 @@ export interface IncludeDirective {
 }
 
 /**
- * Content section within an LLM document
+ * Section directive for LLM document generation (build-time configuration)
  */
-export interface ContentSection {
+export interface SectionDirective {
   title: string;
   description?: string;
   includes: IncludeDirective[];
@@ -27,7 +27,7 @@ export interface LLMDocDirective {
   title: string;
   description: string;
   routePath: string; // Where this document should be available (e.g., "docs/llms-full")
-  sections: ContentSection[];
+  sections: SectionDirective[];
 }
 
 /**
@@ -38,13 +38,13 @@ export interface LLMDocMeta {
 }
 
 /**
- * Helper function for creating content sections
+ * Helper function for creating section directives
  */
 export function section(
   title: string,
   includes: IncludeDirective[],
   description?: string
-): ContentSection {
+): SectionDirective {
   return {
     title,
     description,
