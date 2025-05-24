@@ -1,5 +1,5 @@
 import { test, expect } from "bun:test";
-import { include, defineLLMDocDirective } from "./llm-documents";
+import { include, defineLLMDocDirective } from "./llm-directives";
 import type { DocInfo } from "./spec";
 
 test("include helpers create correct directive types", () => {

@@ -22,7 +22,7 @@ public/static/
 public/sitemap.xml
 public/social-cards/
 public/seo-metadata.json
-public/docs/
+public/llms-full.txt
 .extracted-snippets/
 debug-output
 

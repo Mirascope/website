@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as PrivacyImport } from './routes/privacy'
 import { Route as PricingImport } from './routes/pricing'
+import { Route as LlmsFullImport } from './routes/llms-full'
 import { Route as DevImport } from './routes/dev'
 import { Route as CatchallImport } from './routes/$catchall'
 import { Route as IndexImport } from './routes/index'
@@ -22,7 +23,6 @@ import { Route as DevIndexImport } from './routes/dev/index'
 import { Route as BlogIndexImport } from './routes/blog.index'
 import { Route as TermsUseImport } from './routes/terms/use'
 import { Route as TermsServiceImport } from './routes/terms/service'
-import { Route as DocsLlmsFullImport } from './routes/docs.llms-full'
 import { Route as DocsSplatImport } from './routes/docs.$'
 import { Route as DevSocialCardImport } from './routes/dev/social-card'
 import { Route as DevLayoutTestImport } from './routes/dev/layout-test'
@@ -41,6 +41,12 @@ const PrivacyRoute = PrivacyImport.update({
 const PricingRoute = PricingImport.update({
   id: '/pricing',
   path: '/pricing',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LlmsFullRoute = LlmsFullImport.update({
+  id: '/llms-full',
+  path: '/llms-full',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -95,12 +101,6 @@ const TermsUseRoute = TermsUseImport.update({
 const TermsServiceRoute = TermsServiceImport.update({
   id: '/terms/service',
   path: '/terms/service',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const DocsLlmsFullRoute = DocsLlmsFullImport.update({
-  id: '/docs/llms-full',
-  path: '/docs/llms-full',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -165,6 +165,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DevImport
       parentRoute: typeof rootRoute
     }
+    '/llms-full': {
+      id: '/llms-full'
+      path: '/llms-full'
+      fullPath: '/llms-full'
+      preLoaderRoute: typeof LlmsFullImport
+      parentRoute: typeof rootRoute
+    }
     '/pricing': {
       id: '/pricing'
       path: '/pricing'
@@ -219,13 +226,6 @@ declare module '@tanstack/react-router' {
       path: '/docs/$'
       fullPath: '/docs/$'
       preLoaderRoute: typeof DocsSplatImport
-      parentRoute: typeof rootRoute
-    }
-    '/docs/llms-full': {
-      id: '/docs/llms-full'
-      path: '/docs/llms-full'
-      fullPath: '/docs/llms-full'
-      preLoaderRoute: typeof DocsLlmsFullImport
       parentRoute: typeof rootRoute
     }
     '/terms/service': {
@@ -297,6 +297,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$catchall': typeof CatchallRoute
   '/dev': typeof DevRouteWithChildren
+  '/llms-full': typeof LlmsFullRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -305,7 +306,6 @@ export interface FileRoutesByFullPath {
   '/dev/layout-test': typeof DevLayoutTestRoute
   '/dev/social-card': typeof DevSocialCardRoute
   '/docs/$': typeof DocsSplatRoute
-  '/docs/llms-full': typeof DocsLlmsFullRoute
   '/terms/service': typeof TermsServiceRoute
   '/terms/use': typeof TermsUseRoute
   '/blog': typeof BlogIndexRoute
@@ -317,6 +317,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$catchall': typeof CatchallRoute
+  '/llms-full': typeof LlmsFullRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -325,7 +326,6 @@ export interface FileRoutesByTo {
   '/dev/layout-test': typeof DevLayoutTestRoute
   '/dev/social-card': typeof DevSocialCardRoute
   '/docs/$': typeof DocsSplatRoute
-  '/docs/llms-full': typeof DocsLlmsFullRoute
   '/terms/service': typeof TermsServiceRoute
   '/terms/use': typeof TermsUseRoute
   '/blog': typeof BlogIndexRoute
@@ -339,6 +339,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/$catchall': typeof CatchallRoute
   '/dev': typeof DevRouteWithChildren
+  '/llms-full': typeof LlmsFullRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -347,7 +348,6 @@ export interface FileRoutesById {
   '/dev/layout-test': typeof DevLayoutTestRoute
   '/dev/social-card': typeof DevSocialCardRoute
   '/docs/$': typeof DocsSplatRoute
-  '/docs/llms-full': typeof DocsLlmsFullRoute
   '/terms/service': typeof TermsServiceRoute
   '/terms/use': typeof TermsUseRoute
   '/blog/': typeof BlogIndexRoute
@@ -362,6 +362,7 @@ export interface FileRouteTypes {
     | '/'
     | '/$catchall'
     | '/dev'
+    | '/llms-full'
     | '/pricing'
     | '/privacy'
     | '/blog/$slug'
@@ -370,7 +371,6 @@ export interface FileRouteTypes {
     | '/dev/layout-test'
     | '/dev/social-card'
     | '/docs/$'
-    | '/docs/llms-full'
     | '/terms/service'
     | '/terms/use'
     | '/blog'
@@ -381,6 +381,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/$catchall'
+    | '/llms-full'
     | '/pricing'
     | '/privacy'
     | '/blog/$slug'
@@ -389,7 +390,6 @@ export interface FileRouteTypes {
     | '/dev/layout-test'
     | '/dev/social-card'
     | '/docs/$'
-    | '/docs/llms-full'
     | '/terms/service'
     | '/terms/use'
     | '/blog'
@@ -401,6 +401,7 @@ export interface FileRouteTypes {
     | '/'
     | '/$catchall'
     | '/dev'
+    | '/llms-full'
     | '/pricing'
     | '/privacy'
     | '/blog/$slug'
@@ -409,7 +410,6 @@ export interface FileRouteTypes {
     | '/dev/layout-test'
     | '/dev/social-card'
     | '/docs/$'
-    | '/docs/llms-full'
     | '/terms/service'
     | '/terms/use'
     | '/blog/'
@@ -423,11 +423,11 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CatchallRoute: typeof CatchallRoute
   DevRoute: typeof DevRouteWithChildren
+  LlmsFullRoute: typeof LlmsFullRoute
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   BlogSlugRoute: typeof BlogSlugRoute
   DocsSplatRoute: typeof DocsSplatRoute
-  DocsLlmsFullRoute: typeof DocsLlmsFullRoute
   TermsServiceRoute: typeof TermsServiceRoute
   TermsUseRoute: typeof TermsUseRoute
   BlogIndexRoute: typeof BlogIndexRoute
@@ -439,11 +439,11 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CatchallRoute: CatchallRoute,
   DevRoute: DevRouteWithChildren,
+  LlmsFullRoute: LlmsFullRoute,
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   BlogSlugRoute: BlogSlugRoute,
   DocsSplatRoute: DocsSplatRoute,
-  DocsLlmsFullRoute: DocsLlmsFullRoute,
   TermsServiceRoute: TermsServiceRoute,
   TermsUseRoute: TermsUseRoute,
   BlogIndexRoute: BlogIndexRoute,
@@ -464,11 +464,11 @@ export const routeTree = rootRoute
         "/",
         "/$catchall",
         "/dev",
+        "/llms-full",
         "/pricing",
         "/privacy",
         "/blog/$slug",
         "/docs/$",
-        "/docs/llms-full",
         "/terms/service",
         "/terms/use",
         "/blog/",
@@ -491,6 +491,9 @@ export const routeTree = rootRoute
         "/dev/social-card",
         "/dev/"
       ]
+    },
+    "/llms-full": {
+      "filePath": "llms-full.tsx"
     },
     "/pricing": {
       "filePath": "pricing.tsx"
@@ -519,9 +522,6 @@ export const routeTree = rootRoute
     },
     "/docs/$": {
       "filePath": "docs.$.tsx"
-    },
-    "/docs/llms-full": {
-      "filePath": "docs.llms-full.tsx"
     },
     "/terms/service": {
       "filePath": "terms/service.tsx"
