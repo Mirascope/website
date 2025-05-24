@@ -6,6 +6,15 @@ import {
 } from "@/src/lib/content/llm-documents";
 import { BASE_URL } from "@/src/lib/constants/site";
 
+// Format token count with approximation (OpenAI tokenizer)
+const formatTokenCount = (count: number): string => {
+  if (count < 1000) {
+    return "<1k";
+  }
+  const rounded = Math.round(count / 1000);
+  return `~${rounded}k`;
+};
+
 // Inline SectionHeader component
 interface SectionHeaderProps {
   section: ContentSectionType;
@@ -20,11 +29,11 @@ function SectionHeader({ section, url }: SectionHeaderProps) {
   return (
     <div className="bg-card/95 border-border sticky top-4 z-10 mb-2 flex items-center justify-between rounded-lg border p-3 shadow-sm backdrop-blur-sm">
       <div className="flex-1">
-        <h2 className="text-lg font-semibold">{section.title}</h2>
+        <h2 className="font-sans text-lg font-semibold">{section.title}</h2>
       </div>
       <div className="flex items-center gap-2">
         <span className="bg-secondary text-secondary-foreground rounded-full px-2 py-1 text-xs font-medium">
-          {section.tokenCount.toLocaleString()} tokens
+          {formatTokenCount(section.tokenCount)} tokens
         </span>
         <Button onClick={handleCopySection} variant="outline" size="sm">
           Copy
@@ -53,9 +62,18 @@ export default function LLMDocViewer({ document, txtPath }: LLMDocViewerProps) {
   return (
     <div className="bg-background container mx-auto min-h-screen px-4 py-8">
       <div className="mb-8">
-        <h1 className="mb-4 text-3xl font-bold">LLM Document Viewer</h1>
+        <h1 className="mb-4 text-3xl font-bold">{document.metadata.title}</h1>
+        <p>
+          This page contains concatenated documentation content, intended for easy consumption by
+          Large Language Models. You can use the copy it using the buttons below, or navigate to the
+          raw document directly at{" "}
+          <a href={txtPath} className="text-primary underline">
+            {txtPath}
+          </a>
+          .
+        </p>
 
-        <div className="mb-6 flex gap-4">
+        <div className="my-6 flex gap-4">
           <Button onClick={() => navigator.clipboard.writeText(content)} variant="default">
             Copy Content
           </Button>
@@ -70,7 +88,7 @@ export default function LLMDocViewer({ document, txtPath }: LLMDocViewerProps) {
         </div>
 
         <div className="text-muted-foreground mb-4 text-sm">
-          Total Tokens: {document.metadata.totalTokens.toLocaleString()}
+          Total Tokens: {formatTokenCount(document.metadata.totalTokens)} tokens
         </div>
       </div>
 
