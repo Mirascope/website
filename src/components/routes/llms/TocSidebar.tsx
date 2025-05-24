@@ -11,7 +11,7 @@ export default function TocSidebar({ document }: TocSidebarProps) {
   const tocItems: TOCItem[] = [];
 
   // Process content items
-  for (const item of document.content) {
+  for (const item of document.children) {
     if ("content" in item) {
       // IncludedDocument (e.g., Table of Contents)
       tocItems.push({
@@ -27,15 +27,13 @@ export default function TocSidebar({ document }: TocSidebarProps) {
         level: 1,
       });
     } else {
-      // ContentSection
-      const sectionTokens = item.documents.reduce((sum, doc) => sum + doc.tokenCount, 0);
-
+      // ContentContainer
       tocItems.push({
         id: `content-section-${item.title.toLowerCase().replace(/\s+/g, "-")}`,
         content: (
           <div className="flex items-center gap-2">
             <div className="flex w-10 justify-end">
-              <span className={tokenBadge}>{formatTokenCount(sectionTokens)}</span>
+              <span className={tokenBadge}>{formatTokenCount(item.tokenCount)}</span>
             </div>
             <span className="font-medium">{item.title}</span>
           </div>
@@ -44,19 +42,21 @@ export default function TocSidebar({ document }: TocSidebarProps) {
       });
 
       // Add documents under this section
-      for (const doc of item.documents) {
-        tocItems.push({
-          id: doc.id,
-          content: (
-            <div className="flex items-center gap-2">
-              <div className="flex w-10 justify-end">
-                <span className={tokenBadge}>{formatTokenCount(doc.tokenCount)}</span>
+      for (const doc of item.children) {
+        if ("content" in doc && "id" in doc) {
+          tocItems.push({
+            id: (doc as any).id,
+            content: (
+              <div className="flex items-center gap-2">
+                <div className="flex w-10 justify-end">
+                  <span className={tokenBadge}>{formatTokenCount(doc.tokenCount)}</span>
+                </div>
+                <span>{doc.title}</span>
               </div>
-              <span>{doc.title}</span>
-            </div>
-          ),
-          level: 2,
-        });
+            ),
+            level: 2,
+          });
+        }
       }
     }
   }

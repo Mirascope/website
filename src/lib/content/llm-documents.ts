@@ -42,63 +42,61 @@ export interface IncludedDocument extends ContentItem {
 }
 
 /**
- * Processed content section (runtime data, not directive)
+ * Container that aggregates child content items (can be documents or other containers)
  */
-export interface ContentSection extends ContentItem {
-  documents: IncludedDocument[];
-  getContent(): string;
-}
-
-/**
- * Content item in an LLM document - either a standalone document or a section with documents
- */
-export type LLMContent = IncludedDocument | ContentSection;
-
-/**
- * Complete processed LLM document
- */
-export class LLMDocument implements ContentItem {
-  public metadata: {
-    title: string;
-    description: string;
-    routePath: string;
+export interface ContentContainer extends ContentItem {
+  children: ContentItem[];
+  metadata?: {
     totalTokens: number;
     generatedAt: string;
     sectionsCount: number;
   };
-  public content: LLMContent[];
+  generateToC?: boolean;
+  getContent(): string;
+}
 
-  constructor(metadata: LLMDocument["metadata"], content: LLMContent[]) {
-    this.metadata = metadata;
-    this.content = content;
-  }
+/**
+ * Content item in an LLM document - either a standalone document or a container with children
+ */
+export type LLMContent = IncludedDocument | ContentContainer;
 
-  // ContentItem interface implementation
-  get title(): string {
-    return this.metadata.title;
-  }
+/**
+ * Complete processed LLM document - now just a ContentContainer with extra metadata
+ */
+export class LLMDocument implements ContentContainer {
+  public title: string;
+  public description: string;
+  public routePath: string;
+  public tokenCount: number;
+  public children: LLMContent[];
+  public generateToC: boolean = true;
+  public metadata: {
+    totalTokens: number;
+    generatedAt: string;
+    sectionsCount: number;
+  };
 
-  get description(): string | undefined {
-    return this.metadata.description;
-  }
-
-  get routePath(): string {
-    return this.metadata.routePath;
-  }
-
-  get tokenCount(): number {
-    return this.metadata.totalTokens;
+  constructor(
+    title: string,
+    description: string,
+    routePath: string,
+    tokenCount: number,
+    children: LLMContent[],
+    metadata: { generatedAt: string; sectionsCount: number }
+  ) {
+    this.title = title;
+    this.description = description;
+    this.routePath = routePath;
+    this.tokenCount = tokenCount;
+    this.children = children;
+    this.metadata = {
+      ...metadata,
+      totalTokens: tokenCount,
+    };
   }
 
   getContent(): string {
-    return this.content
-      .map(
-        (item) =>
-          "content" in item
-            ? item.getContent() // IncludedDocument
-            : item.getContent() // ContentSection
-      )
-      .join("\n\n");
+    return this.children.map((item) => item.getContent()).join("\n\n");
   }
 
   /**
@@ -106,8 +104,13 @@ export class LLMDocument implements ContentItem {
    */
   toJSON(): object {
     return {
+      title: this.title,
+      description: this.description,
+      routePath: this.routePath,
+      tokenCount: this.tokenCount,
+      children: this.children,
+      generateToC: this.generateToC,
       metadata: this.metadata,
-      content: this.content,
     };
   }
 
@@ -116,7 +119,7 @@ export class LLMDocument implements ContentItem {
    */
   static fromJSON(data: any): LLMDocument {
     // Reconstruct content items with proper methods
-    const content: LLMContent[] = data.content.map((item: any) => {
+    const children: LLMContent[] = data.children.map((item: any) => {
       if ("content" in item) {
         // IncludedDocument - add getContent method
         return {
@@ -124,24 +127,29 @@ export class LLMDocument implements ContentItem {
           getContent: () => item.content,
         } as IncludedDocument;
       } else {
-        // ContentSection - add getContent method
-        const documents = item.documents.map((doc: any) => ({
+        // ContentContainer - add getContent method
+        const childItems = item.children.map((doc: any) => ({
           ...doc,
           getContent: () => doc.content,
         }));
         return {
           ...item,
-          documents,
-          getContent: () => documents.map((doc: IncludedDocument) => doc.getContent()).join("\n\n"),
-        } as ContentSection;
+          children: childItems,
+          getContent: () => childItems.map((child: ContentItem) => child.getContent()).join("\n\n"),
+        } as ContentContainer;
       }
     });
 
-    return new LLMDocument(data.metadata, content);
+    return new LLMDocument(
+      data.title,
+      data.description,
+      data.routePath,
+      data.tokenCount,
+      children,
+      data.metadata
+    );
   }
 }
-
-/* ========== DSL HELPERS =========== */
 
 /* ========== UTILITY FUNCTIONS =========== */
 
@@ -390,14 +398,15 @@ ${toc}`;
     for (const sectionDirective of directive.sections) {
       const sectionDocs = includedDocsBySection.get(sectionDirective.title) || [];
       const sectionTokenCount = sectionDocs.reduce((sum, doc) => sum + doc.tokenCount, 0);
-      const contentSection: ContentSection = {
+      const contentSection: ContentContainer = {
         title: sectionDirective.title,
         description: sectionDirective.description,
         routePath:
           sectionDirective.routePath ||
           `#${sectionDirective.title.toLowerCase().replace(/\s+/g, "-")}`,
-        documents: sectionDocs,
+        children: sectionDocs,
         tokenCount: sectionTokenCount,
+        generateToC: false, // Sections don't generate their own ToC
         getContent: () => sectionDocs.map((doc) => doc.getContent()).join("\n\n"),
       };
       content.push(contentSection);
@@ -408,15 +417,15 @@ ${toc}`;
     const totalTokens = allDocs.reduce((sum, doc) => sum + doc.tokenCount, 0);
 
     return new LLMDocument(
+      directive.title,
+      directive.description,
+      directive.routePath,
+      totalTokens,
+      content,
       {
-        title: directive.title,
-        description: directive.description,
-        routePath: directive.routePath,
-        totalTokens,
         generatedAt: new Date().toISOString(),
         sectionsCount: allDocs.length,
-      },
-      content
+      }
     );
   }
 

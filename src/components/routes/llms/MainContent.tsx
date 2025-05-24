@@ -4,6 +4,7 @@ import { ButtonLink } from "@/src/components/ui/button-link";
 import {
   LLMDocument,
   type IncludedDocument as IncludedDocumentType,
+  type ContentContainer,
 } from "@/src/lib/content/llm-documents";
 import { BASE_URL } from "@/src/lib/constants/site";
 import { formatTokenCount, tokenBadge } from "./utils";
@@ -71,7 +72,7 @@ function IncludedDocument({ document, toRelativeUrl }: IncludedDocumentProps) {
 }
 
 interface ContentSectionProps {
-  contentSection: { title: string; description?: string; documents: IncludedDocumentType[] };
+  contentSection: ContentContainer;
   toRelativeUrl: (url: string) => string;
 }
 
@@ -95,9 +96,18 @@ function ContentSection({ contentSection, toRelativeUrl }: ContentSectionProps) 
       </div>
 
       {/* Documents in this section */}
-      {contentSection.documents.map((doc) => (
-        <IncludedDocument key={doc.id} document={doc} toRelativeUrl={toRelativeUrl} />
-      ))}
+      {contentSection.children.map((doc) => {
+        if ("content" in doc && "id" in doc) {
+          return (
+            <IncludedDocument
+              key={(doc as any).id}
+              document={doc as IncludedDocumentType}
+              toRelativeUrl={toRelativeUrl}
+            />
+          );
+        }
+        return null; // Skip nested containers for now
+      })}
     </div>
   );
 }
@@ -168,7 +178,7 @@ export default function MainContent({ document, txtPath }: MainContentProps) {
         {/* Document content */}
         <div className="p-6">
           {/* Render content items */}
-          {document.content.map((item) => {
+          {document.children.map((item) => {
             if ("content" in item) {
               // IncludedDocument
               return (
@@ -177,7 +187,7 @@ export default function MainContent({ document, txtPath }: MainContentProps) {
                 </div>
               );
             } else {
-              // ContentSection
+              // ContentContainer
               return (
                 <ContentSection
                   key={item.title}

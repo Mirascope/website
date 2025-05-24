@@ -12,9 +12,9 @@ export default function DocPage({ document, txtPath }: DocPageProps) {
   return (
     <>
       <PageMeta
-        title={document.metadata.title}
-        description={document.metadata.description}
-        url={document.metadata.routePath}
+        title={document.title}
+        description={document.description}
+        url={document.routePath}
       />
       <AppLayout>
         <AppLayout.Content>

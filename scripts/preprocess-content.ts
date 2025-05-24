@@ -37,7 +37,7 @@ async function writeLLMDocuments(llmDocs: LLMDocument[], verbose = true): Promis
   const publicDir = path.join(process.cwd(), "public");
 
   for (const doc of llmDocs) {
-    const routePath = doc.metadata.routePath;
+    const routePath = doc.routePath;
 
     // Write JSON file for viewer consumption at public/static/content/{routePath}.json
     const jsonPath = path.join(publicDir, "static", "content", `${routePath}.json`);
@@ -82,7 +82,7 @@ async function generateSitemap(blogPosts: BlogMeta[], llmDocs: LLMDocument[]): P
   llmDocs.forEach((llmDoc) => {
     // Add the .txt file (routePath already includes "docs/")
     xml += "  <url>\n";
-    xml += `    <loc>${SITE_URL}/${llmDoc.metadata.routePath}.txt</loc>\n`;
+    xml += `    <loc>${SITE_URL}/${llmDoc.routePath}.txt</loc>\n`;
     xml += `    <lastmod>${today}</lastmod>\n`;
     xml += "    <changefreq>daily</changefreq>\n";
     xml += "  </url>\n";
