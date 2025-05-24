@@ -65,7 +65,7 @@ export default function LLMDocViewer({ document, txtPath }: LLMDocViewerProps) {
   const tocItems: TOCItem[] = [
     ...document.sections.map((section) => ({
       id: section.id,
-      text: section.title,
+      content: section.title,
       level: 1, // All sections at the same level for now
     })),
   ];

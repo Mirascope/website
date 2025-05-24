@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, type ReactNode } from "react";
 import { cn } from "@/src/lib/utils";
 
 export type TOCItem = {
   id: string;
-  text: string;
+  content: string | ReactNode;
   level: number;
 };
 
@@ -100,7 +100,7 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({
                   : "text-muted-foreground hover:bg-muted border-transparent hover:rounded-md"
               )}
             >
-              {heading.text}
+              {heading.content}
             </button>
           ))}
         </nav>

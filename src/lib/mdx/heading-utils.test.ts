@@ -58,9 +58,9 @@ More content
 `;
     const headings = extractHeadings(content);
     expect(headings).toHaveLength(3);
-    expect(headings[0]).toEqual({ id: "heading-1", text: "Heading 1", level: 1 });
-    expect(headings[1]).toEqual({ id: "heading-2", text: "Heading 2", level: 2 });
-    expect(headings[2]).toEqual({ id: "heading-3", text: "Heading 3", level: 3 });
+    expect(headings[0]).toEqual({ id: "heading-1", content: "Heading 1", level: 1 });
+    expect(headings[1]).toEqual({ id: "heading-2", content: "Heading 2", level: 2 });
+    expect(headings[2]).toEqual({ id: "heading-3", content: "Heading 3", level: 3 });
   });
 
   test("respects explicit heading IDs", () => {
@@ -87,8 +87,8 @@ More content
 `;
     const headings = extractHeadings(content);
     expect(headings).toHaveLength(2);
-    expect(headings[0].text).toBe("Real Heading");
-    expect(headings[1].text).toBe("Another Real Heading");
+    expect(headings[0].content).toBe("Real Heading");
+    expect(headings[1].content).toBe("Another Real Heading");
   });
 
   test("ignores headings inside component tags", () => {
@@ -103,8 +103,8 @@ More content
 `;
     const headings = extractHeadings(content);
     expect(headings).toHaveLength(2);
-    expect(headings[0].text).toBe("Real Heading");
-    expect(headings[1].text).toBe("Another Real Heading");
+    expect(headings[0].content).toBe("Real Heading");
+    expect(headings[1].content).toBe("Another Real Heading");
   });
 
   test("handles heading with ApiType component", () => {
@@ -117,7 +117,7 @@ More content
 `;
     const headings = extractHeadings(content);
     expect(headings).toHaveLength(3);
-    expect(headings[1].text).toBe("[Function] callFunction");
+    expect(headings[1].content).toBe("[Function] callFunction");
     expect(headings[1].id).toBe("callfunction");
   });
 
@@ -135,8 +135,8 @@ More content
 `;
     const headings = extractHeadings(content);
     expect(headings).toHaveLength(2);
-    expect(headings[0].text).toBe("Top Heading");
-    expect(headings[1].text).toBe("[Class] Bottom Heading");
+    expect(headings[0].content).toBe("Top Heading");
+    expect(headings[1].content).toBe("[Class] Bottom Heading");
   });
 });
 
