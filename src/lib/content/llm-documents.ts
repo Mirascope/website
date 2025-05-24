@@ -310,12 +310,36 @@ export class LLMDocumentProcessor {
   }
 
   /**
-   * Generate header section from directive
+   * Generate table of contents XML from content sections
    */
-  generateHeaderSection(directive: LLMDocDirective): ContentSection {
+  generateTableOfContents(contentSections: ContentSection[]): string {
+    let xml = "<table_of_contents>\n";
+
+    for (const section of contentSections) {
+      xml += `  <section title="${section.title}" id="${section.id}"`;
+      if (section.description) {
+        xml += ` description="${section.description}"`;
+      }
+      xml += ` />\n`;
+    }
+
+    xml += "</table_of_contents>";
+    return xml;
+  }
+
+  /**
+   * Generate header section from directive and content sections
+   */
+  generateHeaderSection(
+    directive: LLMDocDirective,
+    contentSections: ContentSection[]
+  ): ContentSection {
+    const toc = this.generateTableOfContents(contentSections);
     const headerContent = `# ${directive.title}
 
-${directive.description}`;
+${directive.description}
+
+${toc}`;
 
     return {
       id: "header",
@@ -350,8 +374,8 @@ ${directive.description}`;
       contentSections.push(section);
     }
 
-    // Generate header section
-    const headerSection = this.generateHeaderSection(directive);
+    // Generate header section with table of contents
+    const headerSection = this.generateHeaderSection(directive, contentSections);
 
     // Combine all sections
     const allSections = [headerSection, ...contentSections];

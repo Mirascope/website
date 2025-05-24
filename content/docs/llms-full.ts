@@ -1,9 +1,9 @@
 import { defineLLMDocDirective, include } from "@/src/lib/content/llm-documents";
 
 export default defineLLMDocDirective({
-  title: "Complete Mirascope & Lilypad Documentation",
+  title: "Combined Mirascope & Lilypad Docs — for LLMs",
   description:
-    "Comprehensive documentation for building AI applications with Mirascope and managing them with Lilypad. It includes core concepts, detailed feature guides, and platform documentation in a single concatenated format optimized for LLM consumption.",
+    "Concatenated documentation for Mirascope and Lilypad, intended to get LLMs up to speed on both products.",
   routePath: "docs/llms-full",
   includes: [
     // Getting Started
