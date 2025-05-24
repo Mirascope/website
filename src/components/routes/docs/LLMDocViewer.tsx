@@ -61,21 +61,27 @@ export default function LLMDocViewer({ document, txtPath }: LLMDocViewerProps) {
     return url.startsWith(BASE_URL) ? url.replace(BASE_URL, "") : url;
   };
 
-  // Convert content sections to TOC items (excluding header)
-  const tocItems: TOCItem[] = document.sections
-    .filter((section) => section.type === "content")
-    .map((section) => ({
+  // Convert content sections to TOC items (including header)
+  const tocItems: TOCItem[] = [
+    ...document.sections.map((section) => ({
       id: section.id,
       text: section.title,
       level: 1, // All sections at the same level for now
-    }));
+    })),
+  ];
 
   return (
     <AppLayout>
       <AppLayout.Content>
         <div className="bg-background container mx-auto min-h-screen px-4 py-8">
           <div className="mb-8">
-            <h1 className="mb-4 text-3xl font-bold">{document.metadata.title}</h1>
+            <h1
+              className="mb-4 text-3xl font-bold"
+              id="top"
+              style={{ scrollMarginTop: "var(--header-height)" }}
+            >
+              {document.metadata.title}
+            </h1>
             <p>
               This page contains concatenated documentation content, intended for easy consumption
               by Large Language Models. You can use the copy it using the buttons below, or navigate
@@ -126,7 +132,14 @@ export default function LLMDocViewer({ document, txtPath }: LLMDocViewerProps) {
 
       <AppLayout.RightSidebar mobileCollapsible>
         <div className="py-6">
-          <h3 className="mb-4 text-sm font-semibold">Table of Contents</h3>
+          <h3 className="mb-4 text-sm font-semibold">
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              className="text-muted-foreground hover:text-foreground font-inherit cursor-pointer border-none bg-transparent p-0 transition-colors"
+            >
+              Table of Contents
+            </button>
+          </h3>
           <TableOfContents headings={tocItems} observeHeadings />
         </div>
       </AppLayout.RightSidebar>
