@@ -78,11 +78,17 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({
       <div className="pl-4">
         <nav className="space-y-1">
           {headings.map((heading) => (
-            <a
+            <button
               key={heading.id}
-              href={`#${heading.id}`}
+              onClick={(e) => {
+                e.preventDefault();
+                const element = document.getElementById(heading.id);
+                if (element) {
+                  element.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
               className={cn(
-                "-ml-[1px] block truncate border-l-2 py-1 text-[13px] transition-colors",
+                "font-inherit -ml-[1px] block w-full cursor-pointer truncate border-l-2 border-none bg-transparent py-1 text-left text-[13px] transition-colors",
                 heading.level === 1 && "pl-2",
                 heading.level === 2 && "pl-2",
                 heading.level === 3 && "pl-4",
@@ -95,7 +101,7 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({
               )}
             >
               {heading.text}
-            </a>
+            </button>
           ))}
         </nav>
       </div>
