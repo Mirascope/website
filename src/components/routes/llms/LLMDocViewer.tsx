@@ -14,7 +14,7 @@ const formatTokenCount = (count: number): string => {
     return "<1k";
   }
   const rounded = Math.round(count / 1000);
-  return `~${rounded}k`;
+  return `${rounded}k`;
 };
 
 // Inline SectionHeader component
@@ -67,9 +67,11 @@ export default function LLMDocViewer({ document, txtPath }: LLMDocViewerProps) {
       id: section.id,
       content: (
         <div className="flex items-center gap-2">
-          <span className="bg-secondary text-secondary-foreground rounded-full px-2 py-1 text-xs font-light">
-            {formatTokenCount(section.tokenCount)}
-          </span>
+          <div className="flex w-8 justify-end">
+            <span className="bg-secondary text-secondary-foreground rounded-md px-1.5 py-1 text-xs font-light">
+              {formatTokenCount(section.tokenCount)}
+            </span>
+          </div>
           <span>{section.title}</span>
         </div>
       ),
