@@ -1,6 +1,7 @@
 import { Button } from "@/src/components/ui/button";
 import { ButtonLink } from "@/src/components/ui/button-link";
 import { LLMDocument } from "@/src/lib/content/llm-documents";
+import { BASE_URL } from "@/src/lib/constants/site";
 import ContentSection from "./ContentSection";
 
 interface LLMDocViewerProps {
@@ -10,6 +11,11 @@ interface LLMDocViewerProps {
 
 export default function LLMDocViewer({ document, txtPath }: LLMDocViewerProps) {
   const content = document.toString();
+
+  // Transform absolute URLs to relative for in-site navigation
+  const toRelativeUrl = (url: string) => {
+    return url.startsWith(BASE_URL) ? url.replace(BASE_URL, "") : url;
+  };
 
   return (
     <div className="bg-background min-h-screen">
@@ -43,7 +49,7 @@ export default function LLMDocViewer({ document, txtPath }: LLMDocViewerProps) {
               key={section.id}
               title={section.title}
               description={section.description}
-              url={section.url}
+              url={toRelativeUrl(section.url)}
               content={section.content}
               tokenCount={section.tokenCount}
             />
