@@ -18,12 +18,7 @@ function IncludedDocument({ document, toRelativeUrl }: IncludedDocumentProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div
-      key={document.id}
-      id={document.id}
-      className="mb-6"
-      style={{ scrollMarginTop: "var(--header-height)" }}
-    >
+    <div id={document.id} className="mb-6" style={{ scrollMarginTop: "var(--header-height)" }}>
       <div className="border-border mb-4 flex items-center justify-between border-b pb-2">
         <div className="flex items-center gap-3">
           <button
@@ -84,7 +79,7 @@ function ContentSection({ contentSection, toRelativeUrl }: ContentSectionProps) 
         if ("content" in doc && "id" in doc) {
           return (
             <IncludedDocument
-              key={(doc as any).id}
+              key={doc.routePath}
               document={doc as IncludedDocumentType}
               toRelativeUrl={toRelativeUrl}
             />
@@ -169,12 +164,18 @@ export default function MainContent({ document, txtPath }: MainContentProps) {
           {document.children.map((item) => {
             if ("content" in item) {
               // IncludedDocument
-              return <IncludedDocument document={item} toRelativeUrl={toRelativeUrl} />;
+              return (
+                <IncludedDocument
+                  key={item.routePath}
+                  document={item}
+                  toRelativeUrl={toRelativeUrl}
+                />
+              );
             } else {
               // ContentContainer
               return (
                 <ContentSection
-                  key={item.title}
+                  key={item.routePath}
                   contentSection={item}
                   toRelativeUrl={toRelativeUrl}
                 />
