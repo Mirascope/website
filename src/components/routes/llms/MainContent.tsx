@@ -37,27 +37,6 @@ function SectionHeader({ section, url }: SectionHeaderProps) {
   );
 }
 
-interface HeaderSectionProps {
-  section: IncludedDocumentType;
-  toRelativeUrl: (url: string) => string;
-}
-
-function HeaderSection({ section, toRelativeUrl }: HeaderSectionProps) {
-  return (
-    <div
-      key={section.id}
-      id={section.id}
-      className="mb-8"
-      style={{ scrollMarginTop: "var(--header-height)" }}
-    >
-      <SectionHeader section={section} url={toRelativeUrl(section.url)} />
-      <pre className="text-foreground overflow-auto font-mono text-sm whitespace-pre-wrap">
-        {section.content}
-      </pre>
-    </div>
-  );
-}
-
 interface IncludedDocumentProps {
   document: IncludedDocumentType;
   toRelativeUrl: (url: string) => string;
@@ -181,14 +160,6 @@ export default function MainContent({ document, txtPath }: MainContentProps) {
 
         {/* Document content */}
         <div className="p-6">
-          {/* Header section */}
-          {(() => {
-            const headerSection = document.sections.find((s) => s.type === "header");
-            return headerSection ? (
-              <HeaderSection section={headerSection} toRelativeUrl={toRelativeUrl} />
-            ) : null;
-          })()}
-
           {/* Content sections with documents */}
           {document.contentSections &&
             document.sectionMap &&

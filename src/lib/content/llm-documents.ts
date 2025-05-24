@@ -26,11 +26,10 @@ import type { LLMDocDirective, IncludeDirective, ContentSection } from "./llm-di
  * Individual document included in processed LLM document
  */
 export interface IncludedDocument {
-  id: string; // "header" | "docs-mirascope-learn-calls" etc
+  id: string; // "docs-mirascope-learn-calls" etc
   title: string;
   description?: string;
   url: string;
-  type: "header" | "content";
   content: string; // includes <ContentSection> wrapper for content sections
   tokenCount: number;
 }
@@ -234,7 +233,6 @@ export class LLMDocumentProcessor {
       title: frontmatter.title || doc.path,
       description: frontmatter.description,
       url: `${BASE_URL}${doc.routePath}`,
-      type: "content",
       content: wrappedContent,
       tokenCount: countTokens(wrappedContent),
     };
@@ -293,7 +291,6 @@ ${toc}`;
       title: "Table of Contents",
       description: directive.description,
       url: `${BASE_URL}/${directive.routePath}`, // Human-readable viewer URL
-      type: "header",
       content: headerContent,
       tokenCount: countTokens(headerContent),
     };
@@ -308,8 +305,8 @@ ${toc}`;
     const allIncludedDocs: IncludedDocument[] = [];
     const includedDocsBySection = new Map<string, IncludedDocument[]>();
 
+    // Process regular content sections first
     for (const contentSection of directive.sections) {
-      // Resolve includes for this content section
       const resolvedDocs = this.resolveIncludes(contentSection.includes);
       const sectionDocs: IncludedDocument[] = [];
 
@@ -328,18 +325,29 @@ ${toc}`;
       includedDocsBySection.set(contentSection.title, sectionDocs);
     }
 
-    // Generate header section with hierarchical table of contents
-    const headerSection = this.generateHeaderSection(
+    // Now generate header section with complete TOC
+    const headerDoc = this.generateHeaderSection(
       directive,
       directive.sections,
       includedDocsBySection
     );
 
-    // Combine all sections
-    const allSections = [headerSection, ...allIncludedDocs];
+    // Create content sections, adding Table of Contents as first section
+    const tocSection: ContentSection = {
+      title: "Table of Contents",
+      description: directive.description,
+      includes: [], // TOC is generated, not included from files
+    };
+    const contentSections = [tocSection, ...directive.sections];
+
+    // Add header to the TOC section
+    includedDocsBySection.set("Table of Contents", [headerDoc]);
+
+    // Insert header at beginning of all docs
+    allIncludedDocs.unshift(headerDoc);
 
     // Calculate total tokens
-    const totalTokens = allSections.reduce((sum, section) => sum + section.tokenCount, 0);
+    const totalTokens = allIncludedDocs.reduce((sum, doc) => sum + doc.tokenCount, 0);
 
     return new LLMDocument(
       {
@@ -348,10 +356,10 @@ ${toc}`;
         routePath: directive.routePath,
         totalTokens,
         generatedAt: new Date().toISOString(),
-        sectionsCount: allSections.length,
+        sectionsCount: allIncludedDocs.length,
       },
-      allSections,
-      directive.sections,
+      allIncludedDocs,
+      contentSections,
       includedDocsBySection
     );
   }

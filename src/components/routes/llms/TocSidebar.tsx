@@ -10,23 +10,6 @@ export default function TocSidebar({ document }: TocSidebarProps) {
   // Convert to hierarchical TOC items
   const tocItems: TOCItem[] = [];
 
-  // Add header first
-  const headerSection = document.sections.find((s) => s.type === "header");
-  if (headerSection) {
-    tocItems.push({
-      id: headerSection.id,
-      content: (
-        <div className="flex items-center gap-2">
-          <div className="flex w-10 justify-end">
-            <span className={tokenBadge}>{formatTokenCount(headerSection.tokenCount)}</span>
-          </div>
-          <span>{headerSection.title}</span>
-        </div>
-      ),
-      level: 1,
-    });
-  }
-
   // Add content sections with their documents
   if (document.contentSections && document.sectionMap) {
     for (const contentSection of document.contentSections) {
