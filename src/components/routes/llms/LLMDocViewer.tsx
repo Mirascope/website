@@ -203,7 +203,7 @@ export default function LLMDocViewer({ document, txtPath }: LLMDocViewerProps) {
                         style={{ scrollMarginTop: "var(--header-height)" }}
                       >
                         <div className="mb-4 flex items-center gap-3">
-                          <h2 className="text-xl font-bold">{contentSection.title}</h2>
+                          <h2 className="px-2 text-2xl font-bold">{contentSection.title}</h2>
                           {contentSection.description && (
                             <span className="text-muted-foreground text-sm">
                               {contentSection.description}

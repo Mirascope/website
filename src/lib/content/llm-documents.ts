@@ -241,36 +241,36 @@ export class LLMDocumentProcessor {
   }
 
   /**
-   * Generate table of contents XML from content sections and included documents
+   * Generate human-readable table of contents from content sections and included documents
    */
   generateTableOfContents(
     contentSections: ContentSection[],
     includedDocsBySection: Map<string, IncludedDocument[]>
   ): string {
-    let xml = "<table_of_contents>\n";
+    let toc = "# Table of Contents\n\n";
 
     for (const contentSection of contentSections) {
-      xml += `  <section title="${contentSection.title}" level="1"`;
+      // Section title with description
+      toc += `# ${contentSection.title}`;
       if (contentSection.description) {
-        xml += ` description="${contentSection.description}"`;
+        toc += ` - ${contentSection.description}`;
       }
-      xml += `>\n`;
+      toc += "\n\n";
 
       // Add included documents under this content section
       const docs = includedDocsBySection.get(contentSection.title) || [];
       for (const doc of docs) {
-        xml += `    <document title="${doc.title}" id="${doc.id}" level="2"`;
+        toc += `## ${doc.title}`;
         if (doc.description) {
-          xml += ` description="${doc.description}"`;
+          toc += `\n- ${doc.description}`;
         }
-        xml += ` />\n`;
+        toc += "\n\n";
       }
 
-      xml += `  </section>\n`;
+      toc += "\n";
     }
 
-    xml += "</table_of_contents>";
-    return xml;
+    return toc.trim();
   }
 
   /**
