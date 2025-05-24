@@ -1,3 +1,7 @@
+import { countTokens, formatTokenCount } from "@/src/lib/token-counter";
+import { Button } from "@/src/components/ui/button";
+import { ButtonLink } from "@/src/components/ui/button-link";
+
 interface LLMDocViewerProps {
   content: string;
   txtPath: string;
@@ -11,33 +15,21 @@ export default function LLMDocViewer({ content, txtPath }: LLMDocViewerProps) {
           <h1 className="mb-4 text-3xl font-bold">LLM Document Viewer</h1>
 
           <div className="mb-6 flex gap-4">
-            <button
-              onClick={() => navigator.clipboard.writeText(content)}
-              className="bg-primary text-primary-foreground hover:bg-primary/90 rounded px-4 py-2"
-            >
+            <Button onClick={() => navigator.clipboard.writeText(content)} variant="default">
               Copy Content
-            </button>
+            </Button>
 
-            <a
-              href={txtPath}
-              download
-              className="bg-secondary text-secondary-foreground hover:bg-secondary/90 rounded px-4 py-2"
-            >
+            <ButtonLink href={txtPath} external variant="outline" download>
               Download .txt
-            </a>
+            </ButtonLink>
 
-            <a
-              href={txtPath}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="border-border hover:bg-muted rounded border px-4 py-2"
-            >
+            <ButtonLink href={txtPath} external variant="outline">
               View Raw
-            </a>
+            </ButtonLink>
           </div>
 
           <div className="text-muted-foreground mb-4 text-sm">
-            Approximate tokens: {Math.ceil(content.length / 4).toLocaleString()}
+            Tokens: {formatTokenCount(countTokens(content))}
           </div>
         </div>
 
