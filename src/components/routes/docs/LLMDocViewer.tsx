@@ -108,7 +108,12 @@ export default function LLMDocViewer({ document, txtPath }: LLMDocViewerProps) {
           {/* Single continuous document view */}
           <div className="bg-card/20 border-border relative rounded-lg border p-6">
             {document.sections.map((section) => (
-              <div key={section.id} className="mb-6" id={section.id}>
+              <div
+                key={section.id}
+                id={section.id}
+                className="mb-6"
+                style={{ scrollMarginTop: "var(--header-height)" }}
+              >
                 <SectionHeader section={section} url={toRelativeUrl(section.url)} />
                 <pre className="text-foreground overflow-auto font-mono text-sm whitespace-pre-wrap">
                   {section.content}
