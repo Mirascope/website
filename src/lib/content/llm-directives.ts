@@ -12,13 +12,22 @@ export interface IncludeDirective {
 }
 
 /**
+ * Content section within an LLM document
+ */
+export interface ContentSection {
+  title: string;
+  description?: string;
+  includes: IncludeDirective[];
+}
+
+/**
  * Simplified LLM document directive (checked into repo)
  */
 export interface LLMDocDirective {
   title: string;
   description: string;
   routePath: string; // Where this document should be available (e.g., "docs/llms-full")
-  includes: IncludeDirective[];
+  sections: ContentSection[];
 }
 
 /**
@@ -26,6 +35,21 @@ export interface LLMDocDirective {
  */
 export interface LLMDocMeta {
   documents: LLMDocDirective[];
+}
+
+/**
+ * Helper function for creating content sections
+ */
+export function section(
+  title: string,
+  includes: IncludeDirective[],
+  description?: string
+): ContentSection {
+  return {
+    title,
+    description,
+    includes,
+  };
 }
 
 /**
@@ -73,8 +97,20 @@ export function defineLLMDocDirective(doc: LLMDocDirective): LLMDocDirective {
   if (!doc.routePath) {
     throw new Error("LLM document must have a routePath");
   }
-  if (!doc.includes || doc.includes.length === 0) {
-    throw new Error("LLM document must have at least one include directive");
+  if (!doc.sections || doc.sections.length === 0) {
+    throw new Error("LLM document must have at least one content section");
+  }
+
+  // Validate each section
+  for (const section of doc.sections) {
+    if (!section.title) {
+      throw new Error("Content section must have a title");
+    }
+    if (!section.includes || section.includes.length === 0) {
+      throw new Error(
+        `Content section "${section.title}" must have at least one include directive`
+      );
+    }
   }
 
   return doc;

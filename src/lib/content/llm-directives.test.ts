@@ -1,5 +1,5 @@
 import { test, expect } from "bun:test";
-import { include, defineLLMDocDirective } from "./llm-directives";
+import { include, section, defineLLMDocDirective } from "./llm-directives";
 import type { DocInfo } from "./spec";
 
 test("include helpers create correct directive types", () => {
@@ -24,7 +24,7 @@ test("defineLLMDocDirective validates required fields", () => {
     title: "Test Document",
     description: "A test document",
     routePath: "docs/test-doc",
-    includes: [include.exact("mirascope/index.mdx")],
+    sections: [section("Test Section", [include.exact("mirascope/index.mdx")])],
   };
 
   expect(() => defineLLMDocDirective(validDirective)).not.toThrow();
@@ -53,13 +53,13 @@ test("defineLLMDocDirective validates required fields", () => {
     })
   ).toThrow("LLM document must have a routePath");
 
-  // Missing includes
+  // Missing sections
   expect(() =>
     defineLLMDocDirective({
       ...validDirective,
-      includes: [],
+      sections: [],
     })
-  ).toThrow("LLM document must have at least one include directive");
+  ).toThrow("LLM document must have at least one content section");
 });
 
 test("pattern matching works correctly", () => {

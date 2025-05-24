@@ -19,7 +19,7 @@ import { parseFrontmatter } from "./mdx-processing";
 import { BASE_URL } from "../constants/site";
 import type { DocInfo } from "./spec";
 import meta from "@/content/llms/_llms-meta";
-import type { LLMDocDirective, IncludeDirective } from "./llm-directives";
+import type { LLMDocDirective, IncludeDirective, ContentSection } from "./llm-directives";
 /* ========== CORE TYPES =========== */
 
 /**
@@ -48,10 +48,19 @@ export class LLMDocument {
     sectionsCount: number;
   };
   public sections: IncludedDocument[];
+  public contentSections: ContentSection[];
+  public sectionMap: Map<string, IncludedDocument[]>;
 
-  constructor(metadata: LLMDocument["metadata"], sections: IncludedDocument[]) {
+  constructor(
+    metadata: LLMDocument["metadata"],
+    sections: IncludedDocument[],
+    contentSections: ContentSection[] = [],
+    sectionMap: Map<string, IncludedDocument[]> = new Map()
+  ) {
     this.metadata = metadata;
     this.sections = sections;
+    this.contentSections = contentSections;
+    this.sectionMap = sectionMap;
   }
 
   /**
@@ -61,6 +70,8 @@ export class LLMDocument {
     return {
       metadata: this.metadata,
       sections: this.sections,
+      contentSections: this.contentSections,
+      sectionMap: Object.fromEntries(this.sectionMap),
     };
   }
 
@@ -68,7 +79,8 @@ export class LLMDocument {
    * Deserialize from JSON
    */
   static fromJSON(data: any): LLMDocument {
-    return new LLMDocument(data.metadata, data.sections);
+    const sectionMap = new Map<string, IncludedDocument[]>(Object.entries(data.sectionMap || {}));
+    return new LLMDocument(data.metadata, data.sections, data.contentSections || [], sectionMap);
   }
 
   /**
@@ -229,17 +241,32 @@ export class LLMDocumentProcessor {
   }
 
   /**
-   * Generate table of contents XML from included documents
+   * Generate table of contents XML from content sections and included documents
    */
-  generateTableOfContents(includedDocs: IncludedDocument[]): string {
+  generateTableOfContents(
+    contentSections: ContentSection[],
+    includedDocsBySection: Map<string, IncludedDocument[]>
+  ): string {
     let xml = "<table_of_contents>\n";
 
-    for (const section of includedDocs) {
-      xml += `  <section title="${section.title}" id="${section.id}"`;
-      if (section.description) {
-        xml += ` description="${section.description}"`;
+    for (const contentSection of contentSections) {
+      xml += `  <section title="${contentSection.title}" level="1"`;
+      if (contentSection.description) {
+        xml += ` description="${contentSection.description}"`;
       }
-      xml += ` />\n`;
+      xml += `>\n`;
+
+      // Add included documents under this content section
+      const docs = includedDocsBySection.get(contentSection.title) || [];
+      for (const doc of docs) {
+        xml += `    <document title="${doc.title}" id="${doc.id}" level="2"`;
+        if (doc.description) {
+          xml += ` description="${doc.description}"`;
+        }
+        xml += ` />\n`;
+      }
+
+      xml += `  </section>\n`;
     }
 
     xml += "</table_of_contents>";
@@ -251,9 +278,10 @@ export class LLMDocumentProcessor {
    */
   generateHeaderSection(
     directive: LLMDocDirective,
-    includedDocs: IncludedDocument[]
+    contentSections: ContentSection[],
+    includedDocsBySection: Map<string, IncludedDocument[]>
   ): IncludedDocument {
-    const toc = this.generateTableOfContents(includedDocs);
+    const toc = this.generateTableOfContents(contentSections, includedDocsBySection);
     const headerContent = `# ${directive.title}
 
 ${directive.description}
@@ -275,29 +303,40 @@ ${toc}`;
    * Process a directive into a complete LLM document
    */
   async processDirective(directive: LLMDocDirective): Promise<LLMDocument> {
-    // Resolve includes to get all docs
-    const resolvedDocs = this.resolveIncludes(directive.includes);
-
-    // Check for ID collisions
+    // Process each content section
     const ids = new Set<string>();
-    const includedDocs: IncludedDocument[] = [];
+    const allIncludedDocs: IncludedDocument[] = [];
+    const includedDocsBySection = new Map<string, IncludedDocument[]>();
 
-    for (const doc of resolvedDocs) {
-      const section = this.generateIncludedDocument(doc);
+    for (const contentSection of directive.sections) {
+      // Resolve includes for this content section
+      const resolvedDocs = this.resolveIncludes(contentSection.includes);
+      const sectionDocs: IncludedDocument[] = [];
 
-      if (ids.has(section.id)) {
-        throw new Error(`ID collision detected: ${section.id} (from ${doc.routePath})`);
+      for (const doc of resolvedDocs) {
+        const includedDoc = this.generateIncludedDocument(doc);
+
+        if (ids.has(includedDoc.id)) {
+          throw new Error(`ID collision detected: ${includedDoc.id} (from ${doc.routePath})`);
+        }
+
+        ids.add(includedDoc.id);
+        sectionDocs.push(includedDoc);
+        allIncludedDocs.push(includedDoc);
       }
 
-      ids.add(section.id);
-      includedDocs.push(section);
+      includedDocsBySection.set(contentSection.title, sectionDocs);
     }
 
-    // Generate header section with table of contents
-    const headerSection = this.generateHeaderSection(directive, includedDocs);
+    // Generate header section with hierarchical table of contents
+    const headerSection = this.generateHeaderSection(
+      directive,
+      directive.sections,
+      includedDocsBySection
+    );
 
     // Combine all sections
-    const allSections = [headerSection, ...includedDocs];
+    const allSections = [headerSection, ...allIncludedDocs];
 
     // Calculate total tokens
     const totalTokens = allSections.reduce((sum, section) => sum + section.tokenCount, 0);
@@ -311,7 +350,9 @@ ${toc}`;
         generatedAt: new Date().toISOString(),
         sectionsCount: allSections.length,
       },
-      allSections
+      allSections,
+      directive.sections,
+      includedDocsBySection
     );
   }
 

@@ -64,21 +64,63 @@ export default function LLMDocViewer({ document, txtPath }: LLMDocViewerProps) {
     return url.startsWith(BASE_URL) ? url.replace(BASE_URL, "") : url;
   };
 
-  // Convert content sections to TOC items (including header)
-  const tocItems: TOCItem[] = [
-    ...document.sections.map((section) => ({
-      id: section.id,
+  // Convert to hierarchical TOC items
+  const tocItems: TOCItem[] = [];
+
+  // Add header first
+  const headerSection = document.sections.find((s) => s.type === "header");
+  if (headerSection) {
+    tocItems.push({
+      id: headerSection.id,
       content: (
         <div className="flex items-center gap-2">
           <div className="flex w-10 justify-end">
-            <span className={tokenBadge}>{formatTokenCount(section.tokenCount)}</span>
+            <span className={tokenBadge}>{formatTokenCount(headerSection.tokenCount)}</span>
           </div>
-          <span>{section.title}</span>
+          <span>{headerSection.title}</span>
         </div>
       ),
-      level: 1, // All sections at the same level for now
-    })),
-  ];
+      level: 1,
+    });
+  }
+
+  // Add content sections with their documents
+  if (document.contentSections && document.sectionMap) {
+    for (const contentSection of document.contentSections) {
+      // Add the content section header
+      const sectionDocs = document.sectionMap.get(contentSection.title) || [];
+      const sectionTokens = sectionDocs.reduce((sum, doc) => sum + doc.tokenCount, 0);
+
+      tocItems.push({
+        id: `content-section-${contentSection.title.toLowerCase().replace(/\s+/g, "-")}`,
+        content: (
+          <div className="flex items-center gap-2">
+            <div className="flex w-10 justify-end">
+              <span className={tokenBadge}>{formatTokenCount(sectionTokens)}</span>
+            </div>
+            <span className="font-medium">{contentSection.title}</span>
+          </div>
+        ),
+        level: 1,
+      });
+
+      // Add documents under this content section
+      for (const doc of sectionDocs) {
+        tocItems.push({
+          id: doc.id,
+          content: (
+            <div className="flex items-center gap-2">
+              <div className="flex w-10 justify-end">
+                <span className={tokenBadge}>{formatTokenCount(doc.tokenCount)}</span>
+              </div>
+              <span>{doc.title}</span>
+            </div>
+          ),
+          level: 2,
+        });
+      }
+    }
+  }
 
   return (
     <AppLayout>
@@ -127,19 +169,66 @@ export default function LLMDocViewer({ document, txtPath }: LLMDocViewerProps) {
 
             {/* Document content */}
             <div className="p-6">
-              {document.sections.map((section) => (
-                <div
-                  key={section.id}
-                  id={section.id}
-                  className="mb-6"
-                  style={{ scrollMarginTop: "var(--header-height)" }}
-                >
-                  <SectionHeader section={section} url={toRelativeUrl(section.url)} />
-                  <pre className="text-foreground overflow-auto font-mono text-sm whitespace-pre-wrap">
-                    {section.content}
-                  </pre>
-                </div>
-              ))}
+              {/* Header section */}
+              {(() => {
+                const headerSection = document.sections.find((s) => s.type === "header");
+                return headerSection ? (
+                  <div
+                    key={headerSection.id}
+                    id={headerSection.id}
+                    className="mb-8"
+                    style={{ scrollMarginTop: "var(--header-height)" }}
+                  >
+                    <SectionHeader section={headerSection} url={toRelativeUrl(headerSection.url)} />
+                    <pre className="text-foreground overflow-auto font-mono text-sm whitespace-pre-wrap">
+                      {headerSection.content}
+                    </pre>
+                  </div>
+                ) : null;
+              })()}
+
+              {/* Content sections with documents */}
+              {document.contentSections &&
+                document.sectionMap &&
+                document.contentSections.map((contentSection) => {
+                  const sectionDocs = document.sectionMap!.get(contentSection.title) || [];
+                  const sectionId = `content-section-${contentSection.title.toLowerCase().replace(/\s+/g, "-")}`;
+
+                  return (
+                    <div key={sectionId} className="mb-8">
+                      {/* Content section header */}
+                      <div
+                        id={sectionId}
+                        className="border-border mb-6 border-t pt-6"
+                        style={{ scrollMarginTop: "var(--header-height)" }}
+                      >
+                        <div className="mb-4 flex items-center gap-3">
+                          <h2 className="text-xl font-bold">{contentSection.title}</h2>
+                          {contentSection.description && (
+                            <span className="text-muted-foreground text-sm">
+                              {contentSection.description}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Documents in this section */}
+                      {sectionDocs.map((doc) => (
+                        <div
+                          key={doc.id}
+                          id={doc.id}
+                          className="mb-6"
+                          style={{ scrollMarginTop: "var(--header-height)" }}
+                        >
+                          <SectionHeader section={doc} url={toRelativeUrl(doc.url)} />
+                          <pre className="text-foreground overflow-auto font-mono text-sm whitespace-pre-wrap">
+                            {doc.content}
+                          </pre>
+                        </div>
+                      ))}
+                    </div>
+                  );
+                })}
             </div>
           </div>
         </div>
