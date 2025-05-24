@@ -89,7 +89,7 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({
               }}
               className={cn(
                 "font-inherit -ml-[1px] block w-full cursor-pointer truncate border-l-2 border-none bg-transparent py-1 text-left text-[13px] transition-colors",
-                heading.level === 1 && "pl-2",
+                heading.level === 1 && "pl-0",
                 heading.level === 2 && "pl-2",
                 heading.level === 3 && "pl-4",
                 heading.level === 4 && "pl-6",

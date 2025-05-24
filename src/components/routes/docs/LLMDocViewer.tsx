@@ -65,7 +65,14 @@ export default function LLMDocViewer({ document, txtPath }: LLMDocViewerProps) {
   const tocItems: TOCItem[] = [
     ...document.sections.map((section) => ({
       id: section.id,
-      content: section.title,
+      content: (
+        <div className="flex items-center gap-2">
+          <span className="bg-secondary text-secondary-foreground rounded-full px-2 py-1 text-xs font-light">
+            {formatTokenCount(section.tokenCount)}
+          </span>
+          <span>{section.title}</span>
+        </div>
+      ),
       level: 1, // All sections at the same level for now
     })),
   ];
