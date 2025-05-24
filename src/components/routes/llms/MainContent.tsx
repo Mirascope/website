@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/src/components/ui/button";
 import { ButtonLink } from "@/src/components/ui/button-link";
 import {
@@ -6,36 +7,7 @@ import {
 } from "@/src/lib/content/llm-documents";
 import { BASE_URL } from "@/src/lib/constants/site";
 import { formatTokenCount, tokenBadge } from "./utils";
-
-interface SectionHeaderProps {
-  section: IncludedDocumentType;
-  url: string;
-}
-
-function SectionHeader({ section, url }: SectionHeaderProps) {
-  const handleCopySection = () => {
-    navigator.clipboard.writeText(section.content);
-  };
-
-  return (
-    <div className="border-border mb-4 flex items-center justify-between border-b pb-2">
-      <div className="flex items-center gap-3">
-        <h2 className="text-foreground rounded-md px-2 py-1 text-base font-bold">
-          {section.title}
-        </h2>
-      </div>
-      <div className="flex items-center gap-2">
-        <span className={tokenBadge}>{formatTokenCount(section.tokenCount)} tokens</span>
-        <Button onClick={handleCopySection} variant="ghost" size="sm" className="text-xs">
-          Copy
-        </Button>
-        <ButtonLink href={url} variant="ghost" size="sm" className="text-xs">
-          Docs
-        </ButtonLink>
-      </div>
-    </div>
-  );
-}
+import { ChevronDown, ChevronRight } from "lucide-react";
 
 interface IncludedDocumentProps {
   document: IncludedDocumentType;
@@ -43,6 +15,8 @@ interface IncludedDocumentProps {
 }
 
 function IncludedDocument({ document, toRelativeUrl }: IncludedDocumentProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   return (
     <div
       key={document.id}
@@ -50,10 +24,48 @@ function IncludedDocument({ document, toRelativeUrl }: IncludedDocumentProps) {
       className="mb-6"
       style={{ scrollMarginTop: "var(--header-height)" }}
     >
-      <SectionHeader section={document} url={toRelativeUrl(document.url)} />
-      <pre className="text-foreground overflow-auto font-mono text-sm whitespace-pre-wrap">
-        {document.content}
-      </pre>
+      <div className="border-border mb-4 flex items-center justify-between border-b pb-2">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
+          >
+            {isExpanded ? (
+              <ChevronDown className="h-4 w-4" />
+            ) : (
+              <ChevronRight className="h-4 w-4" />
+            )}
+            <h2 className="text-foreground rounded-md px-2 py-1 text-base font-bold">
+              {document.title}
+            </h2>
+          </button>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className={tokenBadge}>{formatTokenCount(document.tokenCount)} tokens</span>
+          <Button
+            onClick={() => navigator.clipboard.writeText(document.content)}
+            variant="ghost"
+            size="sm"
+            className="text-xs"
+          >
+            Copy
+          </Button>
+          <ButtonLink
+            href={toRelativeUrl(document.url)}
+            variant="ghost"
+            size="sm"
+            className="text-xs"
+          >
+            Docs
+          </ButtonLink>
+        </div>
+      </div>
+
+      {isExpanded && (
+        <pre className="text-foreground overflow-auto font-mono text-sm whitespace-pre-wrap">
+          {document.content}
+        </pre>
+      )}
     </div>
   );
 }
