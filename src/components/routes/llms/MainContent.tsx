@@ -43,7 +43,7 @@ function IncludedDocument({ document, toRelativeUrl }: IncludedDocumentProps) {
         <div className="flex items-center gap-2">
           <span className={tokenBadge}>{formatTokenCount(document.tokenCount)} tokens</span>
           <Button
-            onClick={() => navigator.clipboard.writeText(document.content)}
+            onClick={() => navigator.clipboard.writeText(document.getContent())}
             variant="ghost"
             size="sm"
             className="text-xs"
@@ -63,7 +63,7 @@ function IncludedDocument({ document, toRelativeUrl }: IncludedDocumentProps) {
 
       {isExpanded && (
         <pre className="text-foreground overflow-auto font-mono text-sm whitespace-pre-wrap">
-          {document.content}
+          {document.getContent()}
         </pre>
       )}
     </div>
@@ -108,8 +108,6 @@ interface DocumentHeaderProps {
 }
 
 function DocumentHeader({ document, txtPath }: DocumentHeaderProps) {
-  const content = document.toString();
-
   return (
     <div className="bg-primary/10 border-border border-b p-6">
       <div className="flex items-start justify-between">
@@ -119,7 +117,7 @@ function DocumentHeader({ document, txtPath }: DocumentHeaderProps) {
             id="top"
             style={{ scrollMarginTop: "var(--header-height)" }}
           >
-            {document.metadata.title}
+            {document.title}
           </h1>
           <p className="text-muted-foreground text-sm">
             This page contains concatenated documentation content, intended for easy consumption by
@@ -132,11 +130,9 @@ function DocumentHeader({ document, txtPath }: DocumentHeaderProps) {
           </p>
         </div>
         <div className="ml-4 flex items-center gap-2">
-          <span className={tokenBadge}>
-            {formatTokenCount(document.metadata.totalTokens)} tokens
-          </span>
+          <span className={tokenBadge}>{formatTokenCount(document.tokenCount)} tokens</span>
           <Button
-            onClick={() => navigator.clipboard.writeText(content)}
+            onClick={() => navigator.clipboard.writeText(document.getContent())}
             variant="outline"
             size="sm"
           >

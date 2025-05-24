@@ -47,10 +47,10 @@ async function writeLLMDocuments(llmDocs: LLMDocument[], verbose = true): Promis
     // Write TXT file for direct LLM consumption at public/{routePath}.txt
     const txtPath = path.join(publicDir, `${routePath}.txt`);
     fs.mkdirSync(path.dirname(txtPath), { recursive: true });
-    fs.writeFileSync(txtPath, doc.toString());
+    fs.writeFileSync(txtPath, doc.getContent());
 
     if (verbose) {
-      console.log(`Generated LLM document: ${routePath} (${doc.metadata.totalTokens} tokens)`);
+      console.log(`Generated LLM document: ${routePath} (${doc.tokenCount} tokens)`);
     }
   }
 }

@@ -23,24 +23,31 @@ import type { LLMDocDirective, IncludeDirective, SectionDirective } from "./llm-
 /* ========== CORE TYPES =========== */
 
 /**
- * Individual document included in processed LLM document
+ * Shared interface for content items that can be copied and displayed with token counts
  */
-export interface IncludedDocument {
-  id: string; // "docs-mirascope-learn-calls" etc
+export interface ContentItem {
   title: string;
   description?: string;
+  tokenCount: number;
+  getContent(): string;
+}
+
+/**
+ * Individual document included in processed LLM document
+ */
+export interface IncludedDocument extends ContentItem {
+  id: string; // "docs-mirascope-learn-calls" etc
   url: string;
   content: string; // includes <ContentSection> wrapper for content sections
-  tokenCount: number;
+  getContent(): string;
 }
 
 /**
  * Processed content section (runtime data, not directive)
  */
-export interface ContentSection {
-  title: string;
-  description?: string;
+export interface ContentSection extends ContentItem {
   documents: IncludedDocument[];
+  getContent(): string;
 }
 
 /**
@@ -51,7 +58,7 @@ export type LLMContent = IncludedDocument | ContentSection;
 /**
  * Complete processed LLM document
  */
-export class LLMDocument {
+export class LLMDocument implements ContentItem {
   public metadata: {
     title: string;
     description: string;
@@ -65,6 +72,30 @@ export class LLMDocument {
   constructor(metadata: LLMDocument["metadata"], content: LLMContent[]) {
     this.metadata = metadata;
     this.content = content;
+  }
+
+  // ContentItem interface implementation
+  get title(): string {
+    return this.metadata.title;
+  }
+
+  get description(): string | undefined {
+    return this.metadata.description;
+  }
+
+  get tokenCount(): number {
+    return this.metadata.totalTokens;
+  }
+
+  getContent(): string {
+    return this.content
+      .map(
+        (item) =>
+          "content" in item
+            ? item.getContent() // IncludedDocument
+            : item.getContent() // ContentSection
+      )
+      .join("\n\n");
   }
 
   /**
@@ -81,21 +112,29 @@ export class LLMDocument {
    * Deserialize from JSON
    */
   static fromJSON(data: any): LLMDocument {
-    return new LLMDocument(data.metadata, data.content);
-  }
+    // Reconstruct content items with proper methods
+    const content: LLMContent[] = data.content.map((item: any) => {
+      if ("content" in item) {
+        // IncludedDocument - add getContent method
+        return {
+          ...item,
+          getContent: () => item.content,
+        } as IncludedDocument;
+      } else {
+        // ContentSection - add getContent method
+        const documents = item.documents.map((doc: any) => ({
+          ...doc,
+          getContent: () => doc.content,
+        }));
+        return {
+          ...item,
+          documents,
+          getContent: () => documents.map((doc: IncludedDocument) => doc.getContent()).join("\n\n"),
+        } as ContentSection;
+      }
+    });
 
-  /**
-   * Generate .txt file content
-   */
-  toString(): string {
-    return this.content
-      .map(
-        (item) =>
-          "content" in item
-            ? item.content // IncludedDocument
-            : item.documents.map((d) => d.content).join("\n\n") // ContentSection
-      )
-      .join("\n\n");
+    return new LLMDocument(data.metadata, content);
   }
 }
 
@@ -244,6 +283,7 @@ export class LLMDocumentProcessor {
       url: `${BASE_URL}${doc.routePath}`,
       content: wrappedContent,
       tokenCount: countTokens(wrappedContent),
+      getContent: () => wrappedContent,
     };
   }
 
@@ -302,6 +342,7 @@ ${toc}`;
       url: `${BASE_URL}/${directive.routePath}`, // Human-readable viewer URL
       content: headerContent,
       tokenCount: countTokens(headerContent),
+      getContent: () => headerContent,
     };
   }
 
@@ -345,10 +386,13 @@ ${toc}`;
 
     for (const sectionDirective of directive.sections) {
       const sectionDocs = includedDocsBySection.get(sectionDirective.title) || [];
+      const sectionTokenCount = sectionDocs.reduce((sum, doc) => sum + doc.tokenCount, 0);
       const contentSection: ContentSection = {
         title: sectionDirective.title,
         description: sectionDirective.description,
         documents: sectionDocs,
+        tokenCount: sectionTokenCount,
+        getContent: () => sectionDocs.map((doc) => doc.getContent()).join("\n\n"),
       };
       content.push(contentSection);
     }
