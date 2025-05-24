@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Button } from "@/src/components/ui/button";
 import { ButtonLink } from "@/src/components/ui/button-link";
 import {
   LLMDocument,
@@ -7,8 +6,8 @@ import {
   type ContentContainer,
 } from "@/src/lib/content/llm-documents";
 import { BASE_URL } from "@/src/lib/constants/site";
-import { formatTokenCount, tokenBadge } from "./utils";
 import { ChevronDown, ChevronRight } from "lucide-react";
+import ContentActions from "./ContentActions";
 
 interface IncludedDocumentProps {
   document: IncludedDocumentType;
@@ -41,25 +40,7 @@ function IncludedDocument({ document, toRelativeUrl }: IncludedDocumentProps) {
             </h2>
           </button>
         </div>
-        <div className="flex items-center gap-2">
-          <span className={tokenBadge}>{formatTokenCount(document.tokenCount)} tokens</span>
-          <Button
-            onClick={() => navigator.clipboard.writeText(document.getContent())}
-            variant="ghost"
-            size="sm"
-            className="text-xs"
-          >
-            Copy
-          </Button>
-          <ButtonLink
-            href={toRelativeUrl(`${BASE_URL}${document.routePath}`)}
-            variant="ghost"
-            size="sm"
-            className="text-xs"
-          >
-            Docs
-          </ButtonLink>
-        </div>
+        <ContentActions item={document} toRelativeUrl={toRelativeUrl} />
       </div>
 
       {isExpanded && (
@@ -87,11 +68,14 @@ function ContentSection({ contentSection, toRelativeUrl }: ContentSectionProps) 
         className="border-border mb-6 border-t pt-6"
         style={{ scrollMarginTop: "var(--header-height)" }}
       >
-        <div className="mb-4 flex items-center gap-3">
-          <h2 className="px-2 text-2xl font-bold">{contentSection.title}</h2>
-          {contentSection.description && (
-            <span className="text-muted-foreground text-sm">{contentSection.description}</span>
-          )}
+        <div className="mb-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <h2 className="px-2 text-2xl font-bold">{contentSection.title}</h2>
+            {contentSection.description && (
+              <span className="text-muted-foreground text-sm">{contentSection.description}</span>
+            )}
+          </div>
+          <ContentActions item={contentSection} toRelativeUrl={toRelativeUrl} />
         </div>
       </div>
 
@@ -118,6 +102,11 @@ interface DocumentHeaderProps {
 }
 
 function DocumentHeader({ document, txtPath }: DocumentHeaderProps) {
+  // Transform absolute URLs to relative for in-site navigation
+  const toRelativeUrl = (url: string) => {
+    return url.startsWith(BASE_URL) ? url.replace(BASE_URL, "") : url;
+  };
+
   return (
     <div className="bg-primary/10 border-border border-b p-6">
       <div className="flex items-start justify-between">
@@ -140,14 +129,12 @@ function DocumentHeader({ document, txtPath }: DocumentHeaderProps) {
           </p>
         </div>
         <div className="ml-4 flex items-center gap-2">
-          <span className={tokenBadge}>{formatTokenCount(document.tokenCount)} tokens</span>
-          <Button
-            onClick={() => navigator.clipboard.writeText(document.getContent())}
+          <ContentActions
+            item={document}
+            toRelativeUrl={toRelativeUrl}
             variant="outline"
-            size="sm"
-          >
-            Copy
-          </Button>
+            showDocs={false}
+          />
           <ButtonLink href={txtPath} external variant="outline" size="sm">
             Raw
           </ButtonLink>
