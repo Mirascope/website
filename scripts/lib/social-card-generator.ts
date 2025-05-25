@@ -69,7 +69,8 @@ export class SocialCardGenerator {
     );
 
     // Find and process all image references
-    const imageRegex = /url\("\/([^"]+\.(png|jpg|svg))"\)|src="\/([^"]+\.(png|jpg|svg))"/g;
+    const imageRegex =
+      /url\("\/([^"]+\.(png|jpg|svg|webp))"\)|src="\/([^"]+\.(png|jpg|svg|webp))"/g;
     let match;
     const processedPaths = new Set();
 
@@ -92,9 +93,11 @@ export class SocialCardGenerator {
         const extension = path.extname(fullImagePath).substring(1);
         let mimeType = `image/${extension}`;
 
-        // Special handling for SVG
+        // Special handling for SVG and WebP
         if (extension === "svg") {
           mimeType = "image/svg+xml";
+        } else if (extension === "webp") {
+          mimeType = "image/webp";
         }
 
         // Replace all occurrences of this image with data URL
