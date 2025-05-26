@@ -9,6 +9,7 @@
  */
 import { isValidProduct } from "./route-types";
 import { getAllDocInfo } from "@/src/lib/content";
+import { canonicalizePath } from "./utils";
 
 // Group redirects map - this will be populated dynamically
 const groupRedirects: Record<string, string> = {};
@@ -22,7 +23,7 @@ function buildGroupRedirects() {
 
   // First pass: collect all valid doc paths
   allDocs.forEach((doc) => {
-    validDocPaths.add(doc.routePath);
+    validDocPaths.add(canonicalizePath(doc.routePath));
   });
 
   // Second pass: find potential group paths and their first document
@@ -43,14 +44,14 @@ function buildGroupRedirects() {
       // If this group path doesn't exist as a valid doc itself and
       // we haven't assigned a redirect target yet, use this doc
       if (!validDocPaths.has(partialPath) && !groupToFirstDoc[partialPath]) {
-        groupToFirstDoc[partialPath] = doc.routePath;
+        groupToFirstDoc[partialPath] = canonicalizePath(doc.routePath);
       }
     }
   });
 
   // Convert to URL paths for our redirects
   Object.entries(groupToFirstDoc).forEach(([groupPath, docPath]) => {
-    groupRedirects[groupPath] = docPath;
+    groupRedirects[groupPath] = canonicalizePath(docPath);
   });
 }
 
@@ -67,30 +68,31 @@ export const patternRedirects: Array<{
  * Returns the new path if a redirect is needed, or null if no redirect applies
  */
 export function processRedirects(path: string): string | null {
-  // Normalize path by removing trailing slash except for root path
-  if (path !== "/" && path.endsWith("/")) {
-    path = path.slice(0, -1);
-  }
+  const canonicalPath = canonicalizePath(path);
 
   // 1. Check group redirects for docs paths
-  if (groupRedirects[path]) {
-    return groupRedirects[path];
+  if (groupRedirects[canonicalPath]) {
+    return groupRedirects[canonicalPath];
   }
 
   // 2. Check pattern redirects
   for (const { pattern, replacement } of patternRedirects) {
-    const match = path.match(pattern);
+    const match = canonicalPath.match(pattern);
     if (match) {
-      return path.replace(pattern, replacement);
+      return canonicalPath.replace(pattern, replacement);
     }
   }
 
   // 3. Special case: redirect /docs/{invalid-product} to /docs/mirascope
-  const docsProductMatch = path.match(/^\/docs\/([^\/]+)(?:\/.*)?$/);
+  const docsProductMatch = canonicalPath.match(/^\/docs\/([^\/]+)(?:\/.*)?$/);
   if (docsProductMatch && !isValidProduct(docsProductMatch[1])) {
     return "/docs/mirascope";
   }
 
+  if (path != canonicalPath) {
+    // If the path was modified by canonicalization, return the new path
+    return canonicalPath;
+  }
   // No redirect found
   return null;
 }
