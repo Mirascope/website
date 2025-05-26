@@ -25,7 +25,8 @@
       "WebFetchTool(domain:mkdocstrings.github.io)",
       "WebFetchTool(domain:tanstack.com)",
       "WebFetchTool(domain:vite.dev)",
-      "Bash(rg:*)"
+      "Bash(rg:*)",
+      "WebFetch(domain:tanstack.com)"
     ],
     "deny": []
   }
