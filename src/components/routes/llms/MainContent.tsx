@@ -114,9 +114,8 @@ function DocumentHeader({ document, txtPath }: DocumentHeaderProps) {
             {document.title}
           </h1>
           <p className="text-muted-foreground text-sm">
-            This page contains concatenated documentation content, intended for easy consumption by
-            Large Language Models. You can copy it using the buttons, or navigate to the raw
-            document at{" "}
+            Concatenated markdown docs, intended for use by LLMs. Copy it using the buttons, or
+            navigate to{" "}
             <a href={txtPath} className="text-primary underline">
               {txtPath}
             </a>

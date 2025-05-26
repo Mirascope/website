@@ -2,7 +2,7 @@ import { defineLLMDocDirective, include, section } from "@/src/lib/content/llm-d
 import { MIRASCOPE } from "@/src/lib/constants/site";
 
 export default defineLLMDocDirective({
-  title: "llms-mirascope.txt",
+  title: "Mirascope LLM Reference",
   description: `Complete Mirascope documentation for LLMs. ${MIRASCOPE.tagline}`,
   routePath: "docs/mirascope/llms",
   sections: [
@@ -17,7 +17,7 @@ export default defineLLMDocDirective({
         include.glob("mirascope/learn/*.mdx"),
       ],
       MIRASCOPE.tagline,
-      "/docs/mirascope"
+      "/docs/mirascope/llms"
     ),
   ],
 });
