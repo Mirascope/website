@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { BASE_URL, PRODUCT_CONFIGS } from "@/src/lib/constants/site";
 import { useRouterState } from "@tanstack/react-router";
-import { routeToFilename } from "@/src/lib/utils";
+import { routeToFilename, canonicalizePath } from "@/src/lib/utils";
 import { RouteMeta } from "./RouteMeta";
 import type { ProductName } from "@/src/lib/content/spec";
 export interface PageMetaProps {
@@ -29,6 +29,7 @@ export function routeToImagePath(route: string): string {
 export function PageMeta(props: PageMetaProps) {
   const router = useRouterState();
   const currentPath = router.location.pathname;
+  console.log("Current path for metadata:", currentPath);
 
   const { title, description, image, url, type = "website", product, article, robots } = props;
 
@@ -45,27 +46,19 @@ export function PageMeta(props: PageMetaProps) {
     return generatedImage;
   }, [image, currentPath]);
 
-  // Handle URL construction
-  const ogUrl = url
-    ? url.startsWith("http")
-      ? url
-      : `${BASE_URL}${url.startsWith("/") ? url : `/${url}`}`
-    : `${BASE_URL}${currentPath}`;
-
-  // Create canonical URL with trailing slash removed for all URLs
-  const canonicalUrl = ogUrl.endsWith("/") ? ogUrl.slice(0, -1) : ogUrl;
+  // Create canonical URL following NTS rule (no trailing slash except homepage)
+  const canonicalPath = canonicalizePath(url || currentPath);
+  const canonicalUrl = url?.startsWith("http") ? url : `${BASE_URL}${canonicalPath}`;
 
   // Create absolute image URL
   const ogImage = computedImage.startsWith("http")
     ? computedImage
     : `${BASE_URL}${computedImage.startsWith("/") ? computedImage : `/${computedImage}`}`;
 
-  //We don't need this anymore as we're adding the script element directly to the RouteMeta
-
   return (
     <RouteMeta>
       <title>{pageTitle}</title>
-      <meta name="description" content={description} />
+      {description && <meta name="description" content={description} />}
       {robots && <meta name="robots" content={robots} />}
 
       {/* Canonical URL - self-referencing to prevent duplicate content issues */}
@@ -109,16 +102,16 @@ export function PageMeta(props: PageMetaProps) {
 
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />
-      <meta property="og:url" content={ogUrl} />
+      <meta property="og:url" content={canonicalUrl} />
       <meta property="og:title" content={pageTitle} />
-      <meta property="og:description" content={description} />
+      {description && <meta property="og:description" content={description} />}
       <meta property="og:image" content={ogImage} />
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:url" content={ogUrl} />
+      <meta name="twitter:url" content={canonicalUrl} />
       <meta name="twitter:title" content={pageTitle} />
-      <meta name="twitter:description" content={description} />
+      {description && <meta name="twitter:description" content={description} />}
       <meta name="twitter:image" content={ogImage} />
 
       {/* Article specific metadata */}

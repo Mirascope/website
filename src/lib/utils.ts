@@ -118,3 +118,20 @@ export function slugify(text: string): string {
     "heading"
   ); // Default to 'heading' if nothing remains
 }
+
+/**
+ * Converts a route path to a canonical URL
+ * Rule: All URLs have no trailing slash except the homepage which keeps trailing slash
+ *
+ * @param path Route path (e.g., "/blog/my-post" or "/blog/my-post/")
+ * @returns Canonical path (e.g., "/blog/my-post" or "/" for homepage)
+ */
+export function canonicalizePath(path: string): string {
+  // Handle empty or root path
+  if (!path || path === "/" || path === "") {
+    return "/";
+  }
+
+  // Remove trailing slash for all non-root paths
+  return path.endsWith("/") ? path.slice(0, -1) : path;
+}
