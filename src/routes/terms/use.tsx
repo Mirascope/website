@@ -40,7 +40,6 @@ function TermsOfUsePage() {
           content?.mdx?.frontmatter?.description ||
           "Guidelines and rules for using the Mirascope website."
         }
-        url="/terms/use"
         type="article"
       />
       <PolicyPage content={content} type="terms-use" />

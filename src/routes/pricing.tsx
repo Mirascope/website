@@ -224,7 +224,6 @@ function PricingPage() {
         title="Lilypad Pricing"
         description="Lilypad's pricing plans and features"
         product="lilypad"
-        url="/pricing"
       />
       <div className="px-4 py-4">
         <div className="mx-auto max-w-4xl">

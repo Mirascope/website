@@ -26,16 +26,14 @@ const DocsPage: React.FC<DocsPageProps> = ({ document, isLoading = false }) => {
   // Extract metadata for SEO (use defaults when loading)
   const meta = document?.meta || {
     title: "Loading...",
-    path: "",
     description: "Loading documentation content",
   };
-  const { title, path, description } = meta;
-  const urlPath = path ? `/docs/${path}` : "";
+  const { title, description } = meta;
   const product = useProduct();
 
   return (
     <>
-      <PageMeta title={title} description={description} url={urlPath} product={product} />
+      <PageMeta title={title} description={description} product={product} />
 
       <ProviderContextProvider>
         <AppLayout>

@@ -39,7 +39,6 @@ function PrivacyPage() {
           content?.mdx?.frontmatter?.description ||
           "How Mirascope collects, uses, and protects your personal information."
         }
-        url="/privacy"
         type="article"
       />
       <PolicyPage content={content} type="privacy" />

@@ -127,7 +127,6 @@ export function BlogPostPage({ post, slug, isLoading = false }: BlogPostPageProp
         title={title}
         description={post.meta.description || post.mdx?.frontmatter?.excerpt}
         image={ogImage}
-        url={`/blog/${slug}`}
         type="article"
         article={{
           publishedTime: date,

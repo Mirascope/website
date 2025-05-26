@@ -8,7 +8,6 @@ export interface PageMetaProps {
   title?: string;
   description?: string;
   image?: string;
-  url?: string;
   type?: "website" | "article";
   product?: ProductName;
   robots?: string;
@@ -29,9 +28,8 @@ export function routeToImagePath(route: string): string {
 export function PageMeta(props: PageMetaProps) {
   const router = useRouterState();
   const currentPath = router.location.pathname;
-  console.log("Current path for metadata:", currentPath);
 
-  const { title, description, image, url, type = "website", product, article, robots } = props;
+  const { title, description, image, type = "website", product, article, robots } = props;
 
   // Calculate metadata values
   const siteTitle = product ? `${PRODUCT_CONFIGS[product].title}` : "Mirascope";
@@ -47,8 +45,8 @@ export function PageMeta(props: PageMetaProps) {
   }, [image, currentPath]);
 
   // Create canonical URL following NTS rule (no trailing slash except homepage)
-  const canonicalPath = canonicalizePath(url || currentPath);
-  const canonicalUrl = url?.startsWith("http") ? url : `${BASE_URL}${canonicalPath}`;
+  const canonicalPath = canonicalizePath(currentPath);
+  const canonicalUrl = `${BASE_URL}${canonicalPath}`;
 
   // Create absolute image URL
   const ogImage = computedImage.startsWith("http")
