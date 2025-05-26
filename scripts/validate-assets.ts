@@ -7,6 +7,7 @@ import fs from "fs";
 import path from "path";
 import { JSDOM } from "jsdom";
 import { getAllRoutes } from "../src/lib/router-utils";
+import { canonicalizePath } from "../src/lib/utils";
 import { glob } from "glob";
 import { colorize, printHeader, icons, coloredLog } from "./lib/terminal";
 
@@ -15,6 +16,7 @@ interface ValidationResult {
   brokenLinks: { page: string; link: string; text: string }[];
   brokenImages: { page: string; src: string; alt: string }[];
   disallowedAssets: string[]; // Paths to PNG images that should be WebP
+  nonCanonicalLinks: { page: string; link: string; canonical: string; text: string }[];
 }
 
 async function validateLinksAndImages(
@@ -29,14 +31,10 @@ async function validateLinksAndImages(
     console.log(`Found ${validRoutes.length} valid routes in the site`);
   }
 
-  // Add route normalizations (with and without trailing slash)
+  // Create set with only canonical paths
   const validRoutesSet = new Set<string>();
   validRoutes.forEach((route) => {
-    validRoutesSet.add(route);
-    validRoutesSet.add(route + "/");
-    if (route !== "/" && route.endsWith("/")) {
-      validRoutesSet.add(route.slice(0, -1));
-    }
+    validRoutesSet.add(canonicalizePath(route));
   });
 
   // Find all HTML files in the dist directory
@@ -68,6 +66,7 @@ async function validateLinksAndImages(
 
   const brokenLinks: { page: string; link: string; text: string }[] = [];
   const brokenImages: { page: string; src: string; alt: string }[] = [];
+  const nonCanonicalLinks: { page: string; link: string; canonical: string; text: string }[] = [];
   let totalLinks = 0;
   let totalImages = 0;
 
@@ -112,8 +111,19 @@ async function validateLinksAndImages(
         urlPath = href;
       }
 
-      // Check if the link points to a valid route
-      if (!validRoutesSet.has(urlPath)) {
+      // First check if link uses canonical format
+      const canonicalPath = canonicalizePath(urlPath);
+      if (urlPath !== canonicalPath) {
+        nonCanonicalLinks.push({
+          page: currentPage,
+          link: href,
+          canonical: canonicalPath,
+          text: link.textContent || "[No text]",
+        });
+      }
+
+      // Then check if the canonical path is a valid route
+      if (!validRoutesSet.has(canonicalPath)) {
         brokenLinks.push({
           page: currentPage,
           link: href,
@@ -174,6 +184,38 @@ async function validateLinksAndImages(
     });
   } else {
     coloredLog(`\n${icons.success} All ${totalLinks} internal links are valid!`, "green");
+  }
+
+  // Output results for non-canonical links
+  if (nonCanonicalLinks.length > 0) {
+    coloredLog(
+      `\n${icons.error} Found ${nonCanonicalLinks.length} links using non-canonical URLs:`,
+      "yellow"
+    );
+
+    // Group by page for easier readability
+    const byPage = nonCanonicalLinks.reduce(
+      (acc, { page, link, canonical, text }) => {
+        if (!acc[page]) acc[page] = [];
+        acc[page].push({ link, canonical, text });
+        return acc;
+      },
+      {} as Record<string, { link: string; canonical: string; text: string }[]>
+    );
+
+    Object.entries(byPage).forEach(([page, links]) => {
+      console.log(`\n${colorize(`Page: ${page}`, "yellow")}`);
+      links.forEach(({ link, canonical, text }) => {
+        console.log(
+          `  ${icons.arrow} ${colorize(link, "yellow")} should be ${colorize(canonical, "green")} (${text.substring(0, 30)}${text.length > 30 ? "..." : ""})`
+        );
+      });
+    });
+
+    coloredLog(
+      `\nThese links will be automatically redirected, but should be updated to use canonical URLs.`,
+      "cyan"
+    );
   }
 
   // Output results for images
@@ -242,6 +284,7 @@ async function validateLinksAndImages(
     brokenLinks,
     brokenImages,
     disallowedAssets,
+    nonCanonicalLinks,
   };
 }
 
@@ -270,7 +313,11 @@ async function main() {
     let shouldFail = false;
 
     // Always fail on broken links or images
-    if (result.brokenLinks.length > 0 || result.brokenImages.length > 0) {
+    if (
+      result.brokenLinks.length > 0 ||
+      result.brokenImages.length > 0 ||
+      result.nonCanonicalLinks.length > 0
+    ) {
       shouldFail = true;
     }
 
