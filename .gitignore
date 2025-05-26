@@ -21,6 +21,7 @@ public/sitemap.xml
 public/social-cards/
 public/seo-metadata.json
 .extracted-snippets/
+debug-output
 
 # API docs generation repositories
 .api-generation-repos/
