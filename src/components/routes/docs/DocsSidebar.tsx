@@ -6,7 +6,9 @@ import type {
   SidebarConfig,
   SidebarItem,
   SidebarGroup,
+  SidebarSection,
 } from "@/src/components/core/layout/Sidebar";
+import { PRODUCT_CONFIGS } from "@/src/lib/constants/site";
 
 interface DocsSidebarProps {
   product: ProductName;
@@ -94,7 +96,7 @@ function createSidebarConfig(product: ProductName): SidebarConfig {
   }
 
   // Create sidebar sections from spec sections
-  const sidebarSections = allSections.map((section) => {
+  const sidebarSections: SidebarSection[] = allSections.map((section) => {
     // Create basePath - for index section, don't include the section slug
     const basePath =
       section.slug === "index" ? `/docs/${product}` : `/docs/${product}/${section.slug}`;
@@ -142,6 +144,22 @@ function createSidebarConfig(product: ProductName): SidebarConfig {
       groups: Object.keys(groups).length > 0 ? groups : undefined,
     };
   });
+  const productTitle = PRODUCT_CONFIGS[product]?.title || product;
+  // Inject LLM Documentation section
+  const llmItem: SidebarItem = {
+    slug: "llms",
+    label: `${productTitle} LLM Reference`,
+    routePath: `/docs/${product}/llms`,
+  };
+  const llmSection: SidebarSection = {
+    slug: "llms",
+    label: "LLM Reference",
+    basePath: `/docs/${product}/llms`,
+    items: { llms: llmItem },
+  };
+
+  // Add the LLM section to the end
+  sidebarSections.push(llmSection);
 
   // Return the complete sidebar config
   return {
