@@ -23,6 +23,7 @@ public/sitemap.xml
 public/social-cards/
 public/seo-metadata.json
 public/llms-full.txt
+public/docs
 .extracted-snippets/
 debug-output
 

@@ -29,6 +29,7 @@ import { Route as DevLayoutTestImport } from './routes/dev/layout-test'
 import { Route as DevAuditMetadataImport } from './routes/dev/audit-metadata'
 import { Route as DevSlugImport } from './routes/dev.$slug'
 import { Route as BlogSlugImport } from './routes/blog.$slug'
+import { Route as DocsProductLlmsImport } from './routes/docs.$product.llms'
 
 // Create/Update Routes
 
@@ -137,6 +138,12 @@ const DevSlugRoute = DevSlugImport.update({
 const BlogSlugRoute = BlogSlugImport.update({
   id: '/blog/$slug',
   path: '/blog/$slug',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DocsProductLlmsRoute = DocsProductLlmsImport.update({
+  id: '/docs/$product/llms',
+  path: '/docs/$product/llms',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -270,6 +277,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsIndexImport
       parentRoute: typeof rootRoute
     }
+    '/docs/$product/llms': {
+      id: '/docs/$product/llms'
+      path: '/docs/$product/llms'
+      fullPath: '/docs/$product/llms'
+      preLoaderRoute: typeof DocsProductLlmsImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -312,6 +326,7 @@ export interface FileRoutesByFullPath {
   '/dev/': typeof DevIndexRoute
   '/docs': typeof DocsIndexRoute
   '/terms': typeof TermsIndexRoute
+  '/docs/$product/llms': typeof DocsProductLlmsRoute
 }
 
 export interface FileRoutesByTo {
@@ -332,6 +347,7 @@ export interface FileRoutesByTo {
   '/dev': typeof DevIndexRoute
   '/docs': typeof DocsIndexRoute
   '/terms': typeof TermsIndexRoute
+  '/docs/$product/llms': typeof DocsProductLlmsRoute
 }
 
 export interface FileRoutesById {
@@ -354,6 +370,7 @@ export interface FileRoutesById {
   '/dev/': typeof DevIndexRoute
   '/docs/': typeof DocsIndexRoute
   '/terms/': typeof TermsIndexRoute
+  '/docs/$product/llms': typeof DocsProductLlmsRoute
 }
 
 export interface FileRouteTypes {
@@ -377,6 +394,7 @@ export interface FileRouteTypes {
     | '/dev/'
     | '/docs'
     | '/terms'
+    | '/docs/$product/llms'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -396,6 +414,7 @@ export interface FileRouteTypes {
     | '/dev'
     | '/docs'
     | '/terms'
+    | '/docs/$product/llms'
   id:
     | '__root__'
     | '/'
@@ -416,6 +435,7 @@ export interface FileRouteTypes {
     | '/dev/'
     | '/docs/'
     | '/terms/'
+    | '/docs/$product/llms'
   fileRoutesById: FileRoutesById
 }
 
@@ -433,6 +453,7 @@ export interface RootRouteChildren {
   BlogIndexRoute: typeof BlogIndexRoute
   DocsIndexRoute: typeof DocsIndexRoute
   TermsIndexRoute: typeof TermsIndexRoute
+  DocsProductLlmsRoute: typeof DocsProductLlmsRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -449,6 +470,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogIndexRoute: BlogIndexRoute,
   DocsIndexRoute: DocsIndexRoute,
   TermsIndexRoute: TermsIndexRoute,
+  DocsProductLlmsRoute: DocsProductLlmsRoute,
 }
 
 export const routeTree = rootRoute
@@ -473,7 +495,8 @@ export const routeTree = rootRoute
         "/terms/use",
         "/blog/",
         "/docs/",
-        "/terms/"
+        "/terms/",
+        "/docs/$product/llms"
       ]
     },
     "/": {
@@ -541,6 +564,9 @@ export const routeTree = rootRoute
     },
     "/terms/": {
       "filePath": "terms/index.tsx"
+    },
+    "/docs/$product/llms": {
+      "filePath": "docs.$product.llms.tsx"
     }
   }
 }

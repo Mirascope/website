@@ -56,7 +56,7 @@ function ContentSection({ contentSection, toRelativeUrl }: ContentSectionProps) 
   const sectionId = `content-section-${contentSection.title.toLowerCase().replace(/\s+/g, "-")}`;
 
   return (
-    <div key={sectionId} className="mb-8">
+    <div key={sectionId}>
       {/* Content section header */}
       <div
         id={sectionId}
@@ -152,7 +152,7 @@ export default function MainContent({ document, txtPath }: MainContentProps) {
   };
 
   return (
-    <div className="bg-background container mx-auto min-h-screen px-4 py-4">
+    <div className="bg-background container mx-auto min-h-screen px-4">
       {/* Single continuous document view with integrated header */}
       <div className="bg-card/20 border-border relative overflow-hidden rounded-lg border">
         {/* Document header - integrated into the card */}
