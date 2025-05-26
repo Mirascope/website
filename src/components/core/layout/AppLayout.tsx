@@ -246,7 +246,7 @@ AppLayout.LeftSidebar = ({ children, className, collapsible = true }: SidebarPro
             !isOpen && "translate-x-[-110%] md:translate-x-0", // Hidden on mobile when closed
             // Size and appearance
             "w-[calc(100vw-20px)] max-w-xs sm:w-[85vw] md:w-64",
-            "rounded-r-md md:border-r",
+            "rounded-r-md",
             // Always display on desktop, unless non-collapsible on mobile
             !collapsible && "md:block",
             // Animation
