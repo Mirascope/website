@@ -1,15 +1,4 @@
 #!/usr/bin/env bun
-/**
- * Unified social media generation tool
- *
- * Supports:
- * --all                  : Regenerate all metadata and images
- * --update               : Update metadata and regenerate images only for changed routes
- * --regenerate-images    : Regenerate all images using existing metadata
- * --only <path>          : Update specific route only
- * --check                : Check for missing metadata or images
- * --help                 : Show help
- */
 
 import { colorize, coloredLog, printHeader } from "./lib/terminal";
 import { generateOgImages } from "./lib/social-card-generator";
