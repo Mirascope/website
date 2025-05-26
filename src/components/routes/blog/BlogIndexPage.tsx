@@ -77,7 +77,6 @@ export function BlogIndexPage({ posts }: BlogIndexPageProps) {
       <PageMeta
         title="Blog"
         description="The latest news, updates, and insights about Mirascope and LLM application development."
-        url="/blog"
         type="website"
       />
       <BlogLayout>

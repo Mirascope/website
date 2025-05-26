@@ -11,7 +11,13 @@ import { ContentErrorHandler } from "@/src/components";
 async function contentPathLoader({ params }: { params: { _splat: string } }) {
   // Construct the full route path from the splat parameter
   const splat = params._splat;
-  const routePath = `/docs/${splat}`;
+  let routePath = `/docs/${splat}`;
+
+  // Strip hash fragment if present - hash links should load the same content as the base page
+  const hashIndex = routePath.indexOf("#");
+  if (hashIndex !== -1) {
+    routePath = routePath.substring(0, hashIndex);
+  }
 
   try {
     // Look up DocInfo for this route path using the docRegistry

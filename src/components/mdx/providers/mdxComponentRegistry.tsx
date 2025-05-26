@@ -245,24 +245,64 @@ const mediaElements = {
   // Responsive image component
   img: (props: React.ComponentPropsWithoutRef<"img">) => <ResponsiveImage {...props} />,
   a: (props: React.ComponentPropsWithoutRef<"a">) => {
-    // Check if the link is internal
     const { href, ...rest } = props;
+    const navigate = useNavigate();
+
+    // Handle hash-only links (same page)
+    if (href?.startsWith("#")) {
+      const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        e.preventDefault();
+        navigate({
+          hash: href.substring(1), // Remove the # prefix
+          replace: true,
+        });
+      };
+
+      return (
+        <a
+          href={href}
+          onClick={handleClick}
+          className="text-primary text-base no-underline hover:underline"
+          {...rest}
+        />
+      );
+    }
+
+    // Handle cross-page hash links (path + hash)
     if (
-      href &&
+      href?.includes("#") &&
       (href.startsWith("/") ||
-        (href !== "#" &&
-          !href.startsWith("http") &&
+        (!href.startsWith("http") &&
           !href.startsWith("https") &&
           !href.startsWith("mailto:") &&
           !href.startsWith("tel:")))
     ) {
-      // It's an internal link, use Link from TanStack Router
+      const [path, hash] = href.split("#");
+      return (
+        <Link
+          to={path}
+          hash={hash}
+          className="text-primary text-base no-underline hover:underline"
+          {...rest}
+        />
+      );
+    }
+
+    // Handle regular internal links
+    if (
+      href &&
+      (href.startsWith("/") ||
+        (!href.startsWith("http") &&
+          !href.startsWith("https") &&
+          !href.startsWith("mailto:") &&
+          !href.startsWith("tel:")))
+    ) {
       return (
         <Link to={href} className="text-primary text-base no-underline hover:underline" {...rest} />
       );
     }
 
-    // Use regular <a> for external links or anchor links
+    // Use regular <a> for external links
     return <a className="text-primary text-base no-underline hover:underline" {...props} />;
   },
 };

@@ -42,7 +42,6 @@ function TermsOfServicePage() {
           content?.mdx?.frontmatter?.description ||
           "Legal terms governing your use of Mirascope's platform and services."
         }
-        url="/terms/service"
         type="article"
       />
       <PolicyPage content={content} type="terms-service" />

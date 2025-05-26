@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./scripts/typecheck-snippets.sh:*)",
+      "Bash(bun run:*)",
+      "Bash(bun test:*)",
+      "Bash(find:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(gh pr view:*)",
+      "Bash(git checkout:*)",
+      "Bash(git fetch:*)",
+      "Bash(git reset:*)",
+      "Bash(grep:*)",
+      "Bash(ls:*)",
+      "Bash(mkdir:*)",
+      "Bash(node:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm run typecheck:*)",
+      "Bash(npm run update-snippets:*)",
+      "Bash(npx tsc:*)",
+      "WebFetchTool(domain:bun.sh)",
+      "WebFetchTool(domain:developers.cloudflare.com)",
+      "WebFetchTool(domain:mirascope.com)",
+      "WebFetchTool(domain:mkdocstrings.github.io)",
+      "WebFetchTool(domain:tanstack.com)",
+      "WebFetchTool(domain:vite.dev)",
+      "Bash(rg:*)",
+      "WebFetch(domain:tanstack.com)"
+    ],
+    "deny": []
+  }
+}
