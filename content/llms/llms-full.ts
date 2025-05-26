@@ -1,4 +1,5 @@
 import { defineLLMDocDirective, include, section } from "@/src/lib/content/llm-directives";
+import { MIRASCOPE, LILYPAD } from "@/src/lib/constants/site";
 
 export default defineLLMDocDirective({
   title: "llms-full.txt",
@@ -16,15 +17,10 @@ export default defineLLMDocDirective({
         // Learning Mirascope
         include.glob("mirascope/learn/*.mdx"),
       ],
-      "Unified abstractions for building with LLMs",
+      MIRASCOPE.tagline,
       "/docs/mirascope"
     ),
 
-    section(
-      "Lilypad",
-      [include.wildcard("lilypad/*")],
-      "Observability and evaluation platform for LLM applications",
-      "/docs/lilypad"
-    ),
+    section("Lilypad", [include.wildcard("lilypad/*")], LILYPAD.tagline, "/docs/lilypad"),
   ],
 });
