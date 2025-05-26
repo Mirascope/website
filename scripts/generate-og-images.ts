@@ -1,15 +1,4 @@
 #!/usr/bin/env bun
-/**
- * Unified social media generation tool
- *
- * Supports:
- * --all                  : Regenerate all metadata and images
- * --update               : Update metadata and regenerate images only for changed routes
- * --regenerate-images    : Regenerate all images using existing metadata
- * --only <path>          : Update specific route only
- * --check                : Check for missing metadata or images
- * --help                 : Show help
- */
 
 import { colorize, coloredLog, printHeader } from "./lib/terminal";
 import { generateOgImages } from "./lib/social-card-generator";
@@ -71,11 +60,19 @@ function saveMetadataToFile(metadata: RouteMetadata[], verbose = false): string 
  * Main function
  */
 async function main() {
-  printHeader("SOCIAL CARD GENERATION", "magenta");
+  // Check for test flag
+  const isTestMode = process.argv.includes("--test");
 
-  // Get all routes
+  if (isTestMode) {
+    printHeader("TEST MODE SOCIAL CARD GENERATION", "magenta");
+    coloredLog("Generating cards for test routes only", "yellow");
+  } else {
+    printHeader("SOCIAL CARD GENERATION", "magenta");
+  }
+
+  // Get routes (either all or test routes)
   const routesStart = performance.now();
-  const allRoutes = await getAllRoutes();
+  const allRoutes = isTestMode ? ["/", "/pricing"] : await getAllRoutes();
   coloredLog(
     `Found ${allRoutes.length} routes (${((performance.now() - routesStart) / 1000).toFixed(2)}s)`,
     "cyan"
@@ -99,12 +96,14 @@ async function main() {
   );
 
   // Save full metadata (with descriptions) to file
-  saveMetadataToFile(metadataList, true);
+  if (!isTestMode) {
+    saveMetadataToFile(metadataList, true);
+  }
 
   // Generate social card images (only needs route and title)
   printHeader("IMAGE GENERATION", "blue");
   const imagesStart = performance.now();
-  await generateOgImages(metadataList);
+  await generateOgImages(metadataList, true, isTestMode);
   const imagesTime = (performance.now() - imagesStart) / 1000;
   coloredLog(`Image generation complete (${imagesTime.toFixed(2)}s)`, "green");
 
@@ -112,6 +111,9 @@ async function main() {
   const totalTime = (performance.now() - routesStart) / 1000;
   printHeader("PROCESS COMPLETE", "green");
   coloredLog(`Total processing time: ${totalTime.toFixed(2)}s`, "cyan");
+  if (isTestMode) {
+    coloredLog("Test mode complete. Images saved to debug-output/.", "yellow");
+  }
 }
 
 // Run the main function

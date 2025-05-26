@@ -29,7 +29,7 @@
     }
 
     // Function to update the social card
-    function updateSocialCard(title) {
+    function updateSocialCard(title, product = 'mirascope') {
       // Update the content
       document.getElementById('title-element').textContent = title;
 
@@ -39,6 +39,31 @@
 
       document.getElementById('title-element').style.fontSize = titleFontSize;
       document.getElementById('title-element').style.lineHeight = lineHeight;
+
+      // Update product branding
+      updateProductBranding(product);
+    }
+
+    // Function to update product branding (logo and text)
+    function updateProductBranding(product) {
+      const logoImg = document.getElementById('logo-img');
+      const logoText = document.getElementById('logo-text');
+      
+      if (product === 'lilypad') {
+        // Use data URL if available (for Puppeteer), otherwise use regular path (for browser)
+        const lilypadLogoUrl = window.LOGO_DATA_URLS?.['/assets/branding/lilypad-logo.svg'] || '/assets/branding/lilypad-logo.svg';
+        logoImg.src = lilypadLogoUrl;
+        logoImg.alt = 'Lilypad Logo';
+        logoText.textContent = 'Lilypad';
+        logoText.style.color = '#409b45'; // Lilypad green
+      } else {
+        // Use data URL if available (for Puppeteer), otherwise use regular path (for browser)
+        const mirascopeLogoUrl = window.LOGO_DATA_URLS?.['/assets/branding/mirascope-logo.svg'] || '/assets/branding/mirascope-logo.svg';
+        logoImg.src = mirascopeLogoUrl;
+        logoImg.alt = 'Mirascope Logo';
+        logoText.textContent = 'Mirascope';
+        logoText.style.color = '#6366f1'; // Mirascope purple
+      }
     }
 
     // Expose the update function globally for iframe and Puppeteer communication
@@ -47,10 +72,10 @@
     // Check for URL parameters that might be passed to this template
     const urlParams = new URLSearchParams(window.location.search);
     const titleParam = urlParams.get('title');
-    const descriptionParam = urlParams.get('description');
+    const productParam = urlParams.get('product');
 
-    if (titleParam) {
-      updateSocialCard(titleParam);
+    if (titleParam && productParam) {
+      updateSocialCard(titleParam, productParam);
     }
   </script>
   <style>
@@ -116,7 +141,7 @@
 
     .logo-inner {
       position: relative;
-      padding: 5px 30px;
+      padding: 15px 42px;
     }
 
     .logo-bg {
@@ -140,7 +165,7 @@
     }
 
     .logo-img {
-      width: 48px;
+      height: 44px;
       margin-right: 12px;
       margin-bottom: 6px;
     }
@@ -195,8 +220,8 @@
         <div class="logo-inner">
           <div class="logo-bg torn-paper-effect"></div>
           <div class="logo-content">
-            <img src="/assets/branding/mirascope-logo.svg" alt="Mirascope Logo" class="logo-img">
-            <span class="logo-text">Mirascope</span>
+            <img id="logo-img" src="/assets/branding/mirascope-logo.svg" alt="Mirascope Logo" class="logo-img">
+            <span id="logo-text" class="logo-text">Mirascope</span>
           </div>
         </div>
       </div>

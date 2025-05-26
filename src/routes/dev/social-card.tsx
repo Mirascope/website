@@ -2,7 +2,7 @@ import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import { useState, useEffect, useRef, useCallback } from "react";
 import DevLayout from "@/src/components/routes/dev/DevLayout";
 import { environment } from "@/src/lib/content/environment";
-import { getAllDevMeta } from "@/src/lib/content";
+import { getAllDevMeta, type ProductName } from "@/src/lib/content";
 import { LoadingContent, ContentErrorHandler } from "@/src/components";
 
 export const Route = createFileRoute("/dev/social-card")({
@@ -40,7 +40,7 @@ export const Route = createFileRoute("/dev/social-card")({
 // Helper interface for iframe communication
 declare global {
   interface Window {
-    updateSocialCard?: (title: string) => void;
+    updateSocialCard?: (title: string, product: ProductName) => void;
     SOCIAL_CARD_CONFIG?: {
       fontSizes: Array<{
         maxChars: number;
@@ -57,6 +57,7 @@ type FontSizeRule = { maxChars: number; fontSize: string; label: string };
 function SocialCardPreview() {
   const { devPages } = useLoaderData({ from: "/dev/social-card" });
   const [title, setTitle] = useState("Your Title Goes Here");
+  const [product, setProduct] = useState<ProductName>("mirascope");
   const [fontSizeRules, setFontSizeRules] = useState<FontSizeRule[]>([]);
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -65,9 +66,9 @@ function SocialCardPreview() {
   // Update the card when form values change
   useEffect(() => {
     if (iframeLoaded && iframeRef.current?.contentWindow?.updateSocialCard) {
-      iframeRef.current.contentWindow.updateSocialCard(title);
+      iframeRef.current.contentWindow.updateSocialCard(title, product);
     }
-  }, [title, iframeLoaded]);
+  }, [title, product, iframeLoaded]);
 
   // Get the current font size rule that applies to this title length
   const getCurrentFontSizeRule = useCallback((): FontSizeRule | undefined => {
@@ -85,7 +86,7 @@ function SocialCardPreview() {
 
     // Apply initial values
     if (iframeRef.current?.contentWindow?.updateSocialCard) {
-      iframeRef.current.contentWindow.updateSocialCard(title);
+      iframeRef.current.contentWindow.updateSocialCard(title, product);
     }
   };
 
@@ -118,6 +119,21 @@ function SocialCardPreview() {
             onChange={(e) => setTitle(e.target.value)}
             className="w-full rounded-md border px-3 py-2"
           />
+        </div>
+
+        <div className="mb-6">
+          <label htmlFor="product" className="mb-2 block font-medium">
+            Product
+          </label>
+          <select
+            id="product"
+            value={product}
+            onChange={(e) => setProduct(e.target.value as ProductName)}
+            className="w-full rounded-md border px-3 py-2"
+          >
+            <option value="mirascope">Mirascope</option>
+            <option value="lilypad">Lilypad</option>
+          </select>
         </div>
 
         <div className="flex justify-center">

@@ -2,7 +2,7 @@ import puppeteer, { Browser, Page } from "puppeteer";
 import fs from "fs";
 import path from "path";
 import { getProjectRoot } from "../../src/lib/router-utils";
-import { routeToFilename } from "../../src/lib/utils";
+import { routeToFilename, getProductFromPath } from "../../src/lib/utils";
 import { coloredLog } from "./terminal";
 
 /**
@@ -72,18 +72,28 @@ export class SocialCardGenerator {
     const imageRegex =
       /url\("\/([^"]+\.(png|jpg|svg|webp))"\)|src="\/([^"]+\.(png|jpg|svg|webp))"/g;
     let match;
-    const processedPaths = new Set();
+    const processedPaths = new Set<string>();
 
+    // Pre-add logo paths that will be dynamically loaded by JavaScript
+    const requiredLogos = [
+      "assets/branding/mirascope-logo.svg",
+      "assets/branding/lilypad-logo.svg",
+    ];
+    requiredLogos.forEach((logo) => processedPaths.add(logo));
+
+    // Add images found in HTML to the processing set
     while ((match = imageRegex.exec(templateHtml)) !== null) {
       const imagePath = match[1] || match[3];
-
-      // Skip if we've already processed this path
-      if (processedPaths.has(imagePath)) {
-        continue;
+      if (imagePath) {
+        processedPaths.add(imagePath);
       }
+    }
 
-      processedPaths.add(imagePath);
+    // Track logo data URLs for JavaScript injection
+    const logoDataUrls: Record<string, string> = {};
 
+    // Process all images (both from HTML and pre-required ones)
+    for (const imagePath of processedPaths) {
       // Read the image file
       const fullImagePath = path.join(projectRoot, "public", imagePath);
 
@@ -103,6 +113,11 @@ export class SocialCardGenerator {
         // Replace all occurrences of this image with data URL
         const imgDataUrl = `data:${mimeType};base64,${imageBase64}`;
 
+        // Store logo data URLs for JavaScript injection
+        if (imagePath.includes("branding/")) {
+          logoDataUrls[`/${imagePath}`] = imgDataUrl;
+        }
+
         templateHtml = templateHtml.replace(
           new RegExp(`url\\("/+${imagePath.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"\\)`, "g"),
           `url("${imgDataUrl}")`
@@ -114,6 +129,14 @@ export class SocialCardGenerator {
         );
       }
     }
+
+    // Inject logo data URLs into the template for JavaScript use
+    const logoDataUrlsScript = `
+    <script>
+      window.LOGO_DATA_URLS = ${JSON.stringify(logoDataUrls)};
+    </script>`;
+
+    templateHtml = templateHtml.replace("</head>", `${logoDataUrlsScript}</head>`);
 
     return templateHtml;
   }
@@ -189,10 +212,17 @@ export class SocialCardGenerator {
       processedTitle = title.substring(0, pipeIndex);
     }
 
-    // Update the social card with the provided title
-    await this.page.evaluate((title) => {
-      window.updateSocialCard!(title);
-    }, processedTitle);
+    // Determine the product from the route
+    const product = getProductFromPath(route);
+
+    // Update the social card with the provided title and product
+    await this.page.evaluate(
+      (title, product) => {
+        window.updateSocialCard!(title, product);
+      },
+      processedTitle,
+      product
+    );
 
     // Brief delay to ensure rendering is complete
     await new Promise((resolve) => setTimeout(resolve, 100));
@@ -257,12 +287,8 @@ export class SocialCardGenerator {
       }
 
       try {
-        const imagePath = await this.generateSingleImage(route, title);
+        await this.generateSingleImage(route, title);
         successCount++;
-
-        if (this.options.verbose) {
-          coloredLog(`✓ Generated image for: ${route} at ${imagePath}`, "green");
-        }
       } catch (error) {
         console.error(`✗ Failed to generate image for ${route}:`);
         console.error(error);
@@ -306,7 +332,8 @@ export class SocialCardGenerator {
  */
 export async function generateOgImages(
   metadata: { route: string; title: string }[],
-  verbose = true
+  verbose = true,
+  isTestMode = false
 ): Promise<void> {
   if (metadata.length === 0) {
     if (verbose) {
@@ -317,7 +344,9 @@ export async function generateOgImages(
 
   // Ensure output directory exists
   const projectRoot = getProjectRoot();
-  const outputDir = path.join(projectRoot, "public", "social-cards");
+  const outputDir = isTestMode
+    ? path.join(projectRoot, "debug-output", "social-cards")
+    : path.join(projectRoot, "public", "social-cards");
 
   // Create generator
   const generator = new SocialCardGenerator({
