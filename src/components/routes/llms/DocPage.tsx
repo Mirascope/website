@@ -11,11 +11,7 @@ interface DocPageProps {
 export default function DocPage({ document, txtPath }: DocPageProps) {
   return (
     <>
-      <PageMeta
-        title={document.title}
-        description={document.description}
-        url={document.routePath}
-      />
+      <PageMeta title={document.title} description={document.description} />
       <AppLayout>
         <AppLayout.Content>
           <MainContent document={document} txtPath={txtPath} />
