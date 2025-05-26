@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { BASE_URL, PRODUCT_CONFIGS } from "@/src/lib/constants/site";
 import { useRouterState } from "@tanstack/react-router";
 import { routeToFilename, canonicalizePath } from "@/src/lib/utils";
@@ -36,22 +35,14 @@ export function PageMeta(props: PageMetaProps) {
   const pageTitle = title ? `${title} | ${siteTitle}` : siteTitle;
 
   // Generate image path if not provided
-  const computedImage = useMemo(() => {
-    if (image) return image;
-
-    // Use the generated social image path for this route
-    const generatedImage = routeToImagePath(currentPath);
-    return generatedImage;
-  }, [image, currentPath]);
+  const computedImage = image || routeToImagePath(currentPath);
 
   // Create canonical URL following NTS rule (no trailing slash except homepage)
   const canonicalPath = canonicalizePath(currentPath);
   const canonicalUrl = `${BASE_URL}${canonicalPath}`;
 
   // Create absolute image URL
-  const ogImage = computedImage.startsWith("http")
-    ? computedImage
-    : `${BASE_URL}${computedImage.startsWith("/") ? computedImage : `/${computedImage}`}`;
+  const ogImage = computedImage.startsWith("http") ? computedImage : `${BASE_URL}${computedImage}`;
 
   return (
     <RouteMeta>
