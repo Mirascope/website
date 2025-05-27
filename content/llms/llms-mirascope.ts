@@ -1,8 +1,7 @@
-import { LLMContent, withTableOfContents } from "@/src/lib/content/llm-content";
+import { LLMContent } from "@/src/lib/content/llm-content";
 import { include } from "@/src/lib/content/llm-includes";
 import { MIRASCOPE } from "@/src/lib/constants/site";
 
-// Create the base content structure
 export const mirascopeContent = LLMContent.fromChildren({
   slug: "mirascope",
   title: "Mirascope",
@@ -17,5 +16,4 @@ export const mirascopeContent = LLMContent.fromChildren({
   ],
 });
 
-// Export with table of contents for standalone use
-export default withTableOfContents(mirascopeContent);
+export default mirascopeContent;

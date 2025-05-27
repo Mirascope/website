@@ -55,7 +55,7 @@ function validateUniqueChildSlugs(children: ReadonlyArray<LLMContent>): void {
 /**
  * Unified content representation for LLM documentation.
  * Can represent both leaf content (documents) and composed structures (collections).
- * Supports having both direct content and children for preamble use cases.
+ * Leaf content contains raw content, containers contain only children.
  */
 export class LLMContent {
   public readonly slug: Slug;
@@ -118,47 +118,40 @@ export class LLMContent {
     description?: string;
     children: ReadonlyArray<LLMContent>;
     route?: string;
-    preamble?: string;
   }): LLMContent {
     validateSlug(params.slug);
     validateUniqueChildSlugs(params.children);
 
-    // Calculate total token count from children and optional preamble
-    const childrenTokens = params.children.reduce((sum, child) => sum + child.tokenCount, 0);
-    const preambleTokens = params.preamble ? countTokens(params.preamble) : 0;
-    const totalTokens = childrenTokens + preambleTokens;
+    // Calculate token count for the formatted container content
+    const formattedContent = formatContainerContent(params.children);
+    const tokenCount = countTokens(formattedContent);
 
     return new LLMContent({
       slug: params.slug,
       title: params.title,
-      tokenCount: totalTokens,
+      tokenCount,
       description: params.description,
       route: params.route,
-      rawContent: params.preamble,
+      rawContent: undefined,
       children: params.children,
     });
   }
 
   /**
    * Get the complete content as a string.
-   * For leaf content: returns the raw content.
-   * For composed content: returns preamble (if any) followed by children content.
+   * For leaf content: returns the raw content (already wrapped in ContentSection).
+   * For containers: returns ToC + concatenated children content.
    */
   getContent(): string {
-    const parts: string[] = [];
-
-    // Add preamble content if present
-    if (this.rawContent) {
-      parts.push(this.rawContent);
+    if (this.isLeaf()) {
+      return this.rawContent!;
     }
 
-    // Add children content if present
-    if (this.children && this.children.length > 0) {
-      const childrenContent = this.children.map((child) => child.getContent()).join("\n\n");
-      parts.push(childrenContent);
+    if (this.isContainer()) {
+      return formatContainerContent(this.children!);
     }
 
-    return parts.join("\n\n");
+    throw new Error(`Invalid LLMContent state: ${this.slug}`);
   }
 
   /**
@@ -176,17 +169,20 @@ export class LLMContent {
   }
 
   /**
-   * Check if this has both content and children (preamble case)
-   */
-  hasPreamble(): boolean {
-    return Boolean(this.rawContent && this.children && this.children.length > 0);
-  }
-
-  /**
    * Get all child items (empty array if no children)
    */
   getChildren(): ReadonlyArray<LLMContent> {
     return this.children || [];
+  }
+
+  /**
+   * Get concatenated children content without ToC (helper for internal use)
+   */
+  getChildrenContent(): string {
+    if (!this.children || this.children.length === 0) {
+      return "";
+    }
+    return this.children.map((child) => child.getContent()).join("\n\n");
   }
 
   /**
@@ -231,19 +227,19 @@ export class LLMContent {
  */
 
 /**
- * Generate a table of contents from a LLMContent structure
+ * Generate a table of contents from an array of children
  * Recursively walks the content tree and builds a hierarchical ToC
  */
-export function generateTableOfContents(content: LLMContent): string {
+export function generateTableOfContents(children: ReadonlyArray<LLMContent>): string {
   let toc = "# Table of Contents\n\n";
 
   // Add sections for each child
-  for (const child of content.getChildren()) {
+  for (const child of children) {
     toc += `# ${child.title}`;
     if (child.description) {
       toc += ` - ${child.description}`;
     }
-    toc += "\n\n";
+    toc += "\n";
 
     // Add subsections for nested children
     for (const grandchild of child.getChildren()) {
@@ -251,7 +247,7 @@ export function generateTableOfContents(content: LLMContent): string {
       if (grandchild.description) {
         toc += `\n- ${grandchild.description}`;
       }
-      toc += "\n\n";
+      toc += "\n";
     }
 
     toc += "\n";
@@ -261,31 +257,17 @@ export function generateTableOfContents(content: LLMContent): string {
 }
 
 /**
- * Create a table of contents LLMContent item for a given content structure
+ * Format container content: ToC + concatenated children content
+ * Pure function for consistent formatting between token counting and content generation
  */
-export function createTableOfContents(content: LLMContent): LLMContent {
-  const tocContent = generateTableOfContents(content);
-
-  return LLMContent.fromRawContent({
-    slug: "table-of-contents",
-    title: "Table of Contents",
-    content: tocContent,
-  });
-}
-
-/**
- * Add a table of contents as the first child of a LLMContent structure
- * Returns a new LLMContent with ToC prepended to children
- */
-export function withTableOfContents(content: LLMContent): LLMContent {
-  const toc = createTableOfContents(content);
-  const newChildren = [toc, ...content.getChildren()];
-
-  return LLMContent.fromChildren({
-    slug: content.slug,
-    title: content.title,
-    description: content.description,
-    children: newChildren,
-    route: content.route,
-  });
+function formatContainerContent(children: ReadonlyArray<LLMContent>): string {
+  const tocContent = generateTableOfContents(children);
+  const childrenContent = children
+    .map((child) => {
+      // For child containers, use getChildrenContent() to avoid nested ToCs
+      // For child leaves, use getContent() to get the wrapped content
+      return child.isContainer() ? child.getChildrenContent() : child.getContent();
+    })
+    .join("\n\n");
+  return tocContent + "\n\n" + childrenContent;
 }

@@ -1,4 +1,4 @@
-import { LLMContent, withTableOfContents } from "@/src/lib/content/llm-content";
+import { LLMContent } from "@/src/lib/content/llm-content";
 import { mirascopeContent } from "./llms-mirascope";
 import { lilypadContent } from "./llms-lilypad";
 
@@ -12,5 +12,5 @@ const fullContent = LLMContent.fromChildren({
   children: [mirascopeContent, lilypadContent],
 });
 
-// Export with table of contents
-export default withTableOfContents(fullContent);
+// Export content (ToC is generated dynamically in getContent())
+export default fullContent;

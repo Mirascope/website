@@ -20,8 +20,8 @@ async function productLlmDocLoader({ params }: { params: { product: ProductName 
   }
 
   // Construct paths to both JSON and TXT files
-  const jsonPath = `/static/content/docs/${product}/llms.json`;
-  const txtPath = `/docs/${product}/llms.txt`;
+  const jsonPath = `/static/content/docs/${product}/llms-full.json`;
+  const txtPath = `/docs/${product}/llms-full.txt`;
 
   try {
     // Fetch the processed JSON data

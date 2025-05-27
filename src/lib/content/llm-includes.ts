@@ -11,6 +11,7 @@ import { getAllDocInfo } from "./content";
 import { parseFrontmatter } from "./mdx-processing";
 import type { DocInfo } from "./spec";
 import { LLMContent } from "./llm-content";
+import { BASE_URL } from "@/src/lib/constants/site";
 
 /**
  * Generate a slug from a route path
@@ -37,8 +38,8 @@ function createLLMContentFromDoc(doc: DocInfo, docsRoot?: string): LLMContent {
   const rawContent = fs.readFileSync(filePath, "utf-8");
   const { frontmatter, content } = parseFrontmatter(rawContent);
 
-  // Build ContentSection wrapper with content
-  let wrappedContent = `<ContentSection`;
+  // Build final formatted content with ContentSection wrapper
+  let wrappedContent = `<Content`;
 
   if (frontmatter.title) {
     wrappedContent += ` title="${frontmatter.title}"`;
@@ -48,10 +49,10 @@ function createLLMContentFromDoc(doc: DocInfo, docsRoot?: string): LLMContent {
     wrappedContent += ` description="${frontmatter.description}"`;
   }
 
-  wrappedContent += ` url="${doc.routePath}"`;
+  wrappedContent += ` url="${BASE_URL}${doc.routePath}"`;
   wrappedContent += `>\n\n`;
   wrappedContent += content;
-  wrappedContent += `\n\n</ContentSection>`;
+  wrappedContent += `\n\n</Content>`;
 
   return LLMContent.fromRawContent({
     slug: generateSlugFromRoute(doc.routePath),
