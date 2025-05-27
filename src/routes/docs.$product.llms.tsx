@@ -1,6 +1,5 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
-import { AppLayout, PageMeta } from "@/src/components";
-import { LLMDocument, TocSidebar } from "@/src/components/routes/llms";
+import { LLMPage } from "@/src/components/routes/llms";
 import { environment } from "@/src/lib/content/environment";
 import { ContentErrorHandler } from "@/src/components";
 import { LLMContent } from "@/src/lib/content/llm-content";
@@ -76,24 +75,15 @@ function ProductLLMDocViewerPage() {
   const { content, txtPath, product } = data;
 
   return (
-    <>
-      <PageMeta title={content.title} description={content.description} />
-      <AppLayout>
-        <AppLayout.LeftSidebar>
-          <DocsSidebar product={product} />
-        </AppLayout.LeftSidebar>
-
-        <AppLayout.Content>
-          <LLMDocument content={content} txtPath={txtPath} />
-        </AppLayout.Content>
-
-        <AppLayout.RightSidebar mobileCollapsible>
-          <ButtonLink variant="outline" href="/llms-full">
-            Cross-Product LLM Docs
-          </ButtonLink>
-          <TocSidebar content={content} />
-        </AppLayout.RightSidebar>
-      </AppLayout>
-    </>
+    <LLMPage
+      content={content}
+      txtPath={txtPath}
+      leftSidebar={<DocsSidebar product={product} />}
+      rightSidebarExtra={
+        <ButtonLink variant="outline" href="/llms-full">
+          Cross-Product LLM Docs
+        </ButtonLink>
+      }
+    />
   );
 }
