@@ -1,17 +1,15 @@
 import { useState } from "react";
 import { ButtonLink } from "@/src/components/ui/button-link";
 import { LLMContent } from "@/src/lib/content/llm-content";
-import { BASE_URL } from "@/src/lib/constants/site";
 import { ChevronDown, ChevronRight, Binary } from "lucide-react";
 import ContentActions from "./ContentActions";
 
 interface ContentItemProps {
   content: LLMContent;
-  toRelativeUrl: (url: string) => string;
   level?: number;
 }
 
-function ContentItem({ content, toRelativeUrl, level = 1 }: ContentItemProps) {
+function ContentItem({ content, level = 1 }: ContentItemProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const isContainer = content.isContainer();
   const sectionId = `section-${content.slug}`;
@@ -34,18 +32,13 @@ function ContentItem({ content, toRelativeUrl, level = 1 }: ContentItemProps) {
                 <span className="text-muted-foreground text-sm">{content.description}</span>
               )}
             </div>
-            <ContentActions item={content} toRelativeUrl={toRelativeUrl} />
+            <ContentActions item={content} />
           </div>
         </div>
 
         {/* Render children */}
         {content.getChildren().map((child) => (
-          <ContentItem
-            key={child.slug}
-            content={child}
-            toRelativeUrl={toRelativeUrl}
-            level={level + 1}
-          />
+          <ContentItem key={child.slug} content={child} level={level + 1} />
         ))}
       </div>
     );
@@ -69,7 +62,7 @@ function ContentItem({ content, toRelativeUrl, level = 1 }: ContentItemProps) {
               </h3>
             </button>
           </div>
-          <ContentActions item={content} toRelativeUrl={toRelativeUrl} />
+          <ContentActions item={content} />
         </div>
 
         {isExpanded && (
@@ -88,11 +81,6 @@ interface DocumentHeaderProps {
 }
 
 function DocumentHeader({ document, txtPath }: DocumentHeaderProps) {
-  // Transform absolute URLs to relative for in-site navigation
-  const toRelativeUrl = (url: string) => {
-    return url.startsWith(BASE_URL) ? url.replace(BASE_URL, "") : url;
-  };
-
   return (
     <div className="bg-primary/10 border-border border-b p-6">
       <div className="flex items-start justify-between">
@@ -114,12 +102,7 @@ function DocumentHeader({ document, txtPath }: DocumentHeaderProps) {
           </p>
         </div>
         <div className="ml-4 flex items-center gap-2">
-          <ContentActions
-            item={document}
-            toRelativeUrl={toRelativeUrl}
-            variant="ghost"
-            showDocs={false}
-          />
+          <ContentActions item={document} variant="ghost" showDocs={false} />
           <ButtonLink href={txtPath} external variant="ghost" size="sm">
             <Binary className="mr-1 h-4 w-4" />
             Raw
@@ -136,11 +119,6 @@ interface MainContentProps {
 }
 
 export default function MainContent({ document, txtPath }: MainContentProps) {
-  // Transform absolute URLs to relative for in-site navigation
-  const toRelativeUrl = (url: string) => {
-    return url.startsWith(BASE_URL) ? url.replace(BASE_URL, "") : url;
-  };
-
   return (
     <div className="bg-background container mx-auto min-h-screen px-4">
       {/* Single continuous document view with integrated header */}
@@ -152,7 +130,7 @@ export default function MainContent({ document, txtPath }: MainContentProps) {
         <div className="p-6">
           {/* Render content items */}
           {document.getChildren().map((item) => (
-            <ContentItem key={item.slug} content={item} toRelativeUrl={toRelativeUrl} />
+            <ContentItem key={item.slug} content={item} />
           ))}
         </div>
       </div>
