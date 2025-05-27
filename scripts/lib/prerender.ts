@@ -29,10 +29,18 @@ export async function prerenderPage(
     // Root route: /index.html
     outputPath = path.join(outputDir, "index.html");
   } else {
-    // Create directory for the route and place index.html inside
-    const dirPath = path.join(outputDir, route.slice(1));
-    fs.mkdirSync(dirPath, { recursive: true });
-    outputPath = path.join(dirPath, "index.html");
+    // Create a file named after the route path (without trailing slash)
+    // e.g., /docs/mirascope -> docs/mirascope.html
+    const routePath = route.slice(1); // Remove leading slash
+    const parentDir = path.dirname(routePath);
+
+    // Ensure parent directory exists
+    if (parentDir !== ".") {
+      const fullParentDir = path.join(outputDir, parentDir);
+      fs.mkdirSync(fullParentDir, { recursive: true });
+    }
+
+    outputPath = path.join(outputDir, `${routePath}.html`);
   }
 
   // Write the file
