@@ -17,16 +17,16 @@ export default function LLMContainer({ content, level = 1 }: LLMContainerProps) 
         className="border-border mb-6 border-b pt-2"
         style={{ scrollMarginTop: "var(--header-height)" }}
       >
-        <div className="mb-4 flex items-start justify-between">
-          <div className="flex-1">
+        <div className="mb-4">
+          <div className="flex items-center justify-between">
             <h2 className={`px-2 font-bold ${level === 1 ? "text-2xl" : "text-xl"}`}>
               {content.title}
             </h2>
-            {content.description && (
-              <p className="text-muted-foreground mt-1 px-2 text-sm">{content.description}</p>
-            )}
+            <ContentActions item={content} />
           </div>
-          <ContentActions item={content} />
+          {content.description && (
+            <p className="text-muted-foreground mt-2 px-2 text-sm">{content.description}</p>
+          )}
         </div>
       </div>
 
