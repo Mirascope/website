@@ -3,7 +3,7 @@ import { AppLayout, PageMeta } from "@/src/components";
 import { MainContent, TocSidebar } from "@/src/components/routes/llms";
 import { environment } from "@/src/lib/content/environment";
 import { ContentErrorHandler } from "@/src/components";
-import { LLMDocument } from "@/src/lib/content/llm-documents";
+import { LLMContent } from "@/src/lib/content/llm-content";
 import DocsSidebar from "@/src/components/routes/docs/DocsSidebar";
 import type { ProductName } from "@/src/lib/content/doc-registry";
 import { ButtonLink } from "@/src/components/ui/button-link";
@@ -33,7 +33,7 @@ async function productLlmDocLoader({ params }: { params: { product: ProductName 
     }
 
     const data = await response.json();
-    const document = LLMDocument.fromJSON(data);
+    const document = LLMContent.fromJSON(data);
 
     return {
       document,

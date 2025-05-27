@@ -1,10 +1,10 @@
 import { AppLayout, PageMeta } from "@/src/components";
-import { LLMDocument } from "@/src/lib/content/llm-documents";
+import { LLMContent } from "@/src/lib/content/llm-content";
 import MainContent from "./MainContent";
 import TocSidebar from "./TocSidebar";
 
 interface DocPageProps {
-  document: LLMDocument;
+  document: LLMContent;
   txtPath: string;
 }
 

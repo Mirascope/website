@@ -2,7 +2,7 @@ import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import { DocPage } from "@/src/components/routes/llms";
 import { environment } from "@/src/lib/content/environment";
 import { ContentErrorHandler } from "@/src/components";
-import { LLMDocument } from "@/src/lib/content/llm-documents";
+import { LLMContent } from "@/src/lib/content/llm-content";
 
 /**
  * Loader for LLM document viewer routes
@@ -22,7 +22,7 @@ async function llmDocLoader() {
     }
 
     const data = await response.json();
-    const document = LLMDocument.fromJSON(data);
+    const document = LLMContent.fromJSON(data);
 
     return {
       document,

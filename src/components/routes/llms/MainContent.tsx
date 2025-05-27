@@ -1,98 +1,89 @@
 import { useState } from "react";
 import { ButtonLink } from "@/src/components/ui/button-link";
-import {
-  LLMDocument,
-  type IncludedDocument as IncludedDocumentType,
-  type ContentContainer,
-} from "@/src/lib/content/llm-documents";
+import { LLMContent } from "@/src/lib/content/llm-content";
 import { BASE_URL } from "@/src/lib/constants/site";
 import { ChevronDown, ChevronRight, Binary } from "lucide-react";
 import ContentActions from "./ContentActions";
 
-interface IncludedDocumentProps {
-  document: IncludedDocumentType;
+interface ContentItemProps {
+  content: LLMContent;
   toRelativeUrl: (url: string) => string;
+  level?: number;
 }
 
-function IncludedDocument({ document, toRelativeUrl }: IncludedDocumentProps) {
+function ContentItem({ content, toRelativeUrl, level = 1 }: ContentItemProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const isContainer = content.isContainer();
+  const sectionId = `section-${content.slug}`;
 
-  return (
-    <div id={document.id} className="mb-6" style={{ scrollMarginTop: "var(--header-height)" }}>
-      <div className="border-border mb-4 flex items-center justify-between border-b pb-2">
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
-          >
-            {isExpanded ? (
-              <ChevronDown className="h-4 w-4" />
-            ) : (
-              <ChevronRight className="h-4 w-4" />
-            )}
-            <h2 className="text-foreground rounded-md px-2 py-1 text-base font-bold">
-              {document.title}
-            </h2>
-          </button>
-        </div>
-        <ContentActions item={document} toRelativeUrl={toRelativeUrl} />
-      </div>
-
-      {isExpanded && (
-        <pre className="text-foreground overflow-auto font-mono text-sm whitespace-pre-wrap">
-          {document.getContent()}
-        </pre>
-      )}
-    </div>
-  );
-}
-
-interface ContentSectionProps {
-  contentSection: ContentContainer;
-  toRelativeUrl: (url: string) => string;
-}
-
-function ContentSection({ contentSection, toRelativeUrl }: ContentSectionProps) {
-  const sectionId = `content-section-${contentSection.title.toLowerCase().replace(/\s+/g, "-")}`;
-
-  return (
-    <div key={sectionId}>
-      {/* Content section header */}
-      <div
-        id={sectionId}
-        className="border-border mb-6 border-b pt-2"
-        style={{ scrollMarginTop: "var(--header-height)" }}
-      >
-        <div className="mb-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <h2 className="px-2 text-2xl font-bold">{contentSection.title}</h2>
-            {contentSection.description && (
-              <span className="text-muted-foreground text-sm">{contentSection.description}</span>
-            )}
+  if (isContainer) {
+    // This is a container with children
+    return (
+      <div key={sectionId}>
+        <div
+          id={sectionId}
+          className="border-border mb-6 border-b pt-2"
+          style={{ scrollMarginTop: "var(--header-height)" }}
+        >
+          <div className="mb-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <h2 className={`px-2 font-bold ${level === 1 ? "text-2xl" : "text-xl"}`}>
+                {content.title}
+              </h2>
+              {content.description && (
+                <span className="text-muted-foreground text-sm">{content.description}</span>
+              )}
+            </div>
+            <ContentActions item={content} toRelativeUrl={toRelativeUrl} />
           </div>
-          <ContentActions item={contentSection} toRelativeUrl={toRelativeUrl} />
         </div>
-      </div>
 
-      {/* Documents in this section */}
-      {contentSection.children.map((doc) => {
-        if ("content" in doc && "id" in doc) {
-          return (
-            <IncludedDocument
-              key={doc.routePath}
-              document={doc as IncludedDocumentType}
-              toRelativeUrl={toRelativeUrl}
-            />
-          );
-        }
-        return null; // Skip nested containers for now
-      })}
-    </div>
-  );
+        {/* Render children */}
+        {content.getChildren().map((child) => (
+          <ContentItem
+            key={child.slug}
+            content={child}
+            toRelativeUrl={toRelativeUrl}
+            level={level + 1}
+          />
+        ))}
+      </div>
+    );
+  } else {
+    // This is a leaf content item
+    return (
+      <div id={sectionId} className="mb-6" style={{ scrollMarginTop: "var(--header-height)" }}>
+        <div className="border-border mb-4 flex items-center justify-between border-b pb-2">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
+            >
+              {isExpanded ? (
+                <ChevronDown className="h-4 w-4" />
+              ) : (
+                <ChevronRight className="h-4 w-4" />
+              )}
+              <h3 className="text-foreground rounded-md px-2 py-1 text-base font-bold">
+                {content.title}
+              </h3>
+            </button>
+          </div>
+          <ContentActions item={content} toRelativeUrl={toRelativeUrl} />
+        </div>
+
+        {isExpanded && (
+          <pre className="text-foreground overflow-auto font-mono text-sm whitespace-pre-wrap">
+            {content.getContent()}
+          </pre>
+        )}
+      </div>
+    );
+  }
 }
 
 interface DocumentHeaderProps {
-  document: LLMDocument;
+  document: LLMContent;
   txtPath: string;
 }
 
@@ -140,7 +131,7 @@ function DocumentHeader({ document, txtPath }: DocumentHeaderProps) {
 }
 
 interface MainContentProps {
-  document: LLMDocument;
+  document: LLMContent;
   txtPath: string;
 }
 
@@ -160,27 +151,9 @@ export default function MainContent({ document, txtPath }: MainContentProps) {
         {/* Document content */}
         <div className="p-6">
           {/* Render content items */}
-          {document.children.map((item) => {
-            if ("content" in item) {
-              // IncludedDocument
-              return (
-                <IncludedDocument
-                  key={item.routePath}
-                  document={item}
-                  toRelativeUrl={toRelativeUrl}
-                />
-              );
-            } else {
-              // ContentContainer
-              return (
-                <ContentSection
-                  key={item.routePath}
-                  contentSection={item}
-                  toRelativeUrl={toRelativeUrl}
-                />
-              );
-            }
-          })}
+          {document.getChildren().map((item) => (
+            <ContentItem key={item.slug} content={item} toRelativeUrl={toRelativeUrl} />
+          ))}
         </div>
       </div>
     </div>

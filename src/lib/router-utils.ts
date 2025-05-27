@@ -152,7 +152,7 @@ export function getDocsRoutes(): string[] {
  * Get LLM document routes
  */
 export function getLLMDocRoutes(): string[] {
-  return llmMeta.documents.map((doc) => `/${doc.routePath}`).sort();
+  return llmMeta.map((doc) => `/${doc.route}`).sort();
 }
 
 /**

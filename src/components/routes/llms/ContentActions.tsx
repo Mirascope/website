@@ -1,12 +1,12 @@
 import { Button } from "@/src/components/ui/button";
 import { ButtonLink } from "@/src/components/ui/button-link";
-import type { ContentItem } from "@/src/lib/content/llm-documents";
+import type { LLMContent } from "@/src/lib/content/llm-content";
 import { BASE_URL } from "@/src/lib/constants/site";
 import { formatTokenCount, tokenBadge } from "./utils";
 import { Clipboard, Rocket } from "lucide-react";
 
 interface ContentActionsProps {
-  item: ContentItem;
+  item: LLMContent;
   toRelativeUrl: (url: string) => string;
   size?: "sm" | "default";
   variant?: "ghost" | "outline";
@@ -34,7 +34,7 @@ export default function ContentActions({
       </Button>
       {showDocs && (
         <ButtonLink
-          href={toRelativeUrl(`${BASE_URL}${item.routePath}`)}
+          href={toRelativeUrl(`${BASE_URL}${item.route}`)}
           variant={variant}
           size={size}
           className="text-xs"

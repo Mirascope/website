@@ -1,9 +1,10 @@
 import fs from "fs";
 import path from "path";
 import { ContentPreprocessor } from "@/src/lib/content/preprocess";
-import { LLMDocumentProcessor, type LLMDocument } from "@/src/lib/content/llm-documents";
+import type { LLMContent } from "@/src/lib/content/llm-content";
 import { SITE_URL, getAllRoutes } from "@/src/lib/router-utils";
 import type { BlogMeta } from "@/src/lib/content";
+import llmMeta from "@/content/llms/_llms-meta";
 
 /**
  * Main processing function that generates static JSON files for all MDX content,
@@ -14,15 +15,10 @@ export async function preprocessContent(verbose = true): Promise<void> {
     const preprocessor = new ContentPreprocessor(process.cwd(), verbose);
     await preprocessor.processAllContent();
 
-    // Process LLM documents after regular content processing (LLM docs depend on docs content)
     if (verbose) console.log("Processing LLM documents...");
-    const llmDocProcessor = new LLMDocumentProcessor();
-    const llmDocs = await llmDocProcessor.processAllDocuments();
+    await writeLLMDocuments(llmMeta, verbose);
 
-    // Write LLM document files
-    await writeLLMDocuments(llmDocs, verbose);
-
-    await generateSitemap(preprocessor.getMetadataByType().blog, llmDocs);
+    await generateSitemap(preprocessor.getMetadataByType().blog, llmMeta);
     return;
   } catch (error) {
     console.error("Error during preprocessing:", error);
@@ -33,11 +29,11 @@ export async function preprocessContent(verbose = true): Promise<void> {
 /**
  * Write LLM documents to disk as JSON and TXT files
  */
-async function writeLLMDocuments(llmDocs: LLMDocument[], verbose = true): Promise<void> {
+async function writeLLMDocuments(llmDocs: LLMContent[], verbose = true): Promise<void> {
   const publicDir = path.join(process.cwd(), "public");
 
   for (const doc of llmDocs) {
-    const routePath = doc.routePath;
+    const routePath = doc.route!;
 
     // Write JSON file for viewer consumption at public/static/content/{routePath}.json
     const jsonPath = path.join(publicDir, "static", "content", `${routePath}.json`);
@@ -58,7 +54,7 @@ async function writeLLMDocuments(llmDocs: LLMDocument[], verbose = true): Promis
 /**
  * Generate sitemap.xml file based on the processed content
  */
-async function generateSitemap(blogPosts: BlogMeta[], llmDocs: LLMDocument[]): Promise<void> {
+async function generateSitemap(blogPosts: BlogMeta[], llmDocs: LLMContent[]): Promise<void> {
   console.log("Generating sitemap.xml...");
 
   // Get all routes using our centralized utility
@@ -80,9 +76,9 @@ async function generateSitemap(blogPosts: BlogMeta[], llmDocs: LLMDocument[]): P
 
   // Add LLM document URLs to the sitemap
   llmDocs.forEach((llmDoc) => {
-    // Add the .txt file (routePath already includes "docs/")
+    // Add the .txt file
     xml += "  <url>\n";
-    xml += `    <loc>${SITE_URL}/${llmDoc.routePath}.txt</loc>\n`;
+    xml += `    <loc>${SITE_URL}/${llmDoc.route}.txt</loc>\n`;
     xml += `    <lastmod>${today}</lastmod>\n`;
     xml += "    <changefreq>daily</changefreq>\n";
     xml += "  </url>\n";
