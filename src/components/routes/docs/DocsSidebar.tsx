@@ -149,12 +149,12 @@ function createSidebarConfig(product: ProductName): SidebarConfig {
   const llmItem: SidebarItem = {
     slug: "llms",
     label: `${productTitle} LLMs Text`,
-    routePath: `/docs/${product}/llms`,
+    routePath: `/docs/${product}/llms-full`,
   };
   const llmSection: SidebarSection = {
     slug: "llms",
     label: "LLMs Text",
-    basePath: `/docs/${product}/llms`,
+    basePath: `/docs/${product}/llms-full`,
     items: { llms: llmItem },
   };
 

@@ -46,7 +46,7 @@ async function productLlmDocLoader({ params }: { params: { product: ProductName 
   }
 }
 
-export const Route = createFileRoute("/docs/$product/llms")({
+export const Route = createFileRoute("/docs/$product/llms-full")({
   component: ProductLLMDocViewerPage,
 
   loader: productLlmDocLoader,
@@ -68,7 +68,7 @@ export const Route = createFileRoute("/docs/$product/llms")({
 
 function ProductLLMDocViewerPage() {
   const data = useLoaderData({
-    from: "/docs/$product/llms",
+    from: "/docs/$product/llms-full",
     structuralSharing: false,
   });
 

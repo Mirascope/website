@@ -29,7 +29,7 @@ import { Route as DevLayoutTestImport } from './routes/dev/layout-test'
 import { Route as DevAuditMetadataImport } from './routes/dev/audit-metadata'
 import { Route as DevSlugImport } from './routes/dev.$slug'
 import { Route as BlogSlugImport } from './routes/blog.$slug'
-import { Route as DocsProductLlmsImport } from './routes/docs.$product.llms'
+import { Route as DocsProductLlmsFullImport } from './routes/docs.$product.llms-full'
 
 // Create/Update Routes
 
@@ -141,9 +141,9 @@ const BlogSlugRoute = BlogSlugImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const DocsProductLlmsRoute = DocsProductLlmsImport.update({
-  id: '/docs/$product/llms',
-  path: '/docs/$product/llms',
+const DocsProductLlmsFullRoute = DocsProductLlmsFullImport.update({
+  id: '/docs/$product/llms-full',
+  path: '/docs/$product/llms-full',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -277,11 +277,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsIndexImport
       parentRoute: typeof rootRoute
     }
-    '/docs/$product/llms': {
-      id: '/docs/$product/llms'
-      path: '/docs/$product/llms'
-      fullPath: '/docs/$product/llms'
-      preLoaderRoute: typeof DocsProductLlmsImport
+    '/docs/$product/llms-full': {
+      id: '/docs/$product/llms-full'
+      path: '/docs/$product/llms-full'
+      fullPath: '/docs/$product/llms-full'
+      preLoaderRoute: typeof DocsProductLlmsFullImport
       parentRoute: typeof rootRoute
     }
   }
@@ -326,7 +326,7 @@ export interface FileRoutesByFullPath {
   '/dev/': typeof DevIndexRoute
   '/docs': typeof DocsIndexRoute
   '/terms': typeof TermsIndexRoute
-  '/docs/$product/llms': typeof DocsProductLlmsRoute
+  '/docs/$product/llms-full': typeof DocsProductLlmsFullRoute
 }
 
 export interface FileRoutesByTo {
@@ -347,7 +347,7 @@ export interface FileRoutesByTo {
   '/dev': typeof DevIndexRoute
   '/docs': typeof DocsIndexRoute
   '/terms': typeof TermsIndexRoute
-  '/docs/$product/llms': typeof DocsProductLlmsRoute
+  '/docs/$product/llms-full': typeof DocsProductLlmsFullRoute
 }
 
 export interface FileRoutesById {
@@ -370,7 +370,7 @@ export interface FileRoutesById {
   '/dev/': typeof DevIndexRoute
   '/docs/': typeof DocsIndexRoute
   '/terms/': typeof TermsIndexRoute
-  '/docs/$product/llms': typeof DocsProductLlmsRoute
+  '/docs/$product/llms-full': typeof DocsProductLlmsFullRoute
 }
 
 export interface FileRouteTypes {
@@ -394,7 +394,7 @@ export interface FileRouteTypes {
     | '/dev/'
     | '/docs'
     | '/terms'
-    | '/docs/$product/llms'
+    | '/docs/$product/llms-full'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -414,7 +414,7 @@ export interface FileRouteTypes {
     | '/dev'
     | '/docs'
     | '/terms'
-    | '/docs/$product/llms'
+    | '/docs/$product/llms-full'
   id:
     | '__root__'
     | '/'
@@ -435,7 +435,7 @@ export interface FileRouteTypes {
     | '/dev/'
     | '/docs/'
     | '/terms/'
-    | '/docs/$product/llms'
+    | '/docs/$product/llms-full'
   fileRoutesById: FileRoutesById
 }
 
@@ -453,7 +453,7 @@ export interface RootRouteChildren {
   BlogIndexRoute: typeof BlogIndexRoute
   DocsIndexRoute: typeof DocsIndexRoute
   TermsIndexRoute: typeof TermsIndexRoute
-  DocsProductLlmsRoute: typeof DocsProductLlmsRoute
+  DocsProductLlmsFullRoute: typeof DocsProductLlmsFullRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -470,7 +470,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogIndexRoute: BlogIndexRoute,
   DocsIndexRoute: DocsIndexRoute,
   TermsIndexRoute: TermsIndexRoute,
-  DocsProductLlmsRoute: DocsProductLlmsRoute,
+  DocsProductLlmsFullRoute: DocsProductLlmsFullRoute,
 }
 
 export const routeTree = rootRoute
@@ -496,7 +496,7 @@ export const routeTree = rootRoute
         "/blog/",
         "/docs/",
         "/terms/",
-        "/docs/$product/llms"
+        "/docs/$product/llms-full"
       ]
     },
     "/": {
@@ -565,8 +565,8 @@ export const routeTree = rootRoute
     "/terms/": {
       "filePath": "terms/index.tsx"
     },
-    "/docs/$product/llms": {
-      "filePath": "docs.$product.llms.tsx"
+    "/docs/$product/llms-full": {
+      "filePath": "docs.$product.llms-full.tsx"
     }
   }
 }

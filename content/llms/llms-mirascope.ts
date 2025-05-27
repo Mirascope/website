@@ -7,7 +7,7 @@ export const mirascopeContent = LLMContent.fromChildren({
   slug: "mirascope",
   title: "Mirascope",
   description: MIRASCOPE.tagline,
-  route: "/docs/mirascope/llms",
+  route: "/docs/mirascope/llms-full",
   children: [
     // Getting Started
     include.file("mirascope/index.mdx"),

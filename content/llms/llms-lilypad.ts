@@ -7,7 +7,7 @@ export const lilypadContent = LLMContent.fromChildren({
   slug: "lilypad",
   title: "Lilypad",
   description: LILYPAD.tagline,
-  route: "/docs/lilypad/llms",
+  route: "/docs/lilypad/llms-full",
   children: include.flatTree("lilypad"),
 });
 
