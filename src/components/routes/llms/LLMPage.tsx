@@ -17,9 +17,11 @@ export default function LLMPage({
   leftSidebar,
   rightSidebarExtra,
 }: LLMPageProps) {
+  const title = `${content.title} - LLMs Text Viewer`;
+  const description = `View the concatenated markdown content for ${content.title} in a format suitable for LLMs.`;
   return (
     <>
-      <PageMeta title={content.title} description={content.description} />
+      <PageMeta title={title} description={description} />
       <AppLayout>
         {leftSidebar && <AppLayout.LeftSidebar>{leftSidebar}</AppLayout.LeftSidebar>}
 
@@ -31,18 +33,20 @@ export default function LLMPage({
               id="top"
               style={{ scrollMarginTop: "var(--header-height)" }}
             >
-              {content.title}
+              {title}
             </h1>
             <p className="text-muted-foreground text-sm">
-              Concatenated markdown docs, intended for use by LLMs. Copy it using the buttons, or
-              navigate to{" "}
+              Concatenated markdown docs, intended for use by LLMs.
+            </p>
+            <p className="text-muted-foreground text-sm">
+              Copy it using the buttons, or navigate to{" "}
               <a href={txtPath} className="text-primary underline">
                 {txtPath}
               </a>
               .
             </p>
 
-            <div className="bg-card/20 border-border relative mt-4 overflow-hidden rounded-lg border">
+            <div className="bg-card/20 border-border relative mt-6 overflow-hidden rounded-lg border">
               <LLMRenderer content={content} />
             </div>
           </div>

@@ -13,8 +13,8 @@ export default function LLMLeaf({ content }: LLMLeafProps) {
 
   return (
     <div id={sectionId} className="mb-6" style={{ scrollMarginTop: "var(--header-height)" }}>
-      <div className="border-border mb-4 flex items-center justify-between border-b pb-2">
-        <div className="flex items-center gap-3">
+      <div className="border-border mb-4 flex items-start justify-between border-b pb-2">
+        <div className="flex-1">
           <button
             onClick={() => setIsExpanded(!isExpanded)}
             className="text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
@@ -28,6 +28,9 @@ export default function LLMLeaf({ content }: LLMLeafProps) {
               {content.title}
             </h3>
           </button>
+          {content.description && (
+            <p className="text-muted-foreground mt-1 ml-5 px-2 text-sm">{content.description}</p>
+          )}
         </div>
         <ContentActions item={content} />
       </div>
