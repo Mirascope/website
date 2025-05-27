@@ -21,7 +21,7 @@ export const mirascopeContent = LLMContent.fromChildren({
 export default withTableOfContents(
   LLMContent.fromChildren({
     slug: "mirascope-llms",
-    title: "Mirascope LLM Reference",
+    title: "Mirascope LLMs Text",
     description: `Complete Mirascope documentation for LLMs. ${MIRASCOPE.tagline}`,
     route: "/docs/mirascope/llms",
     children: mirascopeContent.getChildren(),

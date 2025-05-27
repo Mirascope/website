@@ -78,7 +78,7 @@ async function generateSitemap(blogPosts: BlogMeta[], llmDocs: LLMContent[]): Pr
   llmDocs.forEach((llmDoc) => {
     // Add the .txt file
     xml += "  <url>\n";
-    xml += `    <loc>${SITE_URL}/${llmDoc.route}.txt</loc>\n`;
+    xml += `    <loc>${SITE_URL}${llmDoc.route}.txt</loc>\n`;
     xml += `    <lastmod>${today}</lastmod>\n`;
     xml += "    <changefreq>daily</changefreq>\n";
     xml += "  </url>\n";
