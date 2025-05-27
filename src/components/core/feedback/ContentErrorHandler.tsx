@@ -40,6 +40,12 @@ const ContentErrorHandler: React.FC<ContentErrorHandlerProps> = ({ error, conten
       backTo: "/dev",
       backLabel: "Back to Dev Tools",
     },
+    "llm-docs": {
+      title: isNotFound ? "LLM Document Not Found" : "Error Loading LLM Document",
+      notFoundMessage: "The LLM document you're looking for doesn't exist or has been moved.",
+      backTo: "/docs",
+      backLabel: "Back to Documentation",
+    },
   };
 
   const config = contentTypeConfig[contentType];

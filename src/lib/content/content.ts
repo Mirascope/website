@@ -29,7 +29,7 @@ export { docRegistry };
  * - Output directory: static/content/{type}
  * - Metadata file: static/content-meta/{type}/index.json
  */
-export type ContentType = "docs" | "blog" | "policy" | "dev";
+export type ContentType = "docs" | "blog" | "policy" | "dev" | "llm-docs";
 export const CONTENT_TYPES: ContentType[] = ["docs", "blog", "policy", "dev"];
 
 /**

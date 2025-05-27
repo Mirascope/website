@@ -30,26 +30,30 @@ export interface ProductConfig {
   github: GithubInfo;
 }
 
+export const MIRASCOPE: ProductConfig = {
+  title: "Mirascope",
+  tagline: "LLM abstractions that aren't obstructions.",
+  github: {
+    repo: "Mirascope/mirascope",
+    stars: githubStats.mirascope.stars,
+    version: githubStats.mirascope.version,
+  },
+};
+
+export const LILYPAD: ProductConfig = {
+  title: "Lilypad",
+  tagline: "Spin up your data flywheel with one line of code.",
+  github: {
+    repo: "Mirascope/lilypad",
+    stars: githubStats.lilypad.stars,
+    version: githubStats.lilypad.version,
+  },
+};
+
 // Product configurations
 export const PRODUCT_CONFIGS: Record<ProductName, ProductConfig> = {
-  mirascope: {
-    title: "Mirascope",
-    tagline: "LLM abstractions that aren't obstructions.",
-    github: {
-      repo: "Mirascope/mirascope",
-      stars: githubStats.mirascope.stars,
-      version: githubStats.mirascope.version,
-    },
-  },
-  lilypad: {
-    title: "Lilypad",
-    tagline: "Spin up your data flywheel with one line of code.",
-    github: {
-      repo: "Mirascope/lilypad",
-      stars: githubStats.lilypad.stars,
-      version: githubStats.lilypad.version,
-    },
-  },
+  mirascope: MIRASCOPE,
+  lilypad: LILYPAD,
 };
 
 // Helper function to get product config with defaulting to Mirascope

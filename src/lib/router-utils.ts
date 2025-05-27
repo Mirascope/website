@@ -3,6 +3,8 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { getAllDocInfo, type BlogMeta } from "@/src/lib/content";
+import llmMeta from "@/content/llms/_llms-meta";
+import type { LLMContent } from "@/src/lib/content/llm-content";
 
 // Base URL for the site
 export const SITE_URL = "https://mirascope.com";
@@ -148,14 +150,28 @@ export function getDocsRoutes(): string[] {
 }
 
 /**
- * Get all routes (static + blogs + docs)
+ * Get LLM document routes
+ */
+export function getLLMDocRoutes(): string[] {
+  function getRoute(doc: LLMContent): string {
+    if (!doc.route) {
+      throw new Error(`LLM document ${doc.slug} does not have a route defined`);
+    }
+    return doc.route;
+  }
+  return llmMeta.map(getRoute).sort();
+}
+
+/**
+ * Get all routes (static + blogs + docs + llm docs)
  */
 export function getAllRoutes(includeHidden = false): string[] {
   const staticRoutes = getStaticRoutes();
   const blogRoutes = getBlogRoutes();
   const docRoutes = getDocsRoutes();
+  const llmDocRoutes = getLLMDocRoutes();
 
   // Combine all routes and remove duplicates
-  const allRoutes = [...staticRoutes, ...blogRoutes, ...docRoutes];
+  const allRoutes = [...staticRoutes, ...blogRoutes, ...docRoutes, ...llmDocRoutes];
   return [...new Set(allRoutes)].filter((route) => includeHidden || !isHiddenRoute(route)).sort();
 }

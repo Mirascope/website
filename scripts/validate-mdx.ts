@@ -48,6 +48,8 @@ const contentLocations: ContentLocation[] = [
     label: "policy documents",
     recursive: true,
   },
+  // Note: content/llms is excluded as it contains template files with {{include}} directives
+  // that are not valid MDX syntax
 ];
 
 /**
@@ -309,15 +311,22 @@ async function validateSingleFile(filepath: string): Promise<boolean> {
     return false;
   }
 
+  const absolutePath = path.resolve(filepath);
+  const rootDir = process.cwd();
+
+  // Skip files in content/llms directory (template files with {{include}} directives)
+  const llmsDir = path.join(rootDir, "content/llms");
+  if (absolutePath.startsWith(llmsDir)) {
+    console.log(`⏭️  Skipping template file: ${path.relative(rootDir, filepath)}`);
+    return true; // Return true to indicate this file doesn't need validation
+  }
+
   try {
     const fileContent = fs.readFileSync(filepath, "utf-8");
     const { content } = parseFrontmatter(fileContent);
 
     // Determine content type from path based on the contentLocations config
     let contentType: ContentType = "dev"; // Default content type
-
-    const absolutePath = path.resolve(filepath);
-    const rootDir = process.cwd();
 
     for (const location of contentLocations) {
       const contentDir = path.join(rootDir, location.dir);

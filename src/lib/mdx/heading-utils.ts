@@ -168,7 +168,7 @@ export function parseHeadingLine(line: string): TOCItem | null {
 
   return {
     id,
-    text,
+    content: text,
     level,
   };
 }

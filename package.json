@@ -61,6 +61,7 @@
     "@tanstack/router-plugin": "^1.114.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "js-tiktoken": "^1.0.20",
     "lucide-react": "^0.476.0",
     "mermaid": "^11.6.0",
     "next-mdx-remote": "^5.0.0",

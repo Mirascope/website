@@ -6,7 +6,6 @@
 import fs from "fs";
 import path from "path";
 import { JSDOM } from "jsdom";
-import { getAllRoutes } from "../src/lib/router-utils";
 import { canonicalizePath } from "../src/lib/utils";
 import { glob } from "glob";
 import { colorize, printHeader, icons, coloredLog } from "./lib/terminal";
@@ -19,23 +18,67 @@ interface ValidationResult {
   nonCanonicalLinks: { page: string; link: string; canonical: string; text: string }[];
 }
 
+/**
+ * Parse sitemap.xml to extract all valid routes
+ */
+function parseSitemap(sitemapPath: string): Set<string> {
+  const validRoutes = new Set<string>();
+
+  if (!fs.existsSync(sitemapPath)) {
+    console.warn(`⚠️  Sitemap not found at ${sitemapPath}, falling back to empty route set`);
+    return validRoutes;
+  }
+
+  try {
+    const sitemapContent = fs.readFileSync(sitemapPath, "utf-8");
+    const dom = new JSDOM(sitemapContent, { contentType: "text/xml" });
+    const urls = dom.window.document.querySelectorAll("url loc");
+
+    urls.forEach((loc) => {
+      const fullUrl = loc.textContent?.trim();
+      if (fullUrl) {
+        // Extract path from full URL (e.g., "https://mirascope.com/docs/test" -> "/docs/test")
+        try {
+          const url = new URL(fullUrl);
+          const path = url.pathname;
+          validRoutes.add(path);
+
+          // Also add variants with/without trailing slash
+          if (path !== "/" && path.endsWith("/")) {
+            validRoutes.add(path.slice(0, -1));
+          } else if (path !== "/") {
+            validRoutes.add(path + "/");
+          }
+        } catch (e) {
+          console.warn(`⚠️  Invalid URL in sitemap: ${fullUrl}`);
+        }
+      }
+    });
+  } catch (error) {
+    console.warn(`⚠️  Error parsing sitemap: ${error}`);
+  }
+
+  return validRoutes;
+}
+
 async function validateLinksAndImages(
   distDir: string,
   verbose: boolean = false
 ): Promise<ValidationResult> {
   printHeader("Validating Internal Links and Images");
 
-  // Get all valid routes
-  const validRoutes = await getAllRoutes(true);
-  if (verbose) {
-    console.log(`Found ${validRoutes.length} valid routes in the site`);
-  }
+  // Parse sitemap.xml to get all valid routes
+  // If distDir is process.cwd() (skip-dist-check mode), look in public directory
+  const isSkipDistMode = path.resolve(distDir) === path.resolve(process.cwd());
+  const sitemapPath = isSkipDistMode
+    ? path.join(process.cwd(), "public", "sitemap.xml")
+    : path.join(distDir, "sitemap.xml");
 
-  // Create set with only canonical paths
-  const validRoutesSet = new Set<string>();
-  validRoutes.forEach((route) => {
-    validRoutesSet.add(canonicalizePath(route));
-  });
+  const validRoutesSet = parseSitemap(sitemapPath);
+
+  if (verbose) {
+    console.log(`Found ${validRoutesSet.size} valid routes in sitemap`);
+  }
 
   // Find all HTML files in the dist directory
   const htmlFiles = await glob(`${distDir}/**/index.html`);

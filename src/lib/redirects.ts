@@ -7,8 +7,8 @@
  * Note: Static redirects have been moved to public/_redirects for Cloudflare Pages.
  * Only include redirects here that need dynamic processing or aren't covered by Cloudflare.
  */
-import { isValidProduct } from "./route-types";
 import { getAllDocInfo } from "@/src/lib/content";
+import { isValidProduct } from "@/src/lib/route-types";
 import { canonicalizePath } from "./utils";
 
 // Group redirects map - this will be populated dynamically

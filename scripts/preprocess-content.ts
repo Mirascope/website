@@ -1,18 +1,24 @@
 import fs from "fs";
 import path from "path";
 import { ContentPreprocessor } from "@/src/lib/content/preprocess";
+import type { LLMContent } from "@/src/lib/content/llm-content";
 import { SITE_URL, getAllRoutes } from "@/src/lib/router-utils";
 import type { BlogMeta } from "@/src/lib/content";
+import llmMeta from "@/content/llms/_llms-meta";
 
 /**
- * Main processing function that generates static JSON files for all MDX content
- * and creates a sitemap.xml file
+ * Main processing function that generates static JSON files for all MDX content,
+ * processes template files, and creates a sitemap.xml file
  */
 export async function preprocessContent(verbose = true): Promise<void> {
   try {
     const preprocessor = new ContentPreprocessor(process.cwd(), verbose);
     await preprocessor.processAllContent();
-    await generateSitemap(preprocessor.getMetadataByType().blog);
+
+    if (verbose) console.log("Processing LLM documents...");
+    await writeLLMDocuments(llmMeta, verbose);
+
+    await generateSitemap(preprocessor.getMetadataByType().blog, llmMeta);
     return;
   } catch (error) {
     console.error("Error during preprocessing:", error);
@@ -21,9 +27,34 @@ export async function preprocessContent(verbose = true): Promise<void> {
 }
 
 /**
+ * Write LLM documents to disk as JSON and TXT files
+ */
+async function writeLLMDocuments(llmDocs: LLMContent[], verbose = true): Promise<void> {
+  const publicDir = path.join(process.cwd(), "public");
+
+  for (const doc of llmDocs) {
+    const routePath = doc.route!;
+
+    // Write JSON file for viewer consumption at public/static/content/{routePath}.json
+    const jsonPath = path.join(publicDir, "static", "content", `${routePath}.json`);
+    fs.mkdirSync(path.dirname(jsonPath), { recursive: true });
+    fs.writeFileSync(jsonPath, JSON.stringify(doc.toJSON(), null, 2));
+
+    // Write TXT file for direct LLM consumption at public/{routePath}.txt
+    const txtPath = path.join(publicDir, `${routePath}.txt`);
+    fs.mkdirSync(path.dirname(txtPath), { recursive: true });
+    fs.writeFileSync(txtPath, doc.getContent());
+
+    if (verbose) {
+      console.log(`Generated LLM document: ${routePath} (${doc.tokenCount} tokens)`);
+    }
+  }
+}
+
+/**
  * Generate sitemap.xml file based on the processed content
  */
-async function generateSitemap(blogPosts: BlogMeta[]): Promise<void> {
+async function generateSitemap(blogPosts: BlogMeta[], llmDocs: LLMContent[]): Promise<void> {
   console.log("Generating sitemap.xml...");
 
   // Get all routes using our centralized utility
@@ -42,6 +73,16 @@ async function generateSitemap(blogPosts: BlogMeta[]): Promise<void> {
   // Generate sitemap XML
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
   xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+
+  // Add LLM document URLs to the sitemap
+  llmDocs.forEach((llmDoc) => {
+    // Add the .txt file
+    xml += "  <url>\n";
+    xml += `    <loc>${SITE_URL}${llmDoc.route}.txt</loc>\n`;
+    xml += `    <lastmod>${today}</lastmod>\n`;
+    xml += "    <changefreq>daily</changefreq>\n";
+    xml += "  </url>\n";
+  });
 
   // Add each URL
   uniqueRoutes.forEach((route) => {
@@ -75,8 +116,6 @@ async function generateSitemap(blogPosts: BlogMeta[]): Promise<void> {
   // Write to file
   const outFile = path.join(process.cwd(), "public", "sitemap.xml");
   fs.writeFileSync(outFile, xml);
-
-  console.log(`Sitemap generated with ${uniqueRoutes.length} URLs`);
 }
 
 // Vite server interface for TypeScript
@@ -91,7 +130,7 @@ interface ViteDevServer {
 }
 
 export function contentPreprocessPlugin(options = { verbose: true }) {
-  // Get all content directories
+  // Get all content directories (docs includes LLM document templates)
   const contentDirs = ["blog", "docs", "policy", "dev"].map((type) =>
     path.join(process.cwd(), "content", type)
   );
@@ -133,7 +172,10 @@ export function contentPreprocessPlugin(options = { verbose: true }) {
 
       // React to content changes - these will work for any content directory
       server.watcher.on("change", async (filePath: string) => {
-        if (filePath.endsWith(".mdx") && filePath.includes("/content/")) {
+        if (
+          (filePath.endsWith(".mdx") || filePath.endsWith(".ts")) &&
+          filePath.includes("/content/")
+        ) {
           if (verbose) console.log(`Content file changed: ${filePath}`);
           await preprocessContent(false).catch((error) => {
             console.error("Error preprocessing content after file change:", error);
@@ -142,7 +184,10 @@ export function contentPreprocessPlugin(options = { verbose: true }) {
       });
 
       server.watcher.on("add", async (filePath: string) => {
-        if (filePath.endsWith(".mdx") && filePath.includes("/content/")) {
+        if (
+          (filePath.endsWith(".mdx") || filePath.endsWith(".ts")) &&
+          filePath.includes("/content/")
+        ) {
           if (verbose) console.log(`Content file added: ${filePath}`);
           await preprocessContent(false).catch((error) => {
             console.error("Error preprocessing content after file add:", error);
@@ -151,7 +196,10 @@ export function contentPreprocessPlugin(options = { verbose: true }) {
       });
 
       server.watcher.on("unlink", async (filePath: string) => {
-        if (filePath.endsWith(".mdx") && filePath.includes("/content/")) {
+        if (
+          (filePath.endsWith(".mdx") || filePath.endsWith(".ts")) &&
+          filePath.includes("/content/")
+        ) {
           if (verbose) console.log(`Content file deleted: ${filePath}`);
           await preprocessContent(false).catch((error) => {
             console.error("Error preprocessing content after file delete:", error);

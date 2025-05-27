@@ -9,6 +9,9 @@
 /CONTRIBUTING         /docs/mirascope/getting-started/contributing 301
 /learn                /docs/mirascope/learn                        301
 
+# Legacy from moving quickstart around
+/docs/mirascope/getting-started/quickstart /docs/mirascope/guides/getting-started/quickstart 301
+
 # Special redirects for routes that had underscores
 /tutorials/agents/blog_writing_agent*                                   /docs/mirascope/guides/agents/blog-writing-agent                                     301
 /tutorials/agents/documentation_agent*                                  /docs/mirascope/guides/agents/documentation-agent                                    301
@@ -79,9 +82,6 @@
 /learn/*              /docs/mirascope/learn/:splat        301
 /tutorials/*          /docs/mirascope/guides/:splat       301
 /api/*                /docs/mirascope/api/:splat          301
-
-# Legacy from moving quickstart around
-/docs/mirascope/getting-started/quickstart /docs/mirascope/guides/getting-started/quickstart 301
 
 # Old blog paths
 /post/*               /blog/:splat                       301
