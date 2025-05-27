@@ -46,7 +46,7 @@ export default function LLMPage({
               .
             </p>
 
-            <div className="bg-card/20 border-border relative mt-6 overflow-hidden rounded-lg border">
+            <div className="bg-card/20 border-border relative mt-6 overflow-hidden rounded-lg border p-4">
               <LLMRenderer content={content} />
             </div>
           </div>

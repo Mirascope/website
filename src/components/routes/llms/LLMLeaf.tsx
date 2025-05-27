@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { LLMContent } from "@/src/lib/content/llm-content";
-import { ChevronDown, ChevronRight } from "lucide-react";
-import ContentActions from "./ContentActions";
+import LLMHeader from "./LLMHeader";
 
 interface LLMLeafProps {
   content: LLMContent;
@@ -14,25 +13,12 @@ export default function LLMLeaf({ content }: LLMLeafProps) {
   return (
     <div id={sectionId} className="mb-6" style={{ scrollMarginTop: "var(--header-height)" }}>
       <div className="border-border mb-4 border-b pb-2">
-        <div className="flex items-center justify-between">
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
-          >
-            {isExpanded ? (
-              <ChevronDown className="h-4 w-4" />
-            ) : (
-              <ChevronRight className="h-4 w-4" />
-            )}
-            <h3 className="text-foreground rounded-md px-2 py-1 text-base font-bold">
-              {content.title}
-            </h3>
-          </button>
-          <ContentActions item={content} />
-        </div>
-        {content.description && (
-          <p className="text-muted-foreground mt-2 ml-5 px-2 text-sm">{content.description}</p>
-        )}
+        <LLMHeader
+          content={content}
+          clickable={true}
+          isExpanded={isExpanded}
+          onToggle={() => setIsExpanded(!isExpanded)}
+        />
       </div>
 
       {isExpanded && (
