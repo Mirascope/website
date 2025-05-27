@@ -1,5 +1,6 @@
 import { environment } from "../content/environment";
-import { type ContentMeta, type DocMeta } from "../content/content";
+import { type ContentMeta } from "../content/content";
+import { SearchScorer, type RawSearchResult, type SearchResultItem } from "./search-scoring";
 
 // Define Pagefind types
 interface PagefindResult {
@@ -27,27 +28,8 @@ interface PagefindAPI {
   options: (options: any) => Promise<void>;
 }
 
-// Raw search result from Pagefind before weighting
-interface RawSearchResult {
-  title: string;
-  excerpt: string;
-  url: string;
-  section: string;
-  score: number; // Original score from Pagefind
-  meta?: ContentMeta; // Optional content metadata if found
-}
-
-// Final search result after weighting has been applied
-export interface SearchResultItem {
-  title: string;
-  excerpt: string;
-  url: string;
-  section: string;
-  rawScore: number; // Original score from Pagefind
-  weight: number; // Weight applied based on content type
-  score: number; // Final score (rawScore × weight)
-  meta: ContentMeta; // Content metadata (required)
-}
+// Re-export types from search-scoring for convenience
+export type { SearchResultItem, RawSearchResult } from "./search-scoring";
 
 export interface SearchResponse {
   items: SearchResultItem[];
@@ -69,8 +51,11 @@ export class PagefindSearchService implements SearchService {
   private initialized = false;
   private contentMeta: ContentMeta[] = [];
   private routeToMetaMap: Map<string, ContentMeta> = new Map();
+  private scorer: SearchScorer;
 
-  constructor() {}
+  constructor() {
+    this.scorer = new SearchScorer();
+  }
 
   async init(): Promise<void> {
     if (this.initialized) return;
@@ -242,11 +227,23 @@ export class PagefindSearchService implements SearchService {
       })
     );
 
-    // Apply custom reweighting logic (will filter and transform raw results)
-    const reweightedItems = this.applyCustomReweighting(rawResults, query);
+    // Apply custom scoring logic (will filter and transform raw results)
+    const scoredItems = this.scorer.scoreAndRankResults(rawResults, query);
 
-    // Return the search response with reweighted items
-    return { items: reweightedItems };
+    // Log a summary of the top 5 results if in dev mode
+    if (environment.isDev() && scoredItems.length > 0) {
+      console.log(
+        `🔍 [SearchService] Top ${Math.min(5, scoredItems.length)} results after scoring:`
+      );
+      scoredItems.slice(0, 5).forEach((item, index) => {
+        console.log(
+          `  ${index + 1}. ${item.title} (score: ${item.score.toFixed(3)}, raw: ${item.rawScore.toFixed(3)}, weight: ${item.weight}, type: ${item.meta.type})`
+        );
+      });
+    }
+
+    // Return the search response with scored items
+    return { items: scoredItems };
   }
 
   /**
@@ -335,94 +332,6 @@ export class PagefindSearchService implements SearchService {
       default:
         return DEFAULT_SECTION;
     }
-  }
-
-  /**
-   * Get the search weight for a content item based on its metadata
-   *
-   * Applies different weights according to content type:
-   * - Blog: 0.25x weight
-   * - Policy: 0.25x weight
-   * - Dev: 0x weight (shouldn't appear in search)
-   * - Docs: Use searchWeight from meta or 1.0 as default
-   */
-  private getContentWeight(meta: ContentMeta | undefined): number {
-    // If no metadata, use default weight
-    if (!meta) return 1.0;
-
-    // Determine weight based on content type
-    switch (meta.type) {
-      case "blog":
-        return 0.25;
-      case "policy":
-        return 0.25;
-      case "dev":
-        return 0; // Effectively removes from results
-      case "docs":
-        // For docs, use the searchWeight from DocMeta
-        const docMeta = meta as DocMeta;
-        return docMeta.searchWeight || 1.0;
-      default:
-        return 1.0;
-    }
-  }
-
-  /**
-   * Apply custom reweighting logic to search results
-   *
-   * Transforms raw search results into weighted search results:
-   * 1. Filters out results without metadata
-   * 2. Applies content-type-specific weights
-   * 3. Sorts by final weighted score
-   */
-  private applyCustomReweighting(
-    rawResults: RawSearchResult[],
-    _query: string
-  ): SearchResultItem[] {
-    // Filter out results without metadata
-    const resultsWithMeta = rawResults.filter((result) => result.meta !== undefined);
-
-    // Transform raw results into weighted results
-    const weightedResults: SearchResultItem[] = resultsWithMeta.map((rawResult) => {
-      // Get content type weight (meta is guaranteed to exist from the filter above)
-      const weight = this.getContentWeight(rawResult.meta);
-      const rawScore = rawResult.score;
-
-      // Calculate the weighted score
-      const score = rawScore * weight;
-
-      // Create the weighted result with all required fields
-      return {
-        title: rawResult.title,
-        excerpt: rawResult.excerpt,
-        url: rawResult.url,
-        section: rawResult.section,
-        rawScore: rawScore,
-        weight: weight,
-        score: score,
-        meta: rawResult.meta!, // Non-null assertion is safe due to the filter above
-      };
-    });
-
-    // Filter out items with zero weight or score
-    const filteredItems = weightedResults.filter((item) => item.score > 0);
-
-    // Sort by adjusted score (highest first)
-    const sortedItems = filteredItems.sort((a, b) => b.score - a.score);
-
-    // Log a summary of the top 5 results if in dev mode
-    if (environment.isDev() && sortedItems.length > 0) {
-      console.log(
-        `🔍 [SearchService] Top ${Math.min(5, sortedItems.length)} results after weighting:`
-      );
-      sortedItems.slice(0, 5).forEach((item, index) => {
-        console.log(
-          `  ${index + 1}. ${item.title} (score: ${item.score.toFixed(3)}, raw: ${item.rawScore.toFixed(3)}, weight: ${item.weight}, type: ${item.meta.type})`
-        );
-      });
-    }
-
-    return sortedItems;
   }
 }
 
