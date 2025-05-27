@@ -22,7 +22,7 @@ export default function LLMHeader({
   const titleElement = clickable ? (
     <button
       onClick={onToggle}
-      className="text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
+      className="text-muted-foreground hover:text-foreground flex cursor-pointer items-center gap-1 transition-colors"
     >
       {isExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
       <h3 className="text-foreground rounded-md px-2 py-1 text-left text-base font-bold">
@@ -56,7 +56,7 @@ export default function LLMHeader({
             size="sm"
             className="text-xs"
           >
-            <Clipboard className="mr-1 h-4 w-4 sm:mr-1" />
+            <Clipboard className="h-4 w-4 sm:mr-1" />
             <span className="hidden sm:inline">Copy</span>
           </Button>
         </div>
