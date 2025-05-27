@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { ButtonLink } from "@/src/components/ui/button-link";
 import { LLMContent } from "@/src/lib/content/llm-content";
-import { ChevronDown, ChevronRight, Binary } from "lucide-react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 import ContentActions from "./ContentActions";
 
 interface ContentItemProps {
@@ -75,44 +74,6 @@ function ContentItem({ content, level = 1 }: ContentItemProps) {
   }
 }
 
-interface DocumentHeaderProps {
-  content: LLMContent;
-  txtPath: string;
-}
-
-function DocumentHeader({ content, txtPath }: DocumentHeaderProps) {
-  return (
-    <div className="bg-primary/10 border-border border-b p-6">
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <h1
-            className="mb-2 text-2xl font-bold"
-            id="top"
-            style={{ scrollMarginTop: "var(--header-height)" }}
-          >
-            {content.title}
-          </h1>
-          <p className="text-muted-foreground text-sm">
-            Concatenated markdown docs, intended for use by LLMs. Copy it using the buttons, or
-            navigate to{" "}
-            <a href={txtPath} className="text-primary underline">
-              {txtPath}
-            </a>
-            .
-          </p>
-        </div>
-        <div className="ml-4 flex items-center gap-2">
-          <ContentActions item={content} variant="ghost" showDocs={false} />
-          <ButtonLink href={txtPath} external variant="ghost" size="sm">
-            <Binary className="mr-1 h-4 w-4" />
-            Raw
-          </ButtonLink>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 interface LLMDocumentProps {
   content: LLMContent;
   txtPath: string;
@@ -122,17 +83,25 @@ export default function LLMDocument({ content, txtPath }: LLMDocumentProps) {
   return (
     <div className="bg-background container mx-auto min-h-screen px-4">
       {/* Single continuous document view with integrated header */}
-      <div className="bg-card/20 border-border relative overflow-hidden rounded-lg border">
-        {/* Document header - integrated into the card */}
-        <DocumentHeader content={content} txtPath={txtPath} />
+      {/* Document header - integrated into the card */}
+      <h1
+        className="mb-2 text-2xl font-bold"
+        id="top"
+        style={{ scrollMarginTop: "var(--header-height)" }}
+      >
+        {content.title}
+      </h1>
+      <p className="text-muted-foreground text-sm">
+        Concatenated markdown docs, intended for use by LLMs. Copy it using the buttons, or navigate
+        to{" "}
+        <a href={txtPath} className="text-primary underline">
+          {txtPath}
+        </a>
+        .
+      </p>
 
-        {/* Document content */}
-        <div className="p-6">
-          {/* Render content items */}
-          {content.getChildren().map((item) => (
-            <ContentItem key={item.slug} content={item} />
-          ))}
-        </div>
+      <div className="bg-card/20 border-border relative mt-4 overflow-hidden rounded-lg border">
+        <ContentItem content={content} />
       </div>
     </div>
   );

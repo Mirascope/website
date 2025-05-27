@@ -12,12 +12,4 @@ export const lilypadContent = LLMContent.fromChildren({
 });
 
 // Export with table of contents for standalone use
-export default withTableOfContents(
-  LLMContent.fromChildren({
-    slug: "lilypad-llms",
-    title: "Lilypad LLMs Text",
-    description: `Complete Lilypad documentation for LLMs. ${LILYPAD.tagline}`,
-    route: "/docs/lilypad/llms",
-    children: lilypadContent.getChildren(),
-  })
-);
+export default withTableOfContents(lilypadContent);

@@ -3,12 +3,12 @@ import { LLMContent } from "@/src/lib/content/llm-content";
 import LLMDocument from "./LLMDocument";
 import TocSidebar from "./TocSidebar";
 
-interface DocPageProps {
+interface LLMPageProps {
   content: LLMContent;
   txtPath: string;
 }
 
-export default function DocPage({ content, txtPath }: DocPageProps) {
+export default function LLMPage({ content, txtPath }: LLMPageProps) {
   return (
     <>
       <PageMeta title={content.title} description={content.description} />

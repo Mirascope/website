@@ -18,12 +18,4 @@ export const mirascopeContent = LLMContent.fromChildren({
 });
 
 // Export with table of contents for standalone use
-export default withTableOfContents(
-  LLMContent.fromChildren({
-    slug: "mirascope-llms",
-    title: "Mirascope LLMs Text",
-    description: `Complete Mirascope documentation for LLMs. ${MIRASCOPE.tagline}`,
-    route: "/docs/mirascope/llms",
-    children: mirascopeContent.getChildren(),
-  })
-);
+export default withTableOfContents(mirascopeContent);
