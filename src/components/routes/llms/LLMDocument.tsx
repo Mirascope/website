@@ -76,11 +76,11 @@ function ContentItem({ content, level = 1 }: ContentItemProps) {
 }
 
 interface DocumentHeaderProps {
-  document: LLMContent;
+  content: LLMContent;
   txtPath: string;
 }
 
-function DocumentHeader({ document, txtPath }: DocumentHeaderProps) {
+function DocumentHeader({ content, txtPath }: DocumentHeaderProps) {
   return (
     <div className="bg-primary/10 border-border border-b p-6">
       <div className="flex items-start justify-between">
@@ -90,7 +90,7 @@ function DocumentHeader({ document, txtPath }: DocumentHeaderProps) {
             id="top"
             style={{ scrollMarginTop: "var(--header-height)" }}
           >
-            {document.title}
+            {content.title}
           </h1>
           <p className="text-muted-foreground text-sm">
             Concatenated markdown docs, intended for use by LLMs. Copy it using the buttons, or
@@ -102,7 +102,7 @@ function DocumentHeader({ document, txtPath }: DocumentHeaderProps) {
           </p>
         </div>
         <div className="ml-4 flex items-center gap-2">
-          <ContentActions item={document} variant="ghost" showDocs={false} />
+          <ContentActions item={content} variant="ghost" showDocs={false} />
           <ButtonLink href={txtPath} external variant="ghost" size="sm">
             <Binary className="mr-1 h-4 w-4" />
             Raw
@@ -113,23 +113,23 @@ function DocumentHeader({ document, txtPath }: DocumentHeaderProps) {
   );
 }
 
-interface MainContentProps {
-  document: LLMContent;
+interface LLMDocumentProps {
+  content: LLMContent;
   txtPath: string;
 }
 
-export default function MainContent({ document, txtPath }: MainContentProps) {
+export default function LLMDocument({ content, txtPath }: LLMDocumentProps) {
   return (
     <div className="bg-background container mx-auto min-h-screen px-4">
       {/* Single continuous document view with integrated header */}
       <div className="bg-card/20 border-border relative overflow-hidden rounded-lg border">
         {/* Document header - integrated into the card */}
-        <DocumentHeader document={document} txtPath={txtPath} />
+        <DocumentHeader content={content} txtPath={txtPath} />
 
         {/* Document content */}
         <div className="p-6">
           {/* Render content items */}
-          {document.getChildren().map((item) => (
+          {content.getChildren().map((item) => (
             <ContentItem key={item.slug} content={item} />
           ))}
         </div>

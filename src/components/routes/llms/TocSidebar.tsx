@@ -3,15 +3,15 @@ import { LLMContent } from "@/src/lib/content/llm-content";
 import { formatTokenCount, tokenBadge } from "./utils";
 
 interface TocSidebarProps {
-  document: LLMContent;
+  content: LLMContent;
 }
 
-export default function TocSidebar({ document }: TocSidebarProps) {
+export default function TocSidebar({ content }: TocSidebarProps) {
   // Convert to hierarchical TOC items
   const tocItems: TOCItem[] = [];
 
   // Process content items
-  for (const item of document.getChildren()) {
+  for (const item of content.getChildren()) {
     tocItems.push({
       id: `section-${item.slug}`,
       content: (

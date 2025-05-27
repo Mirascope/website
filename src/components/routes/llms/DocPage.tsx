@@ -1,24 +1,24 @@
 import { AppLayout, PageMeta } from "@/src/components";
 import { LLMContent } from "@/src/lib/content/llm-content";
-import MainContent from "./MainContent";
+import LLMDocument from "./LLMDocument";
 import TocSidebar from "./TocSidebar";
 
 interface DocPageProps {
-  document: LLMContent;
+  content: LLMContent;
   txtPath: string;
 }
 
-export default function DocPage({ document, txtPath }: DocPageProps) {
+export default function DocPage({ content, txtPath }: DocPageProps) {
   return (
     <>
-      <PageMeta title={document.title} description={document.description} />
+      <PageMeta title={content.title} description={content.description} />
       <AppLayout>
         <AppLayout.Content>
-          <MainContent document={document} txtPath={txtPath} />
+          <LLMDocument content={content} txtPath={txtPath} />
         </AppLayout.Content>
 
         <AppLayout.RightSidebar mobileCollapsible>
-          <TocSidebar document={document} />
+          <TocSidebar content={content} />
         </AppLayout.RightSidebar>
       </AppLayout>
     </>

@@ -22,10 +22,10 @@ async function llmDocLoader() {
     }
 
     const data = await response.json();
-    const document = LLMContent.fromJSON(data);
+    const content = LLMContent.fromJSON(data);
 
     return {
-      document,
+      content,
       txtPath,
       viewerPath: `/llms-full`,
     };

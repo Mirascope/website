@@ -1,6 +1,6 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import { AppLayout, PageMeta } from "@/src/components";
-import { MainContent, TocSidebar } from "@/src/components/routes/llms";
+import { LLMDocument, TocSidebar } from "@/src/components/routes/llms";
 import { environment } from "@/src/lib/content/environment";
 import { ContentErrorHandler } from "@/src/components";
 import { LLMContent } from "@/src/lib/content/llm-content";
@@ -33,10 +33,10 @@ async function productLlmDocLoader({ params }: { params: { product: ProductName 
     }
 
     const data = await response.json();
-    const document = LLMContent.fromJSON(data);
+    const content = LLMContent.fromJSON(data);
 
     return {
-      document,
+      content,
       txtPath,
       viewerPath: `/docs/${product}/llms`,
       product,
@@ -73,25 +73,25 @@ function ProductLLMDocViewerPage() {
     structuralSharing: false,
   });
 
-  const { document, txtPath, product } = data;
+  const { content, txtPath, product } = data;
 
   return (
     <>
-      <PageMeta title={document.title} description={document.description} />
+      <PageMeta title={content.title} description={content.description} />
       <AppLayout>
         <AppLayout.LeftSidebar>
           <DocsSidebar product={product} />
         </AppLayout.LeftSidebar>
 
         <AppLayout.Content>
-          <MainContent document={document} txtPath={txtPath} />
+          <LLMDocument content={content} txtPath={txtPath} />
         </AppLayout.Content>
 
         <AppLayout.RightSidebar mobileCollapsible>
           <ButtonLink variant="outline" href="/llms-full">
             Cross-Product LLM Docs
           </ButtonLink>
-          <TocSidebar document={document} />
+          <TocSidebar content={content} />
         </AppLayout.RightSidebar>
       </AppLayout>
     </>
