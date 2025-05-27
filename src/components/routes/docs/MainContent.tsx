@@ -27,7 +27,6 @@ const MainContent: React.FC<MainContentProps> = ({ document }) => {
               title={document.meta.title}
               description={document.meta.description}
               section={section}
-              searchWeight={document.meta.searchWeight}
             >
               <MDXRenderer code={document.mdx.code} frontmatter={document.mdx.frontmatter} />
             </PagefindMeta>
