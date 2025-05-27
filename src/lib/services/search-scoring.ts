@@ -37,10 +37,10 @@ export interface ScoringConfig {
 export const DEFAULT_SCORING_CONFIG: ScoringConfig = {
   titleBoostMultiplier: 2.0,
   contentTypeWeights: {
-    blog: 0.25,
+    blog: 0.33,
     policy: 0.25,
     dev: 0, // Effectively removes from results
-    docs: 1.0, // Will use searchWeight from meta or this as fallback
+    docs: 1.0, // Multiplied by DocMeta searchWeight if available
   },
 };
 
@@ -53,11 +53,7 @@ export class SearchScorer {
   /**
    * Get the search weight for a content item based on its metadata
    *
-   * Applies different weights according to content type:
-   * - Blog: 0.25x weight
-   * - Policy: 0.25x weight
-   * - Dev: 0x weight (shouldn't appear in search)
-   * - Docs: Use searchWeight from meta or 1.0 as default
+   * Applies different weights according to content type (see scoring config)
    */
   getContentWeight(meta: ContentMeta | undefined): number {
     // If no metadata, use default weight
@@ -74,7 +70,7 @@ export class SearchScorer {
       case "docs":
         // For docs, use the searchWeight from DocMeta
         const docMeta = meta as DocMeta;
-        return docMeta.searchWeight || this.config.contentTypeWeights.docs;
+        return docMeta.searchWeight * this.config.contentTypeWeights.docs;
       default:
         return 1.0;
     }
