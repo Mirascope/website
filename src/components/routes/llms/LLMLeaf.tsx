@@ -11,8 +11,12 @@ export default function LLMLeaf({ content }: LLMLeafProps) {
   const sectionId = `section-${content.slug}`;
 
   return (
-    <div id={sectionId} className="mb-6" style={{ scrollMarginTop: "var(--header-height)" }}>
-      <div className="border-border mb-4 border-b pb-2">
+    <div
+      id={sectionId}
+      className="[&:not(:last-child)]:mb-4"
+      style={{ scrollMarginTop: "var(--header-height)" }}
+    >
+      <div className="border-border border-b pb-2">
         <LLMHeader
           content={content}
           clickable={true}
