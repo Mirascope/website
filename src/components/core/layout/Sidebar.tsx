@@ -514,7 +514,7 @@ const Sidebar = ({ config, headerContent, footerContent }: SidebarProps) => {
         </div>
 
         {/* Fixed non-scrollable footer buffer */}
-        <div className="h-24 flex-shrink-0">
+        <div className="h-50 flex-shrink-0">
           {/* Footer content if provided */}
           {footerContent}
         </div>
