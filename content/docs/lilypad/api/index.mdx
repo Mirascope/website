@@ -22,9 +22,12 @@ import os
 
 from lilypad import Lilypad
 
+
 client = Lilypad(
-    api_key=os.environ["LILYPAD_API_KEY"],  # can be ommitted if set in env
+    base_url="https://lilypad-api.mirascope.com/v0",  # can be ommitted if set in env
+    api_key=os.environ["LILYPAD_API_KEY"],            # can be ommitted if set in env
 )
+
 traces = client.projects.traces.list(
     project_uuid=os.environ["LILYPAD_PROJECT_ID"],
 )
@@ -40,7 +43,8 @@ import os
 from lilypad import AsyncLilypad
 
 client = AsyncLilypad(
-    api_key=os.environ["LILYPAD_API_KEY"],  # can be ommitted if set in env
+    base_url="https://lilypad-api.mirascope.com/v0",  # can be ommitted if set in env
+    api_key=os.environ["LILYPAD_API_KEY"],            # can be ommitted if set in env
 )
 
 
