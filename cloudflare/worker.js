@@ -63,19 +63,14 @@ async function handleRegularRequest(request) {
  * @return {Response} The modified response
  */
 function addCountryCodeToHtml(response, countryCode) {
-  // Clone the response so we can modify it
-  const newResponse = new Response(response.body, response);
-
-  // Add country code meta tag to HTML head
   return new HTMLRewriter()
     .on("head", {
       element(element) {
-        // Insert the country meta tag
         console.log(`adding countryCode: ${countryCode} to response`);
         element.append(`<meta name="cf-ipcountry" content="${countryCode}">`, { html: true });
       },
     })
-    .transform(newResponse);
+    .transform(response);
 }
 
 /**
