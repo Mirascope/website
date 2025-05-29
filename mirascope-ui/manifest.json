@@ -1,0 +1,21 @@
+{
+  "registryUrl": "https://ui.mirascope.com",
+  "components": {
+    "code-block": {
+      "version": "main",
+      "lastSync": "2025-05-29T02:05:17.813Z",
+      "files": [
+        "mirascope-ui/blocks/code-block/code-block.tsx",
+        "mirascope-ui/blocks/code-block/code-block.css",
+        "mirascope-ui/lib/code-highlight.ts",
+        "mirascope-ui/blocks/copy-button.tsx"
+      ]
+    },
+    "utils": {
+      "version": "main",
+      "lastSync": "2025-05-29T02:05:17.813Z",
+      "files": ["mirascope-ui/lib/utils.ts"]
+    }
+  },
+  "lastFullSync": ""
+}

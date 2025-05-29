@@ -1,5 +1,5 @@
 import { useRef, useMemo } from "react";
-import { CodeBlock } from "@/src/components/code-block";
+import { CodeBlock } from "@/mirascope-ui/blocks/code-block/code-block";
 import { useProduct } from "@/src/components/core";
 import analyticsManager from "@/src/lib/services/analytics";
 

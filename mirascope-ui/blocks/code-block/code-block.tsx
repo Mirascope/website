@@ -1,11 +1,11 @@
-import { CopyButton } from "@/src/components/copy-button";
+import { CopyButton } from "@/mirascope-ui/blocks/copy-button";
 import {
   highlightCode,
   stripHighlightMarkers,
   type HighlightResult,
   initialHighlight,
-} from "@/src/lib/code-highlight";
-import { cn } from "@/src/lib/utils";
+} from "@/mirascope-ui/lib/code-highlight";
+import { cn } from "@/mirascope-ui/lib/utils";
 import { useEffect, useRef, useState } from "react";
 
 interface CodeBlockProps {
@@ -30,6 +30,11 @@ export function CodeBlock({
   );
   const codeRef = useRef<HTMLDivElement>(null);
   const [isSmallBlock, setIsSmallBlock] = useState<boolean>(false);
+
+  // Calculate dynamic padding for line numbers
+  const lineCount = code.split("\n").length;
+  const extraPadding = 1 + Math.max(0, Math.floor(Math.log10(lineCount))) * 0.2;
+  const lineNumberPadding = `${extraPadding}rem`;
 
   // Base styles for code block container
   const codeBlockBaseStyles =
@@ -68,6 +73,7 @@ export function CodeBlock({
     <div
       ref={codeRef}
       className={cn(codeBlockBaseStyles, `${showLineNumbers && "show-line-numbers"}`, className)}
+      style={{ "--line-number-padding": lineNumberPadding } as React.CSSProperties}
     >
       {/* Buttons - positioned based on block size */}
       <div

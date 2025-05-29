@@ -8,7 +8,7 @@ import { providers, providerDefaults } from "@/src/config/providers";
 export type { Provider };
 export { providers, providerDefaults };
 
-import { temporarilyEnableSyncHighlighting } from "@/src/lib/code-highlight";
+import { temporarilyEnableSyncHighlighting } from "@/mirascope-ui/lib/code-highlight";
 
 // Create a context to share the selected provider
 interface ProviderContextType {
