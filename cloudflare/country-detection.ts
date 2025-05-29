@@ -23,7 +23,7 @@ export default {
     const url = new URL(request.url);
 
     // Handle country detection API endpoint
-    if (url.pathname === "/api/country-detection") {
+    if (url.pathname === "/cf/country-detection") {
       return handleCountryDetection(request);
     }
 
