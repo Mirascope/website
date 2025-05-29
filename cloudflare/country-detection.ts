@@ -11,12 +11,7 @@ interface CloudflareRequest extends Request {
   };
 }
 
-interface CountryDetectionResponse {
-  country: string | null;
-  timezone: string | null;
-  continent: string | null;
-  timestamp: string;
-}
+import type { CountryDetectionResponse } from "@/src/lib/services/country-detection";
 
 export default {
   async fetch(request: Request): Promise<Response> {
