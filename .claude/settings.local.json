@@ -29,5 +29,6 @@
       "WebFetch(domain:tanstack.com)"
     ],
     "deny": []
-  }
+  },
+  "enableAllProjectMcpServers": false
 }

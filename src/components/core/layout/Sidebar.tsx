@@ -465,7 +465,7 @@ const Sidebar = ({ config, headerContent, footerContent }: SidebarProps) => {
   const activeSection = matchingSections.length > 0 ? matchingSections[0].slug : undefined;
 
   return (
-    <aside className="h-full overflow-hidden">
+    <aside className="flex h-full flex-col overflow-hidden">
       {/* Custom header content if provided */}
       {headerContent && <div className="mb-5">{headerContent}</div>}
 
@@ -491,13 +491,10 @@ const Sidebar = ({ config, headerContent, footerContent }: SidebarProps) => {
         </>
       )}
 
-      {/* Scrollable content area with fixed height */}
-      <div className="flex h-[calc(100vh-220px)] flex-col">
-        <div
-          ref={sidebarRef}
-          className="flex-1 overflow-y-auto" // Flexbox will allow this to fill available space
-        >
-          <nav className="space-y-1">
+      {/* Scrollable content area that flexes to fill remaining space */}
+      <div className="flex min-h-0 flex-1 flex-col">
+        <div ref={sidebarRef} className="min-h-0 flex-1 overflow-y-auto">
+          <nav className="space-y-1 pb-6">
             {/* Show content for active section */}
             {activeSection ? (
               <SectionContent
@@ -513,11 +510,8 @@ const Sidebar = ({ config, headerContent, footerContent }: SidebarProps) => {
           </nav>
         </div>
 
-        {/* Fixed non-scrollable footer buffer */}
-        <div className="h-50 flex-shrink-0">
-          {/* Footer content if provided */}
-          {footerContent}
-        </div>
+        {/* Footer content if provided - natural height */}
+        {footerContent && <div className="flex-shrink-0">{footerContent}</div>}
       </div>
     </aside>
   );
