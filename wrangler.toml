@@ -1,6 +1,6 @@
 name = "website"
 main = "cloudflare/country-detection.ts"
-route = { pattern = "mirascope.com/*", zone_name = "mirascope.com" }
+route = { pattern = "mirascope.com/cf/*", zone_name = "mirascope.com" }
 compatibility_date = "2025-04-01"
 
 [assets]
