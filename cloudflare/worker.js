@@ -71,6 +71,7 @@ function addCountryCodeToHtml(response, countryCode) {
     .on("head", {
       element(element) {
         // Insert the country meta tag
+        console.log(`adding countryCode: ${countryCode} to response`);
         element.append(`<meta name="cf-ipcountry" content="${countryCode}">`, { html: true });
       },
     })
