@@ -1,17 +1,15 @@
-// Cloudflare worker - Manually deployed at present
+// Cloudflare worker - ES Module syntax
 
 const ASSET_FILE_REGEX = /\.(png|jpg|jpeg|gif|svg|ico|css|js|woff|woff2|ttf|pdf|webp)$/i;
-
-addEventListener("fetch", (event) => {
-  event.respondWith(handleRequest(event.request));
-});
 
 /**
  * Main request handler function
  * @param {Request} request - The incoming request
+ * @param {Object} env - Environment bindings
+ * @param {Object} ctx - Execution context
  * @return {Response} The response to be sent
  */
-async function handleRequest(request) {
+async function handleRequest(request, env, ctx) {
   const url = new URL(request.url);
   const path = url.pathname;
 
@@ -123,3 +121,10 @@ async function handleStaticRequest(request) {
     });
   }
 }
+
+// ES Module export
+export default {
+  async fetch(request, env, ctx) {
+    return handleRequest(request, env, ctx);
+  },
+};
