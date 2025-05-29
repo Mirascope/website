@@ -1,5 +1,6 @@
 name = "website"
 main = "cloudflare/worker.js"
+route = { pattern = "mirascope.com/*", zone_name = "mirascope.com" }
 compatibility_date = "2025-01-01"
 [assets]
 directory = "./dist"
