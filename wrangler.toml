@@ -1,10 +1,12 @@
 name = "website"
-main = "cloudflare/worker.js"
+main = "cloudflare/country-detection.ts"
 route = { pattern = "mirascope.com/*", zone_name = "mirascope.com" }
 compatibility_date = "2025-04-01"
+
 [assets]
 directory = "./dist"
 not_found_handling = "404-page"
+
 [observability]
 enabled = true
 head_sampling_rate = 1
