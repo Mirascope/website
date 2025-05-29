@@ -7,7 +7,7 @@
 @import "./themes.css";
 @import "./paper-texture.css";
 @import "./nav.css";
-@import "./components/code-block.css";
+@import "../mirascope-ui/blocks/code-block/code-block.css";
 
 /* Configure plugins */
 @plugin "tailwindcss-animate";

@@ -7,7 +7,7 @@ import { routeTree } from "./routeTree.gen";
 
 import "./styles.css";
 import reportWebVitals from "./reportWebVitals.ts";
-import { initializeSynchronousHighlighter } from "./lib/code-highlight";
+import { initializeSynchronousHighlighter } from "@/mirascope-ui/lib/code-highlight";
 
 // Initial theme setup (later handled by ThemeSwitcher component)
 const initializeTheme = () => {
