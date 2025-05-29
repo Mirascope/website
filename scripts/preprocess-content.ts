@@ -58,7 +58,7 @@ async function generateSitemap(blogPosts: BlogMeta[], llmDocs: LLMContent[]): Pr
   console.log("Generating sitemap.xml...");
 
   // Get all routes using our centralized utility
-  const uniqueRoutes = getAllRoutes();
+  const uniqueRoutes = getAllRoutes().filter((route) => route !== "/404");
 
   // Use the blog posts metadata
   const postsList = blogPosts || [];

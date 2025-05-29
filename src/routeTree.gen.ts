@@ -15,6 +15,7 @@ import { Route as PrivacyImport } from './routes/privacy'
 import { Route as PricingImport } from './routes/pricing'
 import { Route as LlmsFullImport } from './routes/llms-full'
 import { Route as DevImport } from './routes/dev'
+import { Route as R404Import } from './routes/404'
 import { Route as CatchallImport } from './routes/$catchall'
 import { Route as IndexImport } from './routes/index'
 import { Route as TermsIndexImport } from './routes/terms/index'
@@ -54,6 +55,12 @@ const LlmsFullRoute = LlmsFullImport.update({
 const DevRoute = DevImport.update({
   id: '/dev',
   path: '/dev',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const R404Route = R404Import.update({
+  id: '/404',
+  path: '/404',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -163,6 +170,13 @@ declare module '@tanstack/react-router' {
       path: '/$catchall'
       fullPath: '/$catchall'
       preLoaderRoute: typeof CatchallImport
+      parentRoute: typeof rootRoute
+    }
+    '/404': {
+      id: '/404'
+      path: '/404'
+      fullPath: '/404'
+      preLoaderRoute: typeof R404Import
       parentRoute: typeof rootRoute
     }
     '/dev': {
@@ -310,6 +324,7 @@ const DevRouteWithChildren = DevRoute._addFileChildren(DevRouteChildren)
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$catchall': typeof CatchallRoute
+  '/404': typeof R404Route
   '/dev': typeof DevRouteWithChildren
   '/llms-full': typeof LlmsFullRoute
   '/pricing': typeof PricingRoute
@@ -332,6 +347,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$catchall': typeof CatchallRoute
+  '/404': typeof R404Route
   '/llms-full': typeof LlmsFullRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
@@ -354,6 +370,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/$catchall': typeof CatchallRoute
+  '/404': typeof R404Route
   '/dev': typeof DevRouteWithChildren
   '/llms-full': typeof LlmsFullRoute
   '/pricing': typeof PricingRoute
@@ -378,6 +395,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/$catchall'
+    | '/404'
     | '/dev'
     | '/llms-full'
     | '/pricing'
@@ -399,6 +417,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/$catchall'
+    | '/404'
     | '/llms-full'
     | '/pricing'
     | '/privacy'
@@ -419,6 +438,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/$catchall'
+    | '/404'
     | '/dev'
     | '/llms-full'
     | '/pricing'
@@ -442,6 +462,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CatchallRoute: typeof CatchallRoute
+  R404Route: typeof R404Route
   DevRoute: typeof DevRouteWithChildren
   LlmsFullRoute: typeof LlmsFullRoute
   PricingRoute: typeof PricingRoute
@@ -459,6 +480,7 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CatchallRoute: CatchallRoute,
+  R404Route: R404Route,
   DevRoute: DevRouteWithChildren,
   LlmsFullRoute: LlmsFullRoute,
   PricingRoute: PricingRoute,
@@ -485,6 +507,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/$catchall",
+        "/404",
         "/dev",
         "/llms-full",
         "/pricing",
@@ -504,6 +527,9 @@ export const routeTree = rootRoute
     },
     "/$catchall": {
       "filePath": "$catchall.tsx"
+    },
+    "/404": {
+      "filePath": "404.tsx"
     },
     "/dev": {
       "filePath": "dev.tsx",
