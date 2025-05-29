@@ -58,7 +58,7 @@ export class AnalyticsManager {
   /**
    * Update the user's consent preference
    */
-  updateConsent(consent: AnalyticsConsent): void {
+  async updateConsent(consent: AnalyticsConsent): Promise<void> {
     if (!isBrowser) return;
 
     // Store consent in localStorage
@@ -67,7 +67,7 @@ export class AnalyticsManager {
 
     if (consent === "accepted") {
       // Initialize analytics if consent is granted
-      this.enableAnalytics();
+      await this.enableAnalytics();
     } else if (consent === "rejected") {
       // Handle revoking consent
       this.disableAnalytics();
@@ -78,7 +78,7 @@ export class AnalyticsManager {
   /**
    * Check if analytics should be enabled based on consent and location
    */
-  isEnabled(): boolean {
+  async isEnabled(): Promise<boolean> {
     if (!isBrowser) return false;
 
     // Disable analytics in development environment
@@ -93,7 +93,7 @@ export class AnalyticsManager {
     if (consent === "rejected") return false;
 
     // For unknown consent, check location
-    if (this.isUserInEU()) {
+    if (await this.isUserInEU()) {
       // Default to false for EU users to respect GDPR
       return false;
     } else {
@@ -105,8 +105,8 @@ export class AnalyticsManager {
   /**
    * Enable analytics - initializes both analytics providers if needed
    */
-  enableAnalytics(): boolean {
-    if (!this.isEnabled()) return false;
+  async enableAnalytics(): Promise<boolean> {
+    if (!(await this.isEnabled())) return false;
 
     this.initializeGoogleAnalytics();
     this.initializePostHog();
@@ -140,7 +140,7 @@ export class AnalyticsManager {
   /**
    * Check if the user is in the EU based on Cloudflare country header
    */
-  isUserInEU(): boolean {
+  async isUserInEU(): Promise<boolean> {
     if (!isBrowser) return true; // Default to true for SSR
 
     // EU country codes (including UK for GDPR compliance)
@@ -323,8 +323,8 @@ export class AnalyticsManager {
   /**
    * Track a page view in all analytics systems
    */
-  trackPageView(path: string): void {
-    if (!this.enableAnalytics()) return;
+  async trackPageView(path: string): Promise<void> {
+    if (!(await this.enableAnalytics())) return;
 
     // Send pageview to Google Analytics
     if (window.gtag) {
@@ -345,8 +345,8 @@ export class AnalyticsManager {
   /**
    * Track a custom event in Google Analytics
    */
-  trackGAEvent(action: string, params: EventParams = {}): void {
-    if (!this.enableAnalytics()) return;
+  async trackGAEvent(action: string, params: EventParams = {}): Promise<void> {
+    if (!(await this.enableAnalytics())) return;
 
     // Add site version to all events
     const eventParams = {
@@ -360,8 +360,8 @@ export class AnalyticsManager {
   /**
    * Track a custom event in all analytics systems
    */
-  trackEvent(eventName: string, params: EventParams = {}): void {
-    if (!this.enableAnalytics()) return;
+  async trackEvent(eventName: string, params: EventParams = {}): Promise<void> {
+    if (!(await this.enableAnalytics())) return;
 
     // Add site version to all events
     const eventParams = {
@@ -384,7 +384,7 @@ export class AnalyticsManager {
   /**
    * Track a copy to clipboard event consistently across the site with all analytics
    */
-  trackCopyEvent({
+  async trackCopyEvent({
     contentType,
     itemId,
     product,
@@ -394,21 +394,21 @@ export class AnalyticsManager {
     itemId: string;
     product: string;
     language?: string;
-  }): void {
-    this.trackEvent("select_content", { contentType, itemId, product, language });
+  }): Promise<void> {
+    await this.trackEvent("select_content", { contentType, itemId, product, language });
   }
 
   /**
    * Report web vitals metrics to GA / PostHog
    */
-  reportWebVital(metric: any): void {
-    if (!this.enableAnalytics()) return;
+  async reportWebVital(metric: any): Promise<void> {
+    if (!(await this.enableAnalytics())) return;
 
     console.log(
       `Web vital reported to GA: ${metric.name} - ${Math.round(metric.value * 100) / 100}`
     );
 
-    this.trackEvent("web-vitals", {
+    await this.trackEvent("web-vitals", {
       event_category: "Web Vitals",
       event_label: metric.id,
       value: Math.round(metric.value * 100) / 100,

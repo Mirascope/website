@@ -142,17 +142,17 @@ describe("AnalyticsManager", () => {
     expect(localStorage.getItem("cookie-consent")).toBe("rejected");
   });
 
-  test("isEnabled respects explicit user consent", () => {
+  test("isEnabled respects explicit user consent", async () => {
     // With explicit acceptance
     localStorage.setItem("cookie-consent", "accepted");
-    expect(analyticsManager.isEnabled()).toBe(true);
+    expect(await analyticsManager.isEnabled()).toBe(true);
 
     // With explicit rejection
     localStorage.setItem("cookie-consent", "rejected");
-    expect(analyticsManager.isEnabled()).toBe(false);
+    expect(await analyticsManager.isEnabled()).toBe(false);
   });
 
-  test("isEnabled uses country detection for unknown consent", () => {
+  test("isEnabled uses country detection for unknown consent", async () => {
     // Set up country detection mock
     const mockMetaTag = document.createElement("meta");
     mockMetaTag.setAttribute("name", "cf-ipcountry");
@@ -162,57 +162,57 @@ describe("AnalyticsManager", () => {
     document.head.appendChild(mockMetaTag);
     const querySpy = spyOn(document, "querySelector");
     querySpy.mockImplementation(() => mockMetaTag);
-    expect(analyticsManager.isEnabled()).toBe(false);
+    expect(await analyticsManager.isEnabled()).toBe(false);
 
     // Test non-EU country (United States)
     mockMetaTag.setAttribute("content", "US");
-    expect(analyticsManager.isEnabled()).toBe(true);
+    expect(await analyticsManager.isEnabled()).toBe(true);
   });
 
-  test("enableAnalytics initializes tracking when enabled", () => {
+  test("enableAnalytics initializes tracking when enabled", async () => {
     // Spy on private initializeGoogleAnalytics method
     const initializeSpy = spyOn(analyticsManager as any, "initializeGoogleAnalytics");
     const initializePostHogSpy = spyOn(analyticsManager as any, "initializePostHog");
 
     // When analytics should be enabled
     const isEnabledSpy = spyOn(analyticsManager, "isEnabled");
-    isEnabledSpy.mockImplementation(() => true);
+    isEnabledSpy.mockResolvedValue(true);
 
-    expect(analyticsManager.enableAnalytics()).toBe(true);
+    expect(await analyticsManager.enableAnalytics()).toBe(true);
     expect(initializeSpy).toHaveBeenCalled();
     expect(initializePostHogSpy).toHaveBeenCalled();
 
     // When analytics should be disabled
-    isEnabledSpy.mockImplementation(() => false);
-    expect(analyticsManager.enableAnalytics()).toBe(false);
+    isEnabledSpy.mockResolvedValue(false);
+    expect(await analyticsManager.enableAnalytics()).toBe(false);
 
     // Should not call initialize again
     expect(initializeSpy.mock.calls.length).toBe(1);
   });
 
-  test("trackPageView only tracks when analytics is enabled", () => {
+  test("trackPageView only tracks when analytics is enabled", async () => {
     // Create a fresh gtag mock for this test
     const gtagMock = mock((_command: string, _action: string, _params?: any) => {});
     window.gtag = gtagMock;
 
     // When analytics is enabled
     const enableSpy = spyOn(analyticsManager, "enableAnalytics");
-    enableSpy.mockImplementation(() => true);
+    enableSpy.mockResolvedValue(true);
 
-    analyticsManager.trackPageView("/test-page");
+    await analyticsManager.trackPageView("/test-page");
     expect(gtagMock).toHaveBeenCalled();
 
     // Reset the mock for the second part of the test
     gtagMock.mockReset();
 
     // When analytics is disabled
-    enableSpy.mockImplementation(() => false);
+    enableSpy.mockResolvedValue(false);
 
-    analyticsManager.trackPageView("/test-page");
+    await analyticsManager.trackPageView("/test-page");
     expect(gtagMock).not.toHaveBeenCalled();
   });
 
-  test("trackEvent sends events to both GA and PostHog when enabled", () => {
+  test("trackEvent sends events to both GA and PostHog when enabled", async () => {
     // Create fresh mocks for this test
     const gtagMock = mock((_command: string, _action: string, _params?: any) => {});
     window.gtag = gtagMock;
@@ -225,10 +225,10 @@ describe("AnalyticsManager", () => {
 
     // Enable analytics
     const enableSpy = spyOn(analyticsManager, "enableAnalytics");
-    enableSpy.mockImplementation(() => true);
+    enableSpy.mockResolvedValue(true);
 
     // Track event
-    analyticsManager.trackEvent("test_event", { test_property: "value" });
+    await analyticsManager.trackEvent("test_event", { test_property: "value" });
 
     // Verify both analytics services were called
     expect(gtagMock).toHaveBeenCalled();
@@ -239,10 +239,10 @@ describe("AnalyticsManager", () => {
     posthogCaptureMock.mockReset();
 
     // Disable analytics
-    enableSpy.mockImplementation(() => false);
+    enableSpy.mockResolvedValue(false);
 
     // Track event with analytics disabled
-    analyticsManager.trackEvent("test_event", { test_property: "value" });
+    await analyticsManager.trackEvent("test_event", { test_property: "value" });
 
     // Verify neither service was called
     expect(gtagMock).not.toHaveBeenCalled();
