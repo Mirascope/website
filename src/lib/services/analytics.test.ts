@@ -2,6 +2,7 @@
 
 import { describe, test, expect, beforeEach, afterEach, mock, spyOn } from "bun:test";
 import { AnalyticsManager } from "./analytics";
+import * as countryDetection from "./country-detection";
 
 describe("AnalyticsManager", () => {
   let analyticsManager: AnalyticsManager;
@@ -153,19 +154,15 @@ describe("AnalyticsManager", () => {
   });
 
   test("isEnabled uses country detection for unknown consent", async () => {
-    // Set up country detection mock
-    const mockMetaTag = document.createElement("meta");
-    mockMetaTag.setAttribute("name", "cf-ipcountry");
+    // Mock the country detection helper
+    const getCountryCodeSpy = spyOn(countryDetection, "getCountryCode");
 
     // Test EU country (Germany)
-    mockMetaTag.setAttribute("content", "DE");
-    document.head.appendChild(mockMetaTag);
-    const querySpy = spyOn(document, "querySelector");
-    querySpy.mockImplementation(() => mockMetaTag);
+    getCountryCodeSpy.mockResolvedValue("DE");
     expect(await analyticsManager.isEnabled()).toBe(false);
 
     // Test non-EU country (United States)
-    mockMetaTag.setAttribute("content", "US");
+    getCountryCodeSpy.mockResolvedValue("US");
     expect(await analyticsManager.isEnabled()).toBe(true);
   });
 

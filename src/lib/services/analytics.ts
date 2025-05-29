@@ -3,6 +3,7 @@
  * Integrated with Google Analytics 4 and PostHog.
  */
 import { GA_MEASUREMENT_ID, GTM_ID, POSTHOG_PUBLIC_KEY, SITE_VERSION } from "../constants/site";
+import { getCountryCode } from "./country-detection";
 
 // Centralized check for browser environment
 export const isBrowser = typeof window !== "undefined";
@@ -138,7 +139,7 @@ export class AnalyticsManager {
   }
 
   /**
-   * Check if the user is in the EU based on Cloudflare country header
+   * Check if the user is in the EU based on Cloudflare country detection
    */
   async isUserInEU(): Promise<boolean> {
     if (!isBrowser) return true; // Default to true for SSR
@@ -176,13 +177,11 @@ export class AnalyticsManager {
       "UK",
     ];
 
-    // Get country from meta tag that should be injected server-side
-    const countryMetaTag = document.querySelector('meta[name="cf-ipcountry"]');
-    const countryCode = countryMetaTag?.getAttribute("content") || "";
+    const countryCode = await getCountryCode();
 
     // If no country code is found, assume EU to be conservative
     if (!countryCode) {
-      console.log("No country code found from Cloudflare, defaulting to EU user");
+      console.log("No country code found, defaulting to EU user for GDPR compliance");
       return true;
     }
 
