@@ -12,6 +12,7 @@ const ASSET_FILE_REGEX = /\.(png|jpg|jpeg|gif|svg|ico|css|js|woff|woff2|ttf|pdf|
 async function handleRequest(request, env, ctx) {
   const url = new URL(request.url);
   const path = url.pathname;
+  console.log("handleRequest");
 
   // Check if it's an asset file that should be passed through
   if (isAssetFile(path)) {
@@ -45,6 +46,7 @@ function isAssetFile(path) {
 async function handleRegularRequest(request) {
   const countryCode = request.cf?.country || "";
   const response = await fetch(request);
+  console.log(`handleRegularRequest: ${countryCode}`);
 
   // Only modify HTML responses - check the content type
   const contentType = response.headers.get("content-type") || "";
@@ -63,6 +65,7 @@ async function handleRegularRequest(request) {
  * @return {Response} The modified response
  */
 function addCountryCodeToHtml(response, countryCode) {
+  console.log("outer: addCountryCodeToHtml");
   return new HTMLRewriter()
     .on("head", {
       element(element) {
