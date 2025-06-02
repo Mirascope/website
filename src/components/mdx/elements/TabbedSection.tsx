@@ -1,5 +1,5 @@
 import React from "react";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/src/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/mirascope-ui/ui/tabs";
 import { ProductLogo } from "@/src/components/core/branding";
 import { cn } from "@/src/lib/utils";
 import { temporarilyEnableSyncHighlighting } from "@/mirascope-ui/lib/code-highlight";

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Tabs, TabsList, TabsTrigger } from "@/src/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/mirascope-ui/ui/tabs";
 import { ProductLogo } from "@/src/components/core/branding";
 import { cn } from "@/src/lib/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";

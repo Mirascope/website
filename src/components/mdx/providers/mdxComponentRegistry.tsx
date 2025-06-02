@@ -22,7 +22,7 @@ import {
   AttributesTable,
   TypeLink,
 } from "@/src/components/docs/api";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/src/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/mirascope-ui/ui/tabs";
 import { Button } from "@/src/components/ui/button";
 import { ButtonLink } from "@/src/components/ui/button-link";
 import { ProductLogo, MirascopeLogo, LilypadLogo } from "@/src/components/core/branding";
