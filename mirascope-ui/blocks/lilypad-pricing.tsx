@@ -1,7 +1,7 @@
 import { Check, X } from "lucide-react";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/src/components/ui/tabs";
-import { ButtonLink } from "@/src/components/ui/button-link";
-import { cn } from "@/src/lib/utils";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/mirascope-ui/ui/tabs";
+import { ButtonLink } from "@/mirascope-ui/ui/button-link";
+import { cn } from "@/mirascope-ui/lib/utils";
 
 // Feature row component for displaying features with the same value across tiers
 const FeatureRow = ({
@@ -191,11 +191,11 @@ interface PricingActions {
   };
 }
 
-interface LilypadPricingPageProps {
+interface LilypadPricingProps {
   actions: PricingActions;
 }
 
-export function LilypadPricingPage({ actions }: LilypadPricingPageProps) {
+export function LilypadPricing({ actions }: LilypadPricingProps) {
   // Cloud hosted features
   const cloudHostedFeatures = [
     { feature: "Projects", free: "Unlimited", pro: "Unlimited", team: "Unlimited" },
@@ -246,7 +246,6 @@ export function LilypadPricingPage({ actions }: LilypadPricingPageProps) {
           </p>
         </div>
 
-        {/* Shadcn Tabs */}
         <Tabs defaultValue="hosted" className="mb-10 w-full">
           <div className="mb-8 flex justify-center">
             <TabsList className="bg-muted px-1 py-5">

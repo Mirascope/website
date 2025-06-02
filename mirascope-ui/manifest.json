@@ -20,6 +20,26 @@
       "version": "main",
       "lastSync": "2025-06-02T20:30:18.192Z",
       "files": ["mirascope-ui/ui/card.tsx"]
+    },
+    "lilypad-pricing": {
+      "version": "main",
+      "lastSync": "2025-06-02T21:30:21.479Z",
+      "files": ["mirascope-ui/blocks/lilypad-pricing.tsx"]
+    },
+    "tabs": {
+      "version": "main",
+      "lastSync": "2025-06-02T21:30:21.480Z",
+      "files": ["mirascope-ui/ui/tabs.tsx"]
+    },
+    "button-link": {
+      "version": "main",
+      "lastSync": "2025-06-02T21:30:21.480Z",
+      "files": ["mirascope-ui/ui/button-link.tsx"]
+    },
+    "button": {
+      "version": "main",
+      "lastSync": "2025-06-02T21:33:25.801Z",
+      "files": ["mirascope-ui/ui/button.tsx"]
     }
   },
   "lastFullSync": ""
