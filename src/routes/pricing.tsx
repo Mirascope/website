@@ -4,6 +4,43 @@ import { PageMeta } from "@/src/components";
 import { environment } from "@/src/lib/content/environment";
 
 function PricingPageWithMeta() {
+  const marketingActions = {
+    hosted: {
+      free: {
+        buttonText: "Get Started",
+        buttonLink: "/docs/lilypad/",
+        variant: "default" as const,
+      },
+      pro: {
+        buttonText: "Contact Us",
+        buttonLink: "mailto:sales@mirascope.com",
+        variant: "outline" as const,
+      },
+      team: {
+        buttonText: "Contact Us",
+        buttonLink: "mailto:sales@mirascope.com",
+        variant: "outline" as const,
+      },
+    },
+    selfHosted: {
+      free: {
+        buttonText: "Get Started",
+        buttonLink: "/docs/lilypad/getting-started/self-hosting",
+        variant: "default" as const,
+      },
+      pro: {
+        buttonText: "Request License",
+        buttonLink: "mailto:sales@mirascope.com",
+        variant: "outline" as const,
+      },
+      team: {
+        buttonText: "Request License",
+        buttonLink: "mailto:sales@mirascope.com",
+        variant: "outline" as const,
+      },
+    },
+  };
+
   return (
     <>
       <PageMeta
@@ -11,7 +48,7 @@ function PricingPageWithMeta() {
         description="Lilypad's pricing plans and features"
         product="lilypad"
       />
-      <LilypadPricingPage />
+      <LilypadPricingPage actions={marketingActions} />
     </>
   );
 }

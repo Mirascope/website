@@ -172,7 +172,30 @@ const FeatureComparisonTable = ({
   </div>
 );
 
-export function LilypadPricingPage() {
+interface TierAction {
+  buttonText: string;
+  buttonLink: string;
+  variant?: "default" | "outline";
+}
+
+interface PricingActions {
+  hosted: {
+    free: TierAction;
+    pro: TierAction;
+    team: TierAction;
+  };
+  selfHosted: {
+    free: TierAction;
+    pro: TierAction;
+    team: TierAction;
+  };
+}
+
+interface LilypadPricingPageProps {
+  actions: PricingActions;
+}
+
+export function LilypadPricingPage({ actions }: LilypadPricingPageProps) {
   // Cloud hosted features
   const cloudHostedFeatures = [
     { feature: "Projects", free: "Unlimited", pro: "Unlimited", team: "Unlimited" },
@@ -239,27 +262,28 @@ export function LilypadPricingPage() {
                 name="Free"
                 price="$0"
                 description="For individuals just getting started"
-                buttonText="Get Started"
-                buttonLink="/docs/lilypad/"
+                buttonText={actions.hosted.free.buttonText}
+                buttonLink={actions.hosted.free.buttonLink}
                 badge="Open Beta"
+                variant={actions.hosted.free.variant}
               />
               <PricingTier
                 name="Pro"
                 price="TBD"
                 description="For teams with more advanced needs"
-                buttonText="Contact Us"
-                buttonLink="mailto:sales@mirascope.com"
+                buttonText={actions.hosted.pro.buttonText}
+                buttonLink={actions.hosted.pro.buttonLink}
                 badge="Closed Beta"
-                variant="outline"
+                variant={actions.hosted.pro.variant || "outline"}
               />
               <PricingTier
                 name="Team"
                 price="TBD"
                 description="For larger teams requiring dedicated support"
-                buttonText="Contact Us"
-                buttonLink="mailto:sales@mirascope.com"
+                buttonText={actions.hosted.team.buttonText}
+                buttonLink={actions.hosted.team.buttonLink}
                 badge="Closed Beta"
-                variant="outline"
+                variant={actions.hosted.team.variant || "outline"}
               />
             </div>
 
@@ -274,27 +298,28 @@ export function LilypadPricingPage() {
                 name="Free"
                 price="$0"
                 description="For individuals just getting started"
-                buttonText="Get Started"
-                buttonLink="/docs/lilypad/getting-started/self-hosting"
+                buttonText={actions.selfHosted.free.buttonText}
+                buttonLink={actions.selfHosted.free.buttonLink}
                 badge="Open Beta"
+                variant={actions.selfHosted.free.variant}
               />
               <PricingTier
                 name="Pro"
                 price="TBD"
                 description="For teams with more advanced needs"
-                buttonText="Request License"
-                buttonLink="mailto:sales@mirascope.com"
+                buttonText={actions.selfHosted.pro.buttonText}
+                buttonLink={actions.selfHosted.pro.buttonLink}
                 badge="Closed Beta"
-                variant="outline"
+                variant={actions.selfHosted.pro.variant || "outline"}
               />
               <PricingTier
                 name="Team"
                 price="TBD"
                 description="For larger teams requiring dedicated support"
-                buttonText="Request License"
-                buttonLink="mailto:sales@mirascope.com"
+                buttonText={actions.selfHosted.team.buttonText}
+                buttonLink={actions.selfHosted.team.buttonLink}
                 badge="Closed Beta"
-                variant="outline"
+                variant={actions.selfHosted.team.variant || "outline"}
               />
             </div>
 
