@@ -105,5 +105,5 @@ export default function ResponsiveSearchWrapper({ onOpenChange }: SearchWrapperP
   }
 
   // Desktop UI - render the SearchBar normally
-  return <SearchBar onOpenChange={onOpenChange} />;
+  return <SearchBar onOpenChange={onOpenChange} onResultSelect={() => onOpenChange(false)} />;
 }

@@ -70,6 +70,9 @@ function SearchResult({ result, onSelect, isSelected = false, index, onHover }: 
 // Maximum number of search results to display
 const MAX_DISPLAYED_RESULTS = 20;
 
+// Duration to block focus events after result selection to prevent search from reopening
+const FOCUS_BLOCK_DURATION = 200;
+
 // Component for a list of search results
 interface SearchResultListProps {
   results: SearchResultItem[];
@@ -290,7 +293,7 @@ interface SearchBarProps {
 
   /**
    * Called when a search result is selected
-   * Useful for mobile mode to close the overlay
+   * Useful to close the overlay
    */
   onResultSelect?: () => void;
 }
@@ -301,6 +304,8 @@ export default function SearchBar({
   onResultSelect,
 }: SearchBarProps = {}) {
   const [isOpen, setIsOpen] = useState(initialIsOpen);
+  const [isClosingFromResult, setIsClosingFromResult] = useState(false);
+
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResultItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -460,13 +465,21 @@ export default function SearchBar({
 
   // Handle result selection - closes the search interface
   const handleResultSelect = () => {
+    // Set flag to prevent focus events from reopening search during navigation
+    setIsClosingFromResult(true);
+
     setIsOpen(false);
     setQuery("");
 
-    // For mobile mode, call the onResultSelect prop to close the overlay
-    if (isMobile && onResultSelect) {
+    // Call the onResultSelect prop to close the overlay/modal
+    if (onResultSelect) {
       onResultSelect();
     }
+
+    // Clear the flag after navigation has had time to complete
+    setTimeout(() => {
+      setIsClosingFromResult(false);
+    }, FOCUS_BLOCK_DURATION);
   };
 
   // Initialize the search service
@@ -508,7 +521,13 @@ export default function SearchBar({
       <SearchInput
         query={query}
         onChange={setQuery}
-        onFocus={() => setIsOpen(true)}
+        onFocus={() => {
+          // Prevent reopening search if we just closed it due to result selection
+          if (isClosingFromResult) {
+            return;
+          }
+          setIsOpen(true);
+        }}
         inputRef={inputRef}
         isOpen={isOpen || isMobile} // Always show as open in mobile mode
         isMobile={isMobile}
