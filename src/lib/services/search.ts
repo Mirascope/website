@@ -198,7 +198,10 @@ export class PagefindSearchService implements SearchService {
         const data = await pagefindResult.data();
 
         // Normalize the URL to match our routes
-        const url = data.url || "";
+        let url = data.url || "";
+        if (url.endsWith(".html")) {
+          url = url.slice(0, -5);
+        }
 
         // Try to find matching metadata using the URL as route
         const meta = this.findMetadataByUrl(url);
