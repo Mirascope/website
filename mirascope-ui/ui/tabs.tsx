@@ -1,8 +1,8 @@
-import * as React from "react";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
-
-import { cn } from "@/src/lib/utils";
+import * as React from "react";
 import { buttonVariants } from "./button";
+
+import { cn } from "@/mirascope-ui/lib/utils";
 
 function Tabs({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Root>) {
   return (

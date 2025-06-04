@@ -26,7 +26,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/src/components/ui/pagination";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/mirascope-ui/ui/tabs";
 import {
   Tooltip,
   TooltipContent,
