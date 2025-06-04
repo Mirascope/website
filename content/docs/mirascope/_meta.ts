@@ -100,6 +100,7 @@ const docsSection: SectionSpec = {
       slug: "learn/provider-specific",
       label: "Provider-Specific Features",
       children: [
+        { slug: "thinking-and-reasoning", label: "Thinking & Reasoning" },
         {
           slug: "openai",
           label: "OpenAI",
