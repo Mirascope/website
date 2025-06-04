@@ -62,7 +62,7 @@ book: Book = extract_book(text) # [!code highlight]`;
           <BookOpen className="size-5" aria-hidden="true" /> Mirascope Docs
         </ButtonLink>
         <ButtonLink
-          href="https://join.slack.com/t/mirascope-community/shared_invite/zt-2ilqhvmki-FB6LWluInUCkkjYD3oSjNA"
+          href="/slack-invite"
           variant="outline"
           size="default"
           className="landing-page-box-shadow landing-page-box-shadow-hover w-full min-w-[200px] border-0 bg-white px-6 py-4 text-center font-medium text-black hover:bg-gray-100 hover:text-black sm:w-auto"

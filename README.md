@@ -195,7 +195,8 @@ When adding a new explicitly, there are some considerations, please add an `onEr
 
 This is important, as it is the only way the static build will know if the component failed to render. This is because the Tanstack router automatically catches all errors and does not repropagate them, so otherwise the static build will seem to succeed but will prerender broken content.
 
-Also, make sure you include a SEOHelmet component in the component served by your new route, so we'll have proper SEO metadata for that route.
+Also, make sure a `<PageMeta>` component is included in the new route, so that SEO
+meta will be set appropriately.
 
 ### Cloudflare Integrations
 

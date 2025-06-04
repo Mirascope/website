@@ -19,6 +19,12 @@ interface ValidationResult {
 }
 
 /**
+ * Known redirects that are handled by Cloudflare/hosting platform
+ * These are intentional redirects and should not be treated as broken links
+ */
+const KNOWN_REDIRECTS = ["/slack-invite"];
+
+/**
  * Parse sitemap.xml to extract all valid routes
  */
 function parseSitemap(sitemapPath: string): Set<string> {
@@ -152,6 +158,11 @@ async function validateLinksAndImages(
       } catch (e) {
         // If URL parsing fails, use the original href
         urlPath = href;
+      }
+
+      // Skip validation for known redirects
+      if (KNOWN_REDIRECTS.includes(urlPath)) {
+        return;
       }
 
       // First check if link uses canonical format
