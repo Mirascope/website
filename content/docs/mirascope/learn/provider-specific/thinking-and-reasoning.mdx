@@ -122,8 +122,13 @@ for chunk, _ in stream:
 <Tab value="Google">
 
 <Note>
-Google thinking is supported for the Gemini 2.5 series models. It may be invoked using
-the `@google.call` provider-specific decorator, as in the example below. For more, read the [Google documentation](https://ai.google.dev/gemini-api/docs/thinking).
+Google thinking is supported for the Gemini 2.5 series models. It is enabled by default, but may be configured specifically when using
+the `@google.call` provider-specific decorator. 
+
+The `include_thoughts` setting makes summaries of the thinking process available, as shown below. There is also a `thinking_budget` option, in Gemini 2.5 Flash,
+which allows fine tuning how many tokens are availble for thinking.
+
+For more, read the [Google documentation](https://ai.google.dev/gemini-api/docs/thinking).
 </Note>
 
 <TabbedSection>
