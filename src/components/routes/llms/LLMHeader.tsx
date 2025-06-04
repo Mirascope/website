@@ -1,6 +1,6 @@
 import { LLMContent } from "@/src/lib/content/llm-content";
-import { Button } from "@/src/components/ui/button";
-import { ButtonLink } from "@/src/components/ui/button-link";
+import { Button } from "@/mirascope-ui/ui/button";
+import { ButtonLink } from "@/mirascope-ui/ui/button-link";
 import { ChevronDown, ChevronRight, Rocket, Clipboard } from "lucide-react";
 import { formatTokenCount, tokenBadge } from "./utils";
 

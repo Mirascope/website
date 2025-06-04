@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ButtonLink } from "@/src/components/ui/button-link";
+import { ButtonLink } from "@/mirascope-ui/ui/button-link";
 import { ChevronLeft } from "lucide-react";
 import { MDXRenderer } from "@/src/components/mdx/providers";
 import { CopyMarkdownButton } from "@/src/components/ui/copy-markdown-button";

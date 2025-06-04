@@ -1,6 +1,6 @@
 import React from "react";
 import type { DevMeta } from "@/src/lib/content";
-import { Button } from "@/src/components/ui/button";
+import { Button } from "@/mirascope-ui/ui/button";
 import {
   Card,
   CardContent,

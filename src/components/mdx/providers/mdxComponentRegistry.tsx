@@ -23,8 +23,8 @@ import {
   TypeLink,
 } from "@/src/components/docs/api";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/mirascope-ui/ui/tabs";
-import { Button } from "@/src/components/ui/button";
-import { ButtonLink } from "@/src/components/ui/button-link";
+import { Button } from "@/mirascope-ui/ui/button";
+import { ButtonLink } from "@/mirascope-ui/ui/button-link";
 import { ProductLogo, MirascopeLogo, LilypadLogo } from "@/src/components/core/branding";
 import { ProviderCodeWrapper } from "./ProviderCodeWrapper";
 import { ResponsiveImage } from "@/src/components/mdx/providers/ResponsiveImage";

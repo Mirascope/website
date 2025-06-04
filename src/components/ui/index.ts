@@ -1,6 +1,4 @@
 // Export UI components
-export * from "./button";
-export * from "./button-link";
 export * from "./card";
 export * from "./copy-markdown-button";
 export * from "./dropdown-menu";

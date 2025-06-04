@@ -5,7 +5,7 @@ import { ContentErrorHandler } from "@/src/components";
 import { LLMContent } from "@/src/lib/content/llm-content";
 import DocsSidebar from "@/src/components/routes/docs/DocsSidebar";
 import type { ProductName } from "@/src/lib/content/doc-registry";
-import { ButtonLink } from "@/src/components/ui/button-link";
+import { ButtonLink } from "@/mirascope-ui/ui/button-link";
 
 /**
  * Loader for product-specific LLM document viewer routes

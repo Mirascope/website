@@ -1,4 +1,4 @@
-import { Button } from "@/src/components/ui/button";
+import { Button } from "@/mirascope-ui/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,

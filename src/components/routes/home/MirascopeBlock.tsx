@@ -1,4 +1,4 @@
-import { ButtonLink } from "@/src/components/ui/button-link";
+import { ButtonLink } from "@/mirascope-ui/ui/button-link";
 import { ResponsiveTextBlock } from "@/src/components/ui/responsive-text-block";
 import { BookOpen, Users, ChevronDown } from "lucide-react";
 import { ProviderTabbedSection } from "@/src/components/mdx/elements/ProviderTabbedSection";
