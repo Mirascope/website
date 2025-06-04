@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { createContext, useContext, useEffect } from "react";
 import { cn } from "@/src/lib/utils";
-import { Button } from "@/src/components/ui/button";
+import { Button } from "@/mirascope-ui/ui/button";
 import { ChevronLeft, ChevronRight, X, type LucideIcon } from "lucide-react";
 import { useSidebar, isMobileView } from "./useSidebar";
 

@@ -1,7 +1,7 @@
 import React from "react";
 import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { Button } from "@/src/components/ui/button";
+import { Button } from "@/mirascope-ui/ui/button";
 import { ChevronLeft } from "lucide-react";
 
 interface ErrorContentProps {

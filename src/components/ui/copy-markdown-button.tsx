@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "./button";
+import { Button } from "@/mirascope-ui/ui/button";
 import { Clipboard, Check } from "lucide-react";
 import analyticsManager from "@/src/lib/services/analytics";
 

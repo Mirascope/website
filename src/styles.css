@@ -50,6 +50,7 @@
   --font-mono:
     "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
     "Courier New", monospace;
+  --font-fun: "Williams Handwriting", cursive;
   --font-handwriting: "Williams Handwriting", cursive;
   --font-handwriting-descent: "Williams Handwriting Descent", cursive;
 }
@@ -82,6 +83,10 @@ pre {
 /* Font mode class definitions */
 .font-sans {
   font-family: var(--font-sans) !important;
+}
+
+.font-fun {
+  font-family: var(--font-fun) !important;
 }
 
 .font-handwriting {
