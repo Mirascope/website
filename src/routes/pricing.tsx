@@ -2,41 +2,54 @@ import { createFileRoute } from "@tanstack/react-router";
 import { LilypadPricing } from "@/mirascope-ui/blocks/lilypad-pricing";
 import { PageMeta } from "@/src/components";
 import { environment } from "@/src/lib/content/environment";
+import { ButtonLink } from "@/mirascope-ui/ui/button-link";
 
 function PricingPageWithMeta() {
   const marketingActions = {
     hosted: {
       free: {
-        buttonText: "Get Started",
-        buttonLink: "/docs/lilypad/",
-        variant: "default" as const,
+        button: (
+          <ButtonLink href="/docs/lilypad/" variant="default">
+            Get Started
+          </ButtonLink>
+        ),
       },
       pro: {
-        buttonText: "Contact Us",
-        buttonLink: "mailto:sales@mirascope.com",
-        variant: "outline" as const,
+        button: (
+          <ButtonLink href="mailto:sales@mirascope.com" variant="outline">
+            Contact Us
+          </ButtonLink>
+        ),
       },
       team: {
-        buttonText: "Contact Us",
-        buttonLink: "mailto:sales@mirascope.com",
-        variant: "outline" as const,
+        button: (
+          <ButtonLink href="mailto:sales@mirascope.com" variant="outline">
+            Contact Us
+          </ButtonLink>
+        ),
       },
     },
     selfHosted: {
       free: {
-        buttonText: "Get Started",
-        buttonLink: "/docs/lilypad/getting-started/self-hosting",
-        variant: "default" as const,
+        button: (
+          <ButtonLink href="/docs/lilypad/getting-started/self-hosting" variant="default">
+            Get Started
+          </ButtonLink>
+        ),
       },
       pro: {
-        buttonText: "Request License",
-        buttonLink: "mailto:sales@mirascope.com",
-        variant: "outline" as const,
+        button: (
+          <ButtonLink href="mailto:sales@mirascope.com" variant="outline">
+            Request License
+          </ButtonLink>
+        ),
       },
       team: {
-        buttonText: "Request License",
-        buttonLink: "mailto:sales@mirascope.com",
-        variant: "outline" as const,
+        button: (
+          <ButtonLink href="mailto:sales@mirascope.com" variant="outline">
+            Request License
+          </ButtonLink>
+        ),
       },
     },
   };
