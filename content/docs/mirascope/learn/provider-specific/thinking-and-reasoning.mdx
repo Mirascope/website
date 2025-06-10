@@ -30,34 +30,26 @@ the `@anthropic.call` provider-specific decorator, as in the example below. For 
 <TabbedSection>
 <Tab value="Response">
 ```py
-import inspect
-
-from dotenv import load_dotenv
-
-from mirascope.core import anthropic
-
-load_dotenv()
+from mirascope.core import anthropic, prompt_template
 
 
 @anthropic.call(
     model="claude-3-7-sonnet-latest",
-    call_params=anthropic.AnthropicCallParams(  # [!code highlight]
-        max_tokens=2048, # [!code highlight]
+    call_params=anthropic.AnthropicCallParams(
+        max_tokens=2048,
         thinking={"type": "enabled", "budget_tokens": 1024},  # [!code highlight]
-    ),  # [!code highlight]
+    ),
 )
-def answer() -> str:
-    return inspect.cleandoc(
-        """
-    Suppose a rocket is launched from a surface, pointing straight up.
-    For the first ten seconds, the rocket engine is providing upwards thrust of 
-    50m/s^2, after which it shuts off.
-    There is constant downwards acceleration of 10m/s^2 due to gravity.
-    What is the highest height it will achieve?
-    
-    Your final response should be ONLY a number in meters, with no additional text.
-    """
-    )
+@prompt_template("""
+Suppose a rocket is launched from a surface, pointing straight up.
+For the first ten seconds, the rocket engine is providing upwards thrust of
+50m/s^2, after which it shuts off.
+There is constant downwards acceleration of 10m/s^2 due to gravity.
+What is the highest height it will achieve?
+
+Your final response should be ONLY a number in meters, with no additional text.
+""")
+def answer(): ...
 
 
 response = answer()
@@ -69,35 +61,27 @@ print(response.content)  # [!code highlight]
 </Tab>
 <Tab value="Stream">
 ```py
-import inspect
-
-from dotenv import load_dotenv
-
-from mirascope.core import anthropic
-
-load_dotenv()
+from mirascope.core import anthropic, prompt_template
 
 
 @anthropic.call(
     model="claude-3-7-sonnet-latest",
-    call_params=anthropic.AnthropicCallParams(  # [!code highlight]
-        max_tokens=2048, # [!code highlight]
+    call_params=anthropic.AnthropicCallParams(
+        max_tokens=2048,
         thinking={"type": "enabled", "budget_tokens": 1024},  # [!code highlight]
-    ),  # [!code highlight]
+    ),
     stream=True,
 )
-def answer() -> str:
-    return inspect.cleandoc(
-        """
-    Suppose a rocket is launched from a surface, pointing straight up.
-    For the first ten seconds, the rocket engine is providing upwards thrust of 
-    50m/s^2, after which it shuts off.
-    There is constant downwards acceleration of 10m/s^2 due to gravity.
-    What is the highest height it will achieve?
-    
-    Your final response should be ONLY a number in meters, with no additional text.
-    """
-    )
+@prompt_template("""
+Suppose a rocket is launched from a surface, pointing straight up.
+For the first ten seconds, the rocket engine is providing upwards thrust of
+50m/s^2, after which it shuts off.
+There is constant downwards acceleration of 10m/s^2 due to gravity.
+What is the highest height it will achieve?
+
+Your final response should be ONLY a number in meters, with no additional text.
+""")
+def answer(): ...
 
 
 stream = answer()
@@ -134,37 +118,29 @@ For more, read the [Google documentation](https://ai.google.dev/gemini-api/docs/
 <TabbedSection>
 <Tab value="Response">
 ```python
-import inspect
-
-from dotenv import load_dotenv
 from google.genai import types
 
-from mirascope.core import google
-
-load_dotenv()
+from mirascope.core import google, prompt_template
 
 
 @google.call(
     model="gemini-2.5-flash-preview-05-20",
-    # [!code highlight:5]
     call_params={
         "config": types.GenerateContentConfig(
-            thinking_config=types.ThinkingConfig(include_thoughts=True)
+            thinking_config=types.ThinkingConfig(include_thoughts=True) # [!code highlight]
         ),
     },
 )
-def answer() -> str:
-    return inspect.cleandoc(
-        """
-    Suppose a rocket is launched from a surface, pointing straight up.
-    For the first ten seconds, the rocket engine is providing upwards thrust of 
-    50m/s^2, after which it shuts off.
-    There is constant downwards acceleration of 10m/s^2 due to gravity.
-    What is the highest height it will achieve?
-    
-    Your final response should be ONLY a number in meters, with no additional text.
-    """
-    )
+@prompt_template("""
+Suppose a rocket is launched from a surface, pointing straight up.
+For the first ten seconds, the rocket engine is providing upwards thrust of
+50m/s^2, after which it shuts off.
+There is constant downwards acceleration of 10m/s^2 due to gravity.
+What is the highest height it will achieve?
+
+Your final response should be ONLY a number in meters, with no additional text.
+""")
+def answer(): ...
 
 
 response = answer()
@@ -177,38 +153,30 @@ print(response.content)  # [!code highlight]
 
 <Tab value="Stream">
 ```python
-import inspect
-
-from dotenv import load_dotenv
 from google.genai import types
 
-from mirascope.core import google
-
-load_dotenv()
+from mirascope.core import google, prompt_template
 
 
 @google.call(
     model="gemini-2.5-flash-preview-05-20",
-    # [!code highlight:5]
     call_params={
         "config": types.GenerateContentConfig(
-            thinking_config=types.ThinkingConfig(include_thoughts=True)
+            thinking_config=types.ThinkingConfig(include_thoughts=True)  # [!code highlight]
         ),
     },
     stream=True,
 )
-def answer() -> str:
-    return inspect.cleandoc(
-        """
-    Suppose a rocket is launched from a surface, pointing straight up.
-    For the first ten seconds, the rocket engine is providing upwards thrust of 
-    50m/s^2, after which it shuts off.
-    There is constant downwards acceleration of 10m/s^2 due to gravity.
-    What is the highest height it will achieve?
-    
-    Your final response should be ONLY a number in meters, with no additional text.
-    """
-    )
+@prompt_template("""
+Suppose a rocket is launched from a surface, pointing straight up.
+For the first ten seconds, the rocket engine is providing upwards thrust of
+50m/s^2, after which it shuts off.
+There is constant downwards acceleration of 10m/s^2 due to gravity.
+What is the highest height it will achieve?
+
+Your final response should be ONLY a number in meters, with no additional text.
+""")
+def answer(): ...
 
 
 stream = answer()
