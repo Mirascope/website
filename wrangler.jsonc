@@ -1,0 +1,14 @@
+{
+  "name": "website",
+  "main": "cloudflare/worker.ts",
+  "compatibility_date": "2025-06-10",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  }
+}

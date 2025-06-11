@@ -1,5 +1,3 @@
-// TypeScript Cloudflare Worker for country detection API
-
 interface CloudflareRequest extends Request {
   cf?: {
     country?: string;
@@ -13,26 +11,7 @@ interface CloudflareRequest extends Request {
 
 import type { CountryDetectionResponse } from "@/src/lib/services/country-detection";
 
-export default {
-  async fetch(request: Request): Promise<Response> {
-    const url = new URL(request.url);
-
-    // Handle country detection API endpoint
-    if (url.pathname === "/cf/country-detection") {
-      return handleCountryDetection(request);
-    }
-
-    // For all other requests, return 404 (Assets will handle valid files)
-    return new Response("Not Found", { status: 404 });
-  },
-};
-
-/**
- * Handles country detection API requests
- * @param request - The incoming request with CF properties
- * @returns JSON response with country information
- */
-function handleCountryDetection(request: Request): Response {
+export function countryDetectionHandler(request: Request): Response {
   const cfRequest = request as CloudflareRequest;
   const cf = cfRequest.cf;
 
