@@ -27,6 +27,7 @@ export async function contentMetaCorsHandler(request: Request): Promise<Response
     modifiedResponse.headers.set("Access-Control-Allow-Origin", "*");
     modifiedResponse.headers.set("Access-Control-Allow-Methods", "GET, OPTIONS");
     modifiedResponse.headers.set("Access-Control-Allow-Headers", "Content-Type");
+    console.log(`modifying response headers to allow CORS: ${url.pathname}`);
 
     return modifiedResponse;
   }
