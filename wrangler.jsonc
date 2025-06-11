@@ -1,5 +1,6 @@
 {
   "name": "website",
+  "main": "cloudflare/worker.ts",
   "compatibility_date": "2025-03-07",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
