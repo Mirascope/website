@@ -18,6 +18,7 @@
     "build:full": "bun run prebuild && bun run generate-og-images && bun run --bun vite build && bun run optimize-images && bun run prerender && bun run postbuild",
     "postbuild": "pagefind --site dist --output-path dist/_pagefind --root-selector '[data-pagefind-body=\"true\"]' --",
     "deploy": "wrangler deploy",
+    "version-upload": "wrangler versions upload",
     "serve": "bun scripts/serve-static.js",
     "test": "bun test",
     "lint": "bun run typecheck && bun run lint:mdx && bun run lint:snippets && bun run lint:python && bun run lint:format",
