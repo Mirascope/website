@@ -4,6 +4,7 @@ import { contentMetaCorsHandler } from "./handlers/content-meta-cors";
 export default {
   async fetch(request: Request): Promise<Response> {
     const url = new URL(request.url);
+    console.log(`worker dispatch: ${url.pathname}`);
 
     if (url.pathname === "/cf/country-detection") {
       return countryDetectionHandler(request);
