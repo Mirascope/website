@@ -28,14 +28,13 @@ export async function contentMetaCorsHandler(request: Request): Promise<Response
     return new Response("Bad Request", { status: 400 });
   }
 
-  // Create new URL pointing to the static file
-  const staticFileUrl = new URL(contentMetaPath, url.origin);
-  console.log(`Fetching: ${staticFileUrl.toString()}`);
+  // Fetch the static file using relative path to avoid routing loops
+  console.log(`Fetching: ${contentMetaPath}`);
 
   try {
-    // Fetch the static file
-    const response = await fetch(staticFileUrl.toString());
-    console.log(`Fetch result: ${response.status} for ${staticFileUrl.toString()}`);
+    // Fetch the static file using just the path
+    const response = await fetch(contentMetaPath);
+    console.log(`Fetch result: ${response.status} for ${contentMetaPath}`);
 
     if (!response.ok) {
       return new Response("Not Found", { status: 404 });
