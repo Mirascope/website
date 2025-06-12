@@ -1488,7 +1488,7 @@ wheels = [
 
 [[package]]
 name = "mirascope"
-version = "1.23.4"
+version = "1.25.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "docstring-parser" },
@@ -1496,9 +1496,9 @@ dependencies = [
     { name = "pydantic" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/0d/9c/b56e69722097fd9f6db6b8978b3631bdb09efeebdcef866a3da0845bda13/mirascope-1.23.4.tar.gz", hash = "sha256:e5558bf12d5c8ed48922b306cb6b2feaf8690b5aaced3eb4716bfbbdb3e6b41b", size = 601852 }
+sdist = { url = "https://files.pythonhosted.org/packages/fc/7a/eb0480566d2270827c2f79e38d61db8fa823401aaea9e840daad97e13826/mirascope-1.25.0.tar.gz", hash = "sha256:77a1e054d8650251bbf0f06c1b693b3645ff292be4f527e6258747e17e1e17e0", size = 627246 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/9d/c9/62122e6465383080b2021273f7c3a026e5e80eddac1e0b0b23bdd79925fc/mirascope-1.23.4-py3-none-any.whl", hash = "sha256:52931ceb24b91fb313cec76396cd72042b1ba35fa0ed9c7b8966d484d3e02553", size = 369827 },
+    { url = "https://files.pythonhosted.org/packages/30/f4/5b6cc66121e82294ae535441fd093e634bce1461c3b98832901e35dd271f/mirascope-1.25.0-py3-none-any.whl", hash = "sha256:38b790d8c028bfafacf4a581b177dbaf59cb717e0648a8aaf0d611f2a669d121", size = 373171 },
 ]
 
 [[package]]
@@ -1572,7 +1572,7 @@ requires-dist = [
     { name = "lilypad-sdk", specifier = ">=0.2.3" },
     { name = "litellm", marker = "extra == 'mirascope-all'", specifier = ">=1.42.12,<2" },
     { name = "mcp", marker = "extra == 'mirascope-all'", specifier = ">=1.6.0" },
-    { name = "mirascope", specifier = ">=1.23.4" },
+    { name = "mirascope", specifier = ">=1.25.0" },
     { name = "mistralai", marker = "extra == 'mirascope-all'", specifier = ">=1.0.0,<2" },
     { name = "numpy", marker = "extra == 'mirascope-all'", specifier = ">=1.26.4,<2" },
     { name = "openai", marker = "extra == 'mirascope-all'", specifier = ">=1.6.0,<2" },
