@@ -28,12 +28,18 @@ export async function contentMetaCorsHandler(request: Request): Promise<Response
     return new Response("Bad Request", { status: 400 });
   }
 
-  // Fetch the static file using relative path to avoid routing loops
-  console.log(`Fetching: ${contentMetaPath}`);
+  // Create a new request to avoid routing loops by using a fresh Request object
+  const staticFileUrl = new URL(contentMetaPath, url.origin);
+  console.log(`Fetching: ${staticFileUrl.toString()}`);
 
   try {
-    // Fetch the static file using just the path
-    const response = await fetch(contentMetaPath);
+    // Fetch the static file with a new request to avoid worker routing
+    const response = await fetch(
+      new Request(staticFileUrl.toString(), {
+        method: "GET",
+        headers: { "User-Agent": "Cloudflare-Worker" },
+      })
+    );
     console.log(`Fetch result: ${response.status} for ${contentMetaPath}`);
 
     if (!response.ok) {
