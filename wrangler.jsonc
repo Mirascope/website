@@ -2,8 +2,7 @@
   "name": "website",
   "main": "cloudflare/worker.ts",
   "routes": [
-    { "pattern": "mirascope.com/cf/*", "zone_name": "mirascope.com" },
-    { "pattern": "mirascope.com/static/content-meta/*", "zone_name": "mirascope.com" }
+    { "pattern": "mirascope.com/cf/*", "zone_name": "mirascope.com" }
   ],
   "compatibility_date": "2025-06-10",
   "compatibility_flags": ["nodejs_compat"],

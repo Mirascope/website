@@ -10,7 +10,7 @@ export default {
       return countryDetectionHandler(request);
     }
 
-    if (url.pathname.startsWith("/static/content-meta/")) {
+    if (url.pathname.startsWith("/cf/content-meta/")) {
       return contentMetaCorsHandler(request);
     }
 
