@@ -40,14 +40,15 @@ from mirascope.core import anthropic, prompt_template
         thinking={"type": "enabled", "budget_tokens": 1024},  # [!code highlight]
     ),
 )
-@prompt_template("""
-Suppose a rocket is launched from a surface, pointing straight up.
-For the first ten seconds, the rocket engine is providing upwards thrust of
-50m/s^2, after which it shuts off.
-There is constant downwards acceleration of 10m/s^2 due to gravity.
-What is the highest height it will achieve?
+@prompt_template(
+    """
+    Suppose a rocket is launched from a surface, pointing straight up.
+    For the first ten seconds, the rocket engine is providing upwards thrust of
+    50m/s^2, after which it shuts off.
+    There is constant downwards acceleration of 10m/s^2 due to gravity.
+    What is the highest height it will achieve?
 
-Your final response should be ONLY a number in meters, with no additional text.
+    Your final response should be ONLY a number in meters, with no additional text.
 """)
 def answer(): ...
 
@@ -72,14 +73,15 @@ from mirascope.core import anthropic, prompt_template
     ),
     stream=True,
 )
-@prompt_template("""
-Suppose a rocket is launched from a surface, pointing straight up.
-For the first ten seconds, the rocket engine is providing upwards thrust of
-50m/s^2, after which it shuts off.
-There is constant downwards acceleration of 10m/s^2 due to gravity.
-What is the highest height it will achieve?
+@prompt_template(
+    """
+    Suppose a rocket is launched from a surface, pointing straight up.
+    For the first ten seconds, the rocket engine is providing upwards thrust of
+    50m/s^2, after which it shuts off.
+    There is constant downwards acceleration of 10m/s^2 due to gravity.
+    What is the highest height it will achieve?
 
-Your final response should be ONLY a number in meters, with no additional text.
+    Your final response should be ONLY a number in meters, with no additional text.
 """)
 def answer(): ...
 
@@ -131,14 +133,15 @@ from mirascope.core import google, prompt_template
         ),
     },
 )
-@prompt_template("""
-Suppose a rocket is launched from a surface, pointing straight up.
-For the first ten seconds, the rocket engine is providing upwards thrust of
-50m/s^2, after which it shuts off.
-There is constant downwards acceleration of 10m/s^2 due to gravity.
-What is the highest height it will achieve?
+@prompt_template(
+    """
+    Suppose a rocket is launched from a surface, pointing straight up.
+    For the first ten seconds, the rocket engine is providing upwards thrust of
+    50m/s^2, after which it shuts off.
+    There is constant downwards acceleration of 10m/s^2 due to gravity.
+    What is the highest height it will achieve?
 
-Your final response should be ONLY a number in meters, with no additional text.
+    Your final response should be ONLY a number in meters, with no additional text.
 """)
 def answer(): ...
 
@@ -167,14 +170,15 @@ from mirascope.core import google, prompt_template
     },
     stream=True,
 )
-@prompt_template("""
-Suppose a rocket is launched from a surface, pointing straight up.
-For the first ten seconds, the rocket engine is providing upwards thrust of
-50m/s^2, after which it shuts off.
-There is constant downwards acceleration of 10m/s^2 due to gravity.
-What is the highest height it will achieve?
+@prompt_template(
+    """
+    Suppose a rocket is launched from a surface, pointing straight up.
+    For the first ten seconds, the rocket engine is providing upwards thrust of
+    50m/s^2, after which it shuts off.
+    There is constant downwards acceleration of 10m/s^2 due to gravity.
+    What is the highest height it will achieve?
 
-Your final response should be ONLY a number in meters, with no additional text.
+    Your final response should be ONLY a number in meters, with no additional text.
 """)
 def answer(): ...
 
