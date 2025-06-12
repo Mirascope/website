@@ -1,8 +1,8 @@
 export async function contentMetaCorsHandler(request: Request): Promise<Response> {
   const url = new URL(request.url);
 
-  // Handle CORS preflight for content-meta
-  if (request.method === "OPTIONS" && url.pathname.startsWith("/static/content-meta/")) {
+  // Handle CORS preflight
+  if (request.method === "OPTIONS") {
     return new Response(null, {
       headers: {
         "Access-Control-Allow-Origin": "*",
@@ -12,26 +12,46 @@ export async function contentMetaCorsHandler(request: Request): Promise<Response
     });
   }
 
-  // Handle all content-meta files with CORS headers
-  if (url.pathname.startsWith("/static/content-meta/")) {
-    // Pass the request to the origin
-    const response = await fetch(request);
+  // Extract the file path from /cf/content-meta/... and map to /static/content-meta/...
+  const contentMetaPath = url.pathname.replace("/cf/content-meta/", "/static/content-meta/");
 
-    // Clone the response and add CORS headers
-    const modifiedResponse = new Response(response.body, {
+  // Defensive checks to prevent directory traversal and ensure valid paths
+  if (
+    contentMetaPath.includes("..") ||
+    contentMetaPath.includes("//") ||
+    !contentMetaPath.startsWith("/static/content-meta/") ||
+    contentMetaPath === "/static/content-meta/"
+  ) {
+    return new Response("Bad Request", { status: 400 });
+  }
+
+  // Create new URL pointing to the static file
+  const staticFileUrl = new URL(contentMetaPath, url.origin);
+
+  try {
+    // Fetch the static file
+    const response = await fetch(staticFileUrl.toString());
+
+    if (!response.ok) {
+      return new Response("Not Found", { status: 404 });
+    }
+
+    // Return the content with CORS headers
+    const corsResponse = new Response(response.body, {
       status: response.status,
       statusText: response.statusText,
       headers: new Headers(response.headers),
     });
 
-    modifiedResponse.headers.set("Access-Control-Allow-Origin", "*");
-    modifiedResponse.headers.set("Access-Control-Allow-Methods", "GET, OPTIONS");
-    modifiedResponse.headers.set("Access-Control-Allow-Headers", "Content-Type");
-    console.log(`modifying response headers to allow CORS: ${url.pathname}`);
+    corsResponse.headers.set("Access-Control-Allow-Origin", "*");
+    corsResponse.headers.set("Access-Control-Allow-Methods", "GET, OPTIONS");
+    corsResponse.headers.set("Access-Control-Allow-Headers", "Content-Type");
 
-    return modifiedResponse;
+    console.log(`Served content-meta with CORS: ${contentMetaPath}`);
+
+    return corsResponse;
+  } catch (error) {
+    console.error(`Failed to fetch content-meta file: ${contentMetaPath}`, error);
+    return new Response("Internal Server Error", { status: 500 });
   }
-
-  // For non-content-meta requests, return 404
-  return new Response("Not Found", { status: 404 });
 }
