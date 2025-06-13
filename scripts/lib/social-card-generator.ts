@@ -1,9 +1,19 @@
-import puppeteer, { Browser, Page } from "puppeteer";
+import { chromium } from "playwright";
+import type { Browser, Page } from "playwright";
 import fs from "fs";
 import path from "path";
+import sharp from "sharp";
 import { getProjectRoot } from "../../src/lib/router-utils";
 import { routeToFilename, getProductFromPath } from "../../src/lib/utils";
 import { coloredLog } from "./terminal";
+import type { ProductName } from "../../src/lib/content";
+
+// Extend the Window interface to include our custom function
+declare global {
+  interface Window {
+    updateSocialCard?: (title: string, product: ProductName) => void;
+  }
+}
 
 /**
  * Options for configuring the social card generator
@@ -16,7 +26,7 @@ interface SocialCardOptions {
 }
 
 /**
- * Social Card Generator class that uses puppeteer to generate social card images
+ * Social Card Generator class that uses playwright to generate social card images
  * without the need for a local development server
  */
 export class SocialCardGenerator {
@@ -142,25 +152,24 @@ export class SocialCardGenerator {
   }
 
   /**
-   * Initialize the puppeteer browser and page
+   * Initialize the playwright browser and page
    */
   async initialize(): Promise<void> {
     if (this.options.verbose) {
-      coloredLog("Initializing puppeteer browser...", "cyan");
+      coloredLog("Initializing playwright browser...", "cyan");
     }
 
     // Launch browser
-    this.browser = await puppeteer.launch({
+    this.browser = await chromium.launch({
       headless: true,
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
     this.page = await this.browser.newPage();
 
     // Configure viewport
-    await this.page.setViewport({
+    await this.page.setViewportSize({
       width: this.options.width,
       height: this.options.height,
-      deviceScaleFactor: 1,
     });
 
     // Write template to temporary file
@@ -171,7 +180,7 @@ export class SocialCardGenerator {
     fs.writeFileSync(this.tempHtmlPath, this.templateHtml);
 
     // Load template into page
-    await this.page.goto(`file://${this.tempHtmlPath}`, { waitUntil: "networkidle0" });
+    await this.page.goto(`file://${this.tempHtmlPath}`, { waitUntil: "networkidle" });
 
     // Check if updateSocialCard function exists
     const hasUpdateFunction = await this.page.evaluate(() => {
@@ -183,7 +192,7 @@ export class SocialCardGenerator {
     }
 
     if (this.options.verbose) {
-      coloredLog("Puppeteer browser initialized", "green");
+      coloredLog("Playwright browser initialized", "green");
     }
   }
 
@@ -198,6 +207,7 @@ export class SocialCardGenerator {
     // Create a safe filename
     const filename = routeToFilename(route);
     const outputPath = path.join(this.options.outputDir, `${filename}.webp`);
+    const tempPngPath = path.join(this.options.outputDir, `${filename}_temp.png`);
 
     // Create directory if it doesn't exist
     const directory = path.dirname(outputPath);
@@ -217,27 +227,24 @@ export class SocialCardGenerator {
 
     // Update the social card with the provided title and product
     await this.page.evaluate(
-      (title, product) => {
-        window.updateSocialCard!(title, product);
+      ({ title, product }: { title: string; product: ProductName }) => {
+        window.updateSocialCard?.(title, product);
       },
-      processedTitle,
-      product
+      { title: processedTitle, product }
     );
 
     // Brief delay to ensure rendering is complete
     await new Promise((resolve) => setTimeout(resolve, 100));
 
-    // Ensure output path ends with correct extension to satisfy TypeScript
-    // The newer version of Puppeteer has stricter type checking on the path parameter
+    // Ensure output path ends with correct extension
     if (!outputPath.endsWith(".webp")) {
       throw new Error(`Output path ${outputPath} must end with .webp extension`);
     }
 
-    // Take screenshot with WebP compression
+    // Take screenshot as PNG first (Playwright doesn't support WebP directly)
     await this.page.screenshot({
-      path: outputPath as `${string}.webp`, // Type assertion to match Puppeteer's expected format
-      type: "webp",
-      quality: 80,
+      path: tempPngPath,
+      type: "png",
       clip: {
         x: 0,
         y: 0,
@@ -245,6 +252,14 @@ export class SocialCardGenerator {
         height: this.options.height,
       },
     });
+
+    // Convert PNG to WebP using Sharp
+    await sharp(tempPngPath).webp({ quality: 80 }).toFile(outputPath);
+
+    // Clean up temporary PNG file
+    if (fs.existsSync(tempPngPath)) {
+      fs.unlinkSync(tempPngPath);
+    }
 
     return outputPath;
   }
