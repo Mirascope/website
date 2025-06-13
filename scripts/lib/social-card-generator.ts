@@ -361,6 +361,7 @@ export async function generateOgImages(
     await generator.generateAll(metadata);
   } catch (error) {
     console.error(`Error during image generation: ${error}`);
+    throw error;
   } finally {
     // Clean up
     await generator.close();
