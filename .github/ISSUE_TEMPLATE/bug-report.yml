@@ -1,0 +1,12 @@
+name: 🐛 Bug
+description: Report any issue with the Mirascope Website
+labels: [bug]
+
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Please explain what you're seeing and what you would expect to see.
+    validations:
+      required: true
