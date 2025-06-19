@@ -9,7 +9,8 @@
 /CONTRIBUTING         /docs/mirascope/getting-started/contributing 301
 /learn                /docs/mirascope/learn                        301
 
-/slack-invite https://mirascope-community.slack.com/join/shared_invite/zt-2ilqhvmki-FB6LWluInUCkkjYD3oSjNA 302
+/slack-invite /discord-invite 302
+/discord-invite https://discord.gg/gZMNYR4zEs 301
 
 # Legacy from moving quickstart around
 /docs/mirascope/getting-started/quickstart /docs/mirascope/guides/getting-started/quickstart 301
