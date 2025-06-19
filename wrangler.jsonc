@@ -1,17 +1,20 @@
 {
   "name": "website",
   "main": "cloudflare/worker.ts",
-  "routes": [
-    { "pattern": "mirascope.com/cf/*", "zone_name": "mirascope.com" }
-  ],
+  "routes": [{ "pattern": "mirascope.com/cf/*", "zone_name": "mirascope.com" }],
+  "build": {
+    "command": "CF_BUILD=true bun run build:full",
+    "cwd": "./",
+    "watch_dir": "*",
+  },
   "compatibility_date": "2025-06-10",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "404-page"
+    "not_found_handling": "404-page",
   },
   "observability": {
     "enabled": true,
-    "head_sampling_rate": 1
-  }
+    "head_sampling_rate": 1,
+  },
 }

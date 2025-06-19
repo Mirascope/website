@@ -22,7 +22,7 @@ interface ValidationResult {
  * Known redirects that are handled by Cloudflare/hosting platform
  * These are intentional redirects and should not be treated as broken links
  */
-const KNOWN_REDIRECTS = ["/slack-invite", "discord-invite"];
+const KNOWN_REDIRECTS = ["/discord-invite", "/slack-invite"];
 
 /**
  * Parse sitemap.xml to extract all valid routes
