@@ -1,10 +1,10 @@
 {
   "mirascope": {
     "stars": 1183,
-    "version": "v1.25.0"
+    "version": "v1.25.1"
   },
   "lilypad": {
     "stars": 153,
-    "version": "py/v0.8.0"
+    "version": "py/v0.8.1"
   }
 }
