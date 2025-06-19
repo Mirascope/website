@@ -13,7 +13,7 @@ dependencies = [
     "griffe>=1.7.2",
     "tomli>=2.2.1",
     "pymdown-extensions>=10.5.0",
-    "lilypad-sdk>=0.2.3",
+    "lilypad-sdk>=0.8.1",
 ]
 
 [project.optional-dependencies]
@@ -57,18 +57,8 @@ mirascope-all = [
 ]
 
 [tool.uv]
-dev-dependencies = [
-    "pyright>=1.1.396",
-    "ruff>=0.1.6",
-    "pytest>=8.3.5",
-]
+dev-dependencies = ["pyright>=1.1.396", "ruff>=0.1.6", "pytest>=8.3.5"]
 
 [tool.pyright]
-include = [
-    ".extracted-snippets",
-    "public/examples",
-    "scripts/apigen"
-]
-exclude = [
-    "**/__pycache__",
-]
+include = [".extracted-snippets", "public/examples", "scripts/apigen"]
+exclude = ["**/__pycache__"]
