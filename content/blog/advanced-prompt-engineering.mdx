@@ -1,282 +1,102 @@
 ---
 title: "A Guide to Advanced Prompt Engineering"
-description: "Learn how advanced prompt engineering techniques like in-context learning and few-shot prompts can boost LLM performance and accuracy."
-date: "2024-11-11"
-readTime: "24 min read"
+description: "Learn the real strategies behind advanced prompt engineering, from versioning and evaluation to building repeatable, scalable workflows."
+date: "2025-06-30"
+readTime: "14 min read"
 author: "William Bakst"
 ---
 
-Advanced prompt engineering - which usually involves techniques such as few-shot learning, multi-step reasoning, and sophisticated prompting - enriches prompts with greater context and guidance to get better answers from the language model.
+Most people think prompt engineering is easy: just type in what you need, maybe toss in an example or two, and let the AI handle the rest. That’s how basic prompt engineering works and for many use cases it can yield acceptable results.
 
-This is in contrast to basic prompting where you give the LLM simpler, direct instructions.
+But basic prompts often fall apart when you need consistency, accuracy, or scale. That’s where advanced prompt engineering comes in.
 
-The more complex the task, **the greater the need to structure prompts to guide the model with reasoning steps, external information, and specific examples**.
+It’s not just about giving instructions. It’s about knowing how to ask, what to include, and when to break things down. **You have to speak the model’s language**, guide it step-by-step, and sometimes split a task into multiple prompts to get the job done.
 
-Done right, advanced prompt engineering techniques let you do some pretty impressive things, for instance:
+You also need to manage context, because API calls are stateless.
 
-* Not only write about Ernest Hemingway but write *like* Hemingway.  
-* Generate product descriptions solely from e-commerce images, automatically extracting features like color, size, and material.  
-* Fact check a debate or conversation in real time by allowing agents to search multiple web sources and present the most accurate information with citations.  
-* Troubleshoot internal IT issues using a bot that identifies common issues and suggests solutions from the company’s knowledge base.
+Advanced prompt engineering means treating the model like a tool inside a bigger system that may include external tools, often built using [LLM frameworks](/blog/llm-frameworks/). It’s not just about writing a prompt, but about designing how that prompt fits into your app or workflow, what we might broadly call [LLM integration](/blog/llm-integration/). You define roles, shape behavior, and build chains of prompts that work together to solve complex tasks.
 
-The key is you can’t achieve these results (with today’s language models) with a simple request (i.e., a basic prompt), so your prompts will require thought, effort, and iteration, and (in many cases) a framework to orchestrate the model’s responses.
+**But LLMs are non-deterministic**, so the same input can return different outputs each time. To get real, repeatable results, you need to understand how the model behaves, version your prompts, and track what’s changing.
 
-This is where you need advanced prompt engineering, which some refer to as a new kind of programming. And we’d agree: at the very least, it’s programming in human rather than computer language, and requires thoughtful design and iteration.
+That’s not so easy with the current state-of-the-art [LLM tools](/blog/llm-tools/), so we built our own prompt engineering framework, [Lilypad](/docs/lilypad), to make it easy to track every change, not just to the prompt text, but also to the code that calls the model. 
 
-With that in mind, we created this guide to outline some techniques for writing advanced prompts more effectively to influence the model’s output.
+This includes LLM settings, the code structure, and any data transformations involved, so you can version, compare, and optimize model outputs like a real engineering workflow.
 
-Our own interest in prompting, in order to build, refine, and experiment with LLM agents, began with our experiences using the first versions of the OpenAI SDK, which we found frustrating because of how much unnecessary boilerplate we felt we had to write. We also found other libraries at the time were not exactly production ready.
+In this article we describe advanced prompt engineering techniques that we found to be highly useful in our own app development:
 
-This led us to design [Mirascope](https://github.com/mirascope/mirascope), a modular toolkit for interacting with language models and developing clean, well-organized queries.
+* [Few-Shot Prompting](#1-few-shot-prompting)  
+* [Rephrase and Respond](#2-rephrase-and-respond-rar)  
+* [Chain of Thought](#3-chain-of-thought-cot)  
+* [Self-Ask](#4-self-ask-prompt)  
+* [Tree of Thought](#5-tree-of-thought-tot)  
+* [Chain of Verification](#6-chain-of-verification-cov)  
+* [Self-Consistency](#7-self-consistency)
 
-## Advanced Prompt Engineering Strategies
+At the end, we’ll also show how our LLM engineering platform [Lilypad’s experimentation framework](#why-prompts-alone-aren’t-enough) makes iterating and testing your prompts easy and why that matters, since advanced prompt techniques alone aren’t guaranteed solutions but instead are hypotheses about how to guide the model toward better results.
 
-The [strategies](/blog/prompt-engineering-best-practices) below guide LLMs to generate more accurate and context-aware outputs by embedding structures, examples, and external data modules into prompts.
+## 7 Highly Useful Prompt Engineering Techniques
 
-### Use In-Context Learning to Write Better Prompts
+### 1. Few-Shot Prompting
 
-The fact that API calls are stateless requires that we build full context directly into our generative AI prompts.
+Few-shot prompting teaches the model *how* to respond by giving it a few examples first (as opposed to no examples, like in zero-shot prompting). Instead of just asking a question and hoping for the best, you show the model a pattern to follow.
 
-This is where in-context learning comes into play: the model uses the information in the current prompt as temporary memory to understand the task at hand and to better predict the next words, phrases, or sentences in its responses.
+This technique is especially useful when the task is a little unusual, or when you want the outputs to be consistent and predictable.
 
-This means you can add a few examples of, say, sentiment analysis in your prompt, and the model will infer that it needs to do sentiment analysis on a new piece of text without your explicit instruction.
+By seeing a couple of examples, the model picks up on the structure, style, and logic you want, even if you never spell out the rules (which is a good example of in-context learning).
 
-Below, we show different ways to incorporate in-context learning in your prompts.
+In the example below, we’re training the model to classify whether a situation shows "good teamwork" or "poor teamwork" by giving two examples before asking it to evaluate a new one.
 
-#### Use Few-Shot Prompts to Teach the Model
-
-In few-shot prompting, you send multiple examples (i.e, “input-output pairs”) showing the format or pattern in which you want the natural language model to answer.
-
-This allows the model to generalize task requirements so it can leverage its existing knowledge to accomplish different tasks.
-
-In this few-shot prompt, we include several examples of classifying customer feedback as either positive or negative:
-
-```plaintext
-Instruction:
-You are tasked with performing sentiment analysis on customer feedback regarding the customer service department of a corporate food catering company. Your goal is to classify whether the sentiment expressed in the feedback is "positive" or "negative." Below are several examples of feedback along with their corresponding sentiment classifications to guide your understanding of the task. After reviewing these examples, classify the sentiment of the new feedback provided. Respond only with "positive" or "negative."
-
-Examples:
-
-1. "The customer service representative was incredibly helpful! They quickly resolved my issue and made sure I was satisfied with the outcome."
-Sentiment: positive
-
-2. "I’ve been trying to reach the customer support team for days, and no one has responded. This is unacceptable."
-Sentiment: negative
-
-3. "The team was very attentive to our needs and made sure we had everything set up for our event. It was a pleasure working with them."
-Sentiment: positive
-
-4. "The service was delayed, and the representative I spoke to was rude. I won’t be using this catering service again."
-Sentiment: negative
-
-Now, analyze the sentiment of the following feedback:
-
-"The support team was polite but took way too long to get back to me. It made planning much more stressful than it should have been."
-
-Classify the sentiment of the feedback:
-
-# Output: negative
+Example:
 
 ```
-
-The examples clarify the instructions by providing further details on how the model should classify customer sentiment.
-
-#### Define Clear Roles to Set Context
-
-Specifying roles you want the model to assume, like AI assistant, technical advisor, or a creative persona like a novelist, also helps guide its tone, style, and output to better match your task.
-
-For instance, you can describe roles in prompts for fitness advice or creative writing:
-
-```plaintext
-You are a professional fitness coach with extensive experience in helping individuals improve their endurance. Based on this expertise, create a personalized cardio workout plan that minimizes joint strain.
-
-You are a novelist known for your vivid descriptions and deep character development. Write an engaging opening paragraph for a mystery novel, set in a small coastal town, where a sudden disappearance shocks the close-knit community.
+Classify the following scenarios as "Good Teamwork" or "Poor Teamwork."
+Example 1:
+Situation: "During a group project, everyone shares their ideas, listens respectfully, and agrees on a plan together."
+Answer: Good Teamwork
+Example 2:
+Situation: "One team member ignores everyone else’s suggestions and makes all the decisions alone."
+Answer: Poor Teamwork
+Now classify:
+Situation: "The group divides tasks fairly, helps each other when needed, and celebrates success together."
+Answer:
 ```
 
-In a programmatic context, roles offer a structured way to manage interactions and maintain clear context over multiple exchanges.
-
-So you could specify roles such as SYSTEM, USER, and ASSISTANT to further refine the interaction by setting different responsibilities and behaviors for each role. For example:
-
-* SYSTEM indicates the role or expertise the model should embody.  
-* USER defines the input provided by the user.  
-* ASSISTANT specifies the response expected from the model.
-
-Below, we prompt the SYSTEM to assume the role of an insightful fitness coach, the USER to express feedback and specific workout preferences, and the ASSISTANT to provide personalized, low-impact cardio recommendations based on the USER’s past experiences and physical limitations:
-
-```plaintext
-SYSTEM
-You are the world’s most insightful fitness coach, known for creating personalized workout routines that align with individual goals, fitness levels, and unique physical needs. When giving advice, always consider the user’s past workouts, preferences, and any physical limitations. Provide detailed explanations for each recommendation, including how it benefits the user’s specific goals.
-
-USER:
-Can you suggest a HIIT workout for endurance?
-
-ASSISTANT:
-Given your previous mention of knee discomfort, I recommend a modified low-impact HIIT routine that reduces joint strain. We can use exercises like cycling or swimming intervals that provide cardio benefits without the high impact on your knees.
-
-USER:
-That sounds good. Now, can you suggest a low-impact cardio routine for improving endurance?
-
-ASSISTANT:
-For improving endurance while minimizing knee strain, I suggest a low-impact routine focused on brisk walking or swimming. Both provide excellent cardiovascular benefits with minimal joint impact. I can also include some gentle strength exercises to build supporting muscles around your knees.
-```
-
-Such roles define the structure and expectations of the conversation to a higher degree and are usually [used in conjunction with code](/docs/mirascope/learn/prompts) that dynamically manages the flow of interactions, ensuring consistent responses tailored to user inputs and context.
-
-#### Leverage Prompt Templates for Consistency
-
-A prompt template is a reusable set of instructions that can be customized with specific details each time it's used. Instead of rewriting the entire prompt, you can simply fill in the template with the necessary information, ensuring consistency across prompts.
-
-In a coding context, you can add placeholders like `{variable}` to alter specific parts of the instruction during runtime (i.e., prompt execution) to allow automatic insertion of values into the prompt, like user input or context-specific information, while allowing the main instruction to stay the same.
-
-For example, you can experiment with the prompt below by specifying values for `{diet_type}`, such as “keto,” “vegan,” or “gluten free”:
-
-```plaintext
-You are a nutritionist specializing in creating personalized meal plans. Based on the {diet_type} diet, suggest a healthy meal plan for the day.
-```
-
-At runtime the variable is resolved to the defined value and the entire prompt is sent to the LLM as text:
-
-```plaintext
-You are a nutritionist specializing in creating personalized meal plans. Based on the vegan diet, suggest a healthy meal plan for the day.
+Response:
 
 ```
-
-Prompt templates help maintain a consistent format across your interactions, reducing the risk of variability or ambiguity in the prompt structure and making the model’s outputs more predictable.
-
-For good reason, the usage of prompt templates is widespread among many advanced prompt engineering libraries and frameworks such as [LangChain](/blog/langchain-prompt-template).
-
-For those applying prompt engineering in code, Mirascope offers an easy way to [bind prompt templates](/docs/mirascope/learn/prompts) to functions and classes.
-
-#### Chain Calls Together to Do Complex Tasks
-
-Prompt chaining, a popular prompting method, involves breaking down a large, multifaceted prompt into smaller, more manageable sub-tasks to be implemented in sequence.
-
-Each subtask is a prompt with its own LLM call, so the output of one call becomes input to the next. This allows the model to fully process the refined outputs of each intermediate step before proceeding to the next, leading to more accurate and coherent final results.
-
-For example, say you need to summarize a very lengthy legal document and then analyze whether certain clauses align with recent case law.
-
-With chaining, rather than entering both tasks in a single query (especially considering the length of the document), you’d first prompt the model to summarize the document itself to produce a more concise representation of its key points. After reviewing the output, you might then ask the model to analyze specific clauses using the summary as context.
-
-The summary serves as a clean input to the next task, allowing the model to focus on the legal analysis rather than juggling both tasks at once:
-
-First prompt:
-
-```plaintext
-Summarize the following contract in no more than three sentences: [Insert contract text].
+Answer: Good Teamwork
 ```
 
-Output:
+### 2. Rephrase and Respond (RaR)
 
-```plaintext
-The contract is a service agreement between Company A and Company B. It outlines the scope of services, payment terms, and termination conditions. Company B agrees to provide IT support for a period of one year, subject to renewal [...rest of summary].
-```
-
-Second prompt (chained to the output of the first prompt):
-
-```plaintext
-Based on the summary provided, does the termination clause align with recent case law regarding service contracts in California?
-```
-
-Output:
-
-```plaintext
-The termination clause in the summary seems to be a standard provision, but recent case law in California has indicated that service contracts must allow for a minimum 30-day notice period. You should verify if the contract specifies this time frame.
-```
-
-The above prompts show the basics of how prompt chaining works, but for those interested in intuitive ways of chaining LLM calls, Mirascope allows you to use [computed fields and functions](/blog/prompt-chaining).
-
-### Version Prompts to Track and Iterate
-
-It’s helpful to use version control to keep a clear record of changes and revert to earlier prompts if necessary.
-
-We recommend using a [prompt management system](/blog/prompt-versioning) to track and document changes, compare different versions, and easily revert to previous iterations.
-
-Using version control also allows you to maintain separate prompt versions across different models so you can customize prompts for each model’s unique capabilities or context.
-
-An example of a prompt versioning system is [Lilypad](/docs/lilypad), which you can download and install in your local workspace. In Lilypad, every LLM call is automatically versioned and traced for you so you don't have to worry about manually managing your prompts.
-
-### Integrate Data from External Sources
-
-Adding data from external systems and applications allows LLMs to move beyond simple text generation and do more in-depth, complex operations based on dynamic, real-world inputs.
-
-Models then become capable of retrieving real-time data, executing intricate workflows, and making informed decisions based on specific use cases and situational data.
-
-When building LLM-driven applications, it might be necessary to use [data orchestration](/blog/llm-orchestration) to coordinate flows between the model’s inputs and external systems, and to ensure the desired output is appropriately routed or processed.
-
-This can mean connecting to databases, leveraging APIs, or pulling in real-time information from external applications - all while maintaining the integrity and relevance of the data to the user’s needs.
-
-Below are two popular applications incorporating external data:
-
-#### Use Automated Search
-
-Large language models can tap into external tools and data sources like news databases, weather services, or custom APIs via search queries driven by user inputs.
-
-Being able to access the most recent information improves the accuracy of the model’s response and allows it to respond with precise details that may not be available within its pre-trained, existing knowledge.
-
-Our tutorial on [building a web search agent](/docs/mirascope/guides/agents/web-search-agent/) that uses DuckDuckGo to find information relating to your queries provides more details about how automated search works.
-
-#### Retrieval Augmented Generation
-
-Unlike web search, knowledge prompting through retrieval augmented generation (RAG) provides answers using a specific knowledge base.
-
-On the one hand, answers from RAG are confined to both the LLM’s own knowledge and that of the attached database. On the other, RAG gives you highly relevant and accurate information for domain-specific queries.
-
-RAG enables all kinds of applications. For instance, RAG could be implemented as a front-line chatbot assisting customers by retrieving policy-specific information and answering questions.
-
-The basic mechanism of how RAG works is this. Factual information from the knowledge base is incorporated into the prompt to enrich it contextually and to improve the quality of responses while drastically reducing hallucinations.
-
-The broad steps in this pipeline are:
-
-1. First, identify the information or datasets for the RAG to use. This will usually be unstructured, like blog articles, PDFs, and image files. Prepare the content for the next step by parsing it and splitting it into logical sections, and chunking it into sections suitable for encoding it into vectors (if you’re using vectorization in the first place).  
-2. Encode the chunks into vectors using an embedding model. Embedding models convert text or other data into numerical representations that capture the semantic meaning of the content, which allows the system to efficiently analyze and compare relationships between different pieces of information.  
-3. Load the vectorized content into a central repository or database, often referred to as a vector store.  
-4. When a user submits a query, the system similarly encodes it as a vector, which it then matches with the archived content in the vector store using a search algorithm (e.g.,  cosine similarity or dot product).
-5. The system retrieves the content and combines it with the user’s query as a prompt to send to the language model. This is what we refer to as a contextually enriched prompt; it gives the model more complete information to consider than a single question.
-
-For detailed information on how RAG works, our blog post on [building LLM pipelines](/blog/llm-pipeline) shows how to set this up using Mirascope’s advanced prompt engineering features.
-
-## 6 Advanced Prompting Techniques
-
-Below we explore six [sophisticated techniques](/blog/prompt-engineering-examples) for improving model reasoning, consistency, and ability to modify its approach based on the prompt or task at hand:
-
-* Rephrase and Respond (RaR)  
-* Chain of Thought (CoT)  
-* Self-Ask  
-* Tree of Thought (ToT)  
-* Chain of Verification  
-* Self-Consistency
-
-### 1. Rephrase and Respond (RaR)
-
-A prompt that gets the model to think through a problem step by step is rephrase and respond, where you first ask it to rephrase and expand on a question before providing its response.
+RaR gets the model to think through a problem step-by-step, where you first ask it to rephrase and expand on a question before providing its response.
 
 This allows the model to better understand and clarify the original query, especially if the prompt is vague or lacks detail.
 
 In the example below, we start with a rather brief and unclear prompt. By using RaR, the model rephrases the question before responding.
 
-First prompt:
+Example:
 
-```plaintext
-A coin is heads up. Aluino flips the coin. Arthur flips the coin. Is the coin still heads up? Flip means reverse. Rephrase and expand the question, and respond
+```
+A light is turned on. Bella toggles the switch. Carlos toggles the switch. Is the light still on? Toggle means change from on to off or off to on. Rephrase and expand the question, and respond.
 ```
 
 Response:
 
-```plaintext
-A coin starts with the heads side facing up. If Aluino flips the coin, it will land with the tails side facing up. Then Arthur flips the coin again. After these two sequences of flips, can we say that the coin is still heads up?
-
-To analyze the scenario, let’s break down the actions step by step:
-1. Initial State: The coin starts with the heads side facing up.
-2. Aluino Flips the Coin: When Aluino flips the coin, it reverses its position. Since the coin initially was heads up, after Aluino’s flip, the coin will now be tails up.
-3. Arthur Flips the Coin: Next, Arthur takes his turn to flip the coin. Given that the current state of the coin is tails up, flipping it will reverse it again, resulting in the coin now being heads up.
-At the end of these actions, after both Aluino and Arthur have flipped the coin, the final state of the coin is heads up once more.
+```
+A light is initially in the "on" position. Bella comes along and toggles the switch, changing the state of the light. Afterward, Carlos also toggles the switch. Following these two actions, is the light still on?
+Let’s walk through it step-by-step:
+1. Initial State: The light starts in the "on" position.
+2. Bella Toggles the Switch: Toggling changes the light from "on" to "off."
+3. Carlos Toggles the Switch: Carlos toggles it again, changing it from "off" back to "on."
+Therefore, after both Bella and Carlos have toggled the switch, the light is once again in the "on" position.
 ```
 
-You can also see a version of this [RaR prompt in Python](/docs/mirascope/guides/prompt-engineering/text-based/rephrase-and-respond/) in our code tutorials.
+You can also see a version of this [RaR prompt in Python](/docs/mirascope/guides/prompt-engineering/text-based/rephrase-and-respond) in our code tutorials.
 
-### 2. Chain of Thought (CoT)
+### 3. Chain of Thought (CoT)
 
-Chain-of-thought prompting encourages the model to break a problem down into smaller, logical steps for separate consideration rather than just providing the answer immediately.
+Chain of Thought prompting encourages the model to break a problem down into smaller, logical steps for separate consideration rather than just providing the answer immediately.
 
 This mirrors how a human might tackle a complex problem, and is effective for tasks requiring critical thinking, like math, reasoning tasks, and problem-solving scenarios.
 
@@ -284,203 +104,309 @@ You’re basically asking the model to think aloud and explain each step of the 
 
 Example:
 
-```plaintext
-Olivia has $23. She bought five bagels for $3 each. How much money does she have left? Let's think step by step.
+```
+Liam has 40 marbles. He gives 7 marbles each to 4 of his friends. How many marbles does he have left? Let's think step by step.
 ```
 
 Response:
 
-```plaintext
-First, let’s determine how much money Olivia spent on the bagels:
-Price of one bagel = $3
-Number of bagels = 5
-Total cost of the bagels = $3 × 5 = $15
+```
+First, let’s figure out how many marbles Liam gave away in total:  
+Marbles given to one friend = 7  
+Number of friends = 4  
+Total marbles given = 7 × 4 = 28  
 
-Now, let’s subtract the total cost from Olivia’s initial amount:
-Olivia started with $23
-She spent $15
-Amount left = $23 - $15 = $8
-So, Olivia has $8 left after buying the bagels.
+Now, let’s subtract the total marbles given from Liam’s original amount:  
+Liam started with 40 marbles  
+He gave away 28 marbles  
+Marbles left = 40 - 28 = 12  
+
+So, Liam has 12 marbles left after giving marbles to his friends.
 ```
 
-You can also check out our code tutorial for creating both zero- and few-shot variants of [CoT prompts](/docs/mirascope/guides/prompt-engineering/text-based/chain-of-thought/) using Mirascope.
+You can also check out our code tutorial for creating both zero- and few-shot variants of [CoT prompts](/docs/mirascope/guides/prompt-engineering/text-based/chain-of-thought) using Mirascope.
 
-### 3. Self-Ask Prompt
+### 4. Self-Ask Prompt
 
-This prompt encourages the model to process complex queries by asking itself clarifying questions, which it in turn answers step by step before arriving at the final conclusion.
+This technique pushes the model to slow down and think critically by asking itself clarifying questions, and answering them, before jumping to a final conclusion.
 
-Self-ask is great for tackling ambiguous or multi-faceted questions, ensuring the model considers all relevant aspects before responding.
+Self-Ask is especially useful for messy, complicated, or open-ended questions, forcing the model to break down the problem and cover all the important angles.
 
-Compared with CoT, Self-Ask is more focused on questioning and clarifying ambiguities before answering, since it prompts the model to identify gaps in understanding or missing details.
+While CoT walks the model through a solution step-by-step, Self-Ask goes a step further: it trains the model to spot confusion, fill in missing details, and sharpen its reasoning process before giving an answer.
 
 Example:
 
-```plaintext
-Using the Self-Ask method, when does monsoon season end in the state where area code 575 is located? If follow-up questions are needed, please ask and answer them before providing the final answer.
+```
+Using the Self-Ask method, when is peak fall foliage in the state where ZIP code 80302 is located? If follow-up questions are needed, please ask and answer them before providing the final answer.
 ```
 
 Response:
 
-```plaintext
+```
 Are follow-up questions needed here: Yes.
-Follow-up question: Which state is area code 575 located in?
-Intermediate answer: The area code 575 is located in New Mexico.
-Follow-up question: When does monsoon season end in New Mexico?
-Intermediate answer: Monsoon season in New Mexico typically ends in mid-September.
-Final Answer: Monsoon season in the state where area code 575 is located (New Mexico) typically ends in mid-September.
+Follow-up question: Which state is ZIP code 80302 located in?
+Intermediate answer: ZIP code 80302 is in Colorado.
+Follow-up question: When is peak fall foliage in Colorado?
+Intermediate answer: Peak fall foliage in Colorado typically occurs from late September to early October.
+Final Answer: Peak fall foliage in the state where ZIP code 80302 is located (Colorado) typically happens from late September to early October.
 ```
 
-Our [self-ask prompt coding recipe](/docs/mirascope/guides/prompt-engineering/text-based/self-ask/) shows you how to implement both basic and enhanced (with dynamic example selection) versions.
+Our [self-ask prompt coding recipe](/docs/mirascope/guides/prompt-engineering/text-based/self-ask) shows you how to implement both basic and enhanced (with dynamic example selection) versions.
 
-### 4. Tree of Thought (ToT)
+### 5. Tree-of-Thought (ToT)
 
-A [Tree-of-Thought Prompt](/blog/llm-prompt) allows a language model to explore multiple potential solutions or reasoning paths for a given task, rather than follow a single line of reasoning.
+A ToT prompt pushes the model to think wide before it thinks deep. Instead of charging down a single path, the model explores multiple possible solutions or reasoning trails to summarize for a problem.
 
-ToT prompts the model to evaluate different approaches and weigh the pros and cons of each in order to choose the optimal optimal solution. This enlists the model’s problem-solving capabilities by letting it consider a variety of options before arriving at the final answer.
+ToT forces the model to step back, brainstorm different approaches, and then weigh the pros and cons of each before choosing the best path forward. It taps into the model’s real problem-solving abilities, not just its ability to guess fast.
 
-This method’s problem-solving approach has three steps:
+The method breaks down into three key moves:
 
-1. Generate different approaches to solving a problem.  
-2. Evaluate the merits of each approach, considering both the advantages and disadvantages.  
-3. Discard less viable paths and converge on the best solution based on its evaluation.
+1. Brainstorm multiple ways to tackle the problem.  
+2. Judge each option, weighing strengths and weaknesses.  
+3. Toss out the weaker ideas and double down on the strongest one.
 
 Example:
 
-```plaintext
-Design a new smartphone model for the mid-range market. Generate at least three different design approaches, evaluating the pros and cons of each, and then recommend the best design based on your analysis.
+```
+Create a new meal kit product aimed at busy college students. Generate at least three different product concepts, evaluating the pros and cons of each, and then recommend the best concept based on your analysis.
 ```
 
 Response:
 
-```plaintext
-Approach 1: Minimalist Design
-Pros: Simple, sleek design with fewer distractions. Lower production costs due to fewer components. Appeals to users who prefer clean, user-friendly interfaces.
-Cons: Lacks premium features that may attract tech enthusiasts. Limited room for differentiation from other brands. May not appeal to customers who prioritize cutting-edge technology.
+```
+Concept 1: 5-Minute Microwave Meals
+Pros: Extremely quick to prepare, appeals to students with tight schedules. Minimal cooking skills required. Affordable to produce at scale.
+Cons: Limited nutritional value compared to fresh meals. Could become repetitive. May not appeal to students who want healthier options.
 
-Approach 2: Camera-Centric Design
-Pros: High-quality camera system with multiple lenses and advanced AI features for photography. Appeals to users who prioritize mobile photography and content creation. Strong marketing potential through the camera's performance.
-Cons: Higher production costs due to the advanced camera hardware. Might sacrifice other features like battery life or overall performance. May alienate customers who don't prioritize camera quality.
-Approach 3: Battery Life and Durability Focus
+Concept 2: Build-Your-Own Fresh Bowls
+Pros: Fresh ingredients that students can mix and match (grains, proteins, veggies, sauces). Healthier and customizable. Appeals to health-conscious students.
+Cons: Slightly more prep time required (~10-15 minutes). Higher cost due to fresh ingredients and refrigeration needs. Risk of food waste if not used quickly.
 
-Pros: Large battery for extended usage, rugged build for durability, and water resistance. Appeals to users who need a reliable device for work, travel, or outdoor activities. Differentiates itself from other models based on reliability.
-Cons: Bulky design, which may not be aesthetically appealing. Sacrifices some of the cutting-edge features like high refresh rate displays or advanced camera systems.
+Concept 3: Meal Prep Starter Packs
+Pros: Provides students with basic pre-portioned ingredients and simple recipes for 3-4 meals. Teaches basic cooking skills. Appeals to students looking for budget-friendly, homemade meals.
+Cons: Requires more effort than grab-and-go options. Might be intimidating for complete beginners. Shelf life depends on ingredients included.
+
 Final Conclusion:
-After evaluating the pros and cons, the Camera-Centric Design seems the best option for the mid-range market. While it comes at a slightly higher cost, the advanced camera features will appeal to content creators and tech enthusiasts, making it a strong differentiator in a competitive space.
+After weighing the options, the Build-Your-Own Fresh Bowls concept seems like the best fit. It strikes a balance between convenience, health, and customization, appealing to a wide range of busy but health-conscious students who still want some control over their meals.
 ```
 
-### 5. Chain of Verification (CoV)
+### 6. Chain of Verification (CoV)
 
-This prompt improves an LLM’s response accuracy by implementing a self-verification process:
+Chain of Verification takes LLM accuracy to the next level by building in a self-check process.
 
-* After the LLM provides an initial answer to a query, the Chain of Verification prompts the model to create a set of verification questions based on the key facts in the initial response. These questions are designed to ensure that each piece of information provided is factually accurate and relevant to the original query.  
-* Each verification question is then answered separately by the LLM, which "fact-checks" the original response. The answers to these questions help determine if the initial answer was correct or contained any errors.  
-* Once the verification process is complete, the model uses the results from the fact-checking step to revise the initial response, ensuring the final answer is more accurate and reliable. If the verification reveals any errors, they are corrected in the final output.
+Here’s how it works: after the model gives its first answer, it’s immediately asked to come up with a set of verification questions based on the key facts it used. These questions aren’t random. They’re designed to double-check whether the important parts of the answer are actually true and relevant.
 
-CoV is focused on post-answer validation, revisiting the model’s initial output and systematically checking the facts rather than just reasoning through the process.
+The model then answers each verification question separately, basically fact-checking itself. Based on those fact-checks, it revisits its original answer, fixes any mistakes, and produces a final, cleaner version.
+
+Unlike techniques that just try to reason better during the first pass, CoV is all about going back after the fact, picking apart the response, and making sure every claim holds up. It’s a second layer of defense, and it can massively boost reliability when accuracy really matters.
 
 Example:
 
-```plaintext
-List five famous scientists and their primary field of contribution. Please make sure that all the facts are verified correctly by generating and answering verification questions for each scientist's field of contribution. After the verification process, update the list with any necessary corrections. This is very important.
+```
+List five famous explorers and the major discovery or achievement they are best known for. Please make sure that all the facts are verified correctly by generating and answering verification questions for each explorer's achievement. After the verification process, update the list with any necessary corrections. Accuracy is very important.
 ```
 
 Output:
 
-```plaintext
-Preliminary List of Scientists and Their Fields:
-- Albert Einstein - Physics (Theory of Relativity)
-- Marie Curie - Chemistry/Physics (Radioactivity)
-- Isaac Newton - Physics/Mathematics (Classical Mechanics, Laws of Motion)
-- Charles Darwin - Biology (Theory of Evolution)
-- Niels Bohr - Physics (Quantum Mechanics)
+```
+Preliminary List of Explorers and Their Achievements:
+- Christopher Columbus: Discovery of the Americas (1492)
+- Ferdinand Magellan: First circumnavigation of the globe
+- Marco Polo: Travels to China and documentation of the Silk Road
+- Neil Armstrong: First human to walk on the Moon
+- Roald Amundsen: First to reach the South Pole
 
 Verification Questions
-1. Albert Einstein:
-Question: Is Einstein primarily known for contributions in the field of physics, specifically for his development of the theory of relativity?
-Expected Answer: Yes, Einstein is renowned for his theories of special and general relativity, which revolutionized our understanding of space, time, and gravity.
-2. Marie Curie:
-Question: Did Marie Curie primarily contribute to both chemistry and physics through her pioneering work on radioactivity?
-Expected Answer: Yes, Marie Curie won two Nobel Prizes-one in Physics (1903) for her work on radioactivity and one in Chemistry (1911) for her discovery of radium and polonium.
-3. Isaac Newton:
-Question: Is Newton’s primary contribution in the field of physics and mathematics, particularly with regard to the laws of motion and universal gravitation?
-Expected Answer: Yes, Isaac Newton is most famous for his laws of motion and the law of universal gravitation, which laid the foundation for classical mechanics.
-4. Charles Darwin:
-Question: Is Darwin best known for his contributions to biology through his theory of evolution by natural selection?
-Expected Answer: Yes, Charles Darwin's theory of evolution by natural selection is a cornerstone of modern biology.
-5. Niels Bohr:
-Question: Did Niels Bohr primarily contribute to the field of physics, particularly in the development of quantum mechanics and the structure of the atom?
-Expected Answer: Yes, Niels Bohr made significant contributions to the development of quantum mechanics and the understanding of atomic structure, particularly with his model of the atom.
 
-Verified List of Scientists and Their Fields:
-- Albert Einstein - Physics (Theory of Relativity)
-- Marie Curie - Chemistry/Physics (Radioactivity)
-- Isaac Newton - Physics/Mathematics (Classical Mechanics, Laws of Motion)
-- Charles Darwin - Biology (Theory of Evolution)
-- Niels Bohr - Physics (Quantum Mechanics, Atomic Structure)
+1. Christopher Columbus:
+Question: Did Columbus discover the Americas in 1492 during his voyage under the Spanish crown?
+Expected Answer: Yes, although indigenous peoples already lived there, Columbus's 1492 voyage led to widespread European awareness of the American continents.
+
+2. Ferdinand Magellan:
+Question: Was Magellan the leader of the first expedition to circumnavigate the globe, even though he did not survive the entire journey?
+Expected Answer: Yes, Magellan initiated the expedition, but he was killed in the Philippines; his crew completed the circumnavigation.
+
+3. Marco Polo:
+Question: Is Marco Polo best known for his travels to China and his detailed writings about the Silk Road and the Yuan Dynasty?
+Expected Answer: Yes, Marco Polo’s accounts provided Europeans with one of the earliest comprehensive looks into East Asia.
+
+4. Neil Armstrong:
+Question: Was Neil Armstrong the first human to walk on the Moon during the Apollo 11 mission in 1969?
+Expected Answer: Yes, Armstrong was the first person to step onto the lunar surface on July 20, 1969.
+
+5. Roald Amundsen:
+Question: Did Roald Amundsen lead the first successful expedition to reach the South Pole in 1911?
+Expected Answer: Yes, Amundsen reached the South Pole on December 14, 1911, ahead of Robert Falcon Scott’s team.
+
+Verified List of Explorers and Their Achievements:
+
+- Christopher Columbus – Initiated European discovery of the Americas (1492)
+- Ferdinand Magellan – Led the first circumnavigation of the globe
+- Marco Polo – Documented travels to China and the Silk Road
+- Neil Armstrong – First human to walk on the Moon (1969)
+- Roald Amundsen – First to reach the South Pole (1911)
 ```
 
-See our [coding tutorial](/docs/mirascope/guides/prompt-engineering/chaining-based/chain-of-verification/) for a complete example of building a CoV prompt using Python.
+See our [coding tutorial](/docs/mirascope/guides/prompt-engineering/chaining-based/chain-of-verification) for a complete example of building a CoV prompt using Python.
 
-### 6. Self-Consistency
+### 7. Self-Consistency
 
-The self-consistency technique generates multiple answers through CoT prompting and then selects the most common or consistent answer.
+Self-Consistency is a simple but impressive technique: you have the model generate multiple answers using Chain of Thought reasoning, then pick the answer that shows up the most.
 
-This approach ensures accuracy and reliability, particularly in tasks involving complex reasoning like mathematics or symbolic problems.
+This method boosts accuracy and reliability, especially for tricky tasks like math problems or anything that needs careful step-by-step logic.
 
-How it works:
+Here’s how it works:
 
-1. The LLM generates multiple responses to a single query, where each response is derived through a CoT reasoning process.  
-2. The model then selects the most frequent answer from these multiple outputs, assuming that the most common answer is likely to be the most accurate. This avoids the risk of the model making an isolated error or generating a less accurate outlier.
+1. The model creates several full reasoning paths for the same question.  
+2. Instead of trusting a single output, it checks which answer shows up most often, and picks that one. The idea is that while any single answer might go off track, the most consistent answer across multiple runs is usually the right one.
 
 Example:
 
-```plaintext
-Olivia has $23. She bought five bagels for $3 each. How much money does she have left? Please solve this problem by thinking step by step. Generate multiple answers using different approaches or considerations. After generating several responses, select the most frequent answer and explain why it is the best choice.
+```
+Liam had 45 marbles. He gave 7 marbles to each of his 4 friends. How many marbles does he have left? Please solve this problem by thinking step by step. Generate multiple high-quality answers using different approaches or considerations. After generating several responses, select the most frequent answer and explain why it is the best choice.
 ```
 
 Response:
 
-```plaintext
+```
 Step-by-step analysis:
-Approach 1: Direct Subtraction Method
-1. Initial money: Olivia has $23.
-2. Cost of one bagel: Each bagel costs $3.
-3. Total number of bagels: She buys 5 bagels.
-4. Total cost of the bagels: 5 x 3 = 15 dollars.
-5. Remaining money: 23 − 15 = 8 dollars.
-Approach 2: Grouping method
-1. Initial money: Olivia starts with $23.
-2. Break down the expenses:
-- Buying two bagels: 2 × 3 = 6 dollars.
-- Buying three more bagels: 3 × 3 = 9 dollars.
-3. Total cost: 6 + 9 = 15 dollars.
-4. Remaining money: 23 − 15 = 8 dollars.
-Approach 3: Counting backward
-1. Start with $23.
-2. Subtract $3 for each bagel:
-- After buying the first bagel: 23 − 3 = 20.
-- After the second bagel: 20 − 3 = 17.
-- After the third bagel: 17 − 3 =14.
-- After the fourth bagel: 14 − 3 = 11.
-- After the fifth bagel: 11 − 3 = 8.
-3. Olivia has $8 left.
-Approach 4: Algebraic approach
-Let x represent Olivia’s remaining money after buying 5 bagels.
-1. Initial amount: $23.
-2. Total cost: 3 × 5 = 15 dollars.
-3. Equation: 23 − 15 = x.
-4. Solve for x:x = 8.
-Answer Evaluation:
-All four approaches conclude that Olivia has $8 left.
-Conclusion:
-The most frequent and correct answer is $8. All approaches, whether direct subtraction, grouping, counting backward, or algebraic reasoning, reach the same result because they all properly account for the $15 spent on the bagels. This consistency makes $8 the best and accurate answer.
 
+Approach 1: Direct Calculation Method
+1. Liam starts with 45 marbles.
+2. He gives 7 marbles to each of 4 friends: 7 × 4 = 28 marbles given away.
+3. Remaining marbles: 45 − 28 = 17 marbles.
+
+Approach 2: Sequential Giving Method
+1. Start with 45 marbles.
+2. After giving to the first friend: 45 − 7 = 38 marbles left.
+3. After second friend: 38 − 7 = 31 marbles left.
+4. After third friend: 31 − 7 = 24 marbles left.
+5. After fourth friend: 24 − 7 = 17 marbles left.
+
+Approach 3: Algebraic Method
+Let x represent the marbles Liam has left.
+1. Liam starts with 45 marbles.
+2. Total given: 7 × 4 = 28.
+3. Equation: 45 − 28 = x.
+4. Solve for x: x = 17.
+
+Approach 4: Estimation and Adjustment
+1. Rough estimate: 7 is close to 10, so giving 10 marbles to 4 friends would be 40 marbles (overestimate).
+2. Adjust: 40 − (3 × 4) = 28 marbles actually given.
+3. Subtract 28 from 45: 45 − 28 = 17 marbles left.
+
+Answer Evaluation:
+All four methods result in 17 marbles remaining.
+
+Conclusion:
+The most frequent and correct answer is 17 marbles. Each method, whether direct calculation, step-by-step subtraction, algebraic reasoning, or estimation, correctly accounts for the 28 marbles Liam gave away. Therefore, 17 marbles is the final and accurate answer.
 ```
 
-Our coding tutorial shows you how to construct both a basic version of the [self-consistency prompt](/docs/mirascope/guides/prompt-engineering/chaining-based/self-consistency/), as well as using automated answer extraction.
+Our coding tutorial shows you how to construct both a basic version of the [self-consistency prompt](/docs/mirascope/guides/prompt-engineering/chaining-based/self-consistency), as well as using automated answer extraction.
 
-## Achieve Precision in Prompt Design with Mirascope
+## Why Prompts Alone Aren’t Enough
 
-Ready to build smarter, more effective prompts? Mirascope allows you to construct advanced prompts for artificial intelligence applications using the Python you already know, and without needing to learn new, complex abstractions. Get started quickly building LLM-powered agents with our lightweight, modular toolkit.
+When people hear "advanced prompt engineering," they usually think of techniques that we just described above, like Chain of Thought, Self-Ask, and so on. And to be fair, these advanced prompting techniques are way better than just firing off a one-shot prompt and crossing your fingers.
 
-You can find Mirascope code samples and tutorials both on our [docs](/docs/mirascope) and on our [GitHub page](https://github.com/mirascope/mirascope).
+**But real prompt engineering isn’t *just* about learning a few clever tactics**. It’s about managing the process like a serious engineering problem grounded in [prompt engineering best practices](/blog/prompt-engineering-best-practices/). Knowledge prompting techniques are just the starting point: they’re hypotheses, not guarantees. Every time you try a new prompting method, you’re running an experiment to see if it improves your outputs across different tasks.
+
+And if you’re running experiments, you need an experiment framework because the **same prompt can produce different outputs each time**. You can’t just "try a new technique" and eyeball a few good answers. You need to measure whether you’re actually making things better, or just getting lucky.
+
+The real goal of prompt engineering is to optimize your model's outputs across repeated, real-world inputs, like those required for production-grade [LLM applications](/blog/llm-applications/). Not just once, but consistently. To do that at scale, you need a system that versions your prompts, tracks every change, and ties every output back to its exact input, code, and model settings.
+
+**That’s why we built [Lilypad](https://lilypad.so/docs)** to treat your prompts, and the full context around them, as versioned, traceable units so that prompt engineering becomes more like professional software development.
+
+To use Lilypad, we advocate encapsulating calls in functions as a first step so that each LLM interaction can be versioned, traced, evaluated, and optimized independently, giving you full control over how prompts evolve and how your system improves over time.
+
+Next, you simply add the `@lilypad.trace` decorator to turn the function into a managed prompt. This allows Lilypad to automatically version all changes made within the function closure, i.e., the prompt itself, model settings, input arguments, any pre-processing code, etc.
+
+```py
+from openai import OpenAI
+import lilypad
+
+lilypad.configure()
+client = OpenAI()
+
+@lilypad.trace(versioning="automatic")  # [!code highlight]
+def answer_question(question: str) -> str:
+    completion = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[{"role": "user", "content": question}],
+    )
+    return str(completion.choices[0].message.content) 
+    
+response = answer_question("What is the largest planet in the solar system?")
+print(response)
+# > The largest planet in the solar system is Jupiter. 
+```
+
+Versioning the full function closure means you can:
+
+* Reproduce exactly what happened during any model call  
+* Compare different versions of your function and outputs with full confidence  
+* Understand how changes to the prompt, code, or model settings impact the results  
+* Roll back safely if a change causes regressions or unexpected behavior
+
+All of this brings real structure to the prompt engineering process, making it possible to trace every change, label failures clearly, and improve systematically, instead of flying blind.
+
+Lilypad displays all versions and traces in its playground environment (described below), which is a no-code user interface where SMEs can experiment with different prompts and settings, and where you can easily visualize how different versions perform.
+
+For example, for every LLM call we make, that versioned code appears in the playground:
+
+![Lilypad Answer Question Trace](/assets/blog/advanced-prompt-engineering/lilypad-answer-question-trace.webp)
+
+Changing anything within the function closure (including the prompt text) and running the code will automatically increment the version number, unless that change is identical to a previous version.
+
+Lilypad traces not just the raw API request to the model, capturing input/output tokens, costs, and model metadata (which is key for doing [LLM evaluation](/blog/llm-evaluation/)), but also the full function that generated the call, including the code, prompt logic, arguments, and version.
+
+You’re not just saving outputs; you’re building a complete history of how your prompts and the artificial intelligence behaves. This lets you spot bugs faster, track down unexpected costs, compare versions, and make real improvements based on data, not guesswork. It turns prompt engineering into something you can test, trust, and scale like real software, not just hope for the best.
+
+## How Lilypad Makes Prompt Collaboration Actually Work
+
+A lot of prompt observability platforms, like LangSmith or Langfuse Prompt Manager, completely separate prompts from the codebase. On paper, this sounds great: prompts on one side, code on the other, each managed by different teams.
+
+But in practice, **we’ve found this setup fragile, error-prone, and hard to scale**. Once you break the link between prompts and the code that influences them, it becomes easy for things to drift out of sync, leading to confusing bugs and messy failures when changes happen.
+
+In Lilypad, we take a different approach: we treat the prompt and the code as a single, versioned unit. Every time you update your [LLM prompt](/blog/llm-prompt/) or the function around it, Lilypad automatically keeps them in lockstep. The type-safe code generated in the playground always matches what’s running in production, no gaps, no surprises. And even if Lilypad’s servers went down, your local project stays fully intact.
+
+Nonetheless, we still offer the playground as a separate, no-code environment where non-technical domain experts can safely create, modify, and manage prompts, without developers needing to redeploy code.
+
+This setup reduces risk: no random bugs from redeployments, no dependency drift, no config mismatches.
+
+Inside the playground, domain experts have everything they need, from type-safe variable inputs to real-time model feedback, along with full metadata like token usage, cost, provider, model, and temperature settings.
+
+Experts can use the markdown-supported prompt templates to try different prompting techniques and compare outputs as often as needed, all without having to manually save effective prompts or risk breakage by inadvertently changing application logic.
+
+![Lilypad Playground](/assets/blog/advanced-prompt-engineering/lilypad-playground.webp)
+
+## Stop Guessing, Start Testing Your Prompts
+
+If you’re not doing evals, it’s not really prompt engineering. You’re just guessing.
+
+Testing and [prompt evaluation](/blog/prompt-evaluation/) are how you know if your prompts are actually getting better. The tricky part is that LLM outputs aren’t always black and white. They’re often fuzzy, and it’s not always obvious what counts as “right.”
+
+Imagine you ask an AI model to extract the age from a user message: "I turned thirty-one just last week.”
+
+The model might return "thirty-one" as a string, "The user is 31 years old," or simply 31\.
+
+Technically, only the number 31 matches the exact instruction to "return a number," but all three answers are understandable.
+
+This is where evaluation of generative AI responses gets tricky: without clear criteria, you could accidentally mark a useful answer as wrong, or pass something that technically doesn’t meet your needs.
+
+We believe the best way to stay consistent is to use simple pass/fail judgments, backed by a short explanation when needed. Binary evaluations are easier to agree on among different people, unlike other criteria like scaled ratings (“rate on a scale from 1 to 5”), which can lead to inconsistent results.
+
+That’s because different reviewers might see the scale differently: what feels like a "3" to one person could feel like a "4" to another. That kind of mismatch makes it harder to tell if a prompt is actually getting better or if people just see it differently. Pass/fail decisions are way clearer. They keep everyone on the same page and give you a much stronger way to judge whether your prompt changes are really working.
+
+Also, if you successfully collect accurate evals over time, you can train large language models to introduce automation in evals later (using [LLM-as-a-judge](/blog/llm-as-judge/) for instance). This means you can start automating parts of the review process without losing the consistency and quality needed to keep improving your prompts (although we strongly recommend manually verifying all automated evals to catch errors, prevent drift, and avoid quietly shipping broken prompts).
+
+Lilypad makes it easy for reviewers to quickly label outputs. Just pick a response in the playground, mark it pass or fail, and (if you want) add a quick note. Over time, you build up a clear record of what’s working and what’s not.
+
+![Lilypad Annotation Queue](/assets/blog/advanced-prompt-engineering/lilypad-annotation-queue.webp)
+
+This simple process builds a ground truth dataset that can be compared against new outputs to see if things got better, worse, or stayed the same.
+
+## Turn Prompt Engineering into a Repeatable Process
+
+Lilypad lets you treat your prompts like real software: versioned, traceable, and always improving based on real feedback, not just intuition. It’s ideal for teams building and scaling [LLM agents](/blog/llm-agents/).
+
+[To get started with Lilypad](https://lilypad.mirascope.com/), you can use your GitHub credentials to sign up and begin tracing and versioning your LLM functions with just a few lines of code.
