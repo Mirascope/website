@@ -6,6 +6,7 @@ import {
   GitHubRepoButton,
   DocsProductSelector,
   useIsLandingPage,
+  useIsRouterWaitlistPage,
 } from "@/src/components/core";
 import ThemeSwitcher from "@/src/components/routes/root/ThemeSwitcher";
 import DesktopNavigation from "@/src/components/routes/root/DesktopNavigation";
@@ -28,6 +29,9 @@ export default function Header({ showProductSelector = false }: HeaderProps) {
   // Use the isLandingPage hook instead of router
   const isLandingPage = useIsLandingPage();
 
+  // Use the isRouterWaitlistPage hook instead of router
+  const isRouterWaitlistPage = useIsRouterWaitlistPage();
+
   // State to track scroll position
   const [scrolled, setScrolled] = useState(false);
 
@@ -48,9 +52,9 @@ export default function Header({ showProductSelector = false }: HeaderProps) {
   }, [scrolled]);
 
   return (
-    <header className={HEADER_STYLES.container(isLandingPage, scrolled)}>
+    <header className={HEADER_STYLES.container(isLandingPage || isRouterWaitlistPage, scrolled)}>
       <nav className={HEADER_STYLES.nav}>
-        <Link to="/" className={HEADER_STYLES.logo(isLandingPage)}>
+        <Link to="/" className={HEADER_STYLES.logo(isLandingPage || isRouterWaitlistPage)}>
           <ProductLogo
             size="small"
             withText={true}

@@ -11,6 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as RouterWaitlistImport } from './routes/router-waitlist'
 import { Route as PrivacyImport } from './routes/privacy'
 import { Route as PricingImport } from './routes/pricing'
 import { Route as LlmsFullImport } from './routes/llms-full'
@@ -33,6 +34,12 @@ import { Route as BlogSlugImport } from './routes/blog.$slug'
 import { Route as DocsProductLlmsFullImport } from './routes/docs.$product.llms-full'
 
 // Create/Update Routes
+
+const RouterWaitlistRoute = RouterWaitlistImport.update({
+  id: '/router-waitlist',
+  path: '/router-waitlist',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const PrivacyRoute = PrivacyImport.update({
   id: '/privacy',
@@ -207,6 +214,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyImport
       parentRoute: typeof rootRoute
     }
+    '/router-waitlist': {
+      id: '/router-waitlist'
+      path: '/router-waitlist'
+      fullPath: '/router-waitlist'
+      preLoaderRoute: typeof RouterWaitlistImport
+      parentRoute: typeof rootRoute
+    }
     '/blog/$slug': {
       id: '/blog/$slug'
       path: '/blog/$slug'
@@ -329,6 +343,7 @@ export interface FileRoutesByFullPath {
   '/llms-full': typeof LlmsFullRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
+  '/router-waitlist': typeof RouterWaitlistRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/dev/$slug': typeof DevSlugRoute
   '/dev/audit-metadata': typeof DevAuditMetadataRoute
@@ -351,6 +366,7 @@ export interface FileRoutesByTo {
   '/llms-full': typeof LlmsFullRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
+  '/router-waitlist': typeof RouterWaitlistRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/dev/$slug': typeof DevSlugRoute
   '/dev/audit-metadata': typeof DevAuditMetadataRoute
@@ -375,6 +391,7 @@ export interface FileRoutesById {
   '/llms-full': typeof LlmsFullRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
+  '/router-waitlist': typeof RouterWaitlistRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/dev/$slug': typeof DevSlugRoute
   '/dev/audit-metadata': typeof DevAuditMetadataRoute
@@ -400,6 +417,7 @@ export interface FileRouteTypes {
     | '/llms-full'
     | '/pricing'
     | '/privacy'
+    | '/router-waitlist'
     | '/blog/$slug'
     | '/dev/$slug'
     | '/dev/audit-metadata'
@@ -421,6 +439,7 @@ export interface FileRouteTypes {
     | '/llms-full'
     | '/pricing'
     | '/privacy'
+    | '/router-waitlist'
     | '/blog/$slug'
     | '/dev/$slug'
     | '/dev/audit-metadata'
@@ -443,6 +462,7 @@ export interface FileRouteTypes {
     | '/llms-full'
     | '/pricing'
     | '/privacy'
+    | '/router-waitlist'
     | '/blog/$slug'
     | '/dev/$slug'
     | '/dev/audit-metadata'
@@ -467,6 +487,7 @@ export interface RootRouteChildren {
   LlmsFullRoute: typeof LlmsFullRoute
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
+  RouterWaitlistRoute: typeof RouterWaitlistRoute
   BlogSlugRoute: typeof BlogSlugRoute
   DocsSplatRoute: typeof DocsSplatRoute
   TermsServiceRoute: typeof TermsServiceRoute
@@ -485,6 +506,7 @@ const rootRouteChildren: RootRouteChildren = {
   LlmsFullRoute: LlmsFullRoute,
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
+  RouterWaitlistRoute: RouterWaitlistRoute,
   BlogSlugRoute: BlogSlugRoute,
   DocsSplatRoute: DocsSplatRoute,
   TermsServiceRoute: TermsServiceRoute,
@@ -512,6 +534,7 @@ export const routeTree = rootRoute
         "/llms-full",
         "/pricing",
         "/privacy",
+        "/router-waitlist",
         "/blog/$slug",
         "/docs/$",
         "/terms/service",
@@ -549,6 +572,9 @@ export const routeTree = rootRoute
     },
     "/privacy": {
       "filePath": "privacy.tsx"
+    },
+    "/router-waitlist": {
+      "filePath": "router-waitlist.tsx"
     },
     "/blog/$slug": {
       "filePath": "blog.$slug.tsx"

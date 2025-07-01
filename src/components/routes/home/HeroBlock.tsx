@@ -1,4 +1,5 @@
 import { ChevronDown } from "lucide-react";
+import { ButtonLink } from "@/mirascope-ui/ui/button-link";
 import { ResponsiveTextBlock } from "@/src/components/ui/responsive-text-block";
 
 // Shared styling constants for logo and hero components
@@ -140,6 +141,16 @@ export function HeroBlock({ onScrollDown, showScrollButton }: HeroBlockProps) {
               textShadow={true}
             />
           </div>
+        </div>
+        <div className="mt-8 flex w-full max-w-3xl flex-col items-center justify-center gap-4 sm:flex-row">
+          <ButtonLink
+            href="/router-waitlist"
+            variant="outline"
+            size="default"
+            className="landing-page-box-shadow landing-page-box-shadow-hover w-full min-w-[200px] border-0 bg-white px-6 py-4 text-center font-medium text-black hover:bg-gray-100 hover:text-black sm:w-auto"
+          >
+            Mirascope Router Waitlist
+          </ButtonLink>
         </div>
       </div>
 

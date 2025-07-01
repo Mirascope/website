@@ -6,12 +6,18 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
 } from "@/src/components/ui/dropdown-menu";
-import { useTheme, useIsLandingPage, type Theme } from "@/src/components/core/providers";
+import {
+  useTheme,
+  useIsLandingPage,
+  useIsRouterWaitlistPage,
+  type Theme,
+} from "@/src/components/core/providers";
 import { THEME_SWITCHER_STYLES } from "./styles";
 
 export default function ThemeSwitcher() {
   const { theme, current, set: setTheme } = useTheme();
   const isLandingPage = useIsLandingPage();
+  const isRouterWaitlistPage = useIsRouterWaitlistPage();
 
   const handleThemeChange = (newTheme: Theme) => {
     // Get current effective theme before change for transition effect
@@ -21,7 +27,10 @@ export default function ThemeSwitcher() {
     setTheme(newTheme);
 
     // For theme changes on homepage, update the background transition
-    if (isLandingPage && prevEffectiveTheme !== (newTheme === "system" ? current : newTheme)) {
+    if (
+      (isLandingPage || isRouterWaitlistPage) &&
+      prevEffectiveTheme !== (newTheme === "system" ? current : newTheme)
+    ) {
       document.body.style.transition = "background-image 0.3s ease";
     }
   };
@@ -35,7 +44,10 @@ export default function ThemeSwitcher() {
           {theme === "system" && <Monitor size={20} />}
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className={THEME_SWITCHER_STYLES.content(isLandingPage)} align="end">
+      <DropdownMenuContent
+        className={THEME_SWITCHER_STYLES.content(isLandingPage || isRouterWaitlistPage)}
+        align="end"
+      >
         <DropdownMenuRadioGroup
           value={theme}
           onValueChange={(value) => handleThemeChange(value as Theme)}
