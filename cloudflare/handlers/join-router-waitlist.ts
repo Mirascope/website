@@ -22,7 +22,7 @@ export async function joinRouterWaitlistHandler(request: Request, env: any): Pro
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: "Failed to join waitlist" }), {
+    return new Response(JSON.stringify({ error: error }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
     });
