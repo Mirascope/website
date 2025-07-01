@@ -16,7 +16,7 @@ export default {
     }
 
     if (url.pathname === "/cf/join-router-waitlist") {
-      return await joinRouterWaitlistHandler(request, env);
+      return joinRouterWaitlistHandler(request, env);
     }
 
     // For all other requests, return 404 (Assets will handle valid files)

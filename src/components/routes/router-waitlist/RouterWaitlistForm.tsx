@@ -49,13 +49,13 @@ export function RouterWaitlistForm() {
               name="firstName"
               placeholder="First name"
               required
-              className="bg-white/90 text-black"
+              className="text-foreground bg-white/90"
             />
             <Input
               name="lastName"
               placeholder="Last name"
               required
-              className="bg-white/90 text-black"
+              className="text-foreground bg-white/90"
             />
           </div>
           <Input
@@ -63,7 +63,7 @@ export function RouterWaitlistForm() {
             type="email"
             placeholder="you@company.com"
             required
-            className="bg-white/90 text-black"
+            className="text-foreground bg-white/90"
           />
           <Button
             type="submit"
