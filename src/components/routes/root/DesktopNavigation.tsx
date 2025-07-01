@@ -9,7 +9,7 @@ import {
   NavigationMenuLink,
 } from "@/src/components/ui/navigation-menu";
 import { getProductRoute } from "@/src/lib/routes";
-import { useProduct, useIsLandingPage } from "@/src/components/core";
+import { useProduct, useIsLandingPage, useIsRouterWaitlistPage } from "@/src/components/core";
 import { PRODUCT_CONFIGS } from "@/src/lib/constants/site";
 import type { ProductName } from "@/src/lib/content/spec";
 import { cn } from "@/src/lib/utils";
@@ -69,6 +69,7 @@ export default function DesktopNavigation({ isSearchOpen }: DesktopNavigationPro
   // Get the current product
   const product = useProduct();
   const isLandingPage = useIsLandingPage();
+  const isRouterWaitlistPage = useIsRouterWaitlistPage();
 
   return (
     <div className={DESKTOP_NAV_STYLES.container(isSearchOpen)}>
@@ -83,7 +84,9 @@ export default function DesktopNavigation({ isSearchOpen }: DesktopNavigationPro
                 </Link>
               </span>
             </NavigationMenuTrigger>
-            <NavigationMenuContent className={DESKTOP_NAV_STYLES.menuContent(isLandingPage)}>
+            <NavigationMenuContent
+              className={DESKTOP_NAV_STYLES.menuContent(isLandingPage || isRouterWaitlistPage)}
+            >
               <ul className={DESKTOP_NAV_STYLES.productGrid}>
                 <ProductMenuLink productName="mirascope" />
                 <ProductMenuLink productName="lilypad" />

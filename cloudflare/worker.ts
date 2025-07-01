@@ -1,8 +1,9 @@
 import { countryDetectionHandler } from "./handlers/country-detection";
 import { contentMetaCorsHandler } from "./handlers/content-meta-cors";
+import { joinRouterWaitlistHandler } from "./handlers/join-router-waitlist";
 
 export default {
-  async fetch(request: Request): Promise<Response> {
+  async fetch(request: Request, env: any): Promise<Response> {
     const url = new URL(request.url);
     console.log(`worker dispatch: ${url.pathname}`);
 
@@ -12,6 +13,10 @@ export default {
 
     if (url.pathname.startsWith("/cf/content-meta/")) {
       return contentMetaCorsHandler(request);
+    }
+
+    if (url.pathname === "/cf/join-router-waitlist") {
+      return await joinRouterWaitlistHandler(request, env);
     }
 
     // For all other requests, return 404 (Assets will handle valid files)

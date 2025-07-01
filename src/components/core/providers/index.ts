@@ -6,6 +6,7 @@ export {
   StorybookThemeProvider,
   useTheme,
   useIsLandingPage,
+  useIsRouterWaitlistPage,
   type Theme,
 } from "./ThemeContext";
 export { ProductProvider, useProduct, type ProductName } from "./ProductContext";

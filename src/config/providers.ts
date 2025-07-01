@@ -100,7 +100,7 @@ export function getAlternativeProvider(primaryProvider: Provider): {
 
 /**
  * Replace provider variables in content
- * Replaces $PROVIDER, $MODEL, $OTHER_PROVIDER, and $OTHER_MODEL
+ * Replaces $PROVIDER, $MODEL, $OTHER_PROVIDER, $OTHER_MODEL, and $PROVIDER:MODEL
  */
 export function replaceProviderVariables(content: string, primaryProvider: Provider): string {
   const primaryInfo = providerDefaults[primaryProvider];
@@ -108,6 +108,7 @@ export function replaceProviderVariables(content: string, primaryProvider: Provi
     getAlternativeProvider(primaryProvider);
 
   const after = content
+    .replace(/\$PROVIDER:MODEL/g, `${primaryProvider}:${primaryInfo.defaultModel}`)
     .replace(/\$PROVIDER/g, primaryProvider)
     .replace(/\$MODEL/g, primaryInfo.defaultModel)
     .replace(/\$OTHER_PROVIDER/g, secondaryProvider)

@@ -3,7 +3,7 @@ import { Search as SearchIcon, X } from "lucide-react";
 import { useIsMobile } from "./hooks/useIsMobile";
 import SearchBar from "./SearchBar";
 import { SEARCH_BAR_STYLES } from "./styles";
-import { useIsLandingPage } from "@/src/components/core";
+import { useIsLandingPage, useIsRouterWaitlistPage } from "@/src/components/core";
 
 /**
  * Props for search wrappers
@@ -22,6 +22,7 @@ function MobileSearchWrapper({ onOpenChange }: SearchWrapperProps) {
   // Manage internal state for mobile search
   const [isOpen, setIsOpen] = useState(false);
   const isLandingPage = useIsLandingPage();
+  const isRouterWaitlistPage = useIsRouterWaitlistPage();
 
   // Open mobile search handler
   const handleOpenSearch = () => {
@@ -46,8 +47,8 @@ function MobileSearchWrapper({ onOpenChange }: SearchWrapperProps) {
   if (!isOpen) {
     return (
       <button
-        className={SEARCH_BAR_STYLES.mobileSearchButton(isLandingPage)}
-        style={SEARCH_BAR_STYLES.getInputContainerStyles(isLandingPage)}
+        className={SEARCH_BAR_STYLES.mobileSearchButton(isLandingPage || isRouterWaitlistPage)}
+        style={SEARCH_BAR_STYLES.getInputContainerStyles(isLandingPage || isRouterWaitlistPage)}
         onClick={handleOpenSearch}
         aria-label="Open search"
       >
@@ -78,7 +79,7 @@ function MobileSearchWrapper({ onOpenChange }: SearchWrapperProps) {
 
             {/* Close button positioned on the right side */}
             <button
-              className={SEARCH_BAR_STYLES.closeButton(isLandingPage)}
+              className={SEARCH_BAR_STYLES.closeButton(isLandingPage || isRouterWaitlistPage)}
               onClick={handleCloseSearch}
               aria-label="Close search"
             >

@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { isBrowser, analyticsManager } from "@/src/lib/services/analytics";
 import { cn } from "@/src/lib/utils";
-import { useIsLandingPage } from "@/src/components/";
+import { useIsLandingPage, useIsRouterWaitlistPage } from "@/src/components/";
 
 export default function CookieBanner() {
   const [isVisible, setIsVisible] = useState(false);
   const bannerRef = useRef<HTMLDivElement>(null);
   const isLandingPage = useIsLandingPage();
+  const isRouterWaitlistPage = useIsRouterWaitlistPage();
 
   useEffect(() => {
     // Only run in browser environment
@@ -41,7 +42,7 @@ export default function CookieBanner() {
       className={cn(
         "fixed bottom-18 left-4 z-50 w-[180px] rounded-lg p-3 shadow-lg backdrop-blur-sm",
         "xs:bottom-18 sm:bottom-12 sm:left-4 md:left-4 lg:left-4 xl:bottom-12 2xl:bottom-4",
-        isLandingPage
+        isLandingPage || isRouterWaitlistPage
           ? "bg-background/40 landing-page-box-shadow"
           : "border-border bg-background/80 border"
       )}
@@ -62,7 +63,7 @@ export default function CookieBanner() {
               "rounded-md px-2 py-1 text-sm font-medium transition-colors focus:ring-2 focus:outline-none",
               "text-muted-foreground",
               "hover:bg-accent focus:ring-ring cursor-pointer",
-              isLandingPage ? "bg-muted/60" : "bg-muted"
+              isLandingPage || isRouterWaitlistPage ? "bg-muted/60" : "bg-muted"
             )}
           >
             Reject
@@ -74,7 +75,7 @@ export default function CookieBanner() {
               "rounded-md px-2 py-1 text-sm font-medium transition-colors focus:ring-2 focus:outline-none",
               "text-primary-foreground",
               "hover:bg-primary/90 focus:ring-ring cursor-pointer",
-              isLandingPage ? "bg-primary/80" : "bg-primary"
+              isLandingPage || isRouterWaitlistPage ? "bg-primary/80" : "bg-primary"
             )}
           >
             Accept

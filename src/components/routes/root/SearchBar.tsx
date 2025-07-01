@@ -3,7 +3,7 @@ import { Search as SearchIcon } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { getSearchService, type SearchResultItem } from "@/src/lib/services/search";
 import { environment } from "@/src/lib/content/environment";
-import { useIsLandingPage } from "@/src/components/core";
+import { useIsLandingPage, useIsRouterWaitlistPage } from "@/src/components/core";
 import { SEARCH_BAR_STYLES, ANIMATION_TIMING } from "./styles";
 import { useIsMobile } from "./hooks/useIsMobile";
 
@@ -130,11 +130,12 @@ function SearchInput({
   isMobile = false,
 }: SearchInputProps) {
   const isLandingPage = useIsLandingPage();
+  const isRouterWaitlistPage = useIsRouterWaitlistPage();
   return (
     <div
-      className={SEARCH_BAR_STYLES.inputContainer(isLandingPage, isMobile)}
+      className={SEARCH_BAR_STYLES.inputContainer(isLandingPage || isRouterWaitlistPage, isMobile)}
       data-testid="search-input"
-      style={SEARCH_BAR_STYLES.getInputContainerStyles(isLandingPage)}
+      style={SEARCH_BAR_STYLES.getInputContainerStyles(isLandingPage || isRouterWaitlistPage)}
       onClick={onFocus}
     >
       <SearchIcon size={16} className={SEARCH_BAR_STYLES.icon(isOpen)} />
@@ -143,13 +144,13 @@ function SearchInput({
         readOnly={!isOpen}
         type="text"
         placeholder="Search..."
-        className={SEARCH_BAR_STYLES.input(isOpen, isLandingPage, isMobile)}
+        className={SEARCH_BAR_STYLES.input(isOpen, isLandingPage || isRouterWaitlistPage, isMobile)}
         value={query}
         onChange={(e) => onChange(e.target.value)}
         onFocus={onFocus}
         autoFocus={isMobile && isOpen} // Auto-focus in mobile mode
       />
-      <kbd className={SEARCH_BAR_STYLES.kbd(isLandingPage, isOpen)}>
+      <kbd className={SEARCH_BAR_STYLES.kbd(isLandingPage || isRouterWaitlistPage, isOpen)}>
         <span className="text-xs">⌘</span>K
       </kbd>
     </div>
@@ -187,10 +188,15 @@ function SearchResultsContainer({
   isMobile = false,
 }: SearchResultsContainerProps) {
   const isLandingPage = useIsLandingPage();
+  const isRouterWaitlistPage = useIsRouterWaitlistPage();
   return (
     <div
-      className={SEARCH_BAR_STYLES.resultsContainer(isLandingPage, isMobile, isOpen)}
-      style={SEARCH_BAR_STYLES.getResultsContainerStyles(isLandingPage)}
+      className={SEARCH_BAR_STYLES.resultsContainer(
+        isLandingPage || isRouterWaitlistPage,
+        isMobile,
+        isOpen
+      )}
+      style={SEARCH_BAR_STYLES.getResultsContainerStyles(isLandingPage || isRouterWaitlistPage)}
       ref={resultsRef}
     >
       {renderSearchContent()}

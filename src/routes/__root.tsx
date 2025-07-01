@@ -33,7 +33,7 @@ export const Route = createRootRoute({
   component: () => {
     const router = useRouterState();
     const path = router.location.pathname;
-    const isLandingPage = path === "/";
+    const isLandingPage = ["/", "/router-waitlist"].includes(path);
 
     useEffect(() => {
       analyticsManager.trackPageView(path);

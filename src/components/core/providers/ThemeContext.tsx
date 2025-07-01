@@ -13,6 +13,8 @@ interface ThemeAPI {
   set: (theme: Theme) => void;
   // Whether the current page is the landing page
   isLandingPage: boolean;
+  // Whether the current page is the router waitlist page
+  isRouterWaitlistPage: boolean;
 }
 
 // Create the context with default values
@@ -21,6 +23,7 @@ const ThemeContext = createContext<ThemeAPI>({
   current: "light",
   set: () => {},
   isLandingPage: false,
+  isRouterWaitlistPage: false,
 });
 
 // Hook for components to use the theme
@@ -31,6 +34,11 @@ export function useTheme() {
 // Hook specifically for landing page status
 export function useIsLandingPage() {
   return useContext(ThemeContext).isLandingPage;
+}
+
+// Hook specifically for router waitlist page status
+export function useIsRouterWaitlistPage() {
+  return useContext(ThemeContext).isRouterWaitlistPage;
 }
 
 // Get stored theme preference from localStorage
@@ -68,9 +76,10 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   // Track if client-side code has run
   const [isHydrated, setIsHydrated] = useState(false);
 
-  // Get router to determine if we're on the landing page
+  // Get router to determine if we're on the landing page or router waitlist page
   const router = useRouterState();
   const isLandingPage = router.location.pathname === "/";
+  const isRouterWaitlistPage = router.location.pathname === "/router-waitlist";
 
   // Initialize theme on mount
   useEffect(() => {
@@ -125,7 +134,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 
   // Add the data-landing-page attribute to the HTML element
   if (isHydrated && typeof document !== "undefined") {
-    if (isLandingPage) {
+    if (isLandingPage || isRouterWaitlistPage) {
       document.documentElement.setAttribute("data-landing-page", "true");
     } else {
       document.documentElement.removeAttribute("data-landing-page");
@@ -139,6 +148,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
         current,
         set: setThemeHandler,
         isLandingPage,
+        isRouterWaitlistPage,
       }}
     >
       {children}
@@ -152,6 +162,7 @@ interface StorybookThemeProviderProps {
   initialTheme?: Theme;
   initialCurrent?: "light" | "dark";
   isLandingPage?: boolean;
+  isRouterWaitlistPage?: boolean;
 }
 
 /**
@@ -167,6 +178,7 @@ export function StorybookThemeProvider({
   initialTheme = "system",
   initialCurrent = "light",
   isLandingPage = false,
+  isRouterWaitlistPage = false,
 }: StorybookThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(initialTheme);
   const [current, setCurrent] = useState<"light" | "dark">(initialCurrent);
@@ -192,6 +204,7 @@ export function StorybookThemeProvider({
         current,
         set: setThemeHandler,
         isLandingPage,
+        isRouterWaitlistPage,
       }}
     >
       {children}
