@@ -7,9 +7,10 @@ export async function joinRouterWaitlistHandler(request: Request, env: any): Pro
 
   try {
     const { firstName, lastName, email } = await request.json();
+    console.log(`Received waitlist submission: ${firstName} ${lastName} <${email}>`);
 
     const resend = new Resend(env.RESEND_API_KEY);
-
+    console.log("Resend client initialized");
     await resend.contacts.create({
       email,
       firstName,
