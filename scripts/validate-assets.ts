@@ -87,7 +87,7 @@ async function validateLinksAndImages(
   }
 
   // Find all HTML files in the dist directory
-  const htmlFiles = await glob(`${distDir}/**/index.html`);
+  const htmlFiles = await glob(`${distDir}/**/*.html`);
   console.log(`${icons.info} Found ${htmlFiles.length} HTML files to check`);
 
   // Gather all assets in the dist directory
@@ -128,8 +128,8 @@ async function validateLinksAndImages(
 
     // Get the relative path for reporting
     const relativePath = path.relative(distDir, htmlFile);
-    // Convert dist/some/path/index.html to /some/path
-    const currentPage = "/" + relativePath.replace(/\/index\.html$/, "");
+    // Convert dist/some/path/index.html to /some/path or dist/page.html to /page
+    const currentPage = "/" + relativePath.replace(/\/index\.html$/, "").replace(/\.html$/, "");
 
     if (verbose) {
       console.log(`Checking ${links.length} links and ${images.length} images in ${relativePath}`);
