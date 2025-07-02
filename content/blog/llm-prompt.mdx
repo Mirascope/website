@@ -6,7 +6,6 @@ readTime: "23 min read"
 author: "William Bakst"
 ---
 
-
 An LLM prompt is an instruction you give a language model to guide it to a desired response, and can be anything from a simple question to an input spanning multiple calls.
 
 For simple queries, a straightforward, one-liner prompt will often get you the response you want, but we recommend prompt engineering for anything more complex or when your initial prompts don’t achieve your desired results.
@@ -595,9 +594,9 @@ Catching basic errors early, before they even reach the model, helps produce rel
 
 Mirascope also provides linting features and editor support, showing warnings and errors based on our API even before you run the code.
 
-For instance, `response` below is assigned the output of an OpenAI call that returns a stream. When you hover the cursor over the `response` object in your editor, it’s identified as being an `OpenAIStream`.
+For instance, `response` below is assigned the output of an OpenAI call that returns a structured output. When you hover the cursor over the `response` object in your editor, it’s identified as being a `Book`.
 
-![OpenAI Stream example](/assets/blog/langchain-sucks/mirascope_stream_type_hint.webp)
+![Structured Output example](/assets/blog/llm-prompt/mirascope-type-safety.webp)
 
 ### Version Your Prompts
 

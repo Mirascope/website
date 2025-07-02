@@ -367,13 +367,13 @@ We provide automatic type validation of prompt inputs, requiring only a single P
 
 Again, since Mirascope prompt templates are written as Python functions, you get inline documentation and linting out of the box, conveniently available in your IDE.
 
-A missing argument in a function call:
+Proper type hinting:
 
-![Mirascope Prompt Function Missing Argument](/assets/blog/langchain-structured-output/mirascope_prompt_missing_arg.webp)
+![Mirascope Prompt Function Type Hints](/assets/blog/prompt-flow-vs-langchain/mirascope-type-hints.webp)
 
 Autocompletion of a function call:
 
-![Mirascope Prompt Function Autocomplete](/assets/blog/langchain-structured-output/mirascope_prompt_autocomplete.webp)
+![Mirascope Prompt Function Autocomplete](/assets/blog/prompt-flow-vs-langchain/mirascope-autocomplete.webp)
 
 **Beyond automatic validation of prompt inputs, you can also use Pydantic to validate data extracted from LLM outputs, as shown in the example code below:**
 
