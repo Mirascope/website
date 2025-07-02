@@ -1,251 +1,303 @@
 ---
-title: "8 Prompt Engineering Best Practices and Techniques"
-description: "Following prompt engineering best practices helps you elicit accurate and reliable responses from the LLM. Here are 8 best practices with examples."
-date: "2024-05-31"
+title: "11 Prompt Engineering Best Practices Every Modern Dev Needs "
+description: "Build better AI systems with these 11 prompt engineering best practices. Ideal for devs working across teams and tools."
+date: "2025-07-01"
 readTime: "13 min read"
 author: "William Bakst"
 ---
 
-Eliciting the best answers from Large Language Models (LLMs) begins with giving them clear instructions. That’s really the goal of prompt engineering: it’s to guide the model to respond in kind to your precise and specific inputs. **Prompt engineering done right introduces predictability in the model’s outputs and saves you the effort of having to iterate excessively on your prompts.**
+Most people treat prompting like a conversation. They type something in, hope the AI gets it, and move on. But prompting isn’t just dialog: it’s design that shapes the way the generative AI model responds. The words you use, the structure you follow, the context you provide, these might not lock in an exact output, but they point the model in the right direction.
 
-In our experience, there are two key aspects to prompting an LLM effectively:
+And once you start thinking that way, everything changes. Prompting stops being a guessing game and becomes a process you can test, tune, and trust. You’re not aiming for one lucky output, you’re aiming for consistency, even across edge cases, over time, and at scale.
 
-1. The language employed should be unambiguous and contextually rich. The more an LLM understands exactly what you want, the better it’ll respond.
+In this article, we’ll share 11 prompt engineering best practices that modern developers can apply right away. We’ll begin with the essentials: seven practical techniques for writing clearer, more effective prompts that deliver better results with less trial and error.
 
-2. Beyond the language used, good software developer practices such as version control, ensuring the quality of prompt inputs, writing clean code, and others, help maintain a structured and dependable approach.
+Then we’ll shift from prompt writing to *actual* prompt engineering. Because while most advice on “prompt engineering” ends at tips for phrasing, **real engineering means treating AI behavior like a system**, something you can version, trace, and optimize like any other part of your stack.
 
-Of course, a “pre-step” to consider is the prompt development life cycle as a whole. Prompt engineers should define the stages of this life cycle in terms of key metrics and specify success criteria for evaluating LLM outputs. However, at present we won’t be considering such aspects of the life cycle,**but rather what it takes for writing (and coding) prompts to coax better results from the model.**
+That’s where our platform [Lilypad](/docs/lilypad) comes in. It’s a prompt engineering framework built for developers, designed to help them capture everything that influences an LLM’s output, from the prompt to the code that wraps it, and trace snippets back to its source. With Lilypad, teams can iterate faster, evaluate reliably, and ship AI features that actually hold up under real-world use cases.
 
-Besides accuracy, “better” also means results that are reliable, especially taking into account how inconsistent language model outputs can be-even when using the same model with the same inputs. This is where best practices can help you achieve some baseline of consistency in LLM responses. **In this article, we share our insights for helping you generate predictable LLM responses.** 
+## 7 Fundamental Prompt Engineering Best Practices
 
-These insights are grounded in our own experiences writing prompts since the earliest days of the OpenAI SDK, when we developed our guiding principles in response to our frustrations working with [complex frameworks](/blog/langchain-alternatives) for developing LLM applications.
+### 1. Specify Exactly What You Want
 
-These principles eventually coalesced into our own Python toolkit for building with LLMs, [Mirascope](https://github.com/mirascope/mirascope). We illustrate our list of prompt engineering best practices below with some examples of how you would implement these in our toolkit.
+Large language models are great at picking up on hints, but that’s not always a good thing. In zero-shot prompts, where no guidance is given beyond the task description, vague instructions are especially risky.
 
-1. Provide a clear context
-2. Use tailored prompts, not predefined templates
-3. Use chain of thought prompting rather than “flat,” broad prompts
-4. Prompt initially without examples, then provide examples to refine the prompt
-5. Adjust the `temperature` or `top_p` parameters as necessary
-6. Colocate parameters and code with the LLM call
-7. Validate prompt inputs for data integrity
-8. Place prompts under version control
+If your prompt is vague, the model will still try to guess what you meant, often filling in the blanks with assumptions that don’t match your intent.
 
-## Prompting Best Practices for Getting Better Results from the LLM
+That’s why clarity matters. You need to be direct about what you're asking, how it should be structured, and what to avoid. Don’t just say “make it better” or “keep it simple”: define what “better” means. Does it mean shorter sentences or a specific tone?
 
-Below are some recommendations for getting better results from your prompt engineering workflows.
+Assume nothing. If your output needs to follow a certain format, stay within a word count, or match a particular style, say so. The more specific your prompt, the more likely the model is to give you what you actually want.
 
-### 1. Provide a Clear Context
+Don’t do this:
 
-Set the stage for your request by providing as many relevant details as possible to help the model understand your intent.
-
-LLMs learn to predict the next word in a sequence based on patterns they’ve encountered in training data, a prediction heavily influenced by the context provided in the input. Without enough context, the model has less information to base its predictions on, which can lead to misunderstandings or irrelevant outputs​​​​.
-
-As well, natural language can be ambiguous, with many words and phrases having different meanings depending on the context. For example, the word “bank” can refer to a financial institution or the side of a river. Without clear context, the model might choose an incorrect meaning, resulting in irrelevant or incorrect responses​​​​.
-
-So for example, rather than prompting with a one-liner like:
-
-```plaintext
-"What are the best techniques for improving memory?"
+```
+Summarize this article.
 ```
 
-Include background information, along with specific requirements or constraints:
+Instead, do this:
+
+```
+Summarize the following article in three concise bullet points that highlight its key arguments. Avoid including any opinion or unnecessary detail.
+```
+
+### 2. Show What Good Looks Like
+
+LLMs are fast learners, at least when it comes to patterns. That means you don’t just have to tell the model what you want. You can show it.
+
+By providing examples of the kind of output you expect (for a certain input), you’re helping the model pick up on the task, the tone, the format, everything. This approach is called few-shot prompting, and it’s especially useful when your output needs to follow a certain structure or carry a bit of nuance.
+
+Think of examples as anchors. The model uses them to get its bearings, then generalizes from there. So pick examples that match the tone, format, and level of detail you want in return. Garbage in, garbage out, but good examples in? Much better output back.
+
+Don’t do this:
+
+```
+Generate a product description for this item: a stainless steel water bottle.
+```
+
+Instead, do this:
+
+```
+Here’s how I want the product description to be written:
+Example:
+Product: Wireless Ergonomic Mouse
+Description: A sleek, Bluetooth-enabled mouse with a contoured design for all-day comfort and precision.
+Now generate one for:
+Product: Stainless Steel Water Bottle
+```
+
+### 3. Use Clear, Action-Oriented Instructions
+
+Start your AI prompts with strong action verbs. Words like Generate, Summarize, or Translate give the model a clear directive, and help cut through the noise.
+
+Avoid soft openings like “Can you…” or “I need…”. These weaken the prompt’s intent and make it feel more like a suggestion than a command. Instead, treat your prompt like an instruction to a function: be direct, specific, and purposeful.
+
+This kind of action-oriented language doesn’t just sound better, it actually works better. Many of the model’s training examples came from commands and task-based inputs, so prompts written that way tend to map more cleanly to what the model already understands.
+
+Don’t do this:
+
+```
+I need help understanding this paragraph.
+```
+
+Instead, do this:
+
+```
+Summarize this paragraph in natural language to explain it to a high school student.
+```
+
+### 4. Guide the Model to Think Step-by-Step
+
+When your prompt involves a complex or multi-part task, don’t ask the model to jump straight to the answer. Instead, use [prompt chaining](/blog/prompt-chaining/) or step by step guidance to help it think through the problem in stages.
+
+This technique is known as Chain-of-Thought prompting. You’re asking the model to reason out loud before giving its final answer. It’s a simple tweak that can make a big difference, reducing hallucinated answers and encouraging deeper, more accurate responses.
+
+It’s especially useful for complex tasks like logic-heavy prompts, coding challenges, analytical work, and decision-making tasks. Even if you just want a final answer, guiding the process often leads to higher-quality (and more explainable) results.
+
+Don’t do this:
+
+```
+What’s the best marketing strategy for our new product?
+```
+
+Instead, do this:
+
+```
+Let's think through this step-by-step:
+1. List the top 3 features or benefits of our new productivity app.
+2. Identify the primary target audience based on those features.
+3. Describe one or two marketing channels that would best reach that audience.
+4. Based on all of the above, recommend a simple marketing strategy tailored to this audience.
+```
+
+### 5. Specify the Desired Output Format
+
+LLMs don’t just need to know what to answer: they need to know how to answer. When you define the format you expect, the results get a whole lot better.
+
+Want a list? Say so. Need bullet points, a table, JSON, or a block of code? Spell it out. Clear formatting instructions help the model stay focused, avoid hallucinations, and produce outputs that are easier to read, and easier to use.
+
+This matters even more when your output is going into a downstream tool or system. Consistency counts. You can even prime the model by showing the format before the content, setting the structure before it generates the response.
+
+Don’t do this:
+
+```
+List benefits of remote work.
+```
+
+Instead, do this:
+
+```
+List 3 key benefits of remote work in bullet points, with each point no longer than one sentence.
+```
+
+### 6. Stay with Simple, Accessible Language
+
+LLMs work best when your prompts are clear, direct, and easy to understand, just like any good API. If your wording is vague or overloaded with jargon, the model is more likely to misfire.
+
+Skip the slang, idioms, and fuzzy phrases unless they’re truly necessary, and if they are, define them clearly. Words like better, intuitive, or robust might mean something to you, but to the model, they’re open to interpretation.
+
+Write your prompt like you’re explaining specific tasks to someone smart but unfamiliar with your field. The simpler the language, the easier it is for the model to build a clear mental map, and that leads to more consistent, reliable results.
+
+Don’t do this:
+
+```
+Write a robust, intuitive onboarding flow with all the bells and whistles.
+```
+
+Instead, do this:
+
+```
+Write a clear, step-by-step onboarding flow that explains the product’s core features in under 5 screens.
+```
+
+### 7. Assign the Model a Role When Context Matters
+
+LLMs tend to respond more accurately, and in the right tone, when you tell them who they’re supposed to be. Giving the model a role helps it adopt the right voice, vocabulary, and level of formality for the task.
+
+Need a professional explanation for a client? Ask the model to act as a consultant. Writing a friendly support reply? Frame it as coming from a helpful rep. Roles help guide tone, audience awareness, and framing, all of which make the output more relevant and useful.
+
+Some argue that assigning a role doesn’t truly change the model, it just forces you to clarify what you actually want, which might be a valid reason it works so well.
+
+Don’t do this:
+
+```
+Explain how to use Git to someone new.
+```
+
+Instead, do this:
+
+```
+You are a programming instructor teaching a beginner. Explain how to use Git for version control in simple, friendly language.
+```
+
+## 4 Best Practices to Make Your Prompts Repeatably Good
+
+At small scale, writing better prompts can get you far. But once you’re shipping [LLM applications](/blog/llm-applications/) to real users, with unpredictable inputs and evolving models, prompt quality alone won’t cut it.
+
+LLMs are inherently non-deterministic since the same prompt can yield different outputs. So the question becomes not “how do I write the perfect prompt?” but “how do I engineer this system, including [LLM integration](/blog/llm-integration/), to deliver reliable results?”
+
+That makes prompt engineering a process of continuous improvement, what machine learning developers would call an optimization problem.
+
+Solving it means tracking *everything* that changes, measuring what works, and testing new ideas against old ones in your artificial intelligence systems. It’s no longer just about the prompt, but the entire system: inputs, outputs, and the code connecting them. In other words, effective [LLM orchestration](/blog/llm-orchestration/).
+
+The four best practices below approach prompt engineering as a system-level discipline that you version, trace, and improve over time.
+
+**We built Lilypad with this in mind**. While other platforms focus on narrow slices, like playgrounds or prompt versioning, they often fall short when it comes to implementing prompt engineering techniques that make LLM behavior repeatable at scale.
+
+For example, such tools version the prompt but ignore things like parameters or helper logic. Others silo tracing and evaluation, forcing constant context-switching just to label or compare outputs.
+
+Lilypad brings it all together. In the best practices for prompt engineering that follow, we’ll show how it helps teams apply real engineering principles to prompt development and make outputs reliably good.
+
+### 8. Version Everything that Influences the Output
+
+If it affects the LLM’s behavior, it should be versioned. Not just the prompt, but the model, temperature, helper functions, preprocessing steps, and surrounding logic.
+
+Without versioning, you can’t reproduce outputs or track what changed. That’s why prompt engineering should follow the same rules as production code: every change to logic or inputs should create a new version.
+
+Versioning gives you visibility. It lets you roll back, track progress, and understand exactly what changed when results shift.
+
+Lilypad makes this easy by versioning the full context; not just the prompt, but the code that shapes the call. In fact, we recommend wrapping every LLM call in a Python function to capture the model, parameters, prompt, and any pre/post-processing in one place, even when working with multi-step patterns like [LLM chaining](/blog/llm-chaining/).
+
+Add the `@lilypad.trace` decorator and set `versioning=automatic` to have Lilypad version every change made within the function closure.
 
 ```python
-“I’m a second-year college student who struggles with retaining information from my lectures and reading material. I find it hard to remember key concepts during exams. What are the best techniques for improving my memory to enhance my study habits and exam performance?”
+import lilypad
+import os
+from openai import OpenAI
+
+lilypad.configure(auto_llm=True)  # [!code highlight]  
+
+client = OpenAI()
+
+@lilypad.trace(versioning="automatic")  # [!code highlight]
+def answer_question(question: str) -> str:
+    completion = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": question}],
+    )
+    return str(completion.choices[0].message.content) 
+
+response = answer_question("What makes popcorn pop?")    
+print(response)
 ```
 
-For chat interactions, specifying different roles in prompts adds context. For instance, distinguishing between the system's instructions and the user's input helps the model differentiate between directive information and conversational content:
+This shifts your workflow from ad hoc prompt tweaking to a structured, iterative process. The function now becomes a unit of optimization, something you can version, evaluate, and refine over time, much like a machine learning model.
 
-```python
-from mirascope.core import openai, prompt_template
+You’re no longer asking, “Did this prompt change help?” You’re comparing, “Did version 4 outperform version 3 on our eval set?” Each time that function runs, whether in dev, staging, or production, Lilypad captures the full generation: it can break down the inputs, model responses, parameters, and the exact version of the code that produced it. That data flows straight into the Lilypad playground.
 
-@openai.call(model="gpt-4o-mini", call_params={"temperature": 0.4})
-@prompt_template(
-    """
-    SYSTEM:
-    You are a world-renowned chef.
+The playground is a collaborative prompt engineering environment where you evaluate and compare results. You can:
 
-    USER:
-    I need a new recipe idea for dinner. Here are the ingredients I have:
-    {ingredients:list}
-    """
-)
-def recommend_recipe(ingredients: list[str]): ...
+* View outputs across different versions  
+* Inspect inputs and parameters for every call  
+* Swap between model or prompt versions to see how behavior changes  
+* Annotate outputs with pass/fail labels or notes  
+* Replay generations to test reproducibility or debug edge cases
 
-ingredients = ["chicken", "garlic", "spinach", "mushrooms"]
+Instead of guessing what changed (or why) you get a full trace, backed by version history and real inputs. 
 
-response = recommend_recipe(ingredients=ingredients)
+For example, we see below that V6 of our code calls `gpt-4o`:
 
-print(response.messages)
+![Lilypad Answer Question v6 Trace](/assets/blog/prompt-engineering-best-practices/lilypad-answer-question-v6-trace.webp)
 
-# > [{'role': 'system', 'content': 'You are a world-renowned chef.'}, {'role': 'user', 'content': 'I need a new recipe idea for dinner. Here are the ingredients I have:\nchicken\ngarlic\nspinach\nmushrooms'}]
+Changing the model type automatically increments the version number:
 
-print(response.content)
+![Lilypad Answer Question v7 Trace](/assets/blog/prompt-engineering-best-practices/lilypad-answer-question-v7-trace.webp)
 
-# > How about garlic chicken with spinach and mushrooms? Here's a simple recipe...
+### 9. Trace Every Output You Generate
 
-```
+Tracing is how you observe what the model actually did, given a specific input, set of parameters, and version of your code.
 
-### 2. Use Tailored Prompts, Not Predefined Templates
+A good trace captures everything that matters: inputs, outputs, model settings, token usage, latency, cost, and more. When something breaks or performance drops, traces let you debug the issue instead of guessing. Observability isn’t optional. It’s foundational to building reliable LLM\-powered apps, especially in production.
 
-By their very nature, reusable [prompt templates](/blog/langchain-prompt-template) that are designed for one context don’t port easily to others. There are a few reasons for this:
+That’s why we recommend to trace not just raw API calls, but also the structured execution of your LLM\-powered functions. You want to know not only *what* happened, but where it happened, and why.
 
-- LLMs are highly sensitive to the actual inputs used in a prompt-that is, everything from the words, phrases, style, and tone, to implicit assumptions, data points, structure, and formatting. Reusing the same prompt template in another context can generate unexpected LLM outputs.
-- LLMs don’t maintain state across interactions outside of the current context window, so each prompt-response pair is treated independently without memory of previous exchanges unless they are within the same context window. This means that every prompt within a new interaction or outside of the current context window needs to be self-contained and provide all necessary context to ensure accurate and reliable responses.
+That’s where Lilypad’s tracing system comes in. Just call `lilypad.configure()` to enable automatic tracing. This captures raw LLM API calls and logs critical metadata like inputs, outputs, token usage, and costs, giving you an API\-level footprint of your versioned calls.
 
-The fact there’s little to no reusability with the current generation of LLMs means that modern [prompt engineering ](/blog/prompt-engineering-tools)(still) has little use for automation-even with templates. Case in point: [some libraries](/blog/prompt-flow-vs-langchain) make much of their use of directed acyclic graphs yet the vast majority of prompting work still lies in iteratively optimizing effective prompts by hand until you get the desired result.
+![Lilypad Traces Tab](/assets/blog/prompt-engineering-best-practices/lilypad-traces-tab.webp)
 
-### 3. Use Chain of Thought (CoT) Prompting Instead of “Flat,” Broad Prompts
+But to make those traces truly actionable, the `@lilypad.trace` decorator promotes each trace from a loose log to a structured unit of execution, linking it directly to the function that made the call, like `answer_question()` in our earlier example. That lets you filter, group, and analyze traces by logical units, not just endpoints or paths.
 
-LLMs generally don’t handle long, complex prompts (or even simple, broadly defined ones) very well, partly because they don’t inherently know which parts are most important unless guided by the prompt structure, so they might struggle to determine which details to prioritize.
+![Lilypad Nested OpenTelemetry Span](/assets/blog/prompt-engineering-best-practices/lilypad-nested-otel-span.webp)
 
-The result is often outputs that are jumbled or fail to address all aspects of the prompt adequately.
+### 10. Offer Safe and Controlled Prompt Collaboration
 
-They’re better at handling explicit instructions than implicit ones, so when a prompt includes implicit tasks, the model may not effectively infer all the intended actions or responses, leading to incomplete or incorrect outputs.
+Prompt tuning shouldn't be limited to engineers. Product managers, writers, and domain experts often bring the kind of insight that makes or breaks how you write prompts, especially when tone, clarity, or context really matter.
 
-Our advice is to use CoT prompting, or decompose such prompts into smaller, more explicit steps, asking the model to provide a response for each of these steps, sequentially, in building up to the final response.
+That means you need a way to let non-developers contribute without touching production code.
 
-This allows the LLM to break up its response into intermediate responses, letting it reason more deeply about the task before it arrives at its final answer.
+With Lilypad, you can do exactly that. It supports managed prompts, which are versioned prompt templates that live in the playground. This lets contributors edit, test, and iterate on prompts directly in the browser, while developers reference those prompts safely in code, without ever needing to redeploy the app just to apply a wording tweak.
 
-This prompt, for example, appears to be simple:
+![Lilypad Playground](/assets/blog/prompt-engineering-best-practices/lilypad-playground.webp)
 
-```plaintext
-“Describe the various renewable energy options today.”
-```
+This creates a clean separation of concerns: developers handle infrastructure and application logic, while subject matter experts own the prompt wording. This division is especially valuable when collaborating on more advanced use cases, such as [LLM agents](/blog/llm-agents/), where prompt components and control logic need to evolve independently.
 
-Yet it might not give you as satisfying a response as if you had broken it down into sub-steps:
+Each team can move quickly without blocking or breaking the other, improving the user experience. And because the playground features prompts that are markdown-enabled and fully versioned, collaborators can experiment freely, revert changes, and keep improving without risk.
 
-```plaintext
-1. First, list the main types of renewable energy sources available today.
-2. Next, for each type, provide a brief description of how it works.
-3. Compare each of the options in terms of energy production and installation costs.
-4. Discuss the environmental impacts of using each option compared to the other.
-```
+But make no mistake: an [LLM prompt](/blog/llm-prompt/) isn’t a floating artifact detached from your codebase. Under the hood, Lilypad treats them just like any other function. The playground generates type-safe code that matches the prompt version you’re referencing in production. 
 
-Note that with CoT prompting, you’re breaking down tasks within the same prompt and sending everything in a single LLM call.
+If Lilypad ever goes offline, your code keeps running as-is, with no hidden dependencies, no broken links.
 
-### 4. Prompt Initially Without Examples, Then Provide Examples to Refine the Prompt
+This contrasts with many other systems, which treat prompts as separate from code entirely. That kind of separation might seem flexible, but it makes your system brittle. When the logic that drives model behavior lives outside your source of truth, it’s harder to test, debug, or trust what’s actually going into production.
 
-Not including examples (or zero-shot prompting) lets you gauge the model’s baseline response to identify gaps or misconceptions it might have about a task.
+### 11. Make Evals a First-Class Citizen
 
-You then introduce examples (referred to as few shot prompting) to guide the model towards more accurate or contextually appropriate AI responses. Examples serve as a form of in-context learning, where the model learns from the patterns demonstrated by the examples. This helps it align its responses with the specific format, style or content you’re looking for.
+Without evaluation, you’re running without feedback. You can’t know whether a prompt change improved performance, introduced regressions, or simply altered behavior in unpredictable ways.
 
-For example, you start out with a zero-shot prompt and assess the response:
+[LLM evaluation](/blog/llm-evaluation/) shouldn’t be an afterthought, but should be a core part of your development workflow. A practical place to start is with binary labels: pass/fail, accompanied by a brief explanation. This approach is faster to apply, easier to interpret, and more consistent than numeric scoring systems. 
 
-```plaintext
-Summarize the article below.
-Article: {article}
-Summary:
-```
+By contrast, ratings like 1–5 often suffer from ambiguity. What distinguishes a “4” from a “5”? Without clear criteria, such scores quickly become subjective and inconsistent, even across reviews from the same person.
 
-Before introducing examples for clarity:
+Pass/fail evaluations avoid that ambiguity and better reflect real-world needs. They align with the core question most teams care about: is this output good enough to deploy?
 
-```plaintext
-Summarize the articles listed below.
+This structure also lends itself to automation. Once you’ve built a solid evaluation dataset, some [LLM tools](/blog/llm-tools/) allow you to prompt an LLM to act as a judge, replicating the behavior of human evaluators. That said, [LLM-as-a-judge](/blog/llm-as-judge/) outputs should still be verified by humans, especially when dealing with edge cases where outputs may be difficult to assess.
 
-Article 1: The global economy is currently experiencing unprecedented challenges as nations worldwide grapple with high inflation rates, significant disruptions in global supply chains, and escalating geopolitical tensions across various regions. Financial experts are closely monitoring these developments and predict that these factors will likely result in increased market volatility, with potential impacts on international trade and investment flows in the upcoming quarters.
-Summary 1: The global economy faces challenges like high inflation, supply chain disruptions, and geopolitical tensions, which are expected to increase market volatility and affect international trade and investments.
+Lilypad makes evaluation easy to adopt. Non-technical contributors can annotate outputs from AI tools directly in the playground UI: selecting pass or fail and providing reasoning with just a few clicks.
 
-Article 2: Recent advances in artificial intelligence technology like ChatGPT and other chatbots have paved the way for developers to construct more sophisticated machine learning models and AI tools, which are significantly enhancing the capabilities of data processing systems. These AI models are not only streamlining complex data analysis tasks and other use cases but are also increasingly being integrated into various business sectors to improve decision-making processes, optimize operations, and drive innovation in ways previously unimagined.
-Summary 2: Recent advances in generative AI have resulted in sophisticated machine learning models that enhance data processing and decision-making across various business sectors, leading to increased operational efficiency and innovation.
+![Lilypad Annotation Queue](/assets/blog/prompt-engineering-best-practices/lilypad-annotation-queue.webp)
 
-Article 3: {article}
-Summary 3:
-```
+Each evaluation is tied to a specific version of the function that generated the model outputs. That means when quality shifts, whether for better or worse, you can immediately trace back to what changed: the prompt, model, code, parameters, or any combination of the above.
 
-### 5. Adjust the `temperature` or `top_p` Parameters As Necessary
+## Go Beyond Prompt Writing, Start Prompt Engineering
 
-These optional LLM parameters allow you to experiment with model outputs by fine-tuning their randomness and diversity of model responses.
+Build with the same rigor you apply to the rest of your stack: Lilypad brings versioning, observability, and [prompt evaluation](/blog/prompt-evaluation/) to every call made to AI models to help ensure desired outcomes.
 
-You can set the `temperature` as a range between 0 and 1 (though you can go up to 2), to adjust the probability distribution of the next word in the sequence. This is more commonly modified than `top_p` and dictates how deterministic the model should be when generating text:
-
-- Lower values (e.g., 0.1) will make the model choose the most likely next word leading to a predictable and repetitive response. This is useful for complex tasks requiring precision and consistency.
-- Higher values (e.g., 0.9) increase randomness by flattening the probability distribution, meaning less probable words will more likely be chosen than with a lower temperature setting. This generates more creative and diverse responses, which is useful for creative writing or brainstorming.
-
-You set `top_p` in a range between 0 and 1 to control the diversity of the model's desired output:
-
-- Lower values (e.g., 0.1) will make the model only consider the top 10% of probable next words, leading to more deterministic and focused responses.
-- Higher values (e.g., 0.9) will make the model consider the top 90% of probable next words, allowing for a wider variety of choices and more diverse outputs.
-
-You can include either of these parameters individually (but not at the same time) in your LLM call, for example:
-
-```python
-@openai.call(model="gpt-4o-mini", call_params={"temperature": 0.7})
-```
-
-This example uses a moderately high `temperature` to introduce some randomness with less probable words. We generally recommend not modifying `top_p` unless you have a specific understanding of this parameter and have a need to change it.
-
-If you don’t specify these parameters in your call, then the model assumes certain defaults (e.g., Open AI sets the default value of both parameters at 1).
-
-### 6. Colocate Parameters and Code with the LLM Call
-
-We find that making the LLM call the [central organizing unit](/blog/engineers-should-handle-prompting-llms) around which everything, including the prompt, gets versioned and tested promotes code cleanliness and maintainability.
-
-It also properly defines the boundaries of modules, ensuring that each is self-contained and encapsulates all the elements necessary for its functionality.
-
-You can find examples of colocation throughout our library:
-
-```python
-from mirascope.core import openai, prompt_template
-
-@openai.call(model="gpt-4o-mini", call_params={"temperature": 0.9})
-@prompt_template("Provide the current weather for {location}")
-def report_weather(location: str): ...
-
-response = report_weather(location="San Francisco")
-print(response.content)  # prints the string content of the call
-
-print(response.call_params) # prints the call parameters of the call
-
-```
-
-With Mirascope, all call parameters are colocated with the call and easy to access from the response.
-
-### **7. Validate Prompt Inputs for Data Integrity**
-
-Eliminating prompt errors from the start ensures that the data going into the language model is both accurate and reliable, avoiding issues that can arise from malformed or unexpected results.
-
-We recommend building error-checking boilerplate into your workflows to automatically catch errors that may otherwise go silently into the LLM using libraries like Pydantic to provide reliable data validation.
-
-In the case of Mirascope, since everything is written as functions you can tatke advantage of Pydantic's [`validate_call`](https://docs.pydantic.dev/latest/concepts/validation_decorator/) decorator to ensure prompt arguments adhere to their defined types.
-
-This is especially useful if you’re using a code editor, where we display warning and error messages and offer autocomplete suggestions.
-
-For example, `storyline` is defined in the `editor` prompt method below:
-
-```python
-from mirascope.core import openai
-
-@openai.call("gpt-4o-mini")
-@prompt_template(
-    """
-    SYSTEM: You are a TV show script editor.
-    USER: I'm working on a new storyline. What do you think? {storyline}
-    """
-)
-def editor(storyline: str): ...
-
-storyline = "..."
-response = editor(storyline)
-```
-
-If you try to pass an incorrect name like `storylines` using an IDE, it’ll flag the error:
-
-![Incorrect LLM Function Input Argument Error](/assets/blog/prompt-engineering-best-practices/storylines_incorrect_input_arg.webp)
-
-### 8. Place Prompts Under Version Control
-
-Versioning your prompts may seem like an intuitive step to anyone who’s done serious prompt engineering, but we’d like to repeat this anyway. And if this isn’t standard practice yet, you’ll thank us later for it.
-
-In our experience, prompts become unmanageable past several iterations if we don’t [version track them](/blog/prompt-versioning) as we would any other code. And if you’re rapidly experimenting with, and optimizing prompts, even manual change tracking is better than none at all.
-
-Our own library Lilypad is purpose built for [prompt management](/docs/lilypad), automatically versioning and tracing every LLM call made, including any and all code that could impact the quality of the prompt.
-
-## Use Advanced Prompt Engineering Techniques
-
-Mirascope's LLM application development toolkit, grounded in software development best practices, supports scalability and collaboration with a heavy focus on improving LLM API interactions all the way down to editor support and autocomplete.
-
-Mirascope offers building blocks rather than a framework so design decisions can remain in the hands of developers. Lilypad, on the other hand, offers a more framework driven approach for additional supporting tooling for prompt engineering, and it offers first-class support for Mirascope.
-
-Want to learn more? You can find more Mirascope code samples on both our [docs](/docs/mirascope) and on [GitHub](https://github.com/mirascope/mirascope/).
+[To get started with Lilypad](https://lilypad.mirascope.com/), you can use your GitHub credentials to sign up and begin tracing and versioning your LLM functions with just a few lines of code.
