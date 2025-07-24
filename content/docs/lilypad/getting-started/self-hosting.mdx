@@ -20,9 +20,10 @@ You can also run Lilypad on your local machine.
 To self-host Lilypad, you'll need:
 
 1. Python 3.10+
-2. PostgreSQL
-3. A GitHub or Google account (for authentication)
-4. Docker
+2. Bun
+3. PostgreSQL
+4. A GitHub or Google account (for authentication)
+5. Docker
 
 <Info>
   In the following sections we will be using `http://localhost:8000` as the host/port URL.
@@ -50,7 +51,11 @@ Last, create a `.env` file where you'll store all of the upcoming environment va
 
 ## Authentication
 
-First, you'll need to generate and set a JWT secret (e.g. using [https://jwtsecret.com/generate](https://jwtsecret.com/generate)).
+First, you'll need to generate and set a JWT secret. For example:
+
+```bash
+bun -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+```
 
 Then set it in your environment:
 
@@ -97,8 +102,8 @@ Now, build the client:
 cd client
 touch .env
 echo "VITE_REMOTE_API_URL=http://localhost:8000/v0" > .env
-pnpm i
-pnpm run build
+bun i
+bun run build
 cd ..
 ```
 
