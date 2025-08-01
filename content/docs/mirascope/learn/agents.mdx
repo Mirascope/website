@@ -242,14 +242,15 @@ class Librarian(BaseModel):
         messages = [
             Messages.System("You are a librarian"),
             *self.history,
-            Messages.User(query),
         ]
+        if query:
+            messages.append(Messages.User(query))
         return {"messages": messages, "tools": [self._available_books]} # [!code highlight]
 
     def _step(self, query: str) -> str:
+        response = self._call(query)
         if query:
             self.history.append(Messages.User(query))
-        response = self._call(query)
         self.history.append(response.message_param)
         tools_and_outputs = [] # [!code highlight]
         if tools := response.tools: # [!code highlight]
@@ -316,9 +317,9 @@ class Librarian(BaseModel):
         return {"tools": [self._available_books]} # [!code highlight]
 
     def _step(self, query: str) -> str:
+        response = self._call(query)
         if query:
             self.history.append(Messages.User(query))
-        response = self._call(query)
         self.history.append(response.message_param)
         tools_and_outputs = [] # [!code highlight]
         if tools := response.tools: # [!code highlight]
@@ -387,14 +388,15 @@ class Librarian(BaseModel):
         messages = [
             Messages.System("You are a librarian"),
             *self.history,
-            Messages.User(query),
         ]
+        if query:
+            messages.append(Messages.User(query))
         return {"messages": messages, "tools": [self._ask_for_help]} # [!code highlight]
 
     def _step(self, query: str) -> str:
+        response = self._call(query)
         if query:
             self.history.append(Messages.User(query))
-        response = self._call(query)
         self.history.append(response.message_param)
         tools_and_outputs = []
         if tools := response.tools:
@@ -454,9 +456,9 @@ class Librarian(BaseModel):
         return {"tools": [self._ask_for_help]} # [!code highlight]
 
     def _step(self, query: str) -> str:
+        response = self._call(query)
         if query:
             self.history.append(Messages.User(query))
-        response = self._call(query)
         self.history.append(response.message_param)
         tools_and_outputs = []
         if tools := response.tools:
@@ -519,14 +521,15 @@ class Librarian(BaseModel):
         messages = [
             Messages.System("You are a librarian"),
             *self.history,
-            Messages.User(query),
         ]
+        if query:
+            messages.append(Messages.User(query))
         return {"messages": messages, "tools": [self._available_books]}
 
     def _step(self, query: str) -> None:
+        stream = self._stream(query) # [!code highlight]
         if query:
             self.history.append(Messages.User(query))
-        stream = self._stream(query) # [!code highlight]
         tools_and_outputs = [] # [!code highlight]
         for chunk, tool in stream: # [!code highlight]
             if tool: # [!code highlight]
@@ -594,9 +597,9 @@ class Librarian(BaseModel):
         return {"tools": [self._available_books]}
 
     def _step(self, query: str) -> None:
+        stream = self._stream(query) # [!code highlight]
         if query:
             self.history.append(Messages.User(query))
-        stream = self._stream(query) # [!code highlight]
         tools_and_outputs = [] # [!code highlight]
         for chunk, tool in stream: # [!code highlight]
             if tool: # [!code highlight]
