@@ -93,10 +93,18 @@ function validateAbsoluteUrls(content: string, contentType?: ContentType): Valid
     return { isValid: true, errors: [] };
   }
 
+  // Allowed absolute URLs that require redirects
+  const allowedAbsoluteUrls = ["https://mirascope.com/discord-invite"];
+
   for (let i = 0; i < lines.length; i++) {
     const matches = lines[i].match(urlPattern);
     if (matches) {
       for (const match of matches) {
+        // Skip validation if this is an allowed absolute URL
+        if (allowedAbsoluteUrls.includes(match)) {
+          continue;
+        }
+
         errors.push({
           type: "absolute-url",
           message: `Absolute Mirascope URL found: "${match}". Use relative URLs instead.`,
