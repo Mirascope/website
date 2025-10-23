@@ -50,6 +50,8 @@ const GitHubRepoButton: React.FC<GitHubRepoButtonProps> = ({ className }) => {
     </svg>
   );
 
+  const productDisplay = product === "mirascope-v2" ? "mirascope" : product;
+
   return (
     <a
       href={`https://github.com/${repo}`}
@@ -60,7 +62,7 @@ const GitHubRepoButton: React.FC<GitHubRepoButtonProps> = ({ className }) => {
       {/* GitHub icon and product name */}
       <div className="flex items-center gap-1 text-base font-medium">
         {GitHubIcon}
-        <span>{product}</span>
+        <span>{productDisplay}</span>
       </div>
 
       {/* Stats on second line */}
