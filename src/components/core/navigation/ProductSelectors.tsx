@@ -67,44 +67,97 @@ function getSmartProductRoute(targetProduct: ProductName, currentPath: string): 
   return getProductRoute(targetProduct);
 }
 
-// Shared styles and components
-const ProductTitle = ({ product }: { product: ProductName }) => {
-  const titleClass = `text-lg font-medium ${product === "mirascope" ? "text-mirascope-purple" : "text-lilypad-green"}`;
-  return <span className={titleClass}>{product === "mirascope" ? "Mirascope" : "Lilypad"}</span>;
-};
+function V2Badge({ isActive, route }: { isActive: boolean; route: string }) {
+  const activeClass = "bg-secondary text-secondary-foreground border-secondary";
+  const inactiveClass =
+    "text-muted-foreground border-muted-foreground hover:border-secondary hover:text-secondary";
+  const baseClass = "absolute -top-1 -right-2 text-2xs font-semibold border rounded-lg px-1";
 
-const ProductLink = ({ product }: { product: ProductName }) => {
-  const router = useRouterState();
-  const currentPath = router.location.pathname;
-  const smartRoute = getSmartProductRoute(product, currentPath);
+  if (isActive) {
+    return <span className={`${baseClass} ${activeClass}`}>v2</span>;
+  }
 
-  const hoverClass =
-    product === "mirascope" ? "hover:text-mirascope-purple" : "hover:text-lilypad-green";
   return (
-    <Link to={smartRoute} className={`text-muted-foreground text-lg font-medium ${hoverClass}`}>
-      {product === "mirascope" ? "Mirascope" : "Lilypad"}
+    <Link to={route} className={`${baseClass} transition-colors ${inactiveClass}`}>
+      v2
     </Link>
   );
-};
+}
+
+function MirascopeSelector({
+  currentProduct,
+  currentPath,
+}: {
+  currentProduct: ProductName;
+  currentPath: string;
+}) {
+  const isV1 = currentProduct === "mirascope";
+  const isV2 = currentProduct === "mirascope-v2";
+  const isMirascope = isV1 || isV2;
+
+  const v1Route = getSmartProductRoute("mirascope", currentPath);
+  const v2Route = getSmartProductRoute("mirascope-v2", currentPath);
+
+  return (
+    <div className="relative pr-4">
+      {isMirascope ? (
+        isV2 ? (
+          <Link to={v1Route} className="text-mirascope-purple text-lg font-medium hover:opacity-80">
+            Mirascope
+          </Link>
+        ) : (
+          <span className="text-mirascope-purple text-lg font-medium">Mirascope</span>
+        )
+      ) : (
+        <Link
+          to={v1Route}
+          className="text-muted-foreground hover:text-mirascope-purple text-lg font-medium"
+        >
+          Mirascope
+        </Link>
+      )}
+
+      <V2Badge isActive={isV2} route={v2Route} />
+    </div>
+  );
+}
+
+/**
+ * LilypadSelector - Shows Lilypad as active or link based on current product
+ */
+function LilypadSelector({
+  currentProduct,
+  currentPath,
+}: {
+  currentProduct: ProductName;
+  currentPath: string;
+}) {
+  const isActive = currentProduct === "lilypad";
+
+  if (isActive) {
+    return <span className="text-lilypad-green text-lg font-medium">Lilypad</span>;
+  }
+
+  const route = getSmartProductRoute("lilypad", currentPath);
+  return (
+    <Link to={route} className="text-muted-foreground hover:text-lilypad-green text-lg font-medium">
+      Lilypad
+    </Link>
+  );
+}
 
 /**
  * DocsProductSelector - Shows current product title and link to other product
  */
 export function DocsProductSelector() {
+  const router = useRouterState();
+  const currentPath = router.location.pathname;
   const currentProduct = useProduct();
+
   return (
     <div className="flex space-x-4 px-1">
-      {currentProduct === "mirascope" ? (
-        <ProductTitle product="mirascope" />
-      ) : (
-        <ProductLink product="mirascope" />
-      )}
-
-      {currentProduct === "lilypad" ? (
-        <ProductTitle product="lilypad" />
-      ) : (
-        <ProductLink product="lilypad" />
-      )}
+      <MirascopeSelector currentProduct={currentProduct} currentPath={currentPath} />
+      <LilypadSelector currentProduct={currentProduct} currentPath={currentPath} />
     </div>
   );
 }
