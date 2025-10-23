@@ -17,6 +17,10 @@ __pycache__/
 *.egg-info/
 .venv/
 
+# Imported content from other repos
+.build-cache
+content/docs/mirascope-v2
+
 # Generated files
 public/static/
 public/sitemap.xml
