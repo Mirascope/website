@@ -15,7 +15,7 @@ async function productLlmDocLoader({ params }: { params: { product: ProductName 
   const { product } = params;
 
   // Validate product
-  if (product !== "mirascope" && product !== "lilypad") {
+  if (product !== "mirascope" && product !== "lilypad" && product !== "mirascope-v2") {
     throw new Error(`Invalid product: ${product}`);
   }
 
