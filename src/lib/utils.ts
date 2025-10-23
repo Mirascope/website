@@ -90,6 +90,11 @@ export function getProductFromPath(path: string): ProductName {
     return "lilypad";
   }
 
+  // While we are in v2 transition, we consider it a separate project.
+  if (path.startsWith("/docs/mirascope-v2")) {
+    return "mirascope-v2";
+  }
+
   // Default to mirascope for all other paths
   return "mirascope";
 }

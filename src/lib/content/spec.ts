@@ -7,7 +7,7 @@
  */
 
 // Define valid product names as a union type
-export type ProductName = "mirascope" | "lilypad";
+export type ProductName = "mirascope" | "lilypad" | "mirascope-v2";
 
 // Type for URL-friendly slugs (no slashes)
 export type Slug = string; // In practice: enforced by regex /^[a-z0-9-_]+$/

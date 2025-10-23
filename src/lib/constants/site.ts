@@ -53,6 +53,7 @@ export const LILYPAD: ProductConfig = {
 // Product configurations
 export const PRODUCT_CONFIGS: Record<ProductName, ProductConfig> = {
   mirascope: MIRASCOPE,
+  "mirascope-v2": MIRASCOPE,
   lilypad: LILYPAD,
 };
 

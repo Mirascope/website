@@ -5,6 +5,7 @@ import type { ProductName } from "@/src/lib/content/spec";
 // This allows adding new products by just extending this object
 export const PRODUCT_ROUTES: Record<ProductName, ValidStaticPath> = {
   mirascope: "/docs/mirascope",
+  "mirascope-v2": "/docs/mirascope-v2",
   lilypad: "/docs/lilypad",
 };
 
