@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
-import { parseFrontmatter, processMDXContent, type ContentType } from "@/src/lib/content";
+import { processMDXContent, type ContentType } from "@/src/lib/content";
+import { preprocessMdx } from "@/src/lib/content/mdx-preprocessing";
 
 // Define the validation result type
 interface ValidationError {
@@ -198,8 +199,11 @@ async function validateDirectory(
       count++;
       const fileContent = fs.readFileSync(itemPath, "utf-8");
 
-      // Extract frontmatter to validate just the content
-      const { content } = parseFrontmatter(fileContent);
+      // Extract frontmatter and process CodeExamples to validate the processed content
+      const { content } = preprocessMdx(fileContent, {
+        basePath: path.join(process.cwd(), "content"),
+        filePath: itemPath,
+      });
 
       const validationResult = await validateMDXContent(content, itemPath, contentType);
       if (validationResult.isValid) {
@@ -292,7 +296,10 @@ async function validateMDX(basePath?: string): Promise<void> {
         // Try to compile the MDX to get more detailed error messages
         try {
           const fileContent = fs.readFileSync(path.join(rootDir, file), "utf-8");
-          const { content } = parseFrontmatter(fileContent);
+          const { content } = preprocessMdx(fileContent, {
+            basePath: path.join(process.cwd(), "content"),
+            filePath: path.join(rootDir, file),
+          });
           const { serialize } = await import("next-mdx-remote/serialize");
           await serialize(content);
         } catch (error) {
@@ -331,7 +338,10 @@ async function validateSingleFile(filepath: string): Promise<boolean> {
 
   try {
     const fileContent = fs.readFileSync(filepath, "utf-8");
-    const { content } = parseFrontmatter(fileContent);
+    const { content } = preprocessMdx(fileContent, {
+      basePath: path.join(process.cwd(), "content"),
+      filePath: filepath,
+    });
 
     // Determine content type from path based on the contentLocations config
     let contentType: ContentType = "dev"; // Default content type
