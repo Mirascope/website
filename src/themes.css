@@ -11,6 +11,7 @@
   /* Responsive font sizes using clamp() - smaller sizes with more dramatic scaling */
   --text-code: clamp(0.6rem, 0.55rem + 0.5vw, 0.75rem); /* For code elements */
 
+  --text-2xs: clamp(0.5rem, 0.45rem + 0.4vw, 0.625rem); /* ~8-10px */
   --text-xs: clamp(0.6rem, 0.55rem + 0.5vw, 0.8rem); /* ~10-13px */
   --text-sm: clamp(0.7rem, 0.6rem + 0.75vw, 0.875rem); /* ~11-14px */
   --text-base: clamp(0.825rem, 0.7rem + 0.875vw, 1rem); /* ~13-16px */
