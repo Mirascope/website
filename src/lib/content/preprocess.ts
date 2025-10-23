@@ -10,7 +10,7 @@ import {
   type PolicyMeta,
   docRegistry,
 } from "./content";
-import { parseFrontmatter } from "./mdx-processing";
+import { preprocessMdx } from "./mdx-preprocessing";
 
 /**
  * Path representation for consistent handling across the application
@@ -127,8 +127,21 @@ export class ContentPreprocessor {
     const outputBase = path.join(this.contentDir, contentType);
 
     try {
-      // Process this content type's directory
-      await this.processContentDirectory(srcDir, contentType, outputBase);
+      if (contentType === "docs") {
+        const products = fs
+          .readdirSync(srcDir, { withFileTypes: true })
+          .filter((dirent) => dirent.isDirectory())
+          .map((dirent) => dirent.name);
+
+        for (const product of products) {
+          // Set productSrcDir so that we will resolve CodeExample file references relative to this product's content
+          const productSrcDir = path.join(srcDir, product);
+          await this.processContentDirectory(productSrcDir, contentType, outputBase);
+        }
+      } else {
+        // For other content types, process the whole directory
+        await this.processContentDirectory(srcDir, contentType, outputBase);
+      }
 
       // Sort blog posts by date if applicable
       if (contentType === "blog") {
@@ -266,7 +279,10 @@ export class ContentPreprocessor {
   ): Promise<void> {
     // Read and parse file
     const fileContent = fs.readFileSync(filePath, "utf-8");
-    const { frontmatter } = parseFrontmatter(fileContent);
+    const { frontmatter, fullContent } = preprocessMdx(fileContent, {
+      basePath: srcDir,
+      filePath,
+    });
 
     // Get the relative path from the source directory
     const relativePath = path.relative(srcDir, filePath);
@@ -277,8 +293,16 @@ export class ContentPreprocessor {
     // Validate the filename is a valid slug
     this.validateSlug(filename, filePath);
 
+    // For docs, we need to include the product name in the path
+    // since we're now processing per-product but the registry expects full paths
+    let pathForRegistry = relativePath;
+    if (contentType === "docs") {
+      const product = path.basename(srcDir);
+      pathForRegistry = path.join(product, relativePath);
+    }
+
     // Create a consistent content path object
-    const contentPath = this.createContentPath(contentType, relativePath, filename);
+    const contentPath = this.createContentPath(contentType, pathForRegistry, filename);
 
     // Create and validate metadata in one step
     const metadata = this.createAndValidateMetadata(
@@ -292,20 +316,27 @@ export class ContentPreprocessor {
     this.addToMetadataCollection(contentType, metadata);
 
     // Create content object that will be saved to JSON
-    // Just store meta and the raw content (with frontmatter included)
+    // Just store meta and the processed content (with frontmatter and CodeExamples resolved)
     // MDX processing will happen at load time
     const contentObject = {
       meta: metadata,
-      content: fileContent,
+      content: fullContent,
     };
 
     // Create output directory if needed
     const outputDir = path.dirname(path.join(outputBase, `${contentPath.subpath}.json`));
     fs.mkdirSync(outputDir, { recursive: true });
 
+    const outputPath = path.join(outputBase, `${contentPath.subpath}.json`);
+
+    if (filePath.endsWith("mirascope-v2/examples.mdx")) {
+      console.log(outputBase);
+      console.log(outputPath);
+    }
     // Write content file with metadata
     fs.writeFileSync(
-      path.join(outputBase, `${contentPath.subpath}.json`),
+      outputPath,
+
       JSON.stringify(contentObject)
     );
   }
