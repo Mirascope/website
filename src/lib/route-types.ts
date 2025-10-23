@@ -2,7 +2,7 @@ import { type ProductName } from "./content/spec";
 
 // Type guard to check if a string is a valid product name
 export function isValidProduct(product: string): product is ProductName {
-  return product === "mirascope" || product === "lilypad";
+  return product === "mirascope" || product === "lilypad" || product == "mirascope-v2";
 }
 
 // Type aliases for valid static paths in the router
@@ -11,6 +11,7 @@ export type ValidStaticPath =
   | "/blog"
   | "/docs"
   | "/docs/mirascope"
+  | "/docs/mirascope-v2"
   | "/docs/lilypad"
   | "/privacy"
   | "/terms";
