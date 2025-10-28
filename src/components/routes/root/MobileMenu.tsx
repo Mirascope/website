@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { getProductRoute } from "@/src/lib/routes";
 import { PRODUCT_CONFIGS } from "@/src/lib/constants/site";
-import type { ProductName } from "@/src/lib/content/spec";
+import { type Product, productKey } from "@/src/lib/content/spec";
 import { NAV_LINK_STYLES, PRODUCT_LINK_STYLES, MOBILE_MENU_STYLES } from "./styles";
 
 interface MobileMenuProps {
@@ -19,19 +19,19 @@ interface MobileMenuProps {
  * Mobile menu product link component
  */
 interface MobileProductLinkProps {
-  productName: ProductName;
+  product: Product;
   onClick: () => void;
 }
 
-const MobileProductLink = ({ productName, onClick }: MobileProductLinkProps) => {
-  const config = PRODUCT_CONFIGS[productName];
+const MobileProductLink = ({ product, onClick }: MobileProductLinkProps) => {
+  const config = PRODUCT_CONFIGS[product.name];
 
   return (
     <Link
-      to={getProductRoute(productName)}
+      to={getProductRoute(product)}
       className={PRODUCT_LINK_STYLES.mobile.container}
       onClick={onClick}
-      data-product={productName}
+      data-product={productKey(product)}
     >
       {config.title}
     </Link>
@@ -46,8 +46,8 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
       <div className={MOBILE_MENU_STYLES.content}>
         <div className={MOBILE_MENU_STYLES.sectionTitle}>Docs</div>
 
-        <MobileProductLink productName="mirascope" onClick={onClose} />
-        <MobileProductLink productName="lilypad" onClick={onClose} />
+        <MobileProductLink product={{ name: "mirascope" }} onClick={onClose} />
+        <MobileProductLink product={{ name: "lilypad" }} onClick={onClose} />
 
         <hr className={MOBILE_MENU_STYLES.divider} />
 

@@ -12,9 +12,9 @@ if (process.env.SKIP_DOCS_SYNC === "1") {
 }
 
 const REPO_URL = "https://github.com/mirascope/mirascope.git";
-const BRANCH = "10-23-feat_add_docs__meta.ts_in_website-compatible_form"; // TODO: change to 'v2' later, then 'main'
+const BRANCH = "10-23-feat_watch_docs_example_changes_and_update_content_for_site";
 const CACHE_DIR = resolve(process.cwd(), ".build-cache/mirascope");
-const DEST_BASE = resolve(process.cwd(), "content/docs/mirascope-v2");
+const DEST_BASE = resolve(process.cwd(), "content/docs/mirascope/v2");
 
 // Define source/destination pairs to sync
 const SYNC_PATHS = [

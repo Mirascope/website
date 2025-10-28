@@ -14,7 +14,8 @@ const ROUTES_TO_EXCLUDE = ["/docs/", "/terms/"];
 
 // Patterns for hidden routes (not included in sitemap or SEO metadata)
 export const EXCLUDE_DEV = /^\/dev(\/.*)?$/;
-export const HIDDEN_ROUTE_PATTERNS = [EXCLUDE_DEV];
+export const MIRASCOPE_V2 = /^\/docs\/mirascope\/v2.*/;
+export const HIDDEN_ROUTE_PATTERNS = [EXCLUDE_DEV, MIRASCOPE_V2];
 
 export function isHiddenRoute(route: string): boolean {
   return HIDDEN_ROUTE_PATTERNS.some((pattern) => pattern.test(route));

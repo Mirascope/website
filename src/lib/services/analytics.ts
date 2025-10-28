@@ -4,6 +4,7 @@
  */
 import { GA_MEASUREMENT_ID, GTM_ID, POSTHOG_PUBLIC_KEY, SITE_VERSION } from "../constants/site";
 import { getCountryCode } from "./country-detection";
+import { type Product, productKey } from "../content/spec";
 
 // Centralized check for browser environment
 export const isBrowser = typeof window !== "undefined";
@@ -391,10 +392,16 @@ export class AnalyticsManager {
   }: {
     contentType: "blog_markdown" | "document_markdown" | "code_snippet";
     itemId: string;
-    product: string;
+    product?: Product;
     language?: string;
   }): Promise<void> {
-    await this.trackEvent("select_content", { contentType, itemId, product, language });
+    const params = {
+      contentType,
+      itemId,
+      product: product ? productKey(product) : undefined,
+      language,
+    };
+    await this.trackEvent("select_content", params);
   }
 
   /**

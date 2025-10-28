@@ -24,5 +24,5 @@ export const Route = createFileRoute("/docs/")({
 function DocsIndexPage() {
   // Redirect to default product
   // Redirect to the Mirascope docs by default
-  return <Navigate to={getProductRoute("mirascope")} />;
+  return <Navigate to={getProductRoute({ name: "mirascope" })} />;
 }

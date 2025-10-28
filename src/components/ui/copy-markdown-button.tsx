@@ -2,11 +2,12 @@ import { useState } from "react";
 import { Button } from "@/mirascope-ui/ui/button";
 import { Clipboard, Check } from "lucide-react";
 import analyticsManager from "@/src/lib/services/analytics";
+import { type Product } from "@/src/lib/content/spec";
 
 interface CopyMarkdownButtonProps {
   content: string;
   itemId: string;
-  product: string;
+  product?: Product;
   contentType: "blog_markdown" | "document_markdown";
   className?: string;
 }
