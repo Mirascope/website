@@ -1,8 +1,9 @@
 {
   "name": "mirascope-website",
   "private": true,
+  "type": "module",
   "scripts": {
-    "start": "bun run sync-docs && node scripts/start.js",
+    "start": "bun run sync-docs && bun scripts/start.ts",
     "sync-docs": "bun run scripts/sync-docs.ts",
     "preprocess-content": "bun run scripts/preprocess-content.ts",
     "fetch-github-stats": "bun run --bun scripts/fetch-github-stats.ts",
@@ -19,7 +20,7 @@
     "postbuild": "pagefind --site dist --output-path dist/_pagefind --root-selector '[data-pagefind-body=\"true\"]' --",
     "deploy": "wrangler deploy",
     "version-upload": "wrangler versions upload",
-    "serve": "bun scripts/serve-static.js",
+    "serve": "bun scripts/serve-static.ts",
     "test": "bun test",
     "lint": "bun run typecheck && bun run lint:mdx && bun run lint:snippets && bun run lint:python && bun run lint:format",
     "typecheck": "bun run tsc --noEmit",
@@ -39,7 +40,7 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,css,md,mdx}": "prettier --write",
     "*.{ts,tsx}": [
-      "node scripts/check-ts.js"
+      "bun scripts/check-ts.ts"
     ],
     "*.mdx": [
       "bun run lint:mdx"

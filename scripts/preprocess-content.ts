@@ -5,6 +5,7 @@ import type { LLMContent } from "@/src/lib/content/llm-content";
 import { SITE_URL, getAllRoutes, isHiddenRoute } from "@/src/lib/router-utils";
 import type { BlogMeta } from "@/src/lib/content";
 import llmMeta from "@/content/llms/_llms-meta";
+import type { ViteDevServer } from "vite";
 
 /**
  * Main processing function that generates static JSON files for all MDX content,
@@ -121,17 +122,6 @@ async function generateSitemap(blogPosts: BlogMeta[], llmDocs: LLMContent[]): Pr
   fs.writeFileSync(outFile, xml);
 }
 
-// Vite server interface for TypeScript
-interface ViteDevServer {
-  httpServer?: {
-    once(event: string, callback: () => void): void;
-  };
-  watcher: {
-    add(path: string): void;
-    on(event: string, callback: (path: string) => void): void;
-  };
-}
-
 export function contentPreprocessPlugin(options = { verbose: true }) {
   // Get all content directories (docs includes LLM document templates)
   const contentDirs = ["blog", "docs", "policy", "dev"].map((type) =>
@@ -141,7 +131,7 @@ export function contentPreprocessPlugin(options = { verbose: true }) {
   return {
     name: "content-preprocess-plugin",
     // Only apply during development
-    apply: "serve",
+    apply: "serve" as const,
     configureServer(server: ViteDevServer) {
       const { verbose } = options;
 

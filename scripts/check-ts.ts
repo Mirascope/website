@@ -1,13 +1,13 @@
-#!/usr/bin/env node
+#!/usr/bin/env bun
 
 /**
  * Script to run TypeScript type checking regardless of what files were changed
  * This ensures we check the entire project graph, not just modified files
  *
- * Usage from lint-staged: "*.{ts,tsx}": ["node scripts/check-ts.js", "bun test"]
+ * Usage from lint-staged: "*.{ts,tsx}": ["bun scripts/check-ts.ts", "bun test"]
  */
 
-const { execSync } = require("child_process");
+import { execSync } from "child_process";
 
 // Run the TypeScript check on the entire project, ignoring any specific paths
 console.log("Running TypeScript check on the entire project...");
