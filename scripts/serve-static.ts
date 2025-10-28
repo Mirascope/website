@@ -3,12 +3,12 @@
  * A custom static file server that properly handles SPA routing
  * This ensures routes like /privacy correctly serve /privacy/index.html
  */
-import { createServer } from "http";
+import { createServer, type IncomingMessage, type ServerResponse } from "http";
 import fs from "node:fs";
 import path from "node:path";
 
 // MIME type mapping
-const MIME_TYPES = {
+const MIME_TYPES: Record<string, string> = {
   ".html": "text/html",
   ".js": "application/javascript",
   ".css": "text/css",
@@ -46,10 +46,10 @@ if (!fs.existsSync(distDir)) {
 
 // Check if the port is in use before starting
 async function checkPort() {
-  return new Promise((resolve) => {
+  return new Promise<boolean>((resolve) => {
     const testServer = createServer();
 
-    testServer.once("error", (err) => {
+    testServer.once("error", (err: NodeJS.ErrnoException) => {
       if (err.code === "EADDRINUSE") {
         console.error(`❌ Error: Port ${PORT} is already in use. Please try another port.`);
         resolve(false);
@@ -125,7 +125,7 @@ const server = createServer((req, res) => {
 });
 
 // Helper function to serve static files
-function serveFile(url, res) {
+function serveFile(url: string, res: ServerResponse<IncomingMessage>) {
   const filePath = path.join(distDir, url.startsWith("/") ? url.slice(1) : url);
 
   // Check if file exists
