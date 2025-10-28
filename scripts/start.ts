@@ -1,16 +1,17 @@
-#!/usr/bin/env node
+#!/usr/bin/env bun
 
-const { spawn } = require("child_process");
-const http = require("http");
+import { spawn } from "child_process";
+import http from "http";
+
 const port = process.argv[2] || "3000";
 const host = "127.0.0.1"; // Explicitly use IPv4 localhost address
 
 // Check if the port is in use by trying to bind to the specific address
-function checkPort(port) {
-  return new Promise((resolve) => {
+function checkPort(port: string) {
+  return new Promise<boolean>((resolve) => {
     const server = http.createServer();
 
-    server.on("error", (e) => {
+    server.on("error", (e: NodeJS.ErrnoException) => {
       if (e.code === "EADDRINUSE") {
         console.error(`Error: Port ${port} is already in use. Please try another port.`);
         resolve(false);
@@ -21,7 +22,7 @@ function checkPort(port) {
     });
 
     // Bind to the same address we'll use for Vite
-    server.listen(port, host, () => {
+    server.listen(parseInt(port), host, () => {
       server.close(() => {
         resolve(true);
       });
