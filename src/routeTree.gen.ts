@@ -32,6 +32,7 @@ import { Route as DevAuditMetadataImport } from './routes/dev/audit-metadata'
 import { Route as DevSlugImport } from './routes/dev.$slug'
 import { Route as BlogSlugImport } from './routes/blog.$slug'
 import { Route as DocsProductLlmsFullImport } from './routes/docs.$product.llms-full'
+import { Route as DocsMirascopeV2LlmsFullImport } from './routes/docs.mirascope.v2.llms-full'
 
 // Create/Update Routes
 
@@ -158,6 +159,12 @@ const BlogSlugRoute = BlogSlugImport.update({
 const DocsProductLlmsFullRoute = DocsProductLlmsFullImport.update({
   id: '/docs/$product/llms-full',
   path: '/docs/$product/llms-full',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DocsMirascopeV2LlmsFullRoute = DocsMirascopeV2LlmsFullImport.update({
+  id: '/docs/mirascope/v2/llms-full',
+  path: '/docs/mirascope/v2/llms-full',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -312,6 +319,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DocsProductLlmsFullImport
       parentRoute: typeof rootRoute
     }
+    '/docs/mirascope/v2/llms-full': {
+      id: '/docs/mirascope/v2/llms-full'
+      path: '/docs/mirascope/v2/llms-full'
+      fullPath: '/docs/mirascope/v2/llms-full'
+      preLoaderRoute: typeof DocsMirascopeV2LlmsFullImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -357,6 +371,7 @@ export interface FileRoutesByFullPath {
   '/docs': typeof DocsIndexRoute
   '/terms': typeof TermsIndexRoute
   '/docs/$product/llms-full': typeof DocsProductLlmsFullRoute
+  '/docs/mirascope/v2/llms-full': typeof DocsMirascopeV2LlmsFullRoute
 }
 
 export interface FileRoutesByTo {
@@ -380,6 +395,7 @@ export interface FileRoutesByTo {
   '/docs': typeof DocsIndexRoute
   '/terms': typeof TermsIndexRoute
   '/docs/$product/llms-full': typeof DocsProductLlmsFullRoute
+  '/docs/mirascope/v2/llms-full': typeof DocsMirascopeV2LlmsFullRoute
 }
 
 export interface FileRoutesById {
@@ -405,6 +421,7 @@ export interface FileRoutesById {
   '/docs/': typeof DocsIndexRoute
   '/terms/': typeof TermsIndexRoute
   '/docs/$product/llms-full': typeof DocsProductLlmsFullRoute
+  '/docs/mirascope/v2/llms-full': typeof DocsMirascopeV2LlmsFullRoute
 }
 
 export interface FileRouteTypes {
@@ -431,6 +448,7 @@ export interface FileRouteTypes {
     | '/docs'
     | '/terms'
     | '/docs/$product/llms-full'
+    | '/docs/mirascope/v2/llms-full'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -453,6 +471,7 @@ export interface FileRouteTypes {
     | '/docs'
     | '/terms'
     | '/docs/$product/llms-full'
+    | '/docs/mirascope/v2/llms-full'
   id:
     | '__root__'
     | '/'
@@ -476,6 +495,7 @@ export interface FileRouteTypes {
     | '/docs/'
     | '/terms/'
     | '/docs/$product/llms-full'
+    | '/docs/mirascope/v2/llms-full'
   fileRoutesById: FileRoutesById
 }
 
@@ -496,6 +516,7 @@ export interface RootRouteChildren {
   DocsIndexRoute: typeof DocsIndexRoute
   TermsIndexRoute: typeof TermsIndexRoute
   DocsProductLlmsFullRoute: typeof DocsProductLlmsFullRoute
+  DocsMirascopeV2LlmsFullRoute: typeof DocsMirascopeV2LlmsFullRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -515,6 +536,7 @@ const rootRouteChildren: RootRouteChildren = {
   DocsIndexRoute: DocsIndexRoute,
   TermsIndexRoute: TermsIndexRoute,
   DocsProductLlmsFullRoute: DocsProductLlmsFullRoute,
+  DocsMirascopeV2LlmsFullRoute: DocsMirascopeV2LlmsFullRoute,
 }
 
 export const routeTree = rootRoute
@@ -542,7 +564,8 @@ export const routeTree = rootRoute
         "/blog/",
         "/docs/",
         "/terms/",
-        "/docs/$product/llms-full"
+        "/docs/$product/llms-full",
+        "/docs/mirascope/v2/llms-full"
       ]
     },
     "/": {
@@ -619,6 +642,9 @@ export const routeTree = rootRoute
     },
     "/docs/$product/llms-full": {
       "filePath": "docs.$product.llms-full.tsx"
+    },
+    "/docs/mirascope/v2/llms-full": {
+      "filePath": "docs.mirascope.v2.llms-full.tsx"
     }
   }
 }

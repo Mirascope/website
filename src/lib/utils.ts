@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { type ProductName } from "./content";
+import { type Product } from "@/src/components/core/providers/ProductContext";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -57,7 +58,7 @@ export function setDevProductPreference(product: ProductName): void {
  * @param path The route path
  * @returns The product name or "mirascope" as default
  */
-export function getProductFromPath(path: string): ProductName {
+export function getProductFromPath(path: string): Product {
   // Special case for dev routes - check search params and session storage
   if (path.startsWith("/dev")) {
     try {
@@ -65,7 +66,7 @@ export function getProductFromPath(path: string): ProductName {
       const url = new URL(window.location.href);
       const productParam = url.searchParams.get("product") as ProductName;
       if (productParam && (productParam === "mirascope" || productParam === "lilypad")) {
-        return productParam;
+        return { name: productParam };
       }
     } catch (e) {
       // Ignore any errors when trying to access URL params
@@ -75,28 +76,34 @@ export function getProductFromPath(path: string): ProductName {
     if (typeof sessionStorage !== "undefined") {
       const storedProduct = sessionStorage.getItem(DEV_PRODUCT_STORAGE_KEY) as ProductName;
       if (storedProduct && (storedProduct === "mirascope" || storedProduct === "lilypad")) {
-        return storedProduct;
+        return { name: storedProduct };
       }
     }
   }
 
   // Check for docs paths that explicitly mention lilypad
   if (path.startsWith("/docs/lilypad")) {
-    return "lilypad";
+    return { name: "lilypad" };
   }
 
   // Special case for the pricing page
   if (path.startsWith("/pricing")) {
-    return "lilypad";
+    return { name: "lilypad" };
   }
 
-  // While we are in v2 transition, we consider it a separate project.
-  if (path.startsWith("/docs/mirascope-v2")) {
-    return "mirascope-v2";
+  // Check for versioned mirascope docs (must check before generic mirascope check)
+  // TODO: Refactor this to remove special casing
+  if (path.startsWith("/docs/mirascope/v2")) {
+    return { name: "mirascope", version: "v2" };
+  }
+
+  // Check for mirascope docs (default version)
+  if (path.startsWith("/docs/mirascope")) {
+    return { name: "mirascope" };
   }
 
   // Default to mirascope for all other paths
-  return "mirascope";
+  return { name: "mirascope" };
 }
 
 /**

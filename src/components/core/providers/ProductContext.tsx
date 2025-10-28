@@ -1,25 +1,22 @@
 import { createContext, useContext, type ReactNode } from "react";
-import type { ProductName } from "@/src/lib/content/spec";
+import { type ProductName, type Product, productKey } from "@/src/lib/content/spec";
 
-export type { ProductName };
+export { type ProductName, type Product, productKey };
 
-// Create the context with default value
-const ProductContext = createContext<ProductName>("mirascope");
+const ProductContext = createContext<Product>({ name: "mirascope" });
 
-// Hook for components to use the product
 export function useProduct() {
   return useContext(ProductContext);
 }
 
 interface ProductProviderProps {
   children: ReactNode;
-  product: ProductName;
+  product: Product;
 }
 
-// Product provider component
 export function ProductProvider({ children, product }: ProductProviderProps) {
-  // Apply product attribute for styling
-  const productAttr = { "data-product": product };
+  const key = productKey(product);
+  const productAttr = { "data-product": key };
 
   return (
     <ProductContext.Provider value={product}>

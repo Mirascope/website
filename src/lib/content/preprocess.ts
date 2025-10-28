@@ -10,6 +10,7 @@ import {
   type PolicyMeta,
   docRegistry,
 } from "./content";
+import { type Product, productKey } from "./spec";
 import { preprocessMdx } from "./mdx-preprocessing";
 
 /**
@@ -90,7 +91,15 @@ export class ContentPreprocessor {
 
     // Process each content type
     for (const contentType of CONTENT_TYPES) {
+      if (contentType == "docs") {
+        // Handle docs separately due to product scoping
+        continue;
+      }
       await this.processContentType(contentType);
+    }
+
+    for (const product of docRegistry.products()) {
+      await this.processProductDocs(product);
     }
 
     // Write metadata index files
@@ -123,25 +132,10 @@ export class ContentPreprocessor {
       return;
     }
 
-    // Output directory for this content type
     const outputBase = path.join(this.contentDir, contentType);
 
     try {
-      if (contentType === "docs") {
-        const products = fs
-          .readdirSync(srcDir, { withFileTypes: true })
-          .filter((dirent) => dirent.isDirectory())
-          .map((dirent) => dirent.name);
-
-        for (const product of products) {
-          // Set productSrcDir so that we will resolve CodeExample file references relative to this product's content
-          const productSrcDir = path.join(srcDir, product);
-          await this.processContentDirectory(productSrcDir, contentType, outputBase);
-        }
-      } else {
-        // For other content types, process the whole directory
-        await this.processContentDirectory(srcDir, contentType, outputBase);
-      }
+      await this.processContentDirectory(srcDir, contentType, outputBase);
 
       // Sort blog posts by date if applicable
       if (contentType === "blog") {
@@ -151,6 +145,53 @@ export class ContentPreprocessor {
       this.addError(
         `Error processing ${contentType} content: ${error instanceof Error ? error.message : String(error)}`
       );
+    }
+  }
+
+  /**
+   * Process a specific content type
+   */
+  private async processProductDocs(product: Product): Promise<void> {
+    const key = productKey(product);
+    if (this.verbose) console.log(`Processing ${key} docs...`);
+
+    const srcDir = path.join(this.baseDir, "content/docs");
+    const productDir = path.join(srcDir, key);
+
+    // Skip if product directory doesn't exist
+    if (!fs.existsSync(productDir)) {
+      if (this.verbose)
+        console.warn(`Source directory for product ${key} not found: ${productDir}`);
+      return;
+    }
+
+    const outputBase = path.join(this.contentDir, "docs");
+
+    let mdxFiles = await glob(path.join(productDir, "**/*.mdx"));
+
+    if (!product.version) {
+      // Filter out any files that match a product with a version
+      // (so mirascope/v2/index.mdx is not considered part of the non-versioned mirascope product)
+      const productVersionDirs = docRegistry
+        .products()
+        .filter((p) => p.version)
+        .map((p) => path.join(srcDir, productKey(p)));
+      const matchesOtherProduct = (p: string) =>
+        productVersionDirs.some((dir: string) => p.startsWith(dir));
+      mdxFiles = mdxFiles.filter((p: string) => !matchesOtherProduct(p));
+    }
+
+    if (this.verbose) {
+      console.log(`Found ${mdxFiles.length} MDX files for docs/${key}`);
+    }
+    for (const filePath of mdxFiles) {
+      try {
+        await this.processMdxFile(filePath, srcDir, "docs", outputBase, product);
+      } catch (error) {
+        this.addError(
+          `Error processing ${filePath}: ${error instanceof Error ? error.message : String(error)}`
+        );
+      }
     }
   }
 
@@ -275,12 +316,14 @@ export class ContentPreprocessor {
     filePath: string,
     srcDir: string,
     contentType: ContentType,
-    outputBase: string
+    outputBase: string,
+    product?: Product
   ): Promise<void> {
     // Read and parse file
     const fileContent = fs.readFileSync(filePath, "utf-8");
+    const basePath = product ? path.join(srcDir, productKey(product)) : srcDir;
     const { frontmatter, fullContent } = preprocessMdx(fileContent, {
-      basePath: srcDir,
+      basePath,
       filePath,
     });
 
@@ -293,16 +336,8 @@ export class ContentPreprocessor {
     // Validate the filename is a valid slug
     this.validateSlug(filename, filePath);
 
-    // For docs, we need to include the product name in the path
-    // since we're now processing per-product but the registry expects full paths
-    let pathForRegistry = relativePath;
-    if (contentType === "docs") {
-      const product = path.basename(srcDir);
-      pathForRegistry = path.join(product, relativePath);
-    }
-
     // Create a consistent content path object
-    const contentPath = this.createContentPath(contentType, pathForRegistry, filename);
+    const contentPath = this.createContentPath(contentType, relativePath, filename);
 
     // Create and validate metadata in one step
     const metadata = this.createAndValidateMetadata(
@@ -328,11 +363,10 @@ export class ContentPreprocessor {
     fs.mkdirSync(outputDir, { recursive: true });
 
     const outputPath = path.join(outputBase, `${contentPath.subpath}.json`);
-
-    if (filePath.endsWith("mirascope-v2/examples.mdx")) {
-      console.log(outputBase);
-      console.log(outputPath);
+    if (product && product.version == "v2") {
+      console.log("Processing v2 mdx: ", filePath, basePath, outputPath);
     }
+
     // Write content file with metadata
     fs.writeFileSync(
       outputPath,
@@ -394,11 +428,6 @@ export class ContentPreprocessor {
 
       case "docs":
         // Extract product from path, assuming format: docs/product/...
-        const pathParts = contentPath.subpath.split("/");
-        const product = pathParts.length > 0 ? pathParts[0] : "";
-
-        // Check product if not in path
-        if (!product) missingFields.push("product");
 
         // Find matching DocInfo from docRegistry to get section path and search weight
         const docInfo = docRegistry.getDocInfoByPath(contentPath.subpath);
@@ -409,6 +438,7 @@ export class ContentPreprocessor {
               `Ensure this document is defined in the product's _meta.ts file.`
           );
         }
+        const product: Product = docInfo.product;
 
         // Construct doc metadata with section path and search weight
         metadata = {

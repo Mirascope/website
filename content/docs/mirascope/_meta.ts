@@ -138,11 +138,8 @@ const docsSection: SectionSpec = {
   ],
 };
 
-/**
- * Documentation structure for mirascope in new DocSpec format
- */
 const mirascopeSpec: ProductSpec = {
-  product: "mirascope",
+  product: { name: "mirascope" },
   sections: [docsSection, guides, api],
 };
 export default mirascopeSpec;

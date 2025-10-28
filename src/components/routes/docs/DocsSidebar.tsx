@@ -1,6 +1,7 @@
 import { docRegistry } from "@/src/lib/content";
-import type { DocSpec, ProductName } from "@/src/lib/content/doc-registry";
+import type { DocSpec } from "@/src/lib/content/doc-registry";
 import { type Provider } from "@/src/components/mdx/providers";
+import { type Product, productKey } from "@/src/components/core/providers/ProductContext";
 import { Sidebar } from "@/src/components";
 import type {
   SidebarConfig,
@@ -11,7 +12,7 @@ import type {
 import { PRODUCT_CONFIGS } from "@/src/lib/constants/site";
 
 interface DocsSidebarProps {
-  product: ProductName;
+  product: Product;
   selectedProvider?: Provider;
   onProviderChange?: (provider: Provider) => void;
 }
@@ -21,11 +22,11 @@ interface DocsSidebarProps {
 /**
  * Helper to convert the spec metadata to the sidebar format
  */
-function createSidebarConfig(product: ProductName): SidebarConfig {
+function createSidebarConfig(product: Product): SidebarConfig {
   // Get product spec from the registry
   const productSpec = docRegistry.getProductSpec(product);
 
-  // Get all DocInfo objects for this product
+  // Get all DocInfo objects for this product + version
   const allDocInfo = docRegistry.getDocsByProduct(product);
 
   // Create a map from slug pattern to routePath for quick lookup
@@ -33,18 +34,16 @@ function createSidebarConfig(product: ProductName): SidebarConfig {
   const slugToRoutePathMap: Map<string, string> = new Map();
 
   allDocInfo.forEach((doc) => {
-    if (doc.product === product) {
-      // Extract the slug pattern from the path
-      // This could be product/section/slug or product/slug
-      const keyPath = doc.path;
-      slugToRoutePathMap.set(keyPath, doc.routePath);
-    }
+    // Extract the slug pattern from the path
+    // This could be product/section/slug or product/slug
+    const keyPath = doc.path;
+    slugToRoutePathMap.set(keyPath, doc.routePath);
   });
 
   // If no product spec available, return minimal config
   if (!productSpec) {
     return {
-      label: product,
+      label: productKey(product),
       sections: [],
     };
   }
@@ -65,7 +64,7 @@ function createSidebarConfig(product: ProductName): SidebarConfig {
   // Convert doc specs to sidebar items
   function convertDocToSidebarItem(doc: DocSpec, parentPath: string = ""): SidebarItem {
     // Construct the logical path for this item (used to look up routePath)
-    const itemPath = parentPath ? `${parentPath}/${doc.slug}` : `${product}/${doc.slug}`;
+    const itemPath = `${parentPath || productKey(product)}/${doc.slug}`;
 
     // Look up the routePath from DocInfo if available
     const routePath = slugToRoutePathMap.get(itemPath);
@@ -96,17 +95,18 @@ function createSidebarConfig(product: ProductName): SidebarConfig {
   }
 
   // Create sidebar sections from spec sections
+  const productPath = productKey(product);
   const sidebarSections: SidebarSection[] = allSections.map((section) => {
     // Create basePath - for index section, don't include the section slug
     const basePath =
-      section.slug === "index" ? `/docs/${product}` : `/docs/${product}/${section.slug}`;
+      section.slug === "index" ? `/docs/${productPath}` : `/docs/${productPath}/${section.slug}`;
 
     // Process direct items (those without children) and create groups for top-level folders
     const items: Record<string, SidebarItem> = {};
     const groups: Record<string, SidebarGroup> = {};
 
     // Get path prefix for section items (used for lookup)
-    const pathPrefix = section.slug === "index" ? product : `${product}/${section.slug}`;
+    const pathPrefix = section.slug === "index" ? productPath : `${productPath}/${section.slug}`;
 
     section.children.forEach((child) => {
       if (!child.children || child.children.length === 0) {
@@ -144,17 +144,17 @@ function createSidebarConfig(product: ProductName): SidebarConfig {
       groups: Object.keys(groups).length > 0 ? groups : undefined,
     };
   });
-  const productTitle = PRODUCT_CONFIGS[product]?.title || product;
+  const productTitle = PRODUCT_CONFIGS[product.name]?.title || product.name;
   // Inject LLM Documentation section
   const llmItem: SidebarItem = {
     slug: "llms",
     label: `${productTitle} LLMs Text`,
-    routePath: `/docs/${product}/llms-full`,
+    routePath: `/docs/${productPath}/llms-full`,
   };
   const llmSection: SidebarSection = {
     slug: "llms",
     label: "LLMs Text",
-    basePath: `/docs/${product}/llms-full`,
+    basePath: `/docs/${productPath}/llms-full`,
     items: { llms: llmItem },
   };
 
@@ -163,7 +163,7 @@ function createSidebarConfig(product: ProductName): SidebarConfig {
 
   // Return the complete sidebar config
   return {
-    label: product,
+    label: productKey(product),
     sections: sidebarSections,
   };
 }

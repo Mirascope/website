@@ -15,6 +15,7 @@
 import { environment } from "./environment";
 import { processMDXContent } from "./mdx-processing";
 import { docRegistry, type DocInfo } from "./doc-registry";
+import { type Product } from "./spec";
 import { type TOCItem } from "@/src/components/core/navigation";
 
 // Re-export docRegistry for convenience
@@ -81,7 +82,7 @@ export type BlogContent = Content<BlogMeta>;
  * Documentation-specific metadata extends the base ContentMeta
  */
 export interface DocMeta extends ContentMeta {
-  product: string; // Which product this doc belongs to
+  product: Product; // Which product this doc belongs to
   sectionPath: string; // Hierarchical section path (e.g. "docs>mirascope>learn")
   searchWeight: number; // Computed weight based on hierarchical position
 }

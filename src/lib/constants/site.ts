@@ -53,11 +53,11 @@ export const LILYPAD: ProductConfig = {
 // Product configurations
 export const PRODUCT_CONFIGS: Record<ProductName, ProductConfig> = {
   mirascope: MIRASCOPE,
-  "mirascope-v2": MIRASCOPE,
   lilypad: LILYPAD,
 };
 
 // Helper function to get product config with defaulting to Mirascope
-export function getProductConfig(product?: ProductName): ProductConfig {
+// Currently just uses productName not version since we assume this is conserved across versions
+export function getProductConfigByName(product: ProductName): ProductConfig {
   return PRODUCT_CONFIGS[product || "mirascope"];
 }

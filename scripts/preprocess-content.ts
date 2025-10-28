@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { ContentPreprocessor } from "@/src/lib/content/preprocess";
 import type { LLMContent } from "@/src/lib/content/llm-content";
-import { SITE_URL, getAllRoutes } from "@/src/lib/router-utils";
+import { SITE_URL, getAllRoutes, isHiddenRoute } from "@/src/lib/router-utils";
 import type { BlogMeta } from "@/src/lib/content";
 import llmMeta from "@/content/llms/_llms-meta";
 
@@ -76,6 +76,9 @@ async function generateSitemap(blogPosts: BlogMeta[], llmDocs: LLMContent[]): Pr
 
   // Add LLM document URLs to the sitemap
   llmDocs.forEach((llmDoc) => {
+    if (!llmDoc.route || isHiddenRoute(llmDoc.route)) {
+      return;
+    }
     // Add the .txt file
     xml += "  <url>\n";
     xml += `    <loc>${SITE_URL}${llmDoc.route}.txt</loc>\n`;
