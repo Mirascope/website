@@ -67,21 +67,11 @@ function getSmartProductRoute(targetProduct: ProductName, currentPath: string): 
   return getProductRoute(targetProduct);
 }
 
-function V2Badge({ isActive, route }: { isActive: boolean; route: string }) {
+function V2Badge() {
   const activeClass = "bg-secondary text-secondary-foreground border-secondary";
-  const inactiveClass =
-    "text-muted-foreground border-muted-foreground hover:border-secondary hover:text-secondary";
   const baseClass = "absolute -top-1 -right-2 text-2xs font-semibold border rounded-lg px-1";
 
-  if (isActive) {
-    return <span className={`${baseClass} ${activeClass}`}>v2</span>;
-  }
-
-  return (
-    <Link to={route} className={`${baseClass} transition-colors ${inactiveClass}`}>
-      v2
-    </Link>
-  );
+  return <span className={`${baseClass} ${activeClass}`}>v2</span>;
 }
 
 function MirascopeSelector({
@@ -96,18 +86,11 @@ function MirascopeSelector({
   const isMirascope = isV1 || isV2;
 
   const v1Route = getSmartProductRoute("mirascope", currentPath);
-  const v2Route = getSmartProductRoute("mirascope-v2", currentPath);
 
   return (
-    <div className="relative pr-4">
+    <div className={`relative ${isV2 ? "pr-3" : ""}`}>
       {isMirascope ? (
-        isV2 ? (
-          <Link to={v1Route} className="text-mirascope-purple text-lg font-medium hover:opacity-80">
-            Mirascope
-          </Link>
-        ) : (
-          <span className="text-mirascope-purple text-lg font-medium">Mirascope</span>
-        )
+        <span className="text-mirascope-purple text-lg font-medium">Mirascope</span>
       ) : (
         <Link
           to={v1Route}
@@ -117,7 +100,7 @@ function MirascopeSelector({
         </Link>
       )}
 
-      <V2Badge isActive={isV2} route={v2Route} />
+      {isV2 && <V2Badge />}
     </div>
   );
 }
