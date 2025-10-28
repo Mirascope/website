@@ -110,7 +110,7 @@ describe("validateSectionSpec", () => {
 describe("validateProductSpec", () => {
   test("valid product passes validation", () => {
     const validProduct: ProductSpec = {
-      product: "mirascope",
+      product: { name: "mirascope" },
       sections: [
         {
           slug: "api",
@@ -124,7 +124,7 @@ describe("validateProductSpec", () => {
 
   test("product with duplicate sections fails validation", () => {
     const productWithDupeSections: ProductSpec = {
-      product: "mirascope",
+      product: { name: "mirascope" },
       sections: [
         {
           slug: "api",

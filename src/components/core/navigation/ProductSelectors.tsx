@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { getProductRoute } from "@/src/lib/routes";
-import { type ProductName } from "@/src/lib/content/spec";
+import { type Product, productKey } from "@/src/lib/content/spec";
 import { useProduct } from "@/src/components";
 import { getAllDocInfo } from "@/src/lib/content";
 import { canonicalizePath } from "@/src/lib/utils";
@@ -16,7 +16,7 @@ function buildValidDocPaths() {
 
   // Add special llms-full routes manually
   validDocPaths.add("/docs/mirascope/llms-full");
-  validDocPaths.add("/docs/mirascope-v2/llms-full");
+  validDocPaths.add("/docs/mirascope/v2/llms-full");
   validDocPaths.add("/docs/lilypad/llms-full");
 }
 
@@ -27,39 +27,35 @@ buildValidDocPaths();
  * Smart navigation: tries to map current path to equivalent path for target product
  * Falls back to progressively shorter paths until finding a valid route
  */
-function getSmartProductRoute(targetProduct: ProductName, currentPath: string): string {
+function getSmartProductRoute(
+  currentProduct: Product,
+  targetProduct: Product,
+  currentPath: string
+): string {
   // If not in docs section, use default product route
   if (!currentPath.startsWith("/docs/")) {
     return getProductRoute(targetProduct);
   }
 
-  // Parse current path: /docs/{product}/{...rest}
-  const pathParts = currentPath.split("/").filter(Boolean);
-  if (pathParts.length < 2 || pathParts[0] !== "docs") {
-    return getProductRoute(targetProduct);
-  }
-
-  const currentProduct = pathParts[1];
-  const restOfPath = pathParts.slice(2);
+  const targetKey = productKey(targetProduct);
+  const currentKey = productKey(currentProduct);
 
   // If already on the target product, return current path
-  if (currentProduct === targetProduct) {
+  if (currentKey == targetKey) {
     return currentPath;
   }
 
-  // Try full path substitution first
-  if (restOfPath.length > 0) {
-    const fullPath = `/docs/${targetProduct}/${restOfPath.join("/")}`;
-    if (validDocPaths.has(canonicalizePath(fullPath))) {
-      return fullPath;
-    }
+  const fullTargetPath = currentPath.replace(`/docs/${currentKey}`, `/docs/${targetKey}`);
+  if (validDocPaths.has(canonicalizePath(fullTargetPath))) {
+    return fullTargetPath;
+  }
+  const restOfPath = fullTargetPath.replace(`/docs/${targetKey}/`, "").split("/");
 
-    // Try progressively shorter paths
-    for (let i = restOfPath.length - 1; i > 0; i--) {
-      const shorterPath = `/docs/${targetProduct}/${restOfPath.slice(0, i).join("/")}`;
-      if (validDocPaths.has(canonicalizePath(shorterPath))) {
-        return shorterPath;
-      }
+  // Try progressively shorter paths
+  for (let i = restOfPath.length - 1; i > 0; i--) {
+    const shorterPath = `/docs/${targetKey}/${restOfPath.slice(0, i).join("/")}`;
+    if (validDocPaths.has(canonicalizePath(shorterPath))) {
+      return shorterPath;
     }
   }
 
@@ -78,14 +74,13 @@ function MirascopeSelector({
   currentProduct,
   currentPath,
 }: {
-  currentProduct: ProductName;
+  currentProduct: Product;
   currentPath: string;
 }) {
-  const isV1 = currentProduct === "mirascope";
-  const isV2 = currentProduct === "mirascope-v2";
-  const isMirascope = isV1 || isV2;
+  const isMirascope = currentProduct.name === "mirascope";
+  const isV2 = currentProduct.version === "v2";
 
-  const v1Route = getSmartProductRoute("mirascope", currentPath);
+  const v1Route = getSmartProductRoute(currentProduct, { name: "mirascope" }, currentPath);
 
   return (
     <div className={`relative ${isV2 ? "pr-3" : ""}`}>
@@ -112,16 +107,16 @@ function LilypadSelector({
   currentProduct,
   currentPath,
 }: {
-  currentProduct: ProductName;
+  currentProduct: Product;
   currentPath: string;
 }) {
-  const isActive = currentProduct === "lilypad";
+  const isActive = currentProduct.name === "lilypad";
 
   if (isActive) {
     return <span className="text-lilypad-green text-lg font-medium">Lilypad</span>;
   }
 
-  const route = getSmartProductRoute("lilypad", currentPath);
+  const route = getSmartProductRoute(currentProduct, { name: "lilypad" }, currentPath);
   return (
     <Link to={route} className="text-muted-foreground hover:text-lilypad-green text-lg font-medium">
       Lilypad

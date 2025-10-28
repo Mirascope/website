@@ -104,12 +104,7 @@ export function BlogPostPage({ post, slug, isLoading = false }: BlogPostPageProp
   ) : (
     <div className="flex h-full flex-col">
       <div className="px-4 pt-4 lg:pt-0">
-        <CopyMarkdownButton
-          content={post.content}
-          itemId={slug}
-          product="blog"
-          contentType="blog_markdown"
-        />
+        <CopyMarkdownButton content={post.content} itemId={slug} contentType="blog_markdown" />
 
         <h4 className="text-muted-foreground mt-3 mb-3 text-sm font-medium">On this page</h4>
       </div>

@@ -5,11 +5,11 @@ import {
   ProductProvider,
   type Theme,
 } from "@/src/components/core/providers";
-import type { ProductName } from "@/src/lib/content/spec";
+import type { Product } from "@/src/lib/content/spec";
 
 interface ProductThemeDecoratorProps {
   children: React.ReactNode;
-  product?: ProductName;
+  product?: Product;
   theme?: "light" | "dark";
   isLandingPage?: boolean;
 }
@@ -22,7 +22,7 @@ interface ProductThemeDecoratorProps {
  */
 export const ProductThemeDecorator = ({
   children,
-  product = "mirascope",
+  product = { name: "mirascope" },
   theme = "light",
   isLandingPage = false,
 }: ProductThemeDecoratorProps) => {
@@ -87,7 +87,11 @@ export const ProductThemeDecorator = ({
  * @param isLandingPage Whether to apply landing page styling
  */
 export const withProductTheme =
-  (product: ProductName = "mirascope", theme: "light" | "dark" = "light", isLandingPage = false) =>
+  (
+    product: Product = { name: "mirascope" },
+    theme: "light" | "dark" = "light",
+    isLandingPage = false
+  ) =>
   (Story: any) => {
     return (
       <ProductThemeDecorator product={product} theme={theme} isLandingPage={isLandingPage}>

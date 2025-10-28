@@ -218,7 +218,7 @@ export class SocialCardGenerator {
     // Update the social card with the provided title and product
     await this.page.evaluate(
       (title, product) => {
-        window.updateSocialCard!(title, product);
+        window.updateSocialCard!(title, product.name);
       },
       processedTitle,
       product

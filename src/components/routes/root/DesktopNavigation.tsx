@@ -11,7 +11,7 @@ import {
 import { getProductRoute } from "@/src/lib/routes";
 import { useProduct, useIsLandingPage, useIsRouterWaitlistPage } from "@/src/components/core";
 import { PRODUCT_CONFIGS } from "@/src/lib/constants/site";
-import type { ProductName } from "@/src/lib/content/spec";
+import { type Product, productKey } from "@/src/lib/content/spec";
 import { cn } from "@/src/lib/utils";
 import { NAV_LINK_STYLES, PRODUCT_LINK_STYLES, DESKTOP_NAV_STYLES } from "./styles";
 
@@ -28,19 +28,19 @@ interface NavLinkProps {
  * Retrieves product information from global config and applies appropriate styling.
  */
 interface ProductMenuLinkProps {
-  productName: ProductName;
+  product: Product;
 }
 
-const ProductMenuLink = ({ productName }: ProductMenuLinkProps) => {
-  const config = PRODUCT_CONFIGS[productName];
+const ProductMenuLink = ({ product }: ProductMenuLinkProps) => {
+  const config = PRODUCT_CONFIGS[product.name];
 
   return (
     <li>
       <NavigationMenuLink asChild>
         <Link
-          to={getProductRoute(productName)}
+          to={getProductRoute(product)}
           className={PRODUCT_LINK_STYLES.desktop.container}
-          data-product={productName}
+          data-product={productKey(product)}
         >
           <div className={PRODUCT_LINK_STYLES.desktop.title}>{config.title}</div>
           <p className={PRODUCT_LINK_STYLES.desktop.description}>{config.tagline}</p>
@@ -88,8 +88,8 @@ export default function DesktopNavigation({ isSearchOpen }: DesktopNavigationPro
               className={DESKTOP_NAV_STYLES.menuContent(isLandingPage || isRouterWaitlistPage)}
             >
               <ul className={DESKTOP_NAV_STYLES.productGrid}>
-                <ProductMenuLink productName="mirascope" />
-                <ProductMenuLink productName="lilypad" />
+                <ProductMenuLink product={{ name: "mirascope" }} />
+                <ProductMenuLink product={{ name: "lilypad" }} />
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
