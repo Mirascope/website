@@ -38,7 +38,7 @@ export default defineConfig({
       strict: false,
     },
   },
-  
+
   // Keeping the default build configuration
   build: {
     assetsInlineLimit: 4096, // Default inline limit

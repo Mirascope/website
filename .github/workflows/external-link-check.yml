@@ -2,7 +2,7 @@ name: External Link Check
 
 on:
   schedule:
-    - cron: '0 0 * * 1' # Weekly on Mondays
+    - cron: "0 0 * * 1" # Weekly on Mondays
   workflow_dispatch: # Allow manual triggers
 
 jobs:
@@ -11,34 +11,34 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
-        
+
       - name: Install dependencies
         run: bun install
-        
+
       - name: Build site
         run: bun run build
-        
+
       - name: Check external links
         id: check-links
         run: bun run scripts/validate-external-links.ts
-        
+
       - name: Upload JSON report
         uses: actions/upload-artifact@v4
         with:
           name: links-report-json
           path: links-report.json
           if-no-files-found: ignore
-      
+
       - name: Upload Markdown report
         uses: actions/upload-artifact@v4
         with:
           name: links-report-md
           path: links-report.md
           if-no-files-found: ignore
-      
+
       # Update the dedicated link validation issue (#207)
       - name: Update link validation issue
         if: ${{ steps.check-links.outputs.has_broken_links == 'true' || steps.check-links.outputs.redirected_link_count > 0 }}
