@@ -6,8 +6,22 @@
  * They are distinct from the ContentMeta types used at runtime.
  */
 
-// Define valid product names as a union type
-export type ProductName = "mirascope" | "lilypad" | "mirascope-v2";
+export type ProductName = "mirascope" | "lilypad";
+
+export interface Product {
+  name: ProductName;
+  version?: string; // e.g. "v2". optional for now, and products with a version are hidden
+}
+
+export type ProductKey = `${ProductName}` | `${ProductName}/${string}`;
+
+/**
+ * Get the path segment for a product (includes version if present)
+ * Examples: "mirascope", "mirascope/v2", "lilypad"
+ */
+export function productKey(product: Product): ProductKey {
+  return product.version ? `${product.name}/${product.version}` : product.name;
+}
 
 // Type for URL-friendly slugs (no slashes)
 export type Slug = string; // In practice: enforced by regex /^[a-z0-9-_]+$/
@@ -18,7 +32,7 @@ export interface DocInfo {
   routePath: string; // URL path with /docs/ prefix and index pages represented as trailing slashes
   slug: string;
   type: "docs";
-  product: ProductName; // Product this doc belongs to
+  product: Product;
   searchWeight: number; // Computed weight based on hierarchical position
 }
 
@@ -46,7 +60,7 @@ export interface SectionSpec {
  * Product documentation structure
  */
 export interface ProductSpec {
-  product: ProductName;
+  product: Product;
   // All sections (including the main/default section)
   // A section with slug "index" is treated as the default section (no prefix in URL)
   sections: SectionSpec[];
@@ -76,7 +90,7 @@ export interface ValidationResult {
  */
 export function processDocSpec(
   docSpec: DocSpec,
-  product: ProductName,
+  product: Product,
   pathPrefix: string,
   parentWeight: number = 1.0
 ): DocInfo[] {
@@ -132,11 +146,15 @@ export function getDocsFromSpec(fullSpec: FullDocsSpec): DocInfo[] {
   fullSpec.forEach((productSpec) => {
     const { product, sections, weight: productWeight = 1.0 } = productSpec;
 
+    const basePathPrefix = productKey(product);
+
     // Process all sections
     sections.forEach((section) => {
       // For the default section (index), don't add a section slug prefix
       const isDefaultSection = section.slug === "index";
-      const sectionPathPrefix = isDefaultSection ? product : `${product}/${section.slug}`;
+      const sectionPathPrefix = isDefaultSection
+        ? basePathPrefix
+        : `${basePathPrefix}/${section.slug}`;
 
       // Process each document in this section
       section.children.forEach((docSpec) => {
@@ -328,13 +346,17 @@ export function validateProductSpec(spec: ProductSpec): ValidationResult {
 export function validateFullDocsSpec(specs: FullDocsSpec): ValidationResult {
   const errors: string[] = [];
 
-  // Validate each product
+  // Check for duplicate products
+  const productPaths = new Set();
   specs.forEach((productSpec) => {
+    const path = productKey(productSpec.product);
+    if (productPaths.has(path)) {
+      errors.push(`Duplicat product path: ${path}`);
+    }
+    productPaths.add(path);
     const productResult = validateProductSpec(productSpec);
     if (!productResult.isValid) {
-      errors.push(
-        ...productResult.errors.map((err) => `In product "${productSpec.product}": ${err}`)
-      );
+      errors.push(...productResult.errors.map((err) => `In product "${path}": ${err}`));
     }
   });
 

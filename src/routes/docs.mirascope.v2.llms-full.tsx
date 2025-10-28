@@ -4,25 +4,15 @@ import { environment } from "@/src/lib/content/environment";
 import { ContentErrorHandler } from "@/src/components";
 import { LLMContent } from "@/src/lib/content/llm-content";
 import DocsSidebar from "@/src/components/routes/docs/DocsSidebar";
-import type { ProductName, Product } from "@/src/lib/content/spec";
 import { ButtonLink } from "@/mirascope-ui/ui/button-link";
-
+import { type Product } from "@/src/lib/content/spec";
 /**
- * Loader for product-specific LLM document viewer routes
- * Handles routes like /docs/mirascope/llms, /docs/lilypad/llms
+ * Hack: custom route for mirascope/v2/llms-full.txt
+ * TODO: Dedup this with docs.$product.llms-full.txt
  */
-async function productLlmDocLoader({ params }: { params: { product: ProductName } }) {
-  const { product: productName } = params;
-
-  // Validate product
-  if (productName !== "mirascope" && productName !== "lilypad") {
-    throw new Error(`Invalid product: ${productName}`);
-  }
-  const product: Product = { name: productName };
-
-  // Construct paths to both JSON and TXT files
-  const jsonPath = `/static/content/docs/${productName}/llms-full.json`;
-  const txtPath = `/docs/${productName}/llms-full.txt`;
+async function mirascopeV2LlmLoader() {
+  const jsonPath = `/static/content/docs/mirascope/v2/llms-full.json`;
+  const txtPath = `/docs/mirascope/v2/llms-full.txt`;
 
   try {
     // Fetch the processed JSON data
@@ -38,8 +28,7 @@ async function productLlmDocLoader({ params }: { params: { product: ProductName 
     return {
       content,
       txtPath,
-      viewerPath: `/docs/${productName}/llms`,
-      product,
+      viewerPath: `/docs/mirascope/v2/llms`,
     };
   } catch (error) {
     console.error(`Error loading LLM doc: ${jsonPath}`, error);
@@ -47,10 +36,10 @@ async function productLlmDocLoader({ params }: { params: { product: ProductName 
   }
 }
 
-export const Route = createFileRoute("/docs/$product/llms-full")({
+export const Route = createFileRoute("/docs/mirascope/v2/llms-full")({
   component: ProductLLMDocViewerPage,
 
-  loader: productLlmDocLoader,
+  loader: mirascopeV2LlmLoader,
 
   pendingComponent: () => {
     return <div>Loading LLM document...</div>;
@@ -69,11 +58,12 @@ export const Route = createFileRoute("/docs/$product/llms-full")({
 
 function ProductLLMDocViewerPage() {
   const data = useLoaderData({
-    from: "/docs/$product/llms-full",
+    from: "/docs/mirascope/v2/llms-full",
     structuralSharing: false,
   });
 
-  const { content, txtPath, product } = data;
+  const { content, txtPath } = data;
+  const product: Product = { name: "mirascope", version: "v2" };
 
   return (
     <LLMPage

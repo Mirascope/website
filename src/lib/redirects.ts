@@ -8,7 +8,7 @@
  * Only include redirects here that need dynamic processing or aren't covered by Cloudflare.
  */
 import { getAllDocInfo } from "@/src/lib/content";
-import { isValidProduct } from "@/src/lib/route-types";
+import { isValidProductName } from "@/src/lib/route-types";
 import { canonicalizePath } from "./utils";
 
 // Group redirects map - this will be populated dynamically
@@ -85,7 +85,7 @@ export function processRedirects(path: string): string | null {
 
   // 3. Special case: redirect /docs/{invalid-product} to /docs/mirascope
   const docsProductMatch = canonicalPath.match(/^\/docs\/([^\/]+)(?:\/.*)?$/);
-  if (docsProductMatch && !isValidProduct(docsProductMatch[1])) {
+  if (docsProductMatch && !isValidProductName(docsProductMatch[1])) {
     return "/docs/mirascope";
   }
 

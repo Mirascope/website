@@ -1,6 +1,6 @@
 import React from "react";
 import { cn } from "@/src/lib/utils";
-import { getProductConfig } from "@/src/lib/constants/site";
+import { getProductConfigByName } from "@/src/lib/constants/site";
 import { useProduct } from "@/src/components";
 
 /**
@@ -24,7 +24,7 @@ interface GitHubRepoButtonProps {
 const GitHubRepoButton: React.FC<GitHubRepoButtonProps> = ({ className }) => {
   // Get current product from context
   const product = useProduct();
-  const productConfig = getProductConfig(product);
+  const productConfig = getProductConfigByName(product.name);
 
   if (!productConfig?.github) {
     return null;
@@ -50,8 +50,6 @@ const GitHubRepoButton: React.FC<GitHubRepoButtonProps> = ({ className }) => {
     </svg>
   );
 
-  const productDisplay = product === "mirascope-v2" ? "mirascope" : product;
-
   return (
     <a
       href={`https://github.com/${repo}`}
@@ -62,7 +60,7 @@ const GitHubRepoButton: React.FC<GitHubRepoButtonProps> = ({ className }) => {
       {/* GitHub icon and product name */}
       <div className="flex items-center gap-1 text-base font-medium">
         {GitHubIcon}
-        <span>{productDisplay}</span>
+        <span>{product.name}</span>
       </div>
 
       {/* Stats on second line */}

@@ -7,16 +7,15 @@ import { MirascopeLogo, LilypadLogo, useProduct } from "@/src/components/core";
  * product context.
  */
 const ProductLogo: React.FC<BaseLogoProps> = (props) => {
-  const productName = useProduct();
+  const product = useProduct();
 
-  switch (productName) {
+  switch (product.name) {
     case "lilypad":
       return <LilypadLogo {...props} />;
     case "mirascope":
-    case "mirascope-v2":
       return <MirascopeLogo {...props} />;
     default:
-      throw new Error(`Unknown product: ${productName}`);
+      throw new Error(`Unknown product: ${product.name}`);
   }
 };
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useMatches } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { cn } from "@/src/lib/utils";
 import { ChevronDown, ChevronRight } from "lucide-react";
 
@@ -380,8 +380,8 @@ const SectionContent = ({
  */
 const Sidebar = ({ config, headerContent, footerContent }: SidebarProps) => {
   // Get current route from TanStack Router
-  const matches = useMatches();
-  const currentPath = matches[matches.length - 1]?.pathname || "";
+  const router = useRouterState();
+  const currentPath = router.location.pathname;
 
   // Store and restore scroll position
   const sidebarRef = React.useRef<HTMLDivElement>(null);
