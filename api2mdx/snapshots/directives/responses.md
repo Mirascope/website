@@ -1,113 +1,176 @@
 # responses
 
 <ApiObject
-  path="mirascope_v2_llm.responses.async_context_stream.AsyncContextStream"
-  symbolName="AsyncContextStream"
-  slug="async-context-stream"
+  path="mirascope.llm.responses.base_stream_response.AsyncChunkIterator"
+  symbolName="AsyncChunkIterator"
+  slug="async-chunk-iterator"
   canonicalPath="responses"
 />
 
 <ApiObject
-  path="mirascope_v2_llm.responses.async_context_structured_stream.AsyncContextStructuredStream"
-  symbolName="AsyncContextStructuredStream"
-  slug="async-context-structured-stream"
+  path="mirascope.llm.responses.response.AsyncContextResponse"
+  symbolName="AsyncContextResponse"
+  slug="async-context-response"
   canonicalPath="responses"
 />
 
 <ApiObject
-  path="mirascope_v2_llm.responses.async_stream.AsyncStream"
+  path="mirascope.llm.responses.stream_response.AsyncContextStreamResponse"
+  symbolName="AsyncContextStreamResponse"
+  slug="async-context-stream-response"
+  canonicalPath="responses"
+/>
+
+<ApiObject
+  path="mirascope.llm.responses.response.AsyncResponse"
+  symbolName="AsyncResponse"
+  slug="async-response"
+  canonicalPath="responses"
+/>
+
+<ApiObject
+  path="mirascope.llm.responses.streams.AsyncStream"
   symbolName="AsyncStream"
   slug="async-stream"
   canonicalPath="responses"
 />
 
 <ApiObject
-  path="mirascope_v2_llm.responses.async_structured_stream.AsyncStructuredStream"
-  symbolName="AsyncStructuredStream"
-  slug="async-structured-stream"
+  path="mirascope.llm.responses.stream_response.AsyncStreamResponse"
+  symbolName="AsyncStreamResponse"
+  slug="async-stream-response"
   canonicalPath="responses"
 />
 
 <ApiObject
-  path="mirascope_v2_llm.responses.context_response.ContextResponse"
+  path="mirascope.llm.responses.streams.AsyncTextStream"
+  symbolName="AsyncTextStream"
+  slug="async-text-stream"
+  canonicalPath="responses"
+/>
+
+<ApiObject
+  path="mirascope.llm.responses.streams.AsyncThoughtStream"
+  symbolName="AsyncThoughtStream"
+  slug="async-thought-stream"
+  canonicalPath="responses"
+/>
+
+<ApiObject
+  path="mirascope.llm.responses.streams.AsyncToolCallStream"
+  symbolName="AsyncToolCallStream"
+  slug="async-tool-call-stream"
+  canonicalPath="responses"
+/>
+
+<ApiObject
+  path="mirascope.llm.responses.base_stream_response.ChunkIterator"
+  symbolName="ChunkIterator"
+  slug="chunk-iterator"
+  canonicalPath="responses"
+/>
+
+<ApiObject
+  path="mirascope.llm.responses.response.ContextResponse"
   symbolName="ContextResponse"
   slug="context-response"
   canonicalPath="responses"
 />
 
 <ApiObject
-  path="mirascope_v2_llm.responses.content.ContextResponseContent"
-  symbolName="ContextResponseContent"
-  slug="context-response-content"
+  path="mirascope.llm.responses.stream_response.ContextStreamResponse"
+  symbolName="ContextStreamResponse"
+  slug="context-stream-response"
   canonicalPath="responses"
 />
 
 <ApiObject
-  path="mirascope_v2_llm.responses.context_stream.ContextStream"
-  symbolName="ContextStream"
-  slug="context-stream"
-  canonicalPath="responses"
-/>
-
-<ApiObject
-  path="mirascope_v2_llm.responses.context_stream_chunk.ContextStreamChunk"
-  symbolName="ContextStreamChunk"
-  slug="context-stream-chunk"
-  canonicalPath="responses"
-/>
-
-<ApiObject
-  path="mirascope_v2_llm.responses.context_structured_stream.ContextStructuredStream"
-  symbolName="ContextStructuredStream"
-  slug="context-structured-stream"
-  canonicalPath="responses"
-/>
-
-<ApiObject
-  path="mirascope_v2_llm.responses.finish_reason.FinishReason"
+  path="mirascope.llm.responses.finish_reason.FinishReason"
   symbolName="FinishReason"
   slug="finish-reason"
   canonicalPath="responses"
 />
 
 <ApiObject
-  path="mirascope_v2_llm.responses.response.Response"
+  path="mirascope.llm.responses.finish_reason.FinishReasonChunk"
+  symbolName="FinishReasonChunk"
+  slug="finish-reason-chunk"
+  canonicalPath="responses"
+/>
+
+<ApiObject
+  path="mirascope.llm.responses.base_stream_response.RawMessageChunk"
+  symbolName="RawMessageChunk"
+  slug="raw-message-chunk"
+  canonicalPath="responses"
+/>
+
+<ApiObject
+  path="mirascope.llm.responses.base_stream_response.RawStreamEventChunk"
+  symbolName="RawStreamEventChunk"
+  slug="raw-stream-event-chunk"
+  canonicalPath="responses"
+/>
+
+<ApiObject
+  path="mirascope.llm.responses.response.Response"
   symbolName="Response"
   slug="response"
   canonicalPath="responses"
 />
 
 <ApiObject
-  path="mirascope_v2_llm.responses.content.ResponseContent"
-  symbolName="ResponseContent"
-  slug="response-content"
+  path="mirascope.llm.responses.root_response.RootResponse"
+  symbolName="RootResponse"
+  slug="root-response"
   canonicalPath="responses"
 />
 
 <ApiObject
-  path="mirascope_v2_llm.responses.stream.Stream"
+  path="mirascope.llm.responses.streams.Stream"
   symbolName="Stream"
   slug="stream"
   canonicalPath="responses"
 />
 
 <ApiObject
-  path="mirascope_v2_llm.responses.stream_chunk.StreamChunk"
-  symbolName="StreamChunk"
-  slug="stream-chunk"
+  path="mirascope.llm.responses.stream_response.StreamResponse"
+  symbolName="StreamResponse"
+  slug="stream-response"
   canonicalPath="responses"
 />
 
 <ApiObject
-  path="mirascope_v2_llm.responses.structured_stream.StructuredStream"
-  symbolName="StructuredStream"
-  slug="structured-stream"
+  path="mirascope.llm.responses.base_stream_response.StreamResponseChunk"
+  symbolName="StreamResponseChunk"
+  slug="stream-response-chunk"
   canonicalPath="responses"
 />
 
 <ApiObject
-  path="mirascope_v2_llm.responses.usage.Usage"
-  symbolName="Usage"
-  slug="usage"
+  path="mirascope.llm.responses.streams.TextStream"
+  symbolName="TextStream"
+  slug="text-stream"
+  canonicalPath="responses"
+/>
+
+<ApiObject
+  path="mirascope.llm.responses.streams.ThoughtStream"
+  symbolName="ThoughtStream"
+  slug="thought-stream"
+  canonicalPath="responses"
+/>
+
+<ApiObject
+  path="mirascope.llm.responses.streams.ToolCallStream"
+  symbolName="ToolCallStream"
+  slug="tool-call-stream"
+  canonicalPath="responses"
+/>
+
+<ApiObject
+  path="mirascope.llm.responses._utils"
+  symbolName="_utils"
+  slug="_utils_mod"
   canonicalPath="responses"
 />

@@ -41,7 +41,7 @@
     "*.{ts,tsx}": [
       "bun scripts/check-ts.ts"
     ],
-    "*.mdx": [
+    "content/**/*.mdx": [
       "bun run lint:mdx"
     ],
     "api2mdx/**/*.py": "bun run lint:python",
