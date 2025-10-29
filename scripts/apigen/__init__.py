@@ -1,1 +1,0 @@
-"""Generates MDX API documentation."""

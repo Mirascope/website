@@ -2,7 +2,6 @@
 
 from collections.abc import AsyncIterator
 from typing import Generic
-
 from typing_extensions import TypeVar
 
 from ..types import Dataclass

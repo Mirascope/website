@@ -2,7 +2,6 @@
 
 from collections.abc import Callable
 from typing import ParamSpec, Protocol, overload
-
 from typing_extensions import TypeVar
 
 from ..context import Context

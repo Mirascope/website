@@ -11,7 +11,6 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from api2mdx.admonition_converter import convert_admonitions
 from api2mdx.api_discovery import ApiDocumentation, DirectivesPage
 from api2mdx.griffe_integration import (
     get_loader,
@@ -63,6 +62,7 @@ class DocumentationGenerator:
 
         Args:
             directive_output_path: Optional path to output intermediate directive files
+
         """
         # Load the module
         self.module = self._load_module()
@@ -88,7 +88,7 @@ class DocumentationGenerator:
 
         # Generate metadata
         self._generate_meta_file()
-        
+
         # Print any unresolved symbols for debugging
         self.api_documentation.print_unresolved_symbols()
 
@@ -120,6 +120,7 @@ class DocumentationGenerator:
 
         Args:
             directive_output_path: Path where directive files should be written
+
         """
         if not self.api_documentation:
             raise RuntimeError("API directives must be discovered before output")
@@ -162,7 +163,7 @@ class DocumentationGenerator:
             f"Generated {len(self.api_documentation)} directive files in {directive_output_path}"
         )
 
-    def _load_module(self) -> Any:
+    def _load_module(self) -> Any:  # noqa: ANN401
         """Load the module using Griffe.
 
         Returns:
