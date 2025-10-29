@@ -6,9 +6,11 @@ by the existing documentation pipeline.
 """
 
 import re
+from collections.abc import Iterator
 from dataclasses import dataclass
 from enum import Enum
 from typing import NewType
+
 from griffe import Alias, Attribute, Class, Function, Module, Object
 
 from .type_urls import BUILTIN_TYPE_URLS
@@ -59,9 +61,10 @@ class RawDirective:
 
     def symbol_name(self) -> str:
         """Extract the symbol name from the object path.
-        
+
         Returns:
             The last component of the object path (e.g., "call" from "mirascope_v2_llm.calls.decorator.call")
+
         """
         return self.object_path.split(".")[-1]
 
@@ -75,6 +78,7 @@ class RawDirectivesPage:
         directory: Directory path for nested structures (e.g., "calls" or "" for root)
         slug: The clean slug identifier (e.g., "agent" or "base-tool")
         name: The original name with proper casing (e.g., "Agent" or "agent")
+
     """
 
     directives: list[RawDirective]
@@ -93,7 +97,7 @@ class RawDirectivesPage:
 @dataclass
 class ApiObject:
     """Canonical representation of an API object with all computed properties."""
-    
+
     object_path: ObjectPath
     object_type: DirectiveType
     canonical_slug: Slug
@@ -104,35 +108,36 @@ class ApiObject:
 @dataclass
 class Directive:
     """Directive that references an API object."""
-    
+
     api_object: ApiObject
-    
+
     @property
     def object_path(self) -> ObjectPath:
         """Get the object path from the API object."""
         return self.api_object.object_path
-    
+
     @property
     def object_type(self) -> DirectiveType:
         """Get the object type from the API object."""
         return self.api_object.object_type
-    
+
     def symbol_name(self) -> str:
         """Get the symbol name from the API object."""
         return self.api_object.symbol_name
-    
+
     def __str__(self) -> str:
         return f"::: {self.object_path}  # {self.object_type.value}"
-    
+
     def render(self, current_docs_path: str) -> str:
         """Render directive as JSX-like component for debugging.
-        
+
         Args:
             current_docs_path: The docs path of the current page (e.g., "calls" or "index")
-            
+
         Returns:
             Either a simple path reference or full ApiObject depending on whether
             this is the canonical location for the object.
+
         """
         if self.api_object.canonical_docs_path == current_docs_path:
             # This is the canonical location - render full ApiObject
@@ -145,25 +150,25 @@ class Directive:
 @dataclass
 class DirectivesPage:
     """Enriched directives page with computed file path and enriched directives."""
-    
+
     raw_page: RawDirectivesPage
     directives: list[Directive]
-    
+
     @property
     def directory(self) -> str:
         """Get the directory from the underlying raw page."""
         return self.raw_page.directory
-    
+
     @property
     def slug(self) -> Slug:
         """Get the slug from the underlying raw page."""
         return self.raw_page.slug
-    
+
     @property
     def name(self) -> str:
         """Get the name from the underlying raw page."""
         return self.raw_page.name
-    
+
     @property
     def file_path(self) -> str:
         """Get the full file path with .mdx extension."""
@@ -180,7 +185,9 @@ class ApiDocumentation:
     - Canonical docs path mapping for cross-references
     """
 
-    def __init__(self, raw_pages: list[RawDirectivesPage], api_root: str = DEFAULT_API_ROOT):
+    def __init__(
+        self, raw_pages: list[RawDirectivesPage], api_root: str = DEFAULT_API_ROOT
+    ) -> None:
         # Validate unique file paths
         file_paths = set()
         for page in raw_pages:
@@ -204,6 +211,7 @@ class ApiDocumentation:
 
         Returns:
             Dictionary mapping ObjectPath -> ApiObject
+
         """
         registry: dict[ObjectPath, ApiObject] = {}
         used_slugs: dict[str, ObjectPath] = {}
@@ -217,7 +225,7 @@ class ApiDocumentation:
                 object_type=DirectiveType.ALIAS,  # Treat as external alias
                 canonical_slug=Slug(base_slug),
                 canonical_docs_path=doc_url,  # Use the full external URL as the path
-                symbol_name=type_name
+                symbol_name=type_name,
             )
             registry[ObjectPath(type_name)] = api_object
             used_slugs[base_slug] = ObjectPath(type_name)
@@ -234,14 +242,20 @@ class ApiDocumentation:
         for page in self.raw_pages:
             # Get docs path without .mdx extension for canonical docs path
             docs_path = page.file_path.replace(".mdx", "")
-            
+
             for directive in page.directives:
                 # Check if we already have this object
                 if directive.object_path in registry:
                     # Update canonical docs path if this one is deeper (more specific)
                     existing_api_object = registry[directive.object_path]
-                    current_depth = 0 if docs_path == "index" else 1 + docs_path.count("/")
-                    existing_depth = 0 if existing_api_object.canonical_docs_path == "index" else 1 + existing_api_object.canonical_docs_path.count("/")
+                    current_depth = (
+                        0 if docs_path == "index" else 1 + docs_path.count("/")
+                    )
+                    existing_depth = (
+                        0
+                        if existing_api_object.canonical_docs_path == "index"
+                        else 1 + existing_api_object.canonical_docs_path.count("/")
+                    )
                     if current_depth > existing_depth:
                         existing_api_object.canonical_docs_path = docs_path
                     continue
@@ -276,7 +290,7 @@ class ApiDocumentation:
                     object_type=directive.object_type,
                     canonical_slug=Slug(final_slug_str),
                     canonical_docs_path=docs_path,
-                    symbol_name=symbol_name
+                    symbol_name=symbol_name,
                 )
 
                 # Register it
@@ -287,28 +301,28 @@ class ApiDocumentation:
 
     def _build_symbol_registry(self) -> None:
         """Build a registry mapping symbol names to their canonical API objects.
-        
+
         Stores unique symbols in self._symbol_registry and conflicts in self._orphaned_objects.
         """
         symbol_registry: dict[str, ApiObject] = {}
         symbol_conflicts: dict[str, list[ApiObject]] = {}
-        
+
         # Collect all symbols and track conflicts
         for api_object in self._api_objects_registry.values():
             symbol_name = api_object.symbol_name
-            
+
             if symbol_name in symbol_registry:
                 # This is a conflict - move to conflicts tracking
                 if symbol_name not in symbol_conflicts:
                     # First time seeing this conflict - move the original to conflicts too
                     symbol_conflicts[symbol_name] = [symbol_registry[symbol_name]]
                     del symbol_registry[symbol_name]
-                
+
                 symbol_conflicts[symbol_name].append(api_object)
             elif symbol_name not in symbol_conflicts:
                 # No conflict yet, add to registry
                 symbol_registry[symbol_name] = api_object
-        
+
         # Store results on instance
         self._symbol_registry = symbol_registry
         self._overloaded_symbols = symbol_conflicts
@@ -330,6 +344,7 @@ class ApiDocumentation:
 
         Raises:
             ValueError: If no ApiObject is found for the given path
+
         """
         api_object = self._api_objects_registry.get(object_path)
         if api_object is None:
@@ -338,98 +353,107 @@ class ApiDocumentation:
 
     def _build_enriched_pages(self) -> list[DirectivesPage]:
         """Build enriched pages with computed slugs.
-        
+
         Returns:
             List of enriched DirectivesPage objects
+
         """
         enriched_pages = []
-        
+
         for raw_page in self.raw_pages:
             enriched_directives = []
-            
+
             for raw_directive in raw_page.directives:
                 # Get the API object for this directive
                 api_object = self.get_api_object(raw_directive.object_path)
-                
+
                 # Create enriched directive
                 enriched_directive = Directive(api_object=api_object)
                 enriched_directives.append(enriched_directive)
-            
+
             # Create enriched page
             enriched_page = DirectivesPage(
-                raw_page=raw_page,
-                directives=enriched_directives
+                raw_page=raw_page, directives=enriched_directives
             )
             enriched_pages.append(enriched_page)
-        
+
         return enriched_pages
 
     def generate_symbols_debug(self) -> str:
         """Generate debug output showing all unique symbols in the registry.
-        
+
         Returns:
             Markdown content for _symbols.md file
+
         """
         lines = ["# Symbol Registry", ""]
-        
+
         for symbol_name in sorted(self._symbol_registry.keys()):
             api_object = self._symbol_registry[symbol_name]
             canonical_file_path = f"{api_object.canonical_docs_path}.mdx"
-            lines.append(f'<SymbolRef name="{symbol_name}" path="{canonical_file_path}" />')
+            lines.append(
+                f'<SymbolRef name="{symbol_name}" path="{canonical_file_path}" />'
+            )
             lines.append("")
-        
+
         return "\n".join(lines)
 
     def generate_overloaded_debug(self) -> str | None:
         """Generate debug output showing all overloaded symbols (conflicts).
-        
+
         Returns:
             Markdown content for _overloaded.md file, or None if no overloaded symbols
+
         """
         if not self._overloaded_symbols:
             return None
-            
+
         lines = ["# Overloaded Symbols", ""]
-        lines.append("These symbols appear in multiple objects and cannot be uniquely resolved:")
+        lines.append(
+            "These symbols appear in multiple objects and cannot be uniquely resolved:"
+        )
         lines.append("")
-        
+
         for symbol_name in sorted(self._overloaded_symbols.keys()):
             conflicting_objects = self._overloaded_symbols[symbol_name]
             lines.append(f"## {symbol_name}")
             lines.append("")
-            
+
             for api_object in conflicting_objects:
                 canonical_file_path = f"{api_object.canonical_docs_path}.mdx"
-                lines.append(f'<SymbolRef name="{symbol_name}" path="{canonical_file_path}" objectPath="{api_object.object_path}" />')
-            
+                lines.append(
+                    f'<SymbolRef name="{symbol_name}" path="{canonical_file_path}" objectPath="{api_object.object_path}" />'
+                )
+
             lines.append("")
-        
+
         return "\n".join(lines)
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[DirectivesPage]:
         """Allow iteration over pages."""
         return iter(self.pages)
 
-    def __len__(self):
+    def __len__(self) -> int:
         """Return number of pages."""
         return len(self.pages)
-    
+
     def get_slug(self, object_path: ObjectPath) -> Slug:
         """Get a slug for an object path.
-        
+
         If the object path exists in the API registry, return its canonical slug.
         Otherwise, generate a slug by converting the path (replace dots with hyphens and apply kebab-case).
-        
+
         Args:
             object_path: The object path to get a slug for
-            
+
         Returns:
             A unique slug for the object
+
         """
         # First try to get it from the API registry
         if object_path in self._api_objects_registry:
             return self._api_objects_registry[object_path].canonical_slug
-        
+
         # Otherwise, generate a slug from the path
         # Replace dots with hyphens and apply kebab-case conversion
         path_str = str(object_path).replace(".", "-")
@@ -441,14 +465,16 @@ class ApiDocumentation:
         if not self._unresolved_symbols:
             print("✅ All symbols resolved successfully!")
             return
-            
+
         print(f"\n⚠️  Found {len(self._unresolved_symbols)} unresolved symbols:")
         for symbol in sorted(self._unresolved_symbols):
             print(f"  - {symbol}")
         print()
 
     @classmethod
-    def from_module(cls, module: Module, api_root: str = DEFAULT_API_ROOT) -> "ApiDocumentation":
+    def from_module(
+        cls, module: Module, api_root: str = DEFAULT_API_ROOT
+    ) -> "ApiDocumentation":
         """Discover API directives with hierarchical organization.
 
         This creates a structure like:
@@ -462,6 +488,7 @@ class ApiDocumentation:
 
         Returns:
             ApiDocumentation object containing all pages with symbol registry
+
         """
         # Use the new recursive discovery function
         pages = discover_module_pages(module)
@@ -522,7 +549,6 @@ def _resolve_import_path(
     to get the decorator - in that case we really do want to step into the call.py module
     and find Call
     """
-
     parts = import_path.split(".")
     current = root_module
 
@@ -547,12 +573,11 @@ def _resolve_import_path(
                 current = current.members[part]
             else:
                 return None
+        # Intermediate step: prioritize members (navigation through module structure)
+        elif hasattr(current, "members") and part in current.members:
+            current = current.members[part]
         else:
-            # Intermediate step: prioritize members (navigation through module structure)
-            if hasattr(current, "members") and part in current.members:
-                current = current.members[part]
-            else:
-                return None
+            return None
 
     return current
 
@@ -565,6 +590,7 @@ def _extract_all_exports(module: Module) -> list[str] | None:
 
     Returns:
         List of export names if __all__ is defined, None otherwise
+
     """
     if "__all__" not in module.members:
         # Fallback to public members (no hacky filtering)
@@ -575,7 +601,7 @@ def _extract_all_exports(module: Module) -> list[str] | None:
                 continue
 
             # Include classes, functions, modules, and attributes
-            if isinstance(member, (Class, Function, Module, Attribute)):
+            if isinstance(member, Class | Function | Module | Attribute):
                 fallback_exports.append(name)
 
         return fallback_exports
@@ -622,6 +648,7 @@ def _create_directive_from_member(member: Object | Alias) -> RawDirective:
 
     Returns:
         Directive object with appropriate type and path
+
     """
     if isinstance(member, Class):
         return RawDirective(ObjectPath(member.canonical_path), DirectiveType.CLASS)
@@ -631,9 +658,9 @@ def _create_directive_from_member(member: Object | Alias) -> RawDirective:
         return RawDirective(ObjectPath(member.canonical_path), DirectiveType.MODULE)
     elif isinstance(member, Attribute):
         return RawDirective(ObjectPath(member.canonical_path), DirectiveType.ATTRIBUTE)
-    elif hasattr(member, "target") and getattr(member, "target"):
+    elif isinstance(member, Alias):
         # Handle aliases - use the target's type instead of ALIAS
-        target = getattr(member, "target")
+        target = member.target
         if isinstance(target, Class):
             directive_type = DirectiveType.CLASS
         elif isinstance(target, Function):
@@ -649,7 +676,9 @@ def _create_directive_from_member(member: Object | Alias) -> RawDirective:
         # Debug output to see what type we're dealing with
         member_type = type(member).__name__
         member_class = member.__class__
-        raise ValueError(f"Unknown directive type: {member.canonical_path} (type: {member_type}, class: {member_class})")
+        raise ValueError(
+            f"Unknown directive type: {member.canonical_path} (type: {member_type}, class: {member_class})"
+        )
 
 
 def discover_module_pages(
@@ -663,8 +692,8 @@ def discover_module_pages(
 
     Returns:
         List of DirectivesPage objects for this module and all submodules
-    """
 
+    """
     if base_path:
         parts = base_path.split("/")
         directory = "/".join(parts[:-1]) if len(parts) > 1 else ""

@@ -7,7 +7,7 @@ This module provides Python classes that mirror the TypeScript interfaces used i
 import json
 import re
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from api2mdx.api_discovery import DirectivesPage
 
@@ -146,7 +146,7 @@ def generate_meta_file_content(section: SectionSpec) -> str:
 
 def generate_meta_from_directives(
     directives: list[DirectivesPage],
-    weight: Optional[float],  # Default weight for API sections
+    weight: float | None,  # Default weight for API sections
 ) -> SectionSpec:
     """Generate a SectionSpec from API directives.
 
@@ -198,7 +198,7 @@ def generate_meta_from_directives(
     )
 
 
-def _tree_to_docspecs(tree: dict[str, Any], weight: Optional[float]) -> list[DocSpec]:
+def _tree_to_docspecs(tree: dict[str, Any], weight: float | None) -> list[DocSpec]:
     """Convert a path tree to DocSpec objects.
 
     Args:
@@ -207,6 +207,7 @@ def _tree_to_docspecs(tree: dict[str, Any], weight: Optional[float]) -> list[Doc
 
     Returns:
         List of DocSpec objects
+
     """
     specs = []
 

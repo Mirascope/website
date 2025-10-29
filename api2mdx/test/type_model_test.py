@@ -1,8 +1,9 @@
 """Tests for the type_model module."""
 
 import json
+from typing import Any
 
-from .type_model import (
+from api2mdx.type_model import (
     EnumEncoder,
     GenericType,
     ParameterInfo,
@@ -12,7 +13,7 @@ from .type_model import (
 )
 
 
-def assert_json_equal(actual, expected):
+def assert_json_equal(actual: Any, expected: Any) -> None:  # noqa: ANN401
     """Assert that two objects are equal when serialized to JSON."""
     actual_json = json.loads(actual.to_json())
     expected_json = json.loads(expected.to_json())
@@ -21,7 +22,7 @@ def assert_json_equal(actual, expected):
     )
 
 
-def test_type_model_classes():
+def test_type_model_classes() -> None:
     """Test the type model classes."""
     # Test simple type
     simple_type = SimpleType(type_str="str")
@@ -64,7 +65,7 @@ def test_type_model_classes():
     assert len(union_type.parameters) == 2
 
 
-def test_json_serialization():
+def test_json_serialization() -> None:
     """Test JSON serialization of type models."""
     # Test simple type
     type_info = SimpleType(type_str="str")
@@ -77,7 +78,8 @@ def test_json_serialization():
     assert parsed["type_str"] == "str"
     assert parsed["kind"] == "simple"
     assert parsed["description"] is None
-    assert parsed["doc_identifier"] is None
+    assert parsed["symbol_name"] is None
+    assert parsed["doc_url"] is None
 
     # Test generic type with nested structure
     nested_type = GenericType(
@@ -101,7 +103,8 @@ def test_json_serialization():
             "kind": "simple",
             "type_str": "List",
             "description": None,
-            "doc_identifier": None,
+            "symbol_name": None,
+            "doc_url": None,
         },
         "parameters": [
             {
@@ -112,24 +115,29 @@ def test_json_serialization():
                     "kind": "simple",
                     "type_str": "Dict",
                     "description": None,
-                    "doc_identifier": None,
+                    "symbol_name": None,
+                    "doc_url": None,
                 },
                 "parameters": [
                     {
                         "kind": "simple",
                         "type_str": "str",
                         "description": None,
-                        "doc_identifier": None,
+                        "symbol_name": None,
+                        "doc_url": None,
                     },
                     {
                         "kind": "simple",
                         "type_str": "int",
                         "description": None,
-                        "doc_identifier": None,
+                        "symbol_name": None,
+                        "doc_url": None,
                     },
                 ],
+                "doc_url": None,
             }
         ],
+        "doc_url": None,
     }
 
     # Verify the exact JSON structure matches our expectation
@@ -144,7 +152,7 @@ def test_json_serialization():
     assert json_str == '"union"'
 
 
-def test_parameter_info():
+def test_parameter_info() -> None:
     """Test the ParameterInfo class."""
     # Create a simple parameter
     param = ParameterInfo(
@@ -210,7 +218,7 @@ def test_parameter_info():
     assert complex_json["type_info"]["parameters"][0]["type_str"] == "Dict[str, int]"
 
 
-def test_return_info():
+def test_return_info() -> None:
     """Test the ReturnInfo class."""
     # Create a simple return info
     ret = ReturnInfo(
