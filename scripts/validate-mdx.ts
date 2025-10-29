@@ -24,6 +24,7 @@ interface ContentLocation {
   emoji: string;
   label: string;
   recursive: boolean;
+  ignoredChildren?: string[];
 }
 
 // Configuration for each content type
@@ -41,6 +42,7 @@ const contentLocations: ContentLocation[] = [
     emoji: "📚",
     label: "documentation files",
     recursive: true,
+    ignoredChildren: ["mirascope/v2"],
   },
   {
     dir: "content/policy",
@@ -148,7 +150,8 @@ async function validateDirectory(
   contentType: ContentType,
   relativePath = "",
   basePath?: string,
-  recursive = false
+  recursive = false,
+  ignoredChildren?: string[]
 ): Promise<{ count: number; errors: { file: string; validationErrors: ValidationError[] }[] }> {
   const errors: { file: string; validationErrors: ValidationError[] }[] = [];
   let count = 0;
@@ -175,13 +178,23 @@ async function validateDirectory(
     const itemRelativePath = path.join(relativePath, item).replace(/\\/g, "/"); // Normalize Windows paths
 
     if (fs.statSync(itemPath).isDirectory() && recursive) {
+      // Skip directories in ignoredChildren
+      if (
+        ignoredChildren?.some(
+          (ignored) => itemRelativePath === ignored || itemRelativePath.startsWith(ignored + "/")
+        )
+      ) {
+        continue;
+      }
+
       // Recursively process subdirectories if recursive is true
       const subResults = await validateDirectory(
         itemPath,
         contentType,
         itemRelativePath,
         basePath,
-        recursive
+        recursive,
+        ignoredChildren
       );
       count += subResults.count;
       errors.push(...subResults.errors);
@@ -255,7 +268,8 @@ async function validateMDX(basePath?: string): Promise<void> {
         location.type,
         "",
         basePath,
-        location.recursive
+        location.recursive,
+        location.ignoredChildren
       );
 
       errors.push(...results.errors);
