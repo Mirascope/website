@@ -3,7 +3,7 @@
 <ApiObject
   path="mirascope_v2_llm.agents.agent.Agent"
   symbolName="Agent"
-  slug="agent_cls"
+  slug="agent"
   canonicalPath="agents"
 />
 
@@ -31,6 +31,6 @@
 <ApiObject
   path="mirascope_v2_llm.agents.decorator.agent"
   symbolName="agent"
-  slug="agent"
+  slug="agent_fn"
   canonicalPath="agents"
 />
