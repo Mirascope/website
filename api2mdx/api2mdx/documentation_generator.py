@@ -274,7 +274,7 @@ class DocumentationGenerator:
         content = generate_meta_file_content(api_section)
 
         # Write to file
-        meta_path = self.output_path / "_meta.json"
+        meta_path = self.output_path / "_meta.ts"
         with open(meta_path, "w") as f:
             f.write(content)
         print(f"Generated API meta file at {meta_path}")
