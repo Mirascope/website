@@ -370,7 +370,6 @@ async function validateSingleFile(filepath: string): Promise<boolean> {
 
     const validationResult = await validateMDXContent(content, filepath, contentType);
     if (validationResult.isValid) {
-      console.log(`✅ Valid MDX: ${filepath}`);
       return true;
     } else {
       console.error(`❌ Invalid MDX: ${filepath}`);
