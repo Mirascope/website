@@ -115,8 +115,6 @@ class SectionSpec:
 
     def to_typescript(self) -> str:
         """Convert the SectionSpec to TypeScript code."""
-        import json
-
         # Convert to dict then to JSON with indentation for readability
         doc_dict = self.to_dict()
         json_str = json.dumps(doc_dict, indent=2)
@@ -130,18 +128,34 @@ class SectionSpec:
         return json_str
 
 
-def generate_meta_file_content(section: SectionSpec) -> str:
-    """Generate JSON meta file content.
+def generate_meta_file_content(section: SectionSpec, export_name: str = "apiMeta") -> str:
+    """Generate a complete TypeScript meta file content.
 
     Args:
-        section: The SectionSpec object to convert to JSON
+        section: The SectionSpec object to convert to TypeScript
+        export_name: The name to use for the exported variable (default: "apiMeta")
 
     Returns:
-        A string containing the JSON file content
+        A string containing the complete TypeScript file content
 
     """
-    # Convert to dict and output as formatted JSON
-    return json.dumps(section.to_dict(), indent=2)
+    content = []
+    # Add header
+    content.append("/**")
+    content.append(" * AUTO-GENERATED API DOCUMENTATION - DO NOT EDIT")
+    content.append(" */")
+    content.append("")
+    # Add imports
+    content.append('import type { SectionSpec } from "@/src/lib/content/spec";')
+    content.append("")
+    # Add the export declaration
+    content.append(
+        f"export const {export_name}: SectionSpec = {section.to_typescript()};"
+    )
+    content.append("")
+    # Add default export
+    content.append(f"export default {export_name};")
+    return "\n".join(content)
 
 
 def generate_meta_from_directives(
