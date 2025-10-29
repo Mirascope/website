@@ -5,7 +5,7 @@ import type { LLMContent } from "@/src/lib/content/llm-content";
 import { SITE_URL, getAllRoutes, isHiddenRoute } from "@/src/lib/router-utils";
 import type { BlogMeta } from "@/src/lib/content";
 import llmMeta from "@/content/llms/_llms-meta";
-import type { ViteDevServer } from "vite";
+import type { ViteDevServer, HmrContext } from "vite";
 
 /**
  * Main processing function that generates static JSON files for all MDX content,
@@ -132,8 +132,39 @@ export function contentPreprocessPlugin(options = { verbose: true }) {
     name: "content-preprocess-plugin",
     // Only apply during development
     apply: "serve" as const,
+
+    // Handle module resolution to prevent MDX files from being processed by Vite's HMR
+    handleHotUpdate({ file }: HmrContext) {
+      // If this is an MDX file in content, prevent default HMR
+      if (file.endsWith(".mdx") && file.includes("/content/")) {
+        // Return empty array to prevent Vite from doing HMR for this file
+        // Our watcher will handle it by regenerating JSON and triggering HMR on that
+        return [];
+      }
+      // For other files, let Vite handle them normally
+      return undefined;
+    },
+
     configureServer(server: ViteDevServer) {
       const { verbose } = options;
+
+      let hmrDebounceTimer: NodeJS.Timeout | null = null;
+
+      const debouncedHMR = () => {
+        if (hmrDebounceTimer) {
+          clearTimeout(hmrDebounceTimer);
+        }
+
+        // Wait 16ms (one frame at 60fps) to batch rapid file system events
+        hmrDebounceTimer = setTimeout(() => {
+          if (verbose) console.log(`Generated content changed, triggering HMR`);
+          server.ws.send({
+            type: "full-reload",
+            path: "*",
+          });
+          hmrDebounceTimer = null;
+        }, 16);
+      };
 
       // Run preprocessing when the server starts
       server.httpServer?.once("listening", async () => {
@@ -163,8 +194,16 @@ export function contentPreprocessPlugin(options = { verbose: true }) {
         server.watcher.add(dir);
       });
 
+      // Also watch the output directory (public/static/content) even though it's in .gitignore
+      const publicContentDir = path.join(process.cwd(), "public", "static", "content");
+      if (fs.existsSync(publicContentDir)) {
+        server.watcher.add(publicContentDir);
+        if (verbose) console.log(`Watching output directory for changes: ${publicContentDir}`);
+      }
+
       // React to content changes - these will work for any content directory
       server.watcher.on("change", async (filePath: string) => {
+        // Handle MDX/TS source file changes - regenerate JSON but don't trigger HMR
         if (
           (filePath.endsWith(".mdx") || filePath.endsWith(".ts")) &&
           filePath.includes("/content/")
@@ -174,9 +213,14 @@ export function contentPreprocessPlugin(options = { verbose: true }) {
             console.error("Error preprocessing content after file change:", error);
           });
         }
+        // Handle JSON changes - debounce and trigger HMR once after all files are done
+        else if (filePath.endsWith(".json") && filePath.includes("public/static/content")) {
+          debouncedHMR();
+        }
       });
 
       server.watcher.on("add", async (filePath: string) => {
+        // Handle new MDX/TS source files - regenerate JSON
         if (
           (filePath.endsWith(".mdx") || filePath.endsWith(".ts")) &&
           filePath.includes("/content/")
@@ -186,9 +230,14 @@ export function contentPreprocessPlugin(options = { verbose: true }) {
             console.error("Error preprocessing content after file add:", error);
           });
         }
+        // Handle new JSON files - debounce and trigger HMR
+        else if (filePath.endsWith(".json") && filePath.includes("public/static/content")) {
+          debouncedHMR();
+        }
       });
 
       server.watcher.on("unlink", async (filePath: string) => {
+        // Handle deleted MDX/TS source files - regenerate JSON
         if (
           (filePath.endsWith(".mdx") || filePath.endsWith(".ts")) &&
           filePath.includes("/content/")
@@ -197,6 +246,10 @@ export function contentPreprocessPlugin(options = { verbose: true }) {
           await preprocessContent(false).catch((error) => {
             console.error("Error preprocessing content after file delete:", error);
           });
+        }
+        // Handle deleted JSON files - debounce and trigger HMR
+        else if (filePath.endsWith(".json") && filePath.includes("public/static/content")) {
+          debouncedHMR();
         }
       });
     },
