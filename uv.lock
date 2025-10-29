@@ -1355,7 +1355,7 @@ wheels = [
 
 [[package]]
 name = "lilypad-sdk"
-version = "0.2.3"
+version = "0.10.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "anyio" },
@@ -1365,6 +1365,8 @@ dependencies = [
     { name = "mirascope" },
     { name = "opentelemetry-api" },
     { name = "opentelemetry-instrumentation" },
+    { name = "opentelemetry-propagator-b3" },
+    { name = "opentelemetry-propagator-jaeger" },
     { name = "opentelemetry-sdk" },
     { name = "orjson" },
     { name = "pydantic" },
@@ -1373,9 +1375,9 @@ dependencies = [
     { name = "sniffio" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/0e/3a/ed0f1ac8e9b4ca44ac6ddc910a5b1a77e27abd4cb79e50961daf4941afb1/lilypad_sdk-0.2.3.tar.gz", hash = "sha256:86c36483c677c91eb97a38d10d1a41d8c26b7ba427db4361606a9cd154f2c064", size = 240143 }
+sdist = { url = "https://files.pythonhosted.org/packages/ae/93/32aac9c5b596165cf88de37c9c9ff0c57e1d9e2e587fdfc4e9935bfa2b91/lilypad_sdk-0.10.4.tar.gz", hash = "sha256:971d521a1631dfa33d960bcda5dee13b3c3d98db9a8200cb2a2a4e082cbe465e", size = 464518 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/68/2f/a33c8c4007118d4f4c2ab90fa928a8aa69ee07d63a220a35c683cfc2be44/lilypad_sdk-0.2.3-py3-none-any.whl", hash = "sha256:535a0f652e77dd97b6abb3cc27fe75fd23ea33a24e274f4d58e8dcccbf649be7", size = 269093 },
+    { url = "https://files.pythonhosted.org/packages/d1/4f/79f42c4f7559b6de9de3e0b56065faf55525c29ac5ad7493e2d279863d16/lilypad_sdk-0.10.4-py3-none-any.whl", hash = "sha256:2441e707d2bc0be393cf12d5e0401cec3d9b3f46415ce31e228491040a24ce30", size = 264415 },
 ]
 
 [[package]]
@@ -1569,7 +1571,7 @@ requires-dist = [
     { name = "google-generativeai", marker = "extra == 'mirascope-all'", specifier = ">=0.4.0,<1" },
     { name = "griffe", specifier = ">=1.7.2" },
     { name = "groq", marker = "extra == 'mirascope-all'", specifier = ">=0.9.0,<1" },
-    { name = "lilypad-sdk", specifier = ">=0.2.3" },
+    { name = "lilypad-sdk", specifier = ">=0.8.1" },
     { name = "litellm", marker = "extra == 'mirascope-all'", specifier = ">=1.42.12,<2" },
     { name = "mcp", marker = "extra == 'mirascope-all'", specifier = ">=1.6.0" },
     { name = "mirascope", specifier = ">=1.25.0" },
@@ -1800,6 +1802,31 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/c3/fd/5756aea3fdc5651b572d8aef7d94d22a0a36e49c8b12fcb78cb905ba8896/opentelemetry_instrumentation-0.54b1.tar.gz", hash = "sha256:7658bf2ff914b02f246ec14779b66671508125c0e4227361e56b5ebf6cef0aec", size = 28436 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/f4/89/0790abc5d9c4fc74bd3e03cb87afe2c820b1d1a112a723c1163ef32453ee/opentelemetry_instrumentation-0.54b1-py3-none-any.whl", hash = "sha256:a4ae45f4a90c78d7006c51524f57cd5aa1231aef031eae905ee34d5423f5b198", size = 31019 },
+]
+
+[[package]]
+name = "opentelemetry-propagator-b3"
+version = "1.38.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "opentelemetry-api" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/60/04/5c13b11e7af5f9a576efa7a32c85f0b632a9676ea4ca21a2e1d90b98187d/opentelemetry_propagator_b3-1.38.0.tar.gz", hash = "sha256:16f42fa7a30a41dd710c67832e63985def8f6eddd8425becb832ba20b40595b5", size = 9577 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/eb/ce/1c03b570c13646a89f2ab67698c395f5866747ab497b1f32d76735d4f5c6/opentelemetry_propagator_b3-1.38.0-py3-none-any.whl", hash = "sha256:4b1e5b10ceec4fcc989e28b85c51acd7f39ad5b5edecbac541ff7bed8ef0d0ea", size = 8919 },
+]
+
+[[package]]
+name = "opentelemetry-propagator-jaeger"
+version = "1.38.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "opentelemetry-api" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/67/a1/97c8dc42102feafec72588643bf23a9b9e9b08b672decd57cea33a14b2a2/opentelemetry_propagator_jaeger-1.38.0.tar.gz", hash = "sha256:ee03989454f201ee6f94745d8b1df7c4976bbccc744b83516e5905331a05e404", size = 8628 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/0b/53/a72d2ea1069aee2b27f68c65e9faba752645ae90548485102053f57a102b/opentelemetry_propagator_jaeger-1.38.0-py3-none-any.whl", hash = "sha256:01c13bde5911ec28b313ca60d8058a1b4f4c3f50990ed6e0b932e72e74658f11", size = 8758 },
 ]
 
 [[package]]
