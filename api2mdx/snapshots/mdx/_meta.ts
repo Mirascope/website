@@ -9,20 +9,76 @@ export const apiMeta: SectionSpec = {
   label: "API Reference",
   children: [
     {
-      slug: "agents",
-      label: "agents",
+      slug: "calls",
+      label: "Calls",
+      children: [
+        {
+          slug: "calls",
+          label: "calls",
+        },
+      ],
     },
     {
-      slug: "calls",
-      label: "calls",
+      slug: "clients",
+      label: "clients",
     },
     {
       slug: "content",
       label: "content",
     },
     {
+      slug: "exceptions",
+      label: "exceptions",
+    },
+    {
+      slug: "formatting",
+      label: "formatting",
+    },
+    {
+      slug: "mcp",
+      label: "mcp",
+    },
+    {
+      slug: "messages",
+      label: "messages",
+    },
+    {
+      slug: "models",
+      label: "models",
+    },
+    {
+      slug: "prompts",
+      label: "Prompts",
+      children: [
+        {
+          slug: "-utils",
+          label: "_utils",
+        },
+      ],
+    },
+    {
       slug: "responses",
-      label: "responses",
+      label: "Responses",
+      children: [
+        {
+          slug: "-utils",
+          label: "_utils",
+        },
+      ],
+    },
+    {
+      slug: "tools",
+      label: "Tools",
+      children: [
+        {
+          slug: "protocols",
+          label: "protocols",
+        },
+      ],
+    },
+    {
+      slug: "types",
+      label: "types",
     },
   ],
 };
