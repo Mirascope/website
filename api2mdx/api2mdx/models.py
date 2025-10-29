@@ -6,7 +6,11 @@ to create these models from Griffe objects.
 """
 
 import logging
+import re
 from dataclasses import dataclass
+
+# Forward declaration for type hints
+from typing import TYPE_CHECKING
 
 from griffe import (
     Alias,
@@ -23,21 +27,16 @@ from api2mdx.parser import parse_type_string
 from api2mdx.type_extractor import extract_attribute_type_info, extract_type_info
 from api2mdx.type_model import ParameterInfo, ReturnInfo, SimpleType, TypeInfo
 
-# Forward declaration for type hints
-from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from api2mdx.api_discovery import ApiDocumentation
 
 from api2mdx.api_discovery import ObjectPath
-
-
 
 # Configure logging
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
-
 
 
 def extract_clean_docstring(obj: Object | Alias) -> str | None:
@@ -62,9 +61,8 @@ def extract_clean_docstring(obj: Object | Alias) -> str | None:
     text_sections = []
 
     for section in obj.docstring.parsed:
-        if section.kind == DocstringSectionKind.text:
-            if hasattr(section, "value") and section.value:
-                text_sections.append(str(section.value).strip())
+        if section.kind == DocstringSectionKind.text and hasattr(section, "value") and section.value:
+            text_sections.append(str(section.value).strip())
 
     # Join text sections with newlines
     if text_sections:
@@ -77,7 +75,6 @@ def extract_clean_docstring(obj: Object | Alias) -> str | None:
         # Only escape curly braces that might cause issues with JSX
         # This approach handles common Python f-string and formatting cases
         # For more complex cases, we might need a more sophisticated parser
-        import re
 
         # Define patterns to identify string literals and code blocks
         code_block_pattern = r"```([\s\S]*?)```"
@@ -94,7 +91,7 @@ def extract_clean_docstring(obj: Object | Alias) -> str | None:
         # Replace code blocks with placeholders
         for pattern in [code_block_pattern, backtick_pattern, *quote_patterns]:
 
-            def replace_with_placeholder(match):
+            def replace_with_placeholder(match: re.Match[str]) -> str:
                 nonlocal placeholder_counter
                 placeholder = f"__PLACEHOLDER_{placeholder_counter}__"
                 placeholders[placeholder] = match.group(0)
@@ -198,7 +195,9 @@ ProcessedObject = (
 )
 
 
-def process_function(func_obj: Function, api_docs: "ApiDocumentation") -> ProcessedFunction:
+def process_function(
+    func_obj: Function, api_docs: "ApiDocumentation"
+) -> ProcessedFunction:
     """Process a Function object into a ProcessedFunction model.
 
     Args:
@@ -261,6 +260,7 @@ def process_class(class_obj: Class, api_docs: "ApiDocumentation") -> ProcessedCl
                 base_type_info = parse_type_string(base_str)
                 # Resolve URL for the base type
                 from api2mdx.type_extractor import _resolve_url_for_type_info
+
                 _resolve_url_for_type_info(base_type_info, api_docs)
                 bases.append(base_type_info)
             except Exception as e:
@@ -295,14 +295,23 @@ def process_class(class_obj: Class, api_docs: "ApiDocumentation") -> ProcessedCl
     )
 
 
-def process_attribute(obj: Attribute, api_docs: "ApiDocumentation") -> ProcessedAttribute:
+def process_attribute(
+    obj: Attribute, api_docs: "ApiDocumentation"
+) -> ProcessedAttribute:
     name = getattr(obj, "name", "")
     type_info = extract_attribute_type_info(obj)
     descr = extract_clean_docstring(obj)
-    return ProcessedAttribute(name=name, type_info=type_info, description=descr, object_path=ObjectPath(obj.canonical_path))
+    return ProcessedAttribute(
+        name=name,
+        type_info=type_info,
+        description=descr,
+        object_path=ObjectPath(obj.canonical_path),
+    )
 
 
-def process_object(obj: Object | Alias, api_docs: "ApiDocumentation") -> ProcessedObject | None:
+def process_object(
+    obj: Object | Alias, api_docs: "ApiDocumentation"
+) -> ProcessedObject | None:
     """Process a Griffe object into the appropriate processed model.
 
     Args:
@@ -429,7 +438,7 @@ def process_alias(alias_obj: Alias, api_docs: "ApiDocumentation") -> ProcessedAl
     target_path = ""
     if hasattr(alias_obj, "target") and alias_obj.target:
         target_path = getattr(alias_obj.target, "path", str(alias_obj.target))
-    
+
     # Create and return the processed alias
     return ProcessedAlias(
         name=name,

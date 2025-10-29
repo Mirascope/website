@@ -8,7 +8,6 @@ with the specific arguments provided by the LLM.
 
 from dataclasses import dataclass
 from typing import Generic, ParamSpec
-
 from typing_extensions import TypeVar
 
 from ..content import ToolOutput

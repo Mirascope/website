@@ -1,9 +1,9 @@
 """Tests for the type_urls module and its integration with type_model and parser."""
 
-from .type_urls import BUILTIN_TYPE_URLS, get_doc_url_for_type
+from api2mdx.type_urls import BUILTIN_TYPE_URLS, get_doc_url_for_type
 
 
-def test_get_doc_url_for_type():
+def test_get_doc_url_for_type() -> None:
     """Test the get_doc_url_for_type function."""
     # Test existing builtin types
     assert get_doc_url_for_type("str") == BUILTIN_TYPE_URLS["str"]

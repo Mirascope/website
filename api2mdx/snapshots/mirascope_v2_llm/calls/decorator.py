@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any, ParamSpec, Protocol, overload
-
 from typing_extensions import TypeVar, Unpack
 
 from ..models import Client, Params

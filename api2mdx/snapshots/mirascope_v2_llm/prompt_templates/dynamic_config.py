@@ -1,7 +1,6 @@
 """The `DynamicConfig` class for LLM dynamic configuration."""
 
 from collections.abc import Sequence
-
 from typing_extensions import NotRequired, TypedDict
 
 from ..tools import ToolDef

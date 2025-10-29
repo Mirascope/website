@@ -1,14 +1,15 @@
 """Tests for the parser module."""
 
 import json
+from typing import Any
 
 import pytest
 
-from .parser import ParseError, parse_type_string
-from .type_model import EnumEncoder, GenericType, SimpleType, TypeKind
+from api2mdx.parser import ParseError, parse_type_string
+from api2mdx.type_model import EnumEncoder, GenericType, SimpleType, TypeKind
 
 
-def assert_json_equal(actual, expected):
+def assert_json_equal(actual: Any, expected: Any) -> None:  # noqa: ANN401
     """Assert that two objects are equal when serialized to JSON.
 
     Note: This ignores the doc_url field which may be set by the parser.
@@ -16,11 +17,13 @@ def assert_json_equal(actual, expected):
     actual_json = json.loads(actual.to_json())
     expected_json = json.loads(expected.to_json())
 
-    # Recursively remove doc_url from both objects for comparison
-    def remove_doc_url(obj):
+    # Recursively remove doc_url and symbol_name from both objects for comparison
+    def remove_doc_url(obj: Any) -> None:  # noqa: ANN401
         if isinstance(obj, dict):
-            if "doc_identifier" in obj:
-                obj.pop("doc_identifier")
+            if "doc_url" in obj:
+                obj.pop("doc_url")
+            if "symbol_name" in obj:
+                obj.pop("symbol_name")
             for value in list(obj.values()):
                 remove_doc_url(value)
         elif isinstance(obj, list):
@@ -35,7 +38,7 @@ def assert_json_equal(actual, expected):
     )
 
 
-def test_parse_simple_types():
+def test_parse_simple_types() -> None:
     """Test parsing simple types."""
     # Test builtin types
     for type_str in ["str", "int", "float", "bool", "None"]:
@@ -56,7 +59,7 @@ def test_parse_simple_types():
     assert_json_equal(actual, expected)
 
 
-def test_parse_generic_types():
+def test_parse_generic_types() -> None:
     """Test parsing generic types."""
     # Test simple generic type
     type_str = "List[str]"
@@ -105,7 +108,7 @@ def test_parse_generic_types():
     assert_json_equal(actual, expected)
 
 
-def test_parse_union_types():
+def test_parse_union_types() -> None:
     """Test parsing union types."""
     # Test simple union (pipe syntax)
     type_str = "str | int"
@@ -163,7 +166,7 @@ def test_parse_union_types():
     assert_json_equal(actual, expected)
 
 
-def test_parse_nested_union_types():
+def test_parse_nested_union_types() -> None:
     """Test parsing nested union types."""
     # Test union with generic type
     type_str = "str | List[int]"
@@ -243,7 +246,7 @@ def test_parse_nested_union_types():
     assert_json_equal(actual, expected)
 
 
-def test_parse_tuple_types():
+def test_parse_tuple_types() -> None:
     """Test parsing tuple types."""
     # Test tuple with Tuple[] syntax
     type_str = "Tuple[str, int]"
@@ -340,7 +343,7 @@ def test_parse_tuple_types():
     assert_json_equal(actual, expected)
 
 
-def test_parse_callable_types():
+def test_parse_callable_types() -> None:
     """Test parsing callable types."""
     # Test basic callable
     type_str = "Callable[[str, int], bool]"
@@ -448,7 +451,7 @@ def test_parse_callable_types():
     assert_json_equal(actual, expected)
 
 
-def test_error_handling():
+def test_error_handling() -> None:
     """Test error handling in the parser."""
     # Test unbalanced brackets
     with pytest.raises(ParseError):

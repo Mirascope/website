@@ -13,24 +13,21 @@ The code is organized in the following sections:
 - Directive Processing: Handling API directives and error cases
 """
 
-from pathlib import Path
+# Forward declaration for type hints
+from typing import TYPE_CHECKING
 
 from griffe import (
     Alias,
-    Extensions,
     GriffeLoader,
     Module,
     Object,
     Parser,
 )
 
+from api2mdx.api_discovery import RawDirective
 from api2mdx.mdx_renderer import (
     render_object,
 )
-from api2mdx.api_discovery import RawDirective
-
-# Forward declaration for type hints
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from api2mdx.api_discovery import ApiDocumentation
@@ -106,9 +103,8 @@ def render_directive(
 
         # Find the starting index - skip parts that match the loaded module path
         start_index = 0
-        if len(path_parts) >= len(module_parts):
-            if path_parts[: len(module_parts)] == module_parts:
-                start_index = len(module_parts)
+        if path_parts[: len(module_parts)] == module_parts:
+            start_index = len(module_parts)
 
         # Navigate from the starting index
         for i, part in enumerate(path_parts[start_index:], start_index):

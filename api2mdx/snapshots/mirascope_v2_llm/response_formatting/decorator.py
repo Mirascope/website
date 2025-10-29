@@ -2,7 +2,6 @@
 
 from collections.abc import Callable, Sequence
 from typing import Any, Literal, Protocol, TypeVar, overload
-
 from typing_extensions import dataclass_transform
 
 from ..content import Content

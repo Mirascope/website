@@ -9,8 +9,8 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any
 
-from api2mdx.type_model import EnumEncoder, TypeInfo, ParameterInfo, ReturnInfo
 from api2mdx.models import ProcessedAttribute
+from api2mdx.type_model import EnumEncoder, ParameterInfo, ReturnInfo, TypeInfo
 
 
 class ApiTypeKind(Enum):
