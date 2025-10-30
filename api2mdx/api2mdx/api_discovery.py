@@ -712,14 +712,18 @@ def discover_module_pages(
     )
     pages = [module_page]
 
-    # Get all exports from this module
     export_names = _extract_all_exports(module)
 
     if export_names is None:
         raise ValueError(f"Module {module.canonical_path} has no __all__")
 
-    # Process each export
+    seen_exports: set[str] = set()
+
     for export_name in export_names:
+        if export_name in seen_exports:
+            print(f"⚠️  Warning: Module {module.canonical_path} has duplicate export in __all__: {export_name}")
+            continue
+        seen_exports.add(export_name)
         if export_name not in module.members:
             raise ValueError(
                 f"Export '{export_name}' in __all__ not found in module {module.canonical_path}"

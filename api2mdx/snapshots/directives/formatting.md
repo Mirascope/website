@@ -15,13 +15,6 @@
 />
 
 <ApiObject
-  path="mirascope.llm.formatting.types.FormattableT"
-  symbolName="FormattableT"
-  slug="formattable-t"
-  canonicalPath="formatting"
-/>
-
-<ApiObject
   path="mirascope.llm.formatting.types.FormattingMode"
   symbolName="FormattingMode"
   slug="formatting-mode"
