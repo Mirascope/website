@@ -14,13 +14,7 @@ export const apiMeta: SectionSpec = {
     },
     {
       slug: "calls",
-      label: "Calls",
-      children: [
-        {
-          slug: "calls",
-          label: "calls",
-        },
-      ],
+      label: "calls",
     },
     {
       slug: "clients",

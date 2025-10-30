@@ -1,10 +1,25 @@
 # calls
 
-<Directive path="mirascope.llm.calls.calls.AsyncCall" />
+<ApiObject
+  path="mirascope.llm.calls.calls.AsyncCall"
+  symbolName="AsyncCall"
+  slug="async-call"
+  canonicalPath="calls"
+/>
 
-<Directive path="mirascope.llm.calls.calls.AsyncContextCall" />
+<ApiObject
+  path="mirascope.llm.calls.calls.AsyncContextCall"
+  symbolName="AsyncContextCall"
+  slug="async-context-call"
+  canonicalPath="calls"
+/>
 
-<Directive path="mirascope.llm.calls.calls.Call" />
+<ApiObject
+  path="mirascope.llm.calls.calls.Call"
+  symbolName="Call"
+  slug="call_cls"
+  canonicalPath="calls"
+/>
 
 <ApiObject
   path="mirascope.llm.calls.decorator.CallDecorator"
@@ -13,11 +28,16 @@
   canonicalPath="calls"
 />
 
-<Directive path="mirascope.llm.calls.calls.ContextCall" />
+<ApiObject
+  path="mirascope.llm.calls.calls.ContextCall"
+  symbolName="ContextCall"
+  slug="context-call"
+  canonicalPath="calls"
+/>
 
 <ApiObject
-  path="mirascope.llm.calls.calls"
-  symbolName="calls"
-  slug="calls_mod"
+  path="mirascope.llm.calls.decorator.call"
+  symbolName="call"
+  slug="call"
   canonicalPath="calls"
 />
