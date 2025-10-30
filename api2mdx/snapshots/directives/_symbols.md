@@ -384,8 +384,6 @@
 
 <SymbolRef name="exceptions" path="index.mdx" />
 
-<SymbolRef name="extract_serialized_json" path="responses/-utils.mdx" />
-
 <SymbolRef name="float" path="https://docs.python.org/3/library/functions.html#float.mdx" />
 
 <SymbolRef name="format" path="formatting.mdx" />
@@ -399,12 +397,6 @@
 <SymbolRef name="get_model_from_context" path="models.mdx" />
 
 <SymbolRef name="int" path="https://docs.python.org/3/library/functions.html#int.mdx" />
-
-<SymbolRef name="is_async_promptable" path="prompts/-utils.mdx" />
-
-<SymbolRef name="is_context_promptable" path="prompts/-utils.mdx" />
-
-<SymbolRef name="is_messages" path="prompts/-utils.mdx" />
 
 <SymbolRef name="list" path="https://docs.python.org/3/library/stdtypes.html#list.mdx" />
 
@@ -421,8 +413,6 @@
 <SymbolRef name="namedtuple" path="https://docs.python.org/3/library/collections.html#collections.namedtuple.mdx" />
 
 <SymbolRef name="object" path="https://docs.python.org/3/library/functions.html#object.mdx" />
-
-<SymbolRef name="promote_to_messages" path="prompts/-utils.mdx" />
 
 <SymbolRef name="prompt" path="prompts.mdx" />
 

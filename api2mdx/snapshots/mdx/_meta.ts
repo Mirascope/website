@@ -48,23 +48,11 @@ export const apiMeta: SectionSpec = {
     },
     {
       slug: "prompts",
-      label: "Prompts",
-      children: [
-        {
-          slug: "-utils",
-          label: "_utils",
-        },
-      ],
+      label: "prompts",
     },
     {
       slug: "responses",
-      label: "Responses",
-      children: [
-        {
-          slug: "-utils",
-          label: "_utils",
-        },
-      ],
+      label: "responses",
     },
     {
       slug: "tools",
