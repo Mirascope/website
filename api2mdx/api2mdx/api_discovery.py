@@ -25,13 +25,18 @@ ObjectPath = NewType("ObjectPath", str)
 
 
 class Slug(str):
-    """A filesystem-safe slug matching [a-z0-9-_]* pattern."""
+    """A filesystem-safe slug matching [a-z0-9][a-z0-9-_]* pattern.
 
-    _pattern = re.compile(r"^[a-z0-9-_]+$")
+    Must start with an alphanumeric character (no leading hyphens or underscores).
+    """
+
+    _pattern = re.compile(r"^[a-z0-9][a-z0-9-_]*$")
 
     def __new__(cls, value: str) -> "Slug":
         if not cls._pattern.match(value):
-            raise ValueError(f"Invalid slug '{value}': must match [a-z0-9-_]*")
+            raise ValueError(
+                f"Invalid slug '{value}': must start with [a-z0-9] and contain only [a-z0-9-_]"
+            )
         return super().__new__(cls, value)
 
     @classmethod
@@ -723,6 +728,10 @@ def discover_module_pages(
         member = _resolve_member(module, export_name)
 
         if isinstance(member, Module):
+            # Skip private modules (starting with _)
+            if export_name.startswith("_"):
+                continue
+
             # This is a submodule - give it dedicated page(s) (recursive)
             submodule_base_path = (
                 f"{base_path}/{export_name}" if base_path else export_name
