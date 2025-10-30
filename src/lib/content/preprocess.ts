@@ -358,21 +358,12 @@ export class ContentPreprocessor {
       content: fullContent,
     };
 
-    // Create output directory if needed
     const outputDir = path.dirname(path.join(outputBase, `${contentPath.subpath}.json`));
     fs.mkdirSync(outputDir, { recursive: true });
 
     const outputPath = path.join(outputBase, `${contentPath.subpath}.json`);
-    if (product && product.version == "v2") {
-      console.log("Processing v2 mdx: ", filePath, basePath, outputPath);
-    }
 
-    // Write content file with metadata
-    fs.writeFileSync(
-      outputPath,
-
-      JSON.stringify(contentObject)
-    );
+    fs.writeFileSync(outputPath, JSON.stringify(contentObject));
   }
 
   /**

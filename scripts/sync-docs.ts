@@ -73,6 +73,30 @@ async function syncDocs(): Promise<void> {
   }
 
   console.log("✓ Docs sync complete");
+
+  // Generate API docs using api2mdx
+  console.log("\nGenerating API documentation with api2mdx...");
+  const api2mdxDir = resolve(process.cwd(), "api2mdx");
+  const sourcePath = resolve(CACHE_DIR, "python");
+  const apiOutputPath = resolve(DEST_BASE, "api");
+
+  run(
+    "uv",
+    [
+      "run",
+      "-m",
+      "api2mdx.main",
+      "--source-path",
+      sourcePath,
+      "--package",
+      "mirascope.llm",
+      "--output",
+      apiOutputPath,
+    ],
+    api2mdxDir
+  );
+
+  console.log("✓ API documentation generation complete");
 }
 
 syncDocs().catch((error) => {
