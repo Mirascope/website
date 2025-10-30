@@ -24,6 +24,8 @@ class DocSpec:
         children: Child items (if this is a folder)
         has_extractable_snippets: Flag to indicate the doc has code snippets to extract
         weight: Search weight for this item (multiplicative with parent weights)
+        has_content: If true, this item has its own content page (not just a folder).
+                     Defaults to true if no children, false if has children.
 
     """
 
@@ -34,6 +36,7 @@ class DocSpec:
         children: list["DocSpec"] | None = None,
         has_extractable_snippets: bool | None = None,
         weight: float | None = None,
+        has_content: bool | None = None,
     ) -> None:
         """Initialize a DocSpec.
 
@@ -43,6 +46,8 @@ class DocSpec:
             children: Child items (if this is a folder)
             has_extractable_snippets: Whether the item has extractable code snippets
             weight: Search weight for this item (multiplicative with parent weights)
+            has_content: If true, this item has its own content page (not just a folder).
+                        Defaults to true if no children, false if has children.
 
         """
         self.slug = slug
@@ -50,6 +55,7 @@ class DocSpec:
         self.children = children
         self.has_extractable_snippets = has_extractable_snippets
         self.weight = weight
+        self.has_content = has_content
 
     def to_dict(self) -> dict[str, Any]:
         """Convert to a dictionary for serialization to TypeScript."""
@@ -60,6 +66,9 @@ class DocSpec:
 
         if self.weight is not None:
             result["weight"] = self.weight
+
+        if self.has_content is not None:
+            result["hasContent"] = self.has_content
 
         if self.children is not None:
             result["children"] = [child.to_dict() for child in self.children]
@@ -225,21 +234,30 @@ def _tree_to_docspecs(tree: dict[str, Any], weight: float | None) -> list[DocSpe
         files = node.get("_files", [])
         children_tree = node.get("_children", {})
 
-        if children_tree:
-            # This is a directory with children
-            children = _tree_to_docspecs(children_tree, weight)
-            specs.append(
-                DocSpec(
-                    slug=name, label=titleify(name), children=children, weight=weight
-                )
-            )
-        elif files:
-            # This is a file - there should be exactly one file per name
+        # Determine label: use API directive name if we have a file, else titleify the name
+        if files:
             assert len(files) == 1, (
                 f"Expected exactly one file for {name}, got {len(files)}"
             )
-            api_directive = files[0]
-            specs.append(DocSpec(slug=name, label=api_directive.name, weight=weight))
+            label = files[0].name
+        else:
+            label = titleify(name)
+
+        # Process children if any
+        children = _tree_to_docspecs(children_tree, weight) if children_tree else None
+
+        # Determine has_content: explicit True for hybrid items (has both file and children)
+        has_content = True if (files and children) else None
+
+        specs.append(
+            DocSpec(
+                slug=name,
+                label=label,
+                children=children,
+                weight=weight,
+                has_content=has_content,
+            )
+        )
 
     return specs
 
@@ -284,8 +302,13 @@ def generate_meta_from_organized_files(
         if "/" not in dir_name:
             child_specs = create_doc_specs(files)
             if child_specs:
+                # Check if there's also a root file with this name (hybrid case)
+                has_root_file = any(item.slug == dir_name for item in root_items)
                 child = DocSpec(
-                    slug=dir_name, label=titleify(dir_name), children=child_specs
+                    slug=dir_name,
+                    label=titleify(dir_name),
+                    children=child_specs,
+                    has_content=True if has_root_file else None,
                 )
                 children.append(child)
             continue
@@ -304,6 +327,9 @@ def generate_meta_from_organized_files(
                 slug=parent_slug, label=titleify(parent_slug), children=[]
             )
             children.append(parent_item)
+        else:
+            # Parent already exists (from root files) - mark it as having content
+            parent_item.has_content = True
 
         # Ensure parent has children list
         if parent_item.children is None:

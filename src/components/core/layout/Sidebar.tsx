@@ -11,6 +11,7 @@ export interface SidebarItem {
   label: string; // Display label for sidebar
   routePath?: string; // Optional explicit route path (overrides constructed path)
   items?: Record<string, SidebarItem>; // Nested items
+  hasContent: boolean; // If true, this item has its own content page (not just a folder)
 }
 
 /**
@@ -132,6 +133,43 @@ const GroupLabel = ({ label }: { label: string }) => {
 };
 
 /**
+ * Chevron button component for expand/collapse
+ */
+const ChevronButton = ({ isExpanded, onClick }: { isExpanded: boolean; onClick: () => void }) => {
+  return (
+    <button
+      onClick={onClick}
+      className={cn("mr-1 flex h-5 w-5 items-center justify-center")}
+      aria-label={isExpanded ? "Collapse" : "Expand"}
+    >
+      {isExpanded ? (
+        <ChevronDown size={16} className="text-muted-foreground" />
+      ) : (
+        <ChevronRight size={16} className="text-muted-foreground" />
+      )}
+    </button>
+  );
+};
+
+/**
+ * Hook for managing expansion state with auto-expand on active
+ */
+const useExpansion = (isActive: boolean) => {
+  const [isExpanded, setIsExpanded] = React.useState(isActive);
+
+  // Auto-expand when active
+  React.useEffect(() => {
+    if (isActive && !isExpanded) {
+      setIsExpanded(true);
+    }
+  }, [isActive]);
+
+  const toggleExpand = () => setIsExpanded(!isExpanded);
+
+  return { isExpanded, toggleExpand };
+};
+
+/**
  * Component for rendering nested items (folders)
  */
 interface NestedItemsProps {
@@ -142,7 +180,7 @@ interface NestedItemsProps {
 }
 
 /**
- * Regular item component (without nested items)
+ * Regular item component (with optional nested items for hybrid items)
  */
 const SidebarItemLink = ({
   itemSlug,
@@ -164,19 +202,69 @@ const SidebarItemLink = ({
   // Determine if this item is active
   const isActive = isActivePath(logicalPath, item.routePath);
 
+  // Check if this item has children (hybrid case)
+  const hasChildren = item.items && Object.keys(item.items).length > 0;
+  const { isExpanded, toggleExpand } = useExpansion(isActive);
+
+  if (!hasChildren) {
+    // Simple link without children
+    return (
+      <SidebarLink
+        to={navigationUrl}
+        isActive={isActive}
+        className=""
+        style={{
+          paddingLeft: `${0.75 + indentLevel * 0.5}rem`,
+          paddingRight: "0.75rem",
+          flex: 1,
+        }}
+      >
+        {item.label}
+      </SidebarLink>
+    );
+  }
+
+  // Hybrid: link with children
   return (
-    <SidebarLink
-      to={navigationUrl}
-      isActive={isActive}
-      className=""
-      style={{
-        paddingLeft: `${0.75 + indentLevel * 0.5}rem`,
-        paddingRight: "0.75rem",
-        flex: 1,
-      }}
-    >
-      {item.label}
-    </SidebarLink>
+    <div>
+      <div className="flex items-center">
+        <SidebarLink
+          to={navigationUrl}
+          isActive={isActive}
+          className="flex items-center gap-1"
+          style={{
+            paddingLeft: `${0.75 + indentLevel * 0.5}rem`,
+            paddingRight: "0.75rem",
+            flex: 1,
+          }}
+        >
+          <span>{item.label}</span>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              toggleExpand();
+            }}
+            className="flex flex-shrink-0 items-center justify-center"
+            aria-label={isExpanded ? "Collapse" : "Expand"}
+          >
+            {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+          </button>
+        </SidebarLink>
+      </div>
+
+      {/* Render nested items if expanded */}
+      {isExpanded && (
+        <div className="pt-1 pb-2">
+          <NestedItems
+            items={item.items!}
+            basePath={logicalPath}
+            isActivePath={isActivePath}
+            indentLevel={indentLevel + 1}
+          />
+        </div>
+      )}
+    </div>
   );
 };
 
@@ -204,21 +292,8 @@ const NestedFolder = ({
   // Determine if this folder or any of its children are active
   const isActive = isActivePath(logicalPath, item.routePath);
 
-  // State to track if the folder is expanded
-  const [isExpanded, setIsExpanded] = React.useState(isActive);
-
-  // Auto-expand only when a folder becomes active, not on every render
-  React.useEffect(() => {
-    // Only auto-expand when the item first becomes active
-    // Don't re-expand after user explicitly closes it
-    if (isActive && !isExpanded) {
-      setIsExpanded(true);
-    }
-    // Omitting isExpanded from dependencies to prevent re-expanding after user closes
-  }, [isActive]);
-
-  // Toggle folder expansion
-  const toggleExpand = () => setIsExpanded(!isExpanded);
+  // Use expansion hook
+  const { isExpanded, toggleExpand } = useExpansion(isActive);
 
   return (
     <div>
@@ -228,18 +303,7 @@ const NestedFolder = ({
           isActive ? "text-accent" : "text-muted-foreground"
         )}
       >
-        {/* Chevron icon button */}
-        <button
-          onClick={toggleExpand}
-          className={cn("mr-1 flex h-5 w-5 items-center justify-center")}
-          aria-label={isExpanded ? "Collapse" : "Expand"}
-        >
-          {isExpanded ? (
-            <ChevronDown size={16} className="text-muted-foreground" />
-          ) : (
-            <ChevronRight size={16} className="text-muted-foreground" />
-          )}
-        </button>
+        <ChevronButton isExpanded={isExpanded} onClick={toggleExpand} />
 
         {/* Folder label button */}
         <button
@@ -270,7 +334,7 @@ const NestedFolder = ({
 };
 
 /**
- * Individual nested item component - renders either a folder or a link
+ * Individual nested item component - renders either a folder (no content) or a link (with optional children)
  */
 const NestedItem = ({
   itemSlug,
@@ -285,11 +349,10 @@ const NestedItem = ({
   isActivePath: (path: string, routePath?: string) => boolean;
   indentLevel: number;
 }) => {
-  // Determine if this is a folder (has nested items)
-  const hasNestedItems = Object.keys(item.items || {}).length > 0;
-
-  return hasNestedItems ? (
-    <NestedFolder
+  // Items with content render as links (even if they have children)
+  // Items without content render as pure folders
+  return item.hasContent ? (
+    <SidebarItemLink
       itemSlug={itemSlug}
       item={item}
       basePath={basePath}
@@ -297,7 +360,7 @@ const NestedItem = ({
       indentLevel={indentLevel}
     />
   ) : (
-    <SidebarItemLink
+    <NestedFolder
       itemSlug={itemSlug}
       item={item}
       basePath={basePath}
