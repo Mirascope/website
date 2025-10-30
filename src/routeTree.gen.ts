@@ -8,346 +8,140 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-// Import Routes
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as RouterWaitlistRouteImport } from './routes/router-waitlist'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as LlmsFullRouteImport } from './routes/llms-full'
+import { Route as DevRouteImport } from './routes/dev'
+import { Route as R404RouteImport } from './routes/404'
+import { Route as CatchallRouteImport } from './routes/$catchall'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as TermsIndexRouteImport } from './routes/terms/index'
+import { Route as DocsIndexRouteImport } from './routes/docs.index'
+import { Route as DevIndexRouteImport } from './routes/dev/index'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
+import { Route as TermsUseRouteImport } from './routes/terms/use'
+import { Route as TermsServiceRouteImport } from './routes/terms/service'
+import { Route as DocsSplatRouteImport } from './routes/docs.$'
+import { Route as DevSocialCardRouteImport } from './routes/dev/social-card'
+import { Route as DevLayoutTestRouteImport } from './routes/dev/layout-test'
+import { Route as DevAuditMetadataRouteImport } from './routes/dev/audit-metadata'
+import { Route as DevSlugRouteImport } from './routes/dev.$slug'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as DocsProductLlmsFullRouteImport } from './routes/docs.$product.llms-full'
+import { Route as DocsMirascopeV2LlmsFullRouteImport } from './routes/docs.mirascope.v2.llms-full'
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as RouterWaitlistImport } from './routes/router-waitlist'
-import { Route as PrivacyImport } from './routes/privacy'
-import { Route as PricingImport } from './routes/pricing'
-import { Route as LlmsFullImport } from './routes/llms-full'
-import { Route as DevImport } from './routes/dev'
-import { Route as R404Import } from './routes/404'
-import { Route as CatchallImport } from './routes/$catchall'
-import { Route as IndexImport } from './routes/index'
-import { Route as TermsIndexImport } from './routes/terms/index'
-import { Route as DocsIndexImport } from './routes/docs.index'
-import { Route as DevIndexImport } from './routes/dev/index'
-import { Route as BlogIndexImport } from './routes/blog.index'
-import { Route as TermsUseImport } from './routes/terms/use'
-import { Route as TermsServiceImport } from './routes/terms/service'
-import { Route as DocsSplatImport } from './routes/docs.$'
-import { Route as DevSocialCardImport } from './routes/dev/social-card'
-import { Route as DevLayoutTestImport } from './routes/dev/layout-test'
-import { Route as DevAuditMetadataImport } from './routes/dev/audit-metadata'
-import { Route as DevSlugImport } from './routes/dev.$slug'
-import { Route as BlogSlugImport } from './routes/blog.$slug'
-import { Route as DocsProductLlmsFullImport } from './routes/docs.$product.llms-full'
-import { Route as DocsMirascopeV2LlmsFullImport } from './routes/docs.mirascope.v2.llms-full'
-
-// Create/Update Routes
-
-const RouterWaitlistRoute = RouterWaitlistImport.update({
+const RouterWaitlistRoute = RouterWaitlistRouteImport.update({
   id: '/router-waitlist',
   path: '/router-waitlist',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const PrivacyRoute = PrivacyImport.update({
+const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const PricingRoute = PricingImport.update({
+const PricingRoute = PricingRouteImport.update({
   id: '/pricing',
   path: '/pricing',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const LlmsFullRoute = LlmsFullImport.update({
+const LlmsFullRoute = LlmsFullRouteImport.update({
   id: '/llms-full',
   path: '/llms-full',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const DevRoute = DevImport.update({
+const DevRoute = DevRouteImport.update({
   id: '/dev',
   path: '/dev',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const R404Route = R404Import.update({
+const R404Route = R404RouteImport.update({
   id: '/404',
   path: '/404',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const CatchallRoute = CatchallImport.update({
+const CatchallRoute = CatchallRouteImport.update({
   id: '/$catchall',
   path: '/$catchall',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const IndexRoute = IndexImport.update({
+const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const TermsIndexRoute = TermsIndexImport.update({
+const TermsIndexRoute = TermsIndexRouteImport.update({
   id: '/terms/',
   path: '/terms/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const DocsIndexRoute = DocsIndexImport.update({
+const DocsIndexRoute = DocsIndexRouteImport.update({
   id: '/docs/',
   path: '/docs/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const DevIndexRoute = DevIndexImport.update({
+const DevIndexRoute = DevIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => DevRoute,
 } as any)
-
-const BlogIndexRoute = BlogIndexImport.update({
+const BlogIndexRoute = BlogIndexRouteImport.update({
   id: '/blog/',
   path: '/blog/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const TermsUseRoute = TermsUseImport.update({
+const TermsUseRoute = TermsUseRouteImport.update({
   id: '/terms/use',
   path: '/terms/use',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const TermsServiceRoute = TermsServiceImport.update({
+const TermsServiceRoute = TermsServiceRouteImport.update({
   id: '/terms/service',
   path: '/terms/service',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const DocsSplatRoute = DocsSplatImport.update({
+const DocsSplatRoute = DocsSplatRouteImport.update({
   id: '/docs/$',
   path: '/docs/$',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const DevSocialCardRoute = DevSocialCardImport.update({
+const DevSocialCardRoute = DevSocialCardRouteImport.update({
   id: '/social-card',
   path: '/social-card',
   getParentRoute: () => DevRoute,
 } as any)
-
-const DevLayoutTestRoute = DevLayoutTestImport.update({
+const DevLayoutTestRoute = DevLayoutTestRouteImport.update({
   id: '/layout-test',
   path: '/layout-test',
   getParentRoute: () => DevRoute,
 } as any)
-
-const DevAuditMetadataRoute = DevAuditMetadataImport.update({
+const DevAuditMetadataRoute = DevAuditMetadataRouteImport.update({
   id: '/audit-metadata',
   path: '/audit-metadata',
   getParentRoute: () => DevRoute,
 } as any)
-
-const DevSlugRoute = DevSlugImport.update({
+const DevSlugRoute = DevSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => DevRoute,
 } as any)
-
-const BlogSlugRoute = BlogSlugImport.update({
+const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/blog/$slug',
   path: '/blog/$slug',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const DocsProductLlmsFullRoute = DocsProductLlmsFullImport.update({
+const DocsProductLlmsFullRoute = DocsProductLlmsFullRouteImport.update({
   id: '/docs/$product/llms-full',
   path: '/docs/$product/llms-full',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const DocsMirascopeV2LlmsFullRoute = DocsMirascopeV2LlmsFullImport.update({
+const DocsMirascopeV2LlmsFullRoute = DocsMirascopeV2LlmsFullRouteImport.update({
   id: '/docs/mirascope/v2/llms-full',
   path: '/docs/mirascope/v2/llms-full',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-// Populate the FileRoutesByPath interface
-
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/$catchall': {
-      id: '/$catchall'
-      path: '/$catchall'
-      fullPath: '/$catchall'
-      preLoaderRoute: typeof CatchallImport
-      parentRoute: typeof rootRoute
-    }
-    '/404': {
-      id: '/404'
-      path: '/404'
-      fullPath: '/404'
-      preLoaderRoute: typeof R404Import
-      parentRoute: typeof rootRoute
-    }
-    '/dev': {
-      id: '/dev'
-      path: '/dev'
-      fullPath: '/dev'
-      preLoaderRoute: typeof DevImport
-      parentRoute: typeof rootRoute
-    }
-    '/llms-full': {
-      id: '/llms-full'
-      path: '/llms-full'
-      fullPath: '/llms-full'
-      preLoaderRoute: typeof LlmsFullImport
-      parentRoute: typeof rootRoute
-    }
-    '/pricing': {
-      id: '/pricing'
-      path: '/pricing'
-      fullPath: '/pricing'
-      preLoaderRoute: typeof PricingImport
-      parentRoute: typeof rootRoute
-    }
-    '/privacy': {
-      id: '/privacy'
-      path: '/privacy'
-      fullPath: '/privacy'
-      preLoaderRoute: typeof PrivacyImport
-      parentRoute: typeof rootRoute
-    }
-    '/router-waitlist': {
-      id: '/router-waitlist'
-      path: '/router-waitlist'
-      fullPath: '/router-waitlist'
-      preLoaderRoute: typeof RouterWaitlistImport
-      parentRoute: typeof rootRoute
-    }
-    '/blog/$slug': {
-      id: '/blog/$slug'
-      path: '/blog/$slug'
-      fullPath: '/blog/$slug'
-      preLoaderRoute: typeof BlogSlugImport
-      parentRoute: typeof rootRoute
-    }
-    '/dev/$slug': {
-      id: '/dev/$slug'
-      path: '/$slug'
-      fullPath: '/dev/$slug'
-      preLoaderRoute: typeof DevSlugImport
-      parentRoute: typeof DevImport
-    }
-    '/dev/audit-metadata': {
-      id: '/dev/audit-metadata'
-      path: '/audit-metadata'
-      fullPath: '/dev/audit-metadata'
-      preLoaderRoute: typeof DevAuditMetadataImport
-      parentRoute: typeof DevImport
-    }
-    '/dev/layout-test': {
-      id: '/dev/layout-test'
-      path: '/layout-test'
-      fullPath: '/dev/layout-test'
-      preLoaderRoute: typeof DevLayoutTestImport
-      parentRoute: typeof DevImport
-    }
-    '/dev/social-card': {
-      id: '/dev/social-card'
-      path: '/social-card'
-      fullPath: '/dev/social-card'
-      preLoaderRoute: typeof DevSocialCardImport
-      parentRoute: typeof DevImport
-    }
-    '/docs/$': {
-      id: '/docs/$'
-      path: '/docs/$'
-      fullPath: '/docs/$'
-      preLoaderRoute: typeof DocsSplatImport
-      parentRoute: typeof rootRoute
-    }
-    '/terms/service': {
-      id: '/terms/service'
-      path: '/terms/service'
-      fullPath: '/terms/service'
-      preLoaderRoute: typeof TermsServiceImport
-      parentRoute: typeof rootRoute
-    }
-    '/terms/use': {
-      id: '/terms/use'
-      path: '/terms/use'
-      fullPath: '/terms/use'
-      preLoaderRoute: typeof TermsUseImport
-      parentRoute: typeof rootRoute
-    }
-    '/blog/': {
-      id: '/blog/'
-      path: '/blog'
-      fullPath: '/blog'
-      preLoaderRoute: typeof BlogIndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/dev/': {
-      id: '/dev/'
-      path: '/'
-      fullPath: '/dev/'
-      preLoaderRoute: typeof DevIndexImport
-      parentRoute: typeof DevImport
-    }
-    '/docs/': {
-      id: '/docs/'
-      path: '/docs'
-      fullPath: '/docs'
-      preLoaderRoute: typeof DocsIndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/terms/': {
-      id: '/terms/'
-      path: '/terms'
-      fullPath: '/terms'
-      preLoaderRoute: typeof TermsIndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/docs/$product/llms-full': {
-      id: '/docs/$product/llms-full'
-      path: '/docs/$product/llms-full'
-      fullPath: '/docs/$product/llms-full'
-      preLoaderRoute: typeof DocsProductLlmsFullImport
-      parentRoute: typeof rootRoute
-    }
-    '/docs/mirascope/v2/llms-full': {
-      id: '/docs/mirascope/v2/llms-full'
-      path: '/docs/mirascope/v2/llms-full'
-      fullPath: '/docs/mirascope/v2/llms-full'
-      preLoaderRoute: typeof DocsMirascopeV2LlmsFullImport
-      parentRoute: typeof rootRoute
-    }
-  }
-}
-
-// Create and export the route tree
-
-interface DevRouteChildren {
-  DevSlugRoute: typeof DevSlugRoute
-  DevAuditMetadataRoute: typeof DevAuditMetadataRoute
-  DevLayoutTestRoute: typeof DevLayoutTestRoute
-  DevSocialCardRoute: typeof DevSocialCardRoute
-  DevIndexRoute: typeof DevIndexRoute
-}
-
-const DevRouteChildren: DevRouteChildren = {
-  DevSlugRoute: DevSlugRoute,
-  DevAuditMetadataRoute: DevAuditMetadataRoute,
-  DevLayoutTestRoute: DevLayoutTestRoute,
-  DevSocialCardRoute: DevSocialCardRoute,
-  DevIndexRoute: DevIndexRoute,
-}
-
-const DevRouteWithChildren = DevRoute._addFileChildren(DevRouteChildren)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -373,7 +167,6 @@ export interface FileRoutesByFullPath {
   '/docs/$product/llms-full': typeof DocsProductLlmsFullRoute
   '/docs/mirascope/v2/llms-full': typeof DocsMirascopeV2LlmsFullRoute
 }
-
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$catchall': typeof CatchallRoute
@@ -397,9 +190,8 @@ export interface FileRoutesByTo {
   '/docs/$product/llms-full': typeof DocsProductLlmsFullRoute
   '/docs/mirascope/v2/llms-full': typeof DocsMirascopeV2LlmsFullRoute
 }
-
 export interface FileRoutesById {
-  __root__: typeof rootRoute
+  __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/$catchall': typeof CatchallRoute
   '/404': typeof R404Route
@@ -423,7 +215,6 @@ export interface FileRoutesById {
   '/docs/$product/llms-full': typeof DocsProductLlmsFullRoute
   '/docs/mirascope/v2/llms-full': typeof DocsMirascopeV2LlmsFullRoute
 }
-
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
@@ -498,7 +289,6 @@ export interface FileRouteTypes {
     | '/docs/mirascope/v2/llms-full'
   fileRoutesById: FileRoutesById
 }
-
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CatchallRoute: typeof CatchallRoute
@@ -519,6 +309,183 @@ export interface RootRouteChildren {
   DocsMirascopeV2LlmsFullRoute: typeof DocsMirascopeV2LlmsFullRoute
 }
 
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/router-waitlist': {
+      id: '/router-waitlist'
+      path: '/router-waitlist'
+      fullPath: '/router-waitlist'
+      preLoaderRoute: typeof RouterWaitlistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/llms-full': {
+      id: '/llms-full'
+      path: '/llms-full'
+      fullPath: '/llms-full'
+      preLoaderRoute: typeof LlmsFullRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dev': {
+      id: '/dev'
+      path: '/dev'
+      fullPath: '/dev'
+      preLoaderRoute: typeof DevRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/404': {
+      id: '/404'
+      path: '/404'
+      fullPath: '/404'
+      preLoaderRoute: typeof R404RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$catchall': {
+      id: '/$catchall'
+      path: '/$catchall'
+      fullPath: '/$catchall'
+      preLoaderRoute: typeof CatchallRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms/': {
+      id: '/terms/'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/': {
+      id: '/docs/'
+      path: '/docs'
+      fullPath: '/docs'
+      preLoaderRoute: typeof DocsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dev/': {
+      id: '/dev/'
+      path: '/'
+      fullPath: '/dev/'
+      preLoaderRoute: typeof DevIndexRouteImport
+      parentRoute: typeof DevRoute
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms/use': {
+      id: '/terms/use'
+      path: '/terms/use'
+      fullPath: '/terms/use'
+      preLoaderRoute: typeof TermsUseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms/service': {
+      id: '/terms/service'
+      path: '/terms/service'
+      fullPath: '/terms/service'
+      preLoaderRoute: typeof TermsServiceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/$': {
+      id: '/docs/$'
+      path: '/docs/$'
+      fullPath: '/docs/$'
+      preLoaderRoute: typeof DocsSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dev/social-card': {
+      id: '/dev/social-card'
+      path: '/social-card'
+      fullPath: '/dev/social-card'
+      preLoaderRoute: typeof DevSocialCardRouteImport
+      parentRoute: typeof DevRoute
+    }
+    '/dev/layout-test': {
+      id: '/dev/layout-test'
+      path: '/layout-test'
+      fullPath: '/dev/layout-test'
+      preLoaderRoute: typeof DevLayoutTestRouteImport
+      parentRoute: typeof DevRoute
+    }
+    '/dev/audit-metadata': {
+      id: '/dev/audit-metadata'
+      path: '/audit-metadata'
+      fullPath: '/dev/audit-metadata'
+      preLoaderRoute: typeof DevAuditMetadataRouteImport
+      parentRoute: typeof DevRoute
+    }
+    '/dev/$slug': {
+      id: '/dev/$slug'
+      path: '/$slug'
+      fullPath: '/dev/$slug'
+      preLoaderRoute: typeof DevSlugRouteImport
+      parentRoute: typeof DevRoute
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/$product/llms-full': {
+      id: '/docs/$product/llms-full'
+      path: '/docs/$product/llms-full'
+      fullPath: '/docs/$product/llms-full'
+      preLoaderRoute: typeof DocsProductLlmsFullRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/mirascope/v2/llms-full': {
+      id: '/docs/mirascope/v2/llms-full'
+      path: '/docs/mirascope/v2/llms-full'
+      fullPath: '/docs/mirascope/v2/llms-full'
+      preLoaderRoute: typeof DocsMirascopeV2LlmsFullRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+  }
+}
+
+interface DevRouteChildren {
+  DevSlugRoute: typeof DevSlugRoute
+  DevAuditMetadataRoute: typeof DevAuditMetadataRoute
+  DevLayoutTestRoute: typeof DevLayoutTestRoute
+  DevSocialCardRoute: typeof DevSocialCardRoute
+  DevIndexRoute: typeof DevIndexRoute
+}
+
+const DevRouteChildren: DevRouteChildren = {
+  DevSlugRoute: DevSlugRoute,
+  DevAuditMetadataRoute: DevAuditMetadataRoute,
+  DevLayoutTestRoute: DevLayoutTestRoute,
+  DevSocialCardRoute: DevSocialCardRoute,
+  DevIndexRoute: DevIndexRoute,
+}
+
+const DevRouteWithChildren = DevRoute._addFileChildren(DevRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CatchallRoute: CatchallRoute,
@@ -538,114 +505,6 @@ const rootRouteChildren: RootRouteChildren = {
   DocsProductLlmsFullRoute: DocsProductLlmsFullRoute,
   DocsMirascopeV2LlmsFullRoute: DocsMirascopeV2LlmsFullRoute,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/",
-        "/$catchall",
-        "/404",
-        "/dev",
-        "/llms-full",
-        "/pricing",
-        "/privacy",
-        "/router-waitlist",
-        "/blog/$slug",
-        "/docs/$",
-        "/terms/service",
-        "/terms/use",
-        "/blog/",
-        "/docs/",
-        "/terms/",
-        "/docs/$product/llms-full",
-        "/docs/mirascope/v2/llms-full"
-      ]
-    },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/$catchall": {
-      "filePath": "$catchall.tsx"
-    },
-    "/404": {
-      "filePath": "404.tsx"
-    },
-    "/dev": {
-      "filePath": "dev.tsx",
-      "children": [
-        "/dev/$slug",
-        "/dev/audit-metadata",
-        "/dev/layout-test",
-        "/dev/social-card",
-        "/dev/"
-      ]
-    },
-    "/llms-full": {
-      "filePath": "llms-full.tsx"
-    },
-    "/pricing": {
-      "filePath": "pricing.tsx"
-    },
-    "/privacy": {
-      "filePath": "privacy.tsx"
-    },
-    "/router-waitlist": {
-      "filePath": "router-waitlist.tsx"
-    },
-    "/blog/$slug": {
-      "filePath": "blog.$slug.tsx"
-    },
-    "/dev/$slug": {
-      "filePath": "dev.$slug.tsx",
-      "parent": "/dev"
-    },
-    "/dev/audit-metadata": {
-      "filePath": "dev/audit-metadata.tsx",
-      "parent": "/dev"
-    },
-    "/dev/layout-test": {
-      "filePath": "dev/layout-test.tsx",
-      "parent": "/dev"
-    },
-    "/dev/social-card": {
-      "filePath": "dev/social-card.tsx",
-      "parent": "/dev"
-    },
-    "/docs/$": {
-      "filePath": "docs.$.tsx"
-    },
-    "/terms/service": {
-      "filePath": "terms/service.tsx"
-    },
-    "/terms/use": {
-      "filePath": "terms/use.tsx"
-    },
-    "/blog/": {
-      "filePath": "blog.index.tsx"
-    },
-    "/dev/": {
-      "filePath": "dev/index.tsx",
-      "parent": "/dev"
-    },
-    "/docs/": {
-      "filePath": "docs.index.tsx"
-    },
-    "/terms/": {
-      "filePath": "terms/index.tsx"
-    },
-    "/docs/$product/llms-full": {
-      "filePath": "docs.$product.llms-full.tsx"
-    },
-    "/docs/mirascope/v2/llms-full": {
-      "filePath": "docs.mirascope.v2.llms-full.tsx"
-    }
-  }
-}
-ROUTE_MANIFEST_END */
