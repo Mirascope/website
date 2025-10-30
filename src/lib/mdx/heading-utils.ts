@@ -13,18 +13,47 @@ const HEADING_PATTERN = /^(#{1,6})\s+(.+?)(?:\s+\{#([a-zA-Z0-9_-]+)\})?$/;
 
 /**
  * Pattern to match ApiType component tags
- * Captures the type name from the type attribute
+ * Captures:
+ * - Group 1: type attribute value
+ * - Group 2: slug attribute value (optional)
  */
-const API_TYPE_PATTERN = /<ApiType\s+type="([^"]+)"[^>]*?\/>/;
+const API_TYPE_PATTERN = /<ApiType\s+type="([^"]+)"(?:[^>]*?slug="([^"]+)")?[^>]*?\/>/;
+
+/**
+ * Extracts the slug from an ApiType component if present in the children
+ *
+ * @param children - React children that may include ApiType component
+ * @returns The slug from ApiType's slug prop, or undefined if not found
+ */
+function extractApiTypeSlug(children: React.ReactNode): string | undefined {
+  for (const child of React.Children.toArray(children)) {
+    if (React.isValidElement(child)) {
+      const componentName = getComponentName(child.type);
+      if (componentName === "ApiType") {
+        const props = child.props as { slug?: string };
+        return props.slug;
+      }
+    }
+  }
+  return undefined;
+}
 
 /**
  * Generates a slug ID from React children
  * Handles ApiType components and other complex children
+ * If an ApiType component is present with a slug prop, uses that slug directly
  *
  * @param children - React children to generate ID from
  * @returns A URL-friendly slug ID or undefined if no valid text content
  */
 export function idSlugFromChildren(children: React.ReactNode): string | undefined {
+  // First check if there's an ApiType component with a slug
+  const apiTypeSlug = extractApiTypeSlug(children);
+  if (apiTypeSlug) {
+    return apiTypeSlug;
+  }
+
+  // Fall back to generating slug from text content
   const textContent = extractTextFromReactChildren(children);
   return textContent ? slugify(textContent) : undefined;
 }
@@ -158,13 +187,27 @@ export function parseHeadingLine(line: string): TOCItem | null {
   }
 
   const level = match[1].length;
-  let text = match[2].trim();
+  const headingText = match[2].trim();
 
-  // Process heading text for ApiType components
-  text = extractHeadingText(text);
+  // Process heading text for display
+  const text = extractHeadingText(headingText);
 
-  // Use explicit ID if provided, otherwise generate from text
-  const id = match[3] || generateHeadingId(match[2].trim());
+  // Determine the ID: explicit ID > ApiType slug > generated from text
+  let id: string;
+  if (match[3]) {
+    // Explicit ID provided with {#id} syntax
+    id = match[3];
+  } else {
+    // Check if there's an ApiType component with a slug
+    const apiTypeMatch = headingText.match(API_TYPE_PATTERN);
+    if (apiTypeMatch && apiTypeMatch[2]) {
+      // Use the slug from ApiType component
+      id = apiTypeMatch[2];
+    } else {
+      // Generate ID from text
+      id = generateHeadingId(headingText);
+    }
+  }
 
   return {
     id,
