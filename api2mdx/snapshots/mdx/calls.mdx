@@ -1121,8 +1121,255 @@ Generates a streaming response using the LLM.
 
 
 
-## <ApiType type="Module" slug="calls_mod" symbolName="calls" /> calls
+## <ApiType type="Function" slug="call" symbolName="call" /> call
 
-The Call module for generating responses using LLMs.
+Returns a decorator for turning prompt template functions into generations.
+
+This decorator creates a `Call` or `ContextCall` that can be used with prompt functions.
+If the first parameter is typed as `llm.Context[T]`, it creates a ContextCall.
+Otherwise, it creates a regular Call.
+
+Example:
+
+    Regular call:
+    ```python
+    from mirascope import llm
+
+    @llm.call(
+        provider="openai:completions",
+        model_id="gpt-4o-mini",
+    )
+    def answer_question(question: str) -> str:
+        return f"Answer this question: {question}"
+
+    response: llm.Response = answer_question("What is the capital of France?")
+    print(response)
+    ```
+
+Example:
+
+    Context call:
+    ```python
+    from dataclasses import dataclass
+    from mirascope import llm
+
+    @dataclass
+    class Personality:
+        vibe: str
+
+    @llm.call(
+        provider="openai:completions",
+        model_id="gpt-4o-mini",
+    )
+    def answer_question(ctx: llm.Context[Personality], question: str) -> str:
+        return f"Your vibe is {ctx.deps.vibe}. Answer this question: {question}"
+
+    ctx = llm.Context(deps=Personality(vibe="snarky"))
+    response = answer_question(ctx, "What is the capital of France?")
+    print(response)
+    ```
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "provider",
+    "type_info": {
+      "type_str": "Provider",
+      "description": null,
+      "kind": "simple",
+      "symbol_name": "Provider",
+      "doc_url": "/docs/api/clients#provider"
+    }
+  },
+  {
+    "name": "model_id",
+    "type_info": {
+      "type_str": "ModelId",
+      "description": null,
+      "kind": "simple",
+      "symbol_name": "ModelId",
+      "doc_url": "/docs/api/clients#model-id"
+    }
+  },
+  {
+    "name": "tools",
+    "type_info": {
+      "type_str": "list[ToolT] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "symbol_name": "Union",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+      },
+      "parameters": [
+        {
+          "type_str": "list[ToolT]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "list",
+            "description": null,
+            "kind": "simple",
+            "symbol_name": "list",
+            "doc_url": "https://docs.python.org/3/library/stdtypes.html#list"
+          },
+          "parameters": [
+            {
+              "type_str": "ToolT",
+              "description": null,
+              "kind": "simple",
+              "symbol_name": "ToolT",
+              "doc_url": "/docs/api/tools#tool-t"
+            }
+          ],
+          "doc_url": null
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple",
+          "symbol_name": "None",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
+        }
+      ],
+      "doc_url": null
+    },
+    "default": "None"
+  },
+  {
+    "name": "format",
+    "type_info": {
+      "type_str": "type[FormattableT] | Format[FormattableT] | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "symbol_name": "Union",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+      },
+      "parameters": [
+        {
+          "type_str": "type[FormattableT]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "type",
+            "description": null,
+            "kind": "simple",
+            "symbol_name": "type",
+            "doc_url": "https://docs.python.org/3/library/functions.html#type"
+          },
+          "parameters": [
+            {
+              "type_str": "FormattableT",
+              "description": null,
+              "kind": "simple",
+              "symbol_name": "FormattableT",
+              "doc_url": "/docs/api/formatting#formattable-t"
+            }
+          ],
+          "doc_url": null
+        },
+        {
+          "type_str": "Format[FormattableT]",
+          "description": null,
+          "kind": "generic",
+          "base_type": {
+            "type_str": "Format",
+            "description": null,
+            "kind": "simple",
+            "symbol_name": "Format",
+            "doc_url": "/docs/api/formatting#format"
+          },
+          "parameters": [
+            {
+              "type_str": "FormattableT",
+              "description": null,
+              "kind": "simple",
+              "symbol_name": "FormattableT",
+              "doc_url": "/docs/api/formatting#formattable-t"
+            }
+          ],
+          "doc_url": null
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple",
+          "symbol_name": "None",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
+        }
+      ],
+      "doc_url": null
+    },
+    "default": "None"
+  },
+  {
+    "name": "params",
+    "type_info": {
+      "type_str": "Unpack[Params]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "Unpack",
+        "description": null,
+        "kind": "simple",
+        "symbol_name": "Unpack",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Unpack"
+      },
+      "parameters": [
+        {
+          "type_str": "Params",
+          "description": null,
+          "kind": "simple",
+          "symbol_name": "Params",
+          "doc_url": "/docs/api/clients#params"
+        }
+      ],
+      "doc_url": null
+    },
+    "default": "{}"
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "CallDecorator[ToolT, FormattableT]",
+    "description": null,
+    "kind": "generic",
+    "base_type": {
+      "type_str": "CallDecorator",
+      "description": null,
+      "kind": "simple",
+      "symbol_name": "CallDecorator",
+      "doc_url": "/docs/api/calls#call-decorator"
+    },
+    "parameters": [
+      {
+        "type_str": "ToolT",
+        "description": null,
+        "kind": "simple",
+        "symbol_name": "ToolT",
+        "doc_url": "/docs/api/tools#tool-t"
+      },
+      {
+        "type_str": "FormattableT",
+        "description": null,
+        "kind": "simple",
+        "symbol_name": "FormattableT",
+        "doc_url": "/docs/api/formatting#formattable-t"
+      }
+    ],
+    "doc_url": null
+  }
+}}
+/>
 
 

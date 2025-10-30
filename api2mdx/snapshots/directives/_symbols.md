@@ -20,11 +20,11 @@
 
 <SymbolRef name="AssistantMessage" path="messages.mdx" />
 
-<SymbolRef name="AsyncCall" path="calls/calls.mdx" />
+<SymbolRef name="AsyncCall" path="calls.mdx" />
 
 <SymbolRef name="AsyncChunkIterator" path="responses.mdx" />
 
-<SymbolRef name="AsyncContextCall" path="calls/calls.mdx" />
+<SymbolRef name="AsyncContextCall" path="calls.mdx" />
 
 <SymbolRef name="AsyncContextPrompt" path="prompts.mdx" />
 
@@ -80,7 +80,7 @@
 
 <SymbolRef name="BaseToolkit" path="tools.mdx" />
 
-<SymbolRef name="Call" path="calls/calls.mdx" />
+<SymbolRef name="Call" path="calls.mdx" />
 
 <SymbolRef name="CallDecorator" path="calls.mdx" />
 
@@ -100,7 +100,7 @@
 
 <SymbolRef name="Context" path="index.mdx" />
 
-<SymbolRef name="ContextCall" path="calls/calls.mdx" />
+<SymbolRef name="ContextCall" path="calls.mdx" />
 
 <SymbolRef name="ContextPrompt" path="prompts.mdx" />
 
@@ -358,9 +358,11 @@
 
 <SymbolRef name="bytes" path="https://docs.python.org/3/library/stdtypes.html#bytes.mdx" />
 
-<SymbolRef name="call" path="index.mdx" />
+<SymbolRef name="call" path="calls.mdx" />
 
 <SymbolRef name="callable" path="https://docs.python.org/3/library/functions.html#callable.mdx" />
+
+<SymbolRef name="calls" path="index.mdx" />
 
 <SymbolRef name="client" path="clients.mdx" />
 

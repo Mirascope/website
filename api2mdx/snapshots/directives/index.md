@@ -157,12 +157,7 @@
 
 <Directive path="mirascope.llm.messages.message.UserMessage" />
 
-<ApiObject
-  path="mirascope.llm.calls.decorator.call"
-  symbolName="call"
-  slug="call"
-  canonicalPath="index"
-/>
+<Directive path="mirascope.llm.calls.decorator.call" />
 
 <ApiObject
   path="mirascope.llm.calls"
