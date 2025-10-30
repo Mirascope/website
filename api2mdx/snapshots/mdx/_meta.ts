@@ -54,7 +54,8 @@ export const apiMeta: SectionSpec = {
     },
     {
       slug: "tools",
-      label: "Tools",
+      label: "tools",
+      hasContent: true,
       children: [
         {
           slug: "protocols",

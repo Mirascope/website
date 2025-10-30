@@ -17,6 +17,7 @@ function createDevSidebarConfig(devPages: DevMeta[]): SidebarConfig {
       slug: "index",
       label: "Welcome",
       routePath: "/dev",
+      hasContent: true,
     },
   };
 
@@ -26,16 +27,19 @@ function createDevSidebarConfig(devPages: DevMeta[]): SidebarConfig {
       slug: "audit-metadata",
       label: "SEO Metadata Audit",
       routePath: "/dev/audit-metadata",
+      hasContent: true,
     },
     "social-card": {
       slug: "social-card",
       label: "Social Card Preview",
       routePath: "/dev/social-card",
+      hasContent: true,
     },
     "layout-test": {
       slug: "layout-test",
       label: "Layout Test",
       routePath: "/dev/layout-test",
+      hasContent: true,
     },
   };
 
@@ -47,6 +51,7 @@ function createDevSidebarConfig(devPages: DevMeta[]): SidebarConfig {
       slug: page.slug,
       label: page.title,
       routePath: `/dev/${page.slug}`,
+      hasContent: true,
     };
   });
 
