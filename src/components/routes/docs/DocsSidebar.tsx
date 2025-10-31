@@ -69,9 +69,13 @@ function createSidebarConfig(product: Product): SidebarConfig {
     // Look up the routePath from DocInfo if available
     const routePath = slugToRoutePathMap.get(itemPath);
 
+    // Determine hasContent: explicit value from doc, or default based on children
+    const hasContent = doc.hasContent ?? !doc.children;
+
     const item: SidebarItem = {
       slug: doc.slug,
       label: doc.label,
+      hasContent,
     };
 
     // Add routePath if we found a match
@@ -109,23 +113,26 @@ function createSidebarConfig(product: Product): SidebarConfig {
     const pathPrefix = section.slug === "index" ? productPath : `${productPath}/${section.slug}`;
 
     section.children.forEach((child) => {
-      if (!child.children || child.children.length === 0) {
-        // This is a direct item, add it to items
-        // Convert using our helper that adds routePath
+      const hasContent = child.hasContent ?? !child.children;
+
+      if (hasContent) {
+        // This item has content, add it to items (even if it also has children)
         items[child.slug] = convertDocToSidebarItem(child, pathPrefix);
       } else {
-        // This is a top-level folder, add it as a group
+        // This is a pure folder (no content), add it as a group
         const groupItems: Record<string, SidebarItem> = {};
 
         // Get path for this group's children
         const groupPathPrefix = `${pathPrefix}/${child.slug}`;
 
         // Process all items in this group
-        child.children.forEach((grandchild) => {
-          // Convert the grandchild and its descendants to sidebar items
-          const sidebarItem = convertDocToSidebarItem(grandchild, groupPathPrefix);
-          groupItems[grandchild.slug] = sidebarItem;
-        });
+        if (child.children) {
+          child.children.forEach((grandchild) => {
+            // Convert the grandchild and its descendants to sidebar items
+            const sidebarItem = convertDocToSidebarItem(grandchild, groupPathPrefix);
+            groupItems[grandchild.slug] = sidebarItem;
+          });
+        }
 
         // Add the group
         groups[child.slug] = {
@@ -150,6 +157,7 @@ function createSidebarConfig(product: Product): SidebarConfig {
     slug: "llms",
     label: `${productTitle} LLMs Text`,
     routePath: `/docs/${productPath}/llms-full`,
+    hasContent: true,
   };
   const llmSection: SidebarSection = {
     slug: "llms",

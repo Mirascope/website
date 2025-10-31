@@ -44,6 +44,7 @@ export interface DocSpec {
   label: string; // Display name in sidebar
   children?: DocSpec[]; // Child items (if this is a folder)
   weight?: number; // Search weight for this item (multiplicative with parent weights)
+  hasContent?: boolean; // If true, this item has its own content page (not just a folder). Defaults to true if no children, false if has children.
 }
 
 /**
@@ -111,7 +112,8 @@ export function processDocSpec(
   }
 
   // Add this doc to the result if it's a page (has content)
-  if (!docSpec.children) {
+  // Default: has content if no children, or if explicitly marked with hasContent: true
+  if (docSpec.hasContent ?? !docSpec.children) {
     result.push({
       label: docSpec.label,
       slug: docSpec.slug,
