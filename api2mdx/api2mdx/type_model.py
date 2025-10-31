@@ -7,12 +7,13 @@ offering a more comprehensive representation than simple strings.
 import json
 from dataclasses import asdict, dataclass, field
 from enum import Enum
+from typing import Any
 
 
 class EnumEncoder(json.JSONEncoder):
     """JSON encoder that handles Enum types by converting them to their values."""
 
-    def default(self, o):
+    def default(self, o: Any) -> Any:  # noqa: ANN401
         """Convert Enum instances to their string values for JSON serialization.
 
         Args:

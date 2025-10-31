@@ -12,6 +12,7 @@ bun.lock
 yarn.lock
 pnpm-lock.yaml
 .venv
+api2mdx/.venv
 
 # Generated TypeScript files
 *.gen.ts

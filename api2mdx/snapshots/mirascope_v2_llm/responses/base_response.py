@@ -3,7 +3,6 @@
 from collections.abc import Iterator, Sequence
 from dataclasses import dataclass
 from typing import Any, Generic
-
 from typing_extensions import TypeVar
 
 from ..content import Audio, Image, Text, Video

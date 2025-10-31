@@ -6,7 +6,6 @@ from collections.abc import Iterator
 from contextlib import contextmanager
 from contextvars import ContextVar
 from typing import TYPE_CHECKING, overload
-
 from typing_extensions import Unpack
 
 from .base import LLM, Client, Params

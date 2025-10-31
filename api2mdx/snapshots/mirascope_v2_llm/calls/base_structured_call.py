@@ -4,7 +4,6 @@ from abc import ABC
 from collections.abc import Sequence
 from dataclasses import dataclass
 from typing import Generic, ParamSpec
-
 from typing_extensions import TypeVar
 
 from ..models import LLM

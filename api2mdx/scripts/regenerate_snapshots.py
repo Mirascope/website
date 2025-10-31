@@ -3,7 +3,6 @@
 
 import subprocess
 import sys
-from pathlib import Path
 
 
 def run_command(cmd: list[str], description: str) -> bool:
@@ -24,10 +23,6 @@ def run_command(cmd: list[str], description: str) -> bool:
 def main() -> int:
     """Regenerate all snapshots."""
     print("🚀 Regenerating all api2mdx snapshots...")
-
-    # Get the project root
-    script_dir = Path(__file__).parent
-    project_root = script_dir.parent.parent
 
     commands = [
         # Regenerate mirascope v2 llm example

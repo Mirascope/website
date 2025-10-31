@@ -10,7 +10,6 @@ the stream for convenience (e.g. calling stream.cost after the stream is done).
 
 from collections.abc import AsyncIterator
 from typing import Generic
-
 from typing_extensions import TypeVar
 
 from .context_stream_chunk import ContextStreamChunk

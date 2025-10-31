@@ -2,7 +2,6 @@
 
 from collections.abc import Awaitable, Callable, Sequence
 from typing import Concatenate, ParamSpec, Protocol, TypeAlias, overload
-
 from typing_extensions import TypeVar
 
 from ..content import Content

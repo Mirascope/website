@@ -1,9 +1,9 @@
 """Tests for the tokenizer module."""
 
-from .tokenizer import Token, TokenType, tokenize
+from api2mdx.tokenizer import Token, TokenType, tokenize
 
 
-def test_tokenize_simple_types():
+def test_tokenize_simple_types() -> None:
     """Test tokenizing simple type expressions."""
     # Test simple built-in types
     assert tokenize("str") == [Token(TokenType.IDENTIFIER, "str")]
@@ -22,7 +22,7 @@ def test_tokenize_simple_types():
     ]
 
 
-def test_tokenize_generic_types():
+def test_tokenize_generic_types() -> None:
     """Test tokenizing generic type expressions."""
     # Test List[str]
     assert tokenize("List[str]") == [
@@ -53,7 +53,7 @@ def test_tokenize_generic_types():
     ]
 
 
-def test_tokenize_nested_types():
+def test_tokenize_nested_types() -> None:
     """Test tokenizing nested type expressions."""
     # Test List[Dict[str, int]]
     assert tokenize("List[Dict[str, int]]") == [
@@ -82,7 +82,7 @@ def test_tokenize_nested_types():
     ]
 
 
-def test_tokenize_union_types():
+def test_tokenize_union_types() -> None:
     """Test tokenizing union type expressions."""
     # Test str | int
     assert tokenize("str | int") == [
@@ -131,7 +131,7 @@ def test_tokenize_union_types():
     ]
 
 
-def test_tokenize_tuple_types():
+def test_tokenize_tuple_types() -> None:
     """Test tokenizing tuple type expressions."""
     # Test [str, int]
     assert tokenize("[str, int]") == [
@@ -153,7 +153,7 @@ def test_tokenize_tuple_types():
     ]
 
 
-def test_tokenize_callable_types():
+def test_tokenize_callable_types() -> None:
     """Test tokenizing callable type expressions."""
     # Test Callable[[str, int], bool]
     assert tokenize("Callable[[str, int], bool]") == [

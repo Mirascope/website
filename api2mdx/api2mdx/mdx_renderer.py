@@ -5,6 +5,17 @@ for documentation websites. It focuses purely on the rendering aspect, working
 with pre-processed data models rather than directly with Griffe objects.
 """
 
+# Forward declaration for type hints
+from typing import TYPE_CHECKING
+
+from api2mdx.mdx_components import (
+    ApiType,
+    ApiTypeKind,
+    AttributesTable,
+    ParametersTable,
+    ReturnTable,
+    TypeLink,
+)
 from api2mdx.models import (
     ProcessedAlias,
     ProcessedAttribute,
@@ -13,22 +24,9 @@ from api2mdx.models import (
     ProcessedModule,
     ProcessedObject,
 )
-from api2mdx.mdx_components import (
-    ApiType,
-    ApiTypeKind,
-    TypeLink,
-    ParametersTable,
-    ReturnTable,
-    AttributesTable,
-)
-
-# Forward declaration for type hints
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from api2mdx.api_discovery import ApiDocumentation
-
-
 
 
 def render_object(

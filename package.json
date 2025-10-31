@@ -26,12 +26,11 @@
     "typecheck": "bun run tsc --noEmit",
     "lint:mdx": "bun run scripts/validate-mdx.ts",
     "lint:snippets": "uv pip install -e '.[mirascope-all]' && bun run scripts/generate-snippets.ts && uv run pyright public/examples/ .extracted-snippets && uv run ruff check public/examples/ .extracted-snippets/",
-    "lint:python": "uv pip install -e '.' && uv run pyright scripts/apigen/ && uv run ruff check scripts/apigen/ && uv run pytest && echo \"Lint successful\"",
+    "lint:python": "cd api2mdx && uv run pyright api2mdx && uv run ruff check api2mdx && uv run pytest && echo \"Lint successful\"",
     "lint:format": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\"",
     "fix": "bun run fix:format && bun run fix:python",
     "fix:format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\"",
-    "fix:python": "uv pip install -e '.' && uv run ruff format scripts/apigen/ && uv run ruff check --fix scripts/apigen/ && uv run pytest scripts/apigen/",
-    "apigen": "uv pip install -e \".[mirascope-all]\" && uv run -m scripts.apigen.main",
+    "fix:python": "cd api2mdx && uv run ruff format api2mdx && uv run ruff check --fix api2mdx && uv run pytest",
     "prepare": "husky",
     "pre-commit": "lint-staged",
     "storybook": "storybook dev -p 6006",
@@ -45,7 +44,7 @@
     "*.mdx": [
       "bun run lint:mdx"
     ],
-    "scripts/apigen/**/*.py": "bun run lint:python",
+    "api2mdx/**/*.py": "bun run lint:python",
     "public/assets/**/*.{png,jpg,jpeg}": [
       "bun -e \"console.error('❌ ERROR: PNG/JPG files are not allowed.\\nPlease convert to WebP using: bun run convert-to-webp'); process.exit(1);\""
     ]

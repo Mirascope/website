@@ -6,7 +6,6 @@ including methods for formatting the response according to a specified format.
 
 from collections.abc import Sequence
 from dataclasses import dataclass
-
 from typing_extensions import TypeVar
 
 from ..tools import Tool

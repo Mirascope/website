@@ -2,7 +2,6 @@
 
 from dataclasses import dataclass
 from typing import Generic
-
 from typing_extensions import TypeVar
 
 from ..context import Context

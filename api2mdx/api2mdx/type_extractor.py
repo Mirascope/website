@@ -36,28 +36,29 @@ T = TypeVar("T", bound=DocstringSection)
 
 def resolve_symbol_url(symbol_name: str, api_docs: ApiDocumentation) -> str | None:
     """Resolve a symbol name to its canonical documentation URL.
-    
+
     Args:
         symbol_name: The symbol name to resolve (e.g., "Response", "AsyncCall")
         api_docs: The ApiDocumentation registry containing symbol mappings
-        
+
     Returns:
         Canonical URL if symbol is found in registry, None otherwise
+
     """
     # Skip ellipsis - it's a literal syntax, not a type to resolve
     if symbol_name == "...":
         return None
-        
+
     if symbol_name in api_docs._symbol_registry:
         api_object = api_docs._symbol_registry[symbol_name]
-        
+
         # If canonical_docs_path is already a full URL (e.g., Python docs), return it as-is
-        if api_object.canonical_docs_path.startswith(('http://', 'https://')):
+        if api_object.canonical_docs_path.startswith(("http://", "https://")):
             return api_object.canonical_docs_path
-        
+
         # Otherwise, construct relative URL with api_root
         return f"{api_docs.api_root}/{api_object.canonical_docs_path}#{api_object.canonical_slug}"
-    
+
     # Track unresolved symbols (but not ellipsis)
     api_docs._unresolved_symbols.add(symbol_name)
     return None
@@ -65,12 +66,13 @@ def resolve_symbol_url(symbol_name: str, api_docs: ApiDocumentation) -> str | No
 
 def _resolve_url_for_type_info(type_info: TypeInfo, api_docs: ApiDocumentation) -> None:
     """Recursively resolve URLs for a TypeInfo object and all its nested types.
-    
+
     This modifies the TypeInfo objects in-place by setting their url field.
-    
+
     Args:
         type_info: The TypeInfo object to resolve URLs for
         api_docs: The ApiDocumentation registry containing symbol mappings
+
     """
     if isinstance(type_info, SimpleType):
         if type_info.symbol_name:
@@ -78,12 +80,13 @@ def _resolve_url_for_type_info(type_info: TypeInfo, api_docs: ApiDocumentation) 
     elif isinstance(type_info, GenericType):
         # Resolve URL for the base type
         if type_info.base_type.symbol_name:
-            type_info.base_type.doc_url = resolve_symbol_url(type_info.base_type.symbol_name, api_docs)
-        
+            type_info.base_type.doc_url = resolve_symbol_url(
+                type_info.base_type.symbol_name, api_docs
+            )
+
         # Recursively resolve URLs for all parameters
         for param in type_info.parameters:
             _resolve_url_for_type_info(param, api_docs)
-        
 
 
 def find_docstring_section(
@@ -114,7 +117,9 @@ def find_docstring_section(
     return None
 
 
-def extract_function_parameters(obj: Function, api_docs: ApiDocumentation) -> list[ParameterInfo]:
+def extract_function_parameters(
+    obj: Function, api_docs: ApiDocumentation
+) -> list[ParameterInfo]:
     """Extract parameter information directly from a Function object's parameters.
 
     Args:
@@ -165,7 +170,9 @@ def extract_function_parameters(obj: Function, api_docs: ApiDocumentation) -> li
     return params
 
 
-def extract_parameters_from_docstring(obj: Object | Alias, api_docs: ApiDocumentation) -> list[ParameterInfo]:
+def extract_parameters_from_docstring(
+    obj: Object | Alias, api_docs: ApiDocumentation
+) -> list[ParameterInfo]:
     """Extract parameter information from a Griffe object's docstring.
 
     Args:
@@ -228,7 +235,9 @@ def extract_parameters_from_docstring(obj: Object | Alias, api_docs: ApiDocument
     return params
 
 
-def extract_return_info_from_docstring(obj: Object | Alias, api_docs: ApiDocumentation) -> ReturnInfo | None:
+def extract_return_info_from_docstring(
+    obj: Object | Alias, api_docs: ApiDocumentation
+) -> ReturnInfo | None:
     """Extract return type information from a Griffe object's docstring.
 
     Args:
@@ -247,7 +256,9 @@ def extract_return_info_from_docstring(obj: Object | Alias, api_docs: ApiDocumen
     return process_returns_section(returns_section, api_docs)
 
 
-def process_returns_section(section: DocstringSectionReturns, api_docs: ApiDocumentation) -> ReturnInfo | None:
+def process_returns_section(
+    section: DocstringSectionReturns, api_docs: ApiDocumentation
+) -> ReturnInfo | None:
     """Process a returns section to extract type information.
 
     Args:
@@ -301,7 +312,7 @@ def process_returns_section(section: DocstringSectionReturns, api_docs: ApiDocum
 
     # Parse the type string
     type_info = parse_type_string(type_str)
-    
+
     # Resolve URL for the type
     _resolve_url_for_type_info(type_info, api_docs)
 
@@ -309,7 +320,9 @@ def process_returns_section(section: DocstringSectionReturns, api_docs: ApiDocum
     return ReturnInfo(type_info=type_info, description=description)
 
 
-def extract_function_return_info(obj: Function, api_docs: ApiDocumentation) -> ReturnInfo | None:
+def extract_function_return_info(
+    obj: Function, api_docs: ApiDocumentation
+) -> ReturnInfo | None:
     """Extract return type information directly from a Function object.
 
     Args:
@@ -324,7 +337,7 @@ def extract_function_return_info(obj: Function, api_docs: ApiDocumentation) -> R
         # Extract return type
         type_str = str(obj.returns)
         type_info = parse_type_string(type_str)
-        
+
         # Resolve URL for the type
         _resolve_url_for_type_info(type_info, api_docs)
 
@@ -334,7 +347,9 @@ def extract_function_return_info(obj: Function, api_docs: ApiDocumentation) -> R
     return None
 
 
-def extract_alias_return_info(obj: Alias, api_docs: ApiDocumentation) -> ReturnInfo | None:
+def extract_alias_return_info(
+    obj: Alias, api_docs: ApiDocumentation
+) -> ReturnInfo | None:
     """Extract return type information from an Alias object.
 
     Args:
@@ -354,7 +369,7 @@ def extract_alias_return_info(obj: Alias, api_docs: ApiDocumentation) -> ReturnI
             # Get type from target's annotation
             type_str = str(annotation)
             type_info = parse_type_string(type_str)
-            
+
             # Resolve URL for the type
             _resolve_url_for_type_info(type_info, api_docs)
 
