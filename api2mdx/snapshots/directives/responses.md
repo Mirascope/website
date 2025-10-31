@@ -167,10 +167,3 @@
   slug="tool-call-stream"
   canonicalPath="responses"
 />
-
-<ApiObject
-  path="mirascope.llm.responses._utils"
-  symbolName="_utils"
-  slug="_utils_mod"
-  canonicalPath="responses"
-/>

@@ -64,13 +64,6 @@
 />
 
 <ApiObject
-  path="mirascope.llm.prompts._utils"
-  symbolName="_utils"
-  slug="_utils"
-  canonicalPath="prompts"
-/>
-
-<ApiObject
   path="mirascope.llm.prompts.decorator.prompt"
   symbolName="prompt"
   slug="prompt"
