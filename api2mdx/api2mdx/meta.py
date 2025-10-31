@@ -181,10 +181,6 @@ def generate_meta_from_directives(
     path_tree: dict[str, Any] = {}
 
     for api_directive in directives:
-        # Skip the main index file for now
-        if api_directive.file_path == "index.mdx":
-            continue
-
         # Convert file path to path parts
         path_parts = api_directive.file_path.replace(".mdx", "").split("/")
 

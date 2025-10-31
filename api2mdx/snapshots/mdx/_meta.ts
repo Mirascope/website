@@ -9,6 +9,10 @@ export const apiMeta: SectionSpec = {
   label: "API Reference",
   children: [
     {
+      slug: "index",
+      label: "llm",
+    },
+    {
       slug: "calls",
       label: "Calls",
       children: [
