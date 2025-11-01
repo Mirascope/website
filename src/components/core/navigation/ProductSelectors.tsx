@@ -16,6 +16,7 @@ function buildValidDocPaths() {
 
   // Add special llms-full routes manually
   validDocPaths.add("/docs/mirascope/llms-full");
+  validDocPaths.add("/docs/mirascope-v2/llms-full");
   validDocPaths.add("/docs/lilypad/llms-full");
 }
 

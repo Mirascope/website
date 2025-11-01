@@ -13,6 +13,7 @@ const ProductLogo: React.FC<BaseLogoProps> = (props) => {
     case "lilypad":
       return <LilypadLogo {...props} />;
     case "mirascope":
+    case "mirascope-v2":
       return <MirascopeLogo {...props} />;
     default:
       throw new Error(`Unknown product: ${productName}`);
