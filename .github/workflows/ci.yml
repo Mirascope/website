@@ -52,9 +52,6 @@ jobs:
       - name: Check & Validate apigen module
         run: bun run lint:python
 
-      - name: Extract & validate snippets
-        run: bun run lint:snippets
-
       - name: Build
         run: bun run build
         env:

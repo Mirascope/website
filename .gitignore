@@ -28,10 +28,6 @@ public/social-cards/
 public/seo-metadata.json
 public/llms-full.txt
 public/docs
-.extracted-snippets/
 debug-output
-
-# API docs generation repositories
-.api-generation-repos/
 
 *storybook.log
