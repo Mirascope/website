@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "bun run sync-docs && bun scripts/start.ts",
+    "start": "bun scripts/start.ts",
     "sync-docs": "bun run scripts/sync-docs.ts",
     "preprocess-content": "bun run scripts/preprocess-content.ts",
     "fetch-github-stats": "bun run --bun scripts/fetch-github-stats.ts",
@@ -14,7 +14,7 @@
     "validate-assets": "bun run scripts/validate-assets.ts",
     "convert-to-webp": "bun run scripts/convert-to-webp.ts",
     "optimize-images": "bun run scripts/optimize-images.ts",
-    "prebuild": "bun run sync-docs && bun run preprocess-content",
+    "prebuild": "bun run preprocess-content",
     "build": "bun run --bun vite build && bun run prerender",
     "build:full": "bun run prebuild && bun run generate-og-images && bun run --bun vite build && bun run optimize-images && bun run prerender && bun run postbuild",
     "postbuild": "pagefind --site dist --output-path dist/_pagefind --root-selector '[data-pagefind-body=\"true\"]' --",
