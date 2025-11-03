@@ -35,12 +35,7 @@ function createLLMContentFromDoc(doc: DocInfo, docsRoot?: string): LLMContent {
     throw new Error(`Required doc file not found: ${filePath}`);
   }
 
-  const rawContent = fs.readFileSync(filePath, "utf-8");
-  const { frontmatter, content } = preprocessMdx(rawContent, {
-    basePath: path.join(process.cwd(), "content"),
-    filePath,
-  });
-
+  const { frontmatter, content } = preprocessMdx(filePath);
   // Build final formatted content with ContentSection wrapper
   let wrappedContent = `<Content`;
 

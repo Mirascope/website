@@ -10,7 +10,7 @@ import {
   type PolicyMeta,
   docRegistry,
 } from "./content";
-import { type Product, productKey } from "./spec";
+import { type Product } from "./spec";
 import { preprocessMdx } from "./mdx-preprocessing";
 
 /**
@@ -91,15 +91,7 @@ export class ContentPreprocessor {
 
     // Process each content type
     for (const contentType of CONTENT_TYPES) {
-      if (contentType == "docs") {
-        // Handle docs separately due to product scoping
-        continue;
-      }
       await this.processContentType(contentType);
-    }
-
-    for (const product of docRegistry.products()) {
-      await this.processProductDocs(product);
     }
 
     // Write metadata index files
@@ -145,53 +137,6 @@ export class ContentPreprocessor {
       this.addError(
         `Error processing ${contentType} content: ${error instanceof Error ? error.message : String(error)}`
       );
-    }
-  }
-
-  /**
-   * Process a specific content type
-   */
-  private async processProductDocs(product: Product): Promise<void> {
-    const key = productKey(product);
-    if (this.verbose) console.log(`Processing ${key} docs...`);
-
-    const srcDir = path.join(this.baseDir, "content/docs");
-    const productDir = path.join(srcDir, key);
-
-    // Skip if product directory doesn't exist
-    if (!fs.existsSync(productDir)) {
-      if (this.verbose)
-        console.warn(`Source directory for product ${key} not found: ${productDir}`);
-      return;
-    }
-
-    const outputBase = path.join(this.contentDir, "docs");
-
-    let mdxFiles = await glob(path.join(productDir, "**/*.mdx"));
-
-    if (!product.version) {
-      // Filter out any files that match a product with a version
-      // (so mirascope/v2/index.mdx is not considered part of the non-versioned mirascope product)
-      const productVersionDirs = docRegistry
-        .products()
-        .filter((p) => p.version)
-        .map((p) => path.join(srcDir, productKey(p)));
-      const matchesOtherProduct = (p: string) =>
-        productVersionDirs.some((dir: string) => p.startsWith(dir));
-      mdxFiles = mdxFiles.filter((p: string) => !matchesOtherProduct(p));
-    }
-
-    if (this.verbose) {
-      console.log(`Found ${mdxFiles.length} MDX files for docs/${key}`);
-    }
-    for (const filePath of mdxFiles) {
-      try {
-        await this.processMdxFile(filePath, srcDir, "docs", outputBase, product);
-      } catch (error) {
-        this.addError(
-          `Error processing ${filePath}: ${error instanceof Error ? error.message : String(error)}`
-        );
-      }
     }
   }
 
@@ -316,16 +261,9 @@ export class ContentPreprocessor {
     filePath: string,
     srcDir: string,
     contentType: ContentType,
-    outputBase: string,
-    product?: Product
+    outputBase: string
   ): Promise<void> {
-    // Read and parse file
-    const fileContent = fs.readFileSync(filePath, "utf-8");
-    const basePath = product ? path.join(srcDir, productKey(product)) : srcDir;
-    const { frontmatter, fullContent } = preprocessMdx(fileContent, {
-      basePath,
-      filePath,
-    });
+    const { frontmatter, fullContent } = preprocessMdx(filePath);
 
     // Get the relative path from the source directory
     const relativePath = path.relative(srcDir, filePath);

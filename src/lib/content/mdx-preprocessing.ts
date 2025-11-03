@@ -20,19 +20,34 @@ export interface PreprocessedMdxResult {
   fullContent: string; // Full file content with frontmatter
 }
 
+function resolveExampleBasePath(filePath: string): string {
+  const pathsToTry = [
+    "content/docs/mirascope/v2",
+    "content/docs/mirascope",
+    "content/docs",
+    "content",
+  ];
+
+  for (const pathSegment of pathsToTry) {
+    if (filePath.includes(pathSegment)) {
+      const index = filePath.indexOf(pathSegment);
+      return filePath.slice(0, index + pathSegment.length);
+    }
+  }
+
+  throw new Error(`Could not resolve example base path for: ${filePath}`);
+}
+
 /**
  * Processes CodeExample directives in MDX content by replacing them with actual code blocks
- *
- * @param content - MDX content that may contain <CodeExample /> directives
- * @param basePath - Base path to resolve @/ file paths
- * @param filePath - Current file path for error reporting
- * @returns Content with CodeExample directives replaced by actual code blocks
- * @throws ContentError if referenced files don't exist or can't be read
  */
-function processCodeExamples(content: string, basePath: string, filePath?: string): string {
+function processCodeExamples(filePath: string): string {
   // Regex to match <CodeExample file="..." /> with optional lines, lang, and highlight attributes
   const codeExampleRegex =
     /<CodeExample\s+file="([^"]+)"(?:\s+lines="([^"]+)")?(?:\s+lang="([^"]+)")?(?:\s+highlight="([^"]+)")?\s*\/>/g;
+
+  const content = readFileSync(filePath, "utf-8");
+  const basePath = resolveExampleBasePath(filePath);
 
   return content.replace(
     codeExampleRegex,
@@ -43,15 +58,14 @@ function processCodeExamples(content: string, basePath: string, filePath?: strin
           ? join(basePath, file.slice(2))
           : resolve(basePath, file);
 
-        // Read the file
-        const fileContent = readFileSync(resolvedPath, "utf-8");
+        const exampleContent = readFileSync(resolvedPath, "utf-8");
 
         // Process lines if specified (e.g., "1-5" or "10-20")
-        let processedContent = fileContent;
+        let processedContent = exampleContent;
         if (lines) {
           const [start, end] = lines.split("-").map((n) => parseInt(n.trim(), 10));
           if (!isNaN(start) && !isNaN(end)) {
-            const fileLines = fileContent.split("\n");
+            const fileLines = exampleContent.split("\n");
             // Convert to 0-based indexing and slice
             processedContent = fileLines.slice(start - 1, end).join("\n");
           }
@@ -68,7 +82,6 @@ function processCodeExamples(content: string, basePath: string, filePath?: strin
       } catch (error) {
         throw new ContentError(
           `Error processing CodeExample: ${error instanceof Error ? error.message : String(error)}`,
-          "docs",
           filePath,
           error instanceof Error ? error : undefined
         );
@@ -116,24 +129,9 @@ function inferLanguageFromPath(filePath: string): string {
 
 /**
  * Preprocesses MDX content by resolving CodeExample directives and parsing frontmatter
- *
- * @param rawContent - Raw MDX content with frontmatter and potential CodeExample directives
- * @param options - Options for preprocessing
- * @returns Preprocessed content with CodeExample directives resolved
- * @throws ContentError if referenced files don't exist
  */
-export function preprocessMdx(
-  rawContent: string,
-  options: PreprocessMdxOptions
-): PreprocessedMdxResult {
-  // First process code examples in the raw content (before frontmatter parsing)
-  const contentWithCodeExamples = processCodeExamples(
-    rawContent,
-    options.basePath,
-    options.filePath
-  );
-
-  // Parse frontmatter from the processed content
+export function preprocessMdx(filePath: string): PreprocessedMdxResult {
+  const contentWithCodeExamples = processCodeExamples(filePath);
   const { frontmatter, content } = parseFrontmatter(contentWithCodeExamples);
 
   return {

@@ -5,12 +5,6 @@ import { mkdir, cp } from "fs/promises";
 import { resolve } from "path";
 import { spawnSync } from "child_process";
 
-// Early exit if sync is disabled
-if (process.env.SKIP_DOCS_SYNC === "1") {
-  console.log("Skipping docs sync (SKIP_DOCS_SYNC=1)");
-  process.exit(0);
-}
-
 const REPO_URL = "https://github.com/mirascope/mirascope.git";
 const BRANCH = "10-23-feat_watch_docs_example_changes_and_update_content_for_site";
 const CACHE_DIR = resolve(process.cwd(), ".build-cache/mirascope");

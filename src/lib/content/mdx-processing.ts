@@ -1,4 +1,4 @@
-import { ContentError, type ContentType } from "./content";
+import { ContentError } from "./content";
 import remarkGfm from "remark-gfm";
 import { compile } from "@mdx-js/mdx";
 import { rehypeCodeMeta } from "./rehype-code-meta";
@@ -130,13 +130,12 @@ export function mergeFrontmatter(
  */
 export async function processMDXContent(
   rawContent: string,
-  contentType: ContentType,
   options?: {
     path?: string; // Optional path for better error reporting
   }
 ): Promise<ProcessedContent> {
   if (!rawContent) {
-    throw new ContentError("Empty content provided", contentType, options?.path);
+    throw new ContentError("Empty content provided", options?.path);
   }
 
   try {
@@ -165,7 +164,6 @@ export async function processMDXContent(
     // Throw a ContentError instead of returning an error component
     throw new ContentError(
       `Error processing MDX content: ${error instanceof Error ? error.message : String(error)}`,
-      contentType,
       options?.path,
       error instanceof Error ? error : undefined
     );

@@ -17,9 +17,8 @@ __pycache__/
 *.egg-info/
 .venv/
 
-# Imported content from other repos
+# Git clones, api generation, etc
 .build-cache
-content/docs/mirascope/v2
 
 # Generated files
 public/static/

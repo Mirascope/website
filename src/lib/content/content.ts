@@ -119,7 +119,6 @@ export type DevContent = Content<DevMeta>;
 export class ContentError extends Error {
   constructor(
     message: string,
-    public contentType: ContentType,
     public path?: string,
     public cause?: Error
   ) {
@@ -132,8 +131,8 @@ export class ContentError extends Error {
  * Specific error for document not found conditions
  */
 export class DocumentNotFoundError extends ContentError {
-  constructor(contentType: ContentType, path: string) {
-    super(`${contentType} document not found: ${path}`, contentType, path);
+  constructor(path: string) {
+    super(`document not found: ${path}`, path);
     this.name = "DocumentNotFoundError";
   }
 }
@@ -142,13 +141,8 @@ export class DocumentNotFoundError extends ContentError {
  * Specific error for content loading failures
  */
 export class ContentLoadError extends ContentError {
-  constructor(contentType: ContentType, path: string, cause?: Error) {
-    super(
-      `Failed to load ${contentType} content: ${path}${cause ? ` - ${cause.message}` : ""}`,
-      contentType,
-      path,
-      cause
-    );
+  constructor(path: string, cause?: Error) {
+    super(`Failed to load content: ${path}${cause ? ` - ${cause.message}` : ""}`, path, cause);
     this.name = "ContentLoadError";
   }
 }
@@ -162,7 +156,7 @@ export class ContentLoadError extends ContentError {
  * @param path - The path to the content
  * @throws A well-typed error with consistent format
  */
-export function handleContentError(error: unknown, contentType: ContentType, path: string): never {
+export function handleContentError(error: unknown, path: string): never {
   // Pass the error to the environment handler, to e.g. let the prerenderer know the build is broken
   environment.onError(error instanceof Error ? error : new Error(String(error)));
 
@@ -178,15 +172,11 @@ export function handleContentError(error: unknown, contentType: ContentType, pat
       error.message.includes("not found") ||
       error.message.includes("ENOENT"))
   ) {
-    throw new DocumentNotFoundError(contentType, path);
+    throw new DocumentNotFoundError(path);
   }
 
   // Wrap other errors
-  throw new ContentLoadError(
-    contentType,
-    path,
-    error instanceof Error ? error : new Error(String(error))
-  );
+  throw new ContentLoadError(path, error instanceof Error ? error : new Error(String(error)));
 }
 
 /* ========== CORE CONTENT LOADING =========== */
@@ -230,11 +220,7 @@ function resolveContentPath(path: string, type: ContentType): string {
  * @returns The parsed JSON data
  * @throws ContentError on fetch or parsing failures
  */
-async function fetchJSON<T>(
-  path: string,
-  contentType: ContentType,
-  errorPath: string = path
-): Promise<T> {
+async function fetchJSON<T>(path: string, errorPath: string = path): Promise<T> {
   try {
     // Fetch the JSON file
     const response = await environment.fetch(path);
@@ -250,7 +236,6 @@ async function fetchJSON<T>(
     environment.onError(error instanceof Error ? error : new Error(String(error)));
     throw new ContentError(
       `Failed to fetch data: ${error instanceof Error ? error.message : String(error)}`,
-      contentType,
       errorPath
     );
   }
@@ -279,13 +264,13 @@ export async function loadContent<T extends ContentMeta>(
     const contentPath = resolveContentPath(path, contentType);
 
     // Fetch content JSON data using the shared utility
-    const data = await fetchJSON<{ meta: T; content: string }>(contentPath, contentType, path);
+    const data = await fetchJSON<{ meta: T; content: string }>(contentPath, path);
 
     // Raw content from JSON (includes frontmatter)
     const rawContent = data.content;
 
     // Process MDX for rendering
-    const processed = await processMDXContent(rawContent, contentType, {
+    const processed = await processMDXContent(rawContent, {
       path: path,
     });
 
@@ -303,7 +288,7 @@ export async function loadContent<T extends ContentMeta>(
       },
     };
   } catch (error) {
-    return handleContentError(error, contentType, path);
+    return handleContentError(error, path);
   }
 }
 
@@ -329,7 +314,7 @@ export async function getBlogContent(slug: string): Promise<BlogContent> {
  */
 export async function getAllBlogMeta(): Promise<BlogMeta[]> {
   // Use the shared fetchJSON utility to get blog metadata
-  return fetchJSON<BlogMeta[]>("/static/content-meta/blog/index.json", "blog", "blog/index");
+  return fetchJSON<BlogMeta[]>("/static/content-meta/blog/index.json", "blog/index");
 }
 
 /* ========== DOC CONTENT OPERATIONS =========== */
@@ -359,7 +344,7 @@ export function getAllDocInfo(): DocInfo[] {
  * @returns Array of document metadata objects
  */
 export async function getAllDocMeta(): Promise<DocMeta[]> {
-  return fetchJSON<DocMeta[]>("/static/content-meta/docs/index.json", "docs", "docs/index");
+  return fetchJSON<DocMeta[]>("/static/content-meta/docs/index.json", "docs/index");
 }
 
 /* ========== POLICY CONTENT OPERATIONS =========== */
@@ -445,5 +430,5 @@ export async function getDevContent(slug: string): Promise<DevContent> {
  * @returns Array of dev page metadata objects
  */
 export async function getAllDevMeta(): Promise<DevMeta[]> {
-  return fetchJSON<DevMeta[]>("/static/content-meta/dev/index.json", "dev", "dev/index");
+  return fetchJSON<DevMeta[]>("/static/content-meta/dev/index.json", "dev/index");
 }
