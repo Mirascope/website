@@ -23,8 +23,7 @@ bun run start
 This project is mostly Typescript/React/etc (as stated above). However, there is a small amount of Python code:
 
 - In the public/examples directory. This includes example Python code which is incorporated into the documentation, and typechecked for safety.
-- In the .extracted-snippets directory. This includes example Python code that is automatically extracted from the mdx content, and is typechecked for safety. This should not be edited by hand.
-- In the scripts/apigen module, which contains custom Python code for generating API docs for mirascope/mirascope and other libraries.
+- In the api2mdx module, which contains custom Python code for generating API docs for mirascope/mirascope and other libraries.
 
 ### Commands
 
@@ -44,7 +43,6 @@ This project is mostly Typescript/React/etc (as stated above). However, there is
 - `bun run lint:mdx` - Validate MDX files
 - `bun run lint:social` - Check if generated social cards (OG images) are up to date
 - `bun run generate-og-images` - Regenerate og images for social preview cards. Also updates seo-metadata.json for the metadata audit dev route.
-- `bun run lint:snippets` - Validate code snippets (using pyright and ruff for type/style checking)
 - `bun run lint:python` - Run typechecking and linting on the apigen module only
 - `bun run lint:format` - Check formatting with Prettier
 - `bun run fix:format` - Format all files with Prettier
@@ -56,8 +54,7 @@ This project uses [husky](https://github.com/typicode/husky) and [lint-staged](h
 
 1. Format staged files with Prettier
 2. Validate MDX files
-3. Check if code snippets are up-to-date
-4. Run TypeScript type checking
+3. Run TypeScript type checking
 
 These checks run automatically when you attempt to commit changes, helping maintain code quality and consistency.
 
@@ -98,35 +95,9 @@ For a detailed overview of the content system architecture, please see [Content 
 - Error handling strategy
 - Common tasks such as adding new content
 
-### Code Snippet Extraction
-
-The documentation contains Python code snippets that are automatically extracted to create runnable example files.
-These examples are stored in the repository and verified by CI to ensure they stay in sync with the documentation.
-We find all files matching `content/**/*.mdx`, and process all Python code blocks in such files into snippets.
-We then substitute in `openai` as as the provider (for `$PROVIDER`/`$MODEL` substitution), and typecheck the examples.
-
-Files or directories may be excluded from snippet processing by modifying the `IGNORED_PATHS` variable at the top of `generate-snippets.ts`.
-
-To run snippet validation, use `bun run lint:snippets`.
-
-#### Handling Partial Code Examples
-
-For code blocks that represent partial snippets (not meant to be valid on their own), use the `python-snippet-skip` language tag instead of `python`:
-
-```markdown
->  ```python-snippet-skip
->  @app.receiver("audio")
->  async def receive_audio(response: AudioSegment, context: dict[str, Any]) -> None:
->      play(response)
->  ```
-```
-
-This prevents these partial examples from being extracted as standalone snippets and avoids validation errors for code that's missing imports or context.
-The syntax highlighting still works correctly in the rendered documentation.
-
 #### CI Integration
 
-Our CI workflow automatically verifies that all code is properly formatted, type-checked, and that extracted snippets are up-to-date with the source documentation.
+Our CI workflow automatically verifies that all code is properly formatted, and type-checked.
 
 ### Social Images Generation
 
