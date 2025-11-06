@@ -6,7 +6,7 @@ import { resolve } from "path";
 import { spawnSync } from "child_process";
 
 const REPO_URL = "https://github.com/mirascope/mirascope.git";
-const BRANCH = "10-23-feat_watch_docs_example_changes_and_update_content_for_site";
+const BRANCH = "v2";
 const CACHE_DIR = resolve(process.cwd(), ".build-cache/mirascope");
 const DEST_BASE = resolve(process.cwd(), "content/docs/mirascope/v2");
 

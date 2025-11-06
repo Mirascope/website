@@ -66,9 +66,9 @@ Audio can be included in messages for voice or sound-based interactions.
 ]}
 />
 
-## <ApiType type="Function" slug="mirascope-llm-content-audio--audio-from_url" symbolName="from_url" /> from_url
+## <ApiType type="Function" slug="mirascope-llm-content-audio--audio-download" symbolName="download" /> download
 
-Create an `Audio` from a URL.
+Download and encode an audio file from a URL.
 
 <ParametersTable
   parameters={[
@@ -90,7 +90,20 @@ Create an `Audio` from a URL.
       "kind": "simple",
       "symbol_name": "str",
       "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-    }
+    },
+    "description": "The URL of the audio file to download"
+  },
+  {
+    "name": "max_size",
+    "type_info": {
+      "type_str": "int",
+      "description": null,
+      "kind": "simple",
+      "symbol_name": "int",
+      "doc_url": "https://docs.python.org/3/library/functions.html#int"
+    },
+    "default": "MAX_AUDIO_SIZE",
+    "description": "Maximum allowed audio size in bytes (default: 25MB)"
   }
 ]}
 />
@@ -103,7 +116,64 @@ Create an `Audio` from a URL.
     "kind": "simple",
     "symbol_name": "Audio",
     "doc_url": "/docs/api/content#audio"
+  },
+  "description": "An `Audio` with a `Base64AudioSource`"
+}}
+/>
+
+
+## <ApiType type="Function" slug="mirascope-llm-content-audio--audio-download_async" symbolName="download_async" /> download_async
+
+Asynchronously download and encode an audio file from a URL.
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "cls",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "symbol_name": null,
+      "doc_url": null
+    }
+  },
+  {
+    "name": "url",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "symbol_name": "str",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    },
+    "description": "The URL of the audio file to download"
+  },
+  {
+    "name": "max_size",
+    "type_info": {
+      "type_str": "int",
+      "description": null,
+      "kind": "simple",
+      "symbol_name": "int",
+      "doc_url": "https://docs.python.org/3/library/functions.html#int"
+    },
+    "default": "MAX_AUDIO_SIZE",
+    "description": "Maximum allowed audio size in bytes (default: 25MB)"
   }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "Audio",
+    "description": null,
+    "kind": "simple",
+    "symbol_name": "Audio",
+    "doc_url": "/docs/api/content#audio"
+  },
+  "description": "An `Audio` with a `Base64AudioSource`"
 }}
 />
 
@@ -132,39 +202,20 @@ Create an `Audio` from a file path.
       "kind": "simple",
       "symbol_name": "str",
       "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-    }
+    },
+    "description": "Path to the audio file"
   },
   {
-    "name": "mime_type",
+    "name": "max_size",
     "type_info": {
-      "type_str": "AudioMimeType | None",
+      "type_str": "int",
       "description": null,
-      "kind": "union",
-      "base_type": {
-        "type_str": "Union",
-        "description": null,
-        "kind": "simple",
-        "symbol_name": "Union",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
-      },
-      "parameters": [
-        {
-          "type_str": "AudioMimeType",
-          "description": null,
-          "kind": "simple",
-          "symbol_name": "AudioMimeType",
-          "doc_url": null
-        },
-        {
-          "type_str": "None",
-          "description": null,
-          "kind": "simple",
-          "symbol_name": "None",
-          "doc_url": "https://docs.python.org/3/library/constants.html#None"
-        }
-      ],
-      "doc_url": null
-    }
+      "kind": "simple",
+      "symbol_name": "int",
+      "doc_url": "https://docs.python.org/3/library/functions.html#int"
+    },
+    "default": "MAX_AUDIO_SIZE",
+    "description": "Maximum allowed audio size in bytes (default: 25MB)"
   }
 ]}
 />
@@ -206,39 +257,20 @@ Create an `Audio` from raw bytes.
       "kind": "simple",
       "symbol_name": "bytes",
       "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes"
-    }
+    },
+    "description": "Raw audio bytes"
   },
   {
-    "name": "mime_type",
+    "name": "max_size",
     "type_info": {
-      "type_str": "AudioMimeType | None",
+      "type_str": "int",
       "description": null,
-      "kind": "union",
-      "base_type": {
-        "type_str": "Union",
-        "description": null,
-        "kind": "simple",
-        "symbol_name": "Union",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
-      },
-      "parameters": [
-        {
-          "type_str": "AudioMimeType",
-          "description": null,
-          "kind": "simple",
-          "symbol_name": "AudioMimeType",
-          "doc_url": null
-        },
-        {
-          "type_str": "None",
-          "description": null,
-          "kind": "simple",
-          "symbol_name": "None",
-          "doc_url": "https://docs.python.org/3/library/constants.html#None"
-        }
-      ],
-      "doc_url": null
-    }
+      "kind": "simple",
+      "symbol_name": "int",
+      "doc_url": "https://docs.python.org/3/library/functions.html#int"
+    },
+    "default": "MAX_AUDIO_SIZE",
+    "description": "Maximum allowed audio size in bytes (default: 25MB)"
   }
 ]}
 />

@@ -1785,9 +1785,9 @@ Audio can be included in messages for voice or sound-based interactions.
 ]}
 />
 
-## <ApiType type="Function" slug="mirascope-llm-content-audio--audio-from_url" symbolName="from_url" /> from_url
+## <ApiType type="Function" slug="mirascope-llm-content-audio--audio-download" symbolName="download" /> download
 
-Create an `Audio` from a URL.
+Download and encode an audio file from a URL.
 
 <ParametersTable
   parameters={[
@@ -1809,7 +1809,20 @@ Create an `Audio` from a URL.
       "kind": "simple",
       "symbol_name": "str",
       "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-    }
+    },
+    "description": "The URL of the audio file to download"
+  },
+  {
+    "name": "max_size",
+    "type_info": {
+      "type_str": "int",
+      "description": null,
+      "kind": "simple",
+      "symbol_name": "int",
+      "doc_url": "https://docs.python.org/3/library/functions.html#int"
+    },
+    "default": "MAX_AUDIO_SIZE",
+    "description": "Maximum allowed audio size in bytes (default: 25MB)"
   }
 ]}
 />
@@ -1822,7 +1835,64 @@ Create an `Audio` from a URL.
     "kind": "simple",
     "symbol_name": "Audio",
     "doc_url": "/docs/api/content#audio"
+  },
+  "description": "An `Audio` with a `Base64AudioSource`"
+}}
+/>
+
+
+## <ApiType type="Function" slug="mirascope-llm-content-audio--audio-download_async" symbolName="download_async" /> download_async
+
+Asynchronously download and encode an audio file from a URL.
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "cls",
+    "type_info": {
+      "type_str": "Any",
+      "description": null,
+      "kind": "simple",
+      "symbol_name": null,
+      "doc_url": null
+    }
+  },
+  {
+    "name": "url",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "symbol_name": "str",
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+    },
+    "description": "The URL of the audio file to download"
+  },
+  {
+    "name": "max_size",
+    "type_info": {
+      "type_str": "int",
+      "description": null,
+      "kind": "simple",
+      "symbol_name": "int",
+      "doc_url": "https://docs.python.org/3/library/functions.html#int"
+    },
+    "default": "MAX_AUDIO_SIZE",
+    "description": "Maximum allowed audio size in bytes (default: 25MB)"
   }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "Audio",
+    "description": null,
+    "kind": "simple",
+    "symbol_name": "Audio",
+    "doc_url": "/docs/api/content#audio"
+  },
+  "description": "An `Audio` with a `Base64AudioSource`"
 }}
 />
 
@@ -1851,39 +1921,20 @@ Create an `Audio` from a file path.
       "kind": "simple",
       "symbol_name": "str",
       "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
-    }
+    },
+    "description": "Path to the audio file"
   },
   {
-    "name": "mime_type",
+    "name": "max_size",
     "type_info": {
-      "type_str": "AudioMimeType | None",
+      "type_str": "int",
       "description": null,
-      "kind": "union",
-      "base_type": {
-        "type_str": "Union",
-        "description": null,
-        "kind": "simple",
-        "symbol_name": "Union",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
-      },
-      "parameters": [
-        {
-          "type_str": "AudioMimeType",
-          "description": null,
-          "kind": "simple",
-          "symbol_name": "AudioMimeType",
-          "doc_url": null
-        },
-        {
-          "type_str": "None",
-          "description": null,
-          "kind": "simple",
-          "symbol_name": "None",
-          "doc_url": "https://docs.python.org/3/library/constants.html#None"
-        }
-      ],
-      "doc_url": null
-    }
+      "kind": "simple",
+      "symbol_name": "int",
+      "doc_url": "https://docs.python.org/3/library/functions.html#int"
+    },
+    "default": "MAX_AUDIO_SIZE",
+    "description": "Maximum allowed audio size in bytes (default: 25MB)"
   }
 ]}
 />
@@ -1925,39 +1976,20 @@ Create an `Audio` from raw bytes.
       "kind": "simple",
       "symbol_name": "bytes",
       "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes"
-    }
+    },
+    "description": "Raw audio bytes"
   },
   {
-    "name": "mime_type",
+    "name": "max_size",
     "type_info": {
-      "type_str": "AudioMimeType | None",
+      "type_str": "int",
       "description": null,
-      "kind": "union",
-      "base_type": {
-        "type_str": "Union",
-        "description": null,
-        "kind": "simple",
-        "symbol_name": "Union",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
-      },
-      "parameters": [
-        {
-          "type_str": "AudioMimeType",
-          "description": null,
-          "kind": "simple",
-          "symbol_name": "AudioMimeType",
-          "doc_url": null
-        },
-        {
-          "type_str": "None",
-          "description": null,
-          "kind": "simple",
-          "symbol_name": "None",
-          "doc_url": "https://docs.python.org/3/library/constants.html#None"
-        }
-      ],
-      "doc_url": null
-    }
+      "kind": "simple",
+      "symbol_name": "int",
+      "doc_url": "https://docs.python.org/3/library/functions.html#int"
+    },
+    "default": "MAX_AUDIO_SIZE",
+    "description": "Maximum allowed audio size in bytes (default: 25MB)"
   }
 ]}
 />
@@ -1990,6 +2022,63 @@ Raised for malformed requests (400, 422).
 
 **Bases:** 
 <TypeLink type={{"type_str": "APIError", "description": null, "kind": "simple", "symbol_name": "APIError", "doc_url": "/docs/api/exceptions#a-p-i-error"}} />
+
+
+## <ApiType type="Class" slug="base64-audio-source" symbolName="Base64AudioSource" /> Base64AudioSource
+
+Audio data represented as a base64 encoded string.
+
+<AttributesTable
+  attributes={[
+  {
+    "name": "type",
+    "type_info": {
+      "type_str": "Literal['base64_audio_source']",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "Literal",
+        "description": null,
+        "kind": "simple",
+        "symbol_name": "Literal",
+        "doc_url": null
+      },
+      "parameters": [
+        {
+          "type_str": "'base64_audio_source'",
+          "description": null,
+          "kind": "simple",
+          "symbol_name": "'base64_audio_source'",
+          "doc_url": null
+        }
+      ],
+      "doc_url": null
+    }
+  },
+  {
+    "name": "data",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "symbol_name": "str",
+      "doc_url": null
+    },
+    "description": "The audio data, as a base64 encoded string."
+  },
+  {
+    "name": "mime_type",
+    "type_info": {
+      "type_str": "AudioMimeType",
+      "description": null,
+      "kind": "simple",
+      "symbol_name": "AudioMimeType",
+      "doc_url": null
+    },
+    "description": "The mime type of the audio (e.g. audio/mp3)."
+  }
+]}
+/>
 
 
 ## <ApiType type="Class" slug="base64-image-source" symbolName="Base64ImageSource" /> Base64ImageSource
@@ -3787,29 +3876,40 @@ This class provides a consistent interface for interacting with language models
 from various providers. It handles the common operations like generating responses,
 streaming, and async variants by delegating to the appropriate client methods.
 
-This class can also operate as a context manager, which will set this LLM as the
-model in context for any call to a function decorated with `@llm.call`, which will
-first attempt to use a model set in the context, if any. If no model is set in the
-context, the default model will be used for that function.
+**Usage Note:** In most cases, you should use `llm.use_model()` instead of instantiating
+`Model` directly. This preserves the ability to override the model at runtime using
+the `llm.model()` context manager. Only instantiate `Model` directly if you want to
+hardcode a specific model and prevent it from being overridden by context.
 
-This is useful for overriding the default model at runtime.
-
-Example:
+Example (recommended - allows override):
 
     ```python
     from mirascope import llm
 
-    @llm.call(
-        provider="openai:completions",
-        model_id="gpt-5",
-    )
-    def answer_question(question: str) -> str:
-        return f"Answer this question: {question}"
+    def recommend_book(genre: str) -> llm.Response:
+        # Uses context model if available, otherwise creates default
+        model = llm.use_model(provider="openai", model_id="gpt-4o-mini")
+        message = llm.messages.user(f"Please recommend a book in {genre}.")
+        return model.call(messages=[message])
 
-    # Run the call with a different model from the default
-    with llm.model(provider="anthropic", model_id="claude-4-sonnet"):
-        response: llm.Response = answer_question("What is the capital of France?")
-        print(response.content)
+    # Uses default model
+    response = recommend_book("fantasy")
+
+    # Override with different model
+    with llm.model(provider="anthropic", model_id="claude-sonnet-4-0"):
+        response = recommend_book("fantasy")  # Uses Claude
+    ```
+
+Example (direct instantiation - prevents override):
+
+    ```python
+    from mirascope import llm
+
+    def recommend_book(genre: str) -> llm.Response:
+        # Hardcoded model, cannot be overridden by context
+        model = llm.Model(provider="openai", model_id="gpt-4o-mini")
+        message = llm.messages.user(f"Please recommend a book in {genre}.")
+        return model.call(messages=[message])
     ```
 
 <AttributesTable
@@ -10216,21 +10316,24 @@ content arrays that can include text, images, audio, documents, and tool interac
 
 ## <ApiType type="Function" slug="model_fn" symbolName="model" /> model
 
-Create an `llm.Model` instance with the specified provider and settings.
+Set a model in context for the duration of the context manager.
+
+This context manager sets a model that will be used by `llm.use_model()` calls
+within the context. This allows you to override the default model at runtime.
 
 Example:
 
     ```python
     import mirascope.llm as llm
 
-    openai_model = llm.model(provider="openai:completions", model_id="gpt-4o-mini")
+    def recommend_book(genre: str) -> llm.Response:
+        model = llm.use_model(provider="openai", model_id="gpt-4o-mini")
+        message = llm.messages.user(f"Please recommend a book in {genre}.")
+        return model.call(messages=[message])
 
-    claude_model = llm.model(
-        provider="anthropic",
-        model_id="claude-3-5-sonnet-20241022",
-        temperature=0.7,
-        max_tokens=1000
-    )
+    # Override the default model at runtime
+    with llm.model(provider="anthropic", model_id="claude-sonnet-4-0"):
+        response = recommend_book("fantasy")  # Uses Claude instead of GPT
     ```
 
 <ParametersTable
@@ -10289,13 +10392,27 @@ Example:
 <ReturnTable
   returnType={{
   "type_info": {
-    "type_str": "Model",
+    "type_str": "Iterator[None]",
     "description": null,
-    "kind": "simple",
-    "symbol_name": "Model",
-    "doc_url": "/docs/api/models#model"
-  },
-  "description": "An `llm.Model` instance configured with the specified provider and model."
+    "kind": "generic",
+    "base_type": {
+      "type_str": "Iterator",
+      "description": null,
+      "kind": "simple",
+      "symbol_name": "Iterator",
+      "doc_url": null
+    },
+    "parameters": [
+      {
+        "type_str": "None",
+        "description": null,
+        "kind": "simple",
+        "symbol_name": "None",
+        "doc_url": "https://docs.python.org/3/library/constants.html#None"
+      }
+    ],
+    "doc_url": null
+  }
 }}
 />
 
@@ -10305,9 +10422,9 @@ Example:
 The `llm.models` module for implementing the `Model` interface and utilities.
 
 This module provides a unified interface for interacting with different LLM models
-through the `Model` abstract class. The `llm.model` context manager allows you to
-easily run an LLM call with a model specified at runtime rather than definition
-time.
+through the `Model` class. The `llm.model()` context manager allows you to override
+the model at runtime, and `llm.use_model()` retrieves the model from context or
+creates a default one.
 
 
 ## <ApiType type="Function" slug="prompt" symbolName="prompt" /> prompt
@@ -11044,5 +11161,102 @@ The Tools module for LLMs.
 ## <ApiType type="Module" slug="types" symbolName="types" /> types
 
 Types for the LLM module.
+
+
+## <ApiType type="Function" slug="use_model" symbolName="use_model" /> use_model
+
+Get the model from context if available, otherwise create a new Model.
+
+This function checks if a model has been set in the context (via `llm.model()`
+context manager). If a model is found in the context, it returns that model.
+Otherwise, it creates and returns a new `llm.Model` instance with the provided
+arguments as defaults.
+
+This allows you to write functions that work with a default model but can be
+overridden at runtime using the `llm.model()` context manager.
+
+Example:
+
+    ```python
+    import mirascope.llm as llm
+
+    def recommend_book(genre: str) -> llm.Response:
+        model = llm.use_model(provider="openai", model_id="gpt-4o-mini")
+        message = llm.messages.user(f"Please recommend a book in {genre}.")
+        return model.call(messages=[message])
+
+    # Uses the default model (gpt-4o-mini)
+    response = recommend_book("fantasy")
+
+    # Override with a different model
+    with llm.model(provider="anthropic", model_id="claude-sonnet-4-0"):
+        response = recommend_book("fantasy")  # Uses Claude instead
+    ```
+
+<ParametersTable
+  parameters={[
+  {
+    "name": "provider",
+    "type_info": {
+      "type_str": "Provider",
+      "description": null,
+      "kind": "simple",
+      "symbol_name": "Provider",
+      "doc_url": "/docs/api/clients#provider"
+    },
+    "description": "The LLM provider to use (e.g., \"openai:completions\", \"anthropic\", \"google\")."
+  },
+  {
+    "name": "model_id",
+    "type_info": {
+      "type_str": "ModelId",
+      "description": null,
+      "kind": "simple",
+      "symbol_name": "ModelId",
+      "doc_url": "/docs/api/clients#model-id"
+    },
+    "description": "The specific model identifier for the chosen provider."
+  },
+  {
+    "name": "params",
+    "type_info": {
+      "type_str": "Unpack[Params]",
+      "description": null,
+      "kind": "generic",
+      "base_type": {
+        "type_str": "Unpack",
+        "description": null,
+        "kind": "simple",
+        "symbol_name": "Unpack",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Unpack"
+      },
+      "parameters": [
+        {
+          "type_str": "Params",
+          "description": null,
+          "kind": "simple",
+          "symbol_name": "Params",
+          "doc_url": "/docs/api/clients#params"
+        }
+      ],
+      "doc_url": null
+    },
+    "default": "{}"
+  }
+]}
+/>
+
+<ReturnTable
+  returnType={{
+  "type_info": {
+    "type_str": "Model",
+    "description": null,
+    "kind": "simple",
+    "symbol_name": "Model",
+    "doc_url": "/docs/api/models#model"
+  },
+  "description": "An `llm.Model` instance from context or a new instance with the specified settings."
+}}
+/>
 
 
