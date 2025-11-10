@@ -5,7 +5,6 @@ describe("redirects", () => {
   describe("processRedirects", () => {
     test("should handle exact redirects", () => {
       expect(processRedirects("/docs")).toBe("/docs/mirascope");
-      expect(processRedirects("/docs/")).toBe("/docs/mirascope");
     });
 
     test("should return null for non-redirected paths", () => {

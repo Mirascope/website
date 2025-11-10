@@ -68,31 +68,25 @@ export const patternRedirects: Array<{
  * Returns the new path if a redirect is needed, or null if no redirect applies
  */
 export function processRedirects(path: string): string | null {
-  const canonicalPath = canonicalizePath(path);
-
   // 1. Check group redirects for docs paths
-  if (groupRedirects[canonicalPath]) {
-    return groupRedirects[canonicalPath];
+  if (groupRedirects[path]) {
+    return groupRedirects[path];
   }
 
   // 2. Check pattern redirects
   for (const { pattern, replacement } of patternRedirects) {
-    const match = canonicalPath.match(pattern);
+    const match = path.match(pattern);
     if (match) {
-      return canonicalPath.replace(pattern, replacement);
+      return path.replace(pattern, replacement);
     }
   }
 
   // 3. Special case: redirect /docs/{invalid-product} to /docs/mirascope
-  const docsProductMatch = canonicalPath.match(/^\/docs\/([^\/]+)(?:\/.*)?$/);
+  const docsProductMatch = path.match(/^\/docs\/([^\/]+)(?:\/.*)?$/);
   if (docsProductMatch && !isValidProductName(docsProductMatch[1])) {
     return "/docs/mirascope";
   }
 
-  if (path != canonicalPath) {
-    // If the path was modified by canonicalization, return the new path
-    return canonicalPath;
-  }
   // No redirect found
   return null;
 }

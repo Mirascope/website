@@ -2,7 +2,7 @@ import { Outlet, createRootRoute, useRouterState, redirect } from "@tanstack/rea
 import { processRedirects } from "../lib/redirects";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { useEffect } from "react";
-import { getProductFromPath } from "../lib/utils";
+import { getProductFromPath, canonicalizePath } from "../lib/utils";
 
 import { Header, Footer, CookieBanner, DevToolsButton } from "@/src/components/routes/root";
 import analyticsManager from "@/src/lib/services/analytics";
@@ -19,6 +19,18 @@ export const Route = createRootRoute({
     // Skip redirect check for normal routes that already exist
     // Process redirects first for all incoming requests
     const path = location.pathname;
+
+    // First canoncialize the path using window.history.replaceState
+    // to force the browser url bar to update
+    const canonical = canonicalizePath(path);
+    if (path !== canonical) {
+      console.log(`Canonicalizing path by removing trailing slash: ${canonical}`);
+      window.history.replaceState(null, "", canonical);
+      throw redirect({
+        to: canonical,
+        replace: true,
+      });
+    }
 
     // Check if this is a path that needs redirection
     const redirectTo = processRedirects(path);
