@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import {
   ProductLogo,
   GitHubRepoButton,
+  DiscordLink,
   DocsProductSelector,
   useIsLandingPage,
   useIsRouterWaitlistPage,
@@ -79,6 +80,10 @@ export default function Header({ showProductSelector = false }: HeaderProps) {
           {/* Desktop: GitHub + Theme buttons */}
           <div className={HEADER_STYLES.githubContainer}>
             <GitHubRepoButton />
+          </div>
+
+          <div className={HEADER_STYLES.discordContainer}>
+            <DiscordLink isLandingPage={isLandingPage} />
           </div>
 
           {/* Theme switcher - visible on all screen sizes */}

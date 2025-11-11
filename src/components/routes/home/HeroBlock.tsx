@@ -1,4 +1,4 @@
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Rocket } from "lucide-react";
 import { ButtonLink } from "@/mirascope-ui/ui/button-link";
 import { ResponsiveTextBlock } from "@/src/components/ui/responsive-text-block";
 
@@ -144,12 +144,26 @@ export function HeroBlock({ onScrollDown, showScrollButton }: HeroBlockProps) {
         </div>
         <div className="mt-8 flex w-full max-w-3xl flex-col items-center justify-center gap-4 sm:flex-row">
           <ButtonLink
-            href="/router-waitlist"
+            href="/docs/mirascope/v2"
             variant="outline"
-            size="default"
-            className="landing-page-box-shadow landing-page-box-shadow-hover w-full min-w-[200px] border-0 bg-white px-6 py-4 text-center font-medium text-black hover:bg-gray-100 hover:text-black sm:w-auto"
+            size="lg"
+            className="landing-page-box-shadow landing-page-box-shadow-hover w-full min-w-[200px] border-0 bg-white text-center font-bold text-black hover:bg-white/90 hover:text-black sm:w-auto"
           >
-            Mirascope Router Waitlist
+            <Rocket className="size-5" aria-hidden="true" />
+            Mirascope v2 Alpha
+          </ButtonLink>
+          <ButtonLink
+            href="/discord-invite"
+            variant="default"
+            size="lg"
+            className="landing-page-box-shadow landing-page-box-shadow-hover w-full min-w-[200px] bg-[#5865F2] text-center font-bold text-white hover:bg-[#5865F2]/90 sm:w-auto"
+          >
+            Join our
+            <img
+              src="/assets/branding/Discord-Logo-White.svg"
+              alt="Discord"
+              className="h-3.5 w-full"
+            />
           </ButtonLink>
         </div>
       </div>

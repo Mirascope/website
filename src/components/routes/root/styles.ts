@@ -79,6 +79,9 @@ export const HEADER_STYLES = {
   // GitHub button container
   githubContainer: "hidden items-center gap-3 md:flex",
 
+  // Discord link button container
+  discordContainer: "hidden items-center gap-3 md:flex",
+
   // Mobile menu toggle button
   menuButton: () => cn("p-2 md:hidden", "nav-icon"),
 
