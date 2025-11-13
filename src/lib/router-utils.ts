@@ -139,6 +139,26 @@ export function getBlogRoutes(): string[] {
 }
 
 /**
+ * Get dev page routes by scanning the content/dev directory
+ */
+export function getDevRoutes(): string[] {
+  try {
+    const devDir = path.join(getProjectRoot(), "content", "dev");
+    if (!fs.existsSync(devDir)) {
+      return [];
+    }
+
+    // Get all .mdx files in the dev directory
+    const devFiles = fs.readdirSync(devDir).filter((file) => file.endsWith(".mdx"));
+
+    // Convert filenames to routes by stripping the .mdx extension
+    return devFiles.map((file) => `/dev/${file.replace(".mdx", "")}`).sort();
+  } catch (error) {
+    throw new Error(`Failed to get dev routes: ${error}`);
+  }
+}
+
+/**
  * Get doc routes
  */
 export function getDocsRoutes(): string[] {
@@ -164,15 +184,16 @@ export function getLLMDocRoutes(): string[] {
 }
 
 /**
- * Get all routes (static + blogs + docs + llm docs)
+ * Get all routes (static + blogs + docs + llm docs + dev)
  */
 export function getAllRoutes(includeHidden = false): string[] {
   const staticRoutes = getStaticRoutes();
   const blogRoutes = getBlogRoutes();
   const docRoutes = getDocsRoutes();
   const llmDocRoutes = getLLMDocRoutes();
+  const devRoutes = getDevRoutes();
 
   // Combine all routes and remove duplicates
-  const allRoutes = [...staticRoutes, ...blogRoutes, ...docRoutes, ...llmDocRoutes];
+  const allRoutes = [...staticRoutes, ...blogRoutes, ...docRoutes, ...llmDocRoutes, ...devRoutes];
   return [...new Set(allRoutes)].filter((route) => includeHidden || !isHiddenRoute(route)).sort();
 }

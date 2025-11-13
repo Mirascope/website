@@ -9,6 +9,8 @@ import { JSDOM } from "jsdom";
 import { canonicalizePath } from "../src/lib/utils";
 import { glob } from "glob";
 import { colorize, printHeader, icons, coloredLog } from "./lib/terminal";
+import { isHiddenRoute, getAllRoutes } from "@/src/lib/router-utils";
+import llmMeta from "@/content/llms/_llms-meta";
 
 interface ValidationResult {
   valid: boolean;
@@ -81,9 +83,22 @@ async function validateLinksAndImages(
     : path.join(distDir, "sitemap.xml");
 
   const validRoutesSet = parseSitemap(sitemapPath);
+  for (const route of getAllRoutes(true)) {
+    if (isHiddenRoute(route)) {
+      // Hidden routes will not be included in the sitemap, but they are still
+      // okay to link to.
+      validRoutesSet.add(route);
+    }
+  }
+  llmMeta.forEach((llmDoc) => {
+    if (llmDoc.route && isHiddenRoute(llmDoc.route)) {
+      validRoutesSet.add(llmDoc.route);
+      validRoutesSet.add(llmDoc.route + ".txt");
+    }
+  });
 
   if (verbose) {
-    console.log(`Found ${validRoutesSet.size} valid routes in sitemap`);
+    console.log(`Found ${validRoutesSet.size} valid routes`);
   }
 
   // Find all HTML files in the dist directory
