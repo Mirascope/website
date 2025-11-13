@@ -61,7 +61,11 @@ def extract_clean_docstring(obj: Object | Alias) -> str | None:
     text_sections = []
 
     for section in obj.docstring.parsed:
-        if section.kind == DocstringSectionKind.text and hasattr(section, "value") and section.value:
+        if (
+            section.kind == DocstringSectionKind.text
+            and hasattr(section, "value")
+            and section.value
+        ):
             text_sections.append(str(section.value).strip())
 
     # Join text sections with newlines

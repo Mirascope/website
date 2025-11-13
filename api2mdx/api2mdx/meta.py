@@ -137,7 +137,9 @@ class SectionSpec:
         return json_str
 
 
-def generate_meta_file_content(section: SectionSpec, export_name: str = "apiMeta") -> str:
+def generate_meta_file_content(
+    section: SectionSpec, export_name: str = "apiMeta"
+) -> str:
     """Generate a complete TypeScript meta file content.
 
     Args:

@@ -25,6 +25,7 @@ async function generateApiDocs(): Promise<void> {
   let sourcePath: string | undefined;
   let outputPath: string | undefined;
   let packageName: string | undefined;
+  let apiRoot: string | undefined;
 
   for (let i = 0; i < args.length; i++) {
     if (args[i] === "--source-path" && i + 1 < args.length) {
@@ -36,19 +37,22 @@ async function generateApiDocs(): Promise<void> {
     } else if (args[i] === "--package" && i + 1 < args.length) {
       packageName = args[i + 1];
       i++;
+    } else if (args[i] === "--api-root" && i + 1 < args.length) {
+      apiRoot = args[i + 1];
+      i++;
     }
   }
 
   // Validate required arguments
-  if (!sourcePath || !outputPath || !packageName) {
+  if (!sourcePath || !outputPath || !packageName || !apiRoot) {
     console.error("Error: Missing required arguments");
     console.error("\nUsage:");
     console.error(
-      "  bun run scripts/generate-api-docs.ts --source-path <path> --package <name> --output <path>"
+      "  bun run scripts/generate-api-docs.ts --source-path <path> --package <name> --output <path> --api-root <path>"
     );
     console.error("\nExample:");
     console.error(
-      "  bun run scripts/generate-api-docs.ts --source-path .build-cache/mirascope/python --package mirascope.llm --output content/docs/mirascope/v2/api"
+      "  bun run scripts/generate-api-docs.ts --source-path .build-cache/mirascope/python --package mirascope.llm --output content/docs/mirascope/v2/api --api-root /docs/mirascope/api"
     );
     process.exit(1);
   }
@@ -57,6 +61,7 @@ async function generateApiDocs(): Promise<void> {
   console.log(`  Source: ${sourcePath}`);
   console.log(`  Package: ${packageName}`);
   console.log(`  Output: ${outputPath}`);
+  console.log(`  API Root: ${apiRoot}`);
 
   const api2mdxDir = resolve(process.cwd(), "api2mdx");
 
@@ -72,6 +77,8 @@ async function generateApiDocs(): Promise<void> {
       packageName,
       "--output",
       outputPath,
+      "--api-root",
+      apiRoot,
     ],
     api2mdxDir
   );

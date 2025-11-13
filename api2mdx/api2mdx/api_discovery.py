@@ -15,10 +15,6 @@ from griffe import Alias, Attribute, Class, Function, Module, Object
 
 from .type_urls import BUILTIN_TYPE_URLS
 
-# Default API documentation root path
-DEFAULT_API_ROOT = "/docs/api"
-
-
 # Type aliases for better type safety
 ObjectPath = NewType("ObjectPath", str)
 """Canonical path to a Python object (e.g., 'mirascope_v2_llm.calls.decorator.call')"""
@@ -190,9 +186,7 @@ class ApiDocumentation:
     - Canonical docs path mapping for cross-references
     """
 
-    def __init__(
-        self, raw_pages: list[RawDirectivesPage], api_root: str = DEFAULT_API_ROOT
-    ) -> None:
+    def __init__(self, raw_pages: list[RawDirectivesPage], api_root: str) -> None:
         # Validate unique file paths
         file_paths = set()
         for page in raw_pages:
@@ -477,9 +471,7 @@ class ApiDocumentation:
         print()
 
     @classmethod
-    def from_module(
-        cls, module: Module, api_root: str = DEFAULT_API_ROOT
-    ) -> "ApiDocumentation":
+    def from_module(cls, module: Module, api_root: str) -> "ApiDocumentation":
         """Discover API directives with hierarchical organization.
 
         This creates a structure like:
@@ -721,7 +713,9 @@ def discover_module_pages(
 
     for export_name in export_names:
         if export_name in seen_exports:
-            print(f"⚠️  Warning: Module {module.canonical_path} has duplicate export in __all__: {export_name}")
+            print(
+                f"⚠️  Warning: Module {module.canonical_path} has duplicate export in __all__: {export_name}"
+            )
             continue
         seen_exports.add(export_name)
         if export_name not in module.members:
