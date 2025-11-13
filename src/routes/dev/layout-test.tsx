@@ -31,11 +31,7 @@ function LayoutTestPage() {
 
   return (
     <>
-      <PageMeta
-        title="Layout Test"
-        description="Test AppLayout component behavior"
-        robots="noindex, nofollow"
-      />
+      <PageMeta title="Layout Test" description="Test AppLayout component behavior" />
       <AppLayout>
         <AppLayout.LeftSidebar>
           <div className="border-primary border-2">

@@ -47,11 +47,7 @@ function DevContentPage() {
 
   return (
     <>
-      <PageMeta
-        title={content.meta.title}
-        description={content.meta.description}
-        robots="noindex, nofollow"
-      />
+      <PageMeta title={content.meta.title} description={content.meta.description} />
       <DevLayout devPages={devPages}>
         <div className="mx-auto w-full">
           <div className="prose dark:prose-invert max-w-none">
