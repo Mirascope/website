@@ -92,11 +92,7 @@ function SocialCardPreview() {
 
   return (
     <>
-      <PageMeta
-        title="Social Card Preview"
-        description="Preview and test social card designs"
-        robots="noindex, nofollow"
-      />
+      <PageMeta title="Social Card Preview" description="Preview and test social card designs" />
       <DevLayout devPages={devPages}>
         <div className="container">
           <h1 className="mb-6 text-3xl font-bold">Social Card Preview</h1>

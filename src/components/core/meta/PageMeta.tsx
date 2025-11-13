@@ -1,6 +1,7 @@
 import { BASE_URL, PRODUCT_CONFIGS } from "@/src/lib/constants/site";
 import { useRouterState } from "@tanstack/react-router";
 import { routeToFilename, canonicalizePath } from "@/src/lib/utils";
+import { isHiddenRoute } from "@/src/lib/hidden-routes";
 import { RouteMeta } from "./RouteMeta";
 import type { ProductName } from "@/src/lib/content/spec";
 export interface PageMetaProps {
@@ -34,6 +35,9 @@ export function PageMeta(props: PageMetaProps) {
   const siteTitle = product ? `${PRODUCT_CONFIGS[product].title}` : "Mirascope";
   const pageTitle = title ? `${title} | ${siteTitle}` : siteTitle;
 
+  // Auto-set noindex/nofollow for hidden routes (can be overridden by explicit robots prop)
+  const computedRobots = robots ?? (isHiddenRoute(currentPath) ? "noindex, nofollow" : undefined);
+
   // Generate image path if not provided
   const computedImage = image || routeToImagePath(currentPath);
 
@@ -48,7 +52,7 @@ export function PageMeta(props: PageMetaProps) {
     <RouteMeta>
       <title>{pageTitle}</title>
       {description && <meta name="description" content={description} />}
-      {robots && <meta name="robots" content={robots} />}
+      {computedRobots && <meta name="robots" content={computedRobots} />}
 
       {/* Canonical URL - self-referencing to prevent duplicate content issues */}
       <link rel="canonical" href={canonicalUrl} />

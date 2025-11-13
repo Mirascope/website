@@ -6,20 +6,16 @@ import { getAllDocInfo, type BlogMeta } from "@/src/lib/content";
 import llmMeta from "@/content/llms/_llms-meta";
 import type { LLMContent } from "@/src/lib/content/llm-content";
 
+import { isHiddenRoute } from "@/src/lib/hidden-routes";
+export { isHiddenRoute };
+
 // Base URL for the site
 export const SITE_URL = "https://mirascope.com";
 
 // Exclude these static routes as they auto-redirect to other pages
 const ROUTES_TO_EXCLUDE = ["/docs/", "/terms/"];
 
-// Patterns for hidden routes (not included in sitemap or SEO metadata)
-export const EXCLUDE_DEV = /^\/dev(\/.*)?$/;
-export const MIRASCOPE_V2 = /^\/docs\/mirascope\/v2.*/;
-export const HIDDEN_ROUTE_PATTERNS = [EXCLUDE_DEV, MIRASCOPE_V2];
-
-export function isHiddenRoute(route: string): boolean {
-  return HIDDEN_ROUTE_PATTERNS.some((pattern) => pattern.test(route));
-}
+// Re-export for backward compatibility (build scripts import from this file)
 
 // Get the project root directory
 export function getProjectRoot(): string {

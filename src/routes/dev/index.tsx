@@ -35,7 +35,6 @@ function DevIndexPage() {
       <PageMeta
         title="Developer Tools"
         description="Development and maintenance tools for the Mirascope website"
-        robots="noindex, nofollow"
       />
       <DevLayout devPages={devPages}>
         <div className="container">

@@ -147,11 +147,7 @@ function AuditMetadata() {
 
   return (
     <>
-      <PageMeta
-        title="SEO Metadata Audit"
-        description="Audit page metadata and social cards"
-        robots="noindex, nofollow"
-      />
+      <PageMeta title="SEO Metadata Audit" description="Audit page metadata and social cards" />
       <DevLayout devPages={devPages}>
         <div className="container">{content()}</div>
       </DevLayout>
