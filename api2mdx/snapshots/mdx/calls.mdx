@@ -11,7 +11,7 @@ description: API documentation for calls
 A class for generating responses using LLMs asynchronously.
 
 **Bases:** 
-<TypeLink type={{"type_str": "BaseCall[P, AsyncPrompt, AsyncToolkit, FormattableT]", "description": null, "kind": "generic", "base_type": {"type_str": "BaseCall", "description": null, "kind": "simple", "symbol_name": "BaseCall", "doc_url": null}, "parameters": [{"type_str": "P", "description": null, "kind": "simple", "symbol_name": "P", "doc_url": "/docs/api/types#p"}, {"type_str": "AsyncPrompt", "description": null, "kind": "simple", "symbol_name": "AsyncPrompt", "doc_url": "/docs/api/prompts#async-prompt"}, {"type_str": "AsyncToolkit", "description": null, "kind": "simple", "symbol_name": "AsyncToolkit", "doc_url": "/docs/api/tools#async-toolkit"}, {"type_str": "FormattableT", "description": null, "kind": "simple", "symbol_name": "FormattableT", "doc_url": "/docs/api/formatting#formattable-t"}], "doc_url": null}} />, <TypeLink type={{"type_str": "Generic[P, FormattableT]", "description": null, "kind": "generic", "base_type": {"type_str": "Generic", "description": null, "kind": "simple", "symbol_name": "Generic", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Generic"}, "parameters": [{"type_str": "P", "description": null, "kind": "simple", "symbol_name": "P", "doc_url": "/docs/api/types#p"}, {"type_str": "FormattableT", "description": null, "kind": "simple", "symbol_name": "FormattableT", "doc_url": "/docs/api/formatting#formattable-t"}], "doc_url": null}} />
+<TypeLink type={{"type_str": "BaseCall[P, AsyncPrompt, AsyncToolkit, FormattableT]", "description": null, "kind": "generic", "base_type": {"type_str": "BaseCall", "description": null, "kind": "simple", "symbol_name": "BaseCall", "doc_url": null}, "parameters": [{"type_str": "P", "description": null, "kind": "simple", "symbol_name": "P", "doc_url": "/docs/mirascope/v2/api/types#p"}, {"type_str": "AsyncPrompt", "description": null, "kind": "simple", "symbol_name": "AsyncPrompt", "doc_url": "/docs/mirascope/v2/api/prompts#async-prompt"}, {"type_str": "AsyncToolkit", "description": null, "kind": "simple", "symbol_name": "AsyncToolkit", "doc_url": "/docs/mirascope/v2/api/tools#async-toolkit"}, {"type_str": "FormattableT", "description": null, "kind": "simple", "symbol_name": "FormattableT", "doc_url": "/docs/mirascope/v2/api/formatting#formattable-t"}], "doc_url": null}} />, <TypeLink type={{"type_str": "Generic[P, FormattableT]", "description": null, "kind": "generic", "base_type": {"type_str": "Generic", "description": null, "kind": "simple", "symbol_name": "Generic", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Generic"}, "parameters": [{"type_str": "P", "description": null, "kind": "simple", "symbol_name": "P", "doc_url": "/docs/mirascope/v2/api/types#p"}, {"type_str": "FormattableT", "description": null, "kind": "simple", "symbol_name": "FormattableT", "doc_url": "/docs/mirascope/v2/api/formatting#formattable-t"}], "doc_url": null}} />
 
 ## <ApiType type="Function" slug="mirascope-llm-calls-calls--async-call-call" symbolName="call" /> call
 
@@ -73,7 +73,7 @@ Generates a response using the LLM asynchronously.
         "description": null,
         "kind": "simple",
         "symbol_name": "AsyncResponse",
-        "doc_url": "/docs/api/responses#async-response"
+        "doc_url": "/docs/mirascope/v2/api/responses#async-response"
       },
       {
         "type_str": "AsyncResponse[FormattableT]",
@@ -84,7 +84,7 @@ Generates a response using the LLM asynchronously.
           "description": null,
           "kind": "simple",
           "symbol_name": "AsyncResponse",
-          "doc_url": "/docs/api/responses#async-response"
+          "doc_url": "/docs/mirascope/v2/api/responses#async-response"
         },
         "parameters": [
           {
@@ -92,7 +92,7 @@ Generates a response using the LLM asynchronously.
             "description": null,
             "kind": "simple",
             "symbol_name": "FormattableT",
-            "doc_url": "/docs/api/formatting#formattable-t"
+            "doc_url": "/docs/mirascope/v2/api/formatting#formattable-t"
           }
         ],
         "doc_url": null
@@ -168,7 +168,7 @@ Generates a streaming response using the LLM asynchronously.
           "description": null,
           "kind": "simple",
           "symbol_name": "AsyncStreamResponse",
-          "doc_url": "/docs/api/responses#async-stream-response"
+          "doc_url": "/docs/mirascope/v2/api/responses#async-stream-response"
         },
         "parameters": [
           {
@@ -176,7 +176,7 @@ Generates a streaming response using the LLM asynchronously.
             "description": null,
             "kind": "simple",
             "symbol_name": "FormattableT",
-            "doc_url": "/docs/api/formatting#formattable-t"
+            "doc_url": "/docs/mirascope/v2/api/formatting#formattable-t"
           }
         ],
         "doc_url": null
@@ -186,7 +186,7 @@ Generates a streaming response using the LLM asynchronously.
         "description": null,
         "kind": "simple",
         "symbol_name": "AsyncStreamResponse",
-        "doc_url": "/docs/api/responses#async-stream-response"
+        "doc_url": "/docs/mirascope/v2/api/responses#async-stream-response"
       }
     ],
     "doc_url": null
@@ -201,7 +201,7 @@ Generates a streaming response using the LLM asynchronously.
 A class for generating responses using LLMs asynchronously.
 
 **Bases:** 
-<TypeLink type={{"type_str": "BaseCall[P, AsyncContextPrompt, AsyncContextToolkit[DepsT], FormattableT]", "description": null, "kind": "generic", "base_type": {"type_str": "BaseCall", "description": null, "kind": "simple", "symbol_name": "BaseCall", "doc_url": null}, "parameters": [{"type_str": "P", "description": null, "kind": "simple", "symbol_name": "P", "doc_url": "/docs/api/types#p"}, {"type_str": "AsyncContextPrompt", "description": null, "kind": "simple", "symbol_name": "AsyncContextPrompt", "doc_url": "/docs/api/prompts#async-context-prompt"}, {"type_str": "AsyncContextToolkit[DepsT]", "description": null, "kind": "generic", "base_type": {"type_str": "AsyncContextToolkit", "description": null, "kind": "simple", "symbol_name": "AsyncContextToolkit", "doc_url": "/docs/api/tools#async-context-toolkit"}, "parameters": [{"type_str": "DepsT", "description": null, "kind": "simple", "symbol_name": "DepsT", "doc_url": null}], "doc_url": null}, {"type_str": "FormattableT", "description": null, "kind": "simple", "symbol_name": "FormattableT", "doc_url": "/docs/api/formatting#formattable-t"}], "doc_url": null}} />, <TypeLink type={{"type_str": "Generic[P, DepsT, FormattableT]", "description": null, "kind": "generic", "base_type": {"type_str": "Generic", "description": null, "kind": "simple", "symbol_name": "Generic", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Generic"}, "parameters": [{"type_str": "P", "description": null, "kind": "simple", "symbol_name": "P", "doc_url": "/docs/api/types#p"}, {"type_str": "DepsT", "description": null, "kind": "simple", "symbol_name": "DepsT", "doc_url": null}, {"type_str": "FormattableT", "description": null, "kind": "simple", "symbol_name": "FormattableT", "doc_url": "/docs/api/formatting#formattable-t"}], "doc_url": null}} />
+<TypeLink type={{"type_str": "BaseCall[P, AsyncContextPrompt, AsyncContextToolkit[DepsT], FormattableT]", "description": null, "kind": "generic", "base_type": {"type_str": "BaseCall", "description": null, "kind": "simple", "symbol_name": "BaseCall", "doc_url": null}, "parameters": [{"type_str": "P", "description": null, "kind": "simple", "symbol_name": "P", "doc_url": "/docs/mirascope/v2/api/types#p"}, {"type_str": "AsyncContextPrompt", "description": null, "kind": "simple", "symbol_name": "AsyncContextPrompt", "doc_url": "/docs/mirascope/v2/api/prompts#async-context-prompt"}, {"type_str": "AsyncContextToolkit[DepsT]", "description": null, "kind": "generic", "base_type": {"type_str": "AsyncContextToolkit", "description": null, "kind": "simple", "symbol_name": "AsyncContextToolkit", "doc_url": "/docs/mirascope/v2/api/tools#async-context-toolkit"}, "parameters": [{"type_str": "DepsT", "description": null, "kind": "simple", "symbol_name": "DepsT", "doc_url": null}], "doc_url": null}, {"type_str": "FormattableT", "description": null, "kind": "simple", "symbol_name": "FormattableT", "doc_url": "/docs/mirascope/v2/api/formatting#formattable-t"}], "doc_url": null}} />, <TypeLink type={{"type_str": "Generic[P, DepsT, FormattableT]", "description": null, "kind": "generic", "base_type": {"type_str": "Generic", "description": null, "kind": "simple", "symbol_name": "Generic", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Generic"}, "parameters": [{"type_str": "P", "description": null, "kind": "simple", "symbol_name": "P", "doc_url": "/docs/mirascope/v2/api/types#p"}, {"type_str": "DepsT", "description": null, "kind": "simple", "symbol_name": "DepsT", "doc_url": null}, {"type_str": "FormattableT", "description": null, "kind": "simple", "symbol_name": "FormattableT", "doc_url": "/docs/mirascope/v2/api/formatting#formattable-t"}], "doc_url": null}} />
 
 ## <ApiType type="Function" slug="mirascope-llm-calls-calls--async-context-call-call" symbolName="call" /> call
 
@@ -230,7 +230,7 @@ Generates a response using the LLM asynchronously.
         "description": null,
         "kind": "simple",
         "symbol_name": "Context",
-        "doc_url": "/docs/api/index#context"
+        "doc_url": "/docs/mirascope/v2/api#context"
       },
       "parameters": [
         {
@@ -292,7 +292,7 @@ Generates a response using the LLM asynchronously.
           "description": null,
           "kind": "simple",
           "symbol_name": "AsyncContextResponse",
-          "doc_url": "/docs/api/responses#async-context-response"
+          "doc_url": "/docs/mirascope/v2/api/responses#async-context-response"
         },
         "parameters": [
           {
@@ -321,7 +321,7 @@ Generates a response using the LLM asynchronously.
           "description": null,
           "kind": "simple",
           "symbol_name": "AsyncContextResponse",
-          "doc_url": "/docs/api/responses#async-context-response"
+          "doc_url": "/docs/mirascope/v2/api/responses#async-context-response"
         },
         "parameters": [
           {
@@ -336,7 +336,7 @@ Generates a response using the LLM asynchronously.
             "description": null,
             "kind": "simple",
             "symbol_name": "FormattableT",
-            "doc_url": "/docs/api/formatting#formattable-t"
+            "doc_url": "/docs/mirascope/v2/api/formatting#formattable-t"
           }
         ],
         "doc_url": null
@@ -375,7 +375,7 @@ Generates a streaming response using the LLM asynchronously.
         "description": null,
         "kind": "simple",
         "symbol_name": "Context",
-        "doc_url": "/docs/api/index#context"
+        "doc_url": "/docs/mirascope/v2/api#context"
       },
       "parameters": [
         {
@@ -437,7 +437,7 @@ Generates a streaming response using the LLM asynchronously.
           "description": null,
           "kind": "simple",
           "symbol_name": "AsyncContextStreamResponse",
-          "doc_url": "/docs/api/responses#async-context-stream-response"
+          "doc_url": "/docs/mirascope/v2/api/responses#async-context-stream-response"
         },
         "parameters": [
           {
@@ -466,7 +466,7 @@ Generates a streaming response using the LLM asynchronously.
           "description": null,
           "kind": "simple",
           "symbol_name": "AsyncContextStreamResponse",
-          "doc_url": "/docs/api/responses#async-context-stream-response"
+          "doc_url": "/docs/mirascope/v2/api/responses#async-context-stream-response"
         },
         "parameters": [
           {
@@ -481,7 +481,7 @@ Generates a streaming response using the LLM asynchronously.
             "description": null,
             "kind": "simple",
             "symbol_name": "FormattableT",
-            "doc_url": "/docs/api/formatting#formattable-t"
+            "doc_url": "/docs/mirascope/v2/api/formatting#formattable-t"
           }
         ],
         "doc_url": null
@@ -499,7 +499,7 @@ Generates a streaming response using the LLM asynchronously.
 A class for generating responses using LLMs.
 
 **Bases:** 
-<TypeLink type={{"type_str": "BaseCall[P, Prompt, Toolkit, FormattableT]", "description": null, "kind": "generic", "base_type": {"type_str": "BaseCall", "description": null, "kind": "simple", "symbol_name": "BaseCall", "doc_url": null}, "parameters": [{"type_str": "P", "description": null, "kind": "simple", "symbol_name": "P", "doc_url": "/docs/api/types#p"}, {"type_str": "Prompt", "description": null, "kind": "simple", "symbol_name": "Prompt", "doc_url": "/docs/api/prompts#prompt_cls"}, {"type_str": "Toolkit", "description": null, "kind": "simple", "symbol_name": "Toolkit", "doc_url": "/docs/api/tools#toolkit"}, {"type_str": "FormattableT", "description": null, "kind": "simple", "symbol_name": "FormattableT", "doc_url": "/docs/api/formatting#formattable-t"}], "doc_url": null}} />, <TypeLink type={{"type_str": "Generic[P, FormattableT]", "description": null, "kind": "generic", "base_type": {"type_str": "Generic", "description": null, "kind": "simple", "symbol_name": "Generic", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Generic"}, "parameters": [{"type_str": "P", "description": null, "kind": "simple", "symbol_name": "P", "doc_url": "/docs/api/types#p"}, {"type_str": "FormattableT", "description": null, "kind": "simple", "symbol_name": "FormattableT", "doc_url": "/docs/api/formatting#formattable-t"}], "doc_url": null}} />
+<TypeLink type={{"type_str": "BaseCall[P, Prompt, Toolkit, FormattableT]", "description": null, "kind": "generic", "base_type": {"type_str": "BaseCall", "description": null, "kind": "simple", "symbol_name": "BaseCall", "doc_url": null}, "parameters": [{"type_str": "P", "description": null, "kind": "simple", "symbol_name": "P", "doc_url": "/docs/mirascope/v2/api/types#p"}, {"type_str": "Prompt", "description": null, "kind": "simple", "symbol_name": "Prompt", "doc_url": "/docs/mirascope/v2/api/prompts#prompt_cls"}, {"type_str": "Toolkit", "description": null, "kind": "simple", "symbol_name": "Toolkit", "doc_url": "/docs/mirascope/v2/api/tools#toolkit"}, {"type_str": "FormattableT", "description": null, "kind": "simple", "symbol_name": "FormattableT", "doc_url": "/docs/mirascope/v2/api/formatting#formattable-t"}], "doc_url": null}} />, <TypeLink type={{"type_str": "Generic[P, FormattableT]", "description": null, "kind": "generic", "base_type": {"type_str": "Generic", "description": null, "kind": "simple", "symbol_name": "Generic", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Generic"}, "parameters": [{"type_str": "P", "description": null, "kind": "simple", "symbol_name": "P", "doc_url": "/docs/mirascope/v2/api/types#p"}, {"type_str": "FormattableT", "description": null, "kind": "simple", "symbol_name": "FormattableT", "doc_url": "/docs/mirascope/v2/api/formatting#formattable-t"}], "doc_url": null}} />
 
 ## <ApiType type="Function" slug="mirascope-llm-calls-calls--call-call" symbolName="call" /> call
 
@@ -561,7 +561,7 @@ Generates a response using the LLM.
         "description": null,
         "kind": "simple",
         "symbol_name": "Response",
-        "doc_url": "/docs/api/responses#response"
+        "doc_url": "/docs/mirascope/v2/api/responses#response"
       },
       {
         "type_str": "Response[FormattableT]",
@@ -572,7 +572,7 @@ Generates a response using the LLM.
           "description": null,
           "kind": "simple",
           "symbol_name": "Response",
-          "doc_url": "/docs/api/responses#response"
+          "doc_url": "/docs/mirascope/v2/api/responses#response"
         },
         "parameters": [
           {
@@ -580,7 +580,7 @@ Generates a response using the LLM.
             "description": null,
             "kind": "simple",
             "symbol_name": "FormattableT",
-            "doc_url": "/docs/api/formatting#formattable-t"
+            "doc_url": "/docs/mirascope/v2/api/formatting#formattable-t"
           }
         ],
         "doc_url": null
@@ -652,7 +652,7 @@ Generates a streaming response using the LLM.
         "description": null,
         "kind": "simple",
         "symbol_name": "StreamResponse",
-        "doc_url": "/docs/api/responses#stream-response"
+        "doc_url": "/docs/mirascope/v2/api/responses#stream-response"
       },
       {
         "type_str": "StreamResponse[FormattableT]",
@@ -663,7 +663,7 @@ Generates a streaming response using the LLM.
           "description": null,
           "kind": "simple",
           "symbol_name": "StreamResponse",
-          "doc_url": "/docs/api/responses#stream-response"
+          "doc_url": "/docs/mirascope/v2/api/responses#stream-response"
         },
         "parameters": [
           {
@@ -671,7 +671,7 @@ Generates a streaming response using the LLM.
             "description": null,
             "kind": "simple",
             "symbol_name": "FormattableT",
-            "doc_url": "/docs/api/formatting#formattable-t"
+            "doc_url": "/docs/mirascope/v2/api/formatting#formattable-t"
           }
         ],
         "doc_url": null
@@ -689,7 +689,7 @@ Generates a streaming response using the LLM.
 A decorator for converting prompts to calls.
 
 **Bases:** 
-<TypeLink type={{"type_str": "Generic[ToolT, FormattableT]", "description": null, "kind": "generic", "base_type": {"type_str": "Generic", "description": null, "kind": "simple", "symbol_name": "Generic", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Generic"}, "parameters": [{"type_str": "ToolT", "description": null, "kind": "simple", "symbol_name": "ToolT", "doc_url": "/docs/api/tools#tool-t"}, {"type_str": "FormattableT", "description": null, "kind": "simple", "symbol_name": "FormattableT", "doc_url": "/docs/api/formatting#formattable-t"}], "doc_url": null}} />
+<TypeLink type={{"type_str": "Generic[ToolT, FormattableT]", "description": null, "kind": "generic", "base_type": {"type_str": "Generic", "description": null, "kind": "simple", "symbol_name": "Generic", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Generic"}, "parameters": [{"type_str": "ToolT", "description": null, "kind": "simple", "symbol_name": "ToolT", "doc_url": "/docs/mirascope/v2/api/tools#tool-t"}, {"type_str": "FormattableT", "description": null, "kind": "simple", "symbol_name": "FormattableT", "doc_url": "/docs/mirascope/v2/api/formatting#formattable-t"}], "doc_url": null}} />
 
 <AttributesTable
   attributes={[
@@ -828,7 +828,7 @@ A decorator for converting prompts to calls.
 A class for generating responses using LLMs.
 
 **Bases:** 
-<TypeLink type={{"type_str": "BaseCall[P, ContextPrompt, ContextToolkit[DepsT], FormattableT]", "description": null, "kind": "generic", "base_type": {"type_str": "BaseCall", "description": null, "kind": "simple", "symbol_name": "BaseCall", "doc_url": null}, "parameters": [{"type_str": "P", "description": null, "kind": "simple", "symbol_name": "P", "doc_url": "/docs/api/types#p"}, {"type_str": "ContextPrompt", "description": null, "kind": "simple", "symbol_name": "ContextPrompt", "doc_url": "/docs/api/prompts#context-prompt"}, {"type_str": "ContextToolkit[DepsT]", "description": null, "kind": "generic", "base_type": {"type_str": "ContextToolkit", "description": null, "kind": "simple", "symbol_name": "ContextToolkit", "doc_url": "/docs/api/tools#context-toolkit"}, "parameters": [{"type_str": "DepsT", "description": null, "kind": "simple", "symbol_name": "DepsT", "doc_url": null}], "doc_url": null}, {"type_str": "FormattableT", "description": null, "kind": "simple", "symbol_name": "FormattableT", "doc_url": "/docs/api/formatting#formattable-t"}], "doc_url": null}} />, <TypeLink type={{"type_str": "Generic[P, DepsT, FormattableT]", "description": null, "kind": "generic", "base_type": {"type_str": "Generic", "description": null, "kind": "simple", "symbol_name": "Generic", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Generic"}, "parameters": [{"type_str": "P", "description": null, "kind": "simple", "symbol_name": "P", "doc_url": "/docs/api/types#p"}, {"type_str": "DepsT", "description": null, "kind": "simple", "symbol_name": "DepsT", "doc_url": null}, {"type_str": "FormattableT", "description": null, "kind": "simple", "symbol_name": "FormattableT", "doc_url": "/docs/api/formatting#formattable-t"}], "doc_url": null}} />
+<TypeLink type={{"type_str": "BaseCall[P, ContextPrompt, ContextToolkit[DepsT], FormattableT]", "description": null, "kind": "generic", "base_type": {"type_str": "BaseCall", "description": null, "kind": "simple", "symbol_name": "BaseCall", "doc_url": null}, "parameters": [{"type_str": "P", "description": null, "kind": "simple", "symbol_name": "P", "doc_url": "/docs/mirascope/v2/api/types#p"}, {"type_str": "ContextPrompt", "description": null, "kind": "simple", "symbol_name": "ContextPrompt", "doc_url": "/docs/mirascope/v2/api/prompts#context-prompt"}, {"type_str": "ContextToolkit[DepsT]", "description": null, "kind": "generic", "base_type": {"type_str": "ContextToolkit", "description": null, "kind": "simple", "symbol_name": "ContextToolkit", "doc_url": "/docs/mirascope/v2/api/tools#context-toolkit"}, "parameters": [{"type_str": "DepsT", "description": null, "kind": "simple", "symbol_name": "DepsT", "doc_url": null}], "doc_url": null}, {"type_str": "FormattableT", "description": null, "kind": "simple", "symbol_name": "FormattableT", "doc_url": "/docs/mirascope/v2/api/formatting#formattable-t"}], "doc_url": null}} />, <TypeLink type={{"type_str": "Generic[P, DepsT, FormattableT]", "description": null, "kind": "generic", "base_type": {"type_str": "Generic", "description": null, "kind": "simple", "symbol_name": "Generic", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Generic"}, "parameters": [{"type_str": "P", "description": null, "kind": "simple", "symbol_name": "P", "doc_url": "/docs/mirascope/v2/api/types#p"}, {"type_str": "DepsT", "description": null, "kind": "simple", "symbol_name": "DepsT", "doc_url": null}, {"type_str": "FormattableT", "description": null, "kind": "simple", "symbol_name": "FormattableT", "doc_url": "/docs/mirascope/v2/api/formatting#formattable-t"}], "doc_url": null}} />
 
 ## <ApiType type="Function" slug="mirascope-llm-calls-calls--context-call-call" symbolName="call" /> call
 
@@ -857,7 +857,7 @@ Generates a response using the LLM.
         "description": null,
         "kind": "simple",
         "symbol_name": "Context",
-        "doc_url": "/docs/api/index#context"
+        "doc_url": "/docs/mirascope/v2/api#context"
       },
       "parameters": [
         {
@@ -919,7 +919,7 @@ Generates a response using the LLM.
           "description": null,
           "kind": "simple",
           "symbol_name": "ContextResponse",
-          "doc_url": "/docs/api/responses#context-response"
+          "doc_url": "/docs/mirascope/v2/api/responses#context-response"
         },
         "parameters": [
           {
@@ -948,7 +948,7 @@ Generates a response using the LLM.
           "description": null,
           "kind": "simple",
           "symbol_name": "ContextResponse",
-          "doc_url": "/docs/api/responses#context-response"
+          "doc_url": "/docs/mirascope/v2/api/responses#context-response"
         },
         "parameters": [
           {
@@ -963,7 +963,7 @@ Generates a response using the LLM.
             "description": null,
             "kind": "simple",
             "symbol_name": "FormattableT",
-            "doc_url": "/docs/api/formatting#formattable-t"
+            "doc_url": "/docs/mirascope/v2/api/formatting#formattable-t"
           }
         ],
         "doc_url": null
@@ -1002,7 +1002,7 @@ Generates a streaming response using the LLM.
         "description": null,
         "kind": "simple",
         "symbol_name": "Context",
-        "doc_url": "/docs/api/index#context"
+        "doc_url": "/docs/mirascope/v2/api#context"
       },
       "parameters": [
         {
@@ -1064,7 +1064,7 @@ Generates a streaming response using the LLM.
           "description": null,
           "kind": "simple",
           "symbol_name": "ContextStreamResponse",
-          "doc_url": "/docs/api/responses#context-stream-response"
+          "doc_url": "/docs/mirascope/v2/api/responses#context-stream-response"
         },
         "parameters": [
           {
@@ -1093,7 +1093,7 @@ Generates a streaming response using the LLM.
           "description": null,
           "kind": "simple",
           "symbol_name": "ContextStreamResponse",
-          "doc_url": "/docs/api/responses#context-stream-response"
+          "doc_url": "/docs/mirascope/v2/api/responses#context-stream-response"
         },
         "parameters": [
           {
@@ -1108,7 +1108,7 @@ Generates a streaming response using the LLM.
             "description": null,
             "kind": "simple",
             "symbol_name": "FormattableT",
-            "doc_url": "/docs/api/formatting#formattable-t"
+            "doc_url": "/docs/mirascope/v2/api/formatting#formattable-t"
           }
         ],
         "doc_url": null
@@ -1178,7 +1178,7 @@ Example:
       "description": null,
       "kind": "simple",
       "symbol_name": "Provider",
-      "doc_url": "/docs/api/clients#provider"
+      "doc_url": "/docs/mirascope/v2/api/clients#provider"
     }
   },
   {
@@ -1188,7 +1188,7 @@ Example:
       "description": null,
       "kind": "simple",
       "symbol_name": "ModelId",
-      "doc_url": "/docs/api/clients#model-id"
+      "doc_url": "/docs/mirascope/v2/api/clients#model-id"
     }
   },
   {
@@ -1222,7 +1222,7 @@ Example:
               "description": null,
               "kind": "simple",
               "symbol_name": "ToolT",
-              "doc_url": "/docs/api/tools#tool-t"
+              "doc_url": "/docs/mirascope/v2/api/tools#tool-t"
             }
           ],
           "doc_url": null
@@ -1270,7 +1270,7 @@ Example:
               "description": null,
               "kind": "simple",
               "symbol_name": "FormattableT",
-              "doc_url": "/docs/api/formatting#formattable-t"
+              "doc_url": "/docs/mirascope/v2/api/formatting#formattable-t"
             }
           ],
           "doc_url": null
@@ -1284,7 +1284,7 @@ Example:
             "description": null,
             "kind": "simple",
             "symbol_name": "Format",
-            "doc_url": "/docs/api/formatting#format"
+            "doc_url": "/docs/mirascope/v2/api/formatting#format"
           },
           "parameters": [
             {
@@ -1292,7 +1292,7 @@ Example:
               "description": null,
               "kind": "simple",
               "symbol_name": "FormattableT",
-              "doc_url": "/docs/api/formatting#formattable-t"
+              "doc_url": "/docs/mirascope/v2/api/formatting#formattable-t"
             }
           ],
           "doc_url": null
@@ -1328,7 +1328,7 @@ Example:
           "description": null,
           "kind": "simple",
           "symbol_name": "Params",
-          "doc_url": "/docs/api/clients#params"
+          "doc_url": "/docs/mirascope/v2/api/clients#params"
         }
       ],
       "doc_url": null
@@ -1349,7 +1349,7 @@ Example:
       "description": null,
       "kind": "simple",
       "symbol_name": "CallDecorator",
-      "doc_url": "/docs/api/calls#call-decorator"
+      "doc_url": "/docs/mirascope/v2/api/calls#call-decorator"
     },
     "parameters": [
       {
@@ -1357,14 +1357,14 @@ Example:
         "description": null,
         "kind": "simple",
         "symbol_name": "ToolT",
-        "doc_url": "/docs/api/tools#tool-t"
+        "doc_url": "/docs/mirascope/v2/api/tools#tool-t"
       },
       {
         "type_str": "FormattableT",
         "description": null,
         "kind": "simple",
         "symbol_name": "FormattableT",
-        "doc_url": "/docs/api/formatting#formattable-t"
+        "doc_url": "/docs/mirascope/v2/api/formatting#formattable-t"
       }
     ],
     "doc_url": null

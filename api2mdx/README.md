@@ -16,15 +16,18 @@ uv run -m api2mdx.main \
   --output ./docs/api
 ```
 
-For the Mirascope website, use the sync script which handles both content syncing and API generation:
+For the Mirascope website, use the sync command which handles both content syncing and API generation:
 
 ```bash
-bun scripts/sync-docs.ts
+bun run sync
 ```
+
+This invokes `scripts/generate-api-docs.ts`.
 
 ## Command-line Options
 
 - `--source-path`: Path to the Python source code directory
+- `--api-root`: Route root for doc links (e.g. `/docs/api`)
 - `--package`: Python package name to document (e.g., `mirascope.llm`)
 - `--output`: Path where generated MDX files should be written
 - `--docs-path`: Path within the package where docs are located (default: `docs/api`)

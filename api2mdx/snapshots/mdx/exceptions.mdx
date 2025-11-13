@@ -56,7 +56,7 @@ Base exception for all Mirascope errors.
 Base class for API-related errors.
 
 **Bases:** 
-<TypeLink type={{"type_str": "MirascopeError", "description": null, "kind": "simple", "symbol_name": "MirascopeError", "doc_url": "/docs/api/exceptions#mirascope-error"}} />
+<TypeLink type={{"type_str": "MirascopeError", "description": null, "kind": "simple", "symbol_name": "MirascopeError", "doc_url": "/docs/mirascope/v2/api/exceptions#mirascope-error"}} />
 
 <AttributesTable
   attributes={[
@@ -101,7 +101,7 @@ Base class for API-related errors.
 Raised when unable to connect to the API (network issues, timeouts).
 
 **Bases:** 
-<TypeLink type={{"type_str": "MirascopeError", "description": null, "kind": "simple", "symbol_name": "MirascopeError", "doc_url": "/docs/api/exceptions#mirascope-error"}} />
+<TypeLink type={{"type_str": "MirascopeError", "description": null, "kind": "simple", "symbol_name": "MirascopeError", "doc_url": "/docs/mirascope/v2/api/exceptions#mirascope-error"}} />
 
 
 ## <ApiType type="Class" slug="authentication-error" symbolName="AuthenticationError" /> AuthenticationError
@@ -109,7 +109,7 @@ Raised when unable to connect to the API (network issues, timeouts).
 Raised for authentication failures (401, invalid API keys).
 
 **Bases:** 
-<TypeLink type={{"type_str": "APIError", "description": null, "kind": "simple", "symbol_name": "APIError", "doc_url": "/docs/api/exceptions#a-p-i-error"}} />
+<TypeLink type={{"type_str": "APIError", "description": null, "kind": "simple", "symbol_name": "APIError", "doc_url": "/docs/mirascope/v2/api/exceptions#a-p-i-error"}} />
 
 
 ## <ApiType type="Class" slug="permission-error" symbolName="PermissionError" /> PermissionError
@@ -117,7 +117,7 @@ Raised for authentication failures (401, invalid API keys).
 Raised for permission/authorization failures (403).
 
 **Bases:** 
-<TypeLink type={{"type_str": "APIError", "description": null, "kind": "simple", "symbol_name": "APIError", "doc_url": "/docs/api/exceptions#a-p-i-error"}} />
+<TypeLink type={{"type_str": "APIError", "description": null, "kind": "simple", "symbol_name": "APIError", "doc_url": "/docs/mirascope/v2/api/exceptions#a-p-i-error"}} />
 
 
 ## <ApiType type="Class" slug="bad-request-error" symbolName="BadRequestError" /> BadRequestError
@@ -125,7 +125,7 @@ Raised for permission/authorization failures (403).
 Raised for malformed requests (400, 422).
 
 **Bases:** 
-<TypeLink type={{"type_str": "APIError", "description": null, "kind": "simple", "symbol_name": "APIError", "doc_url": "/docs/api/exceptions#a-p-i-error"}} />
+<TypeLink type={{"type_str": "APIError", "description": null, "kind": "simple", "symbol_name": "APIError", "doc_url": "/docs/mirascope/v2/api/exceptions#a-p-i-error"}} />
 
 
 ## <ApiType type="Class" slug="not-found-error" symbolName="NotFoundError" /> NotFoundError
@@ -133,7 +133,7 @@ Raised for malformed requests (400, 422).
 Raised when requested resource is not found (404).
 
 **Bases:** 
-<TypeLink type={{"type_str": "APIError", "description": null, "kind": "simple", "symbol_name": "APIError", "doc_url": "/docs/api/exceptions#a-p-i-error"}} />
+<TypeLink type={{"type_str": "APIError", "description": null, "kind": "simple", "symbol_name": "APIError", "doc_url": "/docs/mirascope/v2/api/exceptions#a-p-i-error"}} />
 
 
 ## <ApiType type="Class" slug="tool-not-found-error" symbolName="ToolNotFoundError" /> ToolNotFoundError
@@ -141,7 +141,7 @@ Raised when requested resource is not found (404).
 Raised if a tool_call cannot be converted to any corresponding tool.
 
 **Bases:** 
-<TypeLink type={{"type_str": "MirascopeError", "description": null, "kind": "simple", "symbol_name": "MirascopeError", "doc_url": "/docs/api/exceptions#mirascope-error"}} />
+<TypeLink type={{"type_str": "MirascopeError", "description": null, "kind": "simple", "symbol_name": "MirascopeError", "doc_url": "/docs/mirascope/v2/api/exceptions#mirascope-error"}} />
 
 
 ## <ApiType type="Class" slug="feature-not-supported-error" symbolName="FeatureNotSupportedError" /> FeatureNotSupportedError
@@ -152,7 +152,7 @@ If compatibility is model-specific, then `model_id` should be specified.
 If the feature is not supported by the provider at all, then it may be `None`.
 
 **Bases:** 
-<TypeLink type={{"type_str": "MirascopeError", "description": null, "kind": "simple", "symbol_name": "MirascopeError", "doc_url": "/docs/api/exceptions#mirascope-error"}} />
+<TypeLink type={{"type_str": "MirascopeError", "description": null, "kind": "simple", "symbol_name": "MirascopeError", "doc_url": "/docs/mirascope/v2/api/exceptions#mirascope-error"}} />
 
 <AttributesTable
   attributes={[
@@ -217,7 +217,7 @@ If the feature is not supported by the provider at all, then it may be `None`.
 Raised when trying to use a formatting mode that is not supported by the chosen model.
 
 **Bases:** 
-<TypeLink type={{"type_str": "FeatureNotSupportedError", "description": null, "kind": "simple", "symbol_name": "FeatureNotSupportedError", "doc_url": "/docs/api/exceptions#feature-not-supported-error"}} />
+<TypeLink type={{"type_str": "FeatureNotSupportedError", "description": null, "kind": "simple", "symbol_name": "FeatureNotSupportedError", "doc_url": "/docs/mirascope/v2/api/exceptions#feature-not-supported-error"}} />
 
 <AttributesTable
   attributes={[
@@ -240,7 +240,7 @@ Raised when trying to use a formatting mode that is not supported by the chosen 
 Raised when rate limits are exceeded (429).
 
 **Bases:** 
-<TypeLink type={{"type_str": "APIError", "description": null, "kind": "simple", "symbol_name": "APIError", "doc_url": "/docs/api/exceptions#a-p-i-error"}} />
+<TypeLink type={{"type_str": "APIError", "description": null, "kind": "simple", "symbol_name": "APIError", "doc_url": "/docs/mirascope/v2/api/exceptions#a-p-i-error"}} />
 
 
 ## <ApiType type="Class" slug="server-error" symbolName="ServerError" /> ServerError
@@ -248,7 +248,7 @@ Raised when rate limits are exceeded (429).
 Raised for server-side errors (500+).
 
 **Bases:** 
-<TypeLink type={{"type_str": "APIError", "description": null, "kind": "simple", "symbol_name": "APIError", "doc_url": "/docs/api/exceptions#a-p-i-error"}} />
+<TypeLink type={{"type_str": "APIError", "description": null, "kind": "simple", "symbol_name": "APIError", "doc_url": "/docs/mirascope/v2/api/exceptions#a-p-i-error"}} />
 
 
 ## <ApiType type="Class" slug="timeout-error" symbolName="TimeoutError" /> TimeoutError
@@ -256,6 +256,6 @@ Raised for server-side errors (500+).
 Raised when requests timeout or deadline exceeded.
 
 **Bases:** 
-<TypeLink type={{"type_str": "MirascopeError", "description": null, "kind": "simple", "symbol_name": "MirascopeError", "doc_url": "/docs/api/exceptions#mirascope-error"}} />
+<TypeLink type={{"type_str": "MirascopeError", "description": null, "kind": "simple", "symbol_name": "MirascopeError", "doc_url": "/docs/mirascope/v2/api/exceptions#mirascope-error"}} />
 
 

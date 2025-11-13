@@ -88,6 +88,8 @@ def main() -> int:
                 "mirascope.llm",
                 "--output",
                 "./snapshots/mdx",
+                "--api-root",
+                "/docs/mirascope/v2/api",
                 "--output-directives",
                 "./snapshots/directives",
             ],

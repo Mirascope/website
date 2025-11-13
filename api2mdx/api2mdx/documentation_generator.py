@@ -29,17 +29,37 @@ class DocumentationGenerator:
     - Loading the module with Griffe
     - Processing API documentation files
     - Generating formatted MDX output
-
-    Attributes:
-        project_root: Root directory of the project
-        repo_path: Path to the cloned repository
-        module: Loaded Griffe module
-        organized_files: Dictionary of files organized by directory
-
     """
 
+    source_path: Path
+    """Path to the source code directory."""
+
+    api_root: str
+    """Root route for links to api docs (e.g. /docs/mirascope/api)."""
+
+    package: str
+    """Python package name to document."""
+
+    docs_path: str
+    """Path within the package where docs are located."""
+
+    output_path: Path
+    """Path where generated documentation should be written."""
+
+    module: Any | None
+    """Loaded Griffe module, or None if not yet loaded."""
+
+    api_documentation: ApiDocumentation | None
+    """Discovered API documentation, or None if not yet discovered."""
+
     def __init__(
-        self, source_path: Path, package: str, docs_path: str, output_path: Path
+        self,
+        *,
+        source_path: Path,
+        package: str,
+        docs_path: str,
+        output_path: Path,
+        api_root: str,
     ) -> None:
         """Initialize the DocumentationGenerator.
 
@@ -48,14 +68,16 @@ class DocumentationGenerator:
             package: Python package name to document
             docs_path: Path within the package where docs are located
             output_path: Path where generated documentation should be written
+            api_root: Root route for links to api docs (e.g. /docs/mirascope/api)
 
         """
         self.source_path = source_path
+        self.api_root = api_root
         self.package = package
         self.docs_path = docs_path
         self.output_path = output_path
-        self.module: Any | None = None
-        self.api_documentation: ApiDocumentation | None = None
+        self.module = None
+        self.api_documentation = None
 
     def generate_all(self, directive_output_path: Path | None = None) -> None:
         """Generate all documentation files.
@@ -70,7 +92,9 @@ class DocumentationGenerator:
         # Discover API directives from module structure
         if self.module is None:
             raise RuntimeError("Module must be loaded before discovering directives")
-        self.api_documentation = ApiDocumentation.from_module(self.module)
+        self.api_documentation = ApiDocumentation.from_module(
+            self.module, self.api_root
+        )
         print(f"Discovered {len(self.api_documentation)} API directives")
 
         # Output directive snapshots if requested

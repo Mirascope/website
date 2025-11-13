@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "start": "bun scripts/start.ts",
-    "sync": "bun run sync-docs && bun run generate-api-docs --source-path .build-cache/mirascope/python --package mirascope.llm --output content/docs/mirascope/v2/api",
+    "sync": "bun run sync-docs && bun run generate-api-docs --source-path .build-cache/mirascope/python --package mirascope.llm --output content/docs/mirascope/v2/api --api-root /docs/mirascope/v2/api",
     "sync-docs": "bun run scripts/sync-docs.ts",
     "generate-api-docs": "bun run scripts/generate-api-docs.ts",
     "preprocess-content": "bun run scripts/preprocess-content.ts",

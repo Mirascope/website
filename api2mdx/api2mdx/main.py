@@ -20,6 +20,7 @@ def generate_documentation(
     package: str,
     docs_path: str,
     output_path: Path,
+    api_root: str,
     directive_output_path: Path | None = None,
 ) -> bool:
     """Generate API documentation from source code.
@@ -29,6 +30,7 @@ def generate_documentation(
         package: Python package name to document
         docs_path: Path within the package where docs are located
         output_path: Path where generated documentation should be written
+        api_root: Root route for links to api docs (e.g. /docs/mirascope/api)
         directive_output_path: Optional path to output intermediate directive files
 
     Returns:
@@ -36,8 +38,13 @@ def generate_documentation(
 
     """
     try:
-        # Initialize and generate documentation
-        generator = DocumentationGenerator(source_path, package, docs_path, output_path)
+        generator = DocumentationGenerator(
+            source_path=source_path,
+            package=package,
+            docs_path=docs_path,
+            output_path=output_path,
+            api_root=api_root,
+        )
         generator.generate_all(directive_output_path=directive_output_path)
 
         print(f"Successfully generated documentation for {package}")
@@ -83,6 +90,12 @@ def main(cmd_args: list[str] | None = None) -> int:
         help="Path where generated documentation should be written",
     )
     parser.add_argument(
+        "--api-root",
+        type=str,
+        required=True,
+        help="Root route for links to api docs (e.g. /docs/mirascope/api)",
+    )
+    parser.add_argument(
         "--output-directives",
         type=Path,
         help="Optional path to output intermediate directive files (e.g., snapshots/directives/)",
@@ -100,6 +113,7 @@ def main(cmd_args: list[str] | None = None) -> int:
         package=parsed_args.package,
         docs_path=parsed_args.docs_path,
         output_path=parsed_args.output,
+        api_root=parsed_args.api_root,
         directive_output_path=parsed_args.output_directives,
     )
 

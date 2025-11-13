@@ -56,8 +56,20 @@ def resolve_symbol_url(symbol_name: str, api_docs: ApiDocumentation) -> str | No
         if api_object.canonical_docs_path.startswith(("http://", "https://")):
             return api_object.canonical_docs_path
 
+        # Strip "index" from the path as it represents the root/default page
+        docs_path = api_object.canonical_docs_path
+        if docs_path == "index":
+            docs_path = ""
+        elif docs_path.endswith("/index"):
+            docs_path = docs_path[:-6]  # Remove "/index"
+        
+        if docs_path:
+            # Only add the leading slash if docs path is nonempty
+            # Sicne /api#context is preferred to /api/#context
+            docs_path = "/" + docs_path
+
         # Otherwise, construct relative URL with api_root
-        return f"{api_docs.api_root}/{api_object.canonical_docs_path}#{api_object.canonical_slug}"
+        return f"{api_docs.api_root}{docs_path}#{api_object.canonical_slug}"
 
     # Track unresolved symbols (but not ellipsis)
     api_docs._unresolved_symbols.add(symbol_name)
