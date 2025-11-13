@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import DevLayout from "@/src/components/routes/dev/DevLayout";
 import { environment } from "@/src/lib/content/environment";
 import { getAllDevMeta, type ProductName } from "@/src/lib/content";
-import { LoadingContent, ContentErrorHandler } from "@/src/components";
+import { LoadingContent, ContentErrorHandler, PageMeta } from "@/src/components";
 
 export const Route = createFileRoute("/dev/social-card")({
   component: SocialCardPreview,
@@ -91,73 +91,80 @@ function SocialCardPreview() {
   };
 
   return (
-    <DevLayout devPages={devPages}>
-      <div className="container">
-        <h1 className="mb-6 text-3xl font-bold">Social Card Preview</h1>
+    <>
+      <PageMeta
+        title="Social Card Preview"
+        description="Preview and test social card designs"
+        robots="noindex, nofollow"
+      />
+      <DevLayout devPages={devPages}>
+        <div className="container">
+          <h1 className="mb-6 text-3xl font-bold">Social Card Preview</h1>
 
-        <p className="mb-6 text-gray-600">
-          This page lets you preview how social cards will look. Edit the title to see the card
-          update in real-time. Useful for iterating on the social-card.html file to preview changes
-          to social cards and testing font sizing rules.
-        </p>
+          <p className="mb-6 text-gray-600">
+            This page lets you preview how social cards will look. Edit the title to see the card
+            update in real-time. Useful for iterating on the social-card.html file to preview
+            changes to social cards and testing font sizing rules.
+          </p>
 
-        <div className="mb-6">
-          <div className="mb-2 flex items-center justify-between">
-            <label htmlFor="title" className="font-medium">
-              Title
-            </label>
-            <span className="text-sm text-gray-500">
-              {title.length} characters
-              {getCurrentFontSizeRule() &&
-                ` - ${getCurrentFontSizeRule()?.fontSize} (${getCurrentFontSizeRule()?.label})`}
-            </span>
+          <div className="mb-6">
+            <div className="mb-2 flex items-center justify-between">
+              <label htmlFor="title" className="font-medium">
+                Title
+              </label>
+              <span className="text-sm text-gray-500">
+                {title.length} characters
+                {getCurrentFontSizeRule() &&
+                  ` - ${getCurrentFontSizeRule()?.fontSize} (${getCurrentFontSizeRule()?.label})`}
+              </span>
+            </div>
+            <input
+              id="title"
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="w-full rounded-md border px-3 py-2"
+            />
           </div>
-          <input
-            id="title"
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="w-full rounded-md border px-3 py-2"
-          />
-        </div>
 
-        <div className="mb-6">
-          <label htmlFor="product" className="mb-2 block font-medium">
-            Product
-          </label>
-          <select
-            id="product"
-            value={product}
-            onChange={(e) => setProduct(e.target.value as ProductName)}
-            className="w-full rounded-md border px-3 py-2"
-          >
-            <option value="mirascope">Mirascope</option>
-            <option value="lilypad">Lilypad</option>
-          </select>
-        </div>
-
-        <div className="flex justify-center">
-          <div
-            className="overflow-hidden rounded-lg border bg-gray-50"
-            style={{ width: "600px", height: "315px" }}
-          >
-            <div
-              className="origin-top-left scale-50 transform"
-              style={{ width: "200%", height: "200%" }}
+          <div className="mb-6">
+            <label htmlFor="product" className="mb-2 block font-medium">
+              Product
+            </label>
+            <select
+              id="product"
+              value={product}
+              onChange={(e) => setProduct(e.target.value as ProductName)}
+              className="w-full rounded-md border px-3 py-2"
             >
-              <iframe
-                ref={iframeRef}
-                id="social-card-iframe"
-                src="/dev/social-card.html"
-                className="border-0"
-                style={{ width: "1200px", height: "630px" }}
-                title="Social Card Preview"
-                onLoad={handleIframeLoad}
-              />
+              <option value="mirascope">Mirascope</option>
+              <option value="lilypad">Lilypad</option>
+            </select>
+          </div>
+
+          <div className="flex justify-center">
+            <div
+              className="overflow-hidden rounded-lg border bg-gray-50"
+              style={{ width: "600px", height: "315px" }}
+            >
+              <div
+                className="origin-top-left scale-50 transform"
+                style={{ width: "200%", height: "200%" }}
+              >
+                <iframe
+                  ref={iframeRef}
+                  id="social-card-iframe"
+                  src="/dev/social-card.html"
+                  className="border-0"
+                  style={{ width: "1200px", height: "630px" }}
+                  title="Social Card Preview"
+                  onLoad={handleIframeLoad}
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </DevLayout>
+      </DevLayout>
+    </>
   );
 }
