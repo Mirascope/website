@@ -9,5 +9,6 @@
   },
   "files.readonlyInclude": {
     "**/routeTree.gen.ts": true
-  }
+  },
+  "python-envs.pythonProjects": []
 }
