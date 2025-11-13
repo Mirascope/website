@@ -51,7 +51,7 @@ async function main() {
     fs.writeFileSync(rootTemplatePath, prodTemplate);
 
     // Get all routes to prerender
-    const routes = await getAllRoutes();
+    const routes = await getAllRoutes(true);
     printHeader("Pre-rendering Routes");
     console.log(`${icons.info} Pre-rendering ${routes.length} routes to production-ready HTML...`);
 
