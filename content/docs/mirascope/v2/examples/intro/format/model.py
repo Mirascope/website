@@ -9,7 +9,7 @@ class Book(BaseModel):
 
 
 def recommend_book(genre: str) -> llm.Response[Book]:
-    model: llm.Model = llm.use_model(provider="openai", model_id="gpt-5")
+    model: llm.Model = llm.use_model(provider="anthropic", model_id="claude-sonnet-4-0")
     message = llm.messages.user(f"Please recommend a book in {genre}.")
     return model.call(
         messages=[message],

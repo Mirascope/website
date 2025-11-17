@@ -4,8 +4,8 @@ from mirascope import llm
 
 
 @llm.call(
-    provider="openai",
-    model_id="gpt-4o-mini",
+    provider="anthropic",
+    model_id="claude-sonnet-4-0",
 )
 async def sazed(query: str):
     system_prompt = """

@@ -12,8 +12,8 @@ def available_library_books() -> list[str]:  # [!code highlight]
 
 
 @llm.call(
-    provider="openai",
-    model_id="gpt-5",
+    provider="anthropic",
+    model_id="claude-sonnet-4-0",
     tools=[available_library_books],
 )
 def librarian(query: str):
