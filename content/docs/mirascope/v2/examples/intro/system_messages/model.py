@@ -2,7 +2,7 @@ from mirascope import llm
 
 
 def recommend_book(genre: str) -> llm.Response:
-    model = llm.use_model(provider="openai", model_id="gpt-5")
+    model = llm.use_model(provider="anthropic", model_id="claude-sonnet-4-0")
     return model.call(
         messages=[
             # [!code highlight]
