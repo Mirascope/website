@@ -1,4 +1,5 @@
 import { CopyButton } from "@/mirascope-ui/blocks/copy-button";
+import { RunButton } from "@/mirascope-ui/blocks/run-button";
 import {
   highlightCode,
   stripHighlightMarkers,
@@ -7,6 +8,9 @@ import {
 } from "@/mirascope-ui/lib/code-highlight";
 import { cn } from "@/mirascope-ui/lib/utils";
 import { useEffect, useRef, useState } from "react";
+import { ClientMessages, setContext } from "@runmedev/renderers";
+// should this be in a different location? Or dep reversed?
+import { useRunnable } from "@/src/components/core/providers/RunnableContext";
 
 interface CodeBlockProps {
   code: string;
@@ -25,9 +29,12 @@ export function CodeBlock({
   showLineNumbers = true,
   onCopy,
 }: CodeBlockProps) {
+  const [consoleID, setConsoleID] = useState<string>("");
+  const runnable = useRunnable();
   const [highlightedCode, setHighlightedCode] = useState<HighlightResult>(
     initialHighlight(code, language, meta)
   );
+  const consoleRef = useRef<HTMLDivElement>(null);
   const codeRef = useRef<HTMLDivElement>(null);
   const [isSmallBlock, setIsSmallBlock] = useState<boolean>(false);
 
@@ -69,6 +76,64 @@ export function CodeBlock({
     }
   }, [highlightedCode]);
 
+  useEffect(() => {
+    if (!consoleRef.current || !consoleID) {
+      return;
+    }
+    setContext({
+      postMessage: (_message: unknown) => {
+        // Only need this if, e.g., we received stdin
+        // console.log("message", message);
+      },
+      onDidReceiveMessage: (listener: (message: unknown) => void) => {
+        const stdoutSub = runnable.stdout?.subscribe((text) => {
+          listener({
+            type: ClientMessages.terminalStdout,
+            output: {
+              "runme.dev/id": consoleID,
+              data: text,
+            },
+          } as any);
+        });
+
+        const stderrSub = runnable.stderr?.subscribe((text) => {
+          listener({
+            type: ClientMessages.terminalStderr,
+            output: {
+              "runme.dev/id": consoleID,
+              data: text,
+            },
+          } as any);
+        });
+
+        return {
+          dispose: () => {
+            stdoutSub?.unsubscribe();
+            stderrSub?.unsubscribe();
+          },
+        };
+      },
+    });
+    const view = document.createElement("console-view");
+    view.setAttribute("id", consoleID);
+    view.setAttribute("key", consoleID);
+    view.setAttribute("buttons", "false");
+    view.setAttribute("initialRows", "18");
+    view.setAttribute("theme", "dark");
+    view.setAttribute("fontFamily", "monospace");
+    view.setAttribute("fontSize", "13");
+    view.setAttribute("cursorStyle", "block");
+    view.setAttribute("cursorBlink", "true");
+    view.setAttribute("cursorWidth", "1");
+    view.setAttribute("smoothScrollDuration", "0");
+    view.setAttribute("scrollback", "1000");
+    consoleRef.current?.appendChild(view);
+
+    return () => {
+      view?.remove();
+    };
+  }, [consoleID, consoleRef.current]);
+
   return (
     <div
       ref={codeRef}
@@ -82,7 +147,21 @@ export function CodeBlock({
           isSmallBlock ? "top-1/2 right-3 flex -translate-y-1/2 space-x-1" : "top-3 right-3"
         )}
       >
-        <CopyButton content={stripHighlightMarkers(code)} onCopy={onCopy} />
+        <div className="flex items-center space-x-1">
+          <RunButton
+            content={stripHighlightMarkers(code)}
+            language={language}
+            onRun={(running) => {
+              if (!running) {
+                return;
+              }
+              setConsoleID(
+                `console-${Math.random().toString(36).slice(2) + Date.now().toString(36)}`
+              );
+            }}
+          />
+          <CopyButton content={stripHighlightMarkers(code)} onCopy={onCopy} />
+        </div>
       </div>
 
       <div className="highlight-container w-full overflow-auto">
@@ -91,6 +170,13 @@ export function CodeBlock({
           dangerouslySetInnerHTML={{ __html: highlightedCode.themeHtml }}
         />
       </div>
+      {consoleID && (
+        <div
+          ref={(ref) => {
+            consoleRef.current = ref;
+          }}
+        ></div>
+      )}
     </div>
   );
 }
