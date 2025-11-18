@@ -8,7 +8,7 @@
 import fs from "fs";
 import path from "path";
 import { getAllDocInfo } from "./content";
-import { preprocessMdx } from "./mdx-preprocessing";
+import { preprocessDoc } from "./mdx-preprocessing";
 import type { DocInfo } from "./spec";
 import { LLMContent } from "./llm-content";
 import { BASE_URL } from "@/src/lib/constants/site";
@@ -35,7 +35,7 @@ function createLLMContentFromDoc(doc: DocInfo, docsRoot?: string): LLMContent {
     throw new Error(`Required doc file not found: ${filePath}`);
   }
 
-  const { frontmatter, content } = preprocessMdx(filePath);
+  const { frontmatter, content } = preprocessDoc(filePath);
   // Build final formatted content with ContentSection wrapper
   let wrappedContent = `<Content`;
 

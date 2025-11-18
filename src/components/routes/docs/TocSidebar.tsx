@@ -21,7 +21,7 @@ const TocSidebar: React.FC<TocSidebarProps> = ({ document }) => {
         <div className="mb-4 flex flex-col gap-3">
           {document && (
             <CopyMarkdownButton
-              content={document.content}
+              content={document.markdown}
               itemId={document.meta.path}
               product={document.meta.product}
               contentType="document_markdown"

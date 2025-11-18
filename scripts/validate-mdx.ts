@@ -1,7 +1,7 @@
 import path from "path";
 import { glob } from "glob";
 import { processMDXContent } from "@/src/lib/content";
-import { preprocessMdx } from "@/src/lib/content/mdx-preprocessing";
+import { preprocessDoc } from "@/src/lib/content/mdx-preprocessing";
 
 interface ValidationError {
   type: string;
@@ -67,7 +67,7 @@ function validateAbsoluteUrls(content: string): ValidationResult {
 
 async function validateMdxFile(filePath: string): Promise<ValidationResult> {
   try {
-    const { content } = preprocessMdx(filePath);
+    const { content } = preprocessDoc(filePath);
 
     const syntaxResult = await validateMDXSyntax(content, filePath);
     const urlsResult = validateAbsoluteUrls(content);
