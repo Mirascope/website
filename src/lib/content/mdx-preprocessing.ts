@@ -14,7 +14,7 @@ export interface PreprocessMdxOptions {
 /**
  * Result of MDX preprocessing with code examples resolved
  */
-export interface PreprocessedDocResult {
+export interface PreprocessedMdxResult {
   frontmatter: Record<string, any>;
   content: string; // Body content only (no frontmatter)
   fullContent: string; // Full file content with frontmatter
@@ -128,9 +128,9 @@ function inferLanguageFromPath(filePath: string): string {
 }
 
 /**
- * Preprocesses document content by resolving CodeExample directives and parsing frontmatter
+ * Preprocesses MDX content by resolving CodeExample directives and parsing frontmatter
  */
-export function preprocessDoc(filePath: string): PreprocessedDocResult {
+export function preprocessMdx(filePath: string): PreprocessedMdxResult {
   const contentWithCodeExamples = processCodeExamples(filePath);
   const { frontmatter, content } = parseFrontmatter(contentWithCodeExamples);
 

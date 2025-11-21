@@ -11,7 +11,7 @@ import {
   docRegistry,
 } from "./content";
 import { type Product } from "./spec";
-import { preprocessDoc } from "./mdx-preprocessing";
+import { preprocessMdx } from "./mdx-preprocessing";
 import { processMdx } from "./mdx-processing";
 
 /**
@@ -264,7 +264,7 @@ export class ContentPreprocessor {
     contentType: ContentType,
     outputBase: string
   ): Promise<void> {
-    const { frontmatter, fullContent } = preprocessDoc(filePath);
+    const { frontmatter, fullContent } = preprocessMdx(filePath);
 
     // Get plain markdown from document with MDX
     const markdown = await processMdx(fullContent);
