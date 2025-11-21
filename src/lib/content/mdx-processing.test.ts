@@ -186,5 +186,34 @@ Content for tab 1
 Just a vanilla markdown paragraph.
 `);
     });
+    test("strips unknown MDX tags but keeps text content", async () => {
+      const input = `# Hello, World!
+
+<UnknownComponentXyz>
+  Strip node but retain text content.
+</UnknownComponentXyz>
+
+More regular text.
+
+### Tab 1
+
+Content for tab 1
+
+Just a vanilla markdown paragraph.
+`;
+      const result = await processMdx(input);
+      expect(result).toEqual(`# Hello, World!
+
+Strip node but retain text content.
+
+More regular text.
+
+### Tab 1
+
+Content for tab 1
+
+Just a vanilla markdown paragraph.
+`);
+    });
   });
 });
