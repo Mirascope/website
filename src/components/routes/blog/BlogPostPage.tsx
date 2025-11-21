@@ -5,7 +5,6 @@ import { MDXRenderer } from "@/src/components/mdx/providers";
 import { CopyMarkdownButton } from "@/src/components/ui/copy-markdown-button";
 
 import { LoadingContent } from "@/src/components/core/feedback";
-import { RunnableProvider } from "@/src/components/core/providers";
 import { TableOfContents } from "@/src/components/core/navigation";
 import { PageMeta } from "@/src/components/core/meta";
 import { PagefindMeta } from "@/src/components/core/meta";
@@ -129,25 +128,23 @@ export function BlogPostPage({ post, slug, isLoading = false }: BlogPostPageProp
           author: author,
         }}
       />
-      <RunnableProvider>
-        <AppLayout>
-          <AppLayout.LeftSidebar className="pt-1" collapsible={false}>
-            <div className="pr-10">
-              <BackToBlogLink />
-            </div>
-          </AppLayout.LeftSidebar>
+      <AppLayout>
+        <AppLayout.LeftSidebar className="pt-1" collapsible={false}>
+          <div className="pr-10">
+            <BackToBlogLink />
+          </div>
+        </AppLayout.LeftSidebar>
 
-          <AppLayout.Content>{mainContent}</AppLayout.Content>
+        <AppLayout.Content>{mainContent}</AppLayout.Content>
 
-          <AppLayout.RightSidebar
-            className={isLoading ? undefined : "pt-1"}
-            mobileCollapsible={true}
-            mobileTitle="Table of Contents"
-          >
-            {rightSidebarContent}
-          </AppLayout.RightSidebar>
-        </AppLayout>
-      </RunnableProvider>
+        <AppLayout.RightSidebar
+          className={isLoading ? undefined : "pt-1"}
+          mobileCollapsible={true}
+          mobileTitle="Table of Contents"
+        >
+          {rightSidebarContent}
+        </AppLayout.RightSidebar>
+      </AppLayout>
     </>
   );
 }

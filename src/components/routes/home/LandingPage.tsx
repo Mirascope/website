@@ -2,7 +2,7 @@ import { PageMeta } from "@/src/components/";
 import { useSunsetTime } from "@/src/lib/hooks/useSunsetTime";
 import { useGradientFadeOnScroll } from "@/src/lib/hooks/useGradientFadeOnScroll";
 import { useRef, useState, useEffect } from "react";
-import { ProviderContextProvider, RunnableProvider } from "@/src/components/core";
+import { ProviderContextProvider } from "@/src/components/core";
 import { HeroBlock } from "./HeroBlock";
 import { MirascopeBlock } from "./MirascopeBlock";
 import { LilypadBlock } from "./LilypadBlock";
@@ -147,27 +147,25 @@ export function LandingPage() {
     <>
       <PageMeta title="Home" description="The AI Engineer's Developer Stack" />
       <ProviderContextProvider>
-        <RunnableProvider>
-          <div className="flex w-full flex-col">
-            {/* Hero section */}
-            <div data-gradient-fade={true} ref={heroSectionRef}>
-              <HeroBlock
-                onScrollDown={scrollToMirascopeSection}
-                showScrollButton={showScrollButton}
-              />
-            </div>
-
-            {/* Mirascope section */}
-            <div data-gradient-fade={true} ref={mirascopeSectionRef} className="mb-24">
-              <MirascopeBlock onScrollDown={scrollToLilypadSection} />
-            </div>
-
-            {/* Lilypad section */}
-            <div data-gradient-fade={true} ref={lilypadSectionRef} className="mt-24">
-              <LilypadBlock onScrollToTop={scrollToHeroSection} />
-            </div>
+        <div className="flex w-full flex-col">
+          {/* Hero section */}
+          <div data-gradient-fade={true} ref={heroSectionRef}>
+            <HeroBlock
+              onScrollDown={scrollToMirascopeSection}
+              showScrollButton={showScrollButton}
+            />
           </div>
-        </RunnableProvider>
+
+          {/* Mirascope section */}
+          <div data-gradient-fade={true} ref={mirascopeSectionRef} className="mb-24">
+            <MirascopeBlock onScrollDown={scrollToLilypadSection} />
+          </div>
+
+          {/* Lilypad section */}
+          <div data-gradient-fade={true} ref={lilypadSectionRef} className="mt-24">
+            <LilypadBlock onScrollToTop={scrollToHeroSection} />
+          </div>
+        </div>
       </ProviderContextProvider>
     </>
   );
