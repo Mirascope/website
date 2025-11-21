@@ -14,6 +14,8 @@ import {
   CoreMeta,
   RunnableProvider,
 } from "@/src/components";
+// Import Runme renderers (e.g. <console-view.../>) for terminal web-components
+import "@runmedev/renderers";
 
 export const Route = createRootRoute({
   beforeLoad: ({ location }) => {
