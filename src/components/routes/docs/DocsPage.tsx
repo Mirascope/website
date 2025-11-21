@@ -10,7 +10,6 @@ import TocSidebar from "./TocSidebar";
 import MainContent from "./MainContent";
 import DocsSidebar from "./DocsSidebar";
 import type { DocContent } from "@/src/lib/content";
-import "@runmedev/renderers";
 
 type DocsPageProps = {
   document?: DocContent;
