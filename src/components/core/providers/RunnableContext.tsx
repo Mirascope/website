@@ -1,4 +1,4 @@
-import { Observable, bufferTime, connectable, map } from "rxjs";
+import { Observable, connectable } from "rxjs";
 import {
   Component,
   createContext,
@@ -26,8 +26,6 @@ export interface RunnableContextType {
   loading: boolean;
   /** Error loading Pyodide */
   error: Error | null;
-  /** Install Python packages */
-  installPackage: (pkg: string) => Promise<void>;
   /** Run Python code */
   runPython: (code: string) => Promise<unknown>;
   /** Observe stdout */
@@ -73,7 +71,6 @@ function Provider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }: ProviderProps)
     // If we already have a global instance, use it
     if (globalPyodide) {
       setPyodide(globalPyodide);
-      setLoading(false);
       return;
     }
 
@@ -82,7 +79,6 @@ function Provider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }: ProviderProps)
       globalPyodidePromise
         .then((pyodide) => {
           setPyodide(pyodide);
-          setLoading(false);
         })
         .catch((err) => {
           const error = err instanceof Error ? err : new Error(String(err));
@@ -94,10 +90,7 @@ function Provider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }: ProviderProps)
     // Start new initialization
     async function init() {
       const env = {
-        ANTHROPIC_API_KEY: "replace-via-reverse-proxy",
-        ANTHROPIC_BASE_URL: `${window.location.origin}/anthropic`,
-        OPENAI_API_KEY: "replace-via-reverse-proxy",
-        OPENAI_BASE_URL: `${window.location.origin}/openai`,
+        ANTHROPIC_API_KEY: "http-requests-are-cached",
       };
       try {
         const pyodidePromise = loadPyodide({
@@ -111,10 +104,10 @@ function Provider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }: ProviderProps)
         globalPyodidePromise = null;
 
         setPyodide(pyodide);
-        setLoading(false);
       } catch (err) {
         globalPyodidePromise = null;
         const error = err instanceof Error ? err : new Error(String(err));
+        console.error((err as Error).message);
         setError(error);
       }
     }
@@ -123,58 +116,88 @@ function Provider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }: ProviderProps)
 
   useEffect(() => {
     // Multiplex stdout and stderr to observables
-    if (!pyodide || loading) {
+    if (!pyodide) {
       return;
     }
+
+    const stdoutDecoder = new TextDecoder("utf-8");
     const stdout$ = connectable(
       new Observable<string>((observer) =>
         pyodide.setStdout({
-          raw: (c) => observer.next(String.fromCharCode(c)),
+          write: (buffer: Uint8Array) => {
+            const decoded = stdoutDecoder.decode(buffer, { stream: true });
+            observer.next(decoded);
+            return buffer.length;
+          },
         })
-      ).pipe(
-        bufferTime(10),
-        map((chunks) => chunks.join(""))
       )
     );
     stdout$.connect();
     setStdout(stdout$);
+    const stderrDecoder = new TextDecoder("utf-8");
     const stderr$ = connectable(
       new Observable<string>((observer) =>
         pyodide.setStderr({
-          raw: (c) => observer.next(String.fromCharCode(c)),
+          write: (buffer: Uint8Array) => {
+            const decoded = stderrDecoder.decode(buffer, { stream: true });
+            observer.next(decoded);
+            return buffer.length;
+          },
         })
-      ).pipe(
-        bufferTime(50),
-        map((chunks) => chunks.join(""))
       )
     );
     stderr$.connect();
     setStderr(stderr$);
-  }, [pyodide, loading]);
+  }, [pyodide]);
 
   useEffect(() => {
-    if (!pyodide || loading || error) {
+    if (!pyodide || error) {
       return;
     }
 
-    async function installDependencies() {
+    const yamls = [
+      "content/docs/mirascope/v2/examples/intro/decorator/async.py.yaml",
+      "content/docs/mirascope/v2/examples/intro/decorator/async_stream.py.yaml",
+      "content/docs/mirascope/v2/examples/intro/decorator/stream.py.yaml",
+      "content/docs/mirascope/v2/examples/intro/decorator/sync.py.yaml",
+      "content/docs/mirascope/v2/examples/intro/model/async.py.yaml",
+      "content/docs/mirascope/v2/examples/intro/model/async_stream.py.yaml",
+      "content/docs/mirascope/v2/examples/intro/model/stream.py.yaml",
+      "content/docs/mirascope/v2/examples/intro/model/sync.py.yaml",
+    ];
+
+    async function bootstrap() {
       if (!pyodide) {
         return;
       }
       try {
-        // Optionally load built-in packages
-        // await pyodide.loadPackage(["numpy", "matplotlib"]);
         await pyodide.loadPackage("micropip");
+        for (const yaml of yamls) {
+          const baseDir = yaml.substring(0, yaml.lastIndexOf("/"));
+          await pyodide.FS.mkdirTree(baseDir);
+          const yamlURL = `${window.location.origin}/${yaml}`;
+          const content = await fetch(yamlURL).then((res) => res.text());
+          await pyodide.FS.writeFile(yaml, content);
+        }
+        // install dependencies
         const micropip = pyodide.pyimport("micropip");
-        await micropip.install("mirascope[anthropic]==2.0.0a2", { keep_going: true });
+        await micropip.install("vcrpy>=7.0.0");
+        await micropip.install("mirascope[anthropic]==2.0.0a2");
+        // pre-importing makes code blocks run faster
+        await pyodide.runPythonAsync(`
+          import vcr
+          from mirascope import llm
+        `);
+        console.log("dependencies ready");
+        setLoading(false);
       } catch (err) {
         const error = err instanceof Error ? err : new Error(String(err));
-        console.error(error);
+        console.error((err as Error).message);
         setError(error);
       }
     }
-    installDependencies();
-  }, [pyodide, loading, error]);
+    bootstrap();
+  }, [pyodide, error, setError, setLoading]);
 
   const value = useMemo<RunnableContextType>(
     () => ({
@@ -183,19 +206,15 @@ function Provider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }: ProviderProps)
       error,
       stdout,
       stderr,
-      installPackage: async (pkg: string) => {
-        if (!pyodide) {
-          return;
-        }
-        await pyodide.loadPackage(pkg);
-      },
       runPython: async (code: string) => {
-        if (!pyodide) {
+        if (!pyodide || loading || error) {
           return;
         }
-        // Let's not load arbitrary packages for now
-        // await pyodide.loadPackagesFromImports(code);
-        return pyodide.runPython(code);
+        try {
+          await pyodide.runPythonAsync(code);
+        } catch (err) {
+          console.error((err as Error).message);
+        }
       },
     }),
     [pyodide, loading, error, stdout, stderr]

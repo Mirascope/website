@@ -58,7 +58,18 @@ function processCodeExamples(filePath: string): string {
           ? join(basePath, file.slice(2))
           : resolve(basePath, file);
 
-        const exampleContent = readFileSync(resolvedPath, "utf-8");
+        const splitOn = "content/";
+        const parts = resolvedPath.split(splitOn);
+        const yamlPath = parts.length > 1 ? splitOn + parts[1] : resolvedPath;
+
+        let exampleContent = readFileSync(resolvedPath, "utf-8");
+        const contentLines = exampleContent.split("\n");
+        const mainFuncIndex = contentLines.findIndex((line) => line.includes("def main():"));
+        if (mainFuncIndex !== -1) {
+          contentLines.splice(mainFuncIndex, 0, `@vcr.use_cassette('${yamlPath}.yaml')`);
+          contentLines.unshift("import vcr");
+          exampleContent = contentLines.join("\n");
+        }
 
         // Process lines if specified (e.g., "1-5" or "10-20")
         let processedContent = exampleContent;
