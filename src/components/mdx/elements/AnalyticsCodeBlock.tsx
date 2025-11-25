@@ -1,6 +1,6 @@
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useCallback, useState } from "react";
 import { CodeBlock } from "@/mirascope-ui/blocks/code-block/code-block";
-import { useProduct } from "@/src/components/core";
+import { useProduct, useRunnable } from "@/src/components/core";
 import analyticsManager from "@/src/lib/services/analytics";
 
 interface AnalyticsCodeBlockProps {
@@ -18,6 +18,7 @@ export function AnalyticsCodeBlock({
   className,
   showLineNumbers,
 }: AnalyticsCodeBlockProps) {
+  const [output, setOutput] = useState<string>("");
   const product = useProduct();
   const codeRef = useRef<HTMLDivElement>(null);
 
@@ -47,15 +48,40 @@ export function AnalyticsCodeBlock({
     });
   };
 
+  const runnable = useRunnable();
+  const runCode = useCallback(
+    (code: string) => {
+      if (!runnable || !runnable.stdout) {
+        return;
+      }
+      // clear the output
+      setOutput("");
+
+      const sub = runnable.stdout.subscribe((stdout) => setOutput((prev) => prev + stdout));
+
+      runnable
+        .runPython(code)
+        .then(() => {
+          console.log("done running code");
+        })
+        .finally(() => {
+          sub.unsubscribe();
+        });
+    },
+    [setOutput, runnable, runnable.stdout]
+  );
+
   return (
     <div ref={codeRef} data-code-hash={codeHash} className="analytics-code-block">
       <CodeBlock
         code={code}
+        output={output}
         language={language}
         meta={meta}
         className={className}
         showLineNumbers={showLineNumbers}
         onCopy={onCopy}
+        onRun={runCode}
       />
     </div>
   );
