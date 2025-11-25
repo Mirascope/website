@@ -1,4 +1,4 @@
-import { Observable, connectable } from "rxjs";
+import { Observable, connectable, catchError, takeUntil, lastValueFrom, from, EMPTY } from "rxjs";
 import {
   Component,
   createContext,
@@ -27,11 +27,11 @@ export interface RunnableContextType {
   /** Error loading Pyodide */
   error: Error | null;
   /** Run Python code */
-  runPython: (code: string) => Promise<unknown>;
-  /** Observe stdout */
-  stdout: Observable<string> | null;
-  /** Observe stderr */
-  stderr: Observable<string> | null;
+  runPython: (code: string) => {
+    done: () => Promise<void>;
+    stdout: Observable<string>;
+    stderr: Observable<string>;
+  };
 }
 
 export interface ProviderProps extends PropsWithChildren {
@@ -204,17 +204,30 @@ function Provider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }: ProviderProps)
       pyodide,
       loading,
       error,
-      stdout,
-      stderr,
-      runPython: async (code: string) => {
-        if (!pyodide || loading || error) {
-          return;
+      runPython: (code: string) => {
+        if (!pyodide || loading || error || !stdout || !stderr) {
+          console.warn("Pyodide is not ready");
+          return {
+            done: () => Promise.resolve(),
+            stdout: new Observable<string>((observer) => observer.complete()),
+            stderr: new Observable<string>((observer) => observer.complete()),
+          };
         }
-        try {
-          await pyodide.runPythonAsync(code);
-        } catch (err) {
-          console.error((err as Error).message);
-        }
+
+        const done$ = from(pyodide.runPythonAsync(code)).pipe(
+          catchError((err) => {
+            console.error((err as Error).message);
+            return EMPTY;
+          })
+        );
+
+        // function to return done$ as promise
+        const done = () => lastValueFrom(done$);
+        // complete run's stdout + stderr so clients don't have to
+        const runStdout$ = stdout.pipe(takeUntil(done$));
+        const runStderr$ = stderr.pipe(takeUntil(done$));
+
+        return { done, stdout: runStdout$, stderr: runStderr$ };
       },
     }),
     [pyodide, loading, error, stdout, stderr]
