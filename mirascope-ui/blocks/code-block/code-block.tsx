@@ -10,8 +10,6 @@ import {
 } from "@/mirascope-ui/lib/code-highlight";
 import { cn } from "@/mirascope-ui/lib/utils";
 import { useEffect, useRef, useState } from "react";
-// should this be in a different location? Or dep reversed?
-// import { useRunnable } from "@/src/components/core/providers/RunnableContext";
 
 interface CodeBlockProps {
   code: string;
