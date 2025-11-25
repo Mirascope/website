@@ -50,25 +50,21 @@ export function AnalyticsCodeBlock({
 
   const runnable = useRunnable();
   const runCode = useCallback(
-    (code: string) => {
-      if (!runnable || !runnable.stdout) {
-        return;
+    (code: string): Promise<void> => {
+      if (!runnable || runnable.loading) {
+        return Promise.resolve();
       }
-      // clear the output
+      // reset the output to empty string
       setOutput("");
 
-      const sub = runnable.stdout.subscribe((stdout) => setOutput((prev) => prev + stdout));
-
-      runnable
-        .runPython(code)
-        .then(() => {
-          console.log("done running code");
-        })
-        .finally(() => {
-          sub.unsubscribe();
-        });
+      const { done, stdout } = runnable.runPython(code);
+      stdout.subscribe({
+        next: (chunk) => setOutput((prev) => prev + chunk),
+        complete: () => console.log("running code complete"),
+      });
+      return done();
     },
-    [setOutput, runnable, runnable.stdout]
+    [setOutput, runnable, runnable.loading]
   );
 
   return (
