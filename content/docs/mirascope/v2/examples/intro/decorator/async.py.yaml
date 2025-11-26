@@ -1,119 +1,104 @@
 interactions:
-- request:
-    body: '{"max_tokens":16000,"messages":[{"role":"user","content":"Please recommend
-      a book in fantasy."}],"model":"claude-haiku-4-5"}'
-    headers:
-      accept:
-      - application/json
-      accept-encoding:
-      - gzip, deflate
-      anthropic-version:
-      - '2023-06-01'
-      connection:
-      - keep-alive
-      content-length:
-      - '124'
-      content-type:
-      - application/json
-      host:
-      - api.anthropic.com
-      user-agent:
-      - AsyncAnthropic/Python 0.74.1
-      x-api-key:
-      - replace-via-reverse-proxy
-      x-stainless-arch:
-      - arm64
-      x-stainless-async:
-      - async:asyncio
-      x-stainless-lang:
-      - python
-      x-stainless-os:
-      - MacOS
-      x-stainless-package-version:
-      - 0.74.1
-      x-stainless-read-timeout:
-      - '600'
-      x-stainless-retry-count:
-      - '0'
-      x-stainless-runtime:
-      - CPython
-      x-stainless-runtime-version:
-      - 3.12.9
-      x-stainless-timeout:
-      - '600'
-    method: POST
-    uri: https://api.anthropic.com/v1/messages
-  response:
-    body:
-      string: !!binary |
-        H4sIAAAAAAAAAwAAAP//dFPRitxGEPyVZvKwcGiPXccHRm9xiOGwCcEY/JALS6+mpensqEeZ7lmd
-        fBz4I/yF/hIz2juME/IkNNU1XV3V8+DG5Cm61nURi6dtQD6V7cvtzfbF7sXNfrfbu8axd60bdTjs
-        9q+Hd2/mn6ffpPt00ptfQ8jH+/veNc6WiWoVqeJArnE5xXqAqqyGYq5xXRIjMdf++fBcb3RfkfXT
-        up/gQyD4HUeC1IMFgo8sHo4L/IGWuTvB+2ShL6p3cie3Gw+ZujSOJB4ssAIqIAyZ0KBHMdQF1DAb
-        ywBTYrFruDXoU4xpVnh7ThaoAYRIA4nHvEDPQ8kEkmaIfK48FgjsWYamXh9o7VnEFGpHureMKXuW
-        yp5Q7evnL31O44p6XJ5EWcYzxVUH5T7lkTJYWouMRwI0QBhx4A4jFOEzZWVbruugV1cfwwJsG4U5
-        ZQuQCaug9urqTrbwmrAY9yXGBaaclGBmC4DQpXGiuDYVzBmNzwR9xpEq7RfoUTsWXN1ZW4MuajTC
-        EZU8JIEinnKNr7ZbA7FcCAStmrRmxDJove49d6HKi357LByfCDUIoqjVTPJbFkDx4MmQI/mLjCkn
-        wyEJq8Ec0kbBMJIYeTgWgz7iTH7lDSSFheICoYwoF2/eIGeYMcvFkXWFLHD2cEzpVOO76OaYhgUC
-        qmwMjkQCmSKtky5kDWiCJZWNhyPB34nleeIJjUkMZuS6Onk97JJ0sSgnWRO67Z+4kU8Edavy99VE
-        4yTawO1mhIDTtNTgtQwDqQFGoyxrNAqeJrpYnQTmah5OE2HUylhS+fr5C03cAfozSY1AG/CYT+su
-        Sf1bs8KYpK7wmaI2QNZdu8e/GqeWpkMm1CSudST+YCWLewKU/ikkHblWSoyNK+s7bh8cy1TsYOlE
-        oq7dv2xch12gQ1efGSc5/Fiwe8brkv4f9syt99MUaKSM8XAz/rf+O7oP/0YfG5eK/aDu1avGKeUz
-        d3Qwpuxad7Eke/f4+A0AAP//AwBARKXK7wQAAA==
-    headers:
-      CF-RAY:
-      - 9a3cf068de675616-SJC
-      Connection:
-      - keep-alive
-      Content-Encoding:
-      - gzip
-      Content-Type:
-      - application/json
-      Date:
-      - Tue, 25 Nov 2025 00:13:18 GMT
-      Server:
-      - cloudflare
-      Transfer-Encoding:
-      - chunked
-      X-Robots-Tag:
-      - none
-      anthropic-organization-id:
-      - bcf0d122-a6b6-40d4-873c-83762f5fb168
-      anthropic-ratelimit-input-tokens-limit:
-      - '50000'
-      anthropic-ratelimit-input-tokens-remaining:
-      - '50000'
-      anthropic-ratelimit-input-tokens-reset:
-      - '2025-11-25T00:13:15Z'
-      anthropic-ratelimit-output-tokens-limit:
-      - '10000'
-      anthropic-ratelimit-output-tokens-remaining:
-      - '10000'
-      anthropic-ratelimit-output-tokens-reset:
-      - '2025-11-25T00:13:19Z'
-      anthropic-ratelimit-requests-limit:
-      - '50'
-      anthropic-ratelimit-requests-remaining:
-      - '49'
-      anthropic-ratelimit-requests-reset:
-      - '2025-11-25T00:13:16Z'
-      anthropic-ratelimit-tokens-limit:
-      - '60000'
-      anthropic-ratelimit-tokens-remaining:
-      - '60000'
-      anthropic-ratelimit-tokens-reset:
-      - '2025-11-25T00:13:15Z'
-      cf-cache-status:
-      - DYNAMIC
-      request-id:
-      - req_011CVTe8suR3J7s8i8EJTrbt
-      retry-after:
-      - '47'
-      strict-transport-security:
-      - max-age=31536000; includeSubDomains; preload
-      x-envoy-upstream-service-time:
-      - '3278'
-    status:
-      code: 200
-      message: OK
+  - request:
+      body: '{"max_tokens":16000,"messages":[{"role":"user","content":"Please recommend a book in fantasy."}],"model":"claude-sonnet-4-0"}'
+      headers:
+        accept:
+          - application/json
+        accept-encoding:
+          - gzip, deflate
+        anthropic-version:
+          - '2023-06-01'
+        connection:
+          - keep-alive
+        content-length:
+          - '125'
+        content-type:
+          - application/json
+        host:
+          - api.anthropic.com
+        user-agent:
+          - AsyncAnthropic/Python 0.75.0
+        x-api-key:
+          - cached-http-with-invalid-key
+        x-stainless-arch:
+          - arm64
+        x-stainless-async:
+          - async:asyncio
+        x-stainless-lang:
+          - python
+        x-stainless-os:
+          - MacOS
+        x-stainless-package-version:
+          - 0.75.0
+        x-stainless-read-timeout:
+          - '600'
+        x-stainless-retry-count:
+          - '0'
+        x-stainless-runtime:
+          - CPython
+        x-stainless-runtime-version:
+          - 3.10.18
+        x-stainless-timeout:
+          - '600'
+      method: POST
+      uri: https://api.anthropic.com/v1/messages
+    response:
+      body:
+        string: !!binary H4sIAAAAAAAAAwAAAP//dFRhbxxFDP0rZr5EijZRkiaC3hdEKipVFagqoAoRdPLteHfdzHoW23PHNup/RzOXhALi02nHz/bz8/M9hDlHSmET+oQl0pllEfKz67Ori6ubi5vL69AFjmETZhu3F5evPn1/uH1x88u79eW7j998/cOLy92vL1+HLvi6UEWRGY4UuqA51Qc0Y3MUD13osziJh81vD094pz9rpP1swpuTCEp9nmeSCKend+HnieBHnAnyAD4RfGCJdwF2K7xDV+7v4X32aShmp6fncCd38sZPrEEHVnPY5XwPLO3lLct4zymRwqtJs3CfCIyUyQAlglNKx1zzrGvt+XaffaIOEBKNJBF1hYHHogSHKTeyRdxgYoM1F58ADRBGHpwimJdI4rXQjCP3tY5jIqnBuRj3jNK13rQn8YIprYAg2bNyLgYH/oQaz6Hq0EaZ0DZ1zDO4JSzOQ0kdpFW5xwSLZiPwCR1mvCcDdtiTrkAy4sgyglfOGGv+d9DneaGU6nujB7aa0ww7NIqQBWydF/RpbQwFZ5axZr7nfoJD1hTPdoVTrAUO7BNEcuREEfqSvOijrPPqU055XAGOfQetGxVURed9VVtLX/FH6hijAYsrj4Vqxk+uWUboJ1TsnRQi7SnlZa7aNvHm7JwFE0RafHq2AfY9mfEuUR18l32CAcXRVhA69HkmPVLck5Oi2JPNRhKlo+rNCv4o00CU7FiIFu5bLovzjE4dDDmlfKi4o21ODD7mokIrDJrnunzFPbVKC+mQdSatzJ7cdV6Zv0ZWOKAKy7gBrnMsqM1EKFBkYGGbKIIrV1U7sFy9BzOPk8PAEuunGqUBCEfStMIB2dsAWR+Po6rVHJX4nmBGWas29hXcFv/ifvyQG8wAlZpjEvlRlXo2x4UpHW1m6GzDWhvldnKskA/SxvqQS2rEjg2fzxzr5uq+oVKok3JfEurzpqzs2jo6yAoxt6ZsYLlIBFwWwvTo7DWXb8Pn37tgnpetElqWsAkkcetFJTwGjP4oJD2FjZSUulDaP9bmIbAsxbee70ksbC6vu9BjP9G2V2ost/8EXDzF60X9X+wpt9anZaKZFNP2Zv4v/u/o5fTv6Ocu5OJfPl1dX3bBSPf8l5JT40syU4uUrJRA5WxKYlGKUm0tAAAA//8DAFNbpWrYBQAA
+      headers:
+        CF-RAY:
+          - 9a4c1d42ffa83c7d-SJC
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - gzip
+        Content-Type:
+          - application/json
+        Date:
+          - Wed, 26 Nov 2025 20:25:26 GMT
+        Server:
+          - cloudflare
+        Transfer-Encoding:
+          - chunked
+        X-Robots-Tag:
+          - none
+        anthropic-organization-id:
+          - bcf0d122-a6b6-40d4-873c-83762f5fb168
+        anthropic-ratelimit-input-tokens-limit:
+          - '30000'
+        anthropic-ratelimit-input-tokens-remaining:
+          - '30000'
+        anthropic-ratelimit-input-tokens-reset:
+          - '2025-11-26T20:25:20Z'
+        anthropic-ratelimit-output-tokens-limit:
+          - '8000'
+        anthropic-ratelimit-output-tokens-remaining:
+          - '8000'
+        anthropic-ratelimit-output-tokens-reset:
+          - '2025-11-26T20:25:28Z'
+        anthropic-ratelimit-requests-limit:
+          - '50'
+        anthropic-ratelimit-requests-remaining:
+          - '49'
+        anthropic-ratelimit-requests-reset:
+          - '2025-11-26T20:25:20Z'
+        anthropic-ratelimit-tokens-limit:
+          - '38000'
+        anthropic-ratelimit-tokens-remaining:
+          - '38000'
+        anthropic-ratelimit-tokens-reset:
+          - '2025-11-26T20:25:20Z'
+        cf-cache-status:
+          - DYNAMIC
+        request-id:
+          - req_011CVX8NZhSn9JHNPtavx8WF
+        retry-after:
+          - '42'
+        strict-transport-security:
+          - max-age=31536000; includeSubDomains; preload
+        x-envoy-upstream-service-time:
+          - '7831'
+      status:
+        code: 200
+        message: OK
 version: 1
