@@ -49,22 +49,32 @@ export function AnalyticsCodeBlock({
   };
 
   const runnable = useRunnable();
+  const { loading: runnableLoading } = runnable;
   const runCode = useCallback(
-    (code: string): Promise<void> => {
-      if (!runnable || runnable.loading) {
+    async (code: string): Promise<any> => {
+      if (!runnable || runnableLoading) {
         return Promise.resolve();
       }
       // reset the output to empty string
       setOutput("");
 
       const { done, stdout } = runnable.runPython(code);
+      // subscribe to stdout to set the output
       stdout.subscribe({
         next: (chunk) => setOutput((prev) => prev + chunk),
         complete: () => console.log("running code complete"),
       });
-      return done();
+
+      // todo(sebastian): do we want a trackRunEvent?
+      try {
+        // we don't use the result directly since python's main() writes to stdout
+        return await done();
+      } catch (err) {
+        const error = err instanceof Error ? err : new Error(String(err));
+        console.log(error.message);
+      }
     },
-    [setOutput, runnable, runnable.loading]
+    [setOutput, runnable, runnableLoading]
   );
 
   return (
@@ -77,7 +87,7 @@ export function AnalyticsCodeBlock({
         className={className}
         showLineNumbers={showLineNumbers}
         onCopy={onCopy}
-        onRun={runCode}
+        onRun={runnableLoading ? undefined : runCode}
       />
     </div>
   );

@@ -1,14 +1,11 @@
 import { Observable, connectable, catchError, takeUntil, lastValueFrom, from, EMPTY } from "rxjs";
 import {
-  Component,
   createContext,
   useContext,
   useEffect,
   useMemo,
   useState,
-  type HTMLAttributes,
   type PropsWithChildren,
-  type ReactNode,
 } from "react";
 
 import { type PyodideInterface, loadPyodide, version } from "pyodide";
@@ -28,7 +25,7 @@ export interface RunnableContextType {
   error: Error | null;
   /** Run Python code */
   runPython: (code: string) => {
-    done: () => Promise<void>;
+    done: () => Promise<any>;
     stdout: Observable<string>;
     stderr: Observable<string>;
   };
@@ -40,27 +37,11 @@ export interface ProviderProps extends PropsWithChildren {
    * @default "https://cdn.jsdelivr.net/pyodide/v0.29.0/full/"
    */
   pyodideUrl?: string;
-  /**
-   * Props to pass to the error container element
-   */
-  errorContainerProps?: HTMLAttributes<HTMLDivElement>;
-  /**
-   * Props to pass to the error heading element
-   */
-  errorHeadingProps?: HTMLAttributes<HTMLHeadingElement>;
-  /**
-   * Props to pass to the error message element
-   */
-  errorMessageProps?: HTMLAttributes<HTMLPreElement>;
-  /**
-   * Custom error fallback component
-   */
-  errorFallback?: (error: Error) => ReactNode;
 }
 
 const RunnableContext = createContext<RunnableContextType | null>(null);
 
-function Provider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }: ProviderProps) {
+export function RunnableProvider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }: ProviderProps) {
   const [pyodide, setPyodide] = useState<PyodideInterface | null>(globalPyodide);
   const [loading, setLoading] = useState(!globalPyodide);
   const [error, setError] = useState<Error | null>(null);
@@ -107,7 +88,6 @@ function Provider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }: ProviderProps)
       } catch (err) {
         globalPyodidePromise = null;
         const error = err instanceof Error ? err : new Error(String(err));
-        console.error((err as Error).message);
         setError(error);
       }
     }
@@ -115,39 +95,39 @@ function Provider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }: ProviderProps)
   }, [pyodideUrl]);
 
   useEffect(() => {
-    // Multiplex stdout and stderr to observables
+    if (!error) {
+      return;
+    }
+    console.warn("failed to initialize runnable", error.message);
+  }, [error]);
+
+  // Multiplex stdout and stderr via observables
+  useEffect(() => {
     if (!pyodide) {
       return;
     }
 
-    const stdoutDecoder = new TextDecoder("utf-8");
-    const stdout$ = connectable(
-      new Observable<string>((observer) =>
-        pyodide.setStdout({
-          write: (buffer: Uint8Array) => {
-            const decoded = stdoutDecoder.decode(buffer, { stream: true });
-            observer.next(decoded);
-            return buffer.length;
-          },
-        })
-      )
-    );
-    stdout$.connect();
-    setStdout(stdout$);
-    const stderrDecoder = new TextDecoder("utf-8");
-    const stderr$ = connectable(
-      new Observable<string>((observer) =>
-        pyodide.setStderr({
-          write: (buffer: Uint8Array) => {
-            const decoded = stderrDecoder.decode(buffer, { stream: true });
-            observer.next(decoded);
-            return buffer.length;
-          },
-        })
-      )
-    );
-    stderr$.connect();
-    setStderr(stderr$);
+    const createStdioObservable = (
+      setStream: (handler: { write: (buffer: Uint8Array) => number }) => void
+    ) => {
+      const decoder = new TextDecoder("utf-8");
+      const stream$ = connectable(
+        new Observable<string>((observer) =>
+          setStream({
+            write: (buffer: Uint8Array) => {
+              const decoded = decoder.decode(buffer, { stream: true });
+              observer.next(decoded);
+              return buffer.length;
+            },
+          })
+        )
+      );
+      stream$.connect();
+      return stream$;
+    };
+
+    setStdout(createStdioObservable(pyodide.setStdout.bind(pyodide)));
+    setStderr(createStdioObservable(pyodide.setStderr.bind(pyodide)));
   }, [pyodide]);
 
   useEffect(() => {
@@ -167,11 +147,13 @@ function Provider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }: ProviderProps)
     ];
 
     async function bootstrap() {
-      if (!pyodide) {
+      if (!pyodide || !loading || error) {
         return;
       }
+
       try {
         await pyodide.loadPackage("micropip");
+
         for (const yaml of yamls) {
           const baseDir = yaml.substring(0, yaml.lastIndexOf("/"));
           await pyodide.FS.mkdirTree(baseDir);
@@ -179,25 +161,26 @@ function Provider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }: ProviderProps)
           const content = await fetch(yamlURL).then((res) => res.text());
           await pyodide.FS.writeFile(yaml, content);
         }
+
         // install dependencies
         const micropip = pyodide.pyimport("micropip");
         await micropip.install("vcrpy>=7.0.0");
         await micropip.install("mirascope[anthropic]==2.0.0a2");
+
         // pre-importing makes code blocks run faster
         await pyodide.runPythonAsync(`
           import vcr
           from mirascope import llm
         `);
-        console.log("dependencies ready");
+
         setLoading(false);
       } catch (err) {
         const error = err instanceof Error ? err : new Error(String(err));
-        console.error((err as Error).message);
         setError(error);
       }
     }
     bootstrap();
-  }, [pyodide, error, setError, setLoading]);
+  }, [pyodide, error, loading]);
 
   const value = useMemo<RunnableContextType>(
     () => ({
@@ -205,27 +188,30 @@ function Provider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }: ProviderProps)
       loading,
       error,
       runPython: (code: string) => {
-        if (!pyodide || loading || error || !stdout || !stderr) {
-          console.warn("Pyodide is not ready");
+        if (!pyodide) {
+          throw new Error("Pyodide is not ready");
+        }
+
+        if (loading || !stdout || !stderr) {
+          console.warn("Pyodide is still loading");
           return {
-            done: () => Promise.resolve(),
+            done: () => Promise.resolve(undefined),
             stdout: new Observable<string>((observer) => observer.complete()),
             stderr: new Observable<string>((observer) => observer.complete()),
           };
         }
 
-        const done$ = from(pyodide.runPythonAsync(code)).pipe(
-          catchError((err) => {
-            console.error((err as Error).message);
-            return EMPTY;
-          })
-        );
+        const done$ = from(pyodide.runPythonAsync(code));
 
-        // function to return done$ as promise
+        // Returns a promise with the result—if the last
+        // Python statement is an expression (not ending
+        // with a semicolon), Pyodide returns the value.
         const done = () => lastValueFrom(done$);
-        // complete run's stdout + stderr so clients don't have to
-        const runStdout$ = stdout.pipe(takeUntil(done$));
-        const runStderr$ = stderr.pipe(takeUntil(done$));
+
+        // dedupe error and complete the run's stdout+stderr
+        const complete$ = takeUntil<any>(done$.pipe(catchError(() => EMPTY)));
+        const runStdout$ = stdout.pipe(complete$);
+        const runStderr$ = stderr.pipe(complete$);
 
         return { done, stdout: runStdout$, stderr: runStderr$ };
       },
@@ -236,80 +222,10 @@ function Provider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }: ProviderProps)
   return <RunnableContext.Provider value={value}>{children}</RunnableContext.Provider>;
 }
 
-const DEFAULT_ERROR_FALLBACK = (error: Error) => (
-  <div className="pyodide-error">
-    <h2>Failed to initialize Pyodide</h2>
-    <pre>{error.message}</pre>
-  </div>
-);
-
-export function RunnableProvider(props: ProviderProps) {
-  const {
-    errorContainerProps,
-    errorHeadingProps,
-    errorMessageProps,
-    errorFallback = DEFAULT_ERROR_FALLBACK,
-    ...rest
-  } = props;
-
-  return (
-    <ErrorBoundary fallback={errorFallback}>
-      <Provider {...rest} />
-    </ErrorBoundary>
-  );
-}
-
 export function useRunnable() {
   const context = useContext(RunnableContext);
   if (!context) {
     throw new Error("useRunnable must be used within a RunnableProvider");
   }
   return context;
-}
-
-interface Props {
-  children: ReactNode;
-  fallback?: ReactNode | ((error: Error) => ReactNode);
-  className?: string;
-  errorClassName?: string;
-}
-
-interface State {
-  error: Error | null;
-}
-
-export class ErrorBoundary extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = { error: null };
-  }
-
-  static getDerivedStateFromError(error: Error): State {
-    return { error };
-  }
-
-  componentDidCatch() {
-    // Error is handled by rendering the fallback UI
-  }
-
-  render() {
-    const { error } = this.state;
-    const { children, fallback, className, errorClassName } = this.props;
-
-    if (error) {
-      if (typeof fallback === "function") {
-        return fallback(error);
-      }
-      return (
-        fallback || (
-          <section className={errorClassName} aria-label="Error message">
-            <h2>Something went wrong</h2>
-            <pre>{error.message}</pre>
-          </section>
-        )
-      );
-    }
-
-    return <div className={className}>{children}</div>;
-  }
 }
