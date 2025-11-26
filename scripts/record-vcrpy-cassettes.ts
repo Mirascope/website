@@ -1,0 +1,383 @@
+#!/usr/bin/env bun
+
+import { existsSync, rmSync } from "fs";
+import { mkdir, readFile, writeFile } from "fs/promises";
+import { resolve, dirname, relative } from "path";
+import { spawnSync } from "child_process";
+import { glob } from "glob";
+import yaml from "js-yaml";
+
+interface Config {
+  pattern: string;
+  dryRun: boolean;
+}
+
+interface ProcessResult {
+  file: string;
+  success: boolean;
+  error?: string;
+}
+
+/**
+ * Parse CLI arguments
+ */
+function parseArgs(): Config {
+  const args = process.argv.slice(2);
+  let pattern = "content/docs/mirascope/v2/examples/**/*.py";
+  let dryRun = false;
+
+  for (let i = 0; i < args.length; i++) {
+    if ((args[i] === "--pattern" || args[i] === "-p") && i + 1 < args.length) {
+      pattern = args[i + 1];
+      i++;
+    } else if (args[i] === "--dry-run") {
+      dryRun = true;
+    }
+  }
+
+  return { pattern, dryRun };
+}
+
+/**
+ * Run a command and return the result
+ */
+function runCommand(
+  command: string,
+  args: string[],
+  cwd?: string
+): { success: boolean; error?: string; stdout?: string; stderr?: string } {
+  const result = spawnSync(command, args, {
+    cwd: cwd || process.cwd(),
+    stdio: "pipe",
+    shell: false,
+  });
+
+  if (result.error) {
+    return { success: false, error: result.error.message };
+  }
+
+  const stdout = result.stdout?.toString() || "";
+  const stderr = result.stderr?.toString() || "";
+
+  if (result.status !== 0) {
+    return {
+      success: false,
+      error: stderr || `Command failed with exit code ${result.status}`,
+      stdout,
+      stderr,
+    };
+  }
+
+  return { success: true, stdout, stderr };
+}
+
+/**
+ * Transform Python content to add VCR decorator
+ */
+function transformPythonContent(content: string, yamlPath: string): string {
+  const lines = content.split("\n");
+
+  // Check if vcr is already imported
+  const hasVcrImport = lines.some((line) => line.trim().startsWith("import vcr"));
+
+  // Find the main function
+  const mainFuncIndex = lines.findIndex((line) => line.includes("def main():"));
+
+  if (mainFuncIndex === -1) {
+    // No main function found, return as-is
+    return content;
+  }
+
+  const transformed = [...lines];
+
+  // Add VCR decorator before main function
+  transformed.splice(mainFuncIndex, 0, `@vcr.use_cassette('${yamlPath}')`);
+
+  // Add import if not present
+  if (!hasVcrImport) {
+    // Find the first import or add at the top
+    const firstImportIndex = transformed.findIndex(
+      (line) => line.trim().startsWith("import ") || line.trim().startsWith("from ")
+    );
+    if (firstImportIndex !== -1) {
+      transformed.splice(firstImportIndex, 0, "import vcr");
+    } else {
+      transformed.unshift("import vcr");
+    }
+  }
+
+  return transformed.join("\n");
+}
+
+/**
+ * Sanitize YAML cassette by removing sensitive authentication tokens
+ */
+function sanitizeYamlCassette(yamlContent: string): string {
+  try {
+    const data = yaml.load(yamlContent) as any;
+
+    if (!data || !data.interactions || !Array.isArray(data.interactions)) {
+      return yamlContent;
+    }
+
+    // Sensitive header keys to sanitize
+    const sensitiveKeys = [
+      "x-api-key",
+      "authorization",
+      "x-auth-token",
+      "api-key",
+      "x-anthropic-api-key",
+      "x-openai-api-key",
+    ];
+
+    // Process each interaction
+    data.interactions.forEach((interaction: any) => {
+      if (interaction.request?.headers) {
+        sensitiveKeys.forEach((key) => {
+          const lowerKey = key.toLowerCase();
+          Object.keys(interaction.request.headers).forEach((headerKey) => {
+            if (headerKey.toLowerCase() === lowerKey) {
+              interaction.request.headers[headerKey] = ["cached-http-with-invalid-key"];
+            }
+          });
+        });
+      }
+    });
+
+    return yaml.dump(data, { lineWidth: -1, noRefs: true });
+  } catch (error) {
+    console.warn(
+      `Warning: Failed to parse YAML, returning original content: ${error instanceof Error ? error.message : String(error)}`
+    );
+    return yamlContent;
+  }
+}
+
+/**
+ * Set up the virtual environment using uv sync in vcrRec directory
+ */
+async function setupVenv(
+  vcrRecDir: string,
+  dryRun: boolean
+): Promise<{ success: boolean; error?: string }> {
+  if (dryRun) {
+    console.log(`[DRY RUN] Would sync venv in: ${vcrRecDir}`);
+    return { success: true };
+  }
+
+  // Ensure vcrRec directory exists
+  if (!existsSync(vcrRecDir)) {
+    return { success: false, error: `vcrRec directory not found: ${vcrRecDir}` };
+  }
+
+  // Use uv sync to create venv and install dependencies from pyproject.toml
+  console.log("Setting up virtual environment with uv sync...");
+  const syncResult = runCommand("uv", ["sync"], vcrRecDir);
+  if (!syncResult.success) {
+    return { success: false, error: syncResult.error || "Failed to sync venv" };
+  }
+
+  return { success: true };
+}
+
+/**
+ * Find Python files matching the pattern
+ */
+async function findPythonFiles(pattern: string): Promise<string[]> {
+  const files = await glob(pattern, {
+    cwd: process.cwd(),
+    absolute: true,
+  });
+  return files.filter((file) => file.endsWith(".py"));
+}
+
+/**
+ * Process a single Python file
+ */
+async function processFile(
+  pythonFile: string,
+  workDir: string,
+  vcrRecDir: string,
+  projectRoot: string,
+  dryRun: boolean
+): Promise<ProcessResult> {
+  try {
+    // Calculate relative path from project root
+    const relativePath = relative(projectRoot, pythonFile);
+    const recordingPath = resolve(workDir, relativePath);
+    const recordingDirPath = dirname(recordingPath);
+
+    // Calculate YAML path - Use absolute path so VCR.py creates cassettes in the right place
+    // regardless of current working directory
+    const yamlPath = recordingPath + ".yaml";
+
+    // Read original file
+    const originalContent = await readFile(pythonFile, "utf-8");
+
+    // Transform content
+    const transformedContent = transformPythonContent(originalContent, yamlPath);
+
+    if (dryRun) {
+      console.log(`[DRY RUN] Would process: ${relativePath}`);
+      return { file: pythonFile, success: true };
+    }
+
+    // Create recording directory structure
+    await mkdir(recordingDirPath, { recursive: true });
+
+    // Write transformed file to recording
+    await writeFile(recordingPath, transformedContent, "utf-8");
+
+    // Execute Python file using uv run (which uses the venv from pyproject.toml)
+    const { success, error, stdout, stderr } = runCommand(
+      "uv",
+      ["run", "python", recordingPath],
+      vcrRecDir
+    );
+
+    if (!success) {
+      const errorMsg = error || "Unknown error";
+      const output = stdout ? `\nStdout: ${stdout}` : "";
+      const errOutput = stderr ? `\nStderr: ${stderr}` : "";
+      return { file: pythonFile, success: false, error: `${errorMsg}${output}${errOutput}` };
+    }
+
+    // Debug: show what was output
+    if (stdout) {
+      console.log(`  Python stdout: ${stdout.trim()}`);
+    }
+    if (stderr) {
+      console.log(`  Python stderr: ${stderr.trim()}`);
+    }
+
+    // Look for generated YAML cassette
+    // VCR.py creates cassettes relative to the Python file's location
+    const cassettePath = recordingPath + ".yaml";
+
+    if (!existsSync(cassettePath)) {
+      // Debug: show what decorator path was used
+      console.log(`  Decorator path: ${yamlPath}`);
+      console.log(`  Expected cassette at: ${cassettePath}`);
+      console.log(`  Recording path: ${recordingPath}`);
+      console.log(`  Recording dir path: ${recordingDirPath}`);
+
+      return {
+        file: pythonFile,
+        success: false,
+        error: `Cassette file not generated. Expected at: ${cassettePath}`,
+      };
+    }
+
+    // Read and sanitize cassette
+    const cassetteContent = await readFile(cassettePath, "utf-8");
+    const sanitizedContent = sanitizeYamlCassette(cassetteContent);
+
+    // Copy sanitized cassette back to original location
+    const originalCassettePath = pythonFile + ".yaml";
+    const originalCassetteDir = dirname(originalCassettePath);
+    await mkdir(originalCassetteDir, { recursive: true });
+    await writeFile(originalCassettePath, sanitizedContent, "utf-8");
+
+    return { file: pythonFile, success: true };
+  } catch (error) {
+    return {
+      file: pythonFile,
+      success: false,
+      error: error instanceof Error ? error.message : String(error),
+    };
+  }
+}
+
+/**
+ * Main function
+ */
+async function main(): Promise<void> {
+  const config = parseArgs();
+  const projectRoot = process.cwd();
+  const vcrRecDir = resolve(projectRoot, "vcrRec");
+  const workDir = resolve(vcrRecDir, ".work");
+
+  console.log("VCR Cassette Recording Script");
+  console.log(`Pattern: ${config.pattern}`);
+  console.log(`Using vcrRec directory: ${vcrRecDir}`);
+  console.log(`Work directory: ${workDir}`);
+  console.log(`Dry run: ${config.dryRun ? "yes" : "no"}`);
+  console.log("");
+
+  // Find Python files
+  console.log("Discovering Python files...");
+  const pythonFiles = await findPythonFiles(config.pattern);
+  console.log(`Found ${pythonFiles.length} Python file(s)`);
+  console.log("");
+
+  if (pythonFiles.length === 0) {
+    console.log("No Python files found matching the pattern.");
+    return;
+  }
+
+  // Set up virtual environment using uv sync
+  const venvResult = await setupVenv(vcrRecDir, config.dryRun);
+  if (!venvResult.success) {
+    console.error(`Failed to set up virtual environment: ${venvResult.error}`);
+    process.exit(1);
+  }
+  console.log("");
+
+  // Clean up work directory if it exists
+  if (existsSync(workDir)) {
+    if (!config.dryRun) {
+      rmSync(workDir, { recursive: true, force: true });
+    }
+    console.log(`Cleaned work directory: ${workDir}`);
+  }
+
+  // Process each file
+  const results: ProcessResult[] = [];
+  let successCount = 0;
+  let failureCount = 0;
+
+  for (let i = 0; i < pythonFiles.length; i++) {
+    const file = pythonFiles[i];
+    const relativePath = relative(projectRoot, file);
+    console.log(`[${i + 1}/${pythonFiles.length}] Processing: ${relativePath}`);
+
+    const result = await processFile(file, workDir, vcrRecDir, projectRoot, config.dryRun);
+    results.push(result);
+
+    if (result.success) {
+      successCount++;
+      console.log(`  ✓ Success`);
+    } else {
+      failureCount++;
+      console.log(`  ✗ Failed: ${result.error || "Unknown error"}`);
+    }
+  }
+
+  // Clean up work directory
+  if (!config.dryRun && existsSync(workDir)) {
+    rmSync(workDir, { recursive: true, force: true });
+    console.log(`\nCleaned up work directory`);
+  }
+
+  // Summary
+  console.log("\n" + "=".repeat(50));
+  console.log("Summary:");
+  console.log(`  Total files: ${pythonFiles.length}`);
+  console.log(`  Successful: ${successCount}`);
+  console.log(`  Failed: ${failureCount}`);
+
+  if (failureCount > 0) {
+    console.log("\nFailed files:");
+    results
+      .filter((r) => !r.success)
+      .forEach((r) => {
+        console.log(`  - ${relative(projectRoot, r.file)}: ${r.error}`);
+      });
+    process.exit(1);
+  }
+}
+
+main().catch((error) => {
+  console.error("Fatal error:", error.message);
+  process.exit(1);
+});
