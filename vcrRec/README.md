@@ -7,7 +7,7 @@
 Record VCR.py cassettes for Python example files:
 
 ```bash
-bun run record-vcrpy-cassettes
+bun run record-vcr-cassettes
 ```
 
 This will process all Python files matching the default pattern (`content/docs/mirascope/v2/examples/**/*.py`) and generate YAML cassette files alongside them.
@@ -15,7 +15,7 @@ This will process all Python files matching the default pattern (`content/docs/m
 To process specific files:
 
 ```bash
-bun run record-vcrpy-cassettes --pattern "content/docs/mirascope/v2/examples/intro/decorator/*.py"
+bun run record-vcr-cassettes --pattern "content/docs/mirascope/v2/examples/intro/decorator/*.py"
 ```
 
 ## Command-line Options
@@ -71,7 +71,7 @@ The `.work` directory is created during execution and contains:
 
 ## Key Components
 
-### Script: `scripts/record-vcrpy-cassettes.ts`
+### Script: `scripts/record-vcr-cassettes.ts`
 
 The main TypeScript script that orchestrates the entire workflow:
 
@@ -101,25 +101,25 @@ The script uses `uv sync` to:
 ### Process all example files
 
 ```bash
-bun run record-vcrpy-cassettes
+bun run record-vcr-cassettes
 ```
 
 ### Process specific directory
 
 ```bash
-bun run record-vcrpy-cassettes --pattern "content/docs/mirascope/v2/examples/intro/**/*.py"
+bun run record-vcr-cassettes --pattern "content/docs/mirascope/v2/examples/intro/**/*.py"
 ```
 
 ### Preview what would be processed (dry run)
 
 ```bash
-bun run record-vcrpy-cassettes --dry-run
+bun run record-vcr-cassettes --dry-run
 ```
 
 ### Process a single file
 
 ```bash
-bun run record-vcrpy-cassettes --pattern "content/docs/mirascope/v2/examples/intro/decorator/sync.py"
+bun run record-vcr-cassettes --pattern "content/docs/mirascope/v2/examples/intro/decorator/sync.py"
 ```
 
 ## Output
@@ -189,7 +189,7 @@ Then run `uv sync` to update the virtual environment.
 
 ### Modifying Sanitization Rules
 
-To add or remove sanitized headers, edit `scripts/record-vcrpy-cassettes.ts`:
+To add or remove sanitized headers, edit `scripts/record-vcr-cassettes.ts`:
 
 ```typescript
 const sensitiveKeys = [
@@ -204,7 +204,7 @@ const sensitiveKeys = [
 Use `--dry-run` to preview changes without executing:
 
 ```bash
-bun run record-vcrpy-cassettes --dry-run --pattern "path/to/test.py"
+bun run record-vcr-cassettes --dry-run --pattern "path/to/test.py"
 ```
 
 This will show what files would be processed without actually running Python or generating cassettes.

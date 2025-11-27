@@ -6,6 +6,7 @@ import { resolve, dirname, relative } from "path";
 import { spawnSync } from "child_process";
 import { glob } from "glob";
 import yaml from "js-yaml";
+import { transformPythonWithVcrDecorator } from "../src/lib/content/vcr-cassettes";
 
 interface Config {
   pattern: string;
@@ -69,44 +70,6 @@ function runCommand(
   }
 
   return { success: true, stdout, stderr };
-}
-
-/**
- * Transform Python content to add VCR decorator
- */
-function transformPythonContent(content: string, yamlPath: string): string {
-  const lines = content.split("\n");
-
-  // Check if vcr is already imported
-  const hasVcrImport = lines.some((line) => line.trim().startsWith("import vcr"));
-
-  // Find the main function
-  const mainFuncIndex = lines.findIndex((line) => line.includes("def main():"));
-
-  if (mainFuncIndex === -1) {
-    // No main function found, return as-is
-    return content;
-  }
-
-  const transformed = [...lines];
-
-  // Add VCR decorator before main function
-  transformed.splice(mainFuncIndex, 0, `@vcr.use_cassette('${yamlPath}')`);
-
-  // Add import if not present
-  if (!hasVcrImport) {
-    // Find the first import or add at the top
-    const firstImportIndex = transformed.findIndex(
-      (line) => line.trim().startsWith("import ") || line.trim().startsWith("from ")
-    );
-    if (firstImportIndex !== -1) {
-      transformed.splice(firstImportIndex, 0, "import vcr");
-    } else {
-      transformed.unshift("import vcr");
-    }
-  }
-
-  return transformed.join("\n");
 }
 
 /**
@@ -215,7 +178,7 @@ async function processFile(
     const originalContent = await readFile(pythonFile, "utf-8");
 
     // Transform content
-    const transformedContent = transformPythonContent(originalContent, yamlPath);
+    const transformedContent = transformPythonWithVcrDecorator(originalContent, yamlPath);
 
     if (dryRun) {
       console.log(`[DRY RUN] Would process: ${relativePath}`);
