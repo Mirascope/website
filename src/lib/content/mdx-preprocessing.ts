@@ -1,5 +1,5 @@
 import { readFileSync } from "fs";
-import { join, resolve } from "path";
+import { resolve } from "path";
 import { ContentError } from "./content";
 import { parseFrontmatter } from "./mdx-processing";
 
@@ -18,6 +18,13 @@ export interface PreprocessedMdxResult {
   frontmatter: Record<string, any>;
   content: string; // Body content only (no frontmatter)
   fullContent: string; // Full file content with frontmatter
+  vcrCassettes: string[];
+}
+
+export interface CodeExample {
+  fullContent: string;
+  // todo(sebastian): normalize this type
+  vcrCassettes: string[];
 }
 
 function resolveExampleBasePath(filePath: string): string {
@@ -41,7 +48,7 @@ function resolveExampleBasePath(filePath: string): string {
 /**
  * Processes CodeExample directives in MDX content by replacing them with actual code blocks
  */
-function processCodeExamples(filePath: string): string {
+function processCodeExamples(filePath: string): CodeExample {
   // Regex to match <CodeExample file="..." /> with optional lines, lang, and highlight attributes
   const codeExampleRegex =
     /<CodeExample\s+file="([^"]+)"(?:\s+lines="([^"]+)")?(?:\s+lang="([^"]+)")?(?:\s+highlight="([^"]+)")?\s*\/>/g;
@@ -49,27 +56,16 @@ function processCodeExamples(filePath: string): string {
   const content = readFileSync(filePath, "utf-8");
   const basePath = resolveExampleBasePath(filePath);
 
-  return content.replace(
+  const vcs: string[] = [];
+  const processedContent = content.replace(
     codeExampleRegex,
     (_, file: string, lines?: string, lang?: string, highlight?: string) => {
       try {
-        // Resolve @/ paths relative to basePath
-        const resolvedPath = file.startsWith("@/")
-          ? join(basePath, file.slice(2))
-          : resolve(basePath, file);
+        // Extract relative path and resolve
+        const relativePath = file.startsWith("@/") ? file.slice(2) : file;
+        const resolvedPath = resolve(basePath, relativePath);
 
-        const splitOn = "content/";
-        const parts = resolvedPath.split(splitOn);
-        const yamlPath = parts.length > 1 ? splitOn + parts[1] : resolvedPath;
-
-        let exampleContent = readFileSync(resolvedPath, "utf-8");
-        const contentLines = exampleContent.split("\n");
-        const mainFuncIndex = contentLines.findIndex((line) => line.includes("def main():"));
-        if (mainFuncIndex !== -1) {
-          contentLines.splice(mainFuncIndex, 0, `@vcr.use_cassette('${yamlPath}.yaml')`);
-          contentLines.unshift("import vcr");
-          exampleContent = contentLines.join("\n");
-        }
+        const exampleContent = readFileSync(resolvedPath, "utf-8");
 
         // Process lines if specified (e.g., "1-5" or "10-20")
         let processedContent = exampleContent;
@@ -85,6 +81,12 @@ function processCodeExamples(filePath: string): string {
         // Infer language from file extension if not provided
         const inferredLang = lang || inferLanguageFromPath(resolvedPath);
 
+        // Add __filepath__ to the top of the file for Python examples to enable loading colocated VCR cassettes
+        if (inferredLang.startsWith("py")) {
+          vcs.push(relativePath);
+          processedContent = `__filepath__ = "${relativePath}";\n\n${processedContent}`;
+        }
+
         // Add highlight metadata if provided
         const metaInfo = highlight ? ` {${highlight}}` : "";
 
@@ -99,6 +101,11 @@ function processCodeExamples(filePath: string): string {
       }
     }
   );
+
+  return {
+    fullContent: processedContent,
+    vcrCassettes: vcs,
+  };
 }
 
 /**
@@ -142,12 +149,13 @@ function inferLanguageFromPath(filePath: string): string {
  * Preprocesses MDX content by resolving CodeExample directives and parsing frontmatter
  */
 export function preprocessMdx(filePath: string): PreprocessedMdxResult {
-  const contentWithCodeExamples = processCodeExamples(filePath);
-  const { frontmatter, content } = parseFrontmatter(contentWithCodeExamples);
+  const { fullContent, vcrCassettes } = processCodeExamples(filePath);
+  const { frontmatter, content } = parseFrontmatter(fullContent);
 
   return {
     frontmatter,
     content,
-    fullContent: contentWithCodeExamples,
+    fullContent,
+    vcrCassettes,
   };
 }
