@@ -9,6 +9,7 @@ import {
 } from "react";
 
 import { type PyodideInterface, loadPyodide, version } from "pyodide";
+import { transformPythonWithVcrDecorator } from "@/src/lib/content/vcr-cassettes";
 
 const DEFAULT_PYODIDE_URL = `https://cdn.jsdelivr.net/pyodide/v${version}/full/`;
 
@@ -29,6 +30,12 @@ export interface RunnableContextType {
     stdout: Observable<string>;
     stderr: Observable<string>;
   };
+  /** Run Python code with VCR.py cassettes */
+  runPythonWithVCR: (code: string) => Promise<{
+    done: () => Promise<any>;
+    stdout: Observable<string>;
+    stderr: Observable<string>;
+  }>;
 }
 
 export interface ProviderProps extends PropsWithChildren {
@@ -135,16 +142,16 @@ export function RunnableProvider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }:
       return;
     }
 
-    const yamls = [
-      "content/docs/mirascope/v2/examples/intro/decorator/async.py.yaml",
-      "content/docs/mirascope/v2/examples/intro/decorator/async_stream.py.yaml",
-      "content/docs/mirascope/v2/examples/intro/decorator/stream.py.yaml",
-      "content/docs/mirascope/v2/examples/intro/decorator/sync.py.yaml",
-      "content/docs/mirascope/v2/examples/intro/model/async.py.yaml",
-      "content/docs/mirascope/v2/examples/intro/model/async_stream.py.yaml",
-      "content/docs/mirascope/v2/examples/intro/model/stream.py.yaml",
-      "content/docs/mirascope/v2/examples/intro/model/sync.py.yaml",
-    ];
+    // const yamls = [
+    //   "content/docs/mirascope/v2/examples/intro/decorator/async.py.yaml",
+    //   "content/docs/mirascope/v2/examples/intro/decorator/async_stream.py.yaml",
+    //   "content/docs/mirascope/v2/examples/intro/decorator/stream.py.yaml",
+    //   "content/docs/mirascope/v2/examples/intro/decorator/sync.py.yaml",
+    //   "content/docs/mirascope/v2/examples/intro/model/async.py.yaml",
+    //   "content/docs/mirascope/v2/examples/intro/model/async_stream.py.yaml",
+    //   "content/docs/mirascope/v2/examples/intro/model/stream.py.yaml",
+    //   "content/docs/mirascope/v2/examples/intro/model/sync.py.yaml",
+    // ];
 
     async function bootstrap() {
       if (!pyodide || !loading || error) {
@@ -154,13 +161,13 @@ export function RunnableProvider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }:
       try {
         await pyodide.loadPackage("micropip");
 
-        for (const yaml of yamls) {
-          const baseDir = yaml.substring(0, yaml.lastIndexOf("/"));
-          await pyodide.FS.mkdirTree(baseDir);
-          const yamlURL = `${window.location.origin}/${yaml}`;
-          const content = await fetch(yamlURL).then((res) => res.text());
-          await pyodide.FS.writeFile(yaml, content);
-        }
+        // for (const yaml of yamls) {
+        //   const baseDir = yaml.substring(0, yaml.lastIndexOf("/"));
+        //   await pyodide.FS.mkdirTree(baseDir);
+        //   const yamlURL = `${window.location.origin}/${yaml}`;
+        //   const content = await fetch(yamlURL).then((res) => res.text());
+        //   await pyodide.FS.writeFile(yaml, content);
+        // }
 
         // install dependencies
         const micropip = pyodide.pyimport("micropip");
@@ -182,39 +189,65 @@ export function RunnableProvider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }:
     bootstrap();
   }, [pyodide, error, loading]);
 
+  const runPython = (code: string) => {
+    if (!pyodide) {
+      throw new Error("Pyodide is not ready");
+    }
+
+    if (loading || !stdout || !stderr) {
+      console.warn("Pyodide is still loading");
+      return {
+        done: () => Promise.resolve(undefined),
+        stdout: new Observable<string>((observer) => observer.complete()),
+        stderr: new Observable<string>((observer) => observer.complete()),
+      };
+    }
+
+    const done$ = from(pyodide.runPythonAsync(code));
+
+    // Returns a promise with the result—if the last
+    // Python statement is an expression (not ending
+    // with a semicolon), Pyodide returns the value.
+    const done = () => lastValueFrom(done$);
+
+    // dedupe error and complete the run's stdout+stderr
+    const complete$ = takeUntil<any>(done$.pipe(catchError(() => EMPTY)));
+    const runStdout$ = stdout.pipe(complete$);
+    const runStderr$ = stderr.pipe(complete$);
+
+    return { done, stdout: runStdout$, stderr: runStderr$ };
+  };
+
+  const runPythonWithVCR = async (code: string) => {
+    // todo(sebastian): temporary since it only works in dev mode
+    const basePath = `/content${window.location.pathname}`;
+    const filepath = code.match(/__filepath__ = "([^"]+)";/)?.[1] || "";
+    const yamlPath = `${basePath}/${filepath}.yaml`;
+
+    // Load YAML cassette into Pyodide FS
+    const res = await fetch(yamlPath);
+    const yaml = await res.text();
+    const baseDir = yamlPath.substring(0, yamlPath.lastIndexOf("/"));
+    await pyodide!.FS.mkdirTree(baseDir);
+    await pyodide!.FS.writeFile(yamlPath, yaml);
+
+    const transformedCode = transformPythonWithVcrDecorator(code, yamlPath);
+
+    const { done, stdout, stderr } = runPython(transformedCode);
+    return {
+      done,
+      stdout,
+      stderr,
+    };
+  };
+
   const value = useMemo<RunnableContextType>(
     () => ({
       pyodide,
       loading,
       error,
-      runPython: (code: string) => {
-        if (!pyodide) {
-          throw new Error("Pyodide is not ready");
-        }
-
-        if (loading || !stdout || !stderr) {
-          console.warn("Pyodide is still loading");
-          return {
-            done: () => Promise.resolve(undefined),
-            stdout: new Observable<string>((observer) => observer.complete()),
-            stderr: new Observable<string>((observer) => observer.complete()),
-          };
-        }
-
-        const done$ = from(pyodide.runPythonAsync(code));
-
-        // Returns a promise with the result—if the last
-        // Python statement is an expression (not ending
-        // with a semicolon), Pyodide returns the value.
-        const done = () => lastValueFrom(done$);
-
-        // dedupe error and complete the run's stdout+stderr
-        const complete$ = takeUntil<any>(done$.pipe(catchError(() => EMPTY)));
-        const runStdout$ = stdout.pipe(complete$);
-        const runStderr$ = stderr.pipe(complete$);
-
-        return { done, stdout: runStdout$, stderr: runStderr$ };
-      },
+      runPython,
+      runPythonWithVCR,
     }),
     [pyodide, loading, error, stdout, stderr]
   );
