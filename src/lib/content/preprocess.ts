@@ -12,6 +12,7 @@ import {
 } from "./content";
 import { type Product } from "./spec";
 import { preprocessMdx } from "./mdx-preprocessing";
+import { processMdx } from "./mdx-processing";
 
 /**
  * Path representation for consistent handling across the application
@@ -265,6 +266,9 @@ export class ContentPreprocessor {
   ): Promise<void> {
     const { frontmatter, fullContent } = preprocessMdx(filePath);
 
+    // Get plain markdown from document with MDX
+    const markdown = await processMdx(fullContent);
+
     // Get the relative path from the source directory
     const relativePath = path.relative(srcDir, filePath);
 
@@ -294,6 +298,7 @@ export class ContentPreprocessor {
     const contentObject = {
       meta: metadata,
       content: fullContent,
+      markdown,
     };
 
     const outputDir = path.dirname(path.join(outputBase, `${contentPath.subpath}.json`));
