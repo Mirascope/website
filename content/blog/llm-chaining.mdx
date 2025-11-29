@@ -659,11 +659,11 @@ In the end, prompt engineering can be seen as the optimization of non-determinis
 
 To keep track of all this, we developed [Lilypad](/docs/lilypad), an open source AI engineering framework that automatically versions and traces LLM calls when you simply add the `@lilypad.trace` decorator, ensuring that evaluations are systematic and reproducible:
 
-```python {6}
+```python
 import lilypad
 from openai import OpenAI
  
-lilypad.configure(auto_llm=True)  # [!code highlight]
+lilypad.configure(auto_llm=True)
 client = OpenAI()
  
  
