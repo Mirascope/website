@@ -1,4 +1,7 @@
+import { Conversation, ConversationContent } from "@/src/components/ai-elements/conversation";
+import { Message, MessageContent, MessageResponse } from "@/src/components/ai-elements/message";
 import { CopyButton } from "@/mirascope-ui/blocks/copy-button";
+import { RunButton } from "@/mirascope-ui/blocks/run-button";
 import {
   highlightCode,
   stripHighlightMarkers,
@@ -10,20 +13,24 @@ import { useEffect, useRef, useState } from "react";
 
 interface CodeBlockProps {
   code: string;
+  output?: string;
   language?: string;
   meta?: string;
   className?: string;
   showLineNumbers?: boolean;
   onCopy?: (content: string) => void;
+  onRun?: (code: string) => void;
 }
 
 export function CodeBlock({
   code,
+  output,
   language = "text",
   meta = "",
   className = "",
   showLineNumbers = true,
   onCopy,
+  onRun,
 }: CodeBlockProps) {
   const [highlightedCode, setHighlightedCode] = useState<HighlightResult>(
     initialHighlight(code, language, meta)
@@ -82,7 +89,10 @@ export function CodeBlock({
           isSmallBlock ? "top-1/2 right-3 flex -translate-y-1/2 space-x-1" : "top-3 right-3"
         )}
       >
-        <CopyButton content={stripHighlightMarkers(code)} onCopy={onCopy} />
+        <div className="flex items-center space-x-1">
+          {onRun && <RunButton onRun={() => onRun?.(stripHighlightMarkers(code))} />}
+          <CopyButton content={stripHighlightMarkers(code)} onCopy={onCopy} />
+        </div>
       </div>
 
       <div className="highlight-container w-full overflow-auto">
@@ -91,6 +101,17 @@ export function CodeBlock({
           dangerouslySetInnerHTML={{ __html: highlightedCode.themeHtml }}
         />
       </div>
+      {output && (
+        <Conversation>
+          <ConversationContent>
+            <Message from="assistant">
+              <MessageContent>
+                <MessageResponse parseIncompleteMarkdown={true}>{output}</MessageResponse>
+              </MessageContent>
+            </Message>
+          </ConversationContent>
+        </Conversation>
+      )}
     </div>
   );
 }

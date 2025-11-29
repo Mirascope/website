@@ -1,5 +1,6 @@
 export { FunModeContext, FunModeProvider, useFunMode } from "./FunModeContext";
 export { ProviderContextProvider, useProvider } from "./ProviderContext";
+export { RunnableProvider, useRunnable } from "./RunnableContext";
 export type { Provider } from "./ProviderContext";
 export {
   ThemeProvider,

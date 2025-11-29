@@ -4,7 +4,7 @@ from mirascope import llm
 
 
 async def recommend_book(genre: str) -> llm.AsyncResponse:
-    model: llm.Model = llm.use_model(provider="openai", model_id="gpt-5")
+    model: llm.Model = llm.use_model(provider="anthropic", model_id="claude-sonnet-4-0")
     message = llm.messages.user(f"Please recommend a book in {genre}.")
     return await model.call_async(messages=[message])
 
