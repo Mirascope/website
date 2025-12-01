@@ -17,18 +17,11 @@ export function AnalyticsCodeBlock({
   className,
   showLineNumbers,
 }: AnalyticsCodeBlockProps) {
-  const VCRPY_CASSETTE_INTRO = "interactions:";
-
   const [output, setOutput] = useState<string>("");
   const [hasCachedHttp, setHasCachedHttp] = useState<boolean>(false);
   const product = useProduct();
   const codeRef = useRef<HTMLDivElement>(null);
 
-  // Extract __filepath__ (if present) and the rest of the code.
-  const codeFilePath = useMemo(() => {
-    const match = code.match(/^__filepath__ = "(.*)";\n\n/);
-    return match ? match[1] : "";
-  }, [code]);
   const onlyCode = useMemo(() => {
     return code.replace(/^__filepath__ = ".*";\n\n/, "");
   }, [code]);
@@ -68,7 +61,7 @@ export function AnalyticsCodeBlock({
     // reset the output to empty string
     setOutput("");
 
-    const { done, stdout } = await runnable.runPythonWithVCR(code);
+    const { done, stdout } = await runnable.runPythonWithCachedHTTP(code);
     // subscribe to stdout to set the output
     stdout.subscribe({
       next: (chunk) => setOutput((prev) => prev + chunk),
@@ -86,26 +79,20 @@ export function AnalyticsCodeBlock({
   }, [setOutput, code, runnable, runnableLoading]);
 
   useEffect(() => {
-    if (!codeFilePath) {
+    if (runnableLoading || !language?.startsWith("py") || !code) {
+      setHasCachedHttp(false);
       return;
     }
-    const cassetteURL = runnable.getVCRCassetteUrl(code);
-    const checkCassette = async () => {
-      try {
-        const res = await fetch(cassetteURL);
-        if (res.status >= 400) {
-          setHasCachedHttp(false);
-          return;
-        }
-        const text = await res.text();
-        setHasCachedHttp(text.startsWith(VCRPY_CASSETTE_INTRO));
-      } catch (err) {
+    runnable
+      .hasCachedHTTP(code)
+      .then((hasCachedHttp) => {
+        setHasCachedHttp(hasCachedHttp);
+      })
+      .catch((err) => {
+        console.warn("Error checking cached HTTP:", err);
         setHasCachedHttp(false);
-        console.warn("Error checking cassette:", err);
-      }
-    };
-    checkCassette();
-  }, [codeFilePath, runnable]);
+      });
+  }, [code, language, runnable, runnableLoading]);
 
   // Only show the run button if: the code is Python, we have a VCR.py cassette, and Runnable is ready
   const onRunFunc = useMemo(() => {
