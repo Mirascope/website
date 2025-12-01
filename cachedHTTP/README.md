@@ -53,7 +53,8 @@ Capture Cassettes → Sanitize (remove auth tokens) → Copy Back → Cleanup
    - `x-openai-api-key`
 
 7. **File Copying**: Copies sanitized cassettes back to original locations (alongside `.py` files)
-8. **Cleanup**: Removes the `.work` directory after processing
+8. **Checksum Generation**: Writes a `.sha256.txt` file containing the SHA256 hash of the original Python file content to ensure the example and cached HTTP cassette stay in sync
+9. **Cleanup**: Removes the `.work` directory after processing
 
 ### Directory Structure
 
@@ -129,10 +130,13 @@ bun run record-cached-http --pattern "content/docs/mirascope/v2/examples/intro/d
 For each processed Python file, the script:
 
 1. Creates a `.yaml` cassette file alongside the original `.py` file
-2. The cassette contains recorded HTTP interactions with sensitive data removed
-3. Example: `sync.py` → `sync.py.yaml`
+2. Creates a `.sha256.txt` checksum file containing the SHA256 hash of the original Python file content
+3. The cassette contains recorded HTTP interactions with sensitive data removed
+4. Example: `sync.py` → `sync.py.yaml` and `sync.py.sha256.txt`
 
 The cassettes are used by the website's code execution system (Pyodide) to replay API calls without making real HTTP requests.
+
+The checksum file ensures that if the Python example file is modified, the cassette can be detected as out of sync and regenerated. The `validate-cassettes` script checks that all cassettes have matching checksum files that match the current Python file content.
 
 ## Sanitization
 

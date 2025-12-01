@@ -1,5 +1,6 @@
 #!/usr/bin/env bun
 
+import { createHash } from "crypto";
 import { existsSync, rmSync } from "fs";
 import { mkdir, readFile, writeFile } from "fs/promises";
 import { resolve, dirname, relative } from "path";
@@ -170,12 +171,12 @@ async function processFile(
     const recordingPath = resolve(workDir, relativePath);
     const recordingDirPath = dirname(recordingPath);
 
+    // Read original file
+    const originalContent = await readFile(pythonFile, "utf-8");
+
     // Calculate YAML path - Use absolute path so VCR.py creates cassettes in the right place
     // regardless of current working directory
     const yamlPath = recordingPath + ".yaml";
-
-    // Read original file
-    const originalContent = await readFile(pythonFile, "utf-8");
 
     // Transform content
     const transformedContent = transformPythonWithVcrDecorator(originalContent, yamlPath);
@@ -213,12 +214,16 @@ async function processFile(
       console.log(`  Python stderr: ${stderr.trim()}`);
     }
 
+    // Calculate the sha256 checksum of the original content
+    const originalContentSha256 = createHash("sha256").update(originalContent).digest("hex");
+
     // Look for generated YAML cassette
     // VCR.py creates cassettes relative to the Python file's location
     const cassettePath = recordingPath + ".yaml";
 
     if (!existsSync(cassettePath)) {
       // Debug: show what decorator path was used
+      console.log(`  Original content sha256: ${originalContentSha256}`);
       console.log(`  Decorator path: ${yamlPath}`);
       console.log(`  Expected cassette at: ${cassettePath}`);
       console.log(`  Recording path: ${recordingPath}`);
@@ -240,6 +245,9 @@ async function processFile(
     const originalCassetteDir = dirname(originalCassettePath);
     await mkdir(originalCassetteDir, { recursive: true });
     await writeFile(originalCassettePath, sanitizedContent, "utf-8");
+
+    // Write the original content's sha256 checksum into a secondary file to track changes
+    await writeFile(pythonFile + ".sha256.txt", originalContentSha256 + "\n", "utf-8");
 
     return { file: pythonFile, success: true };
   } catch (error) {
@@ -325,9 +333,11 @@ async function main(): Promise<void> {
   // Summary
   console.log("\n" + "=".repeat(50));
   console.log("Summary:");
-  console.log(`  Total files: ${pythonFiles.length}`);
+  const totalCount = pythonFiles.length;
+  console.log(`  Total files: ${totalCount}`);
   console.log(`  Successful: ${successCount}`);
   console.log(`  Failed: ${failureCount}`);
+  console.log(`  Skipped: ${totalCount - successCount - failureCount}`);
 
   if (failureCount > 0) {
     console.log("\nFailed files:");
