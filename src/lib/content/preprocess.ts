@@ -263,7 +263,7 @@ export class ContentPreprocessor {
     contentType: ContentType,
     outputBase: string
   ): Promise<void> {
-    const { frontmatter, fullContent, vcrCassettes } = preprocessMdx(filePath);
+    const { frontmatter, fullContent } = preprocessMdx(filePath);
 
     // Get the relative path from the source directory
     const relativePath = path.relative(srcDir, filePath);
@@ -294,7 +294,6 @@ export class ContentPreprocessor {
     const contentObject = {
       meta: metadata,
       content: fullContent,
-      vcrCassettes,
     };
 
     const outputDir = path.dirname(path.join(outputBase, `${contentPath.subpath}.json`));

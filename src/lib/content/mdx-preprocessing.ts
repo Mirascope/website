@@ -18,13 +18,11 @@ export interface PreprocessedMdxResult {
   frontmatter: Record<string, any>;
   content: string; // Body content only (no frontmatter)
   fullContent: string; // Full file content with frontmatter
-  vcrCassettes: string[];
 }
 
 export interface CodeExample {
   fullContent: string;
   // todo(sebastian): normalize this type
-  vcrCassettes: string[];
 }
 
 function resolveExampleBasePath(filePath: string): string {
@@ -104,7 +102,6 @@ function processCodeExamples(filePath: string): CodeExample {
 
   return {
     fullContent: processedContent,
-    vcrCassettes: vcs,
   };
 }
 
@@ -149,13 +146,12 @@ function inferLanguageFromPath(filePath: string): string {
  * Preprocesses MDX content by resolving CodeExample directives and parsing frontmatter
  */
 export function preprocessMdx(filePath: string): PreprocessedMdxResult {
-  const { fullContent, vcrCassettes } = processCodeExamples(filePath);
+  const { fullContent } = processCodeExamples(filePath);
   const { frontmatter, content } = parseFrontmatter(fullContent);
 
   return {
     frontmatter,
     content,
     fullContent,
-    vcrCassettes,
   };
 }
