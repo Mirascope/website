@@ -1,13 +1,13 @@
-# vcrRec
+# cachedHTTP
 
-`vcrRec` is a tool for safely recording VCR.py cassettes to cache LLM API calls in Python example files. It automates the process of running Python examples, capturing HTTP interactions, and sanitizing sensitive data before committing cassettes to the repository in a location that's served by an HTTP server.
+`cachedHTTP` is a tool for safely recording VCR.py cassettes to cache LLM API calls in Python example files. It automates the process of running Python examples, capturing HTTP interactions, and sanitizing sensitive data before committing cassettes to the repository in a location that's served by an HTTP server.
 
 ## Quick Start
 
 Record VCR.py cassettes for Python example files:
 
 ```bash
-bun run record-vcr-cassettes
+bun run record-cached-http
 ```
 
 This will process all Python files matching the default pattern (`content/docs/mirascope/v2/examples/**/*.py`) and generate YAML cassette files alongside them.
@@ -15,7 +15,7 @@ This will process all Python files matching the default pattern (`content/docs/m
 To process specific files:
 
 ```bash
-bun run record-vcr-cassettes --pattern "content/docs/mirascope/v2/examples/intro/decorator/*.py"
+bun run record-cached-http --pattern "content/docs/mirascope/v2/examples/intro/decorator/*.py"
 ```
 
 ## Command-line Options
@@ -35,14 +35,16 @@ Capture Cassettes → Sanitize (remove auth tokens) → Copy Back → Cleanup
 ### Workflow Process
 
 1. **File Discovery**: Finds all Python files matching the specified glob pattern
-2. **Virtual Environment Setup**: Uses `uv sync` to create and configure a Python virtual environment in `vcrRec` directory
-3. **File Transformation**: Copies Python files to `vcrRec/.work` while adding:
+2. **Virtual Environment Setup**: Uses `uv sync` to create and configure a Python virtual environment in `cachedHTTP` directory
+3. **File Transformation**: Copies Python files to `cachedHTTP/.work` while adding:
+
    - `import vcr` statement (if not present)
    - `@vcr.use_cassette('absolute/path/to/file.py.yaml')` decorator before `main()` function
 
-4. **Execution**: Runs each Python file using `uv run python` from the `vcrRec` directory
+4. **Execution**: Runs each Python file using `uv run python` from the `cachedHTTP` directory
 5. **Cassette Capture**: VCR.py intercepts HTTP requests and creates YAML cassette files
 6. **Sanitization**: Removes sensitive authentication tokens from cassettes:
+
    - `x-api-key`
    - `authorization`
    - `x-auth-token`
@@ -56,7 +58,7 @@ Capture Cassettes → Sanitize (remove auth tokens) → Copy Back → Cleanup
 ### Directory Structure
 
 ```ini
-vcrRec/
+cachedHTTP/
 ├── .venv/              # Python virtual environment (created by uv sync)
 ├── .work/              # Temporary staging directory (created during execution, cleaned up after)
 ├── pyproject.toml      # Python dependencies (vcrpy, mirascope)
@@ -92,7 +94,7 @@ Defines the Python dependencies required for recording:
 
 The script uses `uv sync` to:
 
-- Create a virtual environment in `vcrRec/.venv`
+- Create a virtual environment in `cachedHTTP/.venv`
 - Install dependencies from `pyproject.toml`
 - Ensure consistent Python environment across runs
 
@@ -101,25 +103,25 @@ The script uses `uv sync` to:
 ### Process all example files
 
 ```bash
-bun run record-vcr-cassettes
+bun run record-cached-http
 ```
 
 ### Process specific directory
 
 ```bash
-bun run record-vcr-cassettes --pattern "content/docs/mirascope/v2/examples/intro/**/*.py"
+bun run record-cached-http --pattern "content/docs/mirascope/v2/examples/intro/**/*.py"
 ```
 
 ### Preview what would be processed (dry run)
 
 ```bash
-bun run record-vcr-cassettes --dry-run
+bun run record-cached-http --dry-run
 ```
 
 ### Process a single file
 
 ```bash
-bun run record-vcr-cassettes --pattern "content/docs/mirascope/v2/examples/intro/decorator/sync.py"
+bun run record-cached-http --pattern "content/docs/mirascope/v2/examples/intro/decorator/sync.py"
 ```
 
 ## Output
@@ -160,7 +162,7 @@ If a cassette file is not generated:
 
 If Python files fail to execute:
 
-1. Verify dependencies are installed: `cd vcrRec && uv sync`
+1. Verify dependencies are installed: `cd cachedHTTP && uv sync`
 2. Check Python version matches `.python-version` (currently 3.10)
 3. Review error output in the script's stderr messages
 
@@ -204,7 +206,7 @@ const sensitiveKeys = [
 Use `--dry-run` to preview changes without executing:
 
 ```bash
-bun run record-vcr-cassettes --dry-run --pattern "path/to/test.py"
+bun run record-cached-http --dry-run --pattern "path/to/test.py"
 ```
 
 This will show what files would be processed without actually running Python or generating cassettes.

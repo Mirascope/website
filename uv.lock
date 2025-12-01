@@ -772,7 +772,7 @@ wheels = [
 [[package]]
 name = "vcrrec"
 version = "0.1.0"
-source = { virtual = "vcrRec" }
+source = { virtual = "cachedHTTP" }
 dependencies = [
     { name = "mirascope", extra = ["anthropic"] },
     { name = "vcrpy" },
