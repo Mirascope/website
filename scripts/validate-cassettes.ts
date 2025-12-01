@@ -182,7 +182,7 @@ async function main() {
     console.error("\n❌ Cassette validation failed. Please fix the errors above.");
     process.exit(1);
   } else {
-    console.log("\n🎉 All cassette files are valid!");
+    console.log("\n🎉 All cassette files checksums are matching their Python files correctly!");
   }
 }
 
