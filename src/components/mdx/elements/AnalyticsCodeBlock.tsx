@@ -1,8 +1,7 @@
-import { useRef, useMemo, useCallback, useState } from "react";
+import { useRef, useMemo, useCallback, useState, useEffect } from "react";
 import { CodeBlock } from "@/mirascope-ui/blocks/code-block/code-block";
 import { useProduct, useRunnable } from "@/src/components/core";
 import analyticsManager from "@/src/lib/services/analytics";
-
 interface AnalyticsCodeBlockProps {
   code: string;
   language?: string;
@@ -18,12 +17,21 @@ export function AnalyticsCodeBlock({
   className,
   showLineNumbers,
 }: AnalyticsCodeBlockProps) {
+  const VCRPY_CASSETTE_INTRO = "interactions:";
+
+  const [output, setOutput] = useState<string>("");
+  const [hasCachedHttp, setHasCachedHttp] = useState<boolean>(false);
+  const product = useProduct();
+  const codeRef = useRef<HTMLDivElement>(null);
+
+  // Extract __filepath__ (if present) and the rest of the code.
+  const codeFilePath = useMemo(() => {
+    const match = code.match(/^__filepath__ = "(.*)";\n\n/);
+    return match ? match[1] : "";
+  }, [code]);
   const onlyCode = useMemo(() => {
     return code.replace(/^__filepath__ = ".*";\n\n/, "");
   }, [code]);
-  const [output, setOutput] = useState<string>("");
-  const product = useProduct();
-  const codeRef = useRef<HTMLDivElement>(null);
 
   // Create a stable identifier for this code block based on its content
   // This ensures the ID remains consistent across rerenders
@@ -77,15 +85,37 @@ export function AnalyticsCodeBlock({
     }
   }, [setOutput, code, runnable, runnableLoading]);
 
+  useEffect(() => {
+    if (!codeFilePath) {
+      return;
+    }
+    const cassetteURL = runnable.getVcrpyCassetteUrl(code);
+    const checkCassette = async () => {
+      try {
+        const res = await fetch(cassetteURL);
+        if (res.status >= 400) {
+          setHasCachedHttp(false);
+          return;
+        }
+        const text = await res.text();
+        setHasCachedHttp(text.startsWith(VCRPY_CASSETTE_INTRO));
+      } catch (err) {
+        setHasCachedHttp(false);
+        console.warn("Error checking cassette:", err);
+      }
+    };
+    checkCassette();
+  }, [codeFilePath, runnable]);
+
   const onRunFunc = useMemo(() => {
-    if (!language?.startsWith("py")) {
+    if (!language?.startsWith("py") || !hasCachedHttp) {
       return undefined;
     }
     if (runnableLoading) {
       return undefined;
     }
     return runCode;
-  }, [runnableLoading, runCode]);
+  }, [runnableLoading, runCode, hasCachedHttp]);
 
   return (
     <div ref={codeRef} data-code-hash={codeHash} className="analytics-code-block">

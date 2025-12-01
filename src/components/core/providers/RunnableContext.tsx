@@ -36,6 +36,8 @@ export interface RunnableContextType {
     stdout: Observable<string>;
     stderr: Observable<string>;
   }>;
+  /** Get VCR.py cassette URL for a given code */
+  getVcrpyCassetteUrl: (code: string) => string;
 }
 
 export interface ProviderProps extends PropsWithChildren {
@@ -218,20 +220,28 @@ export function RunnableProvider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }:
     return { done, stdout: runStdout$, stderr: runStderr$ };
   };
 
-  const runPythonWithVCR = async (code: string) => {
+  const getVcrpyCassetteUrl = (code: string) => {
     // todo(sebastian): temporary since it only works in dev mode
-    const basePath = `/content${window.location.pathname}`;
     const filepath = code.match(/__filepath__ = "([^"]+)";/)?.[1] || "";
-    const yamlPath = `${basePath}/${filepath}.yaml`;
+    const url = new URL(
+      `/content${window.location.pathname}/${filepath}.yaml`,
+      window.location.origin
+    ).toString();
 
-    // Load YAML cassette into Pyodide FS
-    const res = await fetch(yamlPath);
-    const yaml = await res.text();
-    const baseDir = yamlPath.substring(0, yamlPath.lastIndexOf("/"));
+    return url;
+  };
+
+  const runPythonWithVCR = async (code: string) => {
+    const cassetteURL = getVcrpyCassetteUrl(code);
+
+    // Load VCR.py cassette into Pyodide FS
+    const res = await fetch(cassetteURL);
+    const cassette = await res.text();
+    const baseDir = cassetteURL.substring(0, cassetteURL.lastIndexOf("/"));
     await pyodide!.FS.mkdirTree(baseDir);
-    await pyodide!.FS.writeFile(yamlPath, yaml);
+    await pyodide!.FS.writeFile(cassetteURL, cassette);
 
-    const transformedCode = transformPythonWithVcrDecorator(code, yamlPath);
+    const transformedCode = transformPythonWithVcrDecorator(code, cassetteURL);
 
     const { done, stdout, stderr } = runPython(transformedCode);
     return {
@@ -248,6 +258,7 @@ export function RunnableProvider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }:
       error,
       runPython,
       runPythonWithVCR,
+      getVcrpyCassetteUrl,
     }),
     [pyodide, loading, error, stdout, stderr]
   );
