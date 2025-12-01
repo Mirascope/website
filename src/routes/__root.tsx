@@ -4,7 +4,7 @@ import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { useEffect } from "react";
 import { getProductFromPath, canonicalizePath } from "../lib/utils";
 
-import { Header, Footer, CookieBanner, DevToolsButton } from "@/src/components/routes/root";
+import { Header, Footer, DevToolsButton } from "@/src/components/routes/root";
 import analyticsManager from "@/src/lib/services/analytics";
 import {
   FunModeProvider,
@@ -120,9 +120,6 @@ export const Route = createRootRoute({
               </div>
               <Footer />
             </div>
-
-            {/* Cookie consent banner - positioned in lower left corner */}
-            <CookieBanner />
           </ProductProvider>
 
           {/* Dev tools - only visible in development */}
