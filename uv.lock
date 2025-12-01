@@ -12,8 +12,8 @@ resolution-markers = [
 
 [manifest]
 members = [
+    "cachedhttp",
     "mirascope-website",
-    "vcrrec",
 ]
 
 [[package]]
@@ -57,6 +57,21 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/c6/78/7d432127c41b50bccba979505f272c16cbcadcc33645d5fa3a738110ae75/anyio-4.11.0.tar.gz", hash = "sha256:82a8d0b81e318cc5ce71a5f1f8b5c4e63619620b63141ef8c995fa0db95a57c4", size = 219094, upload-time = "2025-09-23T09:19:12.58Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/15/b3/9b1a8074496371342ec1e796a96f99c82c945a339cd81a8e73de28b4cf9e/anyio-4.11.0-py3-none-any.whl", hash = "sha256:0287e96f4d26d4149305414d4e3bc32f0dcd0862365a4bddea19d7a1ec38c4fc", size = 109097, upload-time = "2025-09-23T09:19:10.601Z" },
+]
+
+[[package]]
+name = "cachedhttp"
+version = "0.1.0"
+source = { virtual = "cachedHTTP" }
+dependencies = [
+    { name = "mirascope", extra = ["anthropic"] },
+    { name = "vcrpy" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "mirascope", extras = ["anthropic"], specifier = "==2.0.0a2" },
+    { name = "vcrpy", specifier = "==7.0.0" },
 ]
 
 [[package]]
@@ -767,21 +782,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/25/d3/856e06184d4572aada1dd559ddec3bedc46df1f2edc5ab2c91121a2cccdb/vcrpy-7.0.0.tar.gz", hash = "sha256:176391ad0425edde1680c5b20738ea3dc7fb942520a48d2993448050986b3a50", size = 85502, upload-time = "2024-12-31T00:07:57.894Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/13/5d/1f15b252890c968d42b348d1e9b0aa12d5bf3e776704178ec37cceccdb63/vcrpy-7.0.0-py2.py3-none-any.whl", hash = "sha256:55791e26c18daa363435054d8b35bd41a4ac441b6676167635d1b37a71dbe124", size = 42321, upload-time = "2024-12-31T00:07:55.277Z" },
-]
-
-[[package]]
-name = "vcrrec"
-version = "0.1.0"
-source = { virtual = "cachedHTTP" }
-dependencies = [
-    { name = "mirascope", extra = ["anthropic"] },
-    { name = "vcrpy" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "mirascope", extras = ["anthropic"], specifier = "==2.0.0a2" },
-    { name = "vcrpy", specifier = "==7.0.0" },
 ]
 
 [[package]]

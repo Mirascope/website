@@ -25,9 +25,10 @@
     "version-upload": "wrangler versions upload",
     "serve": "bun scripts/serve-static.ts",
     "test": "bun test",
-    "lint": "bun run typecheck && bun run lint:mdx && bun run lint:python && bun run lint:format",
+    "lint": "bun run typecheck && bun run lint:mdx && bun run lint:cassettes && bun run lint:python && bun run lint:format",
     "typecheck": "bun run tsc --noEmit",
     "lint:mdx": "bun run scripts/validate-mdx.ts",
+    "lint:cassettes": "bun run scripts/validate-cassettes.ts",
     "lint:python": "cd api2mdx && uv run pyright api2mdx && uv run ruff check api2mdx && uv run pytest && echo \"Lint successful\"",
     "lint:format": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\"",
     "fix": "bun run fix:format && bun run fix:python",
@@ -45,6 +46,9 @@
     ],
     "content/**/*.mdx": [
       "bun run lint:mdx"
+    ],
+    "content/docs/mirascope/v2/examples/**/*.{yaml,py}": [
+      "bun run lint:cassettes"
     ],
     "api2mdx/**/*.py": "bun run lint:python",
     "public/assets/**/*.{png,jpg,jpeg}": [

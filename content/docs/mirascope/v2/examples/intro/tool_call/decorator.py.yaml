@@ -1,0 +1,206 @@
+interactions:
+  - request:
+      body: '{"max_tokens":16000,"messages":[{"role":"user","content":"Please recommend a mind-bending book that''s available in the library."}],"model":"claude-sonnet-4-0","tools":[{"name":"available_library_books","description":"available_library_books","input_schema":{"properties":{},"required":[],"additionalProperties":false,"type":"object"}}]}'
+      headers:
+        accept:
+          - application/json
+        accept-encoding:
+          - gzip, deflate
+        anthropic-version:
+          - '2023-06-01'
+        connection:
+          - keep-alive
+        content-length:
+          - '336'
+        content-type:
+          - application/json
+        host:
+          - api.anthropic.com
+        user-agent:
+          - Anthropic/Python 0.75.0
+        x-api-key:
+          - cached-http-with-invalid-key
+        x-stainless-arch:
+          - arm64
+        x-stainless-async:
+          - 'false'
+        x-stainless-lang:
+          - python
+        x-stainless-os:
+          - MacOS
+        x-stainless-package-version:
+          - 0.75.0
+        x-stainless-read-timeout:
+          - '600'
+        x-stainless-retry-count:
+          - '0'
+        x-stainless-runtime:
+          - CPython
+        x-stainless-runtime-version:
+          - 3.10.18
+        x-stainless-timeout:
+          - '600'
+      method: POST
+      uri: https://api.anthropic.com/v1/messages
+    response:
+      body:
+        string: !!binary H4sIAAAAAAAAAwAAAP//dJHbatwwEIZfRcxNb7TFTrPpRpeFJi2bDQ2EElKCGEvTtVh5tNHBzbL43YvdmDQNvRIz36/553CELljyoMB4LJYWKTBTXpwuTqqTZbWsT0GCs6CgS1td1et+8y1f9nz3+eLT5ubp8uxmc9+sQUI+7GlUUUq4JZAQgx8TmJJLGTmDBBM4E2dQP46zPtPTSKZHwdd33gvTktmJXy1m0YSwSwIjCVNiJM7+ILBH57HxJByL3JLwrokYDwLZikgmdB2xFSg6x3bREFvHWxGYxM8QxSGU9zDIF/8QvC6J5inHuOiqvupXqy/31+nidoXnt7s1PxZrv4MExm4aa+5CP9vrqdexDO9LBnUchgcJKYe9joQp8GuzCSR6LMSGQHHxXkKZVqeOf2roHHbECdSH1UcJBk1L2kTC7ALr14pq5pHQ/o/Nf0cD2rfUUUSvl91b/Qut23/pICGU/HfqrJaQKPbOkM6OIigYD24xWhiG3wAAAP//AwATx0xoYQIAAA==
+      headers:
+        CF-RAY:
+          - 9a7664239ec47ada-SJC
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - gzip
+        Content-Type:
+          - application/json
+        Date:
+          - Mon, 01 Dec 2025 23:33:46 GMT
+        Server:
+          - cloudflare
+        Transfer-Encoding:
+          - chunked
+        X-Robots-Tag:
+          - none
+        anthropic-organization-id:
+          - bcf0d122-a6b6-40d4-873c-83762f5fb168
+        anthropic-ratelimit-input-tokens-limit:
+          - '30000'
+        anthropic-ratelimit-input-tokens-remaining:
+          - '30000'
+        anthropic-ratelimit-input-tokens-reset:
+          - '2025-12-01T23:33:45Z'
+        anthropic-ratelimit-output-tokens-limit:
+          - '8000'
+        anthropic-ratelimit-output-tokens-remaining:
+          - '8000'
+        anthropic-ratelimit-output-tokens-reset:
+          - '2025-12-01T23:33:46Z'
+        anthropic-ratelimit-requests-limit:
+          - '50'
+        anthropic-ratelimit-requests-remaining:
+          - '49'
+        anthropic-ratelimit-requests-reset:
+          - '2025-12-01T23:33:44Z'
+        anthropic-ratelimit-tokens-limit:
+          - '38000'
+        anthropic-ratelimit-tokens-remaining:
+          - '38000'
+        anthropic-ratelimit-tokens-reset:
+          - '2025-12-01T23:33:45Z'
+        cf-cache-status:
+          - DYNAMIC
+        request-id:
+          - req_011CVgqnUh3gVVxMujp8knEe
+        retry-after:
+          - '16'
+        strict-transport-security:
+          - max-age=31536000; includeSubDomains; preload
+        x-envoy-upstream-service-time:
+          - '2683'
+      status:
+        code: 200
+        message: OK
+  - request:
+      body: '{"max_tokens":16000,"messages":[{"role":"user","content":"Please recommend a mind-bending book that''s available in the library."},{"role":"assistant","content":[{"citations":null,"text":"I''ll check what books are currently available in the library and recommend a mind-bending one for you.","type":"text"},{"id":"toolu_01Lv88HZNsFT8a9TkKnquddV","input":{},"name":"available_library_books","type":"tool_use"}]},{"role":"user","content":[{"type":"tool_result","tool_use_id":"toolu_01Lv88HZNsFT8a9TkKnquddV","content":"[''Mistborn by Brandon Sanderson'', ''The Name of the Wind by Patrick Rothfuss'', ''Too Like the Lightning by Ada Palmer'', ''Wild Seed by Octavia Butler'']"}]}],"model":"claude-sonnet-4-0","tools":[{"name":"available_library_books","description":"available_library_books","input_schema":{"properties":{},"required":[],"additionalProperties":false,"type":"object"}}]}'
+      headers:
+        accept:
+          - application/json
+        accept-encoding:
+          - gzip, deflate
+        anthropic-version:
+          - '2023-06-01'
+        connection:
+          - keep-alive
+        content-length:
+          - '875'
+        content-type:
+          - application/json
+        host:
+          - api.anthropic.com
+        user-agent:
+          - Anthropic/Python 0.75.0
+        x-api-key:
+          - cached-http-with-invalid-key
+        x-stainless-arch:
+          - arm64
+        x-stainless-async:
+          - 'false'
+        x-stainless-lang:
+          - python
+        x-stainless-os:
+          - MacOS
+        x-stainless-package-version:
+          - 0.75.0
+        x-stainless-read-timeout:
+          - '600'
+        x-stainless-retry-count:
+          - '0'
+        x-stainless-runtime:
+          - CPython
+        x-stainless-runtime-version:
+          - 3.10.18
+        x-stainless-timeout:
+          - '600'
+      method: POST
+      uri: https://api.anthropic.com/v1/messages
+    response:
+      body:
+        string: !!binary H4sIAAAAAAAAAwAAAP//fFRfayQ3DP8qwi8HYTYk4ZbSfSktFJpyhT4EWtoci8bWjsV6pIkt72Ya7rsXz+5eLne0TwbLsn5/JL24UQMlt3E+YQ20KipCtnq/uru5W9+sb9+7znFwGzeWYXtz++uhau0rPq3nn+fdd3/99v3tL3/uXedsnqi9olJwINe5rKldYClcDMVc57yKkZjb/P1yeW/03CLLsXE/YaEAKmCRAA/ICftE0KvuC/DpOnGfMc8d3L8LEHmIaYZMXseRJMDV1aN7UIUPvKfl+QceognL8Oign+HHgPA7ppHy1RXsNAPCyBJWPUlgGYCeJ8pM4un6UR7lIXJZygM3AD5T4D7NYFHrEG01ZT3oviWiBGAxSom8VUxpBh8xJZKBZbiGe3tXoJA1Ggh3a4srT2I1z1BNJ0aBop7JZjhGygSWMbCxCibwKp4mK5AaLcF2XToYSALl0i3FdzhyYioQ8UDQEwlk4hEHlqZpBuw1cYkUruEhEhTTPDdagjmjUWjyoECVTIkX3U+RliqhKZM0UwGv45ToGabISYtOkT0meKpUFlitTjUYNWNimzto3w2s0sGkiY39GXCsI0ojU/NJ7D8iGoy4pwJsMGE29jVhTvMbjzaPsloYnODxoXGZE0GgxD01Ll+ITwVmrRmwlDpOC8KWf2/QJ5JQXmnMXwMsE7X6S4Ud+5bb3KvCT5XgiHO5IDlqTmHVV05LE73tlUCGnCgsf06ZCokVaO423Zrp7bBcfVPigu5Vz12VgCOJYQJsmKyA7iDq8XPHeK0pQE+geUDhfyicmvc0OpDpqXKzDv1ChmTAgdqXsMs6LnOSCQOdnD5ySkunpfnUTLPWz3gavxFl/lLQs+VnNB1wILHF+1efe4p4YM3nSWgld5yLXcb6gXJGuB9EDaG0GSynbCxwVAGfmzNNAu8T8rgML1sBHPs2JrVA8TrRN4MIgSaLpwZbZGpsljkyhb3osbUqnSk0YrpbAKnFpsfbJdS1QQpKBf5nzRStEk4ljq2lZ63vMkHS06bYaf7BffrYuWI6bTNhUXEbRxK2VrO4c6DQU217yG2kptS5uuzVzYtjmaptTfckxW3WN+vOefSRtj7Tshm2b1/cXOLN4v+KXXJbAZoijZQxbdfjt+9fo7fx6+in7l8p5ZeWIAsZmRrrKBWnFpVlJqfGl2SmFilZKYGqg5TEohSl2loAAAAA//8DAKZcR+p/BgAA
+      headers:
+        CF-RAY:
+          - 9a7664352ba07ada-SJC
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - gzip
+        Content-Type:
+          - application/json
+        Date:
+          - Mon, 01 Dec 2025 23:33:54 GMT
+        Server:
+          - cloudflare
+        Transfer-Encoding:
+          - chunked
+        X-Robots-Tag:
+          - none
+        anthropic-organization-id:
+          - bcf0d122-a6b6-40d4-873c-83762f5fb168
+        anthropic-ratelimit-input-tokens-limit:
+          - '30000'
+        anthropic-ratelimit-input-tokens-remaining:
+          - '30000'
+        anthropic-ratelimit-input-tokens-reset:
+          - '2025-12-01T23:33:48Z'
+        anthropic-ratelimit-output-tokens-limit:
+          - '8000'
+        anthropic-ratelimit-output-tokens-remaining:
+          - '8000'
+        anthropic-ratelimit-output-tokens-reset:
+          - '2025-12-01T23:33:56Z'
+        anthropic-ratelimit-requests-limit:
+          - '50'
+        anthropic-ratelimit-requests-remaining:
+          - '49'
+        anthropic-ratelimit-requests-reset:
+          - '2025-12-01T23:33:47Z'
+        anthropic-ratelimit-tokens-limit:
+          - '38000'
+        anthropic-ratelimit-tokens-remaining:
+          - '38000'
+        anthropic-ratelimit-tokens-reset:
+          - '2025-12-01T23:33:48Z'
+        cf-cache-status:
+          - DYNAMIC
+        request-id:
+          - req_011CVgqngdtNhJBEJQq7UyQv
+        retry-after:
+          - '12'
+        strict-transport-security:
+          - max-age=31536000; includeSubDomains; preload
+        x-envoy-upstream-service-time:
+          - '7898'
+      status:
+        code: 200
+        message: OK
+version: 1
