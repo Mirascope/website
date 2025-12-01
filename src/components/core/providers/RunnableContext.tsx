@@ -4,6 +4,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useCallback,
   useState,
   type PropsWithChildren,
 } from "react";
@@ -11,6 +12,7 @@ import {
 import { type PyodideInterface, loadPyodide, version } from "pyodide";
 import { transformPythonWithVcrDecorator } from "@/src/lib/content/vcr-cassettes";
 
+const VCRPY_CASSETTE_INTRO = "interactions:";
 const DEFAULT_PYODIDE_URL = `https://cdn.jsdelivr.net/pyodide/v${version}/full/`;
 
 // Module-level singleton to share Pyodide instance across all Provider instances
@@ -30,14 +32,14 @@ export interface RunnableContextType {
     stdout: Observable<string>;
     stderr: Observable<string>;
   };
-  /** Run Python code with VCR.py cassettes */
-  runPythonWithVCR: (code: string) => Promise<{
+  /** Run Python code with pre-cached HTTP interactions via VCR.py cassettes */
+  runPythonWithCachedHTTP: (code: string) => Promise<{
     done: () => Promise<any>;
     stdout: Observable<string>;
     stderr: Observable<string>;
   }>;
-  /** Get VCR.py cassette URL for a given code */
-  getVCRCassetteUrl: (code: string) => string;
+  /** Check if a given code has cached HTTP interactions as VCR.py cassettes */
+  hasCachedHTTP: (code: string) => Promise<boolean>;
 }
 
 export interface ProviderProps extends PropsWithChildren {
@@ -191,35 +193,39 @@ export function RunnableProvider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }:
     bootstrap();
   }, [pyodide, error, loading]);
 
-  const runPython = (code: string) => {
-    if (!pyodide) {
-      throw new Error("Pyodide is not ready");
-    }
+  const runPython = useCallback(
+    (code: string) => {
+      if (!pyodide) {
+        throw new Error("Pyodide is not ready");
+      }
 
-    if (loading || !stdout || !stderr) {
-      console.warn("Pyodide is still loading");
-      return {
-        done: () => Promise.resolve(undefined),
-        stdout: new Observable<string>((observer) => observer.complete()),
-        stderr: new Observable<string>((observer) => observer.complete()),
-      };
-    }
+      if (loading || !stdout || !stderr) {
+        console.warn("Pyodide is still loading");
+        return {
+          done: () => Promise.resolve(undefined),
+          stdout: new Observable<string>((observer) => observer.complete()),
+          stderr: new Observable<string>((observer) => observer.complete()),
+        };
+      }
 
-    const done$ = from(pyodide.runPythonAsync(code));
+      const done$ = from(pyodide.runPythonAsync(code));
 
-    // Returns a promise with the result—if the last
-    // Python statement is an expression (not ending
-    // with a semicolon), Pyodide returns the value.
-    const done = () => lastValueFrom(done$);
+      // Returns a promise with the result—if the last
+      // Python statement is an expression (not ending
+      // with a semicolon), Pyodide returns the value.
+      const done = () => lastValueFrom(done$);
 
-    // dedupe error and complete the run's stdout+stderr
-    const complete$ = takeUntil<any>(done$.pipe(catchError(() => EMPTY)));
-    const runStdout$ = stdout.pipe(complete$);
-    const runStderr$ = stderr.pipe(complete$);
+      // dedupe error and complete the run's stdout+stderr
+      const complete$ = takeUntil<any>(done$.pipe(catchError(() => EMPTY)));
+      const runStdout$ = stdout.pipe(complete$);
+      const runStderr$ = stderr.pipe(complete$);
 
-    return { done, stdout: runStdout$, stderr: runStderr$ };
-  };
+      return { done, stdout: runStdout$, stderr: runStderr$ };
+    },
+    [pyodide, loading, stdout, stderr]
+  );
 
+  /** Get VCR.py cassette URL for a given code */
   const getVCRCassetteUrl = (code: string) => {
     // todo(sebastian): temporary since it only works in dev mode
     const filepath = code.match(/__filepath__ = "([^"]+)";/)?.[1] || "";
@@ -231,25 +237,40 @@ export function RunnableProvider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }:
     return url;
   };
 
-  const runPythonWithVCR = async (code: string) => {
+  /** Check if a given code snippet has cached HTTP interactions as VCR.py cassettes */
+  const hasCachedHTTP = useCallback(async (code: string): Promise<boolean> => {
     const cassetteURL = getVCRCassetteUrl(code);
-
-    // Load VCR.py cassette into Pyodide FS
     const res = await fetch(cassetteURL);
-    const cassette = await res.text();
-    const baseDir = cassetteURL.substring(0, cassetteURL.lastIndexOf("/"));
-    await pyodide!.FS.mkdirTree(baseDir);
-    await pyodide!.FS.writeFile(cassetteURL, cassette);
+    if (!res.ok) {
+      return false;
+    }
+    const text = await res.text();
+    return text.startsWith(VCRPY_CASSETTE_INTRO);
+  }, []);
 
-    const transformedCode = transformPythonWithVcrDecorator(code, cassetteURL);
+  /** Run Python code with pre-cached HTTP interactions via VCR.py cassettes */
+  const runPythonWithCachedHTTP = useCallback(
+    async (code: string) => {
+      const cassetteURL = getVCRCassetteUrl(code);
 
-    const { done, stdout, stderr } = runPython(transformedCode);
-    return {
-      done,
-      stdout,
-      stderr,
-    };
-  };
+      // Load VCR.py cassette into Pyodide FS
+      const res = await fetch(cassetteURL);
+      const cassette = await res.text();
+      const baseDir = cassetteURL.substring(0, cassetteURL.lastIndexOf("/"));
+      await pyodide!.FS.mkdirTree(baseDir);
+      await pyodide!.FS.writeFile(cassetteURL, cassette);
+
+      const transformedCode = transformPythonWithVcrDecorator(code, cassetteURL);
+
+      const { done, stdout, stderr } = runPython(transformedCode);
+      return {
+        done,
+        stdout,
+        stderr,
+      };
+    },
+    [pyodide, runPython]
+  );
 
   const value = useMemo<RunnableContextType>(
     () => ({
@@ -257,10 +278,10 @@ export function RunnableProvider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }:
       loading,
       error,
       runPython,
-      runPythonWithVCR,
-      getVCRCassetteUrl,
+      runPythonWithCachedHTTP,
+      hasCachedHTTP,
     }),
-    [pyodide, loading, error, stdout, stderr]
+    [pyodide, loading, error, runPython, runPythonWithCachedHTTP, hasCachedHTTP]
   );
 
   return <RunnableContext.Provider value={value}>{children}</RunnableContext.Provider>;
