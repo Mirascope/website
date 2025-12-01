@@ -37,7 +37,7 @@ export interface RunnableContextType {
     stderr: Observable<string>;
   }>;
   /** Get VCR.py cassette URL for a given code */
-  getVcrpyCassetteUrl: (code: string) => string;
+  getVCRCassetteUrl: (code: string) => string;
 }
 
 export interface ProviderProps extends PropsWithChildren {
@@ -220,7 +220,7 @@ export function RunnableProvider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }:
     return { done, stdout: runStdout$, stderr: runStderr$ };
   };
 
-  const getVcrpyCassetteUrl = (code: string) => {
+  const getVCRCassetteUrl = (code: string) => {
     // todo(sebastian): temporary since it only works in dev mode
     const filepath = code.match(/__filepath__ = "([^"]+)";/)?.[1] || "";
     const url = new URL(
@@ -232,7 +232,7 @@ export function RunnableProvider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }:
   };
 
   const runPythonWithVCR = async (code: string) => {
-    const cassetteURL = getVcrpyCassetteUrl(code);
+    const cassetteURL = getVCRCassetteUrl(code);
 
     // Load VCR.py cassette into Pyodide FS
     const res = await fetch(cassetteURL);
@@ -258,7 +258,7 @@ export function RunnableProvider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }:
       error,
       runPython,
       runPythonWithVCR,
-      getVcrpyCassetteUrl,
+      getVCRCassetteUrl,
     }),
     [pyodide, loading, error, stdout, stderr]
   );
