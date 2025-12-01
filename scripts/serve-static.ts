@@ -30,6 +30,8 @@ const MIME_TYPES: Record<string, string> = {
   ".xml": "application/xml",
   ".pdf": "application/pdf",
   ".txt": "text/plain",
+  ".yaml": "text/yaml",
+  ".yml": "text/yaml",
   ".map": "application/json",
 };
 
