@@ -1,5 +1,8 @@
 import fs from "fs";
 import path from "path";
+import { mkdir, readFile, writeFile } from "fs/promises";
+import { resolve, relative } from "path";
+import { glob } from "glob";
 import { ContentPreprocessor } from "@/src/lib/content/preprocess";
 import type { LLMContent } from "@/src/lib/content/llm-content";
 import { SITE_URL, getAllRoutes, isHiddenRoute } from "@/src/lib/router-utils";
@@ -8,8 +11,92 @@ import llmMeta from "@/content/llms/_llms-meta";
 import type { ViteDevServer, HmrContext } from "vite";
 
 /**
+ * Publish VCR.py cassette files from content/ to public/ for cached HTTP interactions
+ * Example: content/docs/mirascope/v2/examples/... -> public/docs/mirascope/v2/examples/...
+ */
+async function publishCassettes(verbose = true): Promise<void> {
+  const projectRoot = process.cwd();
+  const contentDir = resolve(projectRoot, "content");
+  const publicDir = resolve(projectRoot, "public");
+
+  if (!fs.existsSync(contentDir)) {
+    if (verbose) {
+      console.log("Content directory not found, skipping VCR.py cassettes publishing");
+    }
+    return;
+  }
+
+  // Find all VCR.py cassette files (yaml) in content directory
+  const yamlFiles = await glob("**/*.yaml", {
+    cwd: contentDir,
+    absolute: true,
+  });
+
+  if (yamlFiles.length === 0) {
+    if (verbose) {
+      console.log("No VCR.py cassette files found to publish");
+    }
+    return;
+  }
+
+  if (verbose) {
+    console.log(`Publishing ${yamlFiles.length} VCR.py cassette file(s)...`);
+  }
+
+  let successCount = 0;
+  let failureCount = 0;
+
+  for (const yamlFile of yamlFiles) {
+    try {
+      // Calculate relative path from content directory
+      // This already excludes "content/" prefix (e.g., "docs/mirascope/v2/examples/...")
+      const relativePath = relative(contentDir, yamlFile);
+
+      // Calculate destination path in public/ (without content prefix)
+      // Example: content/docs/... -> public/docs/...
+      const destPath = resolve(publicDir, relativePath);
+      const destDir = path.dirname(destPath);
+
+      // Create destination directory if it doesn't exist
+      await mkdir(destDir, { recursive: true });
+
+      // Read and copy the file
+      const content = await readFile(yamlFile, "utf-8");
+
+      if (!content.startsWith("interactions:")) {
+        if (verbose) {
+          console.log(
+            `Skipping ${relativePath} because VCR.py cassettes start with "interactions:" but this file does not.`
+          );
+        }
+        continue;
+      }
+
+      await writeFile(destPath, content, "utf-8");
+      successCount++;
+    } catch (error) {
+      failureCount++;
+      const relativePath = relative(contentDir, yamlFile);
+      if (verbose) {
+        console.error(
+          `  ✗ Failed to publish ${relativePath}: ${error instanceof Error ? error.message : String(error)}`
+        );
+      }
+    }
+  }
+
+  if (verbose && failureCount > 0) {
+    console.error(
+      `  Published ${successCount}/${yamlFiles.length} cassettes (${failureCount} failed)`
+    );
+  } else if (verbose) {
+    console.log(`  Published ${successCount} VCR.py cassette file(s)`);
+  }
+}
+
+/**
  * Main processing function that generates static JSON files for all MDX content,
- * processes template files, and creates a sitemap.xml file
+ * processes template files, publishes cassettes, and creates a sitemap.xml file
  */
 export async function preprocessContent(verbose = true): Promise<void> {
   try {
@@ -18,6 +105,9 @@ export async function preprocessContent(verbose = true): Promise<void> {
 
     if (verbose) console.log("Processing LLM documents...");
     await writeLLMDocuments(llmMeta, verbose);
+
+    if (verbose) console.log("Publishing VCR cassettes...");
+    await publishCassettes(verbose);
 
     await generateSitemap(preprocessor.getMetadataByType().blog, llmMeta);
     return;
@@ -180,6 +270,13 @@ export function contentPreprocessPlugin(options = { verbose: true }) {
         fs.mkdirSync(baseContentDir, { recursive: true });
       }
 
+      // Helper function to check if a file path is actually in the content directory
+      const isInContentDir = (filePath: string): boolean => {
+        const normalizedPath = path.resolve(filePath);
+        const normalizedContentDir = path.resolve(baseContentDir);
+        return normalizedPath.startsWith(normalizedContentDir + path.sep);
+      };
+
       // Always watch the base content directory
       server.watcher.add(baseContentDir);
 
@@ -204,13 +301,17 @@ export function contentPreprocessPlugin(options = { verbose: true }) {
       // React to content changes - these will work for any content directory
       server.watcher.on("change", async (filePath: string) => {
         // Handle MDX/TS source file changes - regenerate JSON but don't trigger HMR
-        if (
-          (filePath.endsWith(".mdx") || filePath.endsWith(".ts")) &&
-          filePath.includes("/content/")
-        ) {
+        if ((filePath.endsWith(".mdx") || filePath.endsWith(".ts")) && isInContentDir(filePath)) {
           if (verbose) console.log(`Content file changed: ${filePath}`);
           await preprocessContent(false).catch((error) => {
             console.error("Error preprocessing content after file change:", error);
+          });
+        }
+        // Handle YAML VCR.py cassette file changes - republish cassettes
+        else if (filePath.endsWith(".yaml") && isInContentDir(filePath)) {
+          if (verbose) console.log(`VCR.py cassette file changed: ${filePath}`);
+          await publishCassettes(false).catch((error) => {
+            console.error("Error publishing VCR.py cassettes after file change:", error);
           });
         }
         // Handle JSON changes - debounce and trigger HMR once after all files are done
@@ -221,13 +322,17 @@ export function contentPreprocessPlugin(options = { verbose: true }) {
 
       server.watcher.on("add", async (filePath: string) => {
         // Handle new MDX/TS source files - regenerate JSON
-        if (
-          (filePath.endsWith(".mdx") || filePath.endsWith(".ts")) &&
-          filePath.includes("/content/")
-        ) {
+        if ((filePath.endsWith(".mdx") || filePath.endsWith(".ts")) && isInContentDir(filePath)) {
           if (verbose) console.log(`Content file added: ${filePath}`);
           await preprocessContent(false).catch((error) => {
             console.error("Error preprocessing content after file add:", error);
+          });
+        }
+        // Handle new YAML VCR.py cassette files - republish cassettes
+        else if (filePath.endsWith(".yaml") && isInContentDir(filePath)) {
+          if (verbose) console.log(`VCR.py cassette file added: ${filePath}`);
+          await publishCassettes(false).catch((error) => {
+            console.error("Error publishing VCR.py cassettes after file add:", error);
           });
         }
         // Handle new JSON files - debounce and trigger HMR
@@ -238,13 +343,17 @@ export function contentPreprocessPlugin(options = { verbose: true }) {
 
       server.watcher.on("unlink", async (filePath: string) => {
         // Handle deleted MDX/TS source files - regenerate JSON
-        if (
-          (filePath.endsWith(".mdx") || filePath.endsWith(".ts")) &&
-          filePath.includes("/content/")
-        ) {
+        if ((filePath.endsWith(".mdx") || filePath.endsWith(".ts")) && isInContentDir(filePath)) {
           if (verbose) console.log(`Content file deleted: ${filePath}`);
           await preprocessContent(false).catch((error) => {
             console.error("Error preprocessing content after file delete:", error);
+          });
+        }
+        // Handle deleted YAML VCR.py cassette files - republish cassettes (to remove from public/)
+        else if (filePath.endsWith(".yaml") && isInContentDir(filePath)) {
+          if (verbose) console.log(`VCR.py cassette file deleted: ${filePath}`);
+          await publishCassettes(false).catch((error) => {
+            console.error("Error publishing VCR.py cassettes after file delete:", error);
           });
         }
         // Handle deleted JSON files - debounce and trigger HMR
