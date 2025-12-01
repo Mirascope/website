@@ -104,7 +104,7 @@ export function CodeBlock({
       {output && (
         <Conversation>
           <ConversationContent>
-            <Message from="assistant">
+            <Message from="system">
               <MessageContent>
                 <MessageResponse parseIncompleteMarkdown={true}>{output}</MessageResponse>
               </MessageContent>
