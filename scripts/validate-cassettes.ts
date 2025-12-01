@@ -107,7 +107,7 @@ async function validateCassetteFile(yamlPath: string): Promise<ValidationResult>
         errors: [
           {
             type: "checksum-mismatch",
-            message: `Checksum mismatch: expected ${storedHash}, got ${calculatedHash}`,
+            message: `Recorded checksum mismatch: expected ${storedHash}, got ${calculatedHash}`,
           },
         ],
       };
