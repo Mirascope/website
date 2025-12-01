@@ -44,10 +44,10 @@ interactions:
       uri: https://api.anthropic.com/v1/messages
     response:
       body:
-        string: !!binary H4sIAAAAAAAAAwAAAP//dFTBbhs3EP2VAS9uFyvDDmy00KVwjTpwnQRp0CCHqhBG5OySEZezHQ6tbo3+e0FKMpBDTwvsDN+89+aRL2ZiR9GsjY1YHK0yp0S6ulm9uXpze3V7fWN6E5xZmymP26vrH5/oA/9m/3F3t89f93dv5/fT7Q8H0xtdZqpdlDOOZHojHOsPzDlkxaSmN5aTUlKz/uPl3K/0d620z9o8XjgQsjxNlBx03cb87gk+4ETAA6gn+BKS2xjYLfARVYLdwydWP5Scu+4SHvUit7YhSFbYMe8hJKggTyGN+xAjCdx74RRsJMgkgTJgchAyzCQDWYUwwMIFKH3lZb1Jm7SCrvuZsGgYSuwhLhIsRjhI0JDGroPVKwvwmAFhZmpUuFgPh6AeIqax4EhHtDuwPM0UY0gjJBRBZWlAlWtWlqUyUo6uan16ZvXUA0KkkZJDWWAIYxFqdpVUeYAPuRJXf5zxKdTZLNGtdiVEd6b6QKhFqmxwpBgiOZhwDBbykpUm2GEmB5wg4VRxqz15mWZUv5zoW3Q0BQsDJsW8NNz3VetpTUcFinvKMEe0BKiAxzEYoaTwTJKDnvDe18GyAEWaKGlueB8jJV0qYiYrpMc9HQ2o1kBJgs8U64aqa23bA8fIh+ZDGk++AWbwBEoxHtOxMSqFNuZEkwfwfKgtO7I1a2ebYdU81TA1DISsQqTAMntMfStmLa5lSBv051dlfaNbW+YiuQQ9ezM1sYFLhnuPyUnABAfP0OJ5PDLgFOJyWaV13QMGgQNKahtct4ioD+JeA94sP2a55m9HlCByGld4wKDk4Dt+JmkLr5v7vofMLeNTGL3CjiDSoHDAY5AmFgIclOSEbDkdhzVGj+1+XDiYhYYGW8McSc8kengEyyV+e5kr7Yd2L9/hAVRC5HGp6f6VCe52JFZ42gXqOhhYwKHsSXoYJagGknPWemA5of2Coj4Twv1Sb/Nugc+SS0R4uoR3BG9LSCcwG+s7ZHtQz2X0OpR4xmuSvvi6v2Vu78yp8JpGwHkmjDVyzTPO+pP598/eZOV5K4SZk1kbSm6rRZI5FTL9VShZMutUYuxNaQ/j+sWENBfdKu8pZbO+vumNRetpa4VQA6fttw1X57oQuv+rnc9WfJo9TSQY/1O8aS6meoSsYQa6bK2OUn5pCbKQkaWljlJxalFZZnJqPCgalKyUQMV5SmJRilJtLQAAAP//AwCfS7pcPwYAAA==
+        string: !!binary H4sIAAAAAAAAAwAAAP//dFRRb9tGDP4rxL2kNWTDyZKH6WXIgrTLjBZD2yAPy2Cc7yiJ8ImU73h2hSD/vTg7Tp0NexAE8eORHz9+uifTi8dgauOCzR6nSZhRp5fTi/nF1fzq/NJUhrypTZ/a5fx8cXvNn/DLsLj58Mflx/tfr+83NxfJVEbHAUsWpmRbNJWJEkrApkRJLaupjBNWZDX130/HfMXvBdm/anN35iGik75H9jCZPJpvHcJn2yNIA9ohPBD7RwOrEf6yGsmt4Yto1+SUJpMZ3OlZ2qc1FJPCSmQNxPvIgrhdUwgY4aaLwuQCQsJImMCyB2kajAlWaLNSk0MFYYzkbIAhSkLYkXZgwUk/YAjELfS2JQdpTIo9rGxCD8KQxn6w2o37omx74nYGZYqkEkdoJATZJVhsRTuswELAFtnbglGbI4K+1O8ogez4cLCCVUD2JW79FllzxAr60ryApRl+dxgCssJOYvDTVaZQDswe+ZHvGhgln0WEILIuZRqJkKRH7cqXpzI/slbQYUSw5YEGd1B4RmgjWgUZlIRTXSpOX/fzgRrt4CvaJHzYzefZYgZ/Yk+JeDKBKdwzbTK+laxw3jOtDuIOssPY5FDW1b9s5WSmSErcnvZ9sGOxRdlsOvT9PVr2wvDVsseY5ND8diAHjWW1aTy0Ii7esfqWUfpJ6VU8eKed5LYDKtbaZNKiILfvT4l8lFUghtt+wCjxQGVhi27ECNfe05HKNbTIWkzoJEd9ZdWIyy8GGiSQkjuQcZ2N1ilG8LjFIEOPrEX9h84qlH+oKHCsggELnsAOA9oAKmXp0EvS3+Ddp9NRK8CiyiZj0lQdm9pwkKbNWAGqm72Hb6XRTnLw0GEYoEdoaYv7whZ6KYa1FCTiya9ri01m5vmfyiSVYRn33jC1QfZLzZHNC5Bwk5EdmppzCJXJ+8ujfjLEQ9alyho5mfr8sjLOug6XrviQhJdvE+ZHPKL1/4cdz5b6OBSTRRuWV/1/83+i592/0efKSNbT0MUv88okjFtyuFTCaGpTrjxvozfPzz8AAAD//wMAkkpvAmMFAAA=
       headers:
         CF-RAY:
-          - 9a4c1e635bf92519-SJC
+          - 9a7655290cf067c7-SJC
         Connection:
           - keep-alive
         Content-Encoding:
@@ -55,7 +55,7 @@ interactions:
         Content-Type:
           - application/json
         Date:
-          - Wed, 26 Nov 2025 20:26:13 GMT
+          - Mon, 01 Dec 2025 23:23:36 GMT
         Server:
           - cloudflare
         Transfer-Encoding:
@@ -69,35 +69,35 @@ interactions:
         anthropic-ratelimit-input-tokens-remaining:
           - '30000'
         anthropic-ratelimit-input-tokens-reset:
-          - '2025-11-26T20:26:06Z'
+          - '2025-12-01T23:23:32Z'
         anthropic-ratelimit-output-tokens-limit:
           - '8000'
         anthropic-ratelimit-output-tokens-remaining:
           - '8000'
         anthropic-ratelimit-output-tokens-reset:
-          - '2025-11-26T20:26:15Z'
+          - '2025-12-01T23:23:38Z'
         anthropic-ratelimit-requests-limit:
           - '50'
         anthropic-ratelimit-requests-remaining:
           - '49'
         anthropic-ratelimit-requests-reset:
-          - '2025-11-26T20:26:06Z'
+          - '2025-12-01T23:23:31Z'
         anthropic-ratelimit-tokens-limit:
           - '38000'
         anthropic-ratelimit-tokens-remaining:
           - '38000'
         anthropic-ratelimit-tokens-reset:
-          - '2025-11-26T20:26:06Z'
+          - '2025-12-01T23:23:32Z'
         cf-cache-status:
           - DYNAMIC
         request-id:
-          - req_011CVX8RxUzVvK5mnBjmjo6X
+          - req_011CVgq1FZm6VTakVpp6iM8d
         retry-after:
-          - '55'
+          - '30'
         strict-transport-security:
           - max-age=31536000; includeSubDomains; preload
         x-envoy-upstream-service-time:
-          - '8716'
+          - '6431'
       status:
         code: 200
         message: OK

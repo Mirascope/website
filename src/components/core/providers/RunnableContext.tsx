@@ -146,17 +146,6 @@ export function RunnableProvider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }:
       return;
     }
 
-    // const yamls = [
-    //   "content/docs/mirascope/v2/examples/intro/decorator/async.py.yaml",
-    //   "content/docs/mirascope/v2/examples/intro/decorator/async_stream.py.yaml",
-    //   "content/docs/mirascope/v2/examples/intro/decorator/stream.py.yaml",
-    //   "content/docs/mirascope/v2/examples/intro/decorator/sync.py.yaml",
-    //   "content/docs/mirascope/v2/examples/intro/model/async.py.yaml",
-    //   "content/docs/mirascope/v2/examples/intro/model/async_stream.py.yaml",
-    //   "content/docs/mirascope/v2/examples/intro/model/stream.py.yaml",
-    //   "content/docs/mirascope/v2/examples/intro/model/sync.py.yaml",
-    // ];
-
     async function bootstrap() {
       if (!pyodide || !loading || error) {
         return;
@@ -164,14 +153,6 @@ export function RunnableProvider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }:
 
       try {
         await pyodide.loadPackage("micropip");
-
-        // for (const yaml of yamls) {
-        //   const baseDir = yaml.substring(0, yaml.lastIndexOf("/"));
-        //   await pyodide.FS.mkdirTree(baseDir);
-        //   const yamlURL = `${window.location.origin}/${yaml}`;
-        //   const content = await fetch(yamlURL).then((res) => res.text());
-        //   await pyodide.FS.writeFile(yaml, content);
-        // }
 
         // install dependencies
         const micropip = pyodide.pyimport("micropip");
@@ -227,19 +208,31 @@ export function RunnableProvider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }:
 
   /** Get VCR.py cassette URL for a given code */
   const getVCRCassetteUrl = (code: string) => {
-    // todo(sebastian): temporary since it only works in dev mode
     const filepath = code.match(/__filepath__ = "([^"]+)";/)?.[1] || "";
-    const url = new URL(
-      `/content${window.location.pathname}/${filepath}.yaml`,
-      window.location.origin
-    ).toString();
+    if (!filepath) {
+      return "";
+    }
 
-    return url;
+    // Normalize filepath: remove leading slash or "./" prefix
+    const normalizedFilepath = filepath.replace(/^\.?\//, "");
+
+    // Ensure base pathname ends with "/" so it's treated as a directory
+    const basePathname = window.location.pathname.endsWith("/")
+      ? window.location.pathname
+      : window.location.pathname + "/";
+    const cassetteURL = new URL(basePathname, window.location.origin);
+
+    return new URL(normalizedFilepath + ".yaml", cassetteURL).toString();
   };
 
   /** Check if a given code snippet has cached HTTP interactions as VCR.py cassettes */
   const hasCachedHTTP = useCallback(async (code: string): Promise<boolean> => {
     const cassetteURL = getVCRCassetteUrl(code);
+
+    if (!cassetteURL) {
+      return false;
+    }
+
     const res = await fetch(cassetteURL);
     if (!res.ok) {
       return false;
