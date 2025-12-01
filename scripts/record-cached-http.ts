@@ -117,25 +117,25 @@ function sanitizeYamlCassette(yamlContent: string): string {
 }
 
 /**
- * Set up the virtual environment using uv sync in vcrRec directory
+ * Set up the virtual environment using uv sync in cachedHTTP directory
  */
 async function setupVenv(
-  vcrRecDir: string,
+  cachedHTTPDir: string,
   dryRun: boolean
 ): Promise<{ success: boolean; error?: string }> {
   if (dryRun) {
-    console.log(`[DRY RUN] Would sync venv in: ${vcrRecDir}`);
+    console.log(`[DRY RUN] Would sync venv in: ${cachedHTTPDir}`);
     return { success: true };
   }
 
-  // Ensure vcrRec directory exists
-  if (!existsSync(vcrRecDir)) {
-    return { success: false, error: `vcrRec directory not found: ${vcrRecDir}` };
+  // Ensure cachedHTTP directory exists
+  if (!existsSync(cachedHTTPDir)) {
+    return { success: false, error: `cachedHTTP directory not found: ${cachedHTTPDir}` };
   }
 
   // Use uv sync to create venv and install dependencies from pyproject.toml
   console.log("Setting up virtual environment with uv sync...");
-  const syncResult = runCommand("uv", ["sync"], vcrRecDir);
+  const syncResult = runCommand("uv", ["sync"], cachedHTTPDir);
   if (!syncResult.success) {
     return { success: false, error: syncResult.error || "Failed to sync venv" };
   }
@@ -160,7 +160,7 @@ async function findPythonFiles(pattern: string): Promise<string[]> {
 async function processFile(
   pythonFile: string,
   workDir: string,
-  vcrRecDir: string,
+  cachedHTTPDir: string,
   projectRoot: string,
   dryRun: boolean
 ): Promise<ProcessResult> {
@@ -195,7 +195,7 @@ async function processFile(
     const { success, error, stdout, stderr } = runCommand(
       "uv",
       ["run", "python", recordingPath],
-      vcrRecDir
+      cachedHTTPDir
     );
 
     if (!success) {
@@ -257,12 +257,12 @@ async function processFile(
 async function main(): Promise<void> {
   const config = parseArgs();
   const projectRoot = process.cwd();
-  const vcrRecDir = resolve(projectRoot, "vcrRec");
-  const workDir = resolve(vcrRecDir, ".work");
+  const cachedHTTPDir = resolve(projectRoot, "cachedHTTP");
+  const workDir = resolve(cachedHTTPDir, ".work");
 
   console.log("VCR Cassette Recording Script");
   console.log(`Pattern: ${config.pattern}`);
-  console.log(`Using vcrRec directory: ${vcrRecDir}`);
+  console.log(`Using cachedHTTP directory: ${cachedHTTPDir}`);
   console.log(`Work directory: ${workDir}`);
   console.log(`Dry run: ${config.dryRun ? "yes" : "no"}`);
   console.log("");
@@ -279,7 +279,7 @@ async function main(): Promise<void> {
   }
 
   // Set up virtual environment using uv sync
-  const venvResult = await setupVenv(vcrRecDir, config.dryRun);
+  const venvResult = await setupVenv(cachedHTTPDir, config.dryRun);
   if (!venvResult.success) {
     console.error(`Failed to set up virtual environment: ${venvResult.error}`);
     process.exit(1);
@@ -304,7 +304,7 @@ async function main(): Promise<void> {
     const relativePath = relative(projectRoot, file);
     console.log(`[${i + 1}/${pythonFiles.length}] Processing: ${relativePath}`);
 
-    const result = await processFile(file, workDir, vcrRecDir, projectRoot, config.dryRun);
+    const result = await processFile(file, workDir, cachedHTTPDir, projectRoot, config.dryRun);
     results.push(result);
 
     if (result.success) {

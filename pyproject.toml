@@ -7,5 +7,5 @@ dependencies = []
 
 [tool.uv.workspace]
 members = [
-    "vcrRec",
+    "cachedHTTP",
 ]
