@@ -1,7 +1,7 @@
 [project]
-name = "vcrrec"
+name = "cachedHTTP"
 version = "0.1.0"
-description = "Record VCR.py cassettes to cache LLM API calls"
+description = "Record cached HTTP via VCR.py cassettes to cache LLM API calls"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
