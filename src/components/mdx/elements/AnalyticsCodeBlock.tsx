@@ -89,7 +89,7 @@ export function AnalyticsCodeBlock({
     if (!codeFilePath) {
       return;
     }
-    const cassetteURL = runnable.getVcrpyCassetteUrl(code);
+    const cassetteURL = runnable.getVCRCassetteUrl(code);
     const checkCassette = async () => {
       try {
         const res = await fetch(cassetteURL);
@@ -107,6 +107,7 @@ export function AnalyticsCodeBlock({
     checkCassette();
   }, [codeFilePath, runnable]);
 
+  // Only show the run button if: the code is Python, we have a VCR.py cassette, and Runnable is ready
   const onRunFunc = useMemo(() => {
     if (!language?.startsWith("py") || !hasCachedHttp) {
       return undefined;
