@@ -11,6 +11,24 @@ import {
 import { cn } from "@/mirascope-ui/lib/utils";
 import { useEffect, useRef, useState } from "react";
 
+interface CodeBlockOutputProps {
+  output: string;
+}
+
+function CodeBlockOutput({ output }: CodeBlockOutputProps) {
+  return (
+    <Conversation>
+      <ConversationContent>
+        <Message from="system">
+          <MessageContent>
+            <MessageResponse parseIncompleteMarkdown={true}>{output}</MessageResponse>
+          </MessageContent>
+        </Message>
+      </ConversationContent>
+    </Conversation>
+  );
+}
+
 interface CodeBlockProps {
   code: string;
   output?: string;
@@ -101,17 +119,7 @@ export function CodeBlock({
           dangerouslySetInnerHTML={{ __html: highlightedCode.themeHtml }}
         />
       </div>
-      {output && (
-        <Conversation>
-          <ConversationContent>
-            <Message from="system">
-              <MessageContent>
-                <MessageResponse parseIncompleteMarkdown={true}>{output}</MessageResponse>
-              </MessageContent>
-            </Message>
-          </ConversationContent>
-        </Conversation>
-      )}
+      {output && <CodeBlockOutput output={output} />}
     </div>
   );
 }
