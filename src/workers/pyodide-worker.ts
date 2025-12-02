@@ -130,6 +130,7 @@ async function handleBootstrap(request: Extract<WorkerRequest, { type: "BOOTSTRA
       from mirascope import llm
     `);
 
+    console.log("Pyodide bootstrapped successfully");
     isBootstrapped = true;
     sendSuccess(request.id, { bootstrapped: true });
   } catch (error) {
