@@ -22,7 +22,6 @@ export interface PreprocessedMdxResult {
 
 export interface CodeExample {
   fullContent: string;
-  // todo(sebastian): normalize this type
 }
 
 function resolveExampleBasePath(filePath: string): string {
