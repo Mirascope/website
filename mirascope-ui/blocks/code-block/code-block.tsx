@@ -108,7 +108,7 @@ export function CodeBlock({
         )}
       >
         <div className="flex items-center space-x-1">
-          {onRun && <RunButton onRun={() => onRun?.(stripHighlightMarkers(code))} />}
+          <RunButton onRun={() => onRun?.(stripHighlightMarkers(code))} disabled={!onRun} />
           <CopyButton content={stripHighlightMarkers(code)} onCopy={onCopy} />
         </div>
       </div>
