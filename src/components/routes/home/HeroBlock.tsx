@@ -162,7 +162,7 @@ export function HeroBlock({ onScrollDown, showScrollButton }: HeroBlockProps) {
             <img
               src="/assets/branding/Discord-Logo-White.svg"
               alt="Discord"
-              className="h-3.5 w-full"
+              className="h-3.5 w-auto"
             />
           </ButtonLink>
         </div>
