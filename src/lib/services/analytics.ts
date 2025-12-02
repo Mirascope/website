@@ -3,13 +3,10 @@
  * Integrated with Google Analytics 4 and PostHog.
  */
 import { GA_MEASUREMENT_ID, GTM_ID, POSTHOG_PUBLIC_KEY, SITE_VERSION } from "../constants/site";
-import { getCountryCode } from "./country-detection";
 import { type Product, productKey } from "../content/spec";
 
 // Centralized check for browser environment
 export const isBrowser = typeof window !== "undefined";
-
-export type AnalyticsConsent = "accepted" | "rejected" | "unknown";
 
 type EventParams = {
   event_category?: string;
@@ -23,7 +20,6 @@ type EventParams = {
 
 /**
  * AnalyticsManager class to centralize all analytics functionality
- * including consent management, initialization, and tracking.
  */
 export class AnalyticsManager {
   private gaInitialized = false;
@@ -46,39 +42,7 @@ export class AnalyticsManager {
   }
 
   /**
-   * Get the current analytics consent state
-   */
-  getConsent(): AnalyticsConsent {
-    if (!isBrowser) return "unknown";
-
-    const storedConsent = localStorage.getItem("cookie-consent");
-    if (storedConsent === "accepted") return "accepted";
-    if (storedConsent === "rejected") return "rejected";
-    return "unknown";
-  }
-
-  /**
-   * Update the user's consent preference
-   */
-  async updateConsent(consent: AnalyticsConsent): Promise<void> {
-    if (!isBrowser) return;
-
-    // Store consent in localStorage
-    localStorage.setItem("cookie-consent", consent);
-    console.log(`Analytics consent updated: ${consent}`);
-
-    if (consent === "accepted") {
-      // Initialize analytics if consent is granted
-      await this.enableAnalytics();
-    } else if (consent === "rejected") {
-      // Handle revoking consent
-      this.disableAnalytics();
-    }
-    // "unknown" state doesn't change current analytics state
-  }
-
-  /**
-   * Check if analytics should be enabled based on consent and location
+   * Check if analytics should be enabled
    */
   async isEnabled(): Promise<boolean> {
     if (!isBrowser) return false;
@@ -88,20 +52,8 @@ export class AnalyticsManager {
       return false;
     }
 
-    const consent = this.getConsent();
-
-    // If user has explicitly set a preference, respect it
-    if (consent === "accepted") return true;
-    if (consent === "rejected") return false;
-
-    // For unknown consent, check location
-    if (await this.isUserInEU()) {
-      // Default to false for EU users to respect GDPR
-      return false;
-    } else {
-      // Use analytics by default where permissible
-      return true;
-    }
+    // Analytics enabled by default in production
+    return true;
   }
 
   /**
@@ -113,80 +65,6 @@ export class AnalyticsManager {
     this.initializeGoogleAnalytics();
     this.initializePostHog();
     return true;
-  }
-
-  /**
-   * Disable analytics and update consent settings if already loaded
-   */
-  disableAnalytics(): void {
-    this.gaInitialized = false;
-    this.phInitialized = false;
-
-    // Update Google Analytics consent settings if already loaded
-    if (window.gtag) {
-      // @ts-ignore - Using arguments in the expected way for GA4
-      window.gtag("consent", "update", {
-        analytics_storage: "denied",
-      });
-
-      // This will also affect GTM since they share the same dataLayer
-      window.dataLayer?.push({ "gtm.consent": "denied" });
-    }
-
-    // Opt out of PostHog tracking if loaded
-    if (window.posthog) {
-      window.posthog.opt_out_capturing();
-    }
-  }
-
-  /**
-   * Check if the user is in the EU based on Cloudflare country detection
-   */
-  async isUserInEU(): Promise<boolean> {
-    if (!isBrowser) return true; // Default to true for SSR
-
-    // EU country codes (including UK for GDPR compliance)
-    const euCountryCodes = [
-      "AT",
-      "BE",
-      "BG",
-      "HR",
-      "CY",
-      "CZ",
-      "DK",
-      "EE",
-      "FI",
-      "FR",
-      "DE",
-      "GR",
-      "HU",
-      "IE",
-      "IT",
-      "LV",
-      "LT",
-      "LU",
-      "MT",
-      "NL",
-      "PL",
-      "PT",
-      "RO",
-      "SK",
-      "SI",
-      "ES",
-      "SE",
-      "GB",
-      "UK",
-    ];
-
-    const countryCode = await getCountryCode();
-
-    // If no country code is found, assume EU to be conservative
-    if (!countryCode) {
-      console.log("No country code found, defaulting to EU user for GDPR compliance");
-      return true;
-    }
-
-    return euCountryCodes.includes(countryCode);
   }
 
   /**

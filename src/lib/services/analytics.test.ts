@@ -2,7 +2,6 @@
 
 import { describe, test, expect, beforeEach, afterEach, mock, spyOn } from "bun:test";
 import { AnalyticsManager } from "./analytics";
-import * as countryDetection from "./country-detection";
 
 describe("AnalyticsManager", () => {
   let analyticsManager: AnalyticsManager;
@@ -116,54 +115,14 @@ describe("AnalyticsManager", () => {
     expect((analyticsManager as any).siteVersion).toBe("test-version");
   });
 
-  test('getConsent returns "unknown" when no consent is stored', () => {
-    const consent = analyticsManager.getConsent();
-    expect(consent).toBe("unknown");
-  });
-
-  test("getConsent returns stored consent value", () => {
-    // Set values in localStorage
-    localStorage.setItem("cookie-consent", "accepted");
-    expect(analyticsManager.getConsent()).toBe("accepted");
-
-    localStorage.setItem("cookie-consent", "rejected");
-    expect(analyticsManager.getConsent()).toBe("rejected");
-  });
-
-  test("updateConsent sets consent in localStorage", () => {
-    // Verify no consent value exists initially
-    expect(localStorage.getItem("cookie-consent")).toBe(null);
-
-    // Test accepted consent
-    analyticsManager.updateConsent("accepted");
-    expect(localStorage.getItem("cookie-consent")).toBe("accepted");
-
-    // Test rejected consent
-    analyticsManager.updateConsent("rejected");
-    expect(localStorage.getItem("cookie-consent")).toBe("rejected");
-  });
-
-  test("isEnabled respects explicit user consent", async () => {
-    // With explicit acceptance
-    localStorage.setItem("cookie-consent", "accepted");
+  test("isEnabled returns true in production", async () => {
     expect(await analyticsManager.isEnabled()).toBe(true);
-
-    // With explicit rejection
-    localStorage.setItem("cookie-consent", "rejected");
-    expect(await analyticsManager.isEnabled()).toBe(false);
   });
 
-  test("isEnabled uses country detection for unknown consent", async () => {
-    // Mock the country detection helper
-    const getCountryCodeSpy = spyOn(countryDetection, "getCountryCode");
-
-    // Test EU country (Germany)
-    getCountryCodeSpy.mockResolvedValue("DE");
+  test("isEnabled returns false in development", async () => {
+    process.env.NODE_ENV = "development";
     expect(await analyticsManager.isEnabled()).toBe(false);
-
-    // Test non-EU country (United States)
-    getCountryCodeSpy.mockResolvedValue("US");
-    expect(await analyticsManager.isEnabled()).toBe(true);
+    process.env.NODE_ENV = "production";
   });
 
   test("enableAnalytics initializes tracking when enabled", async () => {

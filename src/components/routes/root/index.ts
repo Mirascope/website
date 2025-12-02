@@ -1,4 +1,3 @@
-export { default as CookieBanner } from "./CookieBanner";
 export { default as DevToolsButton } from "./DevToolsButton";
 export { default as Footer } from "./Footer";
 export { default as Header } from "./Header";
