@@ -303,10 +303,10 @@ export function RunnableProvider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }:
   );
 
   /** Get VCR.py cassette URL for a given code */
-  const getVCRCassetteUrl = (code: string) => {
+  const getVCRCassetteUrl = (code: string): URL => {
     const filepath = code.match(/__filepath__ = "([^"]+)";/)?.[1] || "";
     if (!filepath) {
-      return "";
+      return new URL("", window.location.origin);
     }
 
     // Normalize filepath: remove leading slash or "./" prefix
@@ -318,7 +318,7 @@ export function RunnableProvider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }:
       : window.location.pathname + "/";
     const cassetteURL = new URL(basePathname, window.location.origin);
 
-    return new URL(normalizedFilepath + ".yaml", cassetteURL).toString();
+    return new URL(normalizedFilepath + ".yaml", cassetteURL);
   };
 
   /** Check if a given code snippet has cached HTTP interactions as VCR.py cassettes */
@@ -349,7 +349,8 @@ export function RunnableProvider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }:
       // Load VCR.py cassette into Pyodide FS via worker
       const res = await fetch(cassetteURL);
       const cassette = await res.text();
-      const baseDir = cassetteURL.substring(0, cassetteURL.lastIndexOf("/"));
+      const fsPath = "/tmp" + cassetteURL.pathname;
+      const baseDir = fsPath.substring(0, fsPath.lastIndexOf("/"));
 
       // Create directory
       const mkdirRequest: WorkerRequest = {
@@ -363,11 +364,11 @@ export function RunnableProvider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }:
       const writeFileRequest: WorkerRequest = {
         id: crypto.randomUUID(),
         type: "FS_WRITEFILE",
-        payload: { path: cassetteURL, data: cassette },
+        payload: { path: fsPath, data: cassette },
       };
       await sendRequest(worker, writeFileRequest);
 
-      const transformedCode = transformPythonWithVcrDecorator(code, cassetteURL);
+      const transformedCode = transformPythonWithVcrDecorator(code, fsPath);
 
       const { done, stdout, stderr } = runPython(transformedCode);
       return {
