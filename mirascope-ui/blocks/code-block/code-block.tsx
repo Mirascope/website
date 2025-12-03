@@ -7,6 +7,9 @@ import {
   stripHighlightMarkers,
   type HighlightResult,
   initialHighlight,
+  SHIKI_CLASS,
+  SHIKI_BG_STYLE,
+  SHIKI_COLOR_STYLE,
 } from "@/mirascope-ui/lib/code-highlight";
 import { cn } from "@/mirascope-ui/lib/utils";
 import { useEffect, useRef, useState } from "react";
@@ -16,16 +19,28 @@ interface CodeBlockOutputProps {
 }
 
 function CodeBlockOutput({ output }: CodeBlockOutputProps) {
+  const divRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (divRef.current) {
+      // react-unsafely assign attributes directly to the DOM element
+      divRef.current.setAttribute("class", SHIKI_CLASS);
+      divRef.current.setAttribute("style", `${SHIKI_BG_STYLE}${SHIKI_COLOR_STYLE}`);
+    }
+  }, []);
+
   return (
-    <Conversation>
-      <ConversationContent>
-        <Message from="system">
-          <MessageContent>
-            <MessageResponse parseIncompleteMarkdown={true}>{output}</MessageResponse>
-          </MessageContent>
-        </Message>
-      </ConversationContent>
-    </Conversation>
+    <div ref={divRef}>
+      <Conversation>
+        <ConversationContent>
+          <Message from="system">
+            <MessageContent>
+              <MessageResponse parseIncompleteMarkdown={true}>{output}</MessageResponse>
+            </MessageContent>
+          </Message>
+        </ConversationContent>
+      </Conversation>
+    </div>
   );
 }
 
