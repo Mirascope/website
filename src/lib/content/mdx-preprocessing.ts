@@ -53,7 +53,6 @@ function processCodeExamples(filePath: string): CodeExample {
   const content = readFileSync(filePath, "utf-8");
   const basePath = resolveExampleBasePath(filePath);
 
-  const vcs: string[] = [];
   const processedContent = content.replace(
     codeExampleRegex,
     (_, file: string, lines?: string, lang?: string, highlight?: string) => {
@@ -80,7 +79,6 @@ function processCodeExamples(filePath: string): CodeExample {
 
         // Add __filepath__ to the top of the file for Python examples to enable loading colocated VCR cassettes
         if (inferredLang.startsWith("py")) {
-          vcs.push(relativePath);
           processedContent = `__filepath__ = "${relativePath}";\n\n${processedContent}`;
         }
 
