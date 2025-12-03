@@ -48,6 +48,7 @@ export const Route = createFileRoute("/blog/$slug")({
         type: "blog" as const,
       },
       content: "",
+      markdown: "",
       mdx: {
         code: "",
         frontmatter: {},
