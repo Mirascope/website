@@ -121,7 +121,7 @@ async function handleBootstrap(request: Extract<WorkerRequest, { type: "BOOTSTRA
 
     // Install dependencies
     const micropip = pyodide.pyimport("micropip");
-    await micropip.install("vcrpy>=7.0.0");
+    await micropip.install("vcrpy==7.0.0");
     await micropip.install("mirascope[anthropic]==2.0.0a2");
 
     // Pre-importing makes code blocks run faster
