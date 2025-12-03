@@ -35,7 +35,9 @@ function CodeBlockOutput({ output }: CodeBlockOutputProps) {
         <ConversationContent>
           <Message from="system">
             <MessageContent>
-              <MessageResponse parseIncompleteMarkdown={true}>{output}</MessageResponse>
+              <MessageResponse parseIncompleteMarkdown={true} className="text-xs">
+                {output}
+              </MessageResponse>
             </MessageContent>
           </Message>
         </ConversationContent>
