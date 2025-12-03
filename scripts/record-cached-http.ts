@@ -265,7 +265,7 @@ async function processFile(
 async function main(): Promise<void> {
   const config = parseArgs();
   const projectRoot = process.cwd();
-  const cachedHTTPDir = resolve(projectRoot, "cachedHTTP");
+  const cachedHTTPDir = resolve(projectRoot, "scripts", "cachedHTTP");
   const workDir = resolve(cachedHTTPDir, ".work");
 
   console.log("VCR Cassette Recording Script");
