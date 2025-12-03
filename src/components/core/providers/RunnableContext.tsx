@@ -81,8 +81,6 @@ function getOrCreateWorker(pyodideUrl: string): Promise<Worker> {
             streamSubjects.delete(streamEvent.requestId);
           } else if (streamEvent.type === "error") {
             const error = new Error(streamEvent.error || "Unknown error");
-            subjects.stdout.error(error);
-            subjects.stderr.error(error);
             subjects.done.error(error);
             streamSubjects.delete(streamEvent.requestId);
           }
@@ -286,8 +284,6 @@ export function RunnableProvider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }:
         })
         .catch((err) => {
           const error = err instanceof Error ? err : new Error(String(err));
-          stdout$.error(error);
-          stderr$.error(error);
           done$.error(error);
           streamSubjects.delete(requestId);
           throw error;
