@@ -48,7 +48,10 @@
       "bun run lint:mdx"
     ],
     "content/docs/mirascope/v2/examples/**/*.{yaml,py}": [
-      "bun scripts/check-cassettes.ts"
+      "bun scripts/validate-cassettes.ts"
+    ],
+    "cassettes/**/*.{yaml,py}": [
+      "bun scripts/validate-cassettes.ts"
     ],
     "api2mdx/**/*.py": "bun run lint:python",
     "public/assets/**/*.{png,jpg,jpeg}": [
