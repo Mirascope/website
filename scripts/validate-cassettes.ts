@@ -220,81 +220,81 @@ async function main() {
       process.exit(1);
     }
 
-    // Check if it's a Python file
-    if (!pythonPath.endsWith(".py")) {
-      console.error(`❌ Error: Expected a Python file (.py), got: ${targetFile}`);
-      process.exit(1);
-    }
-
-    console.log(`Validating cassette for ${path.relative(projectRoot, pythonPath)}...`);
-    if (failOnMissing) {
-      console.log("⚠️  Missing cassettes will be treated as validation errors");
-    }
-
-    const result = await validateCassetteFile(pythonPath, failOnMissing);
-
-    if (result.isValid) {
-      console.log("\n🎉 Cassette validation passed!");
-    } else {
-      console.error(
-        `\n❌ Cassette validation failed for ${path.relative(projectRoot, pythonPath)}:\n`
-      );
-
-      for (const err of result.errors) {
-        console.error(`  → ${err.message}`);
+    // Check if it's a Python file - if not, fall back to default glob pattern
+    if (pythonPath.endsWith(".py")) {
+      // It's a Python file, validate it
+      console.log(`Validating cassette for ${path.relative(projectRoot, pythonPath)}...`);
+      if (failOnMissing) {
+        console.log("⚠️  Missing cassettes will be treated as validation errors");
       }
 
-      console.error("\n❌ Cassette validation failed. Please fix the errors above.");
-      process.exit(1);
-    }
-  } else {
-    // Default glob pattern validation
-    const defaultGlobPattern = "content/docs/mirascope/v2/examples/**/*.py";
+      const result = await validateCassetteFile(pythonPath, failOnMissing);
 
-    console.log(`Validating cassette files matching ${defaultGlobPattern}...`);
-    if (failOnMissing) {
-      console.log("⚠️  Missing cassettes will be treated as validation errors");
-    }
-
-    const results = await validateCassetteFiles(defaultGlobPattern, failOnMissing);
-    const errors = results.filter((r) => !r.result.isValid);
-
-    // Count how many files actually had cassette files
-    const filesWithCassettes = results.filter((r) => r.result.hasCassette).length;
-
-    for (const { result } of results) {
       if (result.isValid) {
-        process.stdout.write(".");
+        console.log("\n🎉 Cassette validation passed!");
       } else {
-        process.stdout.write("X");
-      }
-    }
-
-    console.log(
-      `\n\nChecked ${results.length} python files (${filesWithCassettes} had cassette files)`
-    );
-
-    if (errors.length > 0) {
-      console.error(`\n❌ Found ${errors.length} cassette files with errors:\n`);
-
-      for (const { file, result } of errors) {
-        const relativePath = path.relative(projectRoot, file);
-        console.error(`\n❌ ${relativePath}`);
+        console.error(
+          `\n❌ Cassette validation failed for ${path.relative(projectRoot, pythonPath)}:\n`
+        );
 
         for (const err of result.errors) {
           console.error(`  → ${err.message}`);
         }
 
-        console.error("\n---");
+        console.error("\n❌ Cassette validation failed. Please fix the errors above.");
+        process.exit(1);
+      }
+      return; // Exit early after single file validation
+    }
+    // If not a Python file, fall through to default glob pattern validation
+  }
+
+  // Default glob pattern validation (runs if no targetFile or targetFile is not a .py file)
+  const defaultGlobPattern = "content/docs/mirascope/v2/examples/**/*.py";
+
+  console.log(`Validating cassette files matching ${defaultGlobPattern}...`);
+  if (failOnMissing) {
+    console.log("⚠️  Missing cassettes will be treated as validation errors");
+  }
+
+  const results = await validateCassetteFiles(defaultGlobPattern, failOnMissing);
+  const errors = results.filter((r) => !r.result.isValid);
+
+  // Count how many files actually had cassette files
+  const filesWithCassettes = results.filter((r) => r.result.hasCassette).length;
+
+  for (const { result } of results) {
+    if (result.isValid) {
+      process.stdout.write(".");
+    } else {
+      process.stdout.write("X");
+    }
+  }
+
+  console.log(
+    `\n\nChecked ${results.length} python files (${filesWithCassettes} had cassette files)`
+  );
+
+  if (errors.length > 0) {
+    console.error(`\n❌ Found ${errors.length} cassette files with errors:\n`);
+
+    for (const { file, result } of errors) {
+      const relativePath = path.relative(projectRoot, file);
+      console.error(`\n❌ ${relativePath}`);
+
+      for (const err of result.errors) {
+        console.error(`  → ${err.message}`);
       }
 
-      console.error("\n❌ Cassette validation failed. Please fix the errors above.");
-      process.exit(1);
-    } else {
-      console.log(
-        "\n🎉 Available cassette files checksums are matching their Python files correctly!"
-      );
+      console.error("\n---");
     }
+
+    console.error("\n❌ Cassette validation failed. Please fix the errors above.");
+    process.exit(1);
+  } else {
+    console.log(
+      "\n🎉 Available cassette files checksums are matching their Python files correctly!"
+    );
   }
 }
 
