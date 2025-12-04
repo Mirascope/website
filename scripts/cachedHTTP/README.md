@@ -14,8 +14,8 @@ This will process all Python files matching the default pattern (`content/docs/m
 
 To process specific files:
 
-```bash
-bun run record-cached-http --pattern "content/docs/mirascope/v2/examples/intro/decorator/*.py"
+```bash {"language":"bash","terminalRows":"33"}
+bun run record-cached-http --dry-run --pattern "content/docs/mirascope/v2/examples/intro/decorator/*.py"
 ```
 
 ## Command-line Options
@@ -109,8 +109,8 @@ bun run record-cached-http
 
 ### Process specific directory
 
-```bash
-bun run record-cached-http --pattern "content/docs/mirascope/v2/examples/intro/**/*.py"
+```bash {"terminalRows":"32"}
+bun run record-cached-http --pattern "content/docs/mirascope/v2/examples/intro/context/**/*.py"
 ```
 
 ### Preview what would be processed (dry run)

@@ -1,6 +1,6 @@
 interactions:
   - request:
-      body: '{"max_tokens":16000,"messages":[{"role":"user","content":"Please recommend a book in fantasy."}],"model":"claude-haiku-4-5"}'
+      body: '{"max_tokens":16000,"messages":[{"role":"user","content":"Please recommend a book in fantasy."}],"model":"claude-sonnet-4-0"}'
       headers:
         accept:
           - application/json
@@ -11,7 +11,7 @@ interactions:
         connection:
           - keep-alive
         content-length:
-          - '124'
+          - '125'
         content-type:
           - application/json
         host:
@@ -44,10 +44,10 @@ interactions:
       uri: https://api.anthropic.com/v1/messages
     response:
       body:
-        string: !!binary H4sIAAAAAAAAAwAAAP//dFTBjhxFDP0VqzgMjHqj2SWbRHPhEISIViACKCvEopGny91Vmmq71+WaTme1KB+RL8yXoOqdJQHEqSX79bP9nl13bhBPyW1dm7B4OgsYD+Xs6dnl2cXm4vJ8szl3jYvebd2Q+93m/MWlXM2vL948e/38+3edtnbRTt+Sa5zNI1UU5Yx9DaikGsCcYzZkc41rhY3Y3Pb3u0e80duaWT5b9wX8Ggh+xIFAOrBAcB3Zw36Gn9A0tgf4WSx0JecbvuFXKw9KrQwDsQcLMQNmQOiV0KBDNswzsBwpPYFXBp2kJFOGq6NYoAYQEvXEHnWGLvZFaaErbJF7qHQyMWQTnT++/xBkgkAwERt0KgMgmOKRUgWPpJ3oQLrKkIXBBBCUWCYmD1N8h+oB2QP6I7EVJX1SR1ivr8MM0VYZJlELoIQ+cr9dr2/4DNbrlzKMlB5qqGRar+Hj+w9/ywCTRqMMe8JisSspzQ0MeKh4OhLDbYlkMMhAbBmIe+wj9w/cP2AfW8hzNhpOvFX+G/fLPIxoYb5xMCyYjihl6JRyWKYImKFNhApaEuUTXSXS+TOmTnGonXg6xpagrb5QhsimsS8E2KrkvPg8BUn0oPVp8ICKrZFCrzJZONH+JgUmtDacXKzclGR8tGSWwn0DjPFIsJe5FhPIMpAwQfUoetwnWvanyl45uqjZIDKsa9dXkftDTIkUXgYVjm2iNWTSSLmBLBC7WgaSHAmiNZVCaZVhEKXqPL0dkyidDP4Oo8KEyg+2wlL1tkQjSMI9fPnn880GRuwpf7WIWzuyENXDXuRQteaVwZ6IQSkRZvIwky2tzFJWHvYEE8ZlazvRhaAVblPJUXhp41pK8g9dxwNBVU4/3Q5aFM51ruWIvNBSEseRMNWJZikNiD5OPip1pIuqFmrVHESrVaIwRQuA4GPXkdZbMWH6xt3/0bhsMu6UMAu7rSP2OyvK7pTIdFuIW3JbLik1rizvyPbORR6L7UwOxNltz582rsU20G5Zpyi8+ydg85ivp/R/ucd/Kz+NgQZSTLvL4b/4T9nz8O/sfeOk2Oehi69fNC6T1n3fWSR1W1dfP4/q3f39XwAAAP//AwDeLObRbwUAAA==
+        string: !!binary H4sIAAAAAAAAA0yU32/cNgzH/xVCL9cefEHSJS/3Mqzb0A7ZhqHtFgzLEPAk2lZPIl2KuqsX7H8fZCfInmzzl6gPv/SjyxIoub3zCWugXRFmst317s3lm5vLm6tr17kY3N7lMjxcXr29vZl+P7/745f3P/z48z+Hke/6uXxxnbN5ohZFpeBArnMqqRmwlFgM2VznvLARm9v/9fgcb/S1eZbH3v20CaDkJWfiANvtvfs0EvyKmUB6sJHgLnK4d3CY4Tc0jf4IH8TGvpay3V7c8z1/GmOBWJbgPmoxOIgcITK0UreRh2NMiRS+H1U4+kRQSCMVQA4QbdNegL56SonYgNh0hkkiG0Q2gR7ZsMwX8J6UNgXO4wzRoN0xFJBq+9bGdns3okHGI5XFPZGPmPbb7T3v4C1htdjX1EGaNXpMMKkUAmtJShgKYMpSDFI8EkxCpnPL/A685IlSijxAr40MoypaPBGcR1Jabp5oIA6oM4ykArcnaVajlAo0QHJmKCZrzQ/Rj3AWTWF3qDGFVvocbWwgIhspFWu2jEP0UOZilOGAhQIIA2N+glfmPKGNS82PpsID+BEVvZFCoBMlmXJj2oIpi0VhTBBosnGhkqghxHAitqrUQW5n6dyBSkb21C2pXnLkYSf9DgcCStSKlpX6O5EAvSjMUiH2T7z/lArEn2WGM6W084q9UYCzxuViS/ONhq1gn1MW9s2xyOMg1SDXEn23oli7qRxPpCVapPKcGIQ3BjlyAISS5EzaQRalFyC7oPFEDBN6ekrbKIEccV7ht4E9KZPF4ECt0zb8REYwk8GrRdnfNLUXiykBnjEahdfrHqytz9BLSnIujQgPz1LAAiMtu1bZVk18lqpMM/QqGUSnEZkCTKS9aCYFk//Jqo/DMiE0I14UgysUTC9E5pUs0bEFKJ2IB1qm087rMcc0bwrkqoF02d47qSkss1vZ12Fo4hMubYORZ5hQLfqaUJ83EUo9DMRK8Iqm6J/NHVQ9IL98kvmL1yC64l0Wso++cc5UvnX//t25YjI9KGERdntHHB6sKrsnR6EvldiT23NNqXN1+dPtH13kqdqDyZG4uP3Vdec8+pEe/lNyUWoiyPHxqAoMYPKgjI5LDqYXZH5qAciNRYk58aa5mOoRsoYZ6LK1Okr5pSXIQkZmhjpKxalFZZnJqfElmalFSlZK4LIrsShFqbYWAAAA//8DAE/Yss0QBgAA
       headers:
         CF-RAY:
-          - 9a8d99f92d305a2e-SJC
+          - 9a8dc945b89426d3-SJC
         Connection:
           - keep-alive
         Content-Encoding:
@@ -55,7 +55,7 @@ interactions:
         Content-Type:
           - application/json
         Date:
-          - Thu, 04 Dec 2025 19:10:05 GMT
+          - Thu, 04 Dec 2025 19:42:27 GMT
         Server:
           - cloudflare
         Transfer-Encoding:
@@ -65,40 +65,41 @@ interactions:
         anthropic-organization-id:
           - bcf0d122-a6b6-40d4-873c-83762f5fb168
         anthropic-ratelimit-input-tokens-limit:
-          - '50000'
+          - '30000'
         anthropic-ratelimit-input-tokens-remaining:
-          - '50000'
+          - '30000'
         anthropic-ratelimit-input-tokens-reset:
-          - '2025-12-04T19:10:01Z'
+          - '2025-12-04T19:42:20Z'
         anthropic-ratelimit-output-tokens-limit:
-          - '10000'
+          - '8000'
         anthropic-ratelimit-output-tokens-remaining:
-          - '10000'
+          - '8000'
         anthropic-ratelimit-output-tokens-reset:
-          - '2025-12-04T19:10:06Z'
+          - '2025-12-04T19:42:29Z'
         anthropic-ratelimit-requests-limit:
           - '50'
         anthropic-ratelimit-requests-remaining:
           - '49'
         anthropic-ratelimit-requests-reset:
-          - '2025-12-04T19:10:02Z'
+          - '2025-12-04T19:42:19Z'
         anthropic-ratelimit-tokens-limit:
-          - '60000'
+          - '38000'
         anthropic-ratelimit-tokens-remaining:
-          - '60000'
+          - '38000'
         anthropic-ratelimit-tokens-reset:
-          - '2025-12-04T19:10:01Z'
+          - '2025-12-04T19:42:20Z'
         cf-cache-status:
           - DYNAMIC
         request-id:
-          - req_011CVnB6t6ScXoPwS8XWHJHk
+          - req_011CVnDZhDLFPJssZB4Gd38C
         retry-after:
-          - '59'
+          - '43'
         strict-transport-security:
           - max-age=31536000; includeSubDomains; preload
         x-envoy-upstream-service-time:
-          - '4080'
+          - '8534'
       status:
         code: 200
         message: OK
 version: 1
+source_sha256: 649879e0eeb66d56da70ce3324a78384d4fb386a1a63c03148c91260a987d096
