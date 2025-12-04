@@ -75,8 +75,9 @@ function runCommand(
 
 /**
  * Sanitize YAML cassette by removing sensitive authentication tokens
+ * and optionally add source file checksum
  */
-function sanitizeYamlCassette(yamlContent: string): string {
+function sanitizeYamlCassette(yamlContent: string, sourceSha256?: string): string {
   try {
     const data = yaml.load(yamlContent) as any;
 
@@ -107,6 +108,11 @@ function sanitizeYamlCassette(yamlContent: string): string {
         });
       }
     });
+
+    // Add source file checksum if provided
+    if (sourceSha256) {
+      data.source_sha256 = sourceSha256;
+    }
 
     return yaml.dump(data, { lineWidth: -1, noRefs: true });
   } catch (error) {
@@ -239,17 +245,14 @@ async function processFile(
       };
     }
 
-    // Read and sanitize cassette
+    // Read and sanitize cassette, adding source checksum to YAML
     const cassetteContent = await readFile(cassettePath, "utf-8");
-    const sanitizedContent = sanitizeYamlCassette(cassetteContent);
+    const sanitizedContent = sanitizeYamlCassette(cassetteContent, originalContentSha256);
 
     // Copy sanitized cassette back to original location
     const originalCassetteDir = dirname(destinationCassettePath);
     await mkdir(originalCassetteDir, { recursive: true });
     await writeFile(destinationCassettePath, sanitizedContent, "utf-8");
-
-    // Write the original content's sha256 checksum into a secondary file to track changes
-    await writeFile(pythonFile + ".sha256.txt", originalContentSha256 + "\n", "utf-8");
 
     return { file: pythonFile, success: true };
   } catch (error) {
