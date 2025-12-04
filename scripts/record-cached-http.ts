@@ -7,7 +7,7 @@ import { resolve, dirname, relative } from "path";
 import { spawnSync } from "child_process";
 import { glob } from "glob";
 import yaml from "js-yaml";
-import { transformPythonWithVcrDecorator } from "../src/lib/content/vcr-cassettes";
+import { transformPythonWithVcrDecorator, getCassettePath } from "../src/lib/content/vcr-cassettes";
 
 interface Config {
   pattern: string;
@@ -171,6 +171,9 @@ async function processFile(
     const recordingPath = resolve(workDir, relativePath);
     const recordingDirPath = dirname(recordingPath);
 
+    // Calculate flat destination cassette path based of original file path
+    const destinationCassettePath = getCassettePath(relativePath);
+
     // Read original file
     const originalContent = await readFile(pythonFile, "utf-8");
 
@@ -182,7 +185,7 @@ async function processFile(
     const transformedContent = transformPythonWithVcrDecorator(originalContent, yamlPath);
 
     if (dryRun) {
-      console.log(`[DRY RUN] Would process: ${relativePath}`);
+      console.log(`[DRY RUN] Would write: ${destinationCassettePath}`);
       return { file: pythonFile, success: true };
     }
 
@@ -241,10 +244,9 @@ async function processFile(
     const sanitizedContent = sanitizeYamlCassette(cassetteContent);
 
     // Copy sanitized cassette back to original location
-    const originalCassettePath = pythonFile + ".yaml";
-    const originalCassetteDir = dirname(originalCassettePath);
+    const originalCassetteDir = dirname(destinationCassettePath);
     await mkdir(originalCassetteDir, { recursive: true });
-    await writeFile(originalCassettePath, sanitizedContent, "utf-8");
+    await writeFile(destinationCassettePath, sanitizedContent, "utf-8");
 
     // Write the original content's sha256 checksum into a secondary file to track changes
     await writeFile(pythonFile + ".sha256.txt", originalContentSha256 + "\n", "utf-8");

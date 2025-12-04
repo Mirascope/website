@@ -10,7 +10,7 @@ import {
 } from "react";
 
 import { type PyodideInterface, version } from "pyodide";
-import { transformPythonWithVcrDecorator } from "@/src/lib/content/vcr-cassettes";
+import { getCassettePath, transformPythonWithVcrDecorator } from "@/src/lib/content/vcr-cassettes";
 import type {
   WorkerRequest,
   WorkerResponse,
@@ -316,9 +316,16 @@ export function RunnableProvider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }:
     const basePathname = window.location.pathname.endsWith("/")
       ? window.location.pathname
       : window.location.pathname + "/";
-    const cassetteURL = new URL(basePathname, window.location.origin);
 
-    return new URL(normalizedFilepath + ".yaml", cassetteURL);
+    // Construct nested URL before flattening
+    const nestedURL = new URL(basePathname, window.location.origin);
+    const nestedPath = new URL(normalizedFilepath, nestedURL);
+
+    // Flatten the nested URL to a flat path
+    const flatPath = getCassettePath(nestedPath.pathname);
+    const flatURL = new URL(flatPath, window.location.origin);
+
+    return flatURL;
   };
 
   /** Check if a given code snippet has cached HTTP interactions as VCR.py cassettes */

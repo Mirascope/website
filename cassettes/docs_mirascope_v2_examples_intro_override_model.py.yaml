@@ -1,0 +1,104 @@
+interactions:
+  - request:
+      body: '{"max_tokens":16000,"messages":[{"role":"user","content":"Please recommend a book in fantasy."}],"model":"claude-haiku-4-5","temperature":1}'
+      headers:
+        accept:
+          - application/json
+        accept-encoding:
+          - gzip, deflate
+        anthropic-version:
+          - '2023-06-01'
+        connection:
+          - keep-alive
+        content-length:
+          - '140'
+        content-type:
+          - application/json
+        host:
+          - api.anthropic.com
+        user-agent:
+          - Anthropic/Python 0.75.0
+        x-api-key:
+          - cached-http-with-invalid-key
+        x-stainless-arch:
+          - arm64
+        x-stainless-async:
+          - 'false'
+        x-stainless-lang:
+          - python
+        x-stainless-os:
+          - MacOS
+        x-stainless-package-version:
+          - 0.75.0
+        x-stainless-read-timeout:
+          - '600'
+        x-stainless-retry-count:
+          - '0'
+        x-stainless-runtime:
+          - CPython
+        x-stainless-runtime-version:
+          - 3.10.18
+        x-stainless-timeout:
+          - '600'
+      method: POST
+      uri: https://api.anthropic.com/v1/messages
+    response:
+      body:
+        string: !!binary H4sIAAAAAAAAAwAAAP//dJTRitxWDIZfRTm9mHbwLLPbXQK+SwrLLoXShsBedMugsWX7ZI51HEkex4RAHiJPmCcJ8szQNqVXhiPpP9L3y+dj6HNNKZShSjjWtOkwHsbN7eZuc7O9ubvebq9DEWIdytBru9te/4wvb/X9w2uU5o93cm+vHl52TxyKYPNAnkWq2FIoguTkB6ga1ZAtFKHKbMQWyj8/XvKNPnhk+ZThB3jbEfyGPUFuwDqCp8g17Gf4HU1idYA32bpmVH3mZ35c1SBU5b4nrsG6qIAKCK0QGjTIhjoDsckMQ45sV/BAQiuFqZtLV1ivnzo06PFACtFAB6oipnK9fuYN/IKDxSNa5BYYRdCywNRlMEpJwe/LE4NalhkiA4LhkYRBybzINV4TjhabMRWQZokVJhgkK4F1aCsF8hYtQ0sGKatBZC97ZB8XjaDHNlagsxr1sEelGjLDyDWJY629OQdlMhIw2ihndpFbdalXfqFhmzmqefsrhSbhRDUgO8CEhvtEUJMO0Qj25Jr0wQSz1JFR5hMr90bJxqFcr+E+p5QnhV+P2a9vJPcLkRrnsw0meKTkWgNJk6UnWSloZrBO8th2S74JRvYkNEAYhNRiG/Oop8kxwcjxSKLR5it4dGYDikGV+8jtJjcbbOnkQXGK9M5K5quLwXlVA/G7PEO0s7P3yOqUqg4FKyPZ1BKPxGeb45EWdG87d8odT/FAZ+FIClP25PMYebSFM8+ZT9k4DOKLZKRAKb8fiQ0miZeleEPo9gHT5N5fNtVLJ2QDzT0tBkLsex/9SLAfDbCqSDXuE51mu8coMKE4P/dkobO4EWVZJUBflSZy1I5q0KX7AjTDnMdVSrAnmHDpC37ElLmFKVq3aLgTzmjUFz9BkwX2OR98ZqIF7WPjIt83XMemISG2r5+/LNBoiBVMWVK92Y8x+b4WUKO4FPXeTRZYNtnvPzkZSb9+/vK46qHDYVj+Dx3b1hvCZCR8suhF+PRXEdTysBNCzRzKQFzvbBR/kZaAktOvKJQ8plSEcXmdyo8h8jDazvKBWEN5fVuECquOdpU/HjHz7t8J20tcCOv/i11qXZ8GH08w7e76/+b/Hb3uvo9+KkIe7Z9HN3fbIijJMVa0s0gSyvBNkCArSlGqrQUAAAD//wMACJjXocUFAAA=
+      headers:
+        CF-RAY:
+          - 9a8d9a9f6cd28b3c-SJC
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - gzip
+        Content-Type:
+          - application/json
+        Date:
+          - Thu, 04 Dec 2025 19:10:32 GMT
+        Server:
+          - cloudflare
+        Transfer-Encoding:
+          - chunked
+        X-Robots-Tag:
+          - none
+        anthropic-organization-id:
+          - bcf0d122-a6b6-40d4-873c-83762f5fb168
+        anthropic-ratelimit-input-tokens-limit:
+          - '50000'
+        anthropic-ratelimit-input-tokens-remaining:
+          - '50000'
+        anthropic-ratelimit-input-tokens-reset:
+          - '2025-12-04T19:10:27Z'
+        anthropic-ratelimit-output-tokens-limit:
+          - '10000'
+        anthropic-ratelimit-output-tokens-remaining:
+          - '10000'
+        anthropic-ratelimit-output-tokens-reset:
+          - '2025-12-04T19:10:33Z'
+        anthropic-ratelimit-requests-limit:
+          - '50'
+        anthropic-ratelimit-requests-remaining:
+          - '49'
+        anthropic-ratelimit-requests-reset:
+          - '2025-12-04T19:10:29Z'
+        anthropic-ratelimit-tokens-limit:
+          - '60000'
+        anthropic-ratelimit-tokens-remaining:
+          - '60000'
+        anthropic-ratelimit-tokens-reset:
+          - '2025-12-04T19:10:27Z'
+        cf-cache-status:
+          - DYNAMIC
+        request-id:
+          - req_011CVnB8qqKhxQnm8sUuexax
+        retry-after:
+          - '33'
+        strict-transport-security:
+          - max-age=31536000; includeSubDomains; preload
+        x-envoy-upstream-service-time:
+          - '4507'
+      status:
+        code: 200
+        message: OK
+version: 1
