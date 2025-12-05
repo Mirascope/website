@@ -12,22 +12,42 @@ import {
   SHIKI_COLOR_STYLE,
 } from "@/mirascope-ui/lib/code-highlight";
 import { cn } from "@/mirascope-ui/lib/utils";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 interface CodeBlockOutputProps {
-  output: string;
+  output: string | undefined;
+  pending: boolean;
 }
 
-function CodeBlockOutput({ output }: CodeBlockOutputProps) {
+function CodeBlockOutput({ output, pending = false }: CodeBlockOutputProps) {
   const divRef = useRef<HTMLDivElement>(null);
+  const codeBlockOutputBaseStyles =
+    "code-block-wrapper border-t border-card relative m-0 mb-2 p-0 group";
 
+  // Apply same style and class as in codeBlockOutputBaseStyles
   useEffect(() => {
     if (divRef.current) {
-      // react-unsafely assign attributes directly to the DOM element
-      divRef.current.setAttribute("class", SHIKI_CLASS);
+      divRef.current.setAttribute("class", cn(SHIKI_CLASS, codeBlockOutputBaseStyles));
       divRef.current.setAttribute("style", `${SHIKI_BG_STYLE}${SHIKI_COLOR_STYLE}`);
     }
   }, []);
+
+  const isPending = useMemo(() => {
+    return pending && !output;
+  }, [pending, output]);
+
+  const TypingPlaceholder = () => {
+    return (
+      <span
+        className="inline-flex items-center gap-0.5 align-middle"
+        style={{ minHeight: "1.25rem" }}
+      >
+        <span className="bg-muted-foreground h-1 w-1 translate-y-[2px] animate-bounce rounded-full [animation-delay:0ms]" />
+        <span className="bg-muted-foreground h-1 w-1 translate-y-[2px] animate-bounce rounded-full [animation-delay:150ms]" />
+        <span className="bg-muted-foreground h-1 w-1 translate-y-[2px] animate-bounce rounded-full [animation-delay:300ms]" />
+      </span>
+    );
+  };
 
   return (
     <div ref={divRef}>
@@ -35,9 +55,13 @@ function CodeBlockOutput({ output }: CodeBlockOutputProps) {
         <ConversationContent>
           <Message from="system">
             <MessageContent>
-              <MessageResponse parseIncompleteMarkdown={true} className="text-xs">
-                {output}
-              </MessageResponse>
+              {isPending ? (
+                <TypingPlaceholder />
+              ) : (
+                <MessageResponse parseIncompleteMarkdown={true} className="text-xs">
+                  {output}
+                </MessageResponse>
+              )}
             </MessageContent>
           </Message>
         </ConversationContent>
@@ -129,6 +153,13 @@ export function CodeBlock({
     setRunStatus("idle");
   }, [onRun]);
 
+  const outputPending = useMemo(() => {
+    if (output) {
+      return true;
+    }
+    return runStatus === "running";
+  }, [runStatus]);
+
   return (
     <div
       ref={codeRef}
@@ -154,7 +185,7 @@ export function CodeBlock({
           dangerouslySetInnerHTML={{ __html: highlightedCode.themeHtml }}
         />
       </div>
-      {output && <CodeBlockOutput output={output} />}
+      {outputPending && <CodeBlockOutput output={output} pending={outputPending} />}
     </div>
   );
 }
