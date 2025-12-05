@@ -1,24 +1,27 @@
-import { Play } from "lucide-react";
+import { Loader2, Play } from "lucide-react";
 import { cn } from "@/mirascope-ui/lib/utils";
 
 export interface RunButtonProps {
   onRun?: () => void;
-  disabled?: boolean;
+  status?: "idle" | "running";
 }
 
-export const RunButton = ({ onRun, disabled = false }: RunButtonProps) => {
+export const RunButton = ({ onRun, status }: RunButtonProps) => {
   return (
     <button
       className={cn(
         "bg-background relative rounded-md border p-1.5",
-        disabled ? "cursor-not-allowed opacity-50" : "hover:bg-muted cursor-pointer"
+        "hover:bg-muted cursor-pointer"
       )}
       aria-label="Run code"
       title="Run code"
       onClick={onRun}
-      disabled={disabled}
     >
-      <Play className="size-4" />
+      {status === "running" ? (
+        <Loader2 className="size-4 animate-spin" />
+      ) : (
+        <Play className="size-4" />
+      )}
     </button>
   );
 };

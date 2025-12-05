@@ -1,7 +1,9 @@
 import { useRef, useMemo, useCallback, useState, useEffect } from "react";
 import { CodeBlock } from "@/mirascope-ui/blocks/code-block/code-block";
-import { useProduct, useRunnable } from "@/src/components/core";
+import { useProduct } from "@/src/components/core";
 import analyticsManager from "@/src/lib/services/analytics";
+import { getCassetteUrl, ReplayCassette } from "@/src/lib/content/vcr-cassettes";
+import { lastValueFrom, timer } from "rxjs";
 interface AnalyticsCodeBlockProps {
   code: string;
   language?: string;
@@ -17,10 +19,49 @@ export function AnalyticsCodeBlock({
   className,
   showLineNumbers,
 }: AnalyticsCodeBlockProps) {
+  const [replay, setReplay] = useState<ReplayCassette | undefined>(undefined);
   const [output, setOutput] = useState<string>("");
-  const [hasCachedHttp, setHasCachedHttp] = useState<boolean>(false);
+  const [cassetteURL, setCassetteURL] = useState<URL | undefined>(undefined);
   const product = useProduct();
   const codeRef = useRef<HTMLDivElement>(null);
+
+  // Compute cassette URL only on the client side to avoid SSR issues
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    if (!code || !language?.startsWith("py")) {
+      setCassetteURL(undefined);
+      return;
+    }
+
+    try {
+      const url = getCassetteUrl(code, window.location);
+      setCassetteURL(url);
+    } catch (err) {
+      if (err instanceof Error && !err.message.includes("No __filepath__ found in code")) {
+        throw err;
+      }
+      setCassetteURL(undefined);
+    }
+  }, [code, language]);
+
+  useEffect(() => {
+    if (!cassetteURL || replay) {
+      return;
+    }
+
+    const setupReplay = async () => {
+      try {
+        const replay = await ReplayCassette.fromUrl(cassetteURL);
+        setReplay(replay);
+      } catch (err) {
+        console.error("Unexpected error fetching cassette:", err);
+      }
+    };
+    setupReplay();
+  }, [cassetteURL, replay]);
 
   const onlyCode = useMemo(() => {
     return code.replace(/^__filepath__ = ".*";\n\n/, "");
@@ -52,58 +93,33 @@ export function AnalyticsCodeBlock({
     });
   };
 
-  const runnable = useRunnable();
-  const { loading: runnableLoading } = runnable;
-  const runCode = useCallback(async (): Promise<any> => {
-    if (!runnable || runnableLoading) {
-      return Promise.resolve();
-    }
-    // reset the output to empty string
-    setOutput("");
-
-    const { done, stdout } = await runnable.runPythonWithCachedHTTP(code);
-    // subscribe to stdout to set the output
-    stdout.subscribe({
-      next: (chunk) => setOutput((prev) => prev + chunk),
-      complete: () => console.log("running code complete"),
-    });
-
-    // todo(sebastian): do we want a trackRunEvent?
-    try {
-      // we don't use the result directly since python's main() writes to stdout
-      return await done();
-    } catch (err) {
-      const error = err instanceof Error ? err : new Error(String(err));
-      console.log(error.message);
-    }
-  }, [setOutput, code, runnable, runnableLoading]);
-
-  useEffect(() => {
-    if (runnableLoading || !language?.startsWith("py") || !code) {
-      setHasCachedHttp(false);
+  const runCode = useCallback(async (): Promise<void> => {
+    if (!replay) {
       return;
     }
-    runnable
-      .hasCachedHTTP(code)
-      .then((hasCachedHttp) => {
-        setHasCachedHttp(hasCachedHttp);
-      })
-      .catch((err) => {
-        console.warn("Error checking cached HTTP:", err);
-        setHasCachedHttp(false);
-      });
-  }, [code, language, runnable, runnableLoading]);
+    setOutput("");
 
-  // Only show the run button if: the code is Python, we have a VCR.py cassette, and Runnable is ready
-  const onRunFunc = useMemo(() => {
-    if (!language?.startsWith("py") || !hasCachedHttp) {
-      return undefined;
-    }
-    if (runnableLoading) {
-      return undefined;
-    }
-    return runCode;
-  }, [runnableLoading, runCode, hasCachedHttp]);
+    const stream = replay.play({
+      delays: {
+        interaction: (type) => {
+          // 500ms fixed + random delta (up to 10s for "request", 1s otherwise)
+          const delta = type === "request" ? 10_000 : 1_000;
+          return timer(500 + Math.random() * delta);
+        },
+        chunk: (type) => {
+          // 0ms for "request", else 20ms + random up to 100ms
+          return type === "request" ? timer(0) : timer(20 + Math.random() * 100);
+        },
+      },
+    });
+
+    stream.subscribe({
+      next: (chunk) => setOutput((prev) => prev + chunk),
+      complete: () => console.log("play complete"),
+    });
+
+    return lastValueFrom(stream).then();
+  }, [replay]);
 
   return (
     <div ref={codeRef} data-code-hash={codeHash} className="analytics-code-block">
@@ -115,7 +131,7 @@ export function AnalyticsCodeBlock({
         className={className}
         showLineNumbers={showLineNumbers}
         onCopy={onCopy}
-        onRun={onRunFunc}
+        onRun={replay ? runCode : undefined}
       />
     </div>
   );

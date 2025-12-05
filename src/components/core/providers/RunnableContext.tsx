@@ -10,14 +10,17 @@ import {
 } from "react";
 
 import { type PyodideInterface, version } from "pyodide";
-import { getCassettePath, transformPythonWithVcrDecorator } from "@/src/lib/content/vcr-cassettes";
+import {
+  getCassetteUrl,
+  transformPythonWithVcrDecorator,
+  VCRPY_CASSETTE_INTRO,
+} from "@/src/lib/content/vcr-cassettes";
 import type {
   WorkerRequest,
   WorkerResponse,
   WorkerStreamEvent,
 } from "@/src/workers/pyodide-worker-types";
 
-const VCRPY_CASSETTE_INTRO = "interactions:";
 const DEFAULT_PYODIDE_URL = `https://cdn.jsdelivr.net/pyodide/v${version}/full/`;
 
 // Module-level singleton to share Worker instance across all Provider instances
@@ -302,35 +305,9 @@ export function RunnableProvider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }:
     [worker, loading]
   );
 
-  /** Get VCR.py cassette URL for a given code */
-  const getVCRCassetteUrl = (code: string): URL => {
-    const filepath = code.match(/__filepath__ = "([^"]+)";/)?.[1] || "";
-    if (!filepath) {
-      return new URL("", window.location.origin);
-    }
-
-    // Normalize filepath: remove leading slash or "./" prefix
-    const normalizedFilepath = filepath.replace(/^\.?\//, "");
-
-    // Ensure base pathname ends with "/" so it's treated as a directory
-    const basePathname = window.location.pathname.endsWith("/")
-      ? window.location.pathname
-      : window.location.pathname + "/";
-
-    // Construct nested URL before flattening
-    const nestedURL = new URL(basePathname, window.location.origin);
-    const nestedPath = new URL(normalizedFilepath, nestedURL);
-
-    // Flatten the nested URL to a flat path
-    const flatPath = getCassettePath(nestedPath.pathname);
-    const flatURL = new URL(flatPath, window.location.origin);
-
-    return flatURL;
-  };
-
   /** Check if a given code snippet has cached HTTP interactions as VCR.py cassettes */
   const hasCachedHTTP = useCallback(async (code: string): Promise<boolean> => {
-    const cassetteURL = getVCRCassetteUrl(code);
+    const cassetteURL = getCassetteUrl(code, window.location);
 
     if (!cassetteURL) {
       return false;
@@ -351,7 +328,7 @@ export function RunnableProvider({ children, pyodideUrl = DEFAULT_PYODIDE_URL }:
         throw new Error("Pyodide worker is not ready");
       }
 
-      const cassetteURL = getVCRCassetteUrl(code);
+      const cassetteURL = getCassetteUrl(code, window.location);
 
       // Load VCR.py cassette into Pyodide FS via worker
       const res = await fetch(cassetteURL);

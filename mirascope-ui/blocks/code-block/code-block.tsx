@@ -1,7 +1,7 @@
 import { Conversation, ConversationContent } from "@/src/components/ai-elements/conversation";
 import { Message, MessageContent, MessageResponse } from "@/src/components/ai-elements/message";
 import { CopyButton } from "@/mirascope-ui/blocks/copy-button";
-import { RunButton } from "@/mirascope-ui/blocks/run-button";
+import { RunButton, type RunButtonProps } from "@/mirascope-ui/blocks/run-button";
 import {
   highlightCode,
   stripHighlightMarkers,
@@ -12,7 +12,7 @@ import {
   SHIKI_COLOR_STYLE,
 } from "@/mirascope-ui/lib/code-highlight";
 import { cn } from "@/mirascope-ui/lib/utils";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface CodeBlockOutputProps {
   output: string;
@@ -54,7 +54,7 @@ interface CodeBlockProps {
   className?: string;
   showLineNumbers?: boolean;
   onCopy?: (content: string) => void;
-  onRun?: (code: string) => void;
+  onRun?: (code: string) => Promise<void>;
 }
 
 export function CodeBlock({
@@ -72,6 +72,7 @@ export function CodeBlock({
   );
   const codeRef = useRef<HTMLDivElement>(null);
   const [isSmallBlock, setIsSmallBlock] = useState<boolean>(false);
+  const [runStatus, setRunStatus] = useState<RunButtonProps["status"]>("idle");
 
   // Calculate dynamic padding for line numbers
   const lineCount = code.split("\n").length;
@@ -111,6 +112,22 @@ export function CodeBlock({
     }
   }, [highlightedCode]);
 
+  const handleRun = useCallback(async (): Promise<void> => {
+    if (!onRun) {
+      return;
+    }
+    setRunStatus("running");
+    await onRun(stripHighlightMarkers(code));
+    setRunStatus("idle");
+  }, [onRun, code]);
+
+  useEffect(() => {
+    if (!onRun) {
+      return;
+    }
+    setRunStatus("idle");
+  }, [onRun]);
+
   return (
     <div
       ref={codeRef}
@@ -125,9 +142,7 @@ export function CodeBlock({
         )}
       >
         <div className="flex items-center space-x-1">
-          {onRun && (
-            <RunButton onRun={() => onRun?.(stripHighlightMarkers(code))} disabled={!onRun} />
-          )}
+          {onRun && <RunButton onRun={handleRun} status={runStatus} />}
           <CopyButton content={stripHighlightMarkers(code)} onCopy={onCopy} />
         </div>
       </div>
