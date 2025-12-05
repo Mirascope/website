@@ -115,7 +115,6 @@ export function AnalyticsCodeBlock({
 
     stream.subscribe({
       next: (chunk) => setOutput((prev) => prev + chunk),
-      complete: () => console.log("play complete"),
     });
 
     return lastValueFrom(stream).then();

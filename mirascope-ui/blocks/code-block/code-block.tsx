@@ -118,7 +118,8 @@ export function CodeBlock({
     }
     setRunStatus("running");
     await onRun(stripHighlightMarkers(code));
-    setRunStatus("idle");
+    setRunStatus("done");
+    setTimeout(() => setRunStatus("idle"), 2000);
   }, [onRun, code]);
 
   useEffect(() => {
