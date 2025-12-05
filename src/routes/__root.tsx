@@ -12,7 +12,6 @@ import {
   ProductProvider,
   TabbedSectionMemoryProvider,
   CoreMeta,
-  RunnableProvider,
 } from "@/src/components";
 
 export const Route = createRootRoute({
@@ -92,39 +91,36 @@ export const Route = createRootRoute({
         {isLandingPage && <div className="watercolor-bg"></div>}
 
         <ThemeProvider>
-          {/* RunnableProvider is needed to run code blocks */}
-          <RunnableProvider>
-            <ProductProvider product={getProductFromPath(path)}>
-              <div
-                className="flex min-h-screen flex-col px-2"
-                style={
-                  {
-                    "--header-height": path.startsWith("/docs/")
-                      ? "var(--header-height-with-selector)"
-                      : "var(--header-height-base)",
-                  } as React.CSSProperties
-                }
-              >
-                {/* Header is fixed, so it's outside the content flow */}
-                <Header showProductSelector={path.startsWith("/docs/")} />
+          <ProductProvider product={getProductFromPath(path)}>
+            <div
+              className="flex min-h-screen flex-col px-2"
+              style={
+                {
+                  "--header-height": path.startsWith("/docs/")
+                    ? "var(--header-height-with-selector)"
+                    : "var(--header-height-base)",
+                } as React.CSSProperties
+              }
+            >
+              {/* Header is fixed, so it's outside the content flow */}
+              <Header showProductSelector={path.startsWith("/docs/")} />
 
-                {/* Content container with padding to account for fixed header */}
-                <div
-                  className="mx-auto w-full max-w-7xl flex-grow"
-                  style={{ paddingTop: "var(--header-height)" }}
-                >
-                  <FunModeProvider>
-                    <TabbedSectionMemoryProvider>
-                      <main className="flex-grow">
-                        <Outlet />
-                      </main>
-                    </TabbedSectionMemoryProvider>
-                  </FunModeProvider>
-                </div>
-                <Footer />
+              {/* Content container with padding to account for fixed header */}
+              <div
+                className="mx-auto w-full max-w-7xl flex-grow"
+                style={{ paddingTop: "var(--header-height)" }}
+              >
+                <FunModeProvider>
+                  <TabbedSectionMemoryProvider>
+                    <main className="flex-grow">
+                      <Outlet />
+                    </main>
+                  </TabbedSectionMemoryProvider>
+                </FunModeProvider>
               </div>
-            </ProductProvider>
-          </RunnableProvider>
+              <Footer />
+            </div>
+          </ProductProvider>
 
           {/* Dev tools - only visible in development */}
           <TanStackRouterDevtools />
