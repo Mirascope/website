@@ -158,7 +158,7 @@ export function CodeBlock({
       return true;
     }
     return runStatus === "running";
-  }, [runStatus]);
+  }, [output, runStatus]);
 
   return (
     <div
