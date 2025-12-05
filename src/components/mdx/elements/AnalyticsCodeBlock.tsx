@@ -10,6 +10,7 @@ interface AnalyticsCodeBlockProps {
   meta?: string;
   className?: string;
   showLineNumbers?: boolean;
+  runnable?: boolean;
 }
 
 export function AnalyticsCodeBlock({
@@ -18,6 +19,7 @@ export function AnalyticsCodeBlock({
   meta,
   className,
   showLineNumbers,
+  runnable = true,
 }: AnalyticsCodeBlockProps) {
   const [replay, setReplay] = useState<ReplayCassette | undefined>(undefined);
   const [output, setOutput] = useState<string>("");
@@ -28,6 +30,12 @@ export function AnalyticsCodeBlock({
   // Compute cassette URL only on the client side to avoid SSR issues
   useEffect(() => {
     if (typeof window === "undefined") {
+      return;
+    }
+
+    // If the code block is not runnable, don't fetch the cassette
+    if (!runnable) {
+      setCassetteURL(undefined);
       return;
     }
 
@@ -45,7 +53,7 @@ export function AnalyticsCodeBlock({
       }
       setCassetteURL(undefined);
     }
-  }, [code, language]);
+  }, [code, language, runnable]);
 
   useEffect(() => {
     if (!cassetteURL || replay) {
