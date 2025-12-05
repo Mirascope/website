@@ -215,6 +215,10 @@ export class ReplayCassette {
     this.sha256 = this.cassette.source_sha256;
   }
 
+  public get replayType(): ReplayType {
+    return this.type;
+  }
+
   public get sourceSha256(): string {
     return this.sha256;
   }
