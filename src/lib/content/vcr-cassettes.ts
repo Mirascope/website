@@ -315,7 +315,7 @@ export class ReplayCassette {
    * @param delays - Optional delays to apply to the cassette
    * @returns An Observable of strings representing the cassette content
    * @example
-   * const cassette = new ReplayCassette(new URL("https://example.com/cassette.yaml"));
+   * const cassette = await ReplayCassette.fromUrl(new URL("https://example.com/cassette.yaml"));
    * const stream = cassette.play({
    *   delays: {
    *     interaction: (type) => timer(type === "request" ? 1000 : 0),
