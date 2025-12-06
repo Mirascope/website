@@ -1,35 +1,102 @@
+import { Conversation, ConversationContent } from "@/src/components/ai-elements/conversation";
+import { Message, MessageContent, MessageResponse } from "@/src/components/ai-elements/message";
 import { CopyButton } from "@/mirascope-ui/blocks/copy-button";
+import { RunButton, type RunButtonProps } from "@/mirascope-ui/blocks/run-button";
 import {
   highlightCode,
   stripHighlightMarkers,
   type HighlightResult,
   initialHighlight,
+  SHIKI_CLASS,
+  SHIKI_BG_STYLE,
+  SHIKI_COLOR_STYLE,
 } from "@/mirascope-ui/lib/code-highlight";
 import { cn } from "@/mirascope-ui/lib/utils";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+
+interface CodeBlockOutputProps {
+  output: string | undefined;
+  pending: boolean;
+}
+
+function CodeBlockOutput({ output, pending = false }: CodeBlockOutputProps) {
+  const divRef = useRef<HTMLDivElement>(null);
+  const codeBlockOutputBaseStyles =
+    "code-block-wrapper border-t border-card relative m-0 mb-2 p-0 group";
+
+  // Apply same style and class as in codeBlockOutputBaseStyles
+  useEffect(() => {
+    if (divRef.current) {
+      divRef.current.setAttribute("class", cn(SHIKI_CLASS, codeBlockOutputBaseStyles));
+      divRef.current.setAttribute("style", `${SHIKI_BG_STYLE}${SHIKI_COLOR_STYLE}`);
+    }
+  }, []);
+
+  const isPending = useMemo(() => {
+    return pending && !output;
+  }, [pending, output]);
+
+  const TypingPlaceholder = () => {
+    return (
+      <span
+        className="inline-flex items-center gap-0.5 align-middle"
+        style={{ minHeight: "1.25rem" }}
+      >
+        <span className="bg-muted-foreground h-1 w-1 translate-y-[2px] animate-bounce rounded-full [animation-delay:0ms]" />
+        <span className="bg-muted-foreground h-1 w-1 translate-y-[2px] animate-bounce rounded-full [animation-delay:150ms]" />
+        <span className="bg-muted-foreground h-1 w-1 translate-y-[2px] animate-bounce rounded-full [animation-delay:300ms]" />
+      </span>
+    );
+  };
+
+  return (
+    <div ref={divRef}>
+      <Conversation>
+        <ConversationContent>
+          <Message from="system">
+            <MessageContent>
+              {isPending ? (
+                <TypingPlaceholder />
+              ) : (
+                <MessageResponse parseIncompleteMarkdown={true} className="text-xs">
+                  {output}
+                </MessageResponse>
+              )}
+            </MessageContent>
+          </Message>
+        </ConversationContent>
+      </Conversation>
+    </div>
+  );
+}
 
 interface CodeBlockProps {
   code: string;
+  output?: string;
   language?: string;
   meta?: string;
   className?: string;
   showLineNumbers?: boolean;
   onCopy?: (content: string) => void;
+  onRun?: (code: string) => Promise<void>;
 }
 
 export function CodeBlock({
   code,
+  output,
   language = "text",
   meta = "",
   className = "",
   showLineNumbers = true,
   onCopy,
+  onRun,
 }: CodeBlockProps) {
   const [highlightedCode, setHighlightedCode] = useState<HighlightResult>(
     initialHighlight(code, language, meta)
   );
   const codeRef = useRef<HTMLDivElement>(null);
   const [isSmallBlock, setIsSmallBlock] = useState<boolean>(false);
+  const [runStatus, setRunStatus] = useState<RunButtonProps["status"]>("idle");
 
   // Calculate dynamic padding for line numbers
   const lineCount = code.split("\n").length;
@@ -69,6 +136,30 @@ export function CodeBlock({
     }
   }, [highlightedCode]);
 
+  const handleRun = useCallback(async (): Promise<void> => {
+    if (!onRun) {
+      return;
+    }
+    setRunStatus("running");
+    await onRun(stripHighlightMarkers(code));
+    setRunStatus("done");
+    setTimeout(() => setRunStatus("idle"), 2000);
+  }, [onRun, code]);
+
+  useEffect(() => {
+    if (!onRun) {
+      return;
+    }
+    setRunStatus("idle");
+  }, [onRun]);
+
+  const outputPending = useMemo(() => {
+    if (output) {
+      return true;
+    }
+    return runStatus === "running";
+  }, [output, runStatus]);
+
   return (
     <div
       ref={codeRef}
@@ -82,7 +173,10 @@ export function CodeBlock({
           isSmallBlock ? "top-1/2 right-3 flex -translate-y-1/2 space-x-1" : "top-3 right-3"
         )}
       >
-        <CopyButton content={stripHighlightMarkers(code)} onCopy={onCopy} />
+        <div className="flex items-center space-x-1">
+          {onRun && <RunButton onRun={handleRun} status={runStatus} />}
+          <CopyButton content={stripHighlightMarkers(code)} onCopy={onCopy} />
+        </div>
       </div>
 
       <div className="highlight-container w-full overflow-auto">
@@ -91,6 +185,7 @@ export function CodeBlock({
           dangerouslySetInnerHTML={{ __html: highlightedCode.themeHtml }}
         />
       </div>
+      {outputPending && <CodeBlockOutput output={output} pending={outputPending} />}
     </div>
   );
 }

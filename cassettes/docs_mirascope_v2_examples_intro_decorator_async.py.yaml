@@ -1,0 +1,105 @@
+interactions:
+  - request:
+      body: '{"max_tokens":16000,"messages":[{"role":"user","content":"Please recommend a book in fantasy."}],"model":"claude-sonnet-4-0"}'
+      headers:
+        accept:
+          - application/json
+        accept-encoding:
+          - gzip, deflate
+        anthropic-version:
+          - '2023-06-01'
+        connection:
+          - keep-alive
+        content-length:
+          - '125'
+        content-type:
+          - application/json
+        host:
+          - api.anthropic.com
+        user-agent:
+          - AsyncAnthropic/Python 0.75.0
+        x-api-key:
+          - cached-http-with-invalid-key
+        x-stainless-arch:
+          - arm64
+        x-stainless-async:
+          - async:asyncio
+        x-stainless-lang:
+          - python
+        x-stainless-os:
+          - MacOS
+        x-stainless-package-version:
+          - 0.75.0
+        x-stainless-read-timeout:
+          - '600'
+        x-stainless-retry-count:
+          - '0'
+        x-stainless-runtime:
+          - CPython
+        x-stainless-runtime-version:
+          - 3.10.18
+        x-stainless-timeout:
+          - '600'
+      method: POST
+      uri: https://api.anthropic.com/v1/messages
+    response:
+      body:
+        string: !!binary H4sIAAAAAAAAAwAAAP//dFRda91GEP0r031Ja3SNbWwC96W0pg8htBiTNoW6XOZqR9rpXc0qO7NWRMh/L7uynTalT4Kdr3POnNEnNyVP0e1dH7F42mkSIdtd764urm4ubi6vXefYu72bdDxcXP52v9yN8+9yN75+fXkT7n5dh59Po+ucrTPVLFLFkVzncor1AVVZDcVc5/okRmJu/8en53yjjzXSPnv35pWHTH2aJhIPZ2cP7l0g+AUngjSABYL3LP7BnZ3BcYU7tMz9Ce6ThaGonsODPMi7wAqsLXvgrAbHlE7AArXXW5bxxDFShtuQk3AfCZQykwKKh4HQSiaFI2ExHkrsIK6Ze4ww56QEFtAgE3oFjFNSg8gngjmR5RXQwHgiPW/T1FJeYUgxpkXh7WOyQB0gRBpJPNYYjyUTGMXIMkLFnhZ5KkQDFGCRrqlSxJ5z1lQstDhMODZ0RfiRsrKtsATKBG1+8ZVZ1QKzVREFp9rkW4Qh5am+tAbfNfa19YdCamAJBhbfKqdVjTKnonAbUHxmFFhCgibkVjXgxHE9rwt4XwWa8EQKbKAz9Yxx/yA7+OljT7NxEoywZG5s1Na4ifpK4Zgqq74nVT5GapgiG2XMa23wwwYWtCKa4IhKHpKArtOMFtbuiV7XKjEbD9zXKW1pA1FUGDJpqM3uuQ+wpBz97lg4+pq3sAXwZMiVWF/iZobabVotpJjGFWCD0qdpflrbptAKS3okAQs5lTGkYjXxNmDG3ijrFxQwkhQWiiuEMqGAJ53ZaDMtiqFaW6qSVZWqrG+qQDPlgXoDHqoFgOSvtEL/PGHnM1cAW4d1Y/Ni5M2/HVio6GBAzrBglkpg1yZb4OxfzqW9ZG6UA9aLIAHCkXJcARdkI19NBOmRMiB46tHTN/Bjsa+Pr/4AvMJCMdZ1sW0ur7KyAh41xWJVjSVlC+26WMbNTalE38i2M3v5O2D1kVacKCvMddd9iZhfyGs5jiSZOkgZfGpXwAqaSrXGPBPW1X3vPv/ZObU0HzKhJnF7R+IPVrK4p4DSh0LSk9tLibFzpf3h9p8cy1zsYOlEom5/ed25HvtAhz5Tg3f4d8LFc7zy+7/Yc23tT3OgiTLGw8303/wv0cvwdfRz51Kxfz5dXf8tCx2l4tSisszk1PiSzNQiJSslcLQkFqUo1dYCAAAA//8DACV57N4IBgAA
+      headers:
+        CF-RAY:
+          - 9a8dbee7fd34ebe9-SJC
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - gzip
+        Content-Type:
+          - application/json
+        Date:
+          - Thu, 04 Dec 2025 19:35:21 GMT
+        Server:
+          - cloudflare
+        Transfer-Encoding:
+          - chunked
+        X-Robots-Tag:
+          - none
+        anthropic-organization-id:
+          - bcf0d122-a6b6-40d4-873c-83762f5fb168
+        anthropic-ratelimit-input-tokens-limit:
+          - '30000'
+        anthropic-ratelimit-input-tokens-remaining:
+          - '30000'
+        anthropic-ratelimit-input-tokens-reset:
+          - '2025-12-04T19:35:15Z'
+        anthropic-ratelimit-output-tokens-limit:
+          - '8000'
+        anthropic-ratelimit-output-tokens-remaining:
+          - '8000'
+        anthropic-ratelimit-output-tokens-reset:
+          - '2025-12-04T19:35:23Z'
+        anthropic-ratelimit-requests-limit:
+          - '50'
+        anthropic-ratelimit-requests-remaining:
+          - '49'
+        anthropic-ratelimit-requests-reset:
+          - '2025-12-04T19:35:15Z'
+        anthropic-ratelimit-tokens-limit:
+          - '38000'
+        anthropic-ratelimit-tokens-remaining:
+          - '38000'
+        anthropic-ratelimit-tokens-reset:
+          - '2025-12-04T19:35:15Z'
+        cf-cache-status:
+          - DYNAMIC
+        request-id:
+          - req_011CVnD2PpxUzVYEGZzFLadE
+        retry-after:
+          - '48'
+        strict-transport-security:
+          - max-age=31536000; includeSubDomains; preload
+        x-envoy-upstream-service-time:
+          - '7736'
+      status:
+        code: 200
+        message: OK
+version: 1
+source_sha256: 8c4a9858417590b6f05831961dab552ddb9160f8d68bdd3d60d288765c58d1b4

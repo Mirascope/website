@@ -43,4 +43,7 @@ export default defineConfig({
   build: {
     assetsInlineLimit: 4096, // Default inline limit
   },
+  worker: {
+    format: "es",
+  },
 });

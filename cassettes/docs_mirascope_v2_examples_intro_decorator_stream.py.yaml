@@ -1,0 +1,334 @@
+interactions:
+  - request:
+      body: '{"max_tokens":16000,"messages":[{"role":"user","content":"Please recommend a book in fantasy."}],"model":"claude-sonnet-4-0","stream":true}'
+      headers:
+        accept:
+          - application/json
+        accept-encoding:
+          - gzip, deflate
+        anthropic-version:
+          - '2023-06-01'
+        connection:
+          - keep-alive
+        content-length:
+          - '139'
+        content-type:
+          - application/json
+        host:
+          - api.anthropic.com
+        user-agent:
+          - Anthropic/Python 0.75.0
+        x-api-key:
+          - cached-http-with-invalid-key
+        x-stainless-arch:
+          - arm64
+        x-stainless-async:
+          - 'false'
+        x-stainless-helper-method:
+          - stream
+        x-stainless-lang:
+          - python
+        x-stainless-os:
+          - MacOS
+        x-stainless-package-version:
+          - 0.75.0
+        x-stainless-read-timeout:
+          - '600'
+        x-stainless-retry-count:
+          - '0'
+        x-stainless-runtime:
+          - CPython
+        x-stainless-runtime-version:
+          - 3.10.18
+        x-stainless-stream-helper:
+          - messages
+        x-stainless-timeout:
+          - NOT_GIVEN
+      method: POST
+      uri: https://api.anthropic.com/v1/messages
+    response:
+      body:
+        string: |+
+          event: message_start
+          data: {"type":"message_start","message":{"model":"claude-sonnet-4-20250514","id":"msg_01TLmVUirSKGTVW6PWiwPfpF","type":"message","role":"assistant","content":[],"stop_reason":null,"stop_sequence":null,"usage":{"input_tokens":14,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":1,"service_tier":"standard"}}            }
+
+          event: content_block_start
+          data: {"type":"content_block_start","index":0,"content_block":{"type":"text","text":""}     }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"I"}     }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"'d recommen"}}
+
+          event: ping
+          data: {"type": "ping"}
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"d **\"The Name of the Wind\""}         }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" by Patrick"}     }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" Rothfuss**. It's the"}       }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" first book in *"}              }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"The Kingkiller Chronicle* series"}    }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" an"}     }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"d offers"}  }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" beautiful"}         }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":","} }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" ly"}}
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"rical prose combine"}        }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"d with excellent"}             }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" world-building."}  }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"\n\nThe story follows Kvothe"}  }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":", a legendary"}             }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" figure who rec"}           }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"ounts his youth"}     }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" -"}             }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" from"}           }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" his time"}             }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" with"}        }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" a"}         }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" traveling tro"}               }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"upe to studying"}      }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" at"}        }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" a"}}
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" magical"}           }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" university. What"}   }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" makes it special is Rothfuss"}    }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"'s elegant"}     }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" writing style and the unique"}      }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" magic"}          }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" system base"} }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"d on naming"}}
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" and symp"}  }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"athy ("}   }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"a"}     }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" kin"}     }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"d of magical"}          }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" physics"}  }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":").\n\nIt"} }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"'s accessible"}        }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" for"}       }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" both"}             }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" fantasy"}               }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" newcom"}               }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"ers and genre"}    }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" veterans"}}
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":", with"}  }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" a goo"}           }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"d balance of adventure"}          }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":", mystery"}              }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":", and character development. The book works"}  }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" well as a"}          }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" standalone rea"}        }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"d, though"} }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" it's part of a planne"}         }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"d trilogy"}}
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":".\n\nWould you like recommendations"}  }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" in"}           }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" any"}         }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" particular fantasy"}    }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" subgenre, or does"}}
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" this soun"}            }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"d appe"}            }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"aling to"}      }
+
+          event: content_block_delta
+          data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" you?"}            }
+
+          event: content_block_stop
+          data: {"type":"content_block_stop","index":0    }
+
+          event: message_delta
+          data: {"type":"message_delta","delta":{"stop_reason":"end_turn","stop_sequence":null},"usage":{"input_tokens":14,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":181} }
+
+          event: message_stop
+          data: {"type":"message_stop"   }
+
+      headers:
+        CF-RAY:
+          - 9a8dbf52bd01cf1e-SJC
+        Cache-Control:
+          - no-cache
+        Connection:
+          - keep-alive
+        Content-Type:
+          - text/event-stream; charset=utf-8
+        Date:
+          - Thu, 04 Dec 2025 19:35:32 GMT
+        Server:
+          - cloudflare
+        Transfer-Encoding:
+          - chunked
+        X-Robots-Tag:
+          - none
+        anthropic-organization-id:
+          - bcf0d122-a6b6-40d4-873c-83762f5fb168
+        anthropic-ratelimit-input-tokens-limit:
+          - '30000'
+        anthropic-ratelimit-input-tokens-remaining:
+          - '30000'
+        anthropic-ratelimit-input-tokens-reset:
+          - '2025-12-04T19:35:31Z'
+        anthropic-ratelimit-output-tokens-limit:
+          - '8000'
+        anthropic-ratelimit-output-tokens-remaining:
+          - '8000'
+        anthropic-ratelimit-output-tokens-reset:
+          - '2025-12-04T19:35:32Z'
+        anthropic-ratelimit-requests-limit:
+          - '50'
+        anthropic-ratelimit-requests-remaining:
+          - '49'
+        anthropic-ratelimit-requests-reset:
+          - '2025-12-04T19:35:32Z'
+        anthropic-ratelimit-tokens-limit:
+          - '38000'
+        anthropic-ratelimit-tokens-remaining:
+          - '38000'
+        anthropic-ratelimit-tokens-reset:
+          - '2025-12-04T19:35:31Z'
+        cf-cache-status:
+          - DYNAMIC
+        request-id:
+          - req_011CVnD3evLSpJtbMAtsB8kp
+        retry-after:
+          - '31'
+        strict-transport-security:
+          - max-age=31536000; includeSubDomains; preload
+        x-envoy-upstream-service-time:
+          - '1834'
+      status:
+        code: 200
+        message: OK
+version: 1
+source_sha256: 4a289e0bc45fd37bccfbddf9b02067f70da8f6f1171b3c605a9bb64d57e7ac95

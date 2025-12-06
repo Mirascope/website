@@ -12,7 +12,7 @@ def get_book_info(ctx: llm.Context[Library], book: str) -> str:
     return ctx.deps.detailed_book_info.get(book, "Book not found")
 
 
-@llm.call(provider="openai", model_id="gpt-5", tools=[get_book_info])
+@llm.call(provider="anthropic", model_id="claude-sonnet-4-0", tools=[get_book_info])
 # [!code highlight:2]
 def librarian(ctx: llm.Context[Library], query: str):
     book_list = "\n".join(ctx.deps.available_books)

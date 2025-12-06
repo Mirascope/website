@@ -27,6 +27,7 @@ public/social-cards/
 public/seo-metadata.json
 public/llms-full.txt
 public/docs
+public/cassettes
 debug-output
 
 *storybook.log

@@ -3,8 +3,8 @@ from mirascope import llm
 
 def recommend_book(genre: str) -> llm.Response:
     model = llm.use_model(
-        provider="openai",
-        model_id="gpt-5",
+        provider="anthropic",
+        model_id="claude-sonnet-4-0",
         temperature=1,  # [!code highlight]
     )
     message = llm.messages.user(f"Please recommend a book in {genre}.")

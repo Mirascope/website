@@ -1,0 +1,10 @@
+[project]
+name = "cachedHTTP"
+version = "0.1.0"
+description = "Record cached HTTP via VCR.py cassettes to cache LLM API calls"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "mirascope[anthropic]==2.0.0a2",
+    "vcrpy==7.0.0",
+]
