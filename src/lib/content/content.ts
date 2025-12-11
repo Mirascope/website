@@ -53,6 +53,7 @@ export interface ContentMeta {
 export interface Content<T extends ContentMeta = ContentMeta> {
   meta: T; // Typed, validated metadata
   content: string; // MDX with frontmatter stripped out
+  markdown: string; // Plain markdown with MDX replaced by a remark pipeline
 
   // MDX structure expected by components (used in MDXRenderer)
   mdx: {
@@ -281,6 +282,7 @@ export async function loadContent<T extends ContentMeta>(
     return {
       meta,
       content: processed.content,
+      markdown: processed.markdown,
       mdx: {
         code: processed.code,
         frontmatter: processed.frontmatter,

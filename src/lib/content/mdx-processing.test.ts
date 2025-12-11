@@ -1,5 +1,5 @@
 import { describe, test, expect } from "bun:test";
-import { parseFrontmatter, mergeFrontmatter } from "./mdx-processing";
+import { parseFrontmatter, mergeFrontmatter, processMdx } from "./mdx-processing";
 
 describe("Frontmatter Parser", () => {
   describe("parseFrontmatter", () => {
@@ -147,6 +147,73 @@ Content after malformed frontmatter.`;
       const result = mergeFrontmatter(target, source);
 
       expect(result).toEqual(source);
+    });
+  });
+});
+
+describe("Process MDX content", () => {
+  describe("processMdx", () => {
+    test("outputs plain markdown with MDX components replaced", async () => {
+      const input = `# Hello, World!
+
+<Info title="Parameters Reference" collapsible={true} defaultOpen={false}>
+  Test the info callout.
+</Info>
+
+More regular text.
+
+<TabbedSection>
+<Tab value="Tab 1">
+  Content for tab 1
+</Tab>
+</TabbedSection>
+
+Just a vanilla markdown paragraph.
+`;
+      const result = await processMdx(input);
+      expect(result).toEqual(`# Hello, World!
+
+**Parameters Reference**
+
+Test the info callout.
+
+More regular text.
+
+### Tab 1
+
+Content for tab 1
+
+Just a vanilla markdown paragraph.
+`);
+    });
+    test("strips unknown MDX tags but keeps text content", async () => {
+      const input = `# Hello, World!
+
+<UnknownComponentXyz>
+  Strip node but retain text content.
+</UnknownComponentXyz>
+
+More regular text.
+
+### Tab 1
+
+Content for tab 1
+
+Just a vanilla markdown paragraph.
+`;
+      const result = await processMdx(input);
+      expect(result).toEqual(`# Hello, World!
+
+Strip node but retain text content.
+
+More regular text.
+
+### Tab 1
+
+Content for tab 1
+
+Just a vanilla markdown paragraph.
+`);
     });
   });
 });
