@@ -1,0 +1,105 @@
+interactions:
+  - request:
+      body: '{"max_tokens":16000,"messages":[{"role":"user","content":"Please recommend a book in fantasy."}],"model":"claude-sonnet-4-0","temperature":1}'
+      headers:
+        accept:
+          - application/json
+        accept-encoding:
+          - gzip, deflate
+        anthropic-version:
+          - '2023-06-01'
+        connection:
+          - keep-alive
+        content-length:
+          - '141'
+        content-type:
+          - application/json
+        host:
+          - api.anthropic.com
+        user-agent:
+          - Anthropic/Python 0.75.0
+        x-api-key:
+          - cached-http-with-invalid-key
+        x-stainless-arch:
+          - arm64
+        x-stainless-async:
+          - 'false'
+        x-stainless-lang:
+          - python
+        x-stainless-os:
+          - MacOS
+        x-stainless-package-version:
+          - 0.75.0
+        x-stainless-read-timeout:
+          - '600'
+        x-stainless-retry-count:
+          - '0'
+        x-stainless-runtime:
+          - CPython
+        x-stainless-runtime-version:
+          - 3.10.18
+        x-stainless-timeout:
+          - '600'
+      method: POST
+      uri: https://api.anthropic.com/v1/messages
+    response:
+      body:
+        string: !!binary H4sIAAAAAAAAAwAAAP//dFTbbhw3DP0VVi9pjVnDdu2k2JeiSG+pgaBIg+ahWyy4EmfEWkNNRMqbgeF/L6SN0xv6NJDOIXl0SM6Dm3Og5LbOJ6yBNppFyDbXm6uLq5uLm8trNzgObutmnfYXl7/+9O3185C/vKXyy+2L59P41YvDj9+5wdm6UGORKk7kBldyaheoymoo5gbnsxiJue1vD098ow8N6Z+te/UsQCGf55kkwNnZzr2NBK9xJsgjWCR4xxJ2Dg4r/IxW2N/Bm2xxrKpnZ+c72cnbyAqsnTxyUYNDznfAAi3VLct0xylRgZexZGGfCJQKkwJKaIELlZG8AY+w5gokf+QVDoTVeKwprXAsbEYCS8lKPcrneaGUWCZQy2W10+EcXhmMOaV8VLi9zxZpAIREE0nAssLIUy0EH+nQlOejnHLABsaS537pI6cQcw7tGQhW8J56hJVcFwLLnWY8E6ABwowTe0xQhe+pKNv6xHlfSZuoAoXuSSYCnJBFrRs2r2pUOFeFA7FMCseYoRsWeviIM6e1G/0uosGMd6TABrqQZ0zbnWzgh1wmylUHSGvpOpplJ3fWRI3yzUkiaCs4wwGVAmQB9UxiPLKHpbB4XhIpfL5zus4LWlx37osW/4Z9hGMuKWwOlVNoyY9sEQLRAvNqMac8radSJz8b3O07HdVK9dbtj2jPFAph6y7JhBPL1EJf5nlJ9GGAMeGRQuu44ZSF1ZoDr1oYek+qfEi9DUJHn2cq2g4jiqGucIzcpsw4JcjjSKWpDbRY7I1QQs1CbfIxUNFz+B65wBGL9B7HXKcIG+BWbsFibRdQoMrIwhopgBVuzx1Acx/amadoMLKEdixKaQTCiUobXzz1opU+LYlgOi1J4juCGWVtFap+1tuca+pZTuin7UTjLNoHUtYui31NWD69WuthIik0QC4QMrWVZAXNVQLgshCeRrgr/to9/j44tbzsS7fDbR1J2Fst4j4CSu8riSe3lZrS4Gr/0WwfHMtSbW/5jkTd9vJ6cB59pL0v1FXu/0m4eMKb3/+HPcW2/LREmqlg2t/M/+X/hV7Gf6OPg8vV/n51dXU1OKVyz572xlTc1rXfY8AS3OPjnwAAAP//AwANHGLVjwUAAA==
+      headers:
+        CF-RAY:
+          - 9a97734cd9e63451-SJC
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - gzip
+        Content-Type:
+          - application/json
+        Date:
+          - Fri, 05 Dec 2025 23:51:22 GMT
+        Server:
+          - cloudflare
+        Transfer-Encoding:
+          - chunked
+        X-Robots-Tag:
+          - none
+        anthropic-organization-id:
+          - bcf0d122-a6b6-40d4-873c-83762f5fb168
+        anthropic-ratelimit-input-tokens-limit:
+          - '30000'
+        anthropic-ratelimit-input-tokens-remaining:
+          - '30000'
+        anthropic-ratelimit-input-tokens-reset:
+          - '2025-12-05T23:51:16Z'
+        anthropic-ratelimit-output-tokens-limit:
+          - '8000'
+        anthropic-ratelimit-output-tokens-remaining:
+          - '8000'
+        anthropic-ratelimit-output-tokens-reset:
+          - '2025-12-05T23:51:23Z'
+        anthropic-ratelimit-requests-limit:
+          - '50'
+        anthropic-ratelimit-requests-remaining:
+          - '49'
+        anthropic-ratelimit-requests-reset:
+          - '2025-12-05T23:51:15Z'
+        anthropic-ratelimit-tokens-limit:
+          - '38000'
+        anthropic-ratelimit-tokens-remaining:
+          - '38000'
+        anthropic-ratelimit-tokens-reset:
+          - '2025-12-05T23:51:16Z'
+        cf-cache-status:
+          - DYNAMIC
+        request-id:
+          - req_011CVpSMcuJufBh2C4TvH8a8
+        retry-after:
+          - '46'
+        strict-transport-security:
+          - max-age=31536000; includeSubDomains; preload
+        x-envoy-upstream-service-time:
+          - '7284'
+      status:
+        code: 200
+        message: OK
+version: 1
+source_sha256: ffd8a3851f339a033ff30763dfd5efdd84559eb116e0208b94b4fe9da1eeb34a

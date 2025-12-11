@@ -15,6 +15,11 @@ export type HighlightResult = {
 
 const THEME_LIGHT = "github-light";
 const THEME_DARK = "github-dark-default";
+
+export const SHIKI_CLASS = `shiki shiki-themes ${THEME_LIGHT} ${THEME_DARK} has-highlighted`;
+export const SHIKI_BG_STYLE = "background-color:#fff;--shiki-dark-bg:#0d1117;";
+export const SHIKI_COLOR_STYLE = "color:#24292e;--shiki-dark-color:#e6edf3;";
+
 // Use the v1 matching algorithm to ensure we highlight bare comment lines
 // See: https://github.com/shikijs/shiki/issues/1006
 // Note: If ever migrating to the v3 algorithm, it will create an off-by-one
@@ -91,10 +96,7 @@ export function fallbackHighlighter(
   const htmlLines = lines.map((line) => `<span class="line">${line}</span>`);
   const codeHtml = `<code>${htmlLines.join("\n")}</code>`;
 
-  const shikiClass = `shiki shiki-themes ${THEME_LIGHT} ${THEME_DARK} has-highlighted`;
-  const shikiBgStyle = "background-color:#fff;--shiki-dark-bg:#0d1117;";
-  const shikiColorStyle = "color:#24292e;--shiki-dark-color:#e6edf3;";
-  const fallbackHtml = `<pre class="${shikiClass}" style="${shikiBgStyle}${shikiColorStyle}">${codeHtml}</pre>`;
+  const fallbackHtml = `<pre class="${SHIKI_CLASS}" style="${SHIKI_BG_STYLE}${SHIKI_COLOR_STYLE}">${codeHtml}</pre>`;
   return { themeHtml: fallbackHtml, code, language, meta, highlighted: false };
 }
 

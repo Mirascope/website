@@ -25,8 +25,8 @@ def search_coppermind(ctx: llm.Context[Coppermind], query: str) -> str:
 
 
 @llm.call(
-    provider="openai",
-    model_id="gpt-4o-mini",
+    provider="anthropic",
+    model_id="claude-sonnet-4-0",
     tools=[search_coppermind],
     format=KeeperEntry,
 )

@@ -2,7 +2,7 @@ import { PageMeta } from "@/src/components/";
 import { useSunsetTime } from "@/src/lib/hooks/useSunsetTime";
 import { useGradientFadeOnScroll } from "@/src/lib/hooks/useGradientFadeOnScroll";
 import { useRef, useState, useEffect } from "react";
-import { ProviderContextProvider } from "@/src/components/core/providers/ProviderContext";
+import { ProviderContextProvider } from "@/src/components/core";
 import { HeroBlock } from "./HeroBlock";
 import { MirascopeBlock } from "./MirascopeBlock";
 import { LilypadBlock } from "./LilypadBlock";

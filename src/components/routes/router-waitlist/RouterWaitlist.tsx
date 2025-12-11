@@ -1,7 +1,7 @@
 import { PageMeta } from "@/src/components/";
 import { RouterWaitlistForm } from "./RouterWaitlistForm";
 import { MirascopeV2Block } from "./MirascopeV2Block";
-import { ProviderContextProvider } from "@/src/components/core/providers/ProviderContext";
+import { ProviderContextProvider } from "@/src/components/core";
 
 export function RouterWaitlist() {
   return (
