@@ -68,7 +68,7 @@ Execute and return all of the tool calls in the response.
 <ReturnTable
   returnType={{
   "type_info": {
-    "type_str": "Sequence[ToolOutput]",
+    "type_str": "Sequence[ToolOutput[Jsonable]]",
     "description": null,
     "kind": "generic",
     "base_type": {
@@ -80,11 +80,26 @@ Execute and return all of the tool calls in the response.
     },
     "parameters": [
       {
-        "type_str": "ToolOutput",
+        "type_str": "ToolOutput[Jsonable]",
         "description": null,
-        "kind": "simple",
-        "symbol_name": "ToolOutput",
-        "doc_url": "/docs/mirascope/v2/api/content#tool-output"
+        "kind": "generic",
+        "base_type": {
+          "type_str": "ToolOutput",
+          "description": null,
+          "kind": "simple",
+          "symbol_name": "ToolOutput",
+          "doc_url": "/docs/mirascope/v2/api/content#tool-output"
+        },
+        "parameters": [
+          {
+            "type_str": "Jsonable",
+            "description": null,
+            "kind": "simple",
+            "symbol_name": "Jsonable",
+            "doc_url": "/docs/mirascope/v2/api/types#jsonable"
+          }
+        ],
+        "doc_url": null
       }
     ],
     "doc_url": null
@@ -271,7 +286,7 @@ LLM stream. You can pause stream execution midway by breaking out of the iterato
 and you can safely resume execution from the same iterator if desired.
 
 **Bases:** 
-<TypeLink type={{"type_str": "BaseAsyncStreamResponse[AsyncContextToolkit, FormattableT]", "description": null, "kind": "generic", "base_type": {"type_str": "BaseAsyncStreamResponse", "description": null, "kind": "simple", "symbol_name": "BaseAsyncStreamResponse", "doc_url": null}, "parameters": [{"type_str": "AsyncContextToolkit", "description": null, "kind": "simple", "symbol_name": "AsyncContextToolkit", "doc_url": "/docs/mirascope/v2/api/tools#async-context-toolkit"}, {"type_str": "FormattableT", "description": null, "kind": "simple", "symbol_name": "FormattableT", "doc_url": "/docs/mirascope/v2/api/formatting#formattable-t"}], "doc_url": null}} />, <TypeLink type={{"type_str": "Generic[DepsT, FormattableT]", "description": null, "kind": "generic", "base_type": {"type_str": "Generic", "description": null, "kind": "simple", "symbol_name": "Generic", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Generic"}, "parameters": [{"type_str": "DepsT", "description": null, "kind": "simple", "symbol_name": "DepsT", "doc_url": null}, {"type_str": "FormattableT", "description": null, "kind": "simple", "symbol_name": "FormattableT", "doc_url": "/docs/mirascope/v2/api/formatting#formattable-t"}], "doc_url": null}} />
+<TypeLink type={{"type_str": "BaseAsyncStreamResponse[AsyncContextToolkit[DepsT], FormattableT]", "description": null, "kind": "generic", "base_type": {"type_str": "BaseAsyncStreamResponse", "description": null, "kind": "simple", "symbol_name": "BaseAsyncStreamResponse", "doc_url": null}, "parameters": [{"type_str": "AsyncContextToolkit[DepsT]", "description": null, "kind": "generic", "base_type": {"type_str": "AsyncContextToolkit", "description": null, "kind": "simple", "symbol_name": "AsyncContextToolkit", "doc_url": "/docs/mirascope/v2/api/tools#async-context-toolkit"}, "parameters": [{"type_str": "DepsT", "description": null, "kind": "simple", "symbol_name": "DepsT", "doc_url": null}], "doc_url": null}, {"type_str": "FormattableT", "description": null, "kind": "simple", "symbol_name": "FormattableT", "doc_url": "/docs/mirascope/v2/api/formatting#formattable-t"}], "doc_url": null}} />, <TypeLink type={{"type_str": "Generic[DepsT, FormattableT]", "description": null, "kind": "generic", "base_type": {"type_str": "Generic", "description": null, "kind": "simple", "symbol_name": "Generic", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Generic"}, "parameters": [{"type_str": "DepsT", "description": null, "kind": "simple", "symbol_name": "DepsT", "doc_url": null}, {"type_str": "FormattableT", "description": null, "kind": "simple", "symbol_name": "FormattableT", "doc_url": "/docs/mirascope/v2/api/formatting#formattable-t"}], "doc_url": null}} />
 
 ## <ApiType type="Function" slug="mirascope-llm-responses-stream_response--async-context-stream-response-execute_tools" symbolName="execute_tools" /> execute_tools
 
@@ -321,7 +336,7 @@ Execute and return all of the tool calls in the response.
 <ReturnTable
   returnType={{
   "type_info": {
-    "type_str": "Sequence[ToolOutput]",
+    "type_str": "Sequence[ToolOutput[Jsonable]]",
     "description": null,
     "kind": "generic",
     "base_type": {
@@ -333,11 +348,26 @@ Execute and return all of the tool calls in the response.
     },
     "parameters": [
       {
-        "type_str": "ToolOutput",
+        "type_str": "ToolOutput[Jsonable]",
         "description": null,
-        "kind": "simple",
-        "symbol_name": "ToolOutput",
-        "doc_url": "/docs/mirascope/v2/api/content#tool-output"
+        "kind": "generic",
+        "base_type": {
+          "type_str": "ToolOutput",
+          "description": null,
+          "kind": "simple",
+          "symbol_name": "ToolOutput",
+          "doc_url": "/docs/mirascope/v2/api/content#tool-output"
+        },
+        "parameters": [
+          {
+            "type_str": "Jsonable",
+            "description": null,
+            "kind": "simple",
+            "symbol_name": "Jsonable",
+            "doc_url": "/docs/mirascope/v2/api/types#jsonable"
+          }
+        ],
+        "doc_url": null
       }
     ],
     "doc_url": null
@@ -510,7 +540,7 @@ Execute and return all of the tool calls in the response.
 <ReturnTable
   returnType={{
   "type_info": {
-    "type_str": "Sequence[ToolOutput]",
+    "type_str": "Sequence[ToolOutput[Jsonable]]",
     "description": null,
     "kind": "generic",
     "base_type": {
@@ -522,11 +552,26 @@ Execute and return all of the tool calls in the response.
     },
     "parameters": [
       {
-        "type_str": "ToolOutput",
+        "type_str": "ToolOutput[Jsonable]",
         "description": null,
-        "kind": "simple",
-        "symbol_name": "ToolOutput",
-        "doc_url": "/docs/mirascope/v2/api/content#tool-output"
+        "kind": "generic",
+        "base_type": {
+          "type_str": "ToolOutput",
+          "description": null,
+          "kind": "simple",
+          "symbol_name": "ToolOutput",
+          "doc_url": "/docs/mirascope/v2/api/content#tool-output"
+        },
+        "parameters": [
+          {
+            "type_str": "Jsonable",
+            "description": null,
+            "kind": "simple",
+            "symbol_name": "Jsonable",
+            "doc_url": "/docs/mirascope/v2/api/types#jsonable"
+          }
+        ],
+        "doc_url": null
       }
     ],
     "doc_url": null
@@ -696,7 +741,7 @@ Execute and return all of the tool calls in the response.
 <ReturnTable
   returnType={{
   "type_info": {
-    "type_str": "Sequence[ToolOutput]",
+    "type_str": "Sequence[ToolOutput[Jsonable]]",
     "description": null,
     "kind": "generic",
     "base_type": {
@@ -708,11 +753,26 @@ Execute and return all of the tool calls in the response.
     },
     "parameters": [
       {
-        "type_str": "ToolOutput",
+        "type_str": "ToolOutput[Jsonable]",
         "description": null,
-        "kind": "simple",
-        "symbol_name": "ToolOutput",
-        "doc_url": "/docs/mirascope/v2/api/content#tool-output"
+        "kind": "generic",
+        "base_type": {
+          "type_str": "ToolOutput",
+          "description": null,
+          "kind": "simple",
+          "symbol_name": "ToolOutput",
+          "doc_url": "/docs/mirascope/v2/api/content#tool-output"
+        },
+        "parameters": [
+          {
+            "type_str": "Jsonable",
+            "description": null,
+            "kind": "simple",
+            "symbol_name": "Jsonable",
+            "doc_url": "/docs/mirascope/v2/api/types#jsonable"
+          }
+        ],
+        "doc_url": null
       }
     ],
     "doc_url": null
@@ -1216,7 +1276,7 @@ Execute and return all of the tool calls in the response.
 <ReturnTable
   returnType={{
   "type_info": {
-    "type_str": "Sequence[ToolOutput]",
+    "type_str": "Sequence[ToolOutput[Jsonable]]",
     "description": null,
     "kind": "generic",
     "base_type": {
@@ -1228,11 +1288,26 @@ Execute and return all of the tool calls in the response.
     },
     "parameters": [
       {
-        "type_str": "ToolOutput",
+        "type_str": "ToolOutput[Jsonable]",
         "description": null,
-        "kind": "simple",
-        "symbol_name": "ToolOutput",
-        "doc_url": "/docs/mirascope/v2/api/content#tool-output"
+        "kind": "generic",
+        "base_type": {
+          "type_str": "ToolOutput",
+          "description": null,
+          "kind": "simple",
+          "symbol_name": "ToolOutput",
+          "doc_url": "/docs/mirascope/v2/api/content#tool-output"
+        },
+        "parameters": [
+          {
+            "type_str": "Jsonable",
+            "description": null,
+            "kind": "simple",
+            "symbol_name": "Jsonable",
+            "doc_url": "/docs/mirascope/v2/api/types#jsonable"
+          }
+        ],
+        "doc_url": null
       }
     ],
     "doc_url": null
@@ -1419,7 +1494,7 @@ LLM stream. You can pause stream execution midway by breaking out of the iterato
 and you can safely resume execution from the same iterator if desired.
 
 **Bases:** 
-<TypeLink type={{"type_str": "BaseSyncStreamResponse[ContextToolkit, FormattableT]", "description": null, "kind": "generic", "base_type": {"type_str": "BaseSyncStreamResponse", "description": null, "kind": "simple", "symbol_name": "BaseSyncStreamResponse", "doc_url": null}, "parameters": [{"type_str": "ContextToolkit", "description": null, "kind": "simple", "symbol_name": "ContextToolkit", "doc_url": "/docs/mirascope/v2/api/tools#context-toolkit"}, {"type_str": "FormattableT", "description": null, "kind": "simple", "symbol_name": "FormattableT", "doc_url": "/docs/mirascope/v2/api/formatting#formattable-t"}], "doc_url": null}} />, <TypeLink type={{"type_str": "Generic[DepsT, FormattableT]", "description": null, "kind": "generic", "base_type": {"type_str": "Generic", "description": null, "kind": "simple", "symbol_name": "Generic", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Generic"}, "parameters": [{"type_str": "DepsT", "description": null, "kind": "simple", "symbol_name": "DepsT", "doc_url": null}, {"type_str": "FormattableT", "description": null, "kind": "simple", "symbol_name": "FormattableT", "doc_url": "/docs/mirascope/v2/api/formatting#formattable-t"}], "doc_url": null}} />
+<TypeLink type={{"type_str": "BaseSyncStreamResponse[ContextToolkit[DepsT], FormattableT]", "description": null, "kind": "generic", "base_type": {"type_str": "BaseSyncStreamResponse", "description": null, "kind": "simple", "symbol_name": "BaseSyncStreamResponse", "doc_url": null}, "parameters": [{"type_str": "ContextToolkit[DepsT]", "description": null, "kind": "generic", "base_type": {"type_str": "ContextToolkit", "description": null, "kind": "simple", "symbol_name": "ContextToolkit", "doc_url": "/docs/mirascope/v2/api/tools#context-toolkit"}, "parameters": [{"type_str": "DepsT", "description": null, "kind": "simple", "symbol_name": "DepsT", "doc_url": null}], "doc_url": null}, {"type_str": "FormattableT", "description": null, "kind": "simple", "symbol_name": "FormattableT", "doc_url": "/docs/mirascope/v2/api/formatting#formattable-t"}], "doc_url": null}} />, <TypeLink type={{"type_str": "Generic[DepsT, FormattableT]", "description": null, "kind": "generic", "base_type": {"type_str": "Generic", "description": null, "kind": "simple", "symbol_name": "Generic", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Generic"}, "parameters": [{"type_str": "DepsT", "description": null, "kind": "simple", "symbol_name": "DepsT", "doc_url": null}, {"type_str": "FormattableT", "description": null, "kind": "simple", "symbol_name": "FormattableT", "doc_url": "/docs/mirascope/v2/api/formatting#formattable-t"}], "doc_url": null}} />
 
 ## <ApiType type="Function" slug="mirascope-llm-responses-stream_response--context-stream-response-execute_tools" symbolName="execute_tools" /> execute_tools
 
@@ -1469,7 +1544,7 @@ Execute and return all of the tool calls in the response.
 <ReturnTable
   returnType={{
   "type_info": {
-    "type_str": "Sequence[ToolOutput]",
+    "type_str": "Sequence[ToolOutput[Jsonable]]",
     "description": null,
     "kind": "generic",
     "base_type": {
@@ -1481,11 +1556,26 @@ Execute and return all of the tool calls in the response.
     },
     "parameters": [
       {
-        "type_str": "ToolOutput",
+        "type_str": "ToolOutput[Jsonable]",
         "description": null,
-        "kind": "simple",
-        "symbol_name": "ToolOutput",
-        "doc_url": "/docs/mirascope/v2/api/content#tool-output"
+        "kind": "generic",
+        "base_type": {
+          "type_str": "ToolOutput",
+          "description": null,
+          "kind": "simple",
+          "symbol_name": "ToolOutput",
+          "doc_url": "/docs/mirascope/v2/api/content#tool-output"
+        },
+        "parameters": [
+          {
+            "type_str": "Jsonable",
+            "description": null,
+            "kind": "simple",
+            "symbol_name": "Jsonable",
+            "doc_url": "/docs/mirascope/v2/api/types#jsonable"
+          }
+        ],
+        "doc_url": null
       }
     ],
     "doc_url": null
@@ -1842,7 +1932,7 @@ Execute and return all of the tool calls in the response.
 <ReturnTable
   returnType={{
   "type_info": {
-    "type_str": "Sequence[ToolOutput]",
+    "type_str": "Sequence[ToolOutput[Jsonable]]",
     "description": null,
     "kind": "generic",
     "base_type": {
@@ -1854,11 +1944,26 @@ Execute and return all of the tool calls in the response.
     },
     "parameters": [
       {
-        "type_str": "ToolOutput",
+        "type_str": "ToolOutput[Jsonable]",
         "description": null,
-        "kind": "simple",
-        "symbol_name": "ToolOutput",
-        "doc_url": "/docs/mirascope/v2/api/content#tool-output"
+        "kind": "generic",
+        "base_type": {
+          "type_str": "ToolOutput",
+          "description": null,
+          "kind": "simple",
+          "symbol_name": "ToolOutput",
+          "doc_url": "/docs/mirascope/v2/api/content#tool-output"
+        },
+        "parameters": [
+          {
+            "type_str": "Jsonable",
+            "description": null,
+            "kind": "simple",
+            "symbol_name": "Jsonable",
+            "doc_url": "/docs/mirascope/v2/api/types#jsonable"
+          }
+        ],
+        "doc_url": null
       }
     ],
     "doc_url": null
@@ -1975,12 +2080,12 @@ Base class for LLM responses.
     "description": "The raw response from the LLM."
   },
   {
-    "name": "provider",
+    "name": "provider_id",
     "type_info": {
-      "type_str": "Provider",
+      "type_str": "ProviderId",
       "description": null,
       "kind": "simple",
-      "symbol_name": "Provider",
+      "symbol_name": "ProviderId",
       "doc_url": null
     },
     "description": "The provider that generated this response."
@@ -2449,7 +2554,7 @@ Execute and return all of the tool calls in the response.
 <ReturnTable
   returnType={{
   "type_info": {
-    "type_str": "Sequence[ToolOutput]",
+    "type_str": "Sequence[ToolOutput[Jsonable]]",
     "description": null,
     "kind": "generic",
     "base_type": {
@@ -2461,11 +2566,26 @@ Execute and return all of the tool calls in the response.
     },
     "parameters": [
       {
-        "type_str": "ToolOutput",
+        "type_str": "ToolOutput[Jsonable]",
         "description": null,
-        "kind": "simple",
-        "symbol_name": "ToolOutput",
-        "doc_url": "/docs/mirascope/v2/api/content#tool-output"
+        "kind": "generic",
+        "base_type": {
+          "type_str": "ToolOutput",
+          "description": null,
+          "kind": "simple",
+          "symbol_name": "ToolOutput",
+          "doc_url": "/docs/mirascope/v2/api/content#tool-output"
+        },
+        "parameters": [
+          {
+            "type_str": "Jsonable",
+            "description": null,
+            "kind": "simple",
+            "symbol_name": "Jsonable",
+            "doc_url": "/docs/mirascope/v2/api/types#jsonable"
+          }
+        ],
+        "doc_url": null
       }
     ],
     "doc_url": null

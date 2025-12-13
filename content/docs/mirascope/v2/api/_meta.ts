@@ -17,10 +17,6 @@ export const apiMeta: SectionSpec = {
       label: "calls",
     },
     {
-      slug: "clients",
-      label: "clients",
-    },
-    {
       slug: "content",
       label: "content",
     },
@@ -49,19 +45,16 @@ export const apiMeta: SectionSpec = {
       label: "prompts",
     },
     {
+      slug: "providers",
+      label: "providers",
+    },
+    {
       slug: "responses",
       label: "responses",
     },
     {
       slug: "tools",
       label: "tools",
-      hasContent: true,
-      children: [
-        {
-          slug: "protocols",
-          label: "protocols",
-        },
-      ],
     },
     {
       slug: "types",

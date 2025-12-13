@@ -6,9 +6,9 @@ description: API documentation for exceptions
 
 # exceptions
 
-## <ApiType type="Class" slug="mirascope-error" symbolName="MirascopeError" /> MirascopeError
+## <ApiType type="Class" slug="mirascope-l-l-m-error" symbolName="MirascopeLLMError" /> MirascopeLLMError
 
-Base exception for all Mirascope errors.
+Base exception for all Mirascope LLM errors.
 
 **Bases:** 
 <TypeLink type={{"type_str": "Exception", "description": null, "kind": "simple", "symbol_name": "Exception", "doc_url": "https://docs.python.org/3/library/exceptions.html#Exception"}} />
@@ -56,7 +56,7 @@ Base exception for all Mirascope errors.
 Base class for API-related errors.
 
 **Bases:** 
-<TypeLink type={{"type_str": "MirascopeError", "description": null, "kind": "simple", "symbol_name": "MirascopeError", "doc_url": "/docs/mirascope/v2/api/exceptions#mirascope-error"}} />
+<TypeLink type={{"type_str": "MirascopeLLMError", "description": null, "kind": "simple", "symbol_name": "MirascopeLLMError", "doc_url": "/docs/mirascope/v2/api/exceptions#mirascope-l-l-m-error"}} />
 
 <AttributesTable
   attributes={[
@@ -101,7 +101,7 @@ Base class for API-related errors.
 Raised when unable to connect to the API (network issues, timeouts).
 
 **Bases:** 
-<TypeLink type={{"type_str": "MirascopeError", "description": null, "kind": "simple", "symbol_name": "MirascopeError", "doc_url": "/docs/mirascope/v2/api/exceptions#mirascope-error"}} />
+<TypeLink type={{"type_str": "MirascopeLLMError", "description": null, "kind": "simple", "symbol_name": "MirascopeLLMError", "doc_url": "/docs/mirascope/v2/api/exceptions#mirascope-l-l-m-error"}} />
 
 
 ## <ApiType type="Class" slug="authentication-error" symbolName="AuthenticationError" /> AuthenticationError
@@ -141,7 +141,7 @@ Raised when requested resource is not found (404).
 Raised if a tool_call cannot be converted to any corresponding tool.
 
 **Bases:** 
-<TypeLink type={{"type_str": "MirascopeError", "description": null, "kind": "simple", "symbol_name": "MirascopeError", "doc_url": "/docs/mirascope/v2/api/exceptions#mirascope-error"}} />
+<TypeLink type={{"type_str": "MirascopeLLMError", "description": null, "kind": "simple", "symbol_name": "MirascopeLLMError", "doc_url": "/docs/mirascope/v2/api/exceptions#mirascope-l-l-m-error"}} />
 
 
 ## <ApiType type="Class" slug="feature-not-supported-error" symbolName="FeatureNotSupportedError" /> FeatureNotSupportedError
@@ -152,17 +152,17 @@ If compatibility is model-specific, then `model_id` should be specified.
 If the feature is not supported by the provider at all, then it may be `None`.
 
 **Bases:** 
-<TypeLink type={{"type_str": "MirascopeError", "description": null, "kind": "simple", "symbol_name": "MirascopeError", "doc_url": "/docs/mirascope/v2/api/exceptions#mirascope-error"}} />
+<TypeLink type={{"type_str": "MirascopeLLMError", "description": null, "kind": "simple", "symbol_name": "MirascopeLLMError", "doc_url": "/docs/mirascope/v2/api/exceptions#mirascope-l-l-m-error"}} />
 
 <AttributesTable
   attributes={[
   {
-    "name": "provider",
+    "name": "provider_id",
     "type_info": {
-      "type_str": "Provider",
+      "type_str": "ProviderId",
       "description": null,
       "kind": "simple",
-      "symbol_name": "Provider",
+      "symbol_name": "ProviderId",
       "doc_url": null
     }
   },
@@ -256,6 +256,29 @@ Raised for server-side errors (500+).
 Raised when requests timeout or deadline exceeded.
 
 **Bases:** 
-<TypeLink type={{"type_str": "MirascopeError", "description": null, "kind": "simple", "symbol_name": "MirascopeError", "doc_url": "/docs/mirascope/v2/api/exceptions#mirascope-error"}} />
+<TypeLink type={{"type_str": "MirascopeLLMError", "description": null, "kind": "simple", "symbol_name": "MirascopeLLMError", "doc_url": "/docs/mirascope/v2/api/exceptions#mirascope-l-l-m-error"}} />
+
+
+## <ApiType type="Class" slug="no-registered-provider-error" symbolName="NoRegisteredProviderError" /> NoRegisteredProviderError
+
+Raised when no provider is registered for a given model_id.
+
+**Bases:** 
+<TypeLink type={{"type_str": "MirascopeLLMError", "description": null, "kind": "simple", "symbol_name": "MirascopeLLMError", "doc_url": "/docs/mirascope/v2/api/exceptions#mirascope-l-l-m-error"}} />
+
+<AttributesTable
+  attributes={[
+  {
+    "name": "model_id",
+    "type_info": {
+      "type_str": "str",
+      "description": null,
+      "kind": "simple",
+      "symbol_name": "str",
+      "doc_url": null
+    }
+  }
+]}
+/>
 
 

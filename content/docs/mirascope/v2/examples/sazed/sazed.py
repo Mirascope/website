@@ -2,8 +2,7 @@ from mirascope import llm
 
 
 @llm.call(
-    provider="openai",
-    model_id="gpt-4o-mini",
+    "openai/gpt-5-mini",
 )
 def sazed(query: str):
     system_prompt = """

@@ -1,12 +1,9 @@
 from mirascope import llm
 
 
-@llm.call(
-    "openai/gpt-5",
-    temperature=1,  # [!code highlight]
-)
+@llm.call("mlx-community/Qwen3-8B-4bit-DWQ-053125")
 def recommend_book(genre: str):
-    return f"Please recommend a book in {genre}."
+    return f"Recommend a {genre} book."
 
 
 def main():

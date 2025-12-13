@@ -105,9 +105,9 @@ An assistant message containing the model's response.
     "description": "A name identifying the creator of this message."
   },
   {
-    "name": "provider",
+    "name": "provider_id",
     "type_info": {
-      "type_str": "Provider | None",
+      "type_str": "ProviderId | None",
       "description": null,
       "kind": "union",
       "base_type": {
@@ -119,10 +119,10 @@ An assistant message containing the model's response.
       },
       "parameters": [
         {
-          "type_str": "Provider",
+          "type_str": "ProviderId",
           "description": null,
           "kind": "simple",
-          "symbol_name": "Provider",
+          "symbol_name": "ProviderId",
           "doc_url": null
         },
         {
@@ -169,6 +169,39 @@ An assistant message containing the model's response.
       "doc_url": null
     },
     "description": "The model identifier of the LLM that generated this assistant message, if available."
+  },
+  {
+    "name": "provider_model_name",
+    "type_info": {
+      "type_str": "str | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "symbol_name": "Union",
+        "doc_url": null
+      },
+      "parameters": [
+        {
+          "type_str": "str",
+          "description": null,
+          "kind": "simple",
+          "symbol_name": "str",
+          "doc_url": null
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple",
+          "symbol_name": "None",
+          "doc_url": null
+        }
+      ],
+      "doc_url": null
+    },
+    "description": "The provider-specific model identifier (e.g. \"gpt-5:responses\"), if available."
   },
   {
     "name": "raw_message",
@@ -406,39 +439,6 @@ Creates an assistant message.
     "description": "The content of the message, which can be `str` or any `AssistantContent`,\nor a sequence of assistant content pieces."
   },
   {
-    "name": "provider",
-    "type_info": {
-      "type_str": "Provider | None",
-      "description": null,
-      "kind": "union",
-      "base_type": {
-        "type_str": "Union",
-        "description": null,
-        "kind": "simple",
-        "symbol_name": "Union",
-        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
-      },
-      "parameters": [
-        {
-          "type_str": "Provider",
-          "description": null,
-          "kind": "simple",
-          "symbol_name": "Provider",
-          "doc_url": "/docs/mirascope/v2/api/clients#provider"
-        },
-        {
-          "type_str": "None",
-          "description": null,
-          "kind": "simple",
-          "symbol_name": "None",
-          "doc_url": "https://docs.python.org/3/library/constants.html#None"
-        }
-      ],
-      "doc_url": null
-    },
-    "description": "Optional identifier of the provider that produced this message."
-  },
-  {
     "name": "model_id",
     "type_info": {
       "type_str": "ModelId | None",
@@ -457,7 +457,7 @@ Creates an assistant message.
           "description": null,
           "kind": "simple",
           "symbol_name": "ModelId",
-          "doc_url": "/docs/mirascope/v2/api/clients#model-id"
+          "doc_url": "/docs/mirascope/v2/api/providers#model-id"
         },
         {
           "type_str": "None",
@@ -470,6 +470,73 @@ Creates an assistant message.
       "doc_url": null
     },
     "description": "Optional id of the model that produced this message."
+  },
+  {
+    "name": "provider_id",
+    "type_info": {
+      "type_str": "ProviderId | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "symbol_name": "Union",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+      },
+      "parameters": [
+        {
+          "type_str": "ProviderId",
+          "description": null,
+          "kind": "simple",
+          "symbol_name": "ProviderId",
+          "doc_url": "/docs/mirascope/v2/api/providers#provider-id"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple",
+          "symbol_name": "None",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
+        }
+      ],
+      "doc_url": null
+    },
+    "description": "Optional identifier of the provider that produced this message."
+  },
+  {
+    "name": "provider_model_name",
+    "type_info": {
+      "type_str": "str | None",
+      "description": null,
+      "kind": "union",
+      "base_type": {
+        "type_str": "Union",
+        "description": null,
+        "kind": "simple",
+        "symbol_name": "Union",
+        "doc_url": "https://docs.python.org/3/library/typing.html#typing.Union"
+      },
+      "parameters": [
+        {
+          "type_str": "str",
+          "description": null,
+          "kind": "simple",
+          "symbol_name": "str",
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str"
+        },
+        {
+          "type_str": "None",
+          "description": null,
+          "kind": "simple",
+          "symbol_name": "None",
+          "doc_url": "https://docs.python.org/3/library/constants.html#None"
+        }
+      ],
+      "doc_url": null
+    },
+    "default": "None",
+    "description": "Optional provider-specific model name. May include\nprovider-specific additional info (like api mode in \"gpt-5:responses\")."
   },
   {
     "name": "raw_message",

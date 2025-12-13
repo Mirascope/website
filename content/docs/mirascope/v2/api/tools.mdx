@@ -16,6 +16,16 @@ Any call to a tool with this name is NOT considered a regular tool call, but wil
 be converted into textual output containing the arguments to the tool call.
 
 
+## <ApiType type="Attribute" slug="any-tool-fn" symbolName="AnyToolFn" /> AnyToolFn
+
+**Type:** <TypeLink type={{"type_str": "TypeAlias", "description": null, "kind": "simple", "symbol_name": "TypeAlias", "doc_url": null}} />
+
+
+## <ApiType type="Attribute" slug="any-tool-schema" symbolName="AnyToolSchema" /> AnyToolSchema
+
+**Type:** <TypeLink type={{"type_str": "TypeAlias", "description": null, "kind": "simple", "symbol_name": "TypeAlias", "doc_url": null}} />
+
+
 ## <ApiType type="Class" slug="async-context-tool" symbolName="AsyncContextTool" /> AsyncContextTool
 
 Protocol defining an async tool that can be used by LLMs with context.
@@ -26,7 +36,7 @@ It includes metadata like name, description, and parameter schema.
 This class is not instantiated directly but created by the `@tool()` decorator.
 
 **Bases:** 
-<TypeLink type={{"type_str": "ToolSchema[AsyncContextToolFn[DepsT, AnyP, JsonableCovariantT]]", "description": null, "kind": "generic", "base_type": {"type_str": "ToolSchema", "description": null, "kind": "simple", "symbol_name": "ToolSchema", "doc_url": "/docs/mirascope/v2/api/tools#tool-schema"}, "parameters": [{"type_str": "AsyncContextToolFn[DepsT, AnyP, JsonableCovariantT]", "description": null, "kind": "generic", "base_type": {"type_str": "AsyncContextToolFn", "description": null, "kind": "simple", "symbol_name": "AsyncContextToolFn", "doc_url": "/docs/mirascope/v2/api/tools/protocols#async-context-tool-fn"}, "parameters": [{"type_str": "DepsT", "description": null, "kind": "simple", "symbol_name": "DepsT", "doc_url": null}, {"type_str": "AnyP", "description": null, "kind": "simple", "symbol_name": "AnyP", "doc_url": "/docs/mirascope/v2/api/types#any-p"}, {"type_str": "JsonableCovariantT", "description": null, "kind": "simple", "symbol_name": "JsonableCovariantT", "doc_url": "/docs/mirascope/v2/api/types#jsonable-covariant-t"}], "doc_url": null}], "doc_url": null}} />, <TypeLink type={{"type_str": "Generic[DepsT, JsonableCovariantT, AnyP]", "description": null, "kind": "generic", "base_type": {"type_str": "Generic", "description": null, "kind": "simple", "symbol_name": "Generic", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Generic"}, "parameters": [{"type_str": "DepsT", "description": null, "kind": "simple", "symbol_name": "DepsT", "doc_url": null}, {"type_str": "JsonableCovariantT", "description": null, "kind": "simple", "symbol_name": "JsonableCovariantT", "doc_url": "/docs/mirascope/v2/api/types#jsonable-covariant-t"}, {"type_str": "AnyP", "description": null, "kind": "simple", "symbol_name": "AnyP", "doc_url": "/docs/mirascope/v2/api/types#any-p"}], "doc_url": null}} />
+<TypeLink type={{"type_str": "ToolSchema[AsyncContextToolFn[DepsT, AnyP, JsonableCovariantT]]", "description": null, "kind": "generic", "base_type": {"type_str": "ToolSchema", "description": null, "kind": "simple", "symbol_name": "ToolSchema", "doc_url": "/docs/mirascope/v2/api/tools#tool-schema"}, "parameters": [{"type_str": "AsyncContextToolFn[DepsT, AnyP, JsonableCovariantT]", "description": null, "kind": "generic", "base_type": {"type_str": "AsyncContextToolFn", "description": null, "kind": "simple", "symbol_name": "AsyncContextToolFn", "doc_url": "/docs/mirascope/v2/api/tools#async-context-tool-fn"}, "parameters": [{"type_str": "DepsT", "description": null, "kind": "simple", "symbol_name": "DepsT", "doc_url": null}, {"type_str": "AnyP", "description": null, "kind": "simple", "symbol_name": "AnyP", "doc_url": "/docs/mirascope/v2/api/types#any-p"}, {"type_str": "JsonableCovariantT", "description": null, "kind": "simple", "symbol_name": "JsonableCovariantT", "doc_url": "/docs/mirascope/v2/api/types#jsonable-covariant-t"}], "doc_url": null}], "doc_url": null}} />, <TypeLink type={{"type_str": "Generic[DepsT, JsonableCovariantT, AnyP]", "description": null, "kind": "generic", "base_type": {"type_str": "Generic", "description": null, "kind": "simple", "symbol_name": "Generic", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Generic"}, "parameters": [{"type_str": "DepsT", "description": null, "kind": "simple", "symbol_name": "DepsT", "doc_url": null}, {"type_str": "JsonableCovariantT", "description": null, "kind": "simple", "symbol_name": "JsonableCovariantT", "doc_url": "/docs/mirascope/v2/api/types#jsonable-covariant-t"}, {"type_str": "AnyP", "description": null, "kind": "simple", "symbol_name": "AnyP", "doc_url": "/docs/mirascope/v2/api/types#any-p"}], "doc_url": null}} />
 
 ## <ApiType type="Function" slug="mirascope-llm-tools-tools--async-context-tool-execute" symbolName="execute" /> execute
 
@@ -109,6 +119,14 @@ Execute the async context tool using an LLM-provided `ToolCall`.
 }}
 />
 
+
+
+## <ApiType type="Class" slug="async-context-tool-fn" symbolName="AsyncContextToolFn" /> AsyncContextToolFn
+
+Protocol for the async context tool function.
+
+**Bases:** 
+<TypeLink type={{"type_str": "Protocol[DepsT, P, JsonableCovariantT]", "description": null, "kind": "generic", "base_type": {"type_str": "Protocol", "description": null, "kind": "simple", "symbol_name": "Protocol", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Protocol"}, "parameters": [{"type_str": "DepsT", "description": null, "kind": "simple", "symbol_name": "DepsT", "doc_url": null}, {"type_str": "P", "description": null, "kind": "simple", "symbol_name": "P", "doc_url": "/docs/mirascope/v2/api/types#p"}, {"type_str": "JsonableCovariantT", "description": null, "kind": "simple", "symbol_name": "JsonableCovariantT", "doc_url": "/docs/mirascope/v2/api/types#jsonable-covariant-t"}], "doc_url": null}} />
 
 
 ## <ApiType type="Class" slug="async-context-toolkit" symbolName="AsyncContextToolkit" /> AsyncContextToolkit
@@ -214,7 +232,7 @@ It includes metadata like name, description, and parameter schema.
 This class is not instantiated directly but created by the `@tool()` decorator.
 
 **Bases:** 
-<TypeLink type={{"type_str": "ToolSchema[AsyncToolFn[AnyP, JsonableCovariantT]]", "description": null, "kind": "generic", "base_type": {"type_str": "ToolSchema", "description": null, "kind": "simple", "symbol_name": "ToolSchema", "doc_url": "/docs/mirascope/v2/api/tools#tool-schema"}, "parameters": [{"type_str": "AsyncToolFn[AnyP, JsonableCovariantT]", "description": null, "kind": "generic", "base_type": {"type_str": "AsyncToolFn", "description": null, "kind": "simple", "symbol_name": "AsyncToolFn", "doc_url": "/docs/mirascope/v2/api/tools/protocols#async-tool-fn"}, "parameters": [{"type_str": "AnyP", "description": null, "kind": "simple", "symbol_name": "AnyP", "doc_url": "/docs/mirascope/v2/api/types#any-p"}, {"type_str": "JsonableCovariantT", "description": null, "kind": "simple", "symbol_name": "JsonableCovariantT", "doc_url": "/docs/mirascope/v2/api/types#jsonable-covariant-t"}], "doc_url": null}], "doc_url": null}} />, <TypeLink type={{"type_str": "Generic[AnyP, JsonableCovariantT]", "description": null, "kind": "generic", "base_type": {"type_str": "Generic", "description": null, "kind": "simple", "symbol_name": "Generic", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Generic"}, "parameters": [{"type_str": "AnyP", "description": null, "kind": "simple", "symbol_name": "AnyP", "doc_url": "/docs/mirascope/v2/api/types#any-p"}, {"type_str": "JsonableCovariantT", "description": null, "kind": "simple", "symbol_name": "JsonableCovariantT", "doc_url": "/docs/mirascope/v2/api/types#jsonable-covariant-t"}], "doc_url": null}} />
+<TypeLink type={{"type_str": "ToolSchema[AsyncToolFn[AnyP, JsonableCovariantT]]", "description": null, "kind": "generic", "base_type": {"type_str": "ToolSchema", "description": null, "kind": "simple", "symbol_name": "ToolSchema", "doc_url": "/docs/mirascope/v2/api/tools#tool-schema"}, "parameters": [{"type_str": "AsyncToolFn[AnyP, JsonableCovariantT]", "description": null, "kind": "generic", "base_type": {"type_str": "AsyncToolFn", "description": null, "kind": "simple", "symbol_name": "AsyncToolFn", "doc_url": "/docs/mirascope/v2/api/tools#async-tool-fn"}, "parameters": [{"type_str": "AnyP", "description": null, "kind": "simple", "symbol_name": "AnyP", "doc_url": "/docs/mirascope/v2/api/types#any-p"}, {"type_str": "JsonableCovariantT", "description": null, "kind": "simple", "symbol_name": "JsonableCovariantT", "doc_url": "/docs/mirascope/v2/api/types#jsonable-covariant-t"}], "doc_url": null}], "doc_url": null}} />, <TypeLink type={{"type_str": "Generic[AnyP, JsonableCovariantT]", "description": null, "kind": "generic", "base_type": {"type_str": "Generic", "description": null, "kind": "simple", "symbol_name": "Generic", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Generic"}, "parameters": [{"type_str": "AnyP", "description": null, "kind": "simple", "symbol_name": "AnyP", "doc_url": "/docs/mirascope/v2/api/types#any-p"}, {"type_str": "JsonableCovariantT", "description": null, "kind": "simple", "symbol_name": "JsonableCovariantT", "doc_url": "/docs/mirascope/v2/api/types#jsonable-covariant-t"}], "doc_url": null}} />
 
 ## <ApiType type="Function" slug="mirascope-llm-tools-tools--async-tool-execute" symbolName="execute" /> execute
 
@@ -272,6 +290,14 @@ Execute the async tool using an LLM-provided `ToolCall`.
 }}
 />
 
+
+
+## <ApiType type="Class" slug="async-tool-fn" symbolName="AsyncToolFn" /> AsyncToolFn
+
+Protocol for the async tool function.
+
+**Bases:** 
+<TypeLink type={{"type_str": "Protocol[P, JsonableCovariantT]", "description": null, "kind": "generic", "base_type": {"type_str": "Protocol", "description": null, "kind": "simple", "symbol_name": "Protocol", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Protocol"}, "parameters": [{"type_str": "P", "description": null, "kind": "simple", "symbol_name": "P", "doc_url": "/docs/mirascope/v2/api/types#p"}, {"type_str": "JsonableCovariantT", "description": null, "kind": "simple", "symbol_name": "JsonableCovariantT", "doc_url": "/docs/mirascope/v2/api/types#jsonable-covariant-t"}], "doc_url": null}} />
 
 
 ## <ApiType type="Class" slug="async-toolkit" symbolName="AsyncToolkit" /> AsyncToolkit
@@ -470,7 +496,7 @@ It includes metadata like name, description, and parameter schema.
 This class is not instantiated directly but created by the `@tool()` decorator.
 
 **Bases:** 
-<TypeLink type={{"type_str": "ToolSchema[ContextToolFn[DepsT, AnyP, JsonableCovariantT]]", "description": null, "kind": "generic", "base_type": {"type_str": "ToolSchema", "description": null, "kind": "simple", "symbol_name": "ToolSchema", "doc_url": "/docs/mirascope/v2/api/tools#tool-schema"}, "parameters": [{"type_str": "ContextToolFn[DepsT, AnyP, JsonableCovariantT]", "description": null, "kind": "generic", "base_type": {"type_str": "ContextToolFn", "description": null, "kind": "simple", "symbol_name": "ContextToolFn", "doc_url": "/docs/mirascope/v2/api/tools/protocols#context-tool-fn"}, "parameters": [{"type_str": "DepsT", "description": null, "kind": "simple", "symbol_name": "DepsT", "doc_url": null}, {"type_str": "AnyP", "description": null, "kind": "simple", "symbol_name": "AnyP", "doc_url": "/docs/mirascope/v2/api/types#any-p"}, {"type_str": "JsonableCovariantT", "description": null, "kind": "simple", "symbol_name": "JsonableCovariantT", "doc_url": "/docs/mirascope/v2/api/types#jsonable-covariant-t"}], "doc_url": null}], "doc_url": null}} />, <TypeLink type={{"type_str": "Generic[DepsT, JsonableCovariantT, AnyP]", "description": null, "kind": "generic", "base_type": {"type_str": "Generic", "description": null, "kind": "simple", "symbol_name": "Generic", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Generic"}, "parameters": [{"type_str": "DepsT", "description": null, "kind": "simple", "symbol_name": "DepsT", "doc_url": null}, {"type_str": "JsonableCovariantT", "description": null, "kind": "simple", "symbol_name": "JsonableCovariantT", "doc_url": "/docs/mirascope/v2/api/types#jsonable-covariant-t"}, {"type_str": "AnyP", "description": null, "kind": "simple", "symbol_name": "AnyP", "doc_url": "/docs/mirascope/v2/api/types#any-p"}], "doc_url": null}} />
+<TypeLink type={{"type_str": "ToolSchema[ContextToolFn[DepsT, AnyP, JsonableCovariantT]]", "description": null, "kind": "generic", "base_type": {"type_str": "ToolSchema", "description": null, "kind": "simple", "symbol_name": "ToolSchema", "doc_url": "/docs/mirascope/v2/api/tools#tool-schema"}, "parameters": [{"type_str": "ContextToolFn[DepsT, AnyP, JsonableCovariantT]", "description": null, "kind": "generic", "base_type": {"type_str": "ContextToolFn", "description": null, "kind": "simple", "symbol_name": "ContextToolFn", "doc_url": "/docs/mirascope/v2/api/tools#context-tool-fn"}, "parameters": [{"type_str": "DepsT", "description": null, "kind": "simple", "symbol_name": "DepsT", "doc_url": null}, {"type_str": "AnyP", "description": null, "kind": "simple", "symbol_name": "AnyP", "doc_url": "/docs/mirascope/v2/api/types#any-p"}, {"type_str": "JsonableCovariantT", "description": null, "kind": "simple", "symbol_name": "JsonableCovariantT", "doc_url": "/docs/mirascope/v2/api/types#jsonable-covariant-t"}], "doc_url": null}], "doc_url": null}} />, <TypeLink type={{"type_str": "Generic[DepsT, JsonableCovariantT, AnyP]", "description": null, "kind": "generic", "base_type": {"type_str": "Generic", "description": null, "kind": "simple", "symbol_name": "Generic", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Generic"}, "parameters": [{"type_str": "DepsT", "description": null, "kind": "simple", "symbol_name": "DepsT", "doc_url": null}, {"type_str": "JsonableCovariantT", "description": null, "kind": "simple", "symbol_name": "JsonableCovariantT", "doc_url": "/docs/mirascope/v2/api/types#jsonable-covariant-t"}, {"type_str": "AnyP", "description": null, "kind": "simple", "symbol_name": "AnyP", "doc_url": "/docs/mirascope/v2/api/types#any-p"}], "doc_url": null}} />
 
 ## <ApiType type="Function" slug="mirascope-llm-tools-tools--context-tool-execute" symbolName="execute" /> execute
 
@@ -553,6 +579,14 @@ Execute the context tool using an LLM-provided `ToolCall`.
 }}
 />
 
+
+
+## <ApiType type="Class" slug="context-tool-fn" symbolName="ContextToolFn" /> ContextToolFn
+
+Protocol for the context tool function.
+
+**Bases:** 
+<TypeLink type={{"type_str": "Protocol[DepsT, P, JsonableCovariantT]", "description": null, "kind": "generic", "base_type": {"type_str": "Protocol", "description": null, "kind": "simple", "symbol_name": "Protocol", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Protocol"}, "parameters": [{"type_str": "DepsT", "description": null, "kind": "simple", "symbol_name": "DepsT", "doc_url": null}, {"type_str": "P", "description": null, "kind": "simple", "symbol_name": "P", "doc_url": "/docs/mirascope/v2/api/types#p"}, {"type_str": "JsonableCovariantT", "description": null, "kind": "simple", "symbol_name": "JsonableCovariantT", "doc_url": "/docs/mirascope/v2/api/types#jsonable-covariant-t"}], "doc_url": null}} />
 
 
 ## <ApiType type="Class" slug="context-toolkit" symbolName="ContextToolkit" /> ContextToolkit
@@ -658,7 +692,7 @@ It includes metadata like name, description, and parameter schema.
 This class is not instantiated directly but created by the `@tool()` decorator.
 
 **Bases:** 
-<TypeLink type={{"type_str": "ToolSchema[ToolFn[AnyP, JsonableCovariantT]]", "description": null, "kind": "generic", "base_type": {"type_str": "ToolSchema", "description": null, "kind": "simple", "symbol_name": "ToolSchema", "doc_url": "/docs/mirascope/v2/api/tools#tool-schema"}, "parameters": [{"type_str": "ToolFn[AnyP, JsonableCovariantT]", "description": null, "kind": "generic", "base_type": {"type_str": "ToolFn", "description": null, "kind": "simple", "symbol_name": "ToolFn", "doc_url": "/docs/mirascope/v2/api/tools/protocols#tool-fn"}, "parameters": [{"type_str": "AnyP", "description": null, "kind": "simple", "symbol_name": "AnyP", "doc_url": "/docs/mirascope/v2/api/types#any-p"}, {"type_str": "JsonableCovariantT", "description": null, "kind": "simple", "symbol_name": "JsonableCovariantT", "doc_url": "/docs/mirascope/v2/api/types#jsonable-covariant-t"}], "doc_url": null}], "doc_url": null}} />, <TypeLink type={{"type_str": "Generic[AnyP, JsonableCovariantT]", "description": null, "kind": "generic", "base_type": {"type_str": "Generic", "description": null, "kind": "simple", "symbol_name": "Generic", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Generic"}, "parameters": [{"type_str": "AnyP", "description": null, "kind": "simple", "symbol_name": "AnyP", "doc_url": "/docs/mirascope/v2/api/types#any-p"}, {"type_str": "JsonableCovariantT", "description": null, "kind": "simple", "symbol_name": "JsonableCovariantT", "doc_url": "/docs/mirascope/v2/api/types#jsonable-covariant-t"}], "doc_url": null}} />
+<TypeLink type={{"type_str": "ToolSchema[ToolFn[AnyP, JsonableCovariantT]]", "description": null, "kind": "generic", "base_type": {"type_str": "ToolSchema", "description": null, "kind": "simple", "symbol_name": "ToolSchema", "doc_url": "/docs/mirascope/v2/api/tools#tool-schema"}, "parameters": [{"type_str": "ToolFn[AnyP, JsonableCovariantT]", "description": null, "kind": "generic", "base_type": {"type_str": "ToolFn", "description": null, "kind": "simple", "symbol_name": "ToolFn", "doc_url": "/docs/mirascope/v2/api/tools#tool-fn"}, "parameters": [{"type_str": "AnyP", "description": null, "kind": "simple", "symbol_name": "AnyP", "doc_url": "/docs/mirascope/v2/api/types#any-p"}, {"type_str": "JsonableCovariantT", "description": null, "kind": "simple", "symbol_name": "JsonableCovariantT", "doc_url": "/docs/mirascope/v2/api/types#jsonable-covariant-t"}], "doc_url": null}], "doc_url": null}} />, <TypeLink type={{"type_str": "Generic[AnyP, JsonableCovariantT]", "description": null, "kind": "generic", "base_type": {"type_str": "Generic", "description": null, "kind": "simple", "symbol_name": "Generic", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Generic"}, "parameters": [{"type_str": "AnyP", "description": null, "kind": "simple", "symbol_name": "AnyP", "doc_url": "/docs/mirascope/v2/api/types#any-p"}, {"type_str": "JsonableCovariantT", "description": null, "kind": "simple", "symbol_name": "JsonableCovariantT", "doc_url": "/docs/mirascope/v2/api/types#jsonable-covariant-t"}], "doc_url": null}} />
 
 ## <ApiType type="Function" slug="mirascope-llm-tools-tools--tool-execute" symbolName="execute" /> execute
 
@@ -737,6 +771,14 @@ Protocol for the tool decorator.
   }
 ]}
 />
+
+
+## <ApiType type="Class" slug="tool-fn" symbolName="ToolFn" /> ToolFn
+
+Protocol for the tool function.
+
+**Bases:** 
+<TypeLink type={{"type_str": "Protocol[P, JsonableCovariantT]", "description": null, "kind": "generic", "base_type": {"type_str": "Protocol", "description": null, "kind": "simple", "symbol_name": "Protocol", "doc_url": "https://docs.python.org/3/library/typing.html#typing.Protocol"}, "parameters": [{"type_str": "P", "description": null, "kind": "simple", "symbol_name": "P", "doc_url": "/docs/mirascope/v2/api/types#p"}, {"type_str": "JsonableCovariantT", "description": null, "kind": "simple", "symbol_name": "JsonableCovariantT", "doc_url": "/docs/mirascope/v2/api/types#jsonable-covariant-t"}], "doc_url": null}} />
 
 
 ## <ApiType type="Class" slug="tool-parameter-schema" symbolName="ToolParameterSchema" /> ToolParameterSchema
@@ -1047,7 +1089,7 @@ is performed.
 
 ## <ApiType type="Attribute" slug="tool-schema-t" symbolName="ToolSchemaT" /> ToolSchemaT
 
-**Type:** <TypeLink type={{"type_str": "TypeVar('ToolSchemaT', bound='ToolSchema')", "description": null, "kind": "simple", "symbol_name": null, "doc_url": null}} />
+**Type:** <TypeLink type={{"type_str": "TypeVar('ToolSchemaT', bound=AnyToolSchema, covariant=True)", "description": null, "kind": "simple", "symbol_name": null, "doc_url": null}} />
 
 
 ## <ApiType type="Attribute" slug="tool-t" symbolName="ToolT" /> ToolT
@@ -1127,9 +1169,6 @@ Execute a `Tool` using the provided tool call.
 **Type:** <TypeLink type={{"type_str": "TypeVar('ToolkitT', bound='Toolkit | AsyncToolkit | ContextToolkit[Any] | AsyncContextToolkit[Any]', covariant=True)", "description": null, "kind": "simple", "symbol_name": null, "doc_url": null}} />
 
 
-## <ApiType type="Module" slug="protocols" symbolName="protocols" /> protocols
-
-
 ## <ApiType type="Function" slug="tool_fn" symbolName="tool" /> tool
 
 Decorator that turns a function into a tool definition.
@@ -1198,7 +1237,7 @@ Examples:
             "description": null,
             "kind": "simple",
             "symbol_name": "ContextToolFn",
-            "doc_url": "/docs/mirascope/v2/api/tools/protocols#context-tool-fn"
+            "doc_url": "/docs/mirascope/v2/api/tools#context-tool-fn"
           },
           "parameters": [
             {
@@ -1234,7 +1273,7 @@ Examples:
             "description": null,
             "kind": "simple",
             "symbol_name": "AsyncContextToolFn",
-            "doc_url": "/docs/mirascope/v2/api/tools/protocols#async-context-tool-fn"
+            "doc_url": "/docs/mirascope/v2/api/tools#async-context-tool-fn"
           },
           "parameters": [
             {
@@ -1270,7 +1309,7 @@ Examples:
             "description": null,
             "kind": "simple",
             "symbol_name": "ToolFn",
-            "doc_url": "/docs/mirascope/v2/api/tools/protocols#tool-fn"
+            "doc_url": "/docs/mirascope/v2/api/tools#tool-fn"
           },
           "parameters": [
             {
@@ -1299,7 +1338,7 @@ Examples:
             "description": null,
             "kind": "simple",
             "symbol_name": "AsyncToolFn",
-            "doc_url": "/docs/mirascope/v2/api/tools/protocols#async-tool-fn"
+            "doc_url": "/docs/mirascope/v2/api/tools#async-tool-fn"
           },
           "parameters": [
             {

@@ -26,8 +26,7 @@ async def search_coppermind(ctx: llm.Context[Coppermind], query: str) -> str:
 
 
 @llm.call(
-    provider="openai",
-    model_id="gpt-4o-mini",
+    "openai/gpt-5-mini",
     tools=[search_coppermind],
     format=KeeperEntry,
 )
