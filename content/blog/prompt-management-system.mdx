@@ -1,5 +1,5 @@
 ---
-title: "4 Best Prompt Management Systems for LLM Developers in 2025  "
+title: "5 Best Prompt Management Systems for LLM Developers in 2025  "
 description: "Explore the top prompt management systems built for developers, with support for prompt versioning, tracing, and CI/CD workflows."
 date: "2025-11-26"
 readTime: "7 min read"
@@ -21,7 +21,8 @@ The four systems we examine are:
 1. [Lilypad](#1-lilypad)  
 2. [Agenta](#2-agenta)  
 3. [PromptHub](#3-prompthub)  
-4. [Langfuse](#4-langfuse)  
+4. [Langfuse](#4-langfuse)
+5. [LangSmith](#5-langsmith)
 
 ## 4 Questions to Ask When Choosing a Prompt Management Tool
 
@@ -269,6 +270,21 @@ Langfuse offers:
 * A no-code, type-safe playground that mirrors production behavior, letting teams interactively test prompt versions and model parameters.  
 * Dynamic referencing of other prompts within a prompt, enabling modular and reusable prompt architectures that support DRY (Don't repeat yourself) prompt engineering directly in the UI.  
 * Structured evaluation features like datasets for benchmarking, A/B testing workflows, and user feedback capture mechanisms.
+
+### 5. LangSmith
+
+![LangSmith Diagram](/assets/blog/prompt-management-system/langsmith-diagram.webp)
+
+[LangSmith](https://www.langchain.com/langsmith) is a closed source observability and prompt management platform for teams building with LangChain, and features a prompt hub where users can design, version, tag, and deploy prompts via a visual playground or SDK. However, LangSmith treats prompts as isolated artifacts (separate from the logic that runs them) which may introduce drift.
+
+LangSmith allows you to:
+
+* Save prompt versions using Git-like identifiers to keep track of changes, roll back, compare, and pin as known-good versions deployed in production.
+* Embed prompts directly in applications (thanks to its tight integration with LangChain), while providing logging and analytics support across prompt workflows.
+* Experiment with prompts in its playground where you can modify text, variables, and model parameters, and promote the current state to a saved version.
+* Run dataset-driven evaluations using automatic scoring or human review to choose the best-performing variant.
+* Log prompts, responses, latencies, and errors in order to see which prompts underperform or fail on real traffic. Visualizations and filters help you analyze how small prompt or parameter changes affect behavior, which feeds back into the prompt management loop.
+
 
 ## Build Reliable LLM Applications with Full Traceability
 
